@@ -1,0 +1,689 @@
+body, body * {
+	margin:0; padding:0;
+	position:relative;
+	font-family: arial;
+	font-size: 12px;
+	color:black;	
+	outline: 0;
+}
+body {
+	background: #F1F1F1;
+}
+
+a {
+	text-decoration:none;
+	color:#1155CC;
+}
+
+body *:focus, body *:active {
+	outline: none;
+}
+
+body.isLoading, body.isLoading * {
+	cursor:wait !important;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus,
+select:focus {
+	background-color:#FFFFCC !important;
+	border:1px solid #6C9FE1 !important;
+}
+
+
+select::-moz-focus-inner,
+option::-moz-focus-inner,
+button::-moz-focus-inner,
+input[type="select"]::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+	border: 0; outline: 0;
+}
+
+input[type=text], input[type=password], select, textarea {
+	background:white;
+	font-family: arial, sans-serif, tahoma, verdana; 
+	font-size: 12px;
+	text-decoration: none;
+	font-weight: normal; 
+	color: #000000;
+	margin:0px;
+	padding:2px;
+	border:1px #CCCCCC solid;
+	border-radius:3px;
+}
+
+input[type=button], input[type=submit], button {
+	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+	border-color: #CCCCCC #BBBBBB #A0A0A0;
+	border-left: 1px solid #BBBBBB;
+	border-radius: 3px 3px 3px 3px;
+	border-right: 1px solid #BBBBBB;
+	border-style: solid;
+	border-width: 1px;
+	color: #000000;
+	cursor: default;
+	font: 12px arial,sans-serif;
+	margin:0;
+	outline: medium none;
+	padding:2px 8px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+input[type=button]:active, input[type=submit]:active, button:active {
+	background: -moz-linear-gradient(center top , #EEEEEE, #F9F9F9) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left top, left bottom,from(#EEEEEE),to(#F9F9F9));
+	border-color:#444444;
+	text-decoration:none;
+}
+
+input::-webkit-input-placeholder {
+	color:#CCCCCC;
+}
+input:-moz-placeholder {
+	color:#CCCCCC;
+}
+
+option {
+	padding:0 4px; outline: 0;
+}
+
+#divWaiting {
+	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+	border-color: #CCCCCC #BBBBBB #A0A0A0;
+	border-left: 1px solid #BBBBBB;
+	border-radius: 3px 3px 3px 3px;
+	border-right: 1px solid #BBBBBB;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: 0 4px 10px #8B8B8B;
+	left: 50%;
+	margin: 0 0 0 -60px;
+	padding: 2px 0;
+	position: fixed;
+	top: 0;
+	width: 120px;
+	color:#6E6E6E;
+}
+	#divWaiting p {
+		padding: 0 0 0 30px;
+		margin:0;
+		background:	url(img/loadingSmall.gif) no-repeat scroll 6px 2px transparent;
+	}
+
+.alert {
+	background: none repeat scroll 0 0 #F9F9F9;
+	border: 3px solid #CCCCCC;
+	border-radius: 10px 10px 10px 10px;
+	clear: both;
+	display: block;
+	padding: 20px;
+	text-align: left;
+	width: 300px;
+}
+	.alert div.btnContainer {
+		text-align:center;
+		display:block;
+	}
+		.alert div.btnContainer button {
+			display: inline-block;
+			margin: 10px auto 0;
+			cursor: pointer;
+			font-weight: normal;
+			text-align: center;
+		}
+	.alert a {
+		font-size: 14px;
+	}
+
+#header {
+	background: white;
+	width: auto;
+	overflow: hidden;
+}
+	#header div {
+		margin: 0 10px 0 0;
+		min-height: 65px;
+		width:auto;
+	    overflow: hidden;
+	}
+		#header div .logo {
+			background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+			background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
+		    box-shadow: 0 0 2px #4397F3 inset;
+			border: 1px solid #CCCCCC;
+			border-radius: 5px 5px 5px 5px;
+			color: #333;
+			font-size: 16px;
+			font-weight: bolder;
+			left: 0;
+			line-height: 50px;
+			padding: 0 10px;
+			position: absolute;
+		    text-shadow:0px 2px 1px white;
+			top: 7px;
+			width: 230px;
+		    margin: 0 0 0 10px;
+			z-index: 9;
+		}
+		#header div .search {
+		    border: 1px solid #CCCCCC;
+		    padding: 0px;
+		    width: 400px;
+	        line-height: 25px;
+	        position: absolute;
+	        right:0; top:30px;
+		}
+			#header div .search span {
+			    background: url(img/glyphicons-halflings) no-repeat scroll -47px 3px transparent;
+			    height: 20px;
+			    position: absolute;
+			    width: 20px;	
+			    left: 3px; top: 2px;
+			}
+			#header div .search input {
+			    border: 0 none;
+			    margin: 0 0 0 20px;
+			    width: 300px;
+			}		
+			#header div .search input[type=text]:focus {
+				background: white !important;
+				border:0 !important;
+			}
+			#header div .search input.btnSearch {
+				background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+				background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+			    border-radius: 0 0 0 0;
+			    display: inline-block;
+			    margin: 0;
+			    padding: 0px 10px;
+			    width: 70px; height:25px;
+				line-height: 25px;
+				position:absolute;
+				right: 0; top:0;
+			    border-left: 1px solid #CCCCCC;
+			}
+			#header div .search input.btnSearch:active,
+			#header div .search input.btnSearch:focus {
+				box-shadow: 0px 0px 4px #CCC inset;				
+			}			
+		#header div ul {
+			list-style:none;
+			background:black;
+			padding: 5px 20px;
+			margin: 0 0 0 230px;
+		}
+			#header div ul li {
+				display: inline;
+			}
+				#header div ul li a {
+					background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+					border-radius: 3px;
+					font-family: arial;
+					font-weight: bold;
+					padding: 3px 10px;
+					color: white;
+					text-decoration: none;
+				}
+		#header div ul.menuProfile {
+			background: none repeat scroll 0 0 transparent;
+			list-style: none outside none;
+			position: absolute;
+			right: 0;
+			top: 5px;
+			margin: 0;
+			padding: 0;
+		}			
+			#header div ul.menuProfile  li {
+				float:left;
+				border-left: 1px solid #CCCCCC;
+			}
+			#header div ul.menuProfile  li:last-child {
+				border-right: 1px solid #CCCCCC;
+			}
+				#header div ul.menuProfile  li a {
+					background: none repeat scroll 0 0 transparent;
+					color: #3176CB;
+					display: block;
+					font-weight: normal;
+					padding: 0 15px;
+				}
+				
+
+
+.menu {
+	background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+}
+	.menu div {
+		margin: 0 10px;
+		width: auto;		
+		height: 30px;		
+	}
+		.menu div ul {
+			list-style: none outside none;
+		}
+			.menu div ul li {
+				float: left;
+				border-left:1px white solid;
+			}
+			.menu div ul li:last-child {
+				border-right:1px white solid;
+			}
+				.menu div ul li a {
+					clear: both;
+					color: white;
+					display: block;
+					font-family: arial;
+					font-weight: bold;
+					line-height: 30px;
+					padding: 0 10px;
+					text-decoration: none;
+					text-shadow: -1px 1px 0 #333333;
+				}
+				.menu div ul li a:hover {
+					background: -moz-linear-gradient(center top , #3176CB, #4397F3) repeat scroll 0 0 transparent;
+					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+				}
+			.menu div ul.menuAdmin {
+			    position: absolute;
+			    right: 0;
+			    top: 0;				
+			}
+				.menu div ul.menuAdmin li {
+					cursor:pointer;
+				}
+					.menu div ul.menuAdmin li a {}
+					.menu div ul.menuAdmin li ul {
+						display: none;
+					    background: #3176CB;
+					    border: 1px solid #333333;
+					    border-radius: 5px 5px 5px 5px;
+					    position: absolute;
+					    right: 0;
+					    text-align: left;
+					    top: 30px;
+					    width: 150px;
+					    z-index: 9;			
+					    padding:5px 0;
+					    opacity:0.8;			
+					}			
+						.menu div ul.menuAdmin li ul li {
+							float:none;
+							display:block;
+							border:0;
+						}
+							.menu div ul.menuAdmin li ul li a {
+								font-weight:normal;
+								text-shadow:none;
+							}
+							.menu div ul.menuAdmin li ul li a:hover {
+								background:white;
+								color:#333333;
+							}
+						.menu div ul.menuAdmin li ul li ul {
+						    position: absolute;
+						    right: 148px;
+						    top: 0;
+						    opacity: 1;
+						}
+						
+.content {
+    background: none repeat scroll 0 0 white;
+    margin: 0 auto;
+    padding: 0;
+    width: 1024px;	
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	border-top:1px solid transparent;
+	border-bottom:1px solid #CCCCCC;
+}			
+	.content h1{
+		 color:#333333;
+		 font-size:15px;
+		 margin:10px;
+	}			
+					
+#footer {
+	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+    border-top: 1px outset gray;
+    box-shadow: 0 5px 5px #CCCCCC;
+    height: 15px; line-height:15px;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+
+.errors {
+	background: none repeat scroll 0 0 beige;
+	border: 1px solid #CCCCCC;
+	border-radius: 3px 3px 3px 3px;
+	margin: 10px;	
+}	
+	.errors ul {
+		margin: 0 0 0 20px;
+	}
+		.errors ul li {
+			color: gray;
+			padding: 5px 0 5px 10px;
+		}
+
+.errorsPage {
+	background: none repeat scroll 0 0 beige;
+	border: 1px solid #CCCCCC;
+	border-radius: 3px 3px 3px 3px;
+	margin: 50px auto;	
+	padding: 30px;	
+	width:400px;
+}
+
+#frmLogin {
+	border: 1px solid gray;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: 1px 1px 1px gray;
+	margin: 20px auto;
+	padding: 0 0 35px;
+	width: 400px;	
+}
+	#frmLogin fieldset {
+		margin: 10px 0 0;
+	}
+		#frmLogin fieldset label {
+			display: inline-block;
+			margin: 0px 0 0 10px;
+			width: 145px;
+		}
+		#frmLogin fieldset input {
+			display: inline-block;
+			padding: 2px 4px;
+			width: 226px;
+			border-radius: 3px;
+			border: 1px #CCC solid;
+		}
+	#frmLogin input.btnSubmit {
+		margin: 5px 0;
+		position: absolute;
+		right: 5px;
+	}	
+
+
+
+
+.paginatedList, .paginatedList * {
+	margin:0; padding:0; position:relative;
+}
+.paginatedList {
+	margin: 20px auto 20px;
+	width: 977px;
+}
+
+	.paginatedList .btnAdd {
+		color: #3176CB;
+		display: block;
+		margin: 0 0 10px;
+	}
+	.paginatedList table {
+		border: 1px solid #BBBBBB;
+		border-spacing: 0;
+		box-shadow: 2px 2px 4px #777777;
+		empty-cells: show;
+		width: 100%;
+	}
+		.paginatedList table tr td {
+			padding:3px;
+		}
+		.paginatedList table thead {
+			background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+			background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+			font-weight: bold;
+			color: white;
+			height:20px;
+		}
+			.paginatedList table thead .tblFilter {
+				
+			}
+				.paginatedList table thead .tblFilter td {
+					border-bottom: 1px solid #BBBBBB;
+					color:white;
+				}
+					.paginatedList table thead tr.tblFilter td input[type="text"] {
+						padding: 2px 2px 2px 20px;
+					}
+					.paginatedList table thead tr.tblFilter td .filterClear {
+						background: url(img/iconset.png) no-repeat scroll -174px -48px transparent;
+						cursor: pointer;
+						height: 20px;
+						left: 44px;
+						position: absolute;
+						top: 7px;
+						width: 20px;
+					}				
+					.paginatedList table thead tr td, 
+					.paginatedList table thead tr td a  {
+						color:white;
+					}
+		.paginatedList table tbody tr {
+			background: white;
+		}
+		.paginatedList table tbody tr:hover {
+			background:#FFFFCC;
+		}
+		.paginatedList table tbody tr.selected {
+			background: none repeat scroll 0 0 #FFCC99;
+		}
+			.paginatedList table tbody tr.selected td {
+				/*color: white !important;*/
+			}
+			.paginatedList table tbody tr td {
+				border-top:1px #ccc solid;
+				cursor: pointer;
+			}
+			.paginatedList table tbody tr td:first-child {
+				cursor: default;
+			}
+			.paginatedList table tfoot {
+				background: -moz-linear-gradient(top center, #FFFFFF, #CCC) repeat scroll 0 0 transparent;
+				background: -webkit-linear-gradient(white, #CCC);
+				background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+				background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));				
+				color: #777777;
+				font-weight: normal;
+				height:20px;
+			}
+				.paginatedList table tfoot tr td {
+					border-top:1px solid #CCCCCC;
+				}
+					.paginatedList table tfoot tr td span {
+						color:white;
+					}
+					.paginatedList table tfoot tr td div {
+						position:absolute;
+						bottom:4px; right:5px;
+						border:0px #000000 solid;
+					}
+							.paginatedList table tfoot tr td div a {
+								font-weight: normal;
+								padding:0px 4px 0px 4px;
+								color:white;
+							}
+							.paginatedList table tfoot tr td div a.currentPage {
+								font-weight: bold;
+							}
+						
+
+.frmEdit {
+	border: 1px solid #CCCCCC;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: 1px 1px 1px #CCCCCC;
+	margin:40px auto 20px auto;
+	padding: 0 0 35px;
+	width: 977px;	
+	background: white;
+}
+.ui-dialog .frmEdit {
+	border: 0 none !important;
+	border-radius: 0 0 0 0;
+	box-shadow: 0 0 0 white;
+	margin: 0;
+	padding: 0 0 35px !important;
+}
+	.frmEdit .btnBack {
+		color: #3176CB;
+		left: 0;
+		position: absolute;
+		top: -23px;		
+	}
+	.frmEdit fieldset {
+		margin: 5px 0 0;
+		border:0;
+	}
+		.frmEdit fieldset label {
+			display: inline-block;
+			margin: 0px 0 0 10px;
+			width: 250px;
+			vertical-align: top;
+		}
+		.frmEdit fieldset input,
+		.frmEdit fieldset textarea,
+		.frmEdit fieldset select,
+		.frmEdit fieldset .groupCheckBox,
+		.frmEdit fieldset #gallery {
+			display: inline-block;
+			padding: 2px 4px;
+			width: 700px;
+			border-radius: 3px;
+			border: 1px #CCC solid;
+		}
+		.frmEdit fieldset input[type=checkbox] {
+			width: auto;
+		}
+		.frmEdit fieldset input.hasDatepicker {
+			background: url(img/calendar.gif) no-repeat scroll 75px 2px transparent;
+			width: 87px;
+		}
+		.frmEdit fieldset input.datetime {
+    		background: url(img/calendar.gif) no-repeat scroll 110px 2px transparent;
+    		width: 120px;			
+		}
+		.frmEdit fieldset .groupCheckBox {
+			max-height: 300px;
+			list-style: none outside none;
+			overflow: auto;
+			padding: 0;
+		}
+			.frmEdit fieldset .groupCheckBox li {
+				border-bottom: 1px solid #CCCCCC;	
+			}
+			.frmEdit fieldset .groupCheckBox li:last-child {
+				border:0;
+			}
+				.frmEdit fieldset .groupCheckBox li input {
+					width: auto;
+				}
+		.frmEdit fieldset.tree ul:first-child {
+			height: 300px;
+			overflow: auto;
+			border: 1px solid #CCCCCC;
+			border-radius: 6px;
+		}		
+		.frmEdit fieldset.tree ul {
+			list-style: inside;
+			margin: 4px 10px;
+			padding: 0 10px;
+		}				
+			.frmEdit fieldset.tree ul li {
+			}
+				.frmEdit fieldset.tree ul li a {
+					color: #3176CB;
+				}
+				.frmEdit fieldset.tree ul li a.selected {
+					font-weight: bold;	
+				}
+			.frmEdit fieldset #gallery {
+				background: none repeat scroll 0 0 white;
+				border: 1px solid #CCCCCC;
+				border-radius: 5px 5px 5px 5px;
+				overflow: auto;
+				min-height:30px;
+				box-shadow:2px 2px 4px #777777;
+			}
+				.frmEdit fieldset #gallery .btnEditPhotos {
+					cursor: pointer;
+					display: block;
+					float: none;
+					margin: 4px 14px;
+					padding: 2px 8px;
+					width: auto;
+				}			
+				.frmEdit fieldset #gallery a {
+					border-radius: 5px 5px 5px 5px;
+					border: 1px solid #D6D6D6;		
+					margin:5px 15px; padding:3px;
+					float:left;					
+				}
+					.frmEdit fieldset #gallery a img {
+						max-width: none;
+					}
+					.frmEdit fieldset #gallery a  > img,
+					.frmEdit fieldset #gallery a  > .imgCenterFrame {
+						background: url(img/loadingSmall.gif) no-repeat scroll center center white;
+						width: 100px;
+						height: 100px;
+						border-radius: 5px 5px 5px 5px;
+						border: 1px solid #D6D6D6;		
+						display:none;
+					}
+					.frmEdit fieldset .subform {
+						display: inline-block;
+						width: 710px;
+					}
+						.frmEdit fieldset .subform a {
+							color:#3176CB;
+						}
+						.frmEdit fieldset .subform table {
+							border: 1px solid #BBBBBB;
+							border-spacing: 0;
+							box-shadow: 2px 2px 4px #777777;
+							empty-cells: show;
+							width: 100%;
+							border-collapse: separate;
+						}
+							.frmEdit fieldset .subform table tr td {
+								padding:3px;
+							}
+							.frmEdit fieldset .subform table thead {
+								background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+								background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+								font-weight: bold;
+								color: white;
+								height:20px;
+							}
+								.frmEdit fieldset .subform table thead tr {}
+									.frmEdit fieldset .subform table thead tr td, 
+									.frmEdit fieldset .subform table thead tr td a  {
+										color:white;
+									}
+							.frmEdit fieldset .subform table tbody tr { }
+							.frmEdit fieldset .subform table tbody tr:hover {
+								background:#FFFFCC;
+							}
+								.frmEdit fieldset .subform table tbody tr td {
+									border-top:1px #ccc solid;
+									cursor: pointer;
+								}
+	.frmEdit input.btnSubmit {
+		margin: 5px 0;
+		position: absolute;
+		right: 5px;
+	}	
+	
+
+

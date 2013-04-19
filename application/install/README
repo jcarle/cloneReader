@@ -1,0 +1,2 @@
+Agregar al crontab:
+	php /home/jcarle/dev/cloneReader/index.php entries/getNewsEntries

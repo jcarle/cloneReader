@@ -1,0 +1,380 @@
+#cloneReader, #cloneReader * {
+	position:relative;
+	margin:0; padding:0;
+	color:#333;
+}
+	#cloneReader ul.ulMenu {
+		list-style:none;
+		display:block;
+		border-top:1px #ccc solid;
+		border-bottom:1px #ccc solid;
+		background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+		background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
+		padding:0 15px 0 0;
+		margin: 0 0 1px 0;
+		box-shadow: 0 5px 7px gray;
+		height:40px;
+		z-index: 1;
+	}
+		#cloneReader ul.ulMenu li {
+			background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+			background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+			border-color: #CCCCCC #BBBBBB #A0A0A0;
+			border-left: 1px solid #BBBBBB;
+			border-radius: 0;
+			border-right: 1px solid #BBBBBB;
+			border-style: solid;
+			border-width: 1px;
+			cursor: pointer;
+			font-size: 12px;
+			outline: medium none;
+			text-align: center;
+			line-height:30px;
+			width:30px;
+			margin:5px 5px 5px 0 ;
+			float:right;
+			-moz-user-select: none;
+			-khtml-user-select: none;
+			-webkit-user-select: none;
+			user-select: none;			
+		}
+		#cloneReader ul.ulMenu li.reload {
+			font-size:20px;
+		}
+		#cloneReader ul.ulMenu li:hover {
+			box-shadow: 0px 0px 4px #CCC;
+		}
+		#cloneReader ul.ulMenu li:active {
+			box-shadow: 0px 0px 4px #CCC inset;
+		}		
+		#cloneReader ul.ulMenu li.filterUnread,
+		#cloneReader ul.ulMenu li.filterSort,
+		#cloneReader ul.ulMenu li.feedSettings {
+		    padding: 0 0 0 15px;
+		    width: auto;
+		}
+			#cloneReader ul.ulMenu li .arrow {
+			    border-left: 1px solid #CCCCCC;
+			    display: inline-block;
+			    font-size: 9px;
+			    line-height: 20px;
+			    margin: 0 0 0 10px;
+			    width: 20px;
+			}
+		#cloneReader ul.ulMenu li.add  {
+		    padding:0 15px;
+		    width: auto;			
+		}
+		#cloneReader ul.ulMenu > li.expanded,
+		#cloneReader ul.ulMenu > li.expanded:hover,
+		#cloneReader ul.ulMenu > li.expanded:active {
+			box-shadow: none;
+			background: #DDD;
+		}		
+		#cloneReader ul.ulMenu li.feedName {
+		    border: 0px solid red;
+    		cursor: default;
+		    font-weight: bold;
+		    height: 30px;
+		    left: 50px;
+		    line-height: 30px;
+		    overflow: hidden;
+		    position: absolute;
+		    right: 450px;
+		    text-align: left;
+		    text-overflow: ellipsis;
+		    text-transform: capitalize;
+		    top: 0;
+		    white-space: nowrap;
+		    width: auto; 
+		}								
+		#cloneReader ul.ulMenu li.feedName:hover, 
+		#cloneReader ul.ulMenu li.feedName:active {
+			box-shadow: none;
+			background: transparent;
+		}
+		#cloneReader ul.ulMenu li.expand {
+		    float: left;
+		    font-weight: bold;
+		    font-size:16px;
+		    margin:5px 5px 5px 10px;
+		}		
+
+
+	#cloneReader ul.ulEntries {
+		display:block;
+		border:0px gray solid;
+		list-style: none;
+		width: auto;
+		height:500px;
+		overflow: auto;
+		margin:0 0 0 240px;
+		background:white;
+	}
+		#cloneReader ul.ulEntries > li {
+			padding:10px;
+			border:1px #CCC solid;
+			border-radius:5px;
+			margin:10px 5px;
+			box-shadow:0 15px 7px -14px gray;
+		}
+		#cloneReader ul.ulEntries > li.selected {
+			border-left:1px #1155CC solid;
+			border-radius:0 5px 5px 0; 
+		}
+		#cloneReader ul.ulEntries > li.readed {}
+			#cloneReader ul.ulEntries > li > .header {
+				margin: 0 0px 10px 0;
+			}
+				#cloneReader ul.ulEntries > li > .header > a {
+					color:#1155CC;
+					font-size: 16px;
+					font-weight: bold;
+				    background-repeat: no-repeat;
+			        padding: 0 0px 0 20px;
+			        margin: 0 100px 0 0 ;
+			        display: block;
+				}
+				#cloneReader ul.ulEntries > li > .header a {
+					color:#1155CC;
+				}
+				#cloneReader ul.ulEntries > li.readed > .header a {
+					color: #333;
+				}
+				#cloneReader ul.ulEntries > li.selected > .header a {
+					color:#1155CC;
+				}
+				#cloneReader ul.ulEntries > li > .header div {
+					color: gray;
+					font-size:12px;
+				}
+					#cloneReader ul.ulEntries > li > .header div a {
+						font-size:12px;
+						font-weight:normal;
+					}
+				#cloneReader ul.ulEntries > li > .header .entryDate {
+					color: gray;
+					position: absolute;
+					right: 20px;
+					top: 0px;				
+				}
+				#cloneReader ul.ulEntries > li > .header .star {
+					position: absolute;
+					right: 0px; top: 0px;
+					width:16px; height:16px;
+					background: url(img/star-off.png) no-repeat scroll 0 0 transparent;
+					cursor: pointer;
+				}
+				#cloneReader ul.ulEntries > li > .header .star.selected {
+					background: url(img/star-on.png);
+				}
+			#cloneReader ul.ulEntries > li > p {
+				margin:0 0 25px 0;
+			}
+				#cloneReader ul.ulEntries > li > p img {
+					max-width:100%;
+				    width: auto;
+				}
+				#cloneReader ul.ulEntries > li > p ul,
+				#cloneReader ul.ulEntries > li > p ol,
+				#cloneReader ul.ulEntries > li > p li 
+				{
+					margin:auto;
+					padding:0 0 0 40px;
+				}
+			#cloneReader ul.ulEntries > li > .footer {
+				background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+				background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+				border-radius: 0 0 4px 4px;
+				bottom: 0;
+				height: 25px;
+				left: 0;
+				position: absolute;
+				width: 100%;
+				border-top: 1px solid #DDDDDD;
+			}
+				#cloneReader ul.ulEntries > li.selected > .footer {
+					border-radius: 0 0 4px 0px;
+				}
+				#cloneReader ul.ulEntries > li > .footer * {
+					height:25px; line-height:25px;
+					color:#333;
+					float: left;
+					margin:0 5px;
+					font-size:11px;
+				}
+				#cloneReader ul.ulEntries > li > .footer .star {
+					width:16px; 
+					background: url(img/star-off.png) no-repeat scroll center center transparent;
+					cursor: pointer;
+				}
+				#cloneReader ul.ulEntries > li > .footer .star.selected {
+					background-image: url(img/star-on.png);
+				}
+				#cloneReader ul.ulEntries > li > .footer .read {
+					color:gray;
+				}
+				#cloneReader ul.ulEntries > li > .footer .read.selected {
+					color:#333;
+				}
+					#cloneReader ul.ulEntries > li > .footer .checkbox {
+					    border: 1px solid gray;
+						background: none repeat scroll 0 0 white;
+						box-shadow:0 0 4px #CCCCCC inset;
+						cursor: pointer;
+						font-size: 12px;
+						height: 12px;
+						line-height: 12px;
+						text-align: center;
+						top: 5px;
+						width: 12px;
+					}
+					#cloneReader ul.ulEntries > li > .footer .read.selected .checkbox {
+					    background: none repeat scroll 0 0 white;
+					    box-shadow: 0 0 4px #CCCCCC;
+					    color: #3176CB;
+					    font-weight: bold;
+					}
+					
+
+	#cloneReader ul.ulFeeds {
+		width: 240px;
+		position:absolute;
+		left:0; top:44px;
+		overflow:auto;
+		list-style: none;
+	}
+		#cloneReader ul.ulFeeds li {
+			margin: 5px 0 0 0;
+		}
+			#cloneReader ul.ulFeeds li div {}
+			#cloneReader ul.ulFeeds li div:hover {
+				background-color:#EEE;
+			}			
+				#cloneReader ul.ulFeeds li div a, 
+				#cloneReader ul.ulFeeds li div span {
+					line-height:20px;
+					height:20px;
+					font-size:13px;
+				}
+				#cloneReader ul.ulFeeds li div .icon {
+					background-position: center center;
+					background-repeat: no-repeat;				
+					font-size: 10px;
+					left: 10px;
+					position: absolute;
+					top: 0px;
+					width: 16px;
+				    text-align: center;	
+				}
+				#cloneReader ul.ulFeeds li div .icon.arrow {
+					margin: 0 5px 0 0;
+					cursor: pointer;
+				}			
+				#cloneReader ul.ulFeeds li div a {
+					cursor: pointer;
+					display: block;
+					margin:0 40px 0 30px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					font-weight: bold;
+				}
+				#cloneReader ul.ulFeeds li.empty > div > a {
+					color:gray;
+				    font-weight: normal;
+				}
+				#cloneReader ul.ulFeeds li.selected > div > a {
+					color:#d14836;
+				}
+		#cloneReader ul.ulFeeds li.expand {
+		}
+			#cloneReader ul.ulFeeds li .count {
+				font-size: 10px;
+				cursor:default;
+				color:gray;
+				position:absolute;
+				top:0; right:10px;
+			}
+			#cloneReader ul.ulFeeds li ul {
+				padding:0;
+				list-style:none;
+			}
+				#cloneReader ul.ulFeeds li ul  li {
+				}
+					#cloneReader ul.ulFeeds li ul  li .icon {
+						left:26px;
+					} 
+					#cloneReader ul.ulFeeds li ul  li a {
+						margin-left:46px;
+					}
+						#cloneReader ul.ulFeeds li ul li ul li .icon {
+						left:42px;
+					} 
+					#cloneReader ul.ulFeeds li ul li ul li a {
+						margin-left:62px;
+					}
+
+
+
+
+
+	#cloneReader ul.popUpWindow {
+		background: none repeat scroll 0 0 white;
+		border: 1px solid #CCCCCC;
+		border-radius: 0 0 5px 5px;
+		box-shadow: 0 5px 5px gray;
+		height: auto;
+		list-style: none outside none;
+		position: absolute;
+		z-index: 10;
+	}
+		#cloneReader ul.popUpWindow li {
+			background: none repeat scroll 0 0 white;
+			border: 0 none;
+			display: block;
+			float: none;
+			padding: 0 0 0 10px;
+			text-align: left;
+			width: auto;
+			margin:5px 0;
+			line-height: 25px;
+			cursor:pointer;
+		}
+		#cloneReader ul.popUpWindow li:hover {
+			box-shadow:none;
+			background-color:#EEE;
+		}
+	#cloneReader ul.popUpWindow.popupAddFeed {
+	    border-radius: 0px 0px 5px 5px;
+	    text-align: left;
+	    background: none repeat scroll 0 0 white;
+	    cursor: default;
+	}
+		#cloneReader ul.popUpWindow.popupAddFeed li {
+			padding:0;
+		    cursor: default;
+		}
+		#cloneReader ul.popUpWindow.popupAddFeed li:hover {
+			background-color:white;
+		}
+			#cloneReader ul.popUpWindow.popupAddFeed li div {
+			    padding: 10px;
+			}
+				#cloneReader ul.popUpWindow.popupAddFeed li div input {
+				    height: 23px;
+				    width: 220px;
+				    border: 1px solid #CCCCCC;
+					padding:0 5px;
+				}
+				#cloneReader ul.popUpWindow.popupAddFeed li div button {
+				    height: 25px;
+				    line-height: 25px;
+				    padding: 0 8px;
+				}
+
+				#cloneReader ul.popUpWindow.popupFeedSettings li .check {
+					color: gray;
+					display: inline-block;
+					width: 16px;
+				}
