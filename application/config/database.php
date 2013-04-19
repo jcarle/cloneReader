@@ -67,11 +67,11 @@ $db['default']['stricton'] = FALSE;
 
 
 
-$db['qa']['hostname'] = 'mysql6.000webhost.com';
-$db['qa']['username'] = 'a6451681_jcarle';
-$db['qa']['password'] = 'salame998';
-$db['qa']['database'] = 'a6451681_fishing';
-$db['qa']['dbdriver'] = 'mysql';
+$db['qa']['hostname'] = '';
+$db['qa']['username'] = '';
+$db['qa']['password'] = '';
+$db['qa']['database'] = '';
+$db['qa']['dbdriver'] = '';
 $db['qa']['dbprefix'] = '';
 $db['qa']['pconnect'] = TRUE;
 $db['qa']['db_debug'] = TRUE;
