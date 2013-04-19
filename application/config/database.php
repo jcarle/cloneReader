@@ -66,23 +66,5 @@ $db['default']['stricton'] = FALSE;
 
 
 
-
-$db['qa']['hostname'] = '';
-$db['qa']['username'] = '';
-$db['qa']['password'] = '';
-$db['qa']['database'] = '';
-$db['qa']['dbdriver'] = '';
-$db['qa']['dbprefix'] = '';
-$db['qa']['pconnect'] = TRUE;
-$db['qa']['db_debug'] = TRUE;
-$db['qa']['cache_on'] = FALSE;
-$db['qa']['cachedir'] = '';
-$db['qa']['char_set'] = 'utf8';
-$db['qa']['dbcollat'] = 'utf8_general_ci';
-$db['qa']['swap_pre'] = '';
-$db['qa']['autoinit'] = TRUE;
-$db['qa']['stricton'] = FALSE;
-
-
 /* End of file database.php */
 /* Location: ./application/config/database.php */
