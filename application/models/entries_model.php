@@ -9,13 +9,9 @@ class Entries_Model extends CI_Model {
 		return $query;
 	}
 	
-	function select($num, $offset){
+	function select($userFilters, $num, $offset){
 		// TODO: mover esto de aca y buscar nuevas entries en forma asyncronica
 		$this->getNewsEntries((int)$this->session->userdata('userId'));
-
-		$userFilters = (array)json_decode($this->input->post('post')); 
-
-//pr($userFilters);
 
 		$lastEntryId = element('lastEntryId', $userFilters);
 		unset($userFilters['lastEntryId']);

@@ -31,7 +31,7 @@ class Entries extends CI_Controller {
 		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Entries_Model->select(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE),
+			'result' 	=> $this->Entries_Model->select((array)json_decode($this->input->post('post')), PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE),
 		));
 	}
 

@@ -253,7 +253,7 @@ cloneReader = {
 				.addClass('entryTitle')
 				.attr('href', entry.entryUrl)
 				.css('background-image', 'url(https://plus.google.com/_/favicon?domain=' + entry.feedLInk + ')')
-				.text(entry.entryTitle)
+				.html(entry.entryTitle)
 				.appendTo($header);
 			
 			var $div = $('<div />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
