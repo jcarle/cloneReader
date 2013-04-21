@@ -1,2 +1,2 @@
 Agregar al crontab:
-	php /home/jcarle/dev/cloneReader/index.php entries/getNewsEntries
+	php [PATH_TO_CLONEREADER]/cloneReader/index.php entries/getNewsEntries
