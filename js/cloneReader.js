@@ -30,8 +30,8 @@ cloneReader = {
 	},
 
 	initEvents: function() {
-		setInterval(function() { cloneReader.saveData(true); }, 1000); // cada un segundo guardo datos ( solo si hay novedades)
-		setInterval(function() { cloneReader.reloadFeeds(); }, (60000*10)); // cada 5 minutos relodeo los feeds
+		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
+		setInterval(function() { cloneReader.reloadFeeds(); }, (FEED_TIME_RELOAD * 60000));
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow()

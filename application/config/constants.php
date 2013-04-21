@@ -50,4 +50,8 @@ define('MENU_PUBLIC', 8);
 define('TAG_ALL', 1);
 define('TAG_STAR', 2);
 
-define('FEED_SCAN_HOURS', 2); // Cada cuanto tiempo busca nuevos feeds
+define('FEED_TIME_SCAN', 60); 	// 	Cada cuanto MINUTOS busca nuevos feeds
+define('FEED_TIME_SAVE', 1); 	// 	Cada cuanto SEGUNDOS guarda los datos
+define('FEED_TIME_RELOAD', 5);  //  Cada cuanto MINUTOS recarga el menu con feeds
+define('ENTRIES_PAGE_SIZE', 30);
+

@@ -9,7 +9,7 @@ class Entries_Model extends CI_Model {
 		return $query;
 	}
 	
-	function select($userFilters, $num, $offset){
+	function select($userFilters){
 		// busco nuevas entries
 		exec('php '.FCPATH.'index.php entries/getNewsEntries/'.(int)$this->session->userdata('userId').' > /dev/null & ');
 
@@ -60,7 +60,7 @@ class Entries_Model extends CI_Model {
 
 		$query = $this->db
 			->order_by('entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
-			->get('entries', $num, $offset)
+			->get('entries', ENTRIES_PAGE_SIZE)
 			->result_array();
 		//pr($this->db->last_query());		
 		return $query;
@@ -255,7 +255,7 @@ class Entries_Model extends CI_Model {
 	function getNewsEntries($userId = null) {
 		$this->db
 			->select('feeds.feedId, feedUrl')
-			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_SCAN_HOURS.' HOUR)');
+			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)');
 
 
 		if (is_null($userId) == false) {
