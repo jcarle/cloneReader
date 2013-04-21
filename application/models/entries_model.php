@@ -252,6 +252,12 @@ class Entries_Model extends CI_Model {
 		return array('feedId' => $feedId);
 	}
 
+	function unsubscribeFeed($feedId, $userId) {
+		$this->db->delete('users_feeds', array('feedId' => $feedId, 'userId' => $userId));
+		//pr($this->db->last_query());
+		return true;		
+	}
+
 	function getNewsEntries($userId = null) {
 		$this->db
 			->select('feeds.feedId, feedUrl')

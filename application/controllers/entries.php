@@ -1,6 +1,6 @@
 <?php 
 class Entries extends CI_Controller {
-
+	// TODO: implementar la seguridad!
 	function __construct() {
 		parent::__construct();	
 		
@@ -27,7 +27,6 @@ class Entries extends CI_Controller {
 	}
 	
 	function select($page = 1) {
-		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> $this->Entries_Model->select((array)json_decode($this->input->post('post'))),
@@ -35,7 +34,6 @@ class Entries extends CI_Controller {
 	}
 
 	function selectFeeds() {
-		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> $this->Entries_Model->selectFeeds(),
@@ -120,7 +118,6 @@ class Entries extends CI_Controller {
 		// scanea todos los feeds!
 		$this->Entries_Model->getNewsEntries($userId);
 		
-		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> 'ok',
@@ -134,8 +131,6 @@ class Entries extends CI_Controller {
 		$this->Entries_Model->saveUserEntries((int)$this->session->userdata('userId'), $entries);		
 		$this->Entries_Model->saveUserTags((int)$this->session->userdata('userId'), $tags);
 		
-		
-		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> 'ok',
@@ -145,7 +140,6 @@ class Entries extends CI_Controller {
 	function addFeed() {
 		$result = $this->Entries_Model->addFeed($this->input->post('feedUrl'), $this->session->userdata('userId'));
 
-		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> (is_array($result)),
 			'result' 	=> $result,
@@ -155,10 +149,18 @@ class Entries extends CI_Controller {
 	function saveUserFeedTag() {
 		$result = $this->Entries_Model->saveUserFeedTag((int)$this->session->userdata('userId'), $this->input->post('feedId'), $this->input->post('tagId'), ($this->input->post('append') == 'true'));
 
-		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> ($result === true),
 			'result' 	=> ($result === true ? 'ok': $result),
 		));
 	}
+	
+	function unsubscribeFeed() {
+		$result = $this->Entries_Model->unsubscribeFeed($this->input->post('feedId'), (int)$this->session->userdata('userId'));
+
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> 'ok',
+		));
+	}	
 }

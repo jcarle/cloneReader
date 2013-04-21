@@ -669,7 +669,24 @@ cloneReader = {
 				return $(document).alert(response['result']);
 			}
 			cloneReader.reloadFeeds();
-		});			
+		});
+	},
+	
+	unsubscribeFeed: function(feedId) {
+		this.hidePopupWindow();
+
+		$.ajax({
+			'type':	 	'post',
+			'url': 		base_url + 'entries/unsubscribeFeed',
+			'data': 	{ 'feedId':	feedId 	},
+		})
+		.done(function(response) {
+			if (response['code'] != true) {
+				return $(document).alert(response['result']);
+			}
+			cloneReader.loadEntries(true, { 'type': 'tag', 'id': TAG_ALL });
+			cloneReader.reloadFeeds();
+		});		
 	},
 
 	showPopupAddFeed: function() {
@@ -705,7 +722,7 @@ cloneReader = {
 			.text( 'Unsubscribe' )
 			.appendTo(this.$popupFeedSettings)
 			.click(function() { 
-				cloneReader.unsubscribe(); 
+				cloneReader.unsubscribeFeed(cloneReader.aFilters.id); 
 			});
 		$('<li />')
 			.text( 'New tag' )
