@@ -1,4 +1,3 @@
-
 <?php 
 class Entries extends CI_Controller {
 
@@ -39,7 +38,7 @@ class Entries extends CI_Controller {
 		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Entries_Model->selectByTags(),
+			'result' 	=> $this->Entries_Model->selectFeeds(),
 		));
 	}
 	
@@ -117,9 +116,9 @@ class Entries extends CI_Controller {
 		return $form;		
 	}
 	
-	function getNewsEntries() {
+	function getNewsEntries($userId = null) {
 		// scanea todos los feeds!
-		$this->Entries_Model->getNewsEntries(null);
+		$this->Entries_Model->getNewsEntries($userId);
 		
 		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
@@ -148,8 +147,8 @@ class Entries extends CI_Controller {
 
 		// TODO: implementar la seguridad! 
 		return $this->load->view('ajax', array(
-			'code'		=> ($result === true),
-			'result' 	=> ($result === true ? 'ok': $result),
+			'code'		=> (is_array($result)),
+			'result' 	=> $result,
 		));
 	}
 

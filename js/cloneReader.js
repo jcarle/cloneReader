@@ -30,8 +30,8 @@ cloneReader = {
 	},
 
 	initEvents: function() {
-		setInterval(function() { cloneReader.saveData(true); }, 1000);
-
+		setInterval(function() { cloneReader.saveData(true); }, 1000); // cada un segundo guardo datos ( solo si hay novedades)
+		setInterval(function() { cloneReader.reloadFeeds(); }, (60000*10)); // cada 5 minutos relodeo los feeds
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow()
@@ -263,7 +263,12 @@ cloneReader = {
 
 			$('<span />').addClass('entryDate').text(this.humanizeDatetime(entry.entryDate)).appendTo($header);
 			$('<span />').addClass('star').appendTo($header);
-			$('<p/>').html(entry.entryContent).appendTo($li); // TODO: quitar los tags <script> !|
+			
+
+			var $p = $('<p/>');
+			$p[0].innerHTML = entry.entryContent;
+			$p.find('script').remove();
+			$p.appendTo($li);
 
 			var $footer = $('<div/>').addClass('footer').appendTo($li);
 
@@ -493,6 +498,7 @@ cloneReader = {
 						
 				cloneReader.renderFeeds(response.result, cloneReader.$ulFeeds);
 				cloneReader.updateUlFeeds(false);
+				cloneReader.updateUlMenu();
 				cloneReader.$ulFeeds.find('.selected').hide().fadeIn('slow');
 			}
 		);	
@@ -607,6 +613,9 @@ cloneReader = {
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
+			
+			cloneReader.loadEntries(true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
+			cloneReader.reloadFeeds();
 		});				
 	},
 	

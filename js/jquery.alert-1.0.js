@@ -51,39 +51,11 @@
 				(typeof options === 'string' ? { msg: options } :
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
 			);						 
-		/*	
-			// para evitar que se vaya el foco a otro elemento de la pagina con tab
-			$(document).bind('keydown.alertKeydown', ($.proxy(
-				function(event) {
-					if (event.keyCode == 27 ) { // esc!
-//event.keyCode == 13) { // esc!						
-						this.hide(); //btnClose.click();
-						return false;
-					}
-					if (event.keyCode == 13 && event.target == this.btnClose) { // enter en el button close
-						return true;
-					}
-				//	return false;
-				}
-			, this)));
-	
-	*/
-			if (typeof(this.options.msg) =='string') {
-				this.options.msg = $.createElement('div', null, this.options.msg, 'alert', null, null, true);
-			}
-			$('.btnContainer', this.options.msg).remove();
+
+			this.$div = $('<div />').html(this.options.msg).addClass('alert');
+			this.$div.find('.btnContainer').remove();
 			
-			/*
-			if (this.options.showBtnClose == true) {
-				this.btnClose	= $.createElement('button', $.createElement('div', this.options.msg, null, 'btnContainer' ), 'cerrar' ); /* el btnClose tiene un contenedor por un bug en chrome http://www.punkchip.com/2011/03/chrome-wont-center-button-using-auto-margins/  * /
-				$(this.btnClose).click($.proxy(
-					function() {
-						this.hide();
-					}
-				, this));
-			}	*/		
-	
-			$(this.options.msg).dialog( {
+			this.$div.dialog( {
 				position:	['center', 250],
 				draggable: 	false, 
 				width:		'300', 
@@ -99,43 +71,13 @@
 							this.options.callback();
 						}
 						$(this.input).focus();
-						$(this.options.msg).detach();
+						this.$div.detach();
 					}
 				, this)
 			})
-			$('.ui-dialog-titlebar', $(this.options.msg).parent()).hide();
-			$('button', $(this.options.msg).parent()).focus();
-			$(this.options.msg).parent().css({position:"fixed"}); //.end().dialog('open');
-
-							
-							/*			
-				.popupWindow({
-					showBtnClose:	false,
-					isModal:		true,
-					isAutoHidden:	false,
-					onHidden:		$.proxy(
-						function() {
-							$(document).unbind('keydown.alertKeydown');
-							if(this.options.callback instanceof Function) {
-								this.options.callback();
-							}
-							$(this.input).focus();
-							$(this.options.msg).detach();
-						}
-					, this)
-				})
-				.show()
-				.css('position', 'fixed');
-				*/
-			/*				
-			if (this.options.showBtnClose == true) {
-				$('button', this.options.msg).focus();
-			}*/
+			$('.ui-dialog-titlebar', this.$div.parent()).hide();
+			this.$div.parent().find('button').focus();
+			this.$div.parent().css({position:"fixed"}); //.end().dialog('open');
 		}
-		/*,
-	
-		hide: function() {
-			$(this.options.msg).dialog('close');
-		}*/
 	}
 })($);

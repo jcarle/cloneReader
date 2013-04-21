@@ -10,8 +10,9 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function select($userFilters, $num, $offset){
-		// TODO: mover esto de aca y buscar nuevas entries en forma asyncronica
-		$this->getNewsEntries((int)$this->session->userdata('userId'));
+		// busco nuevas entries
+		exec('php '.FCPATH.'index.php entries/getNewsEntries/'.(int)$this->session->userdata('userId').' > /dev/null & ');
+
 
 		$lastEntryId = element('lastEntryId', $userFilters);
 		unset($userFilters['lastEntryId']);
@@ -61,12 +62,11 @@ class Entries_Model extends CI_Model {
 			->order_by('entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
 			->get('entries', $num, $offset)
 			->result_array();
-		//pr($this->db->last_query());				
-
+		//pr($this->db->last_query());		
 		return $query;
 	}
 
-	function selectByTags() {
+	function selectFeeds() {
 	// TODO: filtro por usuarios!
 		$aTags = array();
 	
@@ -105,7 +105,6 @@ class Entries_Model extends CI_Model {
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds');
 		//pr($this->db->last_query());				
-
 		foreach ($query->result() as $row) {
 			if ($row->tagId != null && !isset($aTags[$row->tagId])) {
 				$aTags[$row->tagId] = array(
@@ -180,8 +179,7 @@ class Entries_Model extends CI_Model {
 				->insert('entries', $values);
 			$entryId = $this->db->insert_id();
 		}
-
-		//pr($this->db->last_query());
+		pr($this->db->last_query());
 
 		return true;
 	}
@@ -241,15 +239,17 @@ class Entries_Model extends CI_Model {
 			$feedId = $query[0]['feedId'];
 		}
 		else {
-			$this->db->ignore()->insert('feeds', array( 'feedUrl'	=> $feedUrl ));
+			$this->db->insert('feeds', array( 'feedUrl'	=> $feedUrl ));
 			$feedId = $this->db->insert_id();
 			//pr($this->db->last_query());
 		}
 
 		$this->db->ignore()->insert('users_feeds', array( 'feedId'	=> $feedId, 'userId' => $userId ));
 		//pr($this->db->last_query());
+		
+		$this->getNewsEntries((int)$this->session->userdata('userId'));
 
-		return true;
+		return array('feedId' => $feedId);
 	}
 
 	function getNewsEntries($userId = null) {
@@ -276,7 +276,7 @@ class Entries_Model extends CI_Model {
 	function parseRss($feedId, $feedUrl) {
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
-//		$this->cisimplepie->enable_cache(false);
+		$this->cisimplepie->enable_cache(false);
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
 		
@@ -296,17 +296,21 @@ class Entries_Model extends CI_Model {
 				$entryAuthor = $author->get_name();
 			}
 
-			$reedEntry = array(
+			$data = array(
 				'feedId' 		=> $feedId,
 				'entryId'		=> -1,
 				'entryTitle'	=> $item->get_title(),
-				'entryContent'	=> $item->get_content(),
+				'entryContent'	=> (string)$item->get_content(),
 				'entryDate'		=> $item->get_date('Y-m-d H:i:s'),
 				'entryUrl'		=> $item->get_link(),
-				'entryAuthor'	=> $entryAuthor,
+				'entryAuthor'	=> (string)$entryAuthor,
 			);
 
-			$this->save($reedEntry);
+			$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result();
+			if (count($query) == 0) {
+				$this->db->insert('entries', $data);
+				//pr($this->db->last_query());
+			}
 		}
 	}
 }

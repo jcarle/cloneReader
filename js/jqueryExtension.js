@@ -17,13 +17,15 @@ $.extend({
 		return o;
 	},
 	
+// TODO: BORRAR ESTE METODO!	
+	/*
 	createElement: function(tagName, parent, value, className, name, inputType, isHTML) {
 		var element = document.createElement(tagName);
 //TODO: revisar si es necesaria esta parte del codigo
 	/*	if (Dom.isMSIE == true && tagName == 'input' && inputType == 'radio') {
 			element = document.createElement('<input type="' + inputType + '" name="' + name + '" >');
 		}
-		else {*/
+		else {* /
 			if (name != null) { element.setAttribute('name', name); }
 			if (inputType != null) { element.setAttribute('type', inputType); }
 		//}
@@ -44,7 +46,7 @@ $.extend({
 			}
 		}
 		return element;
-	},
+	},*/
 	
 	linkToObject: function(sTmp){
 		var oParams = {};
