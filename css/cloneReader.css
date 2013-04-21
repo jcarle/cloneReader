@@ -358,16 +358,16 @@
 		#cloneReader ul.popUpWindow.popupAddFeed li:hover {
 			background-color:white;
 		}
-			#cloneReader ul.popUpWindow.popupAddFeed li div {
+			#cloneReader ul.popUpWindow.popupAddFeed li form {
 			    padding: 10px;
 			}
-				#cloneReader ul.popUpWindow.popupAddFeed li div input {
+				#cloneReader ul.popUpWindow.popupAddFeed li form input {
 				    height: 23px;
 				    width: 220px;
 				    border: 1px solid #CCCCCC;
 					padding:0 5px;
 				}
-				#cloneReader ul.popUpWindow.popupAddFeed li div button {
+				#cloneReader ul.popUpWindow.popupAddFeed li form button {
 				    height: 25px;
 				    line-height: 25px;
 				    padding: 0 8px;

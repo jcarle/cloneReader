@@ -136,7 +136,7 @@ cloneReader = {
 			{ 'html': '+ add',  'title': 'add', 'class': 'add', 'callback': function(event) { cloneReader.showPopupAddFeed(); },
 				'childsClassName': 'popupAddFeed',
 				'childs':  [
-					{ 'html': '<div> <input /> <button> add</button></div>' }
+					{ 'html': '<form> <input /> <button> add</button></form>' }
 				]
 			}
 		], this.$ulMenu);
@@ -680,12 +680,16 @@ cloneReader = {
 				event.stopPropagation();
 			});
 
-			this.$container.find('button').click(function(event) {
+			this.$popupAddFeed.submit(function(event) {
+				event.preventDefault();
 				cloneReader.addFeed(cloneReader.$popupAddFeed.find('input').val());
+				return false;
 			});
+			
+			this.$popupAddFeed.find('input').attr('placeholder', 'add feed url');
 		}
 
-		this.$popupAddFeed.find('input').val('').attr('placeholder', 'add feed url').focus();
+		this.$popupAddFeed.find('input').val('').focus();
 	},
 
 	showPopupFeedSettings: function() {
