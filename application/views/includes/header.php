@@ -5,25 +5,28 @@
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.7.2.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-ui-1.8.21.custom.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.ui.datepicker-es.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-ui-timepicker-addon"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.json-2.3.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jqueryExtension.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.printf.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.topzindex.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.url.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.popupWindow-1.0.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.alert-1.0.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.paginatedList-1.0.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.formValidator.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.imgCenter.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.json-2.3.js"></script>
-	
+	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.alert-1.0.js"></script>		
 
 <?php
-if (isset($aJs)) {
-	foreach ($aJs as $fileName) {
-		echo '<script type="text/javascript" src="'.base_url().'js/'.$fileName.'"></script>';
-	}
+if (!isset($aJs)) {
+	$aJs = array();
+}
+// FIXME: pensar si esto se puede resolver de un modo mas elegante
+if ($view == 'includes/paginatedList') { 
+	$aJs[] = 'jquery.paginatedList-1.0.js';
+}
+if ($view == 'includes/formValidation') {
+	$aJs[] = 'jquery.formValidator.js';
+	$aJs[] = 'jquery.url.js';
+} 
+
+foreach ($aJs as $fileName) {
+	echo '<script type="text/javascript" src="'.base_url().'js/'.$fileName.'"></script>';
+
 }
 ?>
 
@@ -31,15 +34,13 @@ if (isset($aJs)) {
 	<link rel="stylesheet" href="<?php echo base_url();?>css/jquery-ui-1.8.22.custom.css" type="text/css" charset="utf-8" />
 	
 <?php
-if (isset($aCss)) {
-	foreach ($aCss as $fileName) {
-		echo '<link rel="stylesheet" href="'.base_url().'css/'.$fileName.'" type="text/css" charset="utf-8" />';
-	}
+if (!isset($aCss)) {
+	$aCss = array();
+}
+foreach ($aCss as $fileName) {
+	echo '<link rel="stylesheet" href="'.base_url().'css/'.$fileName.'" type="text/css" charset="utf-8" />';
 }
 ?>	
-	
-	<link rel="alternate" type="application/atom+xml" title="Master Atom feed" href="" />
-	<link rel="alternate" type="application/rss+xml" title="Master RSS feed" href="" />
 
 	<title><?php echo $title; ?> - cloneReader</title>
 </head>

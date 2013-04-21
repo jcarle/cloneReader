@@ -99,6 +99,10 @@ cloneReader = {
 
 		$(document).click(
 			function(event) {
+				if ($('.alert').length != 0) {
+					return;
+				}
+				
 				var $popUpWindow = cloneReader.$container.find('.popUpWindow:visible');
 				if ($popUpWindow.length != 0) {
 					if ($.contains($popUpWindow[0], event.target)) {
@@ -594,12 +598,13 @@ cloneReader = {
 		});				
 	},
 
-	addFeed: function(feedUrl) {
+	addFeed: function() {
+		var feedUrl = this.$popupAddFeed.find('input').val();
 		if (feedUrl == '') {
-			alert('enter a url'); return;
+			return this.$popupAddFeed.find('input').alert('enter a url');
 		}
 		if ($.validateUrl(feedUrl) == false) {
-			alert('enter a valid url'); return;
+			return this.$popupAddFeed.find('input').alert('enter a valid url');
 		}
 
 		this.hidePopupWindow();
@@ -699,7 +704,7 @@ cloneReader = {
 
 			this.$popupAddFeed.submit(function(event) {
 				event.preventDefault();
-				cloneReader.addFeed(cloneReader.$popupAddFeed.find('input').val());
+				cloneReader.addFeed();
 				return false;
 			});
 			

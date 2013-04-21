@@ -127,17 +127,6 @@ option {
 	text-align: left;
 	width: 300px;
 }
-	.alert div.btnContainer {
-		text-align:center;
-		display:block;
-	}
-		.alert div.btnContainer button {
-			display: inline-block;
-			margin: 10px auto 0;
-			cursor: pointer;
-			font-weight: normal;
-			text-align: center;
-		}
 	.alert a {
 		font-size: 14px;
 	}

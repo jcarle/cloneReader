@@ -40,9 +40,8 @@
 		 * options puede ser un object cons las propiedades {msg, callback }
 		 * 			tambien puede ser un DomNode o un String, es este caso el pluggin se encarga de mergear las options 
 		 */
-		show: function(input, options) {
-			this.input 		= input;
-			
+		show: function($input, options) {
+			this.$input		= $input;
 			this.options 	= $.extend(
 				{
 					msg:			'',
@@ -53,7 +52,6 @@
 			);						 
 
 			this.$div = $('<div />').html(this.options.msg).addClass('alert');
-			this.$div.find('.btnContainer').remove();
 			
 			this.$div.dialog( {
 				position:	['center', 250],
@@ -63,21 +61,27 @@
 				minHeight:	20,
 				modal: 		true, 
 				resizable: 	false, 
-				buttons:	{ 'cerrar': function(){ $(this).dialog("close"); } }, 
+				buttons:	{ 'cerrar': function(){ } }, 
 				close:		$.proxy(
-					function() {
-						$(document).unbind('keydown.alertKeydown');
+					function(event) {
 						if(this.options.callback instanceof Function) {
 							this.options.callback();
 						}
-						$(this.input).focus();
-						this.$div.detach();
+						this.$input.focus();
+						this.$div.parent().detach();
 					}
 				, this)
-			})
+			});
 			$('.ui-dialog-titlebar', this.$div.parent()).hide();
-			this.$div.parent().find('button').focus();
-			this.$div.parent().css({position:"fixed"}); //.end().dialog('open');
+			this.$div.parent().find('button')
+				.removeAttr('class')
+				.unbind()
+				.click(function(event){ 
+					event.stopPropagation(); 
+					$(this).parents('div[role=dialog]').find('.alert').dialog('close') 
+				}) 
+				.focus();
+			this.$div.parent().css({position: 'fixed'}); //.end().dialog('open');
 		}
 	}
 })($);
