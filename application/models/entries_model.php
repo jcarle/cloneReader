@@ -252,6 +252,32 @@ class Entries_Model extends CI_Model {
 		return array('feedId' => $feedId);
 	}
 
+	function addTag($tagName, $userId, $feedId = null) {
+		$tagName = trim($tagName);
+
+		$query = $this->db->where('tagName', $tagName)->get('tags')->result_array();
+		//pr($this->db->last_query());
+		if (!empty($query)) {
+			$tagId = $query[0]['tagId'];
+		}
+		else {
+			$this->db->insert('tags', array( 'tagName'	=> $tagName ));
+			$tagId = $this->db->insert_id();
+			//pr($this->db->last_query());
+		}
+
+		$this->db->ignore()->insert('users_tags', array( 'tagId'=> $tagId, 'userId' => $userId ));
+		//pr($this->db->last_query());
+
+
+		if ($feedId != null) {
+			$this->db->ignore()->insert('users_feeds_tags', array( 'tagId'=> $tagId, 'feedId'	=> $feedId, 'userId' => $userId ));
+			//pr($this->db->last_query());
+		}
+		
+		return array('tagId' => $tagId);
+	}
+
 	function unsubscribeFeed($feedId, $userId) {
 		$this->db->delete('users_feeds', array('feedId' => $feedId, 'userId' => $userId));
 		//pr($this->db->last_query());

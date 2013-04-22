@@ -115,7 +115,7 @@
 			padding:10px;
 			border:1px #CCC solid;
 			border-radius:5px;
-			margin:10px 5px;
+			margin:10px 5px 30px 5px;
 			box-shadow:0 15px 7px -14px gray;
 		}
 		#cloneReader ul.ulEntries > li.selected {
@@ -133,7 +133,7 @@
 				    background-repeat: no-repeat;
 			        padding: 0 0px 0 20px;
 			        margin: 0 100px 0 0 ;
-			        display: inline;
+			        display: inline-block;
 				}
 				#cloneReader ul.ulEntries > li > .header a {
 					color:#1155CC;
@@ -151,6 +151,7 @@
 					#cloneReader ul.ulEntries > li > .header div a {
 						font-size:12px;
 						font-weight:normal;
+						cursor:pointer;
 					}
 				#cloneReader ul.ulEntries > li > .header .entryDate {
 					color: gray;
@@ -319,7 +320,7 @@
 
 
 
-	#cloneReader ul.popUpWindow {
+	#cloneReader .popUpWindow {
 		background: none repeat scroll 0 0 white;
 		border: 1px solid #CCCCCC;
 		border-radius: 0 0 5px 5px;
@@ -329,7 +330,7 @@
 		position: absolute;
 		z-index: 10;
 	}
-		#cloneReader ul.popUpWindow li {
+		#cloneReader .popUpWindow li {
 			background: none repeat scroll 0 0 white;
 			border: 0 none;
 			display: block;
@@ -341,40 +342,41 @@
 			line-height: 25px;
 			cursor:pointer;
 		}
-		#cloneReader ul.popUpWindow li:hover {
+		#cloneReader .popUpWindow li:hover {
 			box-shadow:none;
 			background-color:#EEE;
 		}
-	#cloneReader ul.popUpWindow.popupAddFeed {
+	#cloneReader .popUpWindow.popupAddFeed {
 	    border-radius: 0px 0px 5px 5px;
 	    text-align: left;
 	    background: none repeat scroll 0 0 white;
 	    cursor: default;
 	}
-		#cloneReader ul.popUpWindow.popupAddFeed li {
+		#cloneReader .popUpWindow.popupAddFeed li {
 			padding:0;
 		    cursor: default;
 		}
-		#cloneReader ul.popUpWindow.popupAddFeed li:hover {
+		#cloneReader .popUpWindow.popupAddFeed li:hover {
 			background-color:white;
 		}
-			#cloneReader ul.popUpWindow.popupAddFeed li form {
-			    padding: 10px;
-			}
-				#cloneReader ul.popUpWindow.popupAddFeed li form input {
-				    height: 23px;
-				    width: 220px;
-				    border: 1px solid #CCCCCC;
-					padding:0 5px;
-				}
-				#cloneReader ul.popUpWindow.popupAddFeed li form button {
-				    height: 25px;
-				    line-height: 25px;
-				    padding: 0 8px;
-				}
-
-				#cloneReader ul.popUpWindow.popupFeedSettings li .check {
+				#cloneReader .popUpWindow.popupFeedSettings li .check {
 					color: gray;
 					display: inline-block;
 					width: 16px;
 				}
+
+
+	#cloneReader form.popUpWindow  {
+		padding: 10px;
+	}
+		#cloneReader form.popUpWindow input {
+			height: 23px;
+			width: 220px;
+			border: 1px solid #CCCCCC;
+			padding:0 5px;
+		}
+		#cloneReader form.popUpWindow button {
+			height: 25px;
+			line-height: 25px;
+			padding: 0 8px;
+		}

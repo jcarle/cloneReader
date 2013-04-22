@@ -146,6 +146,15 @@ class Entries extends CI_Controller {
 		));
 	}
 
+	function addTag() {
+		$result = $this->Entries_Model->addTag($this->input->post('tagName'), $this->session->userdata('userId'), $this->input->post('feedId'));
+
+		return $this->load->view('ajax', array(
+			'code'		=> (is_array($result)),
+			'result' 	=> $result,
+		));
+	}
+
 	function saveUserFeedTag() {
 		$result = $this->Entries_Model->saveUserFeedTag((int)$this->session->userdata('userId'), $this->input->post('feedId'), $this->input->post('tagId'), ($this->input->post('append') == 'true'));
 
