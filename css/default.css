@@ -51,9 +51,10 @@ input[type=text], input[type=password], select, textarea {
 	font-weight: normal; 
 	color: #000000;
 	margin:0px;
-	padding:2px;
+	padding:0 4px;
 	border:1px #CCCCCC solid;
 	border-radius:3px;
+	height:20px; line-height:20px;
 }
 
 input[type=button], input[type=submit], button {
@@ -68,9 +69,10 @@ input[type=button], input[type=submit], button {
 	color: #000000;
 	cursor: default;
 	font: 12px arial,sans-serif;
+	height:25px; line-height: 25px;
 	margin:0;
 	outline: medium none;
-	padding:2px 8px;
+	padding:0px 8px;
 	text-align: center;
 	white-space: nowrap;
 }
@@ -546,7 +548,6 @@ option {
 		.frmEdit fieldset .groupCheckBox,
 		.frmEdit fieldset #gallery {
 			display: inline-block;
-			padding: 2px 4px;
 			width: 700px;
 			border-radius: 3px;
 			border: 1px #CCC solid;

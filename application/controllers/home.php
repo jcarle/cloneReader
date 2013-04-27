@@ -7,7 +7,7 @@ class Home extends CI_Controller {
 			array(
 				'view'			=> 'home', 
 				'title'			=> 'cloneReader',
-				'aJs'			=> array('cloneReader.js', 'moment.min.js'),
+				'aJs'			=> array('cloneReader.js', 'moment.min.js', 'jquery.visible.min.js'), //, 'jquery.inview.js', 'jquery.lazyload.min.js'),
 				'aCss'			=> array('cloneReader.css'),
 				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') )
 			)

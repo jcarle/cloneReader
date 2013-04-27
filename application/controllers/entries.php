@@ -27,6 +27,13 @@ class Entries extends CI_Controller {
 	}
 	
 	function select($page = 1) {
+		// busco nuevas entries
+// TODO: mejorar esta parte
+//pr(base_url().'entries/getNewsEntries/'.(int)$this->session->userdata('userId'));
+//		$this->load->spark('curl/1.2.1'); 
+//		$this->curl->simple_get(base_url().'entries/getNewsEntries/'.(int)$this->session->userdata('userId'));
+		exec('php '.FCPATH.'index.php entries/getNewsEntries/'.(int)$this->session->userdata('userId').' > /dev/null & ');
+
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> $this->Entries_Model->select((array)json_decode($this->input->post('post'))),
@@ -138,10 +145,25 @@ class Entries extends CI_Controller {
 	}
 
 	function addFeed() {
+		$this->load->spark('ci-simplepie/1.0.1/');
+		$this->cisimplepie->set_feed_url($this->input->post('feedUrl'));
+		$this->cisimplepie->enable_cache(false);
+		$this->cisimplepie->init();
+		$this->cisimplepie->handle_content_type();
+		if ($this->cisimplepie->error() != '' ) {
+			return $this->load->view('ajax', array(
+				'code'		=> false,
+				'result' 	=> $this->cisimplepie->error(),
+			));			
+		}
+
+		
 		$result = $this->Entries_Model->addFeed($this->input->post('feedUrl'), $this->session->userdata('userId'));
 
+		$this->Entries_Model->getNewsEntries((int)$this->session->userdata('userId'));
+
 		return $this->load->view('ajax', array(
-			'code'		=> (is_array($result)),
+			'code'		=> true,
 			'result' 	=> $result,
 		));
 	}
@@ -171,5 +193,100 @@ class Entries extends CI_Controller {
 			'code'		=> true,
 			'result' 	=> 'ok',
 		));
+	}	
+
+
+	function migrateFromGReader() {
+		$userId 	= 1; // FIXME: harckodeta
+		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/subscriptions.xml';
+
+		$xml = simplexml_load_file($fileName);
+
+		foreach ($xml->xpath('//body/outline') as $tag) {
+			if (count($tag->children()) > 0) {
+				$tagName = (string)$tag['title'];
+
+				foreach ($tag->children() as $feed) {
+					$feedName 	= (string)$feed->attributes()->title;
+					$feedUrl 	= (string)$feed->attributes()->xmlUrl;
+					$result 	=  $this->Entries_Model->addFeed($feedUrl, $userId);
+					$this->Entries_Model->addTag($tagName, $userId, $result['feedId']);
+				}
+			}
+
+			$feedName 	= (string)$tag->title;
+			$feedUrl 	= (string)$tag->xmlUrl;
+
+			$this->Entries_Model->addFeed($feedUrl, $userId);
+		}
+
+	}
+	
+	function migrateStarredFromGReader() {
+		$userId = 1; // FIXME: harckodeta
+		$fileName = '/home/jcarle/dev/cloneReader/application/cache/starred.json';
+
+		$json = (array)json_decode(file_get_contents($fileName), true);
+//vd((array)json_decode($json));
+//vd($json);
+//die;
+//$count = 0;
+		foreach ($json['items'] as $data) {
+//if ($count > 10) { break; }
+//$count++;
+			$entryContent = '';
+			if (element('summary', $data) != null) {
+				$entryContent = $data['summary']['content'];
+			}
+			else if (element('content', $data) != null) {
+				$entryContent = $data['content']['content'];
+			}
+
+			$entry = array(
+				'entryTitle' 	=> element('title', $data, '(title unknown)'),
+				'entryUrl'		=> (string)$data['alternate'][0]['href'],
+				'entryAuthor'	=> element('author', $data, null),
+				'entryDate'		=> date('Y-m-d H:i:s', $data['published']),
+				'entryContent' 	=> (string)$entryContent,
+			);
+			
+//pr($data);			
+
+			$feed = array(
+				'feedName'	=> element('title', $data['origin']),
+				'feedUrl' 	=> substr($data['origin']['streamId'], 5),
+				'feedLink'	=> $data['origin']['htmlUrl']
+			);
+			
+			$result 			= $this->Entries_Model->addFeed($feed['feedUrl'], $userId);
+			$entry['feedId'] 	= $result['feedId'];
+//pr($entry);			
+			$entry['entryId'] 	= $this->Entries_Model->saveEntry($entry);
+
+//pr($feed);        
+//pr($entry);
+			
+			$this->Entries_Model->saveUserEntries((int)$userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
+		}
+
+/*
+		foreach ($xml->xpath('//body/outline') as $tag) {
+			if (count($tag->children()) > 0) {
+				$tagName = (string)$tag['title'];
+
+				foreach ($tag->children() as $feed) {
+					$feedName 	= (string)$feed->attributes()->title;
+					$feedUrl 	= (string)$feed->attributes()->xmlUrl;
+					$result 	=  $this->Entries_Model->addFeed($feedUrl, $userId);
+					$this->Entries_Model->addTag($tagName, $userId, $result['feedId']);
+				}
+			}
+
+			$feedName 	= (string)$tag->title;
+			$feedUrl 	= (string)$tag->xmlUrl;
+
+			$this->Entries_Model->addFeed($feedUrl, $userId);
+		}*/
+
 	}	
 }

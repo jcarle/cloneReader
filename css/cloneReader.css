@@ -29,6 +29,7 @@
 			font-size: 12px;
 			outline: medium none;
 			text-align: center;
+			text-shadow:0 1px 0 white;
 			line-height:30px;
 			width:30px;
 			margin:5px 5px 5px 0 ;
@@ -62,8 +63,9 @@
 			    width: 20px;
 			}
 		#cloneReader ul.ulMenu li.add  {
-		    padding:0 15px;
-		    width: auto;			
+			font-size: 20px;
+			font-weight: bold;
+			font-weight: bold;
 		}
 		#cloneReader ul.ulMenu > li.expanded,
 		#cloneReader ul.ulMenu > li.expanded:hover,
@@ -122,6 +124,16 @@
 			border-left:1px #1155CC solid;
 			border-radius:0 5px 5px 0; 
 		}
+		#cloneReader ul.ulEntries > li.clean, 
+		#cloneReader ul.ulEntries > li.clean.selected {
+			border:0;
+			box-shadow:none;
+		}
+		#cloneReader ul.ulEntries > li.noResult {
+			border-radius: 0 0 0 0;
+			box-shadow: 0 0 3px #CCCCCC inset;
+			text-transform: capitalize;
+		}
 		#cloneReader ul.ulEntries > li.readed {}
 			#cloneReader ul.ulEntries > li > .header {
 				margin: 0 0px 10px 0;
@@ -171,10 +183,13 @@
 				}
 			#cloneReader ul.ulEntries > li > p {
 				margin:0 0 25px 0;
+				max-width: 100%;
+				overflow: auto;				
 			}
 				#cloneReader ul.ulEntries > li > p img {
 					max-width:100%;
 				    width: auto;
+/*				    display: none;*/
 				}
 				#cloneReader ul.ulEntries > li > p ul,
 				#cloneReader ul.ulEntries > li > p ol,
@@ -329,6 +344,8 @@
 		list-style: none outside none;
 		position: absolute;
 		z-index: 10;
+		max-height: 215px;
+		overflow: auto;
 	}
 		#cloneReader .popUpWindow li {
 			background: none repeat scroll 0 0 white;
@@ -371,7 +388,7 @@
 	}
 		#cloneReader form.popUpWindow input {
 			height: 23px;
-			width: 220px;
+			width: 240px;
 			border: 1px solid #CCCCCC;
 			padding:0 5px;
 		}

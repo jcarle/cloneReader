@@ -40,20 +40,27 @@ cloneReader = {
 
 		this.$ulEntries.scroll($.proxy(
 			function(event) {
+				this.$ulEntries.find('> li').each(
+					function() {
+						cloneReader.renderEntry($(this));
+					}
+				);
+				
 				if (this.$ulEntries.is(':animated') == true) {
 					return;
-				}
-
+				}				
+				
 				var top 	= this.$ulEntries.offset().top;
 				var height 	= this.$ulEntries.outerHeight();
-				var aLi 	= this.$ulEntries.find('li');
+				var aLi		= this.$ulEntries.find('li .header').parent(); // recorro solos los visibles ( tienen header ;)
 				for (var i=0; i<aLi.length; i++) {
-					$li = $(aLi[i]);
-					if (top <= $li.offset().top) {
+					var $li 	= $(aLi[i]);
+					var offset 	= $li.offset();
+					if (top <= (offset.top + 10)) { // TODO: revisar el + 10 (al moverse con las flechas, selecciona el item siguiente)
 						this.selectEntry($li, false, false);
 						return;
 					}
-					if (top > $li.offset().top  &&  ($li.offset().top + $li.height())  >= height) {
+					if (top >= offset.top && (offset.top + $li.height())  >= height) {
 						this.selectEntry($li, false, false);
 						return;
 					}
@@ -71,7 +78,7 @@ cloneReader = {
 						this.goToEntry(event['keyCode'] == 74);
 						break;	
 					case 82: // R: reload
-						this.loadEntries(true, {});
+						this.loadEntries(true, true, {});
 						break;
 					case 85: // U: expand!			
 						this.expandEntries();
@@ -121,24 +128,24 @@ cloneReader = {
 			{ 'html': '', 'class': 'feedName' }, // TODO: hacer que se ajuste el width al espacio disponible!
 			{ 'html': '&#9660;', 	'title': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
 			{ 'html': '&#9650;', 	'title': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
-			{ 'html': '&#10226;', 	'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, {}) }},
+			{ 'html': '&#10226;', 	'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, true, {}) }},
 			{ 'html': '<span />', 	'class': 'filterUnread', 
 				'childs':  [
-					{ 'html': 'all items', 							'class': 'filterAllItems', 'callback': function() { cloneReader.loadEntries(true, { 'onlyUnread': false }); }},
-					{ 'html': '<span class="count" /> new items', 	'class': 'filterOnlyUnread', 'callback': function() { cloneReader.loadEntries(true, { 'onlyUnread': true }); }},
+					{ 'html': 'all items', 							'class': 'filterAllItems', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': false }); }},
+					{ 'html': '<span class="count" /> new items', 	'class': 'filterOnlyUnread', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': true }); }},
 				]
 			},
 			{ 'html': '<span />', 	'class': 'filterSort', 
 				'childs':  [
-					{ 'html': 'sort by newest', 'class': 'filterNewestSort', 'callback': function(event) { cloneReader.loadEntries(true, {'sortDesc': true}); }},
-					{ 'html': 'sort by oldest', 'class': 'filterOldestSort', 'callback': function(event) { cloneReader.loadEntries(true, {'sortDesc': false}); }},
+					{ 'html': 'sort by newest', 'class': 'filterNewestSort', 'callback': function(event) { cloneReader.loadEntries(true, false, {'sortDesc': true}); }},
+					{ 'html': 'sort by oldest', 'class': 'filterOldestSort', 'callback': function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); }},
 				]
 			},
 			{ 'html': 'Feed settings', 	'class': 'feedSettings', 'callback':  function() { cloneReader.showPopupFeedSettings(); },
 				'childsClassName': 'popupFeedSettings',
 				'childs':  []
 			},
-			{ 'html': '+ add',  'title': 'add', 'class': 'add', 'callback': 
+			{ 'html': '+',  'title': 'add feed', 'class': 'add', 'callback': 
 				function(event) { 
 					event.stopPropagation(); 
 					cloneReader.showPopupForm('add feed url', function() { cloneReader.addFeed(); }, cloneReader.$ulMenu.find('li.add')); 
@@ -200,10 +207,20 @@ cloneReader = {
 		}
 	},	
 	
-	loadEntries: function(clear, aFilters) {
+	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
 		
-		this.aFilters =	$.extend(this.aFilters, aFilters);
+		var lastFilters =  $.toJSON(this.aFilters);
+		this.aFilters 	=	$.extend(this.aFilters, aFilters);
+		
+		if (cloneReader.$ulEntries.children().length == 0) { // Para la primera carga
+			forceRefresh = true;
+		}
+		
+		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
+			this.renderNotResult();
+			return;
+		}
 
 		if (clear == true) {
 			delete this.aFilters.lastEntryId;
@@ -233,9 +250,9 @@ cloneReader = {
 	},
 	
 	renderEntries: function(result) {
-		if (result.length == 0 && this.$ulEntries.find('> li').length == 0) {
+		if (result.length == 0) {// && this.$ulEntries.find('> li').length == 0) {
 			this.updateMenuCount();
-			var $li = $('<li/>').text('no results').addClass('noResult').appendTo(this.$ulEntries);			
+			this.renderNotResult();
 			return;
 		}
 		
@@ -246,66 +263,105 @@ cloneReader = {
 			}
 			
 			var $li = $('<li/>')
+					.addClass('clean')
 					.data({ 'entryId': entry.entryId } )
 					.appendTo(this.$ulEntries);
-
-			var $header = $('<div/>').addClass('header').appendTo($li);
-			$('<a />')
-				.addClass('entryTitle')
-				.attr('href', entry.entryUrl)
-				.css('background-image', 'url(https://plus.google.com/_/favicon?domain=' + entry.feedLInk + ')')
-				.html(entry.entryTitle || '&nbsp;')
-				.appendTo($header);
-			
-			var $div = $('<div />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
-			if (entry.entryAuthor != '') {
-				$div.html($div.html() + ' by ' + entry.entryAuthor ).appendTo($header);				
-			}	
-			$div.find('a').click(
-				function() {
-					cloneReader.loadEntries(true, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('li').data('entryId')]['feedId'] });
-				}
-			);
-
-			$('<span />').addClass('entryDate').text(this.humanizeDatetime(entry.entryDate)).appendTo($header);
-			$('<span />').addClass('star').appendTo($header);
-			
-
-			var $p = $('<p/>');
-			$p[0].innerHTML = entry.entryContent;
-			$p.find('script').remove();
-			$p.appendTo($li);
-
-			var $footer = $('<div/>').addClass('footer').appendTo($li);
-
-			$('<span />').addClass('star').appendTo($footer);
-			$('<span />').addClass('read').html('<span class="checkbox"/>keep unread').appendTo($footer);
-
-			$li.find('.star').click(function(event) {
-					event.stopPropagation();
-					$star = $(event.target);
-					cloneReader.starEntry($star.parents('li'), !$star.hasClass('selected'));
-				});
-			$li.find('.read .checkbox').click(function(event) {
-					event.stopPropagation();
-					$checkbox = $(event.target);
-					cloneReader.readEntry($checkbox.parents('li'), $checkbox.parent().hasClass('selected'));
-				});				
-							
-			this.starEntry($li, entry.starred);
-			this.readEntry($li, (entry.entryRead == true));
+					
+			this.renderEntry($li);
 		}
+	
+		this.updateMenuCount();
+	},
+	
+	renderEntry: function($li) {
+		if ($li.hasClass('noResult') == true) {
+			return;
+		}
+		if ($li.visible( true ) == false) {
+			$li.addClass('clean').children().remove();
+			return;
+		}
+
+		var entryId = $li.data('entryId');
+		var entry 	= this.aEntries[entryId];
+
+		if ($li.hasClass('clean') == false) {
+			return;
+		}
+		$li.removeClass('clean');
+			
+		var $header = $('<div/>').addClass('header').appendTo($li);
+
+		$('<a />')
+			.addClass('entryTitle')
+			.attr('href', entry.entryUrl)
+			.css('background-image', 'url(https://plus.google.com/_/favicon?domain=' + entry.feedLInk + ')')
+			.html(entry.entryTitle || '&nbsp;')
+			.appendTo($header);
+			
+		var $div = $('<div />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
+		if (entry.entryAuthor != '') {
+			$div.html($div.html() + ' by ' + entry.entryAuthor ).appendTo($header);				
+		}	
+		$div.find('a').click(
+			function() {
+				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('li').data('entryId')]['feedId'] });
+			}
+		);
+
+		$('<span />').addClass('entryDate').text(this.humanizeDatetime(entry.entryDate)).appendTo($header);
+		$('<span />').addClass('star').appendTo($header);
+			
+		var $entryContent = $('<div/>'); // TODO: revisar esta parte, chequear que elimine bien los <scripts>
+		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
+		$entryContent.find('script').remove();
+		$entryContent.find('iframe').remove();
+		$('<p/>').html($entryContent.text()).appendTo($li);
+
+		var $footer = $('<div/>').addClass('footer').appendTo($li);
+
+		$('<span />').addClass('star').appendTo($footer);
+		$('<span />').addClass('read').html('<span class="checkbox"/>keep unread').appendTo($footer);
+
+		$li.find('.star').click(function(event) {
+				event.stopPropagation();
+				$star = $(event.target);
+				cloneReader.starEntry($star.parents('li'), !$star.hasClass('selected'));
+			});
+		$li.find('.read .checkbox').click(function(event) {
+				event.stopPropagation();
+				$checkbox = $(event.target);
+				cloneReader.readEntry($checkbox.parents('li'), $checkbox.parent().hasClass('selected'));
+			});				
+						
+		this.starEntry($li, entry.starred);
+		this.readEntry($li, (entry.entryRead == true));	
 		
-		this.$ulEntries.find('p').children().removeAttr('class');
-		this.$ulEntries.find('a').attr('target', '_blank');
+		$li.css('min-height', $li.height());
+		$li.find('img').load(
+			function(event) {
+				var $li = $(event.target).parents('li');
+				$li.css('min-height', $li.height());
+			}
+		);
 		
-		$('li', this.$ulEntries).click(function(event) {
-			var $li = $(event.target).parents('li')
+		$li.stop().hide().fadeIn();
+		
+		$li.find('p').children().removeAttr('class');
+		$li.find('a').attr('target', '_blank');
+		
+		$li.click(function(event) {
+			var $li = $(event.target).parents('li');
 			if ($li.hasClass('selected') == true) { return; }
 			cloneReader.selectEntry($li, true, true);
-		});
-		
-		this.updateMenuCount();
+		});		
+	},
+	
+	renderNotResult: function() {
+		if (this.$liNoResult == null) {
+			this.$liNoResult = $('<li/>').text('no more entries').addClass('noResult');
+		}
+		this.$liNoResult.css('min-height', Math.max(200, this.$ulEntries.height() - this.$ulEntries.find('li:last').height())).appendTo(this.$ulEntries);			
 	},
 
 	starEntry: function($li, value) {
@@ -381,7 +437,7 @@ cloneReader = {
 	},
 
 	updateUlFeeds: function() {
-		this.$ulFeeds.find('li').removeClass('selected');
+		this.$ulFeeds.find('li.selected').removeClass('selected');
 		this.$ulFeeds.find('li[data-type=' + this.aFilters.type + '][data-id=' + this.aFilters.id + ']').addClass('selected');
 
 		this.$ulFeeds.find('li[data-type=tag][data-id=' + TAG_ALL + '] li')
@@ -435,9 +491,9 @@ cloneReader = {
 		if ($li.hasClass('noResult') == true) { return; }
 		if (this.$ulEntries.find('li.selected:first').is($li)) { return; }
 		
-		$('li', this.$ulEntries).removeClass('selected');
+		this.$ulEntries.find('li.selected').removeClass('selected');
 		$li.addClass('selected');
-		
+			
 		if (scrollTo == true) {
 			this.scrollToEntry($li, animate);
 		}
@@ -445,8 +501,8 @@ cloneReader = {
 		this.readEntry($li, true);
 
 		var lastEntryId = this.$ulEntries.find('> li').last().data('entryId');
-		if (this.aFilters.lastEntryId != lastEntryId &&  (this.$ulEntries.find('> li').length - 5) <= $li.index()) { // TODO: hacer una variable con el '5' !
-			this.loadEntries(false, { 'lastEntryId': this.$ulEntries.find('> li').last().data('entryId') });
+		if (this.aFilters.lastEntryId != lastEntryId &&  (this.$ulEntries.find('> li').length - 2) <= $li.index()) { // TODO: hacer una variable con el '2' !
+			this.loadEntries(false, false, { 'lastEntryId': this.$ulEntries.find('> li').last().data('entryId') });
 		}
 	},
 	
@@ -557,7 +613,7 @@ cloneReader = {
 			.attr('title', feed.name)
 			.click(function (event) {
 				var $li = $($(event.target).parents('li:first'));
-				cloneReader.loadEntries(true, { 'type': $li.data('type'), 'id': $li.data('id')});
+				cloneReader.loadEntries(true, false, { 'type': $li.data('type'), 'id': $li.data('id')});
 			});
 		if (feed.icon != null) {
 			$li.find('.icon').css('background-image', 'url(' + feed.icon + ')');
@@ -622,7 +678,7 @@ cloneReader = {
 				return $(document).alert(response['result']);
 			}
 			
-			cloneReader.loadEntries(true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
+			cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
 			cloneReader.reloadFeeds();
 		});				
 	},
@@ -681,7 +737,7 @@ cloneReader = {
 				return $(document).alert(response['result']);
 			}
 			
-			cloneReader.loadEntries(true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
+			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
 			cloneReader.reloadFeeds();
 		});				
 	},
@@ -709,6 +765,10 @@ cloneReader = {
 	unsubscribeFeed: function(feedId) {
 		this.hidePopupWindow();
 
+		if (!(confirm('seguro?'))){ // TODO: hacer un popup mas lindo
+			return;
+		}		
+
 		$.ajax({
 			'type':	 	'post',
 			'url': 		base_url + 'entries/unsubscribeFeed',
@@ -718,7 +778,7 @@ cloneReader = {
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
-			cloneReader.loadEntries(true, { 'type': 'tag', 'id': TAG_ALL });
+			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
 			cloneReader.reloadFeeds();
 		});		
 	},
@@ -768,6 +828,7 @@ cloneReader = {
 		}
 
 		this.hidePopupWindow();
+		$li.addClass('expanded');
 
 		this.$popupForm
 			.unbind()
@@ -787,6 +848,7 @@ cloneReader = {
 	},
 	
 	resizeWindow: function() {
+		this.hidePopupWindow();
 		$('.content').width('auto');
 		
 		this.$ulFeeds.height(1);
@@ -801,11 +863,7 @@ cloneReader = {
 
 	showPopupWindow: function($popUpWindow, top, left, width) {
 		$popUpWindow
-			.css({
-				'top': 		top,
-				'left': 	left,
-				'width':	width 
-			})
+			.css({ 'top': top,  'left': left, 'width': width })
 			.appendTo(this.$container)
 			.stop().fadeIn();
 	},
