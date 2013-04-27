@@ -250,7 +250,7 @@ cloneReader = {
 	},
 	
 	renderEntries: function(result) {
-		if (result.length == 0) {// && this.$ulEntries.find('> li').length == 0) {
+		if (result.length == 0) {
 			this.updateMenuCount();
 			this.renderNotResult();
 			return;
@@ -271,6 +271,10 @@ cloneReader = {
 		}
 	
 		this.updateMenuCount();
+		
+		if (this.$ulEntries.find('> li').length < ENTRIES_PAGE_SIZE) {
+			this.renderNotResult();
+		}
 	},
 	
 	renderEntry: function($li) {
@@ -345,7 +349,7 @@ cloneReader = {
 			}
 		);
 		
-		$li.stop().hide().fadeIn();
+		//$li.stop().hide().fadeIn();
 		
 		$li.find('p').children().removeAttr('class');
 		$li.find('a').attr('target', '_blank');
@@ -361,7 +365,7 @@ cloneReader = {
 		if (this.$liNoResult == null) {
 			this.$liNoResult = $('<li/>').text('no more entries').addClass('noResult');
 		}
-		this.$liNoResult.css('min-height', Math.max(200, this.$ulEntries.height() - this.$ulEntries.find('li:last').height())).appendTo(this.$ulEntries);			
+		this.$liNoResult.css('min-height', this.$ulEntries.height() - 200).appendTo(this.$ulEntries);			
 	},
 
 	starEntry: function($li, value) {
@@ -874,6 +878,7 @@ cloneReader = {
 	},
 	
 	humanizeDatetime: function(datetime) {
+		if (datetime == null) { return; }
 		datetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
 		if (datetime >= moment()) {
 			datetime = moment().add('ms', -1);

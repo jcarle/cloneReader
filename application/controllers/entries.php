@@ -30,9 +30,23 @@ class Entries extends CI_Controller {
 		// busco nuevas entries
 // TODO: mejorar esta parte
 //pr(base_url().'entries/getNewsEntries/'.(int)$this->session->userdata('userId'));
-//		$this->load->spark('curl/1.2.1'); 
+		$this->load->spark('curl/1.2.1'); 
 //		$this->curl->simple_get(base_url().'entries/getNewsEntries/'.(int)$this->session->userdata('userId'));
-		exec('php '.FCPATH.'index.php entries/getNewsEntries/'.(int)$this->session->userdata('userId').' > /dev/null & ');
+		$this->curl->create(base_url().'entries/getNewsEntries/'.(int)$this->session->userdata('userId'));
+		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
+		$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
+		$this->curl->execute();
+//echo $this->curl->error_code;
+//echo $this->curl->error_string;
+
+//vd($this->input->server('PHP_AUTH_USER'));
+//vd($this->input->server('PHP_AUTH_PW'));
+
+
+// Information
+//vd($this->curl->info); // array
+
+//		exec('php '.FCPATH.'index.php entries/getNewsEntries/'.(int)$this->session->userdata('userId').' > /dev/null & ');
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,

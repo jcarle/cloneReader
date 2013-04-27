@@ -305,8 +305,7 @@ class Entries_Model extends CI_Model {
 		foreach ($query->result() as $row) {
 			$this->parseRss($row->feedId, $row->feedUrl);
 		}
-	}
-		
+	}		
 
 	// TODO: mover estos metodos de aca
 	function parseRss($feedId, $feedUrl) {
@@ -316,13 +315,14 @@ class Entries_Model extends CI_Model {
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
 		
-		$this->db->update('feeds',  
-			array(
-				'feedName' 			=> (string)$this->cisimplepie->get_title(), 
-				'feedLink' 			=> (string)$this->cisimplepie->get_link(),
-				'feedLastUpdate' 	=> date("Y-m-d H:i:s"), 
-			), 
-			array('feedId' => $feedId));
+		$values = array('feedLastUpdate' => date("Y-m-d H:i:s")); 
+		if (trim((string)$this->cisimplepie->get_title()) != '') {
+			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
+		}
+		if (trim((string)$this->cisimplepie->get_link()) != '') {
+			$values['feedLink'] = (string)$this->cisimplepie->get_link();
+		}
+		$this->db->update('feeds', $values, array('feedId' => $feedId));
 			
 		$rss = $this->cisimplepie->get_items();
 
@@ -334,19 +334,14 @@ class Entries_Model extends CI_Model {
 
 			$data = array(
 				'feedId' 		=> $feedId,
-				'entryId'		=> -1,
 				'entryTitle'	=> $item->get_title(),
 				'entryContent'	=> (string)$item->get_content(),
 				'entryDate'		=> $item->get_date('Y-m-d H:i:s'),
 				'entryUrl'		=> $item->get_link(),
 				'entryAuthor'	=> (string)$entryAuthor,
 			);
-
-			$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result();
-			if (count($query) == 0) {
-				$this->db->insert('entries', $data);
-				//pr($this->db->last_query());
-			}
+			
+			$this->saveEntry($data);
 		}
 	}
 }
