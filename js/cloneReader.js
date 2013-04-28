@@ -34,6 +34,9 @@ cloneReader = {
 		setInterval(function() { cloneReader.reloadFeeds(); }, (FEED_TIME_RELOAD * 60000));
 		// TODO: agregar un cron para que actualize la fecha de cada entry
 		
+		this.$ulFeeds.niceScroll({cursorcolor: '#CCC' });
+		this.$ulEntries.niceScroll({cursorcolor: '#CCC' });						
+		
 		$(window).resize(function() {
 			cloneReader.resizeWindow()
 		});
@@ -328,19 +331,16 @@ cloneReader = {
 		$('<span />').addClass('read').html('<span class="checkbox"/>keep unread').appendTo($footer);
 
 		$li.find('.star').click(function(event) {
-				event.stopPropagation();
-				$star = $(event.target);
-				cloneReader.starEntry($star.parents('li'), !$star.hasClass('selected'));
-			});
+			event.stopPropagation();
+			$star = $(event.target);
+			cloneReader.starEntry($star.parents('li'), !$star.hasClass('selected'));
+		});
 		$li.find('.read .checkbox').click(function(event) {
 				event.stopPropagation();
 				$checkbox = $(event.target);
 				cloneReader.readEntry($checkbox.parents('li'), $checkbox.parent().hasClass('selected'));
 			});				
 						
-		this.starEntry($li, entry.starred);
-		this.readEntry($li, (entry.entryRead == true));	
-		
 		$li.css('min-height', $li.height());
 		$li.find('img').load(
 			function(event) {
@@ -358,14 +358,17 @@ cloneReader = {
 			var $li = $(event.target).parents('li');
 			if ($li.hasClass('selected') == true) { return; }
 			cloneReader.selectEntry($li, true, true);
-		});		
+		});
+		
+		this.starEntry($li, entry.starred);
+		this.readEntry($li, (entry.entryRead == true));					
 	},
 	
 	renderNotResult: function() {
 		if (this.$liNoResult == null) {
 			this.$liNoResult = $('<li/>').text('no more entries').addClass('noResult');
 		}
-		this.$liNoResult.css('min-height', this.$ulEntries.height() - 200).appendTo(this.$ulEntries);			
+		this.$liNoResult.css('min-height', this.$ulEntries.height() - 150).appendTo(this.$ulEntries);			
 	},
 
 	starEntry: function($li, value) {
@@ -598,6 +601,7 @@ cloneReader = {
 			}
 		}
 		this.updateTagsCount();
+		this.resizeWindow();
 	},
 
 	renderFeed: function(type, feed, $parent) {
@@ -696,6 +700,9 @@ cloneReader = {
 	},
 	
 	saveData: function(async){
+		if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
+			return;
+		}
 		if (Object.keys(this.aUserEntries).length == 0 && Object.keys(this.aUserFeeds).length == 0) {
 			return;
 		}
@@ -856,11 +863,16 @@ cloneReader = {
 		$('.content').width('auto');
 		
 		this.$ulFeeds.height(1);
+		
+		$('.nicescroll-rails').hide(); 
+		
 		this.$ulEntries
 			.height(1)
 			.height($(document).outerHeight(true) - 1 - this.$ulEntries.offset().top - $('#footer').outerHeight(true)); // TODO: revisar el -1
 
 		this.$ulFeeds.height(this.$ulEntries.height());
+		
+		$('.nicescroll-rails').show();
 			
 		this.scrollToEntry(this.$ulEntries.find('li.selected'), false);
 	},
