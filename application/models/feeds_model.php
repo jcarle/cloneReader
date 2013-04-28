@@ -21,17 +21,29 @@ class Feeds_Model extends CI_Model {
 	}	
 	
 	function save($data){
-		$feedId = $data['feedId'];
+		$feedId = (int)element('feedId', $data);
 		
 		$values = array(
 			'feedName'		=> $data['feedName'],
 			'feedUrl'		=> $data['feedUrl'],
+			'feedLink'		=> $data['feedLink']
 		);
 		
 
-		if ((int)$feedId != -1) {		
-			$this->db->where('feedId', $feedId);
-			$this->db->update('feeds', $values);
+		$query = $this->db->where('feedUrl', $values['feedUrl'])->get('feeds')->result_array();
+		//pr($this->db->last_query());
+		if (!empty($query)) {
+			$feedId = $query[0]['feedId'];
+			
+			if ((string)$query[0]['feedName'] == '') {
+				$values['feedName'] = $values['feedLink'];
+			}
+		}
+		
+		if ((int)$feedId != -1) {
+			$this->db
+				->where('feedId', $feedId)
+				->update('feeds', $values);
 		}
 		else {
 			$this->db->insert('feeds', $values);
@@ -39,6 +51,6 @@ class Feeds_Model extends CI_Model {
 		}
 		//pr($this->db->last_query());
 
-		return true;
+		return $feedId;
 	}
 }

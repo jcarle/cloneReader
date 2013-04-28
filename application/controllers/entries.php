@@ -172,7 +172,7 @@ class Entries extends CI_Controller {
 		}
 
 		
-		$result = $this->Entries_Model->addFeed($this->input->post('feedUrl'), $this->session->userdata('userId'));
+		$result = $this->Entries_Model->addFeed($this->session->userdata('userId'), array('feedUrl' => $this->input->post('feedUrl')));
 
 		$this->Entries_Model->getNewsEntries((int)$this->session->userdata('userId'));
 
@@ -223,31 +223,24 @@ class Entries extends CI_Controller {
 				foreach ($tag->children() as $feed) {
 					$feedName 	= (string)$feed->attributes()->title;
 					$feedUrl 	= (string)$feed->attributes()->xmlUrl;
-					$result 	=  $this->Entries_Model->addFeed($feedUrl, $userId);
-					$this->Entries_Model->addTag($tagName, $userId, $result['feedId']);
+					$feedId 	=  $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
+					$this->Entries_Model->addTag($tagName, $userId, $feedId);
 				}
 			}
 
 			$feedName 	= (string)$tag->title;
 			$feedUrl 	= (string)$tag->xmlUrl;
 
-			$this->Entries_Model->addFeed($feedUrl, $userId);
+			$this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
 		}
-
 	}
 	
 	function migrateStarredFromGReader() {
-		$userId = 1; // FIXME: harckodeta
-		$fileName = '/home/jcarle/dev/cloneReader/application/cache/starred.json';
+		$userId 	= 1; // FIXME: harckodeta
+		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/starred.json';
+		$json 		= (array)json_decode(file_get_contents($fileName), true);
 
-		$json = (array)json_decode(file_get_contents($fileName), true);
-//vd((array)json_decode($json));
-//vd($json);
-//die;
-//$count = 0;
 		foreach ($json['items'] as $data) {
-//if ($count > 10) { break; }
-//$count++;
 			$entryContent = '';
 			if (element('summary', $data) != null) {
 				$entryContent = $data['summary']['content'];
@@ -263,44 +256,18 @@ class Entries extends CI_Controller {
 				'entryDate'		=> date('Y-m-d H:i:s', $data['published']),
 				'entryContent' 	=> (string)$entryContent,
 			);
-			
-//pr($data);			
 
 			$feed = array(
 				'feedName'	=> element('title', $data['origin']),
 				'feedUrl' 	=> substr($data['origin']['streamId'], 5),
-				'feedLink'	=> $data['origin']['htmlUrl']
+				'feedLink'	=> $data['origin']['htmlUrl'],
+				'feedName'	=> element('title', $data['origin'])
 			);
 			
-			$result 			= $this->Entries_Model->addFeed($feed['feedUrl'], $userId);
-			$entry['feedId'] 	= $result['feedId'];
-//pr($entry);			
+			$entry['feedId']	= $this->Entries_Model->addFeed($userId, $feed);
 			$entry['entryId'] 	= $this->Entries_Model->saveEntry($entry);
-
-//pr($feed);        
-//pr($entry);
 			
 			$this->Entries_Model->saveUserEntries((int)$userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
 		}
-
-/*
-		foreach ($xml->xpath('//body/outline') as $tag) {
-			if (count($tag->children()) > 0) {
-				$tagName = (string)$tag['title'];
-
-				foreach ($tag->children() as $feed) {
-					$feedName 	= (string)$feed->attributes()->title;
-					$feedUrl 	= (string)$feed->attributes()->xmlUrl;
-					$result 	=  $this->Entries_Model->addFeed($feedUrl, $userId);
-					$this->Entries_Model->addTag($tagName, $userId, $result['feedId']);
-				}
-			}
-
-			$feedName 	= (string)$tag->title;
-			$feedUrl 	= (string)$tag->xmlUrl;
-
-			$this->Entries_Model->addFeed($feedUrl, $userId);
-		}*/
-
 	}	
 }

@@ -235,9 +235,10 @@ class Entries_Model extends CI_Model {
 		return true;
 	}
 
-	function addFeed($feedUrl, $userId) {
-		$feedUrl = trim($feedUrl);
+	function addFeed($userId, $feed) {
+		//$feedUrl = trim($feedUrl);
 
+		/*
 		$query = $this->db->where('feedUrl', $feedUrl)->get('feeds')->result_array();
 		//pr($this->db->last_query());
 		if (!empty($query)) {
@@ -247,12 +248,15 @@ class Entries_Model extends CI_Model {
 			$this->db->insert('feeds', array( 'feedUrl'	=> $feedUrl ));
 			$feedId = $this->db->insert_id();
 			//pr($this->db->last_query());
-		}
+		}*/
+		
+		$this->load->model('Feeds_Model');
+		$feedId = $this->Feeds_Model->save($feed);
 
 		$this->db->ignore()->insert('users_feeds', array( 'feedId'	=> $feedId, 'userId' => $userId ));
 		//pr($this->db->last_query());
 		
-		return array('feedId' => $feedId);
+		return $feedId;
 	}
 
 	function addTag($tagName, $userId, $feedId = null) {
