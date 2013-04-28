@@ -32,7 +32,7 @@ cloneReader = {
 	initEvents: function() {
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
 		setInterval(function() { cloneReader.reloadFeeds(); }, (FEED_TIME_RELOAD * 60000));
-		// TODO: agregar un cron para que actualize la fecha de cada entry
+		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
 		this.$ulFeeds.niceScroll({cursorcolor: '#CCC' });
 		this.$ulEntries.niceScroll({cursorcolor: '#CCC' });						
@@ -48,7 +48,7 @@ cloneReader = {
 						cloneReader.renderEntry($(this));
 					}
 				);
-				
+
 				if (this.$ulEntries.is(':animated') == true) {
 					return;
 				}				
@@ -269,7 +269,7 @@ cloneReader = {
 					.addClass('clean')
 					.data({ 'entryId': entry.entryId } )
 					.appendTo(this.$ulEntries);
-					
+
 			this.renderEntry($li);
 		}
 	
@@ -316,9 +316,9 @@ cloneReader = {
 			}
 		);
 
-		$('<span />').addClass('entryDate').text(this.humanizeDatetime(entry.entryDate)).appendTo($header);
+		$('<span />').addClass('entryDate').appendTo($header);
 		$('<span />').addClass('star').appendTo($header);
-			
+	
 		var $entryContent = $('<div/>'); // TODO: revisar esta parte, chequear que elimine bien los <scripts>
 		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
 		$entryContent.find('script').remove();
@@ -349,7 +349,7 @@ cloneReader = {
 			}
 		);
 		
-		//$li.stop().hide().fadeIn();
+		$li.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
 		
 		$li.find('p').children().removeAttr('class');
 		$li.find('a').attr('target', '_blank');
@@ -361,7 +361,9 @@ cloneReader = {
 		});
 		
 		this.starEntry($li, entry.starred);
-		this.readEntry($li, (entry.entryRead == true));					
+		this.readEntry($li, (entry.entryRead == true));
+		
+		setTimeout( function() { cloneReader.updateEntryDateTime($li); } , 0);
 	},
 	
 	renderNotResult: function() {
@@ -793,6 +795,20 @@ cloneReader = {
 			cloneReader.reloadFeeds();
 		});		
 	},
+	
+	updateEntriesDateTime: function() {
+		this.$ulEntries.find('.entryDate').each(
+			function() {
+				cloneReader.updateEntryDateTime($(this).parents('li'));
+			}
+		);
+	},
+	
+	updateEntryDateTime: function($li) {
+		var entryId = $li.data('entryId');
+		var entry 	= this.aEntries[entryId];
+		$li.find('.entryDate').text(entry.entryDate + ' (' + this.humanizeDatetime(entry.entryDate) + ')');
+	},	
 
 	showPopupFeedSettings: function() {
 		if (this.$popupFeedSettings == null) {
