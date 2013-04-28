@@ -842,9 +842,9 @@ cloneReader = {
 				return false;
 			});
 
-		var top				= $li.offset().top + $li.height() - this.$container.offset().top + 1; // FIXME: revisar el '1'
-		var left 			= $li.offset().left - this.$container.offset().left;
-		var width 			= 300;
+		var top		= $li.offset().top + $li.height() - this.$container.offset().top + 1; // FIXME: revisar el '1'
+		var left 	= $li.offset().left - this.$container.offset().left;
+		var width 	= 300;
 
 		this.showPopupWindow(this.$popupForm, top, left, width);
 		
@@ -867,7 +867,7 @@ cloneReader = {
 
 	showPopupWindow: function($popUpWindow, top, left, width) {
 		$popUpWindow
-			.css({ 'top': top,  'left': left, 'width': width })
+			.css({ 'top': top,  'left': left, 'width': width, 'max-height': this.$ulEntries.height() })
 			.appendTo(this.$container)
 			.stop().fadeIn();
 	},

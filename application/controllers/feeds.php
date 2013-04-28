@@ -77,6 +77,11 @@ class Feeds extends CI_Controller {
 					'label'		=> 'Url', 
 					'value'		=> element('feedUrl', $data)
 				),
+				'feedLink' => array(
+					'type' 		=> 'text',
+					'label'		=> 'Link', 
+					'value'		=> element('feedLink', $data)
+				),				
 			), 		
 		);
 		

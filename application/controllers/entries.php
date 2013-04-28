@@ -221,17 +221,24 @@ class Entries extends CI_Controller {
 				$tagName = (string)$tag['title'];
 
 				foreach ($tag->children() as $feed) {
-					$feedName 	= (string)$feed->attributes()->title;
-					$feedUrl 	= (string)$feed->attributes()->xmlUrl;
-					$feedId 	=  $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
+					
+					$feed = array(
+						'feedName'	=> (string)$feed->attributes()->title,
+						'feedUrl' 	=> (string)$feed->attributes()->xmlUrl,
+						'feedLink'	=> (string)$feed->attributes()->htmlUrl
+					);
+					$feedId	=  $this->Entries_Model->addFeed($userId, $feed);
 					$this->Entries_Model->addTag($tagName, $userId, $feedId);
 				}
 			}
-
-			$feedName 	= (string)$tag->title;
-			$feedUrl 	= (string)$tag->xmlUrl;
-
-			$this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
+			else {
+				$feed = array(
+					'feedName' 	=> (string)$tag->attributes()->title,
+					'feedUrl' 	=> (string)$tag->attributes()->xmlUrl,
+					'feedLink'	=> (string)$tag->attributes()->htmlUrl
+				);
+				$this->Entries_Model->addFeed($userId, $feed);
+			}
 		}
 	}
 	

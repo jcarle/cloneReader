@@ -1,7 +1,7 @@
 <?php
 class Feeds_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS feeds.feedId AS id, feedName AS \'Nombre\', feedUrl AS \'Url\' ', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS feeds.feedId AS id, feedName AS \'Nombre\', feedUrl AS \'Url\', feedLink AS \'feedLink\' ', false)
 						->like('feedName', $filter)
 		 				->get('feeds', $num, $offset);
 						
@@ -23,11 +23,18 @@ class Feeds_Model extends CI_Model {
 	function save($data){
 		$feedId = (int)element('feedId', $data);
 		
-		$values = array(
-			'feedName'		=> $data['feedName'],
-			'feedUrl'		=> $data['feedUrl'],
-			'feedLink'		=> $data['feedLink']
-		);
+		if (trim($data['feedUrl']) == '') {
+			vd($data);
+			return null;
+		}
+		
+		$values = array('feedUrl' => $data['feedUrl']);
+		if (isset($data['feedName'])) {
+			$values['feedName'] = $data['feedName'];
+		}
+		if (isset($data['feedLink'])) {
+			$values['feedLink']	= $data['feedLink'];
+		}
 		
 
 		$query = $this->db->where('feedUrl', $values['feedUrl'])->get('feeds')->result_array();
@@ -36,11 +43,11 @@ class Feeds_Model extends CI_Model {
 			$feedId = $query[0]['feedId'];
 			
 			if ((string)$query[0]['feedName'] == '') {
-				$values['feedName'] = $values['feedLink'];
+				$values['feedName'] = element('feedLink', $values);
 			}
 		}
 		
-		if ((int)$feedId != -1) {
+		if ((int)$feedId != 0) {
 			$this->db
 				->where('feedId', $feedId)
 				->update('feeds', $values);

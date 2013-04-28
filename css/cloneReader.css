@@ -344,7 +344,6 @@
 		list-style: none outside none;
 		position: absolute;
 		z-index: 10;
-		max-height: 215px;
 		overflow: auto;
 	}
 		#cloneReader .popUpWindow li {
