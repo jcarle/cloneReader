@@ -42,12 +42,32 @@
 		#cloneReader ul.ulMenu li.reload {
 			font-size:20px;
 		}
+		#cloneReader ul.ulMenu li.viewDetail {
+			background: url(img/view_options_details.png) no-repeat scroll center center transparent;
+		}
+		#cloneReader ul.ulMenu li.prev {
+			margin:5px 0;
+		    border-right: 0 none;		
+		}
+		#cloneReader ul.ulMenu li.viewList {
+			background: url(img/view_options_list.png) no-repeat scroll center center transparent;
+			margin:5px 0;
+		    border-right: 0 none;
+		}
 		#cloneReader ul.ulMenu li:hover {
 			box-shadow: 0px 0px 4px #CCC;
 		}
 		#cloneReader ul.ulMenu li:active {
 			box-shadow: 0px 0px 4px #CCC inset;
-		}		
+		}
+		
+		#cloneReader ul.ulMenu li.checked,
+		#cloneReader ul.ulMenu li.checked:hover,
+		#cloneReader ul.ulMenu li.checked:active {
+		    background-color: #DDDDDD;
+		    box-shadow: 0 0 2px gray inset;
+		    cursor: default;
+		}										
 		#cloneReader ul.ulMenu li.filterUnread,
 		#cloneReader ul.ulMenu li.filterSort,
 		#cloneReader ul.ulMenu li.feedSettings {
@@ -103,7 +123,7 @@
 		}		
 
 
-	#cloneReader ul.ulEntries {
+	#cloneReader .ulEntries {
 		display:block;
 		border:0px gray solid;
 		list-style: none;
@@ -113,32 +133,36 @@
 		margin:0 0 0 240px;
 		background:white;
 	}
-		#cloneReader ul.ulEntries > li {
+		#cloneReader .ulEntries > li {
 			padding:10px;
 			border:1px #CCC solid;
 			border-radius:5px;
 			margin:10px 5px 30px 5px;
 			box-shadow:0 15px 7px -14px gray;
 		}
-		#cloneReader ul.ulEntries > li.selected {
+		#cloneReader .ulEntries > li.selected {
 			border-left:1px #1155CC solid;
 			border-radius:0 5px 5px 0; 
 		}
-		#cloneReader ul.ulEntries > li.clean, 
-		#cloneReader ul.ulEntries > li.clean.selected {
+		#cloneReader .ulEntries > li.clean, 
+		#cloneReader .ulEntries > li.clean.selected {
 			border:0;
 			box-shadow:none;
 		}
-		#cloneReader ul.ulEntries > li.noResult {
+		#cloneReader .ulEntries > li.noResult {
 			border-radius: 0 0 0 0;
 			box-shadow: 0 0 3px #CCCCCC inset;
 			text-transform: capitalize;
 		}
-		#cloneReader ul.ulEntries > li.readed {}
-			#cloneReader ul.ulEntries > li > .header {
+		#cloneReader .ulEntries > li.noResult.loading {
+			background: url("img/loadingSmall.gif") no-repeat scroll 10px 12px transparent;
+			padding: 10px 10px 0 40px;
+		}
+		#cloneReader .ulEntries > li.readed {}
+			#cloneReader .ulEntries > li .header {
 				margin: 0 0px 10px 0;
 			}
-				#cloneReader ul.ulEntries > li > .header > a {
+				#cloneReader .ulEntries > li .header > a {
 					color:#1155CC;
 					font-size: 16px;
 					font-weight: bold;
@@ -147,58 +171,57 @@
 			        margin: 0 100px 0 0 ;
 			        display: inline-block;
 				}
-				#cloneReader ul.ulEntries > li > .header a {
+				#cloneReader .ulEntries > li .header a {
 					color:#1155CC;
 				}
-				#cloneReader ul.ulEntries > li.readed > .header a {
+				#cloneReader .ulEntries > li.readed .header a {
 					color: #333;
 				}
-				#cloneReader ul.ulEntries > li.selected > .header a {
+				#cloneReader .ulEntries > li.selected .header a {
 					color:#1155CC;
 				}
-				#cloneReader ul.ulEntries > li > .header div {
+				#cloneReader .ulEntries > li .header div {
 					color: gray;
 					font-size:12px;
 				}
-					#cloneReader ul.ulEntries > li > .header div a {
+					#cloneReader .ulEntries > li .header div a {
 						font-size:12px;
 						font-weight:normal;
 						cursor:pointer;
 					}
-				#cloneReader ul.ulEntries > li > .header .entryDate {
+				#cloneReader .ulEntries > li .header .entryDate {
 					color: gray;
 					position: absolute;
 					right: 20px;
 					top: 0px;				
 				}
-				#cloneReader ul.ulEntries > li > .header .star {
+				#cloneReader .ulEntries > li .header .star {
 					position: absolute;
 					right: 0px; top: 0px;
 					width:16px; height:16px;
 					background: url(img/star-off.png) no-repeat scroll 0 0 transparent;
 					cursor: pointer;
 				}
-				#cloneReader ul.ulEntries > li > .header .star.selected {
+				#cloneReader .ulEntries > li .header .star.selected {
 					background: url(img/star-on.png);
 				}
-			#cloneReader ul.ulEntries > li > p {
+			#cloneReader .ulEntries > li p {
 				margin:0 0 25px 0;
 				max-width: 100%;
 				overflow: auto;				
 			}
-				#cloneReader ul.ulEntries > li > p img {
+				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 				    width: auto;
-/*				    display: none;*/
 				}
-				#cloneReader ul.ulEntries > li > p ul,
-				#cloneReader ul.ulEntries > li > p ol,
-				#cloneReader ul.ulEntries > li > p li 
+				#cloneReader .ulEntries > li p ul,
+				#cloneReader .ulEntries > li p ol,
+				#cloneReader .ulEntries > li p li 
 				{
 					margin:auto;
 					padding:0 0 0 40px;
 				}
-			#cloneReader ul.ulEntries > li > .footer {
+			#cloneReader .ulEntries > li .footer {
 				background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 				background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
 				border-radius: 0 0 4px 4px;
@@ -209,31 +232,31 @@
 				width: 100%;
 				border-top: 1px solid #DDDDDD;
 			}
-				#cloneReader ul.ulEntries > li.selected > .footer {
+				#cloneReader .ulEntries > li.selected .footer {
 					border-radius: 0 0 4px 0px;
 				}
-				#cloneReader ul.ulEntries > li > .footer * {
+				#cloneReader .ulEntries > li .footer * {
 					height:25px; line-height:25px;
 					color:#333;
 					float: left;
 					margin:0 5px;
 					font-size:11px;
 				}
-				#cloneReader ul.ulEntries > li > .footer .star {
+				#cloneReader .ulEntries > li .footer .star {
 					width:16px; 
 					background: url(img/star-off.png) no-repeat scroll center center transparent;
 					cursor: pointer;
 				}
-				#cloneReader ul.ulEntries > li > .footer .star.selected {
+				#cloneReader .ulEntries > li .footer .star.selected {
 					background-image: url(img/star-on.png);
 				}
-				#cloneReader ul.ulEntries > li > .footer .read {
+				#cloneReader .ulEntries > li .footer .read {
 					color:gray;
 				}
-				#cloneReader ul.ulEntries > li > .footer .read.selected {
+				#cloneReader .ulEntries > li .footer .read.selected {
 					color:#333;
 				}
-					#cloneReader ul.ulEntries > li > .footer .checkbox {
+					#cloneReader .ulEntries > li .footer .checkbox {
 					    border: 1px solid gray;
 						background: none repeat scroll 0 0 white;
 						box-shadow:0 0 4px #CCCCCC inset;
@@ -245,13 +268,80 @@
 						top: 5px;
 						width: 12px;
 					}
-					#cloneReader ul.ulEntries > li > .footer .read.selected .checkbox {
+					#cloneReader .ulEntries > li .footer .read.selected .checkbox {
 					    background: none repeat scroll 0 0 white;
 					    box-shadow: 0 0 4px #CCCCCC;
 					    color: #3176CB;
 					    font-weight: bold;
 					}
 					
+		#cloneReader .ulEntries.list > li {
+		    border-radius: 0 0 0 0;
+		    box-shadow: none;
+		    margin: 0;
+	        padding: 0;
+	        border-top: 0;
+	        min-height:40px !important;
+		}
+		#cloneReader .ulEntries.list > li.noResult {
+			padding:10px 0 0 10px;
+		}
+		#cloneReader .ulEntries > li .detail {
+			padding:10px;
+		}
+		#cloneReader .ulEntries.list > li.expanded {
+			display:block;
+		}
+			#cloneReader .ulEntries.list > li .entryList {
+			    height: 40px;
+			    line-height: 40px;	        					
+			}
+			#cloneReader .ulEntries.list > li .entryList * {
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			    height: 40px;
+			    line-height: 40px;
+			    margin: 0 5px;
+			    float: left;			    
+			}		
+			#cloneReader .ulEntries.list > li.expanded .entryList {
+				background: #eee;
+			}
+				#cloneReader .ulEntries.list > li .entryList .star {
+					width:16px; 
+					background: url(img/star-off.png) no-repeat scroll center center transparent;
+					cursor: pointer;
+				}
+				#cloneReader .ulEntries.list > li .entryList .star.selected {
+					background-image: url(img/star-on.png);					
+				}
+				#cloneReader .ulEntries.list > li .entryList .feedName {
+			        width: 150px;
+			        cursor: pointer;
+				}
+				#cloneReader .ulEntries.list > li .entryList .entryContent {
+				    color: gray;
+				    left: 175px;
+				    position: absolute;
+				    right: 128px;
+				    text-align: left;
+				    cursor: pointer;
+				}
+					#cloneReader .ulEntries.list > li .entryList .entryContent h2 {
+						color: #333;
+					    font-weight: bold;
+				        display: inline;
+					}				
+				#cloneReader .ulEntries.list > li .entryList .entryDate {
+					float: right;
+    				margin: 0 10px 0 0;
+   				    color: gray;
+				}
+				#cloneReader .ulEntries.list > li .footer {
+					border-radius: 0;
+				}
+
 
 	#cloneReader ul.ulFeeds {
 		width: 240px;
@@ -396,3 +486,8 @@
 			line-height: 25px;
 			padding: 0 8px;
 		}
+
+
+.nicescroll-rails div {
+	cursor: pointer; /* FIXME: mover esto de aca !*/
+}

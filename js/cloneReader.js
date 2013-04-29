@@ -18,6 +18,7 @@ cloneReader = {
 			'sortDesc': 	true,
 			'id': 			null, 
 			'type': 		null,
+			'viewType': 	'detail'
 		}, aFilters);
 
 		this.aUserEntries 	= {};
@@ -34,8 +35,8 @@ cloneReader = {
 		setInterval(function() { cloneReader.reloadFeeds(); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
-		this.$ulFeeds.niceScroll({cursorcolor: '#CCC' });
-		this.$ulEntries.niceScroll({cursorcolor: '#CCC' });						
+		this.$ulFeeds.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8' });
+		this.$ulEntries.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8' });						
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow()
@@ -43,28 +44,28 @@ cloneReader = {
 
 		this.$ulEntries.scroll($.proxy(
 			function(event) {
-				this.$ulEntries.find('> li').each(
+				this.$ulEntries.find('.entry').each(
 					function() {
 						cloneReader.renderEntry($(this));
 					}
 				);
-
+//return;
 				if (this.$ulEntries.is(':animated') == true) {
 					return;
 				}				
 				
 				var top 	= this.$ulEntries.offset().top;
 				var height 	= this.$ulEntries.outerHeight();
-				var aLi		= this.$ulEntries.find('li .header').parent(); // recorro solos los visibles ( tienen header ;)
+				var aLi		= this.$ulEntries.find('.entry .header').parent(); // recorro solos los visibles ( tienen header ;)
 				for (var i=0; i<aLi.length; i++) {
-					var $li 	= $(aLi[i]);
-					var offset 	= $li.offset();
+					var $entry 	= $(aLi[i]);
+					var offset 	= $entry.offset();
 					if (top <= (offset.top + 10)) { // TODO: revisar el + 10 (al moverse con las flechas, selecciona el item siguiente)
-						this.selectEntry($li, false, false);
+						this.selectEntry($entry, false, false);
 						return;
 					}
-					if (top >= offset.top && (offset.top + $li.height())  >= height) {
-						this.selectEntry($li, false, false);
+					if (top >= offset.top && (offset.top + $entry.height())  >= height) {
+						this.selectEntry($entry, false, false);
 						return;
 					}
 				}
@@ -87,21 +88,21 @@ cloneReader = {
 						this.expandEntries();
 						break;
 					case 83: // S: star
-						var $li = this.$ulEntries.find('li.selected');
-						if ($li.length != 0) {
-							this.starEntry($li, ($li.find('.star.selected').length == 0));
+						var $entry = this.$ulEntries.find('.entry.selected');
+						if ($entry.length != 0) {
+							this.starEntry($entry, ($entry.find('.star.selected').length == 0));
 						}
 						break;
 					case 86: // V: open link
-						var $li = this.$ulEntries.find('li.selected');
-						if ($li.length != 0) {
-							this.$ulEntries.find('li.selected .header a')[0].click();
+						var $entry = this.$ulEntries.find('.entry.selected');
+						if ($entry.length != 0) {
+							this.$ulEntries.find('.entry.selected .header a')[0].click();
 						}
 						break;
 					case 77: // M read entry
-						var $li = this.$ulEntries.find('li.selected');
-						if ($li.length != 0) {					
-							this.readEntry($li, $li.find('.read').hasClass('selected'));
+						var $entry = this.$ulEntries.find('.entry.selected');
+						if ($entry.length != 0) {					
+							this.readEntry($entry, $entry.find('.read').hasClass('selected'));
 						}
 						break;
 				}
@@ -129,9 +130,11 @@ cloneReader = {
 		this.createMenu([
 			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.expandEntries(true) }},
 			{ 'html': '', 'class': 'feedName' }, // TODO: hacer que se ajuste el width al espacio disponible!
-			{ 'html': '&#9660;', 	'title': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
-			{ 'html': '&#9650;', 	'title': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
+			{ 'html': '&#9660;', 	'title': 'next',	'class': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
+			{ 'html': '&#9650;', 	'title': 'prev', 	'class': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
 			{ 'html': '&#10226;', 	'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, true, {}) }},
+			{ 'html': '&nbsp;', 	'class': 'viewDetail', 		'title': 'detail view', 	'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'detail'}); }},
+			{ 'html': '&nbsp;', 	'class': 'viewList', 		'title': 'list view', 		'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'list'}); }},
 			{ 'html': '<span />', 	'class': 'filterUnread', 
 				'childs':  [
 					{ 'html': 'all items', 							'class': 'filterAllItems', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': false }); }},
@@ -156,7 +159,7 @@ cloneReader = {
 			}
 		], this.$ulMenu);
 		
-		this.$ulMenu.find('li.add .arrow').hide();
+		this.$ulMenu.find('.add .arrow, .filterUnread, .filterSort, .feedSettings').hide();
 	},
 
 	showPopupMenu: function($li) {
@@ -221,7 +224,6 @@ cloneReader = {
 		}
 		
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
-			this.renderNotResult();
 			return;
 		}
 
@@ -235,6 +237,8 @@ cloneReader = {
 			this.ajax.abort();
 			this.ajax = null;
 		}
+		
+		this.renderNotResult(true);
 
 		this.ajax = $.ajax({		
 			'url': 		base_url + 'entries/select',
@@ -253,6 +257,11 @@ cloneReader = {
 	},
 	
 	renderEntries: function(result) {
+		this.$ulEntries.removeClass('list');
+		if (this.aFilters.viewType == 'list') {
+			this.$ulEntries.addClass('list');
+		}
+		
 		if (result.length == 0) {
 			this.updateMenuCount();
 			this.renderNotResult();
@@ -265,39 +274,59 @@ cloneReader = {
 				this.aEntries[entry.entryId] = entry;
 			}
 			
-			var $li = $('<li/>')
+			var $entry = $('<li/>')
 					.addClass('clean')
+					.addClass('entry')
 					.data({ 'entryId': entry.entryId } )
 					.appendTo(this.$ulEntries);
 
-			this.renderEntry($li);
+			this.renderEntry($entry);
 		}
 	
 		this.updateMenuCount();
-		
-		if (this.$ulEntries.find('> li').length < ENTRIES_PAGE_SIZE) {
-			this.renderNotResult();
-		}
+		this.renderNotResult();
 	},
 	
-	renderEntry: function($li) {
-		if ($li.hasClass('noResult') == true) {
+	renderEntry: function($entry) {
+		if ($entry.hasClass('noResult') == true) {
 			return;
 		}
-		if ($li.visible( true ) == false) {
-			$li.addClass('clean').children().remove();
+		if ($entry.visible( true ) == false) {
+			$entry.addClass('clean').children().remove();
 			return;
 		}
 
-		var entryId = $li.data('entryId');
+		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
 
-		if ($li.hasClass('clean') == false) {
+		if ($entry.hasClass('clean') == false) {
 			return;
 		}
-		$li.removeClass('clean');
-			
-		var $header = $('<div/>').addClass('header').appendTo($li);
+		$entry.removeClass('clean');
+		
+		if (this.aFilters.viewType == 'detail') {
+			this.renderDetailEntry($entry, entry);
+		}
+		else {
+			this.renderListEntry($entry, entry);
+		}
+
+		$entry.find('.star').click(function(event) {
+			event.stopPropagation();
+			$star = $(event.target);
+			cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
+		});
+		
+		this.starEntry($entry, entry.starred);
+		this.readEntry($entry, (entry.entryRead == true));
+		$entry.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
+		
+		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
+	},
+	
+	
+	renderDetailEntry: function($entry, entry) {
+		var $header = $('<div/>').addClass('header').appendTo($entry);
 
 		$('<a />')
 			.addClass('entryTitle')
@@ -312,7 +341,7 @@ cloneReader = {
 		}	
 		$div.find('a').click(
 			function() {
-				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('li').data('entryId')]['feedId'] });
+				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
 			}
 		);
 
@@ -323,63 +352,76 @@ cloneReader = {
 		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
 		$entryContent.find('script').remove();
 		$entryContent.find('iframe').remove();
-		$('<p/>').html($entryContent.text()).appendTo($li);
+		$('<p/>').html($entryContent.text()).appendTo($entry);
 
-		var $footer = $('<div/>').addClass('footer').appendTo($li);
+		var $footer = $('<div/>').addClass('footer').appendTo($entry);
 
 		$('<span />').addClass('star').appendTo($footer);
 		$('<span />').addClass('read').html('<span class="checkbox"/>keep unread').appendTo($footer);
 
-		$li.find('.star').click(function(event) {
-			event.stopPropagation();
-			$star = $(event.target);
-			cloneReader.starEntry($star.parents('li'), !$star.hasClass('selected'));
-		});
-		$li.find('.read .checkbox').click(function(event) {
+
+		$entry.find('.read .checkbox').click(function(event) {
 				event.stopPropagation();
 				$checkbox = $(event.target);
-				cloneReader.readEntry($checkbox.parents('li'), $checkbox.parent().hasClass('selected'));
+				cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.parent().hasClass('selected'));
 			});				
 						
-		$li.css('min-height', $li.height());
-		$li.find('img').load(
+		$entry.css('min-height', $entry.height());
+		$entry.find('img').load(
 			function(event) {
-				var $li = $(event.target).parents('li');
-				$li.css('min-height', $li.height());
+				var $entry = $(event.target).parents('.entry');
+				$entry.css('min-height', $entry.height());
 			}
 		);
 		
-		$li.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
+		$entry.find('p').children().removeAttr('class');
+		$entry.find('a').attr('target', '_blank');
 		
-		$li.find('p').children().removeAttr('class');
-		$li.find('a').attr('target', '_blank');
-		
-		$li.click(function(event) {
-			var $li = $(event.target).parents('li');
-			if ($li.hasClass('selected') == true) { return; }
-			cloneReader.selectEntry($li, true, true);
+		$entry.click(function(event) {
+			var $entry = $(event.target).parents('.entry');
+			if ($entry.hasClass('selected') == true) { return; }
+			cloneReader.selectEntry($entry, true, true);
 		});
-		
-		this.starEntry($li, entry.starred);
-		this.readEntry($li, (entry.entryRead == true));
-		
-		setTimeout( function() { cloneReader.updateEntryDateTime($li); } , 0);
 	},
 	
-	renderNotResult: function() {
-		if (this.$liNoResult == null) {
-			this.$liNoResult = $('<li/>').text('no more entries').addClass('noResult');
+	renderListEntry: function($entry, entry) {
+		var entryContent 	= $('<div/>').html(entry.entryContent).text();
+		var $div 			= $('<div/>').addClass('entryList').appendTo($entry);
+		
+		$('<span />').addClass('star').appendTo($div);
+		$('<span />').addClass('feedName').text(entry.feedName).appendTo($div);
+		$('<span />').addClass('entryContent').text(entryContent)
+			.appendTo($div)
+			.prepend($('<h2 />').text(entry.entryTitle));
+		$('<span />').addClass('entryDate').appendTo($div);
+		
+		$entry.find('.feedName, .entryContent').click(function(event) {
+			var $entry = $(event.target).parents('.entry');
+			cloneReader.selectEntry($entry, true, false);
+		});		
+	},	
+	
+	renderNotResult: function(loading) {
+		if (this.$noResult == null) {
+			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		this.$liNoResult.css('min-height', this.$ulEntries.height() - 150).appendTo(this.$ulEntries);			
+		this.$noResult.css('min-height', this.$ulEntries.height() - 150).appendTo(this.$ulEntries);
+		
+		if (loading == true) {
+			this.$noResult.text('loading ...').addClass('loading');
+		}
+		else {
+			this.$noResult.text('no more entries').removeClass('loading');
+		}
 	},
 
-	starEntry: function($li, value) {
-		$li.find('.star').removeClass('selected');
+	starEntry: function($entry, value) {
+		$entry.find('.star').removeClass('selected');
 		if (value == true) {
-			$li.find('.star').addClass('selected');
+			$entry.find('.star').addClass('selected');
 		}
 		
-		var entryId = $li.data('entryId');
+		var entryId = $entry.data('entryId');
 		var starred = (this.aEntries[entryId].starred == 1);
 		this.aEntries[entryId].starred = value;
 		if (starred != value) {
@@ -387,29 +429,54 @@ cloneReader = {
 		}
 	},
 
-	readEntry: function($li, value) {
-		$li.find('.read .checkbox').html('')
-		$li.find('.read').removeClass('selected');
+	readEntry: function($entry, value) {
+		$entry.find('.read .checkbox').html('')
+		$entry.find('.read').removeClass('selected');
 		if (value == false) {
-			$li.find('.read .checkbox').html('&#10004;')
-			$li.find('.read').addClass('selected');
+			$entry.find('.read .checkbox').html('&#10004;')
+			$entry.find('.read').addClass('selected');
 		}
 		
-		var entryId		= $li.data('entryId');
+		var entryId		= $entry.data('entryId');
 		var entryRead	= (this.aEntries[entryId].entryRead == 1);
 		this.aEntries[entryId].entryRead = value;
 		if (entryRead != value) {
 			this.addToSave(this.aEntries[entryId]);
-			this.updateCounts(this.aEntries[entryId].feedId, (value == true ? -1 : +1));
+			
+			var feedId 	= this.aEntries[entryId].feedId;
+			var sum 	= (value == true ? -1 : +1);
+			var $feed 	= this.$ulFeeds.find('li[data-type=feed][data-id=' + feedId + ']');
+			this.aFeeds[feedId].count = parseInt(this.aFeeds[feedId].count) + sum;
+			if (this.aFeeds[feedId].count < 0) {
+				this.aFeeds[feedId].count = 0;
+			}
+			
+
+			// actualizo solo los contadores de la parte del arbol de feeds seleccionada
+			this.renderCounts($feed, this.aFeeds[feedId].count);
+			
+			var $aFeeds = $.merge([], $feed);
+			for (var i=0; i<$feed.length; i++) {
+				$aFeeds = $.merge($aFeeds, $($feed[i]).parents('li'));
+			}
+			$aFeeds = $($aFeeds);
+
+			this.updateTagsCount($aFeeds.filter('[data-type=tag]'));
+			this.updateMenuCount();
+			this.updateUlFeeds($aFeeds);
 		}
 
-		$li.removeClass('readed');
+		$entry.removeClass('readed');
 		if (value == true) {
-			$li.addClass('readed');
+			$entry.addClass('readed');
 		}
 	},
 	
 	renderCounts: function($li, count) {
+		if (count < 0) {
+			count = 0;
+		}
+					
 		var $count = $li.find('.count:first');
 		$count.text('(' + count + ')');
 		$count.hide();
@@ -419,73 +486,74 @@ cloneReader = {
 		$li.data('count', count);
 	},
 	
-	updateCounts: function(feedId, sum){
-		var $li = this.$ulFeeds.find('li[data-type=feed][data-id=' + feedId + ']');
-		
-		this.aFeeds[feedId].count = parseInt(this.aFeeds[feedId].count) + sum;
-		if (this.aFeeds[feedId].count < 0) {
-			this.aFeeds[feedId].count = 0;
-		}
-		this.renderCounts($li, this.aFeeds[feedId].count);
-		
-		
-		this.updateTagsCount();
-		this.updateMenuCount();
-		this.updateUlFeeds();
-	},
-
 	updateUlMenu: function() {
 		this.$ulMenu.find('.filterSort span:first').text(this.$container.find(this.aFilters.sortDesc == true ? '.popUpWindow .filterNewestSort' : '.popUpWindow .filterOldestSort').text());
 		this.$ulMenu.find('.filterUnread span:first').html(this.$container.find(this.aFilters.onlyUnread == true ? '.popUpWindow .filterOnlyUnread' :  '.popUpWindow .filterAllItems').html());
 		this.$ulMenu.find('.feedName').text(this.$ulFeeds.find('.selected a:first').text());
+		
+		this.$ulMenu.find('li.viewDetail, li.viewList').removeClass('checked');
+		if (this.aFilters.viewType == 'detail') {
+			this.$ulMenu.find('li.viewDetail').addClass('checked');
+		}
+		else {
+			this.$ulMenu.find('li.viewList').addClass('checked');
+		}		
 
 		this.$ulMenu.find('li.feedSettings').hide();
 		if (this.aFilters.type == 'feed') {
 			this.$ulMenu.find('li.feedSettings').show();
 		}
+		
+		this.$ulMenu.find('.filterUnread, .filterSort').show();
 	},
 
-	updateUlFeeds: function() {
+	updateUlFeeds: function($feeds) {
 		this.$ulFeeds.find('li.selected').removeClass('selected');
 		this.$ulFeeds.find('li[data-type=' + this.aFilters.type + '][data-id=' + this.aFilters.id + ']').addClass('selected');
-
-		this.$ulFeeds.find('li[data-type=tag][data-id=' + TAG_ALL + '] li')
+		
+		if ($feeds == null) {
+			$feeds = this.$ulFeeds.find('li[data-type=tag][data-id=' + TAG_ALL + '] li');
+		}
+		
+		$feeds
 			.removeClass('empty')
 			.each(function() {
-				var $li = $(this);
-				if ($li.data('count') == 0) {
-					$li.addClass('empty');
+				var $feed = $(this);
+				if ($feed.data('count') == 0) {
+					$feed.addClass('empty');
 				}
-				cloneReader.renderFeedVisibility($li);
+				cloneReader.renderFeedVisibility($feed);
 			});
 	},
 
-	renderFeedVisibility: function($li) {
+	renderFeedVisibility: function($feed) {
 		var visible = false;
 
 		if (this.aFilters.onlyUnread == false) {
 			visible = true;
 		}
-		else if (parseInt($li.data('count')) != 0) {
+		else if (parseInt($feed.data('count')) != 0) {
 			visible = true;
 		}
-		else if ($li.hasClass('selected') == true || $li.find('li.selected').length != 0) {
+		else if ($feed.hasClass('selected') == true || $feed.find('li.selected').length != 0) {
 			visible = true;
 		}
 
-		$li.hide().toggle(visible);
+		$feed.hide().toggle(visible);
 	},
 	
-	updateTagsCount: function() {
-		var $li	= this.$ulFeeds.find('li[data-type=tag]');
-		for(var z=0; z<$li.length; z++) { 
-			var $childs 	= $($li[z]).find('ul > li[data-type=feed]');
+	updateTagsCount: function($tag) {
+		if ($tag == null) {
+			var $tag	= this.$ulFeeds.find('li[data-type=tag]');
+		}
+		for(var z=0; z<$tag.length; z++) { 
+			var $childs 	= $($tag[z]).find('ul > li[data-type=feed]');
 			var count		= 0;
 			for (var i=0; i<$childs.length; i++) {
 				var feedId = $($childs[i]).data('id');
 				count += parseInt(this.aFeeds[feedId].count);			
 			}
-			this.renderCounts($($li[z]), count);
+			this.renderCounts($($tag[z]), count);
 		}		
 	},
 	
@@ -495,30 +563,50 @@ cloneReader = {
 		this.$container.find('.popUpWindow .filterOnlyUnread .count').text(count);
 	},
 	
-	selectEntry: function($li, scrollTo, animate) {
-		if ($li.length == 0) { return; }
-		if ($li.hasClass('noResult') == true) { return; }
-		if (this.$ulEntries.find('li.selected:first').is($li)) { return; }
+	selectEntry: function($entry, scrollTo, animate) {
+		if ($entry.length == 0) { return; }
+		if ($entry.hasClass('noResult') == true) { return; }
+		if (this.$ulEntries.find('.entry.selected:first').is($entry)) { return; }
 		
-		this.$ulEntries.find('li.selected').removeClass('selected');
-		$li.addClass('selected');
+		this.$ulEntries.find('.entry.selected').removeClass('selected');
+		$entry.addClass('selected');
+		
+		
+		if (this.aFilters.viewType == 'list') {
+			this.$ulEntries.find('.entry').removeClass('expanded');
+			this.$ulEntries.find('.entry .detail').remove();
 			
-		if (scrollTo == true) {
-			this.scrollToEntry($li, animate);
+			this.scrollToEntry($entry, false);
+			this.renderEntry($entry);			
+			
+			$entry.addClass('expanded');
+			var entryId = $entry.data('entryId');
+			var entry 	= this.aEntries[entryId];		
+			$div = $('<div/>').data('entryId', entryId).addClass('detail');
+			this.renderDetailEntry($div, entry);
+			
+			$div.find('.header .entryDate, .header .star').remove();
+			
+			$entry.append($div);
+		}
+		else {
+			if (scrollTo == true) {
+				this.scrollToEntry($entry, animate);
+			}					
 		}
 
-		this.readEntry($li, true);
+		this.readEntry($entry, true);
 
-		var lastEntryId = this.$ulEntries.find('> li').last().data('entryId');
-		if (this.aFilters.lastEntryId != lastEntryId &&  (this.$ulEntries.find('> li').length - 2) <= $li.index()) { // TODO: hacer una variable con el '2' !
-			this.loadEntries(false, false, { 'lastEntryId': this.$ulEntries.find('> li').last().data('entryId') });
+		var lastEntryId = this.$ulEntries.find('.entry').last().data('entryId');
+		if (this.aFilters.lastEntryId != lastEntryId &&  (this.$ulEntries.find('.entry').length - 2) <= $entry.index()) { // TODO: hacer una variable con el '2' !
+			this.loadEntries(false, false, { 'lastEntryId': this.$ulEntries.find('.entry').last().data('entryId') });
 		}
 	},
 	
-	scrollToEntry: function($li, animate) {
-		if ($li.length == 0) { return; }
+	scrollToEntry: function($entry, animate) {
+		if ($entry.length == 0) { return; }
 
-		var top = $li.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop();
+		var top = $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop();
 		if (animate == true) { 
 			this.$ulEntries.stop().animate( {scrollTop: top } );
 		}
@@ -528,14 +616,14 @@ cloneReader = {
 	},
 	
 	goToEntry: function(next) {
-		var $li = this.$ulEntries.find('li.selected');
-		if ($li.length == 0) {
-			$li = this.$ulEntries.find('li').first();
+		var $entry = this.$ulEntries.find('.entry.selected');
+		if ($entry.length == 0) {
+			$entry = this.$ulEntries.find('.entry').first();
 		}
 		else {
-			$li = (next == true ? $li.nextAll('li:first') : $li.prevAll('li:first'));
+			$entry = (next == true ? $entry.nextAll('.entry:first') : $entry.prevAll('.entry:first'));
 		}
-		this.selectEntry($li, true, true);		
+		this.selectEntry($entry, true, true);
 	},
 
 	loadFeeds: function() {
@@ -548,11 +636,11 @@ cloneReader = {
 
 				cloneReader.renderFeeds(response.result, cloneReader.$ulFeeds);
 	
-				var $li = cloneReader.$ulFeeds.find('li[data-type=' + cloneReader.aFilters.type + '][data-id=' + cloneReader.aFilters.id + '] a:first');
-				if ($li.length == 0) {
-					$li = cloneReader.$ulFeeds.find('li:first a');
+				var $feed = cloneReader.$ulFeeds.find('li[data-type=' + cloneReader.aFilters.type + '][data-id=' + cloneReader.aFilters.id + '] a:first');
+				if ($feed.length == 0) {
+					$feed = cloneReader.$ulFeeds.find('li:first a');
 				}
-				$li.click();
+				$feed.click();
 			}
 		);	
 	},
@@ -580,26 +668,26 @@ cloneReader = {
 		for (var i=0; i<result.length; i++) {
 			var feed = result[i];
 			if (feed.childs != null) {
-				var $li = this.renderFeed('tag', feed, $parent);
-				$li.data('expanded', feed.expanded);
-				$li.append('<ul />').find('.icon').addClass('arrow');
-				$li.find('.icon')
+				var $feed = this.renderFeed('tag', feed, $parent);
+				$feed.data('expanded', feed.expanded);
+				$feed.append('<ul />').find('.icon').addClass('arrow');
+				$feed.find('.icon')
 					.click(
 						function(event) {
-							var $li 	= $($(event.target).parents('li:first'));
-							var $ul 	= $li.find('ul');
-							cloneReader.expandFeed($li, !$ul.is(':visible'));
+							var $feed 	= $($(event.target).parents('li:first'));
+							var $ul 	= $feed.find('ul');
+							cloneReader.expandFeed($feed, !$ul.is(':visible'));
 						}
 					);
 
-				if (feed.expanded == false) { $li.find('ul').hide(); }
-				this.renderFeeds(feed.childs, $li.find('ul'));
-				this.expandFeed($li, feed.expanded);
+				if (feed.expanded == false) { $feed.find('ul').hide(); }
+				this.renderFeeds(feed.childs, $feed.find('ul'));
+				this.expandFeed($feed, feed.expanded);
 			}
 			else {
 				this.aFeeds[feed.id] = feed;
-				var $li = this.renderFeed('feed', feed, $parent);
-				this.renderCounts($li, feed.count);
+				var $feed = this.renderFeed('feed', feed, $parent);
+				this.renderCounts($feed, feed.count);
 			}
 		}
 		this.updateTagsCount();
@@ -607,42 +695,42 @@ cloneReader = {
 	},
 
 	renderFeed: function(type, feed, $parent) {
-		var $li = $parent.find('li[data-type=' + feed.type + '][data-id=' + feed.id + ']');
-		if ($li.length != 0) {
-			return $li;
+		var $feed = $parent.find('li[data-type=' + feed.type + '][data-id=' + feed.id + ']');
+		if ($feed.length != 0) {
+			return $feed;
 		}
 
-		var $li = $('<li/>')
+		var $feed = $('<li/>')
 					.attr('data-type', feed.type)
 					.attr('data-id', feed.id)
 					.data({ 'type': feed.type, 'name': feed.name, 'id': feed.id, 'count': (feed.count || 0) })
 					.html('<div><span class="icon" /><a>' + feed.name + '</a><span class="count" /></div>')
 					.appendTo($parent);
 
-		$li.find('a')
+		$feed.find('a')
 			.attr('title', feed.name)
 			.click(function (event) {
-				var $li = $($(event.target).parents('li:first'));
-				cloneReader.loadEntries(true, false, { 'type': $li.data('type'), 'id': $li.data('id')});
+				var $feed = $($(event.target).parents('li:first'));
+				cloneReader.loadEntries(true, false, { 'type': $feed.data('type'), 'id': $feed.data('id')});
 			});
 		if (feed.icon != null) {
-			$li.find('.icon').css('background-image', 'url(' + feed.icon + ')');
+			$feed.find('.icon').css('background-image', 'url(' + feed.icon + ')');
 		}
 
-		return $li;
+		return $feed;
 	},
 
-	expandFeed: function($li, value){
-		if ($li.data('expanded') != value) {
-			$li.data('expanded', value);
-			this.aUserFeeds[$li.data('id')] = {
-				'tagId': 		$li.data('id'),
+	expandFeed: function($feed, value){
+		if ($feed.data('expanded') != value) {
+			$feed.data('expanded', value);
+			this.aUserFeeds[$feed.data('id')] = {
+				'tagId': 		$feed.data('id'),
 				'expanded': 	value
 			};
 		}
 		
-		var $arrow 	= $li.find('.arrow:first');
-		var $ul 	= $li.find('ul:first');
+		var $arrow 	= $feed.find('.arrow:first');
+		var $ul 	= $feed.find('ul:first');
 
 		if (value != true) {
 			$arrow.html('&#9658;')
@@ -804,10 +892,17 @@ cloneReader = {
 		);
 	},
 	
-	updateEntryDateTime: function($li) {
-		var entryId = $li.data('entryId');
+	updateEntryDateTime: function($entry) {
+		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
-		$li.find('.entryDate').text(entry.entryDate + ' (' + this.humanizeDatetime(entry.entryDate) + ')');
+		if (entry.entryDate == null) { return; }
+		
+		if (this.aFilters.viewType == 'detail') {
+			$entry.find('.entryDate').text(entry.entryDate + ' (' + this.humanizeDatetime(entry.entryDate) + ')');
+		}
+		else {
+			$entry.find('.entryDate').text(this.humanizeDatetime(entry.entryDate));
+		}
 	},	
 
 	showPopupFeedSettings: function() {
@@ -831,13 +926,13 @@ cloneReader = {
 
 		var aLi = this.$ulFeeds.find('li[data-type=tag][data-id=' + TAG_ALL + '] li[data-type=tag]');
 		for (var i=0; i<aLi.length; i++) {
-			var $li 	= $(aLi[i]);
+			var $feed 	= $(aLi[i]);
 			var check 	= '';
-			var hasTag 	= this.$ulFeeds.find('li[data-type=tag][data-id=' + $li.data('id') + '] li[data-type=feed][data-id=' + feedId + ']').length != 0;
+			var hasTag 	= this.$ulFeeds.find('li[data-type=tag][data-id=' + $feed.data('id') + '] li[data-type=feed][data-id=' + feedId + ']').length != 0;
 			if (hasTag == true) {
 				check = '&#10004';
 			}
-			aItems.push( { 'html': '<span class="check">' + check + '</span>' + $li.data('name'),  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': $li.data('id')} , 'callback': function() {  var $li = $(this); cloneReader.saveUserFeedTag($li.data('feedId'), $li.data('tagId'), !$li.hasClass('selected') ); } } );
+			aItems.push( { 'html': '<span class="check">' + check + '</span>' + $feed.data('name'),  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': $feed.data('id')} , 'callback': function() {  var $feed = $(this); cloneReader.saveUserFeedTag($feed.data('feedId'), $feed.data('tagId'), !$feed.hasClass('selected') ); } } );
 
 		}
 
@@ -906,7 +1001,6 @@ cloneReader = {
 	},
 	
 	humanizeDatetime: function(datetime) {
-		if (datetime == null) { return; }
 		datetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
 		if (datetime >= moment()) {
 			datetime = moment().add('ms', -1);
