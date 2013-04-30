@@ -182,6 +182,10 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function saveEntry($data) {
+		if (trim($data['entryUrl']) == '') {
+			return null;
+		}
+		
 		$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result_array();
 		//pr($this->db->last_query());
 		if (!empty($query)) {
@@ -234,6 +238,13 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query());	
 		return true;
 	}
+	
+	function updateFeedStatus($feedId, $statusId) {
+		$this->db
+			->where('feedId', $feedId)
+			->update('feeds', array('statusId' => $statusId ));
+		//pr($this->db->last_query());		
+	}	
 
 	function addFeed($userId, $feed) {
 		$this->load->model('Feeds_Model');
@@ -281,8 +292,8 @@ class Entries_Model extends CI_Model {
 		$this->db
 			->select('feeds.feedId, feedUrl')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
+			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 			->order_by('feedLastUpdate ASC');
-
 
 		if (is_null($userId) == false) {
 			$this->db
@@ -304,6 +315,10 @@ class Entries_Model extends CI_Model {
 		$this->cisimplepie->enable_cache(false);
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
+
+		if ($this->cisimplepie->error() ) {
+			return $this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
+		}
 		
 		$values = array('feedLastUpdate' => date("Y-m-d H:i:s")); 
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
@@ -327,11 +342,17 @@ class Entries_Model extends CI_Model {
 				'entryTitle'	=> $item->get_title(),
 				'entryContent'	=> (string)$item->get_content(),
 				'entryDate'		=> $item->get_date('Y-m-d H:i:s'),
-				'entryUrl'		=> $item->get_link(),
+				'entryUrl'		=> (string)$item->get_link(),
 				'entryAuthor'	=> (string)$entryAuthor,
 			);
 			
+			if ($data['entryDate'] == null) {
+				return $this->updateFeedStatus($feedId, FEED_STATUS_INVALID_FORMAT);
+			}
+			
 			$this->saveEntry($data);
 		}
+		
+		$this->updateFeedStatus($feedId, FEED_STATUS_APPROVED);
 	}
 }

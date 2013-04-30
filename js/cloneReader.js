@@ -49,11 +49,16 @@ cloneReader = {
 						cloneReader.renderEntry($(this));
 					}
 				);
-//return;
+				
+				if (this.aFilters.viewType == 'list') {
+					this.getMoreEntries();
+					return;
+				}
+
 				if (this.$ulEntries.is(':animated') == true) {
 					return;
-				}				
-				
+				}
+
 				var top 	= this.$ulEntries.offset().top;
 				var height 	= this.$ulEntries.outerHeight();
 				var aLi		= this.$ulEntries.find('.entry .header').parent(); // recorro solos los visibles ( tienen header ;)
@@ -268,6 +273,8 @@ cloneReader = {
 			return;
 		}
 		
+		this.$noResult.remove();
+		
 		for (var i=0; i<result.length; i++) {
 			var entry = result[i];
 			if (this.aEntries[entry.entryId] == null) {
@@ -319,7 +326,7 @@ cloneReader = {
 		
 		this.starEntry($entry, entry.starred);
 		this.readEntry($entry, (entry.entryRead == true));
-		$entry.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
+//		$entry.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
 	},
@@ -386,7 +393,7 @@ cloneReader = {
 	
 	renderListEntry: function($entry, entry) {
 		var entryContent 	= $('<div/>').html(entry.entryContent).text();
-		var $div 			= $('<div/>').addClass('entryList').appendTo($entry);
+		var $div 			= $('<div/>').addClass('title').appendTo($entry);
 		
 		$('<span />').addClass('star').appendTo($div);
 		$('<span />').addClass('feedName').text(entry.feedName).appendTo($div);
@@ -394,18 +401,18 @@ cloneReader = {
 			.appendTo($div)
 			.prepend($('<h2 />').text(entry.entryTitle));
 		$('<span />').addClass('entryDate').appendTo($div);
-		
+
 		$entry.find('.feedName, .entryContent').click(function(event) {
 			var $entry = $(event.target).parents('.entry');
 			cloneReader.selectEntry($entry, true, false);
-		});		
+		});	
 	},	
 	
 	renderNotResult: function(loading) {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		this.$noResult.css('min-height', this.$ulEntries.height() - 150).appendTo(this.$ulEntries);
+		this.$noResult.css('min-height', this.$ulEntries.height() - 30).appendTo(this.$ulEntries);
 		
 		if (loading == true) {
 			this.$noResult.text('loading ...').addClass('loading');
@@ -576,7 +583,6 @@ cloneReader = {
 			this.$ulEntries.find('.entry').removeClass('expanded');
 			this.$ulEntries.find('.entry .detail').remove();
 			
-			this.scrollToEntry($entry, false);
 			this.renderEntry($entry);			
 			
 			$entry.addClass('expanded');
@@ -584,10 +590,10 @@ cloneReader = {
 			var entry 	= this.aEntries[entryId];		
 			$div = $('<div/>').data('entryId', entryId).addClass('detail');
 			this.renderDetailEntry($div, entry);
-			
 			$div.find('.header .entryDate, .header .star').remove();
-			
 			$entry.append($div);
+			
+			this.scrollToEntry($entry, false);
 		}
 		else {
 			if (scrollTo == true) {
@@ -596,16 +602,12 @@ cloneReader = {
 		}
 
 		this.readEntry($entry, true);
-
-		var lastEntryId = this.$ulEntries.find('.entry').last().data('entryId');
-		if (this.aFilters.lastEntryId != lastEntryId &&  (this.$ulEntries.find('.entry').length - 2) <= $entry.index()) { // TODO: hacer una variable con el '2' !
-			this.loadEntries(false, false, { 'lastEntryId': this.$ulEntries.find('.entry').last().data('entryId') });
-		}
+		this.getMoreEntries();
 	},
 	
 	scrollToEntry: function($entry, animate) {
 		if ($entry.length == 0) { return; }
-
+		
 		var top = $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop();
 		if (animate == true) { 
 			this.$ulEntries.stop().animate( {scrollTop: top } );
@@ -624,6 +626,20 @@ cloneReader = {
 			$entry = (next == true ? $entry.nextAll('.entry:first') : $entry.prevAll('.entry:first'));
 		}
 		this.selectEntry($entry, true, true);
+	},
+	
+	getMoreEntries: function() {
+		// busco más entries si esta visible el li 'noResult', o si el li.selected es casi el ultimo
+		if (
+			this.$noResult.visible(true) == true 
+			||
+			((this.$ulEntries.find('.entry').length - 2) <= this.$ulEntries.find('.entry.selected').index()) // TODO: hacer una variable con el '2' !
+		) {
+			var lastEntryId = this.$ulEntries.find('.entry').last().data('entryId');
+			if (this.aFilters.lastEntryId != lastEntryId) {
+				this.loadEntries(false, false, { 'lastEntryId': this.$ulEntries.find('.entry').last().data('entryId') });
+			}	
+		}
 	},
 
 	loadFeeds: function() {

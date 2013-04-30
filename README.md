@@ -3,7 +3,7 @@ Reader of feeds, rss
 
 Powered by codeigniter, simplepie, jquery
 
-
+/*************************************************************************/
 
 Clon de google reader
 Lector de feeds, rss.
