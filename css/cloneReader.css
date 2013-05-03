@@ -93,28 +93,6 @@
 			box-shadow: none;
 			background: #DDD;
 		}		
-		#cloneReader ul.ulMenu li.feedName {
-			border: 0px solid red;
-			cursor: default;
-			font-weight: bold;
-			height: 30px;
-			left: 50px;
-			line-height: 30px;
-			overflow: hidden;
-			position: absolute;
-			right: 450px;
-			text-align: left;
-			text-overflow: ellipsis;
-			text-transform: capitalize;
-			top: 0;
-			white-space: nowrap;
-			width: auto; 
-		}
-		#cloneReader ul.ulMenu li.feedName:hover, 
-		#cloneReader ul.ulMenu li.feedName:active {
-			box-shadow: none;
-			background: transparent;
-		}
 		#cloneReader ul.ulMenu li.expand {
 			float: left;
 			font-weight: bold;
@@ -158,8 +136,8 @@
 			background: url("img/loadingSmall.gif") no-repeat scroll 10px 12px #eee;
 			padding: 10px 10px 0 40px !important;
 		}
-		#cloneReader .ulEntries > li.feedName,
-		#cloneReader .ulEntries.list > li.feedName {
+		#cloneReader .ulEntries > li.entriesHead,
+		#cloneReader .ulEntries.list > li.entriesHead {
 			border:none;
 			border-bottom:1px #CCC solid;
 		    border-radius: 0 0 0 0;
@@ -296,7 +274,7 @@
 			border-bottom: 1px solid #CCCCCC;
 			min-height:40px !important;
 		}
-		#cloneReader .ulEntries.list > li.feedName {
+		#cloneReader .ulEntries.list > li.entriesHead {
 		    border-bottom: 1px solid #CCCCCC;
 		    box-shadow: none;
 		    margin: 10px 0 0;

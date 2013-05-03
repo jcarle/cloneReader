@@ -231,16 +231,15 @@ cloneReader = {
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
 			return;
 		}
+		
+		if (this.aFilters.onlyUnread != $.parseJSON(lastFilters).onlyUnread) {
+			this.renderFilters(this.filters, this.$ulFilters, true);
+		}
 
 		if (clear == true) {
 			delete this.aFilters.lastEntryId;
 			this.$ulEntries.children().remove();
 			this.$ulEntries.scrollTop(0);
-			
-			$('<li/>')
-					.addClass('feedName')
-					.text(this.getFilter(this.aFilters).name)
-					.appendTo(this.$ulEntries);
 		}
 		
 		if (this.ajax) {
@@ -249,9 +248,8 @@ cloneReader = {
 		}
 		
 		this.renderNotResult(true);
-		this.renderFilters(this.filters, this.$ulFilters);
-		this.$ulFilters.find('li.selected').removeClass('selected');
-		this.getFilter(this.aFilters).$filter.addClass('selected');
+		this.renderEntriesHead();
+		this.selectFilters();
 		this.updateUlMenu();		
 
 		this.ajax = $.ajax({		
@@ -275,7 +273,7 @@ cloneReader = {
 		
 		if (result.length == 0) {
 			this.updateMenuCount();
-			this.renderNotResult();
+			this.renderNotResult(false);
 			return;
 		}
 		
@@ -297,7 +295,7 @@ cloneReader = {
 		}
 	
 		this.updateMenuCount();
-		this.renderNotResult();
+		this.renderNotResult(false);
 	},
 	
 	renderEntry: function($entry) {
@@ -419,7 +417,28 @@ cloneReader = {
 			}
 			cloneReader.selectEntry($entry, false, false);
 		});	
+	},
+	
+	renderEntriesHead: function() {
+		var filter = this.getFilter(this.aFilters);
+		if (filter == null) { return; }
+		
+		if (this.$entriesHead == null) {
+			this.$entriesHead = $('<li/>').addClass('entriesHead');
+		}
+		
+		this.$entriesHead.text(filter.name);
+		this.$ulEntries.prepend(this.$entriesHead);				
 	},	
+	
+	selectFilters: function() {
+		this.$ulFilters.find('li.selected').removeClass('selected');
+		
+		var filter = this.getFilter(this.aFilters);
+		if (filter == null) { return; }
+				
+		filter.$filter.addClass('selected');
+	},
 	
 	renderNotResult: function(loading) {
 		if (this.$noResult == null) {
@@ -527,7 +546,12 @@ cloneReader = {
 			this.$ulMenu.find('li.feedSettings').show();
 		}
 		
-		this.$ulMenu.find('.filterUnread, .filterSort').show();
+		this.$ulMenu.find('.filterUnread').hide();
+		if (!(this.aFilters.type == 'tag' && this.aFilters.id == TAG_STAR)) {
+			this.$ulMenu.find('.filterUnread').show();
+		}
+		
+		this.$ulMenu.find('.filterSort').show();
 	},
 
 	updateMenuCount: function() {
@@ -617,7 +641,7 @@ cloneReader = {
 console.time("t1");				
 				this.filters = response.result;
 				this.runIndexFilters(this.filters, null, true);
-				this.renderFilters(this.filters, this.$ulFilters);
+				this.renderFilters(this.filters, this.$ulFilters, true);
 				this.resizeWindow();
 				
 				if (reload == true) {
@@ -661,7 +685,7 @@ console.timeEnd("t1");
 		}		
 	},
 
-	renderFilters: function(filters, $parent){
+	renderFilters: function(filters, $parent, selectFilters){
 		for (var i=0; i<filters.length; i++) {
 			var filter = filters[i];
 
@@ -673,9 +697,12 @@ console.timeEnd("t1");
 			}
 				
 			if (filter.$filter != null && filter.childs != null) {
-				this.renderFilters(filter.childs, filter.$filter.find('ul:first'));
+				this.renderFilters(filter.childs, filter.$filter.find('ul:first'), false);
 				this.expandFilter(filter, filter.expanded);
 			}				
+		}
+		if (selectFilters == true) { 
+			this.selectFilters();
 		}
 	},
 
