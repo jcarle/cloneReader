@@ -376,21 +376,19 @@ $(document).ready(function() {
 	
 	$.countProcess = 0;
 	
-	$(document).ajaxSend($.proxy(
+	$(document).ajaxSend(
 		function(event, jqXHR, ajaxOptions) {
 			$.countProcess ++;
 			$.showWaiting();	
-		},
-		this
-	));
+		}
+	);
 	 
-	$(document).ajaxComplete($.proxy(
-		function() {
+	$(document).ajaxComplete(
+		function(event, jqXHR, ajaxOptions) {
 			$.countProcess --;
 			$.showWaiting();	
-		},
-		this
-	));
+		}
+	);
 });
 
 function cn(value) {
