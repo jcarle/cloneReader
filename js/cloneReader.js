@@ -18,8 +18,8 @@ cloneReader = {
 		this.aFilters 			= $.extend({
 			'onlyUnread':	true,
 			'sortDesc': 	true,
-			'id': 			null, 
-			'type': 		null,
+			'id': 			TAG_ALL, 
+			'type': 		'tag',
 			'viewType': 	'detail',
 			'isMaximized': 	false
 		}, aFilters);		

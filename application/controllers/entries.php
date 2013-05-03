@@ -157,13 +157,13 @@ class Entries extends CI_Controller {
 		}
 
 		
-		$result = $this->Entries_Model->addFeed($this->session->userdata('userId'), array('feedUrl' => $this->input->post('feedUrl')));
+		$feedId = $this->Entries_Model->addFeed($this->session->userdata('userId'), array('feedUrl' => $this->input->post('feedUrl')));
 
 		$this->Entries_Model->getNewsEntries((int)$this->session->userdata('userId'));
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $result,
+			'result' 	=> array('feedId' => $feedId),
 		));
 	}
 
@@ -202,8 +202,6 @@ class Entries extends CI_Controller {
 			'result' 	=> 'ok',
 		));
 	}	
-		
-
 
 	function migrateFromGReader() {
 		$userId 	= 1; // FIXME: harckodeta

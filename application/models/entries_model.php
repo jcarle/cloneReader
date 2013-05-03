@@ -292,21 +292,26 @@ class Entries_Model extends CI_Model {
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
 	}	
 	
-	function saveFeedIcon($feedId, $feedLink, $feedIcon) {
-		if ($feedIcon == null) {
+	function saveFeedIcon($feedId) {
+		$query = $this->db
+			->select('feedLink, feedIcon')
+			->where('feedId', $feedId)
+			->get('feeds')->result();
+		//pr($this->db->last_query()); 
+		$row = $query[0];
+		if (trim($row->feedLink) != '' && $row->feedIcon == null) {
 			$this->load->spark('curl/1.2.1');
-			$img = $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
-			$parse = parse_url($feedLink);
-			$feedIcon = $parse['host'].'.png'; 
-			file_put_contents('./img/'.$feedIcon, $img);
-			$values['feedIcon'] = $feedIcon;
-			$this->db->update('feeds', $values, array('feedId' => $feedId));	
+			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$row->feedLink);
+			$parse 			= parse_url($row->feedLink);
+			$row->feedIcon 	= $parse['host'].'.png'; 
+			file_put_contents('./img/'.$row->feedIcon, $img);
+			$this->db->update('feeds', array('feedIcon' => $row->feedIcon), array('feedId' => $feedId));	
 		}				
 	}	
 
 	function getNewsEntries($userId = null) {
 		$this->db
-			->select('feeds.feedId, feedUrl, feedLink, feedIcon')
+			->select('feeds.feedId, feedUrl')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 			->order_by('feedLastUpdate ASC');
@@ -320,13 +325,13 @@ class Entries_Model extends CI_Model {
 		$query = $this->db->get('feeds');
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {
-			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
-			$this->parseRss($row->feedId, $row->feedUrl, $row->feedLink, $row->feedIcon);
+			$this->parseRss($row->feedId, $row->feedUrl);
+			$this->saveFeedIcon($row->feedId);
 		}
 	}		
 
 	// TODO: mover estos metodos de aca
-	function parseRss($feedId, $feedUrl, $feedLink, $feedIcon) {
+	function parseRss($feedId, $feedUrl) {
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
