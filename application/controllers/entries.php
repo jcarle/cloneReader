@@ -32,17 +32,17 @@ class Entries extends CI_Controller {
 		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
 		$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
 		$this->curl->execute();
-
+		
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> $this->Entries_Model->select((array)json_decode($this->input->post('post'))),
 		));
 	}
 
-	function selectFeeds() {
+	function selectFilters() {
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Entries_Model->selectFeeds(),
+			'result' 	=> $this->Entries_Model->selectFilters(),
 		));
 	}
 	

@@ -2,7 +2,7 @@ cloneReader = {
 	init: function(aFilters) {
 		this.$container = $('#cloneReader');
 		this.$ulMenu 	= $('<ul class="ulMenu" />').appendTo(this.$container);
-		this.$ulFeeds	= $('<ul class="ulFeeds"/>').appendTo(this.$container); 
+		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$container); 
 		this.$ulEntries	= $('<ul class="ulEntries"/>').appendTo(this.$container);
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
@@ -10,33 +10,32 @@ cloneReader = {
 		
 		this.$ulEntries.data('margin-left', this.$ulEntries.css('margin-left'));		
 
-		this.aEntries 	= {};
-		this.aFeeds		= {};
-
-		this.aFilters 	= $.extend({
+		this.minUnreadEntries = 2;
+		this.aEntries	 		= {};
+		this.filters			= null;
+		this.aUserEntries 		= {};
+		this.aUserTags			= {};
+		this.aFilters 			= $.extend({
 			'onlyUnread':	true,
 			'sortDesc': 	true,
 			'id': 			null, 
 			'type': 		null,
 			'viewType': 	'detail'
-		}, aFilters);
-
-		this.aUserEntries 	= {};
-		this.aUserFeeds		= {};
+		}, aFilters);		
 		
 		this.renderMenu();
-		this.loadFeeds();
+		this.loadFilters();
 		this.initEvents();
 		this.resizeWindow();
 	},
 
 	initEvents: function() {
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
-		setInterval(function() { cloneReader.reloadFeeds(); }, (FEED_TIME_RELOAD * 60000));
+		setInterval(function() { cloneReader.reloadFilters(); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
-		this.$ulFeeds.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8' });
-		this.$ulEntries.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8' });						
+		this.$ulFilters.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 }); // TODO: revisar los parametros de niceScroll
+		this.$ulEntries.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 });						
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow()
@@ -90,7 +89,7 @@ cloneReader = {
 						this.loadEntries(true, true, {});
 						break;
 					case 85: // U: expand!			
-						this.expandEntries();
+						this.maximiseUlEntries();
 						break;
 					case 83: // S: star
 						var $entry = this.$ulEntries.find('.entry.selected');
@@ -133,7 +132,7 @@ cloneReader = {
 	
 	renderMenu: function() {
 		this.createMenu([
-			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.expandEntries(true) }},
+			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(true) }},
 			{ 'html': '', 'class': 'feedName' }, // TODO: hacer que se ajuste el width al espacio disponible!
 			{ 'html': '&#9660;', 	'title': 'next',	'class': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
 			{ 'html': '&#9650;', 	'title': 'prev', 	'class': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
@@ -244,6 +243,10 @@ cloneReader = {
 		}
 		
 		this.renderNotResult(true);
+		this.renderFilters(this.filters, this.$ulFilters);
+		this.$ulFilters.find('li.selected').removeClass('selected');
+		this.getFilter(this.aFilters).$filter.addClass('selected');
+		this.updateUlMenu();		
 
 		this.ajax = $.ajax({		
 			'url': 		base_url + 'entries/select',
@@ -256,9 +259,6 @@ cloneReader = {
 			}
 			cloneReader.renderEntries(response.result);
 		});	
-		
-		this.updateUlFeeds();
-		this.updateUlMenu();
 	},
 	
 	renderEntries: function(result) {
@@ -331,14 +331,13 @@ cloneReader = {
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
 	},
 	
-	
 	renderDetailEntry: function($entry, entry) {
 		var $header = $('<div/>').addClass('header').appendTo($entry);
 
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
-			.css('background-image', 'url(https://plus.google.com/_/favicon?domain=' + entry.feedLInk + ')')
+			.css('background-image', 'url(' + (entry.feedIcon == null ? 'css/img/default_feed.png' : 'img/' + entry.feedIcon) + ')')
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 			
@@ -451,26 +450,21 @@ cloneReader = {
 			this.addToSave(this.aEntries[entryId]);
 			
 			var feedId 	= this.aEntries[entryId].feedId;
+			var filter 	= this.indexFilters['feed'][feedId];
 			var sum 	= (value == true ? -1 : +1);
-			var $feed 	= this.$ulFeeds.find('li[data-type=feed][data-id=' + feedId + ']');
-			this.aFeeds[feedId].count = parseInt(this.aFeeds[feedId].count) + sum;
-			if (this.aFeeds[feedId].count < 0) {
-				this.aFeeds[feedId].count = 0;
+			
+			filter.count = parseInt(filter.count) + sum;
+			if (filter.count < 0) {
+				filter.count = 0;
+			}
+
+			this.renderCounts(filter.$filter, filter.count); // actualizo solo los contadores de la parte del arbol de filters seleccionado
+			var parents = this.getAllParentsByFilter(filter);
+			for(var i=0; i<parents.length; i++) {
+				this.renderCounts(parents[i].$filter, this.getCountFilter(parents[i]));
 			}
 			
-
-			// actualizo solo los contadores de la parte del arbol de feeds seleccionada
-			this.renderCounts($feed, this.aFeeds[feedId].count);
-			
-			var $aFeeds = $.merge([], $feed);
-			for (var i=0; i<$feed.length; i++) {
-				$aFeeds = $.merge($aFeeds, $($feed[i]).parents('li'));
-			}
-			$aFeeds = $($aFeeds);
-
-			this.updateTagsCount($aFeeds.filter('[data-type=tag]'));
 			this.updateMenuCount();
-			this.updateUlFeeds($aFeeds);
 		}
 
 		$entry.removeClass('readed');
@@ -479,24 +473,33 @@ cloneReader = {
 		}
 	},
 	
-	renderCounts: function($li, count) {
+	renderCounts: function($filter, count) {
+		$filter = $($filter);
+		if ($filter.length == 0) { return; }
+		
 		if (count < 0) {
 			count = 0;
 		}
 					
-		var $count = $li.find('.count:first');
+		var $count = $filter.find('.count:first');
 		$count.text('(' + count + ')');
 		$count.hide();
 		if (count > 0) {
 			$count.show();
 		}
-		$li.data('count', count);
+		
+		
+		$filter.removeClass('empty')
+		if (count == 0) {
+			$filter.addClass('empty');
+		}
+		$filter.hide().toggle(this.isVisible($filter.data('filter'), true));		
 	},
 	
 	updateUlMenu: function() {
 		this.$ulMenu.find('.filterSort span:first').text(this.$container.find(this.aFilters.sortDesc == true ? '.popUpWindow .filterNewestSort' : '.popUpWindow .filterOldestSort').text());
 		this.$ulMenu.find('.filterUnread span:first').html(this.$container.find(this.aFilters.onlyUnread == true ? '.popUpWindow .filterOnlyUnread' :  '.popUpWindow .filterAllItems').html());
-		this.$ulMenu.find('.feedName').text(this.$ulFeeds.find('.selected a:first').text());
+		this.$ulMenu.find('.feedName').text(this.$ulFilters.find('.selected a:first').text());
 		
 		this.$ulMenu.find('li.viewDetail, li.viewList').removeClass('checked');
 		if (this.aFilters.viewType == 'detail') {
@@ -514,58 +517,8 @@ cloneReader = {
 		this.$ulMenu.find('.filterUnread, .filterSort').show();
 	},
 
-	updateUlFeeds: function($feeds) {
-		this.$ulFeeds.find('li.selected').removeClass('selected');
-		this.$ulFeeds.find('li[data-type=' + this.aFilters.type + '][data-id=' + this.aFilters.id + ']').addClass('selected');
-		
-		if ($feeds == null) {
-			$feeds = this.$ulFeeds.find('li[data-type=tag][data-id=' + TAG_ALL + '] li');
-		}
-		
-		$feeds
-			.removeClass('empty')
-			.each(function() {
-				var $feed = $(this);
-				if ($feed.data('count') == 0) {
-					$feed.addClass('empty');
-				}
-				cloneReader.renderFeedVisibility($feed);
-			});
-	},
-
-	renderFeedVisibility: function($feed) {
-		var visible = false;
-
-		if (this.aFilters.onlyUnread == false) {
-			visible = true;
-		}
-		else if (parseInt($feed.data('count')) != 0) {
-			visible = true;
-		}
-		else if ($feed.hasClass('selected') == true || $feed.find('li.selected').length != 0) {
-			visible = true;
-		}
-
-		$feed.hide().toggle(visible);
-	},
-	
-	updateTagsCount: function($tag) {
-		if ($tag == null) {
-			var $tag	= this.$ulFeeds.find('li[data-type=tag]');
-		}
-		for(var z=0; z<$tag.length; z++) { 
-			var $childs 	= $($tag[z]).find('ul > li[data-type=feed]');
-			var count		= 0;
-			for (var i=0; i<$childs.length; i++) {
-				var feedId = $($childs[i]).data('id');
-				count += parseInt(this.aFeeds[feedId].count);			
-			}
-			this.renderCounts($($tag[z]), count);
-		}		
-	},
-	
 	updateMenuCount: function() {
-		var count = this.$ulFeeds.find('.selected .count:first').text().replace('(', '').replace(')', '');
+		var count = this.getFilter(this.aFilters).count;
 		this.$ulMenu.find('.filterUnread .count').text(count);
 		this.$container.find('.popUpWindow .filterOnlyUnread .count').text(count);
 	},
@@ -633,7 +586,7 @@ cloneReader = {
 		if (
 			this.$noResult.visible(true) == true 
 			||
-			((this.$ulEntries.find('.entry').length - 2) <= this.$ulEntries.find('.entry.selected').index()) // TODO: hacer una variable con el '2' !
+			((this.$ulEntries.find('.entry').length - this.minUnreadEntries) <= this.$ulEntries.find('.entry.selected').index())
 		) {
 			var lastEntryId = this.$ulEntries.find('.entry').last().data('entryId');
 			if (this.aFilters.lastEntryId != lastEntryId) {
@@ -642,111 +595,227 @@ cloneReader = {
 		}
 	},
 
-	loadFeeds: function() {
-		$.ajax({ url: base_url + 'entries/selectFeeds' })
-		.done(
+	loadFilters: function() {
+		$.ajax({ url: base_url + 'entries/selectFilters' })
+		.done($.proxy(
 			function(response) {
 				if (response['code'] != true) {
 					return $(document).alert(response['result']);
 				}
-
-				cloneReader.renderFeeds(response.result, cloneReader.$ulFeeds);
-	
-				var $feed = cloneReader.$ulFeeds.find('li[data-type=' + cloneReader.aFilters.type + '][data-id=' + cloneReader.aFilters.id + '] a:first');
-				if ($feed.length == 0) {
-					$feed = cloneReader.$ulFeeds.find('li:first a');
-				}
-				$feed.click();
+console.time("t1");				
+				this.filters = response.result;
+				this.runIndexFilters(this.filters, null, true);
+				this.renderFilters(this.filters, this.$ulFilters);
+				this.loadEntries(true, false, {});
+				this.resizeWindow();
+				
+console.timeEnd("t1");
+								
 			}
-		);	
+		, this));	
 	},
 	
-	reloadFeeds: function() {
-		$.ajax({ url: base_url + 'entries/selectFeeds' })
-		.done(
+	reloadFilters: function() {
+		$.ajax({ url: base_url + 'entries/selectFilters' })
+		.done($.proxy(
 			function(response) {
 				if (response['code'] != true) {
 					return $(document).alert(response['result']);
 				}
-
-				cloneReader.$ulFeeds.children().remove();
-				cloneReader.aFeeds	= {};
-						
-				cloneReader.renderFeeds(response.result, cloneReader.$ulFeeds);
-				cloneReader.updateUlFeeds();
-				cloneReader.updateUlMenu();
-				cloneReader.$ulFeeds.find('.selected').hide().fadeIn('slow');
+				this.filters = response.result;
+				this.runIndexFilters(this.filters, null, true);		
+				this.renderFilters(this.filters, this.$ulFilters);
+//				this.updateUlMenu();
+				this.$ulFilters.find('.selected').hide().fadeIn('slow');
 			}
-		);	
+		, this));	
 	},	
-
-	renderFeeds: function(result, $parent){
-		for (var i=0; i<result.length; i++) {
-			var feed = result[i];
-			if (feed.childs != null) {
-				var $feed = this.renderFeed('tag', feed, $parent);
-				$feed.data('expanded', feed.expanded);
-				$feed.append('<ul />').find('.icon').addClass('arrow');
-				$feed.find('.icon')
-					.click(
-						function(event) {
-							var $feed 	= $($(event.target).parents('li:first'));
-							var $ul 	= $feed.find('ul');
-							cloneReader.expandFeed($feed, !$ul.is(':visible'));
-						}
-					);
-
-				if (feed.expanded == false) { $feed.find('ul').hide(); }
-				this.renderFeeds(feed.childs, $feed.find('ul'));
-				this.expandFeed($feed, feed.expanded);
-			}
-			else {
-				this.aFeeds[feed.id] = feed;
-				var $feed = this.renderFeed('feed', feed, $parent);
-				this.renderCounts($feed, feed.count);
-			}
+	
+	runIndexFilters: function(filters, parent, clear) {
+		if (clear == true) {
+			this.indexFilters 	= { 'tag': {}, 'feed': {}};
+			this.$ulFilters.children().remove();
 		}
-		this.updateTagsCount();
-		this.resizeWindow();
+		
+		for (var i=0; i<filters.length; i++) {
+			var filter = filters[i];
+			
+			if (this.indexFilters[filter.type][filter.id] == null) {
+				this.indexFilters[filter.type][filter.id] = filter;
+				$.extend(filter, { '$filter': $(), 'parents': [] });
+			}
+			
+			filter = this.indexFilters[filter.type][filter.id];
+			
+			if (parent != null) {
+				filter.parents.push(parent);
+			}
+			
+			this.indexFilters[filter.type][filter.id] = filter;
+			if (filter.childs != null) {
+				this.runIndexFilters(filter.childs, filter, false);
+			}
+		}		
 	},
 
-	renderFeed: function(type, feed, $parent) {
-		var $feed = $parent.find('li[data-type=' + feed.type + '][data-id=' + feed.id + ']');
-		if ($feed.length != 0) {
-			return $feed;
+	renderFilters: function(filters, $parent){
+		for (var i=0; i<filters.length; i++) {
+			var filter = filters[i];
+
+			filter.count = this.getCountFilter(filter);
+			this.renderCounts(filter.$filter, filter.count);
+				
+			if (this.isVisible(filter, $parent.is(':visible')) == true) {
+				this.renderFilter(filter, $parent, i);
+			}
+				
+			if (filter.$filter != null && filter.childs != null) {
+				this.renderFilters(filter.childs, filter.$filter.find('ul:first'));
+				this.expandFilter(filter, filter.expanded);
+			}				
+		}
+	},
+
+	renderFilter: function(filter, $parent, index) {
+		var filter = this.getFilter(filter);
+		
+			
+		if (filter.$filter.length != 0 && filter.$filter.parents().is($parent)) {
+			return filter.$filter;
 		}
 
-		var $feed = $('<li/>')
-					.attr('data-type', feed.type)
-					.attr('data-id', feed.id)
-					.data({ 'type': feed.type, 'name': feed.name, 'id': feed.id, 'count': (feed.count || 0) })
-					.html('<div><span class="icon" /><a>' + feed.name + '</a><span class="count" /></div>')
+		var $filter = $('<li/>')
+					.data('filter', filter)
+					.html('<div><span class="icon" /><a>' + filter.name + '</a><span class="count" /></div>')
 					.appendTo($parent);
 
-		$feed.find('a')
-			.attr('title', feed.name)
+		if (index != null && index != $filter.index()) {
+			$($parent.find('> li').get(index)).before($filter); // para ordenar los items que se crearon en tiempo de ejecución
+		}
+					
+		filter.$filter = filter.$filter.add($filter);
+
+		$filter.find('a')
+			.attr('title', filter.name)
 			.click(function (event) {
-				var $feed = $($(event.target).parents('li:first'));
-				cloneReader.loadEntries(true, false, { 'type': $feed.data('type'), 'id': $feed.data('id')});
+				var filter = $($(event.target).parents('li:first')).data('filter');
+				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
 			});
-		if (feed.icon != null) {
-			$feed.find('.icon').css('background-image', 'url(' + feed.icon + ')');
+
+
+		this.renderCounts($filter, filter.count);
+
+		if (filter.icon != null) {
+			$filter.find('.icon').css('background-image', 'url(' + filter.icon + ')');
+		}
+		
+		if (filter.childs != null) {
+			$filter.append('<ul />').find('.icon').addClass('arrow');
+			$filter.find('.icon').click(
+				function(event) {
+					var $filter	= $($(event.target).parents('li:first'));
+					var filter	= $filter.data('filter');
+					cloneReader.expandFilter(filter, !filter.expanded);
+				});
+
+			if (filter.expanded == false) { 
+				$filter.find('ul').hide(); 
+			}
 		}
 
-		return $feed;
+		return $filter;
+	},
+	
+	isVisible: function(filter, parentIsVisible) {
+		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == 'home')) { // TODO: desharckodear
+			return true;
+		}		
+		if (parentIsVisible == true && parseInt(filter.count) > 0) {
+			return true;
+		}
+		if (parentIsVisible == true && this.aFilters.onlyUnread == false) {
+			return true;
+		}
+		if (this.isSelectedFilter(filter) == true) {
+			return true;
+		}						
+		
+		return false;
+	},
+	
+	isSelectedFilter: function(filter) {
+		if (filter.id == this.aFilters.id && filter.type == this.aFilters.type) {
+			return true;
+		}
+		if (filter.childs != null) {
+			for (var i=0; i<filter.childs.length; i++) {
+				if (this.isSelectedFilter(filter.childs[i]) == true) {
+					return true;
+				}
+			}			
+		}
+		return false;
+	},
+	
+	getFilter: function(filter) {
+		return this.indexFilters[filter.type][filter.id];
+	},
+	
+	getAllParentsByFilter: function(filter){
+		var parents = [];
+		for (var i=0; i<filter.parents.length; i++) {
+			parents.push(filter.parents[i]);
+			if (filter.parents.length != 0) {
+				parents = $.merge(parents, this.getAllParentsByFilter(filter.parents[i]));
+			}
+		}
+		return parents;
+	},
+	
+	getFeedsByFilter: function(filter) {
+		if (filter.childs == null) {
+			return [filter];
+		}
+				
+		var feeds = {};
+		for (var i=0; i<filter.childs.length; i++) {
+			if (filter.childs[i].childs != null) {
+				$.extend(feeds, this.getFeedsByFilter(filter.childs[i]));
+			}
+			else {
+				if (filter.childs[i].type == 'feed') {
+					feeds[filter.childs[i].id] = this.getFilter(filter.childs[i]);
+				}
+			}
+		}		
+		return feeds;
 	},
 
-	expandFeed: function($feed, value){
-		if ($feed.data('expanded') != value) {
-			$feed.data('expanded', value);
-			this.aUserFeeds[$feed.data('id')] = {
-				'tagId': 		$feed.data('id'),
+	getCountFilter: function(filter) {
+		if (filter.childs == null) {
+			return filter.count;
+		}
+		
+		var feeds = this.getFeedsByFilter(filter);		
+		var count = 0;
+		for (var feedId in feeds) {
+			count += parseInt(feeds[feedId].count);
+		}
+		return count;
+	},				
+
+	expandFilter: function(filter, value){
+		if (filter.expanded != value) {
+			filter.expanded = value;
+			this.aUserTags[filter.id] = {
+				'tagId': 		filter.id,
 				'expanded': 	value
 			};
 		}
 		
-		var $arrow 	= $feed.find('.arrow:first');
-		var $ul 	= $feed.find('ul:first');
+		var $filter	= filter.$filter;
+		var $arrow 	= $filter.find('.arrow:first');
+		var $ul 	= $filter.find('ul:first');
 
 		if (value != true) {
 			$arrow.html('&#9658;')
@@ -754,11 +823,19 @@ cloneReader = {
 			return;
 		}
 
+		for (var i=0; i<filter.childs.length; i++) {
+			if (this.isVisible(filter.childs[i], true) == true) {
+				this.renderFilter(filter.childs[i], $ul);
+			}
+		}
+
 		$arrow.html('&#9660;');
 		$ul.stop().show('fast', function() { $(this).show()});
+		
+		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
 	
-	expandEntries: function() {
+	maximiseUlEntries: function() {
 		var marginLeft = (parseInt(this.$ulEntries.css('margin-left')) == 0 ? this.$ulEntries.data('margin-left') : 0);  
 			
 		this.$ulEntries.stop().animate(
@@ -793,7 +870,7 @@ cloneReader = {
 			}
 			
 			cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
-			cloneReader.reloadFeeds();
+			cloneReader.reloadFilters();
 		});				
 	},
 	
@@ -809,7 +886,7 @@ cloneReader = {
 		if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
 			return;
 		}
-		if (Object.keys(this.aUserEntries).length == 0 && Object.keys(this.aUserFeeds).length == 0) {
+		if (Object.keys(this.aUserEntries).length == 0 && Object.keys(this.aUserTags).length == 0) {
 			return;
 		}
 		
@@ -818,7 +895,7 @@ cloneReader = {
 			'url': 		base_url + 'entries/saveData',
 			'data': 	{ 
 					'entries': 	$.toJSON(this.aUserEntries),
-					'tags': 	$.toJSON(this.aUserFeeds) 
+					'tags': 	$.toJSON(this.aUserTags) 
 			},
 			'type':	 	'post',
 			'async':	async
@@ -830,7 +907,7 @@ cloneReader = {
 		});			
 		
 		this.aUserEntries 	= {};
-		this.aUserFeeds		= {};
+		this.aUserTags		= {};
 	},
 
 	addTag: function() {
@@ -855,7 +932,7 @@ cloneReader = {
 			}
 			
 			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
-			cloneReader.reloadFeeds();
+			cloneReader.reloadFilters();
 		});				
 	},
 
@@ -875,7 +952,7 @@ cloneReader = {
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
-			cloneReader.reloadFeeds();
+			cloneReader.reloadFilters();
 		});
 	},
 	
@@ -896,7 +973,7 @@ cloneReader = {
 				return $(document).alert(response['result']);
 			}
 			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
-			cloneReader.reloadFeeds();
+			cloneReader.reloadFilters();
 		});		
 	},
 	
@@ -914,7 +991,7 @@ cloneReader = {
 		if (entry.entryDate == null) { return; }
 		
 		if (this.aFilters.viewType == 'detail') {
-			$entry.find('.entryDate').text(entry.entryDate + ' (' + this.humanizeDatetime(entry.entryDate) + ')');
+			$entry.find('.entryDate').text(this.humanizeDatetime(entry.entryDate, 'LLL') + ' (' + this.humanizeDatetime(entry.entryDate) + ')');
 		}
 		else {
 			$entry.find('.entryDate').text(this.humanizeDatetime(entry.entryDate));
@@ -940,20 +1017,29 @@ cloneReader = {
 			}
 		];
 
-		var aLi = this.$ulFeeds.find('li[data-type=tag][data-id=' + TAG_ALL + '] li[data-type=tag]');
-		for (var i=0; i<aLi.length; i++) {
-			var $feed 	= $(aLi[i]);
-			var check 	= '';
-			var hasTag 	= this.$ulFeeds.find('li[data-type=tag][data-id=' + $feed.data('id') + '] li[data-type=feed][data-id=' + feedId + ']').length != 0;
-			if (hasTag == true) {
-				check = '&#10004';
+		for (var id in this.indexFilters['tag']) {
+			if (id != TAG_ALL && id != TAG_STAR && id != 'home') { // TODO: desharckodear
+				var filter	= this.indexFilters['tag'][id];
+				var check 	= '';
+				var hasTag 	= this.feedHasTag(this.getFilter(this.aFilters), filter);
+				if (hasTag == true) {
+					check = '&#10004';
+				}
+				aItems.push( { 'html': '<span class="check">' + check + '</span>' + filter.name,  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': filter.id} , 'callback': function() {  var $filter = $(this); cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), !$filter.hasClass('selected') ); } } );
 			}
-			aItems.push( { 'html': '<span class="check">' + check + '</span>' + $feed.data('name'),  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': $feed.data('id')} , 'callback': function() {  var $feed = $(this); cloneReader.saveUserFeedTag($feed.data('feedId'), $feed.data('tagId'), !$feed.hasClass('selected') ); } } );
-
 		}
 
 		this.createMenu(aItems, this.$popupFeedSettings);
 		this.$popupFeedSettings.find('li.newTag .arrow').hide();
+	},
+	
+	feedHasTag: function(feed, tag) {
+		for (var i=0; i<feed.parents.length; i++) {
+			if (tag.type == feed.parents[i].type && tag.id == feed.parents[i].id) {
+				return true;
+			}
+		} 
+		return false;
 	},
 
 	showPopupForm: function(placeholder, callback, $li){
@@ -989,7 +1075,7 @@ cloneReader = {
 		this.hidePopupWindow();
 		$('.content').width('auto');
 		
-		this.$ulFeeds.height(1);
+		this.$ulFilters.height(1);
 		
 		$('.nicescroll-rails').hide(); 
 		
@@ -997,7 +1083,7 @@ cloneReader = {
 			.height(1)
 			.height($(document).outerHeight(true) - 1 - this.$ulEntries.offset().top - $('#footer').outerHeight(true)); // TODO: revisar el -1
 
-		this.$ulFeeds.height(this.$ulEntries.height());
+		this.$ulFilters.height(this.$ulEntries.height());
 		
 		$('.nicescroll-rails').show();
 			
@@ -1016,12 +1102,15 @@ cloneReader = {
 		this.$ulMenu.find('li').removeClass('expanded');
 	},
 	
-	humanizeDatetime: function(datetime) {
+	humanizeDatetime: function(datetime, format) {
 		datetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
 		if (datetime >= moment()) {
 			datetime = moment().add('ms', -1);
 		} 
 		
-		return datetime.fromNow();
+		if (format == null) {
+			return datetime.fromNow();
+		}
+		return datetime.format('LLL');
 	}	
 };

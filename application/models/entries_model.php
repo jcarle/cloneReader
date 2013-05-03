@@ -25,7 +25,7 @@ class Entries_Model extends CI_Model {
 			$entryDate = $entry['entryDate'];
 		}
 
-		$query = $this->db->select('feeds.feedId, feedName, feedUrl, feedLInk, entries.entryId, entryTitle, entryUrl, entryContent, entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
+		$query = $this->db->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
 						->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 						->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.userId = users_feeds.userId', 'left')
@@ -62,16 +62,15 @@ class Entries_Model extends CI_Model {
 		return $query;
 	}
 
-	function selectFeeds() {
-	// TODO: filtro por usuarios!
-		$aTags = array();
+	function selectFilters() {
+		$aFilters = array();
 	
 		$result = array(
 			array(
 				'type'		=> 'tag',
 				'id'		=> 'home', // TODO: implementar!
 				'name'		=> 'home',
-				'icon'		=> site_url().'css/img/feed.png', 
+				'icon'		=> site_url().'css/img/default_feed.png', 
 			),
 			array(
 				'type'		=> 'tag',
@@ -81,7 +80,7 @@ class Entries_Model extends CI_Model {
 			)
 		);
 		
-		$aTags['tags'] = array(
+		$aFilters['tags'] = array(
 			'type'		=> 'tag',
 			'id'		=> TAG_ALL,		
 			'name'		=> 'Subscriptions',
@@ -90,9 +89,9 @@ class Entries_Model extends CI_Model {
 			'childs'	=> array()				
 		); 		
 		
-		$result[] = & $aTags['tags'];
+		$result[] = & $aFilters['tags'];
 
-		$query = $this->db->select('feeds.feedId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink ', false)
+		$query = $this->db->select('feeds.feedId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon ', false)
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
 						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
@@ -102,8 +101,8 @@ class Entries_Model extends CI_Model {
 		 				->get('feeds');
 		//pr($this->db->last_query());				
 		foreach ($query->result() as $row) {
-			if ($row->tagId != null && !isset($aTags[$row->tagId])) {
-				$aTags[$row->tagId] = array(
+			if ($row->tagId != null && !isset($aFilters[$row->tagId])) {
+				$aFilters[$row->tagId] = array(
 					'type'		=> 'tag',
 					'id'		=> $row->tagId,
 					'name'		=> $row->tagName,
@@ -111,7 +110,7 @@ class Entries_Model extends CI_Model {
 					'childs'	=> array()				
 				); 
 				
-				$aTags['tags']['childs'][] = & $aTags[$row->tagId];
+				$aFilters['tags']['childs'][] = & $aFilters[$row->tagId];
 			}
 			
 			$feed = array(
@@ -119,15 +118,15 @@ class Entries_Model extends CI_Model {
 				'id'		=> $row->feedId, 
 				'name'		=> $row->feedName, 
 				'url'		=> $row->feedUrl,
-				'icon'		=> 'https://plus.google.com/_/favicon?domain='.$row->feedLink, // TODO: guardar los iconos en disco!
+				'icon'		=> ($row->feedIcon == null ? site_url().'css/img/default_feed.png' : site_url().'img/'.$row->feedIcon), 
 				'count'		=> $this->getTotalByFeedId($row->feedId),				
 			);
 			
 			if ($row->tagId != null) {
-				$aTags[$row->tagId]['childs'][] = $feed;
+				$aFilters[$row->tagId]['childs'][] = $feed;
 			}
 			else {
-				$aTags['tags']['childs'][] = $feed;
+				$aFilters['tags']['childs'][] = $feed;
 			}
 		}
 
@@ -287,10 +286,22 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return true;		
 	}
+	
+	function saveFeedIcon($feedId, $feedLink, $feedIcon) {
+		if ($feedIcon == null) {
+			$this->load->spark('curl/1.2.1');
+			$img = $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
+			$parse = parse_url($feedLink);
+			$feedIcon = $parse['host'].'.png'; 
+			file_put_contents('./img/'.$feedIcon, $img);
+			$values['feedIcon'] = $feedIcon;
+			$this->db->update('feeds', $values, array('feedId' => $feedId));	
+		}				
+	}	
 
 	function getNewsEntries($userId = null) {
 		$this->db
-			->select('feeds.feedId, feedUrl')
+			->select('feeds.feedId, feedUrl, feedLink, feedIcon')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 			->order_by('feedLastUpdate ASC');
@@ -304,12 +315,13 @@ class Entries_Model extends CI_Model {
 		$query = $this->db->get('feeds');
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {
-			$this->parseRss($row->feedId, $row->feedUrl);
+			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
+			$this->parseRss($row->feedId, $row->feedUrl, $row->feedLink, $row->feedIcon);
 		}
 	}		
 
 	// TODO: mover estos metodos de aca
-	function parseRss($feedId, $feedUrl) {
+	function parseRss($feedId, $feedUrl, $feedLink, $feedIcon) {
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
@@ -320,7 +332,7 @@ class Entries_Model extends CI_Model {
 			return $this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
 		}
 		
-		$values = array('feedLastUpdate' => date("Y-m-d H:i:s")); 
+		$values = array( 'feedLastUpdate' => date("Y-m-d H:i:s") ); 
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
 			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
 		}
