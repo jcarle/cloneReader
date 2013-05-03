@@ -47,9 +47,9 @@ define('MENU_ADMIN', 1);
 define('MENU_PROFILE', 10);
 define('MENU_PUBLIC', 8);
 
-define('TAG_HOME', 0);
 define('TAG_ALL', 1);
 define('TAG_STAR', 2);
+define('TAG_HOME', 3);
 
 define('FEED_STATUS_PENDING', 0); 	
 define('FEED_STATUS_APPROVED', 1);
