@@ -373,6 +373,7 @@ $.extend({
 
 $(document).ready(function() {
 	$.initMenu();
+	resizeWindow();
 	
 	$.countProcess = 0;
 	
@@ -390,6 +391,18 @@ $(document).ready(function() {
 		}
 	);
 });
+
+
+$(window).resize(function() {
+	resizeWindow();
+});
+
+function resizeWindow() {
+	$('.content')
+		.css('min-height', 1)
+		.css('min-height', $(document).outerHeight(true) - $('.menu').offset().top - $('.menu').outerHeight(true) - $('#footer').outerHeight(true) ); 
+
+}
 
 function cn(value) {
 	console.log(value);

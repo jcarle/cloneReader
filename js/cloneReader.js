@@ -623,6 +623,7 @@ console.time("t1");
 				if (reload == true) {
 					this.$ulFilters.find('.selected').hide().fadeIn('slow');
 				}
+				
 				else {
 					this.loadEntries(true, false, {});
 				}
@@ -1100,7 +1101,7 @@ console.timeEnd("t1");
 	
 	resizeWindow: function() {
 		this.hidePopupWindow();
-		$('.content').width('auto');
+		$('.content').width('auto').css( { 'min-height': 1, 'overflow': 'hidden' });
 		
 		this.$ulFilters.height(1);
 		
