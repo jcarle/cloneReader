@@ -2,6 +2,7 @@
 </div>
 
 <script>
+var TAG_HOME			= <?php echo TAG_HOME; ?>;
 var TAG_ALL			 	= <?php echo TAG_ALL; ?>;
 var TAG_STAR			= <?php echo TAG_STAR; ?>;
 var FEED_TIME_SAVE		= <?php echo FEED_TIME_SAVE; ?>;

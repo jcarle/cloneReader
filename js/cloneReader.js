@@ -20,13 +20,15 @@ cloneReader = {
 			'sortDesc': 	true,
 			'id': 			null, 
 			'type': 		null,
-			'viewType': 	'detail'
+			'viewType': 	'detail',
+			'isMaximized': 	false
 		}, aFilters);		
 		
 		this.renderMenu();
 		this.loadFilters(false);
 		this.initEvents();
 		this.resizeWindow();
+		this.maximiseUlEntries(this.aFilters.isMaximized, false);
 	},
 
 	initEvents: function() {
@@ -89,7 +91,7 @@ cloneReader = {
 						this.loadEntries(true, true, {});
 						break;
 					case 85: // U: expand!			
-						this.maximiseUlEntries();
+						this.maximiseUlEntries(!this.aFilters.isMaximized, true);
 						break;
 					case 83: // S: star
 						var $entry = this.$ulEntries.find('.entry.selected');
@@ -132,8 +134,7 @@ cloneReader = {
 	
 	renderMenu: function() {
 		this.createMenu([
-			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(true) }},
-			{ 'html': '', 'class': 'feedName' }, // TODO: hacer que se ajuste el width al espacio disponible!
+			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) }},
 			{ 'html': '&#9660;', 	'title': 'next',	'class': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
 			{ 'html': '&#9650;', 	'title': 'prev', 	'class': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
 			{ 'html': '&#10226;', 	'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, true, {}) }},
@@ -220,8 +221,8 @@ cloneReader = {
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
 		
-		var lastFilters =  $.toJSON(this.aFilters);
-		this.aFilters 	=	$.extend(this.aFilters, aFilters);
+		var lastFilters = $.toJSON(this.aFilters);
+		this.aFilters 	= $.extend(this.aFilters, aFilters);
 		
 		if (cloneReader.$ulEntries.children().length == 0) { // Para la primera carga
 			forceRefresh = true;
@@ -235,6 +236,11 @@ cloneReader = {
 			delete this.aFilters.lastEntryId;
 			this.$ulEntries.children().remove();
 			this.$ulEntries.scrollTop(0);
+			
+			$('<li/>')
+					.addClass('feedName')
+					.text(this.getFilter(this.aFilters).name)
+					.appendTo(this.$ulEntries);
 		}
 		
 		if (this.ajax) {
@@ -403,7 +409,15 @@ cloneReader = {
 
 		$entry.find('.feedName, .entryContent').click(function(event) {
 			var $entry = $(event.target).parents('.entry');
-			cloneReader.selectEntry($entry, true, false);
+			
+			if ($entry.hasClass('expanded') == true) {
+				$entry
+					.removeClass('expanded')
+					.removeClass('selected')
+					.find('.detail').remove();
+				return;
+			}
+			cloneReader.selectEntry($entry, false, false);
 		});	
 	},	
 	
@@ -499,7 +513,6 @@ cloneReader = {
 	updateUlMenu: function() {
 		this.$ulMenu.find('.filterSort span:first').text(this.$container.find(this.aFilters.sortDesc == true ? '.popUpWindow .filterNewestSort' : '.popUpWindow .filterOldestSort').text());
 		this.$ulMenu.find('.filterUnread span:first').html(this.$container.find(this.aFilters.onlyUnread == true ? '.popUpWindow .filterOnlyUnread' :  '.popUpWindow .filterAllItems').html());
-		this.$ulMenu.find('.feedName').text(this.$ulFilters.find('.selected a:first').text());
 		
 		this.$ulMenu.find('li.viewDetail, li.viewList').removeClass('checked');
 		if (this.aFilters.viewType == 'detail') {
@@ -546,13 +559,12 @@ cloneReader = {
 			$div.find('.header .entryDate, .header .star').remove();
 			$entry.append($div);
 			
-			this.scrollToEntry($entry, false);
+			animate = false;
 		}
-		else {
-			if (scrollTo == true) {
-				this.scrollToEntry($entry, animate);
-			}					
-		}
+
+		if (scrollTo == true) {
+			this.scrollToEntry($entry, animate);
+		}					
 
 		this.readEntry($entry, true);
 		this.getMoreEntries();
@@ -717,7 +729,7 @@ console.timeEnd("t1");
 	},
 	
 	isVisible: function(filter, parentIsVisible) {
-		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == 'home')) { // TODO: desharckodear
+		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == TAG_HOME)) { // TODO: desharckodear
 			return true;
 		}		
 		if (parentIsVisible == true && parseInt(filter.count) > 0) {
@@ -825,17 +837,28 @@ console.timeEnd("t1");
 		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
 	
-	maximiseUlEntries: function() {
-		var marginLeft = (parseInt(this.$ulEntries.css('margin-left')) == 0 ? this.$ulEntries.data('margin-left') : 0);  
-			
-		this.$ulEntries.stop().animate(
-			{ 'margin-left': marginLeft }, 
-			{ 
-				duration: 100 ,
-			 	complete: function() {
-					cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-			}
-		});				
+	maximiseUlEntries: function(value, animate) {
+		var marginLeft = 0;
+		if (value == false) {
+			marginLeft = this.$ulEntries.data('margin-left');
+		}
+		
+		this.aFilters.isMaximized = value;
+		this.updateUserFilters();
+		
+		if (animate == true) {
+			this.$ulEntries.stop().animate(
+				{ 'margin-left': marginLeft }, 
+				{ 
+					duration: 100 ,
+				 	complete: function() {
+						cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+				}
+			});
+		}
+		else {
+			this.$ulEntries.stop().css(	{ 'margin-left': marginLeft } ); 			
+		}				
 	},
 
 	addFeed: function() {
@@ -967,6 +990,19 @@ console.timeEnd("t1");
 		});		
 	},
 	
+	updateUserFilters: function() {
+		this.ajax = $.ajax({		
+			'url': 		base_url + 'entries/updateUserFilters',
+			'data': 	{ 'post': $.toJSON(this.aFilters) },
+			'type':		'post'
+		})
+		.done(function(response) {
+			if (response['code'] != true) {
+				return $(document).alert(response['result']);
+			}
+		});
+	},		
+	
 	updateEntriesDateTime: function() {
 		this.$ulEntries.find('.entryDate').each(
 			function() {
@@ -1009,7 +1045,7 @@ console.timeEnd("t1");
 		];
 
 		for (var id in this.indexFilters['tag']) {
-			if (id != TAG_ALL && id != TAG_STAR && id != 'home') { // TODO: desharckodear
+			if (id != TAG_ALL && id != TAG_STAR && id != TAG_HOME) { // TODO: desharckodear
 				var filter	= this.indexFilters['tag'][id];
 				var check 	= '';
 				var hasTag 	= this.feedHasTag(this.getFilter(this.aFilters), filter);

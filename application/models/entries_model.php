@@ -11,9 +11,8 @@ class Entries_Model extends CI_Model {
 	
 	function select($userFilters){
 		$lastEntryId = element('lastEntryId', $userFilters);
-		unset($userFilters['lastEntryId']);
-		$this->load->model('Users_Model');
-		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$this->session->userdata('userId'));
+		
+		$this->updateUserFilters($userFilters, (int)$this->session->userdata('userId'));
 
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_STAR) {
 			$userFilters['onlyUnread'] = false;
@@ -68,7 +67,7 @@ class Entries_Model extends CI_Model {
 		$result = array(
 			array(
 				'type'		=> 'tag',
-				'id'		=> 'home', // TODO: implementar!
+				'id'		=> TAG_HOME,
 				'name'		=> 'home',
 				'icon'		=> site_url().'css/img/default_feed.png', 
 			),
@@ -286,6 +285,12 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return true;		
 	}
+	
+	function updateUserFilters($userFilters, $userId){
+		unset($userFilters['lastEntryId']);
+		$this->load->model('Users_Model');
+		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
+	}	
 	
 	function saveFeedIcon($feedId, $feedLink, $feedIcon) {
 		if ($feedIcon == null) {

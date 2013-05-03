@@ -192,7 +192,17 @@ class Entries extends CI_Controller {
 			'code'		=> true,
 			'result' 	=> 'ok',
 		));
+	}
+	
+	function updateUserFilters() {
+		$this->Entries_Model->updateUserFilters((array)json_decode($this->input->post('post')), (int)$this->session->userdata('userId'));
+
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> 'ok',
+		));
 	}	
+		
 
 
 	function migrateFromGReader() {
