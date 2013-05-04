@@ -232,6 +232,11 @@ cloneReader = {
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
 			return;
 		}
+		if (clear == true) {
+			delete this.aFilters.lastEntryId;
+			this.$ulEntries.children().remove();
+			this.$ulEntries.scrollTop(0);
+		}		
 		
 		this.renderNotResult(true);
 		this.renderEntriesHead();
@@ -244,17 +249,10 @@ cloneReader = {
 		}
 		
 		if (!(this.aFilters.id == lastFilters.id && this.aFilters.type == lastFilters.type)) {
-cn('asa');			
 			this.renderUlFilterBranch(this.getFilter(lastFilters));
 			
 		}
 
-		if (clear == true) {
-			delete this.aFilters.lastEntryId;
-			this.$ulEntries.children().remove();
-			this.$ulEntries.scrollTop(0);
-		}
-		
 		if (this.ajax) {
 			this.ajax.abort();
 			this.ajax = null;
@@ -653,13 +651,17 @@ cn('asa');
 				if (response['code'] != true) {
 					return $(document).alert(response['result']);
 				}
-console.time("t1");				
+console.time("t1");	
+				if (reload == true) {
+					var scrollTop = this.$ulFilters.scrollTop();
+				}
 				this.filters = response.result;
 				this.runIndexFilters(this.filters, null, true);
 				this.renderFilters(this.filters, this.$ulFilters, true);
 				this.resizeWindow();
 				
 				if (reload == true) {
+					this.$ulFilters.scrollTop(scrollTop);
 					this.$ulFilters.find('.selected').hide().fadeIn('slow');
 				}
 				
@@ -687,13 +689,12 @@ console.timeEnd("t1");
 				$.extend(filter, { '$filter': $(), 'parents': [] });
 			}
 			
-			filter = this.indexFilters[filter.type][filter.id];
+			filter = this.getFilter(filter);
 			
 			if (parent != null) {
 				filter.parents.push(parent);
 			}
 			
-			this.indexFilters[filter.type][filter.id] = filter;
 			if (filter.childs != null) {
 				this.runIndexFilters(filter.childs, filter, false);
 			}
@@ -701,14 +702,18 @@ console.timeEnd("t1");
 	},
 
 	renderFilters: function(filters, $parent, selectFilters){
+		var index = 0;
 		for (var i=0; i<filters.length; i++) {
 			var filter = filters[i];
+			
+			filter = this.getFilter(filter);
 
 			filter.count = this.getCountFilter(filter);
 			this.renderCounts(filter);
 				
 			if (this.isVisible(filter, $parent.is(':visible')) == true) {
-				this.renderFilter(filter, $parent, i);
+				this.renderFilter(filter, $parent, index);
+				index++;
 			}
 				
 			if (filter.$filter != null && filter.childs != null) {
@@ -723,7 +728,6 @@ console.timeEnd("t1");
 
 	renderFilter: function(filter, $parent, index) {
 		var filter = this.getFilter(filter);
-		
 			
 		if (filter.$filter.length != 0 && filter.$filter.parents().is($parent)) {
 			return filter.$filter;
@@ -734,8 +738,8 @@ console.timeEnd("t1");
 					.html('<div><span class="icon" /><a>' + filter.name + '</a><span class="count" /></div>')
 					.appendTo($parent);
 
-		if (index != null && index != $filter.index()) {
-			$($parent.find('> li').get(index)).before($filter); // para ordenar los items que se crearon en tiempo de ejecución
+		if (index != null && index != $filter.index()) { // para ordenar los items que se crearon en tiempo de ejecución
+			$($parent.find('> li').get(index)).before($filter);
 		}
 					
 		filter.$filter = filter.$filter.add($filter);
@@ -869,9 +873,11 @@ console.timeEnd("t1");
 			return;
 		}
 
+		var index = 0;
 		for (var i=0; i<filter.childs.length; i++) {
 			if (this.isVisible(filter.childs[i], true) == true) {
-				this.renderFilter(filter.childs[i], $ul, i);
+				this.renderFilter(filter.childs[i], $ul, index);
+				index++;
 			}
 		}
 
