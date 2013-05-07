@@ -13,6 +13,7 @@ cloneReader = {
 		this.minUnreadEntries 	= 2;
 		this.aEntries	 		= {};
 		this.filters			= null;
+		this.tags				= null;
 		this.aUserEntries 		= {};
 		this.aUserTags			= {};
 		this.aFilters 			= $.extend({
@@ -655,7 +656,8 @@ console.time("t1");
 				if (reload == true) {
 					var scrollTop = this.$ulFilters.scrollTop();
 				}
-				this.filters = response.result;
+				this.filters 	= response.result.filters;
+				this.tags 		= response.result.tags;
 				this.runIndexFilters(this.filters, null, true);
 				this.renderFilters(this.filters, this.$ulFilters, true);
 				this.resizeWindow();
@@ -1050,7 +1052,7 @@ console.timeEnd("t1");
 	},
 	
 	updateUserFilters: function() {
-		this.ajax = $.ajax({		
+		$.ajax({		
 			'url': 		base_url + 'entries/updateUserFilters',
 			'data': 	{ 'post': $.toJSON(this.aFilters) },
 			'type':		'post'
@@ -1103,15 +1105,16 @@ console.timeEnd("t1");
 			}
 		];
 
-		for (var id in this.indexFilters['tag']) {
-			if (id != TAG_ALL && id != TAG_STAR && id != TAG_HOME) { // TODO: desharckodear
-				var filter	= this.indexFilters['tag'][id];
+		for (var i=0; i<this.tags.length; i++) {
+			var tag = this.tags[i];
+			if (tag.tagId != TAG_ALL && tag.tagId != TAG_STAR && tag.tagId != TAG_HOME) {
+				var filter	= this.indexFilters['tag'][tag.tagId];
 				var check 	= '';
 				var hasTag 	= this.feedHasTag(this.getFilter(this.aFilters), filter);
 				if (hasTag == true) {
 					check = '&#10004';
 				}
-				aItems.push( { 'html': '<span class="check">' + check + '</span>' + filter.name,  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': filter.id} , 'callback': function() {  var $filter = $(this); cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), !$filter.hasClass('selected') ); } } );
+				aItems.push( { 'html': '<span class="check">' + check + '</span>' + tag.tagName,  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  var $filter = $(this); cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), !$filter.hasClass('selected') ); } } );
 			}
 		}
 

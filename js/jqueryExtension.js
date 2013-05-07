@@ -377,6 +377,8 @@ $(document).ready(function() {
 	
 	$.countProcess = 0;
 	
+	$.ajaxSetup({dataType: "json"});
+	
 	$(document).ajaxSend(
 		function(event, jqXHR, ajaxOptions) {
 			$.countProcess ++;

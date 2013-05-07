@@ -42,7 +42,7 @@ class Entries extends CI_Controller {
 	function selectFilters() {
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Entries_Model->selectFilters(),
+			'result' 	=> $this->Entries_Model->selectFilters($this->session->userdata('userId')),
 		));
 	}
 	
