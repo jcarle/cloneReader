@@ -61,24 +61,27 @@ class Entries_Model extends CI_Model {
 		return $query;
 	}
 
-	function selectFilters() {
+	function selectFilters($userId) {
 		$aFilters = array();
 	
 		$result = array(
-			array(
-				'type'		=> 'tag',
-				'id'		=> TAG_HOME,
-				'name'		=> 'home',
-				'icon'		=> site_url().'css/img/default_feed.png', 
-			),
-			array(
-				'type'		=> 'tag',
-				'id'		=> TAG_STAR,
-				'name'		=> 'starred', 
-				'icon'		=> site_url().'css/img/star-on.png', 
+			'tags'		=> $this->selectTagsByUserId($userId),
+			'filters'	=> array(
+				array(
+					'type'		=> 'tag',
+					'id'		=> TAG_HOME,
+					'name'		=> 'home',
+					'icon'		=> site_url().'css/img/default_feed.png', 
+				),
+				array(
+					'type'		=> 'tag',
+					'id'		=> TAG_STAR,
+					'name'		=> 'starred', 
+					'icon'		=> site_url().'css/img/star-on.png', 
+				)
 			)
 		);
-		
+
 		$aFilters['tags'] = array(
 			'type'		=> 'tag',
 			'id'		=> TAG_ALL,		
@@ -88,14 +91,14 @@ class Entries_Model extends CI_Model {
 			'childs'	=> array()				
 		); 		
 		
-		$result[] = & $aFilters['tags'];
+		$result['filters'][] = & $aFilters['tags'];
 
 		$query = $this->db->select('feeds.feedId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon ', false)
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
 						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
 						->join('users_tags', 'users_tags.userId = users_feeds.userId AND users_tags.tagId = tags.tagId', 'left')
-						->where('users_feeds.userId', $this->session->userdata('userId'))
+						->where('users_feeds.userId', $userId)
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds');
 		//pr($this->db->last_query());				
@@ -112,15 +115,17 @@ class Entries_Model extends CI_Model {
 				$aFilters['tags']['childs'][] = & $aFilters[$row->tagId];
 			}
 			
+			$count = $this->getTotalByFeedIdAndUserId($row->feedId, $userId);
+
 			$feed = array(
 				'type'		=> 'feed',
 				'id'		=> $row->feedId, 
 				'name'		=> $row->feedName, 
 				'url'		=> $row->feedUrl,
 				'icon'		=> ($row->feedIcon == null ? site_url().'css/img/default_feed.png' : site_url().'img/'.$row->feedIcon), 
-				'count'		=> $this->getTotalByFeedId($row->feedId),				
+				'count'		=> $count,
 			);
-			
+
 			if ($row->tagId != null) {
 				$aFilters[$row->tagId]['childs'][] = $feed;
 			}
@@ -132,15 +137,26 @@ class Entries_Model extends CI_Model {
 		return $result;
 	}
 
-	function getTotalByFeedId($feedId) {
+	function getTotalByFeedIdAndUserId($feedId, $userId) {
 		$query = $this->db->select('COUNT(1) AS total')
-						->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.userId = '.(int)$this->session->userdata('userId'), 'left')
+						->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.userId = '.(int)$userId, 'left')
 						->where('entries.feedId', $feedId)
 						->where('(users_entries.entryRead IS NULL OR users_entries.entryRead <> true)')
 		 				->get('entries');
 		//pr($this->db->last_query());
 		$query = $query->result_array();
 		return $query[0]['total'];
+	}
+	
+	function selectTagsByUserId($userId) {
+		$query = $this->db->select('tags.tagId, tagName ', false)
+			->join('users_tags', 'users_tags.tagId = tags.tagId', 'inner')
+			->where('users_tags.userId', $userId)
+			->where('tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.')')
+			->order_by('tagName asc')
+			->get('tags');
+		//pr($this->db->last_query());				
+		return $query->result_array();
 	}
 
 	function get($entryId){

@@ -47,11 +47,7 @@ cloneReader = {
 
 		this.$ulEntries.scroll($.proxy(
 			function(event) {
-				this.$ulEntries.find('.entry').each(
-					function() {
-						cloneReader.renderEntry($(this));
-					}
-				);
+				this.scrollEntries();
 				
 				if (this.aFilters.viewType == 'list') {
 					this.getMoreEntries();
@@ -67,8 +63,8 @@ cloneReader = {
 				var aLi		= this.$ulEntries.find('.entry .header').parent(); // recorro solos los visibles ( tienen header ;)
 				for (var i=0; i<aLi.length; i++) {
 					var $entry 	= $(aLi[i]);
-					var offset 	= $entry.offset();
-					if (top <= (offset.top + 10)) { // TODO: revisar el + 10 (al moverse con las flechas, selecciona el item siguiente)
+					var offset 	= $entry.find('p:first').offset();
+					if (top <= offset.top) { 
 						this.selectEntry($entry, false, false);
 						return;
 					}
@@ -284,7 +280,7 @@ cloneReader = {
 			return;
 		}
 		
-		this.$noResult.remove();
+		this.$noResult.hide();
 		
 		for (var i=0; i<result.length; i++) {
 			var entry = result[i];
@@ -305,21 +301,35 @@ cloneReader = {
 		this.renderNotResult(false);
 	},
 	
+	scrollEntries: function() {
+		var isVisible 	= false;
+		var $entries 	= this.$ulEntries.find('.entry');
+		for (var i=0; i<$entries.length; i++) {
+			var show = this.renderEntry($($entries.get(i)));
+			if (show == true) {
+				isVisible = true;
+			}
+			if (show == false && isVisible == true) {
+				break;
+			}			
+		}
+	},		
+	
 	renderEntry: function($entry) {
 		if ($entry.hasClass('noResult') == true) {
-			return;
+			return false;
 		}
 		if ($entry.visible( true ) == false) {
 			$entry.addClass('clean').children().remove();
-			return;
+			return false;
 		}
+		if ($entry.hasClass('clean') == false) {
+			return false;
+		}		
 
 		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
 
-		if ($entry.hasClass('clean') == false) {
-			return;
-		}
 		$entry.removeClass('clean');
 		
 		if (this.aFilters.viewType == 'detail') {
@@ -340,6 +350,8 @@ cloneReader = {
 //		$entry.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
+		
+		return true;
 	},
 	
 	renderDetailEntry: function($entry, entry) {
@@ -453,7 +465,7 @@ cloneReader = {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		this.$noResult.css('min-height', this.$ulEntries.height() - 30).appendTo(this.$ulEntries);
+		this.$noResult.css('min-height', this.$ulEntries.height() - 30).appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
 			this.$noResult.text('loading ...').addClass('loading');
@@ -596,6 +608,8 @@ cloneReader = {
 			this.renderDetailEntry($div, entry);
 			$div.find('.header .entryDate, .header .star').remove();
 			$entry.append($div);
+			
+			this.scrollEntries();
 			
 			animate = false;
 		}
@@ -779,7 +793,7 @@ console.timeEnd("t1");
 	
 	isVisible: function(filter, parentIsVisible) {
 		filter = this.getFilter(filter);
-		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == TAG_HOME)) { // TODO: desharckodear
+		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == TAG_HOME)) {
 			return true;
 		}		
 		if (parentIsVisible == true && parseInt(this.getCountFilter(filter)) > 0) {
@@ -1052,6 +1066,8 @@ console.timeEnd("t1");
 	},
 	
 	updateUserFilters: function() {
+// TODO: hacer que no guarde tanto asi no mata al servidor		
+		$.countProcess--; // para evitar que muestre el loading a guardar datos en brackground
 		$.ajax({		
 			'url': 		base_url + 'entries/updateUserFilters',
 			'data': 	{ 'post': $.toJSON(this.aFilters) },
@@ -1176,6 +1192,8 @@ console.timeEnd("t1");
 		
 		$('.nicescroll-rails').show();
 		this.updateNiceScroll();
+		
+		this.scrollEntries();
 			
 		this.scrollToEntry(this.$ulEntries.find('li.selected'), false);
 	},
