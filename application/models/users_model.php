@@ -51,7 +51,7 @@ class Users_Model extends CI_Model {
 	
 	function selectToList($num, $offset, $filter){
 		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId AS id, userEmail AS Email, CONCAT(userFirstsName, \' \', userLastName) AS Nombre, countryName AS País, GROUP_CONCAT(groups.groupName) AS Grupos ', false)
-		 				->join('countries', 'users.countryId = countries.countryId')
+		 				->join('countries', 'users.countryId = countries.countryId', 'left')
 						->join('users_groups', 'users.userId = users_groups.userId', 'left')
 						->join('groups', 'groups.groupId = users_groups.groupId', 'left')
 						->or_like(array('userFirstsName' => $filter, 'userLastName' => $filter))
