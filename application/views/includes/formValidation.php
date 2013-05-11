@@ -8,58 +8,61 @@ $this->load->view('includes/formError');
 
 $hasGallery = false;
 
+$aFields = array();
+
 foreach ($form['fields'] as $name => $field) {
 	switch ($field['type']) {
 		case 'hidden':
-			echo form_hidden($name, $field['value']);
+			$aFields[] = form_hidden($name, $field['value']);
 			break;
 		case 'text':
 		case 'date':
 		case 'datetime':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
 				.form_input($name, $field['value']).
 				'</fieldset>';
 			break;
 		case 'password':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
 				.form_password($name, $field['value']).
 				'</fieldset>';
 			break;			
 		case 'textarea':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
 				.form_textarea($name, $field['value']).
 				'</fieldset>';
 			break;			
 		case 'autocomplete':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
 				.form_input($name, reset($field['value']))
 				.form_hidden($field['fieldId'], key($field['value']))
 				.'</fieldset>';
 			break;			
 		case 'dropdown':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
 				.form_dropdown($name, $field['source'], $field['value'])
 				.'</fieldset>';
 			break;						
 		case 'groupCheckBox':
-			echo '<fieldset>'
+			$sTmp = '<fieldset>'
 				.form_label($field['label']) 				
 				.'<ul class="groupCheckBox">';
 			foreach ($field['source'] as $key => $value) {
-				echo '<li>' 
+				$sTmp .= '<li>' 
 					.form_checkbox($name, $key, element($key, $field['value']))
 					.form_label($value.' - '.$key)
 					.'</li>';
 			}
-			echo '</ul>	</fieldset>';
+			$sTmp .= '</ul>	</fieldset>';
+			$aFields[] = $sTmp;
 			break;		
 		case 'checkbox':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
 				.form_checkbox($name, 'on', $field['checked'])
 				.'</fieldset>';
@@ -72,7 +75,7 @@ foreach ($form['fields'] as $name => $field) {
 				'entityId'		=> $field['entityId']
 			);
 			
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 					.form_label($field['label'])
 					.'<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery">
 						<input type="button" class="btnEditPhotos" value="Editar fotos" />
@@ -80,19 +83,23 @@ foreach ($form['fields'] as $name => $field) {
 				</fieldset>';
 			break;
 		case 'subform':
-			echo '<fieldset>'
+			$aFields[] = '<fieldset>'
 					.form_label($field['label'])
 					.'<div name="'.$name.'" class="subform"></div>
 				</fieldset>';
 			break;		
 		case 'tree':
-			echo '<fieldset class="tree">'
+			$aFields[] = '<fieldset class="tree">'
 					.renderTree($field['source'], $field['value'])	
 				.'</fieldset>';			
+			break;
+		case 'link':
+			$aFields[] = '<fieldset>'.anchor($field['value'], $field['label'], array('class' => 'link')).'</fieldset>';
 			break;
 	}	
 }
 
+echo implode(' ', $aFields);
 echo form_submit(array('value'=> element('btnSubmitValue', $form, 'Guardar'), 'class'=>'btnSubmit'));
 echo form_close(); 
 

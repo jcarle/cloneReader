@@ -130,6 +130,7 @@
 							break;
 						case 'subform':
 							this.loadSubForm(field);
+							break;
 					}
 				}
 			}

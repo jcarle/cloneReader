@@ -6,7 +6,48 @@ class Users_Model extends CI_Model {
 		$this->db->where('userPassword', md5($userPassword));
 
 		return $this->db->get('users');
-	}	
+	}
+	
+	function loginFB($userEmail, $userLastName, $userFirstsName, $oauth_uid, $oauth_provider) {
+		$query = $this->db
+			->where('oauth_uid', $oauth_uid)
+			->where('oauth_provider', $oauth_provider)
+			->get('users');
+		if ($query->num_rows() > 0) { // ya existe
+			return $query->row();
+		}
+		
+		$values = array(
+			'userLastName' 		=> $userLastName, 
+			'userFirstsName'	=> $userFirstsName, 
+			'oauth_uid'			=> $oauth_uid, 
+			'oauth_provider'	=> $oauth_provider
+		);		
+
+		// no existe, lo creo
+		$query = $this->db
+			->where('userEmail', $userEmail)
+			->get('users');
+		
+		if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
+			$this->db
+				->where('userEmail', $userEmail)
+				->update('users', $values);
+			return $query->row();
+		}
+
+		// creo el usuario
+		$values['userEmail'] = $userEmail;
+		$this->db->insert('users', $values);			
+		$userId = $this->db->insert_id();
+
+		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));			
+
+		$query = $this->db
+			->where('userEmail', $userEmail)
+			->get('users');
+		return $query->row();
+	}
 	
 	function selectToList($num, $offset, $filter){
 		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId AS id, userEmail AS Email, CONCAT(userFirstsName, \' \', userLastName) AS Nombre, countryName AS País, GROUP_CONCAT(groups.groupName) AS Grupos ', false)
@@ -78,6 +119,12 @@ class Users_Model extends CI_Model {
 		}
 		return true;
 	}
+	
+	function editProfile($userId, $data){
+		$this->db->where('userId', $userId)->update('users', $data);
+
+		return true;
+	}	
 	
 	function exitsEmail($userEmail, $userId) {
 		$this->db->where('userEmail', $userEmail);

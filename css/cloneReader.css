@@ -133,9 +133,12 @@
 			text-transform: capitalize;
 		}
 		#cloneReader .ulEntries > li.noResult.loading {
-			background: url("img/loadingSmall.gif") no-repeat scroll 10px 12px #eee;
+			background: url("img/loading.png") no-repeat scroll 10px 7px #eee;
 			padding: 10px 10px 0 40px !important;
 		}
+		#cloneReader .ulEntries.list > li.noResult.loading {
+			background-position:10px center;			
+		}		
 		#cloneReader .ulEntries > li.entriesHead,
 		#cloneReader .ulEntries.list > li.entriesHead {
 			border:none;
@@ -158,7 +161,7 @@
 					font-weight: bold;
 					background-repeat: no-repeat;
 					padding: 0 0px 0 20px;
-					margin: 0 100px 0 0 ;
+					margin: 0 170px 0 0 ;
 					display: inline-block;
 				}
 				#cloneReader .ulEntries > li .header a {

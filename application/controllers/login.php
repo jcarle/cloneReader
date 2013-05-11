@@ -25,6 +25,11 @@ class Login extends CI_Controller {
 					'type'	=> 'password',
 					'label'	=> 'Contraseña', 
 					'value'	=> set_value('password')
+				),
+				'link'	=> array(
+					'type'	=> 'link',
+					'label'	=> 'reset password', 
+					'value'	=> 'users/forgotPassword'				
 				)
 			)
 		);
@@ -56,7 +61,7 @@ class Login extends CI_Controller {
 					
 		if ($this->form_validation->run() == FALSE) {
 			return $this->load->view('includes/template', array(
-				'view'		=> 'includes/formValidation', 
+				'view'		=> 'login', 
 				'title'		=> 'Ingresar',
 				'form'		=> $form,
 			));
@@ -82,5 +87,28 @@ class Login extends CI_Controller {
 		));		
 		
 		return true;
+	}
+	
+	function loginFB() {
+		$user = $this->Users_Model->loginFB($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstsName'), $this->input->post('oauth_uid'), 'facebook');
+
+		if ($user == null) {
+			return $this->load->view('ajax', array(
+				'code'		=> false, 
+				'result' 	=> 'error!' 
+			));
+		}
+
+
+		$this->session->set_userdata(array(
+			'userId'  		=> $user->userId,
+			'userEmail'		=> $user->userEmail,
+			'userFullName' 	=> $user->userFirstsName.' '.$user->userLastName
+		));		
+		
+		return $this->load->view('ajax', array(
+			'code'		=> true, 
+			'result' 	=> '' 
+		));
 	}
 }

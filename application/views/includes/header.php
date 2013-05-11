@@ -23,6 +23,11 @@ if ($view == 'includes/formValidation') {
 	$aJs[] = 'jquery.formValidator.js';
 	$aJs[] = 'jquery.url.js';
 } 
+if ($view == 'login') {
+	$aJs[] = 'jquery.formValidator.js';
+	$aJs[] = 'jquery.url.js';
+	$aJs[] = 'loginFB.js';
+} 
 
 foreach ($aJs as $fileName) {
 	echo '<script type="text/javascript" src="'.base_url().'js/'.$fileName.'"></script>';

@@ -432,6 +432,7 @@ cloneReader = {
 					.removeClass('expanded')
 					.removeClass('selected')
 					.find('.detail').remove();
+				cloneReader.scrollEntries();
 				return;
 			}
 			cloneReader.selectEntry($entry, false, false);
@@ -625,7 +626,7 @@ cloneReader = {
 	scrollToEntry: function($entry, animate) {
 		if ($entry.length == 0) { return; }
 		
-		var top = $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop();
+		var top = $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop() - 10;
 		if (animate == true) { 
 			this.$ulEntries.stop().animate( {scrollTop: top } );
 		}
@@ -898,7 +899,12 @@ console.timeEnd("t1");
 		}
 
 		$arrow.html('&#9660;');
-		$ul.stop().show('fast', function() { $(this).show()});
+		$ul.stop().show('fast', function() { 
+			$(this).show(); 
+			cloneReader.$ulFilters.getNiceScroll().resize(); 
+		});
+		
+		this.updateNiceScroll();
 		
 		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
@@ -930,9 +936,9 @@ console.timeEnd("t1");
 	},
 	
 	updateNiceScroll: function() {
-		this.$ulFilters.niceScroll().hide();
+		this.$ulFilters.getNiceScroll().hide();
 		if (this.aFilters.isMaximized == false) {
-			this.$ulFilters.niceScroll().show();
+			this.$ulFilters.getNiceScroll().show();
 		}	
 	},
 

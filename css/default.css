@@ -114,9 +114,11 @@ option {
 	color:#6E6E6E;
 }
 	#divWaiting p {
+		height:25px;
+		line-height:25px;
 		padding: 0 0 0 30px;
 		margin:0;
-		background:	url(img/loadingSmall.gif) no-repeat scroll 6px 2px transparent;
+		background:	url(img/loading.png) no-repeat scroll 6px center transparent;
 	}
 
 .alert {
@@ -390,13 +392,16 @@ option {
 			display: inline-block;
 			margin: 0px 0 0 10px;
 			width: 145px;
+			line-height:25px;
 		}
 		#frmLogin fieldset input {
 			display: inline-block;
-			padding: 2px 4px;
+			padding: 0px 4px;
 			width: 226px;
 			border-radius: 3px;
 			border: 1px #CCC solid;
+		    height: 25px;
+		    line-height: 25px;			
 		}
 	#frmLogin input.btnSubmit {
 		margin: 5px 0;
@@ -404,6 +409,15 @@ option {
 		right: 5px;
 	}	
 
+#fb-login {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    width: 280px;
+}
+	#fb-login img {
+		display: block;
+	}
 
 
 
@@ -540,16 +554,24 @@ option {
 			margin: 0px 0 0 10px;
 			width: 250px;
 			vertical-align: top;
+			height:25px; line-height:25px;
 		}
 		.frmEdit fieldset input,
 		.frmEdit fieldset textarea,
 		.frmEdit fieldset select,
 		.frmEdit fieldset .groupCheckBox,
-		.frmEdit fieldset #gallery {
+		.frmEdit fieldset #gallery,
+		.frmEdit fieldset .link {
 			display: inline-block;
 			width: 700px;
 			border-radius: 3px;
 			border: 1px #CCC solid;
+			height:25px; line-height:25px;
+		}
+		.frmEdit fieldset .link {
+		    border: 0 none;
+		    margin: 0 0 0 155px;
+		    width: auto;
 		}
 		.frmEdit fieldset input[type=checkbox] {
 			width: auto;
@@ -567,6 +589,7 @@ option {
 			list-style: none outside none;
 			overflow: auto;
 			padding: 0;
+			height:auto;
 		}
 			.frmEdit fieldset .groupCheckBox li {
 				border-bottom: 1px solid #CCCCCC;	
@@ -623,7 +646,7 @@ option {
 					}
 					.frmEdit fieldset #gallery a  > img,
 					.frmEdit fieldset #gallery a  > .imgCenterFrame {
-						background: url(img/loadingSmall.gif) no-repeat scroll center center white;
+						background: url(img/loading.png) no-repeat scroll center center white;
 						width: 100px;
 						height: 100px;
 						border-radius: 5px 5px 5px 5px;

@@ -42,7 +42,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 define('PAGE_SIZE',	15);
 define('GROUP_ROOT', 2);
-define('GROUP_CLIENT', 3);
+define('GROUP_DEFAULT', 3);
 define('MENU_ADMIN', 1);
 define('MENU_PROFILE', 10);
 define('MENU_PUBLIC', 8);
