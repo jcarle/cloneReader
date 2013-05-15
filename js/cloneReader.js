@@ -42,7 +42,8 @@ cloneReader = {
 		this.maximiseUlEntries(this.aFilters.isMaximized, false);						
 		
 		$(window).resize(function() {
-			cloneReader.resizeWindow()
+			cloneReader.resizeWindow();
+			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 		});
 
 		this.$ulEntries.scroll($.proxy(
@@ -409,7 +410,7 @@ cloneReader = {
 		$entry.click(function(event) {
 			var $entry = $(event.target).parents('.entry');
 			if ($entry.hasClass('selected') == true) { return; }
-			cloneReader.selectEntry($entry, true, true);
+			cloneReader.selectEntry($entry, false, false);
 		});
 	},
 	
@@ -1200,8 +1201,6 @@ console.timeEnd("t1");
 		this.updateNiceScroll();
 		
 		this.scrollEntries();
-			
-		this.scrollToEntry(this.$ulEntries.find('li.selected'), false);
 	},
 
 	showPopupWindow: function($popUpWindow, top, left, width) {

@@ -190,7 +190,7 @@ class Entries_Model extends CI_Model {
 				->insert('entries', $values);
 			$entryId = $this->db->insert_id();
 		}
-		pr($this->db->last_query());
+		//pr($this->db->last_query());
 
 		return true;
 	}
@@ -203,9 +203,11 @@ class Entries_Model extends CI_Model {
 		$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result_array();
 		//pr($this->db->last_query());
 		if (!empty($query)) {
-			$entryId = $query[0]['entryId'];
+			$entryId 	= $query[0]['entryId'];
+			$entryUrl 	= $data['entryUrl'];
+			unset($data['entryUrl']);
 			
-			$this->db->update('entries', $data, array('entryUrl'=> $data['entryUrl']));
+			$this->db->update('entries', $data, array('entryId' => $entryId));
 			//pr($this->db->last_query());
 			
 			return $entryId;
@@ -330,6 +332,7 @@ class Entries_Model extends CI_Model {
 			->select('feeds.feedId, feedUrl')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+//->where('feeds.feedId = 167')			
 			->order_by('feedLastUpdate ASC');
 
 		if (is_null($userId) == false) {
