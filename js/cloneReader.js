@@ -248,7 +248,6 @@ cloneReader = {
 		
 		if (!(this.aFilters.id == lastFilters.id && this.aFilters.type == lastFilters.type)) {
 			this.renderUlFilterBranch(this.getFilter(lastFilters));
-			
 		}
 
 		if (this.ajax) {
@@ -680,11 +679,13 @@ console.time("t1");
 				if (reload == true) {
 					this.$ulFilters.scrollTop(scrollTop);
 					this.$ulFilters.find('.selected').hide().fadeIn('slow');
+					this.updateMenuCount();
 				}
-				
 				else {
 					this.loadEntries(true, false, {});
 				}
+				
+				
 				
 				
 console.timeEnd("t1");
@@ -859,6 +860,9 @@ console.timeEnd("t1");
 	},
 
 	getCountFilter: function(filter) {
+		if (filter == null) {
+			return 0;
+		}
 		if (filter.childs == null) {
 			return filter.count;
 		}

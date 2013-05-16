@@ -27,12 +27,6 @@ class Entries extends CI_Controller {
 	}
 	
 	function select($page = 1) { // busco nuevas entries
-		$this->load->spark('curl/1.2.1'); 
-		$this->curl->create(base_url().'entries/getNewsEntries/'.(int)$this->session->userdata('userId'));
-		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
-		$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
-		$this->curl->execute();
-		
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> $this->Entries_Model->select((array)json_decode($this->input->post('post'))),
@@ -119,6 +113,16 @@ class Entries extends CI_Controller {
 
 		return $form;		
 	}
+
+	function getAsyncNewsEntries($userId = null) {
+		// TODO: revisar como pedir datos para los users logeados
+		// este metodo tarda casi un segundo creo
+		$this->load->spark('curl/1.2.1'); 
+		$this->curl->create(base_url().'entries/getNewsEntries/'.(int)$userId);
+		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
+		$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
+		$this->curl->execute();
+	}	
 	
 	function getNewsEntries($userId = null) {
 		// scanea todos los feeds!
@@ -131,6 +135,8 @@ class Entries extends CI_Controller {
 	}
 	
 	function saveData() {
+		$this->getAsyncNewsEntries($this->session->userdata('userId'));
+		
 		$entries 	= (array)json_decode($this->input->post('entries'), true);
 		$tags 		= (array)json_decode($this->input->post('tags'), true);
 		
@@ -159,7 +165,7 @@ class Entries extends CI_Controller {
 		
 		$feedId = $this->Entries_Model->addFeed($this->session->userdata('userId'), array('feedUrl' => $this->input->post('feedUrl')));
 
-		$this->Entries_Model->getNewsEntries((int)$this->session->userdata('userId'));
+		$this->Entries_Model->getNewsEntries((int)$this->session->userdata('userId'), $feedId);
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,

@@ -25,9 +25,9 @@ class Entries_Model extends CI_Model {
 		}
 
 		$query = $this->db->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
-						->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
-						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-						->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.userId = users_feeds.userId', 'left')
+						->join('feeds FORCE INDEX (PRIMARY)', 'entries.feedId = feeds.feedId', 'inner')
+						->join('users_feeds FORCE INDEX (PRIMARY)', 'users_feeds.feedId = feeds.feedId', 'inner')
+						->join('users_entries FORCE INDEX (PRIMARY)', 'users_entries.entryId = entries.entryId AND users_entries.userId = users_feeds.userId', 'left')
 						->where('users_feeds.userId', $this->session->userdata('userId'));
 						
 		if ($userFilters['onlyUnread'] == true) {
@@ -202,12 +202,14 @@ class Entries_Model extends CI_Model {
 		
 		$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result_array();
 		//pr($this->db->last_query());
+		// TODO: mejorar la obtencion de nuevas entries
+		// quizas conviene agregar un campo con la fecha de la ultima entrada de un feed, y si ya esta guardada en la db, no buscar y consultar por todas che
 		if (!empty($query)) {
 			$entryId 	= $query[0]['entryId'];
-			$entryUrl 	= $data['entryUrl'];
-			unset($data['entryUrl']);
+			//$entryUrl 	= $data['entryUrl'];
+			//unset($data['entryUrl']);
 			
-			$this->db->update('entries', $data, array('entryId' => $entryId));
+			//$this->db->update('entries', $data, array('entryId' => $entryId));
 			//pr($this->db->last_query());
 			
 			return $entryId;
@@ -327,7 +329,7 @@ class Entries_Model extends CI_Model {
 		}				
 	}	
 
-	function getNewsEntries($userId = null) {
+	function getNewsEntries($userId = null, $feedId = null) {
 		$this->db
 			->select('feeds.feedId, feedUrl')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
@@ -339,7 +341,10 @@ class Entries_Model extends CI_Model {
 			$this->db
 				->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 				->where('users_feeds.userId', $userId);
-		} 			 
+		}
+		if (is_null($feedId) == false) {
+			$this->db->where('feeds.feedId', $feedId);			
+		}
 		 
 		$query = $this->db->get('feeds');
 		//pr($this->db->last_query()); 
