@@ -118,7 +118,7 @@ option {
 		line-height:25px;
 		padding: 0 0 0 30px;
 		margin:0;
-		background:	url(img/loading.png) no-repeat scroll 6px center transparent;
+		background:	url(img/loading.gif) no-repeat scroll 6px center transparent;
 	}
 
 .alert {
@@ -646,7 +646,7 @@ option {
 					}
 					.frmEdit fieldset #gallery a  > img,
 					.frmEdit fieldset #gallery a  > .imgCenterFrame {
-						background: url(img/loading.png) no-repeat scroll center center white;
+						background: url(img/loading.gif) no-repeat scroll center center white;
 						width: 100px;
 						height: 100px;
 						border-radius: 5px 5px 5px 5px;

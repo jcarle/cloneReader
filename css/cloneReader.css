@@ -133,7 +133,7 @@
 			text-transform: capitalize;
 		}
 		#cloneReader .ulEntries > li.noResult.loading {
-			background: url("img/loading.png") no-repeat scroll 10px 7px #eee;
+			background: url("img/loading.gif") no-repeat scroll 10px 7px #eee;
 			padding: 10px 10px 0 40px !important;
 		}
 		#cloneReader .ulEntries.list > li.noResult.loading {
