@@ -17,6 +17,7 @@ cloneReader = {
 		this.aUserEntries 		= {};
 		this.aUserTags			= {};
 		this.aFilters 			= $.extend({
+			'page':			1,
 			'onlyUnread':	true,
 			'sortDesc': 	true,
 			'id': 			TAG_ALL, 
@@ -24,7 +25,8 @@ cloneReader = {
 			'viewType': 	'detail',
 			'isMaximized': 	false
 		}, aFilters);		
-		
+
+		this.buildCache();
 		this.renderMenu();
 		this.loadFilters(false);
 		this.initEvents();
@@ -131,6 +133,13 @@ cloneReader = {
 		);
 	},
 	
+	buildCache: function() {
+		$.ajax({
+			'url': 		base_url + 'entries/buildCache',
+			'async':	true //false
+		})		
+	},
+	
 	renderMenu: function() {
 		this.createMenu([
 			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) }},
@@ -231,7 +240,7 @@ cloneReader = {
 			return;
 		}
 		if (clear == true) {
-			delete this.aFilters.lastEntryId;
+			this.aFilters['page'] = 1;
 			this.$ulEntries.children().remove();
 			this.$ulEntries.scrollTop(0);
 		}		
@@ -240,6 +249,10 @@ cloneReader = {
 		this.renderEntriesHead();
 		this.selectFilters();
 		this.updateUlMenu();
+		
+		/*if (Object.keys(this.aUserEntries).length > 0 || Object.keys(this.aUserTags).length > 0) {
+			this.saveData(false);
+		}*/
 		
 		lastFilters = $.parseJSON(lastFilters);
 		if (this.aFilters.onlyUnread != lastFilters.onlyUnread) {
@@ -465,7 +478,7 @@ cloneReader = {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		this.$noResult.css('min-height', this.$ulEntries.height() - 30).appendTo(this.$ulEntries).show();
+		this.$noResult.css('min-height', this.$ulEntries.height() - 90).appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
 			this.$noResult.text('loading ...').addClass('loading');
@@ -541,7 +554,7 @@ cloneReader = {
 		}
 					
 		var $count = $filter.find('.count:first');
-		$count.text('(' + count + ')');
+		$count.text('(' + (count > FEED_MAX_COUNT ? FEED_MAX_COUNT + '+' : count) + ')');
 		$count.hide();
 		if (count > 0) {
 			$count.show();
@@ -582,6 +595,9 @@ cloneReader = {
 
 	updateMenuCount: function() {
 		var count = this.getCountFilter(this.getFilter(this.aFilters));
+		if (count > FEED_MAX_COUNT) {
+			count = FEED_MAX_COUNT + '+';
+		}
 		this.$ulMenu.find('.filterUnread .count').text(count);
 		this.$container.find('.popUpWindow .filterOnlyUnread .count').text(count);
 	},
@@ -652,10 +668,10 @@ cloneReader = {
 			||
 			((this.$ulEntries.find('.entry').length - this.minUnreadEntries) <= this.$ulEntries.find('.entry.selected').index())
 		) {
-			var lastEntryId = this.$ulEntries.find('.entry').last().data('entryId');
-			if (this.aFilters.lastEntryId != lastEntryId) {
-				this.loadEntries(false, false, { 'lastEntryId': this.$ulEntries.find('.entry').last().data('entryId') });
-			}	
+			
+			if ($.active == 0) {
+				this.loadEntries(false, false, { 'page': this.aFilters['page'] + 1 });
+			}
 		}
 	},
 
@@ -739,7 +755,7 @@ console.timeEnd("t1");
 				this.expandFilter(filter, filter.expanded);
 			}				
 		}
-		if (selectFilters == true) { 
+		if (selectFilters == true) {
 			this.selectFilters();
 		}
 	},
@@ -921,7 +937,8 @@ console.timeEnd("t1");
 		}
 		
 		this.aFilters.isMaximized = value;
-		this.updateUserFilters();
+// TODO: revisar		
+//		this.updateUserFilters();
 		this.updateNiceScroll();
 		
 		if (animate == true) {
@@ -980,6 +997,28 @@ console.timeEnd("t1");
 		};
 	},
 	
+	saveUserTags: function() {
+		if (Object.keys(this.aUserTags).length == 0) {
+			return;
+		}
+		
+		$.ajax({
+			'url': 		base_url + 'entries/saveUserTags',
+			'data': 	{ 
+					'tags': 	$.toJSON(this.aUserTags) 
+			},
+			'type':	 	'post',
+			'async':	false
+		})
+		.done(function(response) {
+			if (response['code'] != true) {
+				return $(document).alert(response['result']);
+			}
+		});			
+
+		this.aUserTags		= {};		
+	},
+	
 	saveData: function(async){
 		if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
 			return;
@@ -988,7 +1027,9 @@ console.timeEnd("t1");
 			return;
 		}
 		
-		$.countProcess--; // para evitar que muestre el loading a guardar datos en brackground
+		if (async == true) {
+			$.countProcess--; // para evitar que muestre el loading a guardar datos en brackground
+		}
 		$.ajax({
 			'url': 		base_url + 'entries/saveData',
 			'data': 	{ 
@@ -1050,6 +1091,7 @@ console.timeEnd("t1");
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
+			cloneReader.saveUserTags();
 			cloneReader.loadFilters(true);
 		});
 	},
@@ -1101,6 +1143,7 @@ console.timeEnd("t1");
 	updateEntryDateTime: function($entry) {
 		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
+		if (entry == null) { return; }
 		if (entry.entryDate == null) { return; }
 		
 		if (this.aFilters.viewType == 'detail') {
@@ -1149,6 +1192,9 @@ console.timeEnd("t1");
 	},
 	
 	feedHasTag: function(feed, tag) {
+		if (tag == null) {
+			return false;
+		}
 		for (var i=0; i<feed.parents.length; i++) {
 			if (tag.type == feed.parents[i].type && tag.id == feed.parents[i].id) {
 				return true;

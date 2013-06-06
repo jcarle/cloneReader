@@ -73,6 +73,10 @@
 		#cloneReader ul.ulMenu li.feedSettings {
 			padding: 0 0 0 15px;
 			width: auto;
+			text-align: right;
+		}
+		#cloneReader ul.ulMenu li.filterUnread {
+			min-width:100px;
 		}
 			#cloneReader ul.ulMenu li .arrow {
 				border-left: 1px solid #CCCCCC;
@@ -81,6 +85,7 @@
 				line-height: 20px;
 				margin: 0 0 0 10px;
 				width: 20px;
+				text-align: center;
 			}
 		#cloneReader ul.ulMenu li.add  {
 			font-size: 20px;
@@ -134,7 +139,7 @@
 		}
 		#cloneReader .ulEntries > li.noResult.loading {
 			background: url("img/loading.gif") no-repeat scroll 10px 7px #eee;
-			padding: 10px 10px 0 40px !important;
+			padding: 10px 10px 10px 40px !important;
 		}
 		#cloneReader .ulEntries.list > li.noResult.loading {
 			background-position:10px center;			
@@ -206,6 +211,10 @@
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 					width: auto;
+				}
+				#cloneReader .ulEntries > li p a {
+					text-decoration: underline;
+					color: #1155CC;
 				}
 				#cloneReader .ulEntries > li p ul,
 				#cloneReader .ulEntries > li p ol,
@@ -391,7 +400,7 @@
 				#cloneReader ul.ulFilters li div a {
 					cursor: pointer;
 					display: block;
-					margin:0 40px 0 30px;
+					margin:0 55px 0 30px;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;

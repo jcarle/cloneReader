@@ -7,6 +7,13 @@ class Entries extends CI_Controller {
 		$this->load->model('Entries_Model');
 	}  
 	
+	/*
+	function __destruct() {
+		// TODO: cerrar las conecciones
+		$this->Commond_Model->closeDB();
+		//$this->db->close();
+	}*/
+	
 	function index() {
 		$this->listing();
 	}
@@ -29,7 +36,7 @@ class Entries extends CI_Controller {
 	function select($page = 1) { // busco nuevas entries
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Entries_Model->select((array)json_decode($this->input->post('post'))),
+			'result' 	=> $this->Entries_Model->select((int)$this->session->userdata('userId'), (array)json_decode($this->input->post('post'))),
 		));
 	}
 
@@ -116,11 +123,11 @@ class Entries extends CI_Controller {
 
 	function getAsyncNewsEntries($userId = null) {
 		// TODO: revisar como pedir datos para los users logeados
-		// este metodo tarda casi un segundo creo
+		// este metodo tarda casi un segundo creo; otro crontab ?
 		$this->load->spark('curl/1.2.1'); 
 		$this->curl->create(base_url().'entries/getNewsEntries/'.(int)$userId);
 		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
-		$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
+		//$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
 		$this->curl->execute();
 	}	
 	
@@ -135,12 +142,22 @@ class Entries extends CI_Controller {
 	}
 	
 	function saveData() {
-		$this->getAsyncNewsEntries($this->session->userdata('userId'));
+//		$this->getAsyncNewsEntries($this->session->userdata('userId'));
 		
 		$entries 	= (array)json_decode($this->input->post('entries'), true);
 		$tags 		= (array)json_decode($this->input->post('tags'), true);
 		
 		$this->Entries_Model->saveUserEntries((int)$this->session->userdata('userId'), $entries);		
+		$this->Entries_Model->saveUserTags((int)$this->session->userdata('userId'), $tags);
+		
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> 'ok',
+		));		
+	}
+	
+	function saveUserTags() {
+		$tags 		= (array)json_decode($this->input->post('tags'), true);
 		$this->Entries_Model->saveUserTags((int)$this->session->userdata('userId'), $tags);
 		
 		return $this->load->view('ajax', array(
@@ -275,5 +292,18 @@ class Entries extends CI_Controller {
 			
 			$this->Entries_Model->saveUserEntries((int)$userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
 		}
+	}
+
+	function buildCache($userId = null) {
+		if ($userId == null) {
+			$userId = (int)$this->session->userdata('userId');
+		}
+		
+		$this->Entries_Model->saveEntriesTagByUser($userId);
+//		$this->Entries_Model->buildCacheNew($userId);		
 	}	
+	
+	function populateMillionsEntries() {
+		$this->Entries_Model->populateMillionsEntries();
+	}
 }

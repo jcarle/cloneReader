@@ -40,6 +40,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
 
+define('USER_ANONYMOUS', 1);
 define('PAGE_SIZE',	15);
 define('GROUP_ROOT', 2);
 define('GROUP_DEFAULT', 3);
@@ -51,13 +52,15 @@ define('TAG_ALL', 1);
 define('TAG_STAR', 2);
 define('TAG_HOME', 3);
 
+define('FEED_MAX_COUNT', 1000);
+
 define('FEED_STATUS_PENDING', 0); 	
 define('FEED_STATUS_APPROVED', 1);
 define('FEED_STATUS_INVALID_FORMAT', 3);
 define('FEED_STATUS_NOT_FOUND', 404);
 
 define('FEED_TIME_SCAN', 60); 	// 	Cada cuanto MINUTOS busca nuevos feeds
-define('FEED_TIME_SAVE', 3); 	// 	Cada cuanto SEGUNDOS guardan los datos
+define('FEED_TIME_SAVE', 60); 	// 	Cada cuanto SEGUNDOS guardan los datos
 define('FEED_TIME_RELOAD', 5);  //  Cada cuanto MINUTOS recarga el menu con feeds
 define('ENTRIES_PAGE_SIZE', 30);
 

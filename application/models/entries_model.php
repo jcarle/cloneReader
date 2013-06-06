@@ -9,55 +9,43 @@ class Entries_Model extends CI_Model {
 		return $query;
 	}
 	
-	function select($userFilters){
-		$lastEntryId = element('lastEntryId', $userFilters);
+	function select($userId, $userFilters){
+		$this->updateUserFilters($userFilters, $userId);
 		
-		$this->updateUserFilters($userFilters, (int)$this->session->userdata('userId'));
-
+		if (!isset($userFilters['page'])) {
+			$userFilters['page'] = 1;
+		}
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_STAR) {
 			$userFilters['onlyUnread'] = false;
 		}
 
-		$entryDate = null;
-		if ($lastEntryId > 0) {
-			$entry = $this->get($lastEntryId);
-			$entryDate = $entry['entryDate'];
+		$indexName = 'PRIMARY';
+//SQL_NO_CACHE
+		$query = $this->db
+			->select('SQL_NO_CACHE users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
+			->join('entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
+			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
+			->where('users_entries.userId', $userId);
+		
+		if ($userFilters['type'] == 'feed') {
+			$indexName = 'indexFeed';
+			$this->db->where('users_entries.feedId', (int)$userFilters['id']);
+			$this->db->where('users_entries.tagId', TAG_ALL);
 		}
-
-		$query = $this->db->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
-						->join('feeds FORCE INDEX (PRIMARY)', 'entries.feedId = feeds.feedId', 'inner')
-						->join('users_feeds FORCE INDEX (PRIMARY)', 'users_feeds.feedId = feeds.feedId', 'inner')
-						->join('users_entries FORCE INDEX (PRIMARY)', 'users_entries.entryId = entries.entryId AND users_entries.userId = users_feeds.userId', 'left')
-						->where('users_feeds.userId', $this->session->userdata('userId'));
-						
-		if ($userFilters['onlyUnread'] == true) {
-			$this->db->where('(users_entries.entryRead IS NULL OR users_entries.entryRead <> true)');
-		}
-
 		if ($userFilters['type'] == 'tag') {
-			if ($userFilters['id'] != TAG_ALL) {
-				if ($userFilters['id'] == TAG_STAR) {
-					$this->db->where('users_entries.tagId', $userFilters['id']);
-				}
-				else {					
-					$this->db->join('users_feeds_tags', 'users_feeds_tags.feedId = users_feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'inner')
-							->where('users_feeds_tags.tagId', $userFilters['id']);
-				}
-			}
+			$indexName = 'indexTag';
+			$this->db->where('users_entries.tagId', (int)$userFilters['id']);
 		}
-		else {
-			$this->db->where('feeds.feedId', $userFilters['id']);
-		}
-
-		if ($entryDate != null) {
-			$this->db->where('entries.entryDate '.($userFilters['sortDesc'] == true ? '<' : '>'), $entryDate);		
+		if ($userFilters['onlyUnread'] == true) {
+			$this->db->where('users_entries.entryRead <> true');
 		}
 
 		$query = $this->db
-			->order_by('entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
-			->get('entries', ENTRIES_PAGE_SIZE)
+			->order_by('users_entries.entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
+			->get('users_entries FORCE INDEX ('.$indexName.')', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)
 			->result_array();
-		//pr($this->db->last_query());		
+		//pr($this->db->last_query());
+		
 		return $query;
 	}
 
@@ -99,6 +87,7 @@ class Entries_Model extends CI_Model {
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
 						->join('users_tags', 'users_tags.userId = users_feeds.userId AND users_tags.tagId = tags.tagId', 'left')
 						->where('users_feeds.userId', $userId)
+						->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds');
 		//pr($this->db->last_query());				
@@ -138,16 +127,22 @@ class Entries_Model extends CI_Model {
 	}
 
 	function getTotalByFeedIdAndUserId($feedId, $userId) {
-		$query = $this->db->select('COUNT(1) AS total')
-						->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.userId = '.(int)$userId, 'left')
-						->where('entries.feedId', $feedId)
-						->where('(users_entries.entryRead IS NULL OR users_entries.entryRead <> true)')
-		 				->get('entries');
+		$query = ' SELECT 
+				SQL_NO_CACHE 
+				COUNT(1) AS total FROM ( 
+			    	SELECT 1 
+			    	FROM users_entries FORCE INDEX (indexUnread)
+			    	WHERE feedId 		= '.$feedId.'
+					AND   userId	 	= '.$userId.'
+					AND   tagId			= '.TAG_ALL.' 
+			    	AND   entryRead 	= false 
+					LIMIT '.(FEED_MAX_COUNT + 50).' 
+			) AS tmp ';
+		$query = $this->db->query($query)->result_array();					
 		//pr($this->db->last_query());
-		$query = $query->result_array();
 		return $query[0]['total'];
 	}
-	
+		
 	function selectTagsByUserId($userId) {
 		$query = $this->db->select('tags.tagId, tagName ', false)
 			->join('users_tags', 'users_tags.tagId = tags.tagId', 'inner')
@@ -164,7 +159,20 @@ class Entries_Model extends CI_Model {
 				->where('entryId', $entryId)
 				->get('entries')->row_array();
 		return $result;
-	}	
+	}
+	
+	function getLastEntryDate($feedId) {
+		$query = $this->db
+				->where('feedId', $feedId)
+				->order_by('entryDate', 'desc')
+				//->get('entries FORCE INDEX (indexFeedIdEntryDate)', 1)->row_array();
+				->get('entries', 1)->row_array();
+		//pr($this->db->last_query());	
+		if (!empty($query)) {
+			return $query['entryDate'];
+		}
+		return null;
+	}
 	
 	function save($data){
 // TODO: usar el metodo saveEntry		
@@ -202,34 +210,41 @@ class Entries_Model extends CI_Model {
 		
 		$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result_array();
 		//pr($this->db->last_query());
-		// TODO: mejorar la obtencion de nuevas entries
-		// quizas conviene agregar un campo con la fecha de la ultima entrada de un feed, y si ya esta guardada en la db, no buscar y consultar por todas che
 		if (!empty($query)) {
-			$entryId 	= $query[0]['entryId'];
-			//$entryUrl 	= $data['entryUrl'];
-			//unset($data['entryUrl']);
-			
-			//$this->db->update('entries', $data, array('entryId' => $entryId));
-			//pr($this->db->last_query());
-			
-			return $entryId;
+			return $query[0]['entryId'];
 		}
-		else {	
-			$this->db->insert('entries', $data);
-			//pr($this->db->last_query());
-			return $this->db->insert_id();
-		}
+	
+		$this->db->insert('entries', $data);
+		//pr($this->db->last_query());
+		$entryId = $this->db->insert_id();
+		
+		return $entryId; 
 	}
 
 	function saveUserEntries($userId, $entries) {
 		foreach ($entries as $entry) {
-			$data = array(
- 				'userId'	=> $userId,
-				'entryId'	=> $entry['entryId'],
-				'tagId'		=> (element('starred', $entry) == true ? TAG_STAR : null), 
-				'entryRead'	=> (element('entryRead', $entry) == true)		
-			);
-			$this->db->replace('users_entries', $data);
+			if ($entry['starred'] == true) {
+				$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate)  
+					SELECT '.$userId.', entryId, feedId, '.TAG_STAR.', false, entryDate
+					FROM entries 
+					WHERE entryId = '.$entry['entryId'];
+				$this->db->query($query);
+				//pr($this->db->last_query());	 
+			}
+			else {
+				$this->db->delete('users_entries', array(
+					'userId'	=> $userId,
+					'entryId'	=> $entry['entryId'],
+					'tagId'		=> TAG_STAR
+				));
+			}
+			
+			$this->db
+				->where(array(
+					'userId'	=> $userId,
+					'entryId'	=> $entry['entryId'])
+				)
+				->update('users_entries', array('entryRead' => (element('entryRead', $entry) == true)));
 			//pr($this->db->last_query());	
 		}
 	}
@@ -247,13 +262,31 @@ class Entries_Model extends CI_Model {
 		if ($append == false) {
 			$this->db->delete('users_feeds_tags', $values);
 			//pr($this->db->last_query());	
+			
+			$this->db->delete('users_entries', array(
+				'userId' => $userId,
+				'feedId' => $feedId,
+				'tagId'	 => $tagId
+			));
+			//pr($this->db->last_query());
+			
 			return true;
 		}
 
 		$this->db
 			->ignore()
 			->insert('users_feeds_tags', $values);
-		//pr($this->db->last_query());	
+		//pr($this->db->last_query());
+		
+		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate)  
+						SELECT userId, entryId, feedId, '.$tagId.', entryRead, entryDate
+						FROM users_entries
+						WHERE users_entries.userId 	= '.$userId.'
+						AND   users_entries.feedId 	= '.$feedId.'
+						AND   users_entries.tagId	= '.TAG_ALL.' ';			
+		$this->db->query($query);
+		//pr($this->db->last_query());
+								
 		return true;
 	}
 	
@@ -307,7 +340,7 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function updateUserFilters($userFilters, $userId){
-		unset($userFilters['lastEntryId']);
+		unset($userFilters['page']);
 		$this->load->model('Users_Model');
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
 	}	
@@ -332,15 +365,14 @@ class Entries_Model extends CI_Model {
 	function getNewsEntries($userId = null, $feedId = null) {
 		$this->db
 			->select('feeds.feedId, feedUrl')
+			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
-//->where('feeds.feedId = 167')			
+//->where('feeds.feedId IN (1, 2, 3, 669)')			
 			->order_by('feedLastUpdate ASC');
 
 		if (is_null($userId) == false) {
-			$this->db
-				->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-				->where('users_feeds.userId', $userId);
+			$this->db->where('users_feeds.userId', $userId);
 		}
 		if (is_null($feedId) == false) {
 			$this->db->where('feeds.feedId', $feedId);			
@@ -356,6 +388,18 @@ class Entries_Model extends CI_Model {
 
 	// TODO: mover estos metodos de aca
 	function parseRss($feedId, $feedUrl) {
+		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
+		$query = $this->db
+			->select('TIMESTAMPDIFF(MINUTE, feedLastUpdate, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
+			->where('feeds.feedId', $feedId)
+			->get('feeds')->result_array();
+		//pr($this->db->last_query()); 
+		$feed = $query[0];
+
+		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
+			return;
+		}
+		
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
@@ -365,15 +409,10 @@ class Entries_Model extends CI_Model {
 		if ($this->cisimplepie->error() ) {
 			return $this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
 		}
+	
+		$lastEntryDate = $this->getLastEntryDate($feedId);
 		
-		$values = array( 'feedLastUpdate' => date("Y-m-d H:i:s") ); 
-		if (trim((string)$this->cisimplepie->get_title()) != '') {
-			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
-		}
-		if (trim((string)$this->cisimplepie->get_link()) != '') {
-			$values['feedLink'] = (string)$this->cisimplepie->get_link();
-		}
-		$this->db->update('feeds', $values, array('feedId' => $feedId));
+		$this->db->update('feeds', array('feedLastUpdate' => date("Y-m-d H:i:s")), array('feedId' => $feedId));	
 			
 		$rss = $this->cisimplepie->get_items();
 
@@ -396,9 +435,160 @@ class Entries_Model extends CI_Model {
 				return $this->updateFeedStatus($feedId, FEED_STATUS_INVALID_FORMAT);
 			}
 			
+			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
+				$this->db->update('feeds', array('statusId' => FEED_STATUS_APPROVED), array('feedId' => $feedId));	
+				return;
+			}
+			
 			$this->saveEntry($data);
 		}
+
+		$values = array( 'statusId'	=> FEED_STATUS_APPROVED ); 
+		if (trim((string)$this->cisimplepie->get_title()) != '') {
+			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
+		}
+		if (trim((string)$this->cisimplepie->get_link()) != '') {
+			$values['feedLink'] = (string)$this->cisimplepie->get_link();
+		}
+		$this->db->update('feeds', $values, array('feedId' => $feedId));
+	}
+	
+	function populateMillionsEntries() {
+		//ini_set('memory_limit', '-1');
+				
+		$query = $this->db->select('MAX(entryId) + 1 AS entryId', true)->get('entries')->result();
+		//pr($this->db->last_query()); 
+		$entryId = $query[0]->entryId;
+
+		$query = $this->db
+			->select('feeds.feedId')
+			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
+			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+			->get('feeds');
+		//pr($this->db->last_query()); 
+		foreach ($query->result() as $row) {		
+			
+			$this->db->trans_start();
+
+			$data = array();
+			for ($i=0; $i<10000; $i++) {
+				$data[] = array(
+					'feedId' 		=> $row->feedId,
+					'entryTitle'	=> 'titulooooo '.$entryId,
+					'entryContent'	=> 'contenido del entry <b><test/b>'.$entryId,
+					'entryDate'		=> date('Y-m-d H:i:s'),
+					'entryUrl'		=> 'http://saranga.com/dadadad/'.$entryId,
+					'entryAuthor'	=> 'el autor',
+				);
+				
+				
+				if (($i % 100) == 0) { 
+					$this->db->insert_batch('entries', $data);
+					//$this->db->insert('entries', $data);
+					unset($data);
+					$data = array();
+				}
+				
+				$entryId++;
+			}
+			$this->db->insert_batch('entries', $data);
+			//pr($this->db->last_query());
+			
+			$this->db->trans_complete();
+		}
+	}
+	
+	function saveEntriesTagByUser($userId) {
+		$entryId 	= null;
+		$limit 		= 1000;
 		
-		$this->updateFeedStatus($feedId, FEED_STATUS_APPROVED);
+		$query = ' SELECT
+						SQL_NO_CACHE
+						MAX(entryId) AS entryId
+						FROM  users_entries  
+						WHERE userId  = '.$userId.' ';
+		$query = $this->db->query($query)->result_array();
+		//pr($this->db->last_query());	
+		if (!empty($query)) {
+			$entryId = $query[0]['entryId'];
+		}		
+
+		// save TAG_ALL
+		$query = ' INSERT INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
+					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.TAG_ALL.', false, entries.entryDate 
+					FROM entries 
+					INNER JOIN users_feeds 
+						ON entries.feedId = users_feeds.feedId
+						AND users_feeds.userId = '.$userId.' 
+					LEFT JOIN users_entries
+						ON    users_entries.userId 		= users_feeds.userId
+						AND   users_entries.entryId 	= entries.entryId
+						AND   users_entries.feedId 		= entries.feedId
+						AND   users_entries.tagId 		= '.TAG_ALL.'
+					WHERE users_entries.userId IS NULL
+					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
+				LIMIT '.$limit;
+		$this->db->query($query);
+		pr($this->db->last_query());
+		
+		// save Custom Tags
+		$query = ' INSERT INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
+					SELECT users_feeds_tags.userId, entries.entryId, entries.feedId, users_feeds_tags.tagId, false, entries.entryDate
+					FROM entries 
+					INNER JOIN users_feeds_tags FORCE INDEX (indexUserIdFeedId) 
+						ON users_feeds_tags.feedId = entries.feedId 
+						AND users_feeds_tags.userId = '.$userId.' 
+					LEFT JOIN users_entries
+						ON users_entries.userId  		= users_feeds_tags.userId
+						AND   users_entries.entryId 	= entries.entryId
+						AND   users_entries.feedId		= entries.feedId     
+						AND   users_entries.tagId		= users_feeds_tags.tagId     
+					WHERE users_entries.userId IS NULL 
+					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
+					LIMIT '.$limit;
+		$this->db->query($query);
+		pr($this->db->last_query());
 	}
 }
+
+/**
+ * 
+ * 
+ * 
+	
+INSERT INTO users_entries
+(userId, entryId, tagId)
+SELECT userId, entryId, tagId 
+FROM users_entries
+WHERE tagId IS NOT NULL;
+
+INSERT INTO users_entries
+(userId, entryId, tagId)
+SELECT userId, entryId, 1 
+FROM entries
+INNER JOIN users_feeds USING (feedId);
+
+INSERT INTO users_entries
+(userId, entryId, tagId)
+SELECT userId, entryId, tagId
+FROM entries
+INNER JOIN users_feeds_tags USING (feedId);
+
+
+
+UPDATE users_entries SET
+entryDate  = (
+SELECT entryDate 
+FROM entries 
+WHERE entries.entryId = users_entries.entryId)
+* 
+* UPDATE users_entries SET
+feedId  = (
+SELECT feedId 
+FROM entries 
+WHERE entries.entryId = users_entries.entryId)
+
+
+* 
+ * 
+*/
