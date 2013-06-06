@@ -14,10 +14,7 @@ class Feeds_Model extends CI_Model {
 	}
 
 	function get($feedId){
-		$result = $this->db
-				->where('feeds.feedId', $feedId)
-				->get('feeds')->row_array();
-		return $result;
+		return $this->db->where('feeds.feedId', $feedId)->get('feeds')->row_array();
 	}	
 	
 	function save($data){

@@ -2041,6 +2041,13 @@ class CI_DB_active_record extends CI_DB_driver {
 		$this->ar_ignore = (is_bool($val)) ? $val : TRUE;
 		return $this;
 	}
+	
+	function return_query()
+	{
+    	$query = $this->_compile_select();
+		$this->_reset_select();
+		return $query;
+	}	
 }
 
 /* End of file DB_active_rec.php */

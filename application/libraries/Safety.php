@@ -4,6 +4,10 @@ class Safety {
 		$CI = &get_instance();
 		$this->db = $CI->db;
 		$this->session = $CI->session;
+		
+		if ($this->session->userdata('userId') == null) {
+			$this->session->set_userdata('userId', USER_ANONYMOUS);
+		}
 	}
 
 	function isRoot() {

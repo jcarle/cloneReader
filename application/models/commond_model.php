@@ -10,4 +10,8 @@ class Commond_Model extends CI_Model {
 		$row = $this->db->query('SELECT NOW() AS datetime')->row();
 		return $row->datetime;
 	}
+	/*
+	public function closeDB() {
+		$this->db->close();
+	}*/
 }

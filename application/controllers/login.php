@@ -99,7 +99,6 @@ class Login extends CI_Controller {
 			));
 		}
 
-
 		$this->session->set_userdata(array(
 			'userId'  		=> $user->userId,
 			'userEmail'		=> $user->userEmail,
