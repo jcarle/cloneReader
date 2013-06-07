@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
+	<link rel="icon" href="<?php echo base_url();?>/favicon.png" type="image/png">
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.7.2.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-ui-1.8.21.custom.min.js"></script>
@@ -10,7 +11,7 @@
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.printf.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.topzindex.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.alert-1.0.js"></script>		
-
+	
 <?php
 if (!isset($aJs)) {
 	$aJs = array();

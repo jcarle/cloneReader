@@ -87,7 +87,7 @@ class Entries_Model extends CI_Model {
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
 						->join('users_tags', 'users_tags.userId = users_feeds.userId AND users_tags.tagId = tags.tagId', 'left')
 						->where('users_feeds.userId', $userId)
-						->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+//						->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds');
 		//pr($this->db->last_query());				
@@ -339,6 +339,14 @@ class Entries_Model extends CI_Model {
 		return true;		
 	}
 	
+	
+	function markAsReadFeed($feedId, $userId) {
+		$this->db->update('users_entries', array('entryRead' => true), array('feedId' => $feedId, 'userId' => $userId));
+		//pr($this->db->last_query());
+		return true;		
+	}	
+	
+	
 	function updateUserFilters($userFilters, $userId){
 		unset($userFilters['page']);
 		$this->load->model('Users_Model');
@@ -363,6 +371,8 @@ class Entries_Model extends CI_Model {
 	}	
 
 	function getNewsEntries($userId = null, $feedId = null) {
+		set_time_limit(0);
+		
 		$this->db
 			->select('feeds.feedId, feedUrl')
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
@@ -454,7 +464,7 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function populateMillionsEntries() {
-		//ini_set('memory_limit', '-1');
+		ini_set('memory_limit', '-1');
 				
 		$query = $this->db->select('MAX(entryId) + 1 AS entryId', true)->get('entries')->result();
 		//pr($this->db->last_query()); 
@@ -463,7 +473,7 @@ class Entries_Model extends CI_Model {
 		$query = $this->db
 			->select('feeds.feedId')
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+//			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 			->get('feeds');
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {		
@@ -499,8 +509,10 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function saveEntriesTagByUser($userId) {
+		// TODO: paginar este proceso para que guarde TODAS las entradas nuevas sin tener que relodear
+		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
 		$entryId 	= null;
-		$limit 		= 1000;
+		$limit 		= 100000;
 		
 		$query = ' SELECT
 						SQL_NO_CACHE
@@ -548,6 +560,11 @@ class Entries_Model extends CI_Model {
 					LIMIT '.$limit;
 		$this->db->query($query);
 		pr($this->db->last_query());
+
+		if ($this->db->affected_rows() == $limit) {
+			sleep(2);
+			$this->saveEntriesTagByUser($userId);
+		}
 	}
 }
 
@@ -556,12 +573,6 @@ class Entries_Model extends CI_Model {
  * 
  * 
 	
-INSERT INTO users_entries
-(userId, entryId, tagId)
-SELECT userId, entryId, tagId 
-FROM users_entries
-WHERE tagId IS NOT NULL;
-
 INSERT INTO users_entries
 (userId, entryId, tagId)
 SELECT userId, entryId, 1 
@@ -576,17 +587,17 @@ INNER JOIN users_feeds_tags USING (feedId);
 
 
 
-UPDATE users_entries SET
-entryDate  = (
-SELECT entryDate 
-FROM entries 
-WHERE entries.entryId = users_entries.entryId)
+	UPDATE users_entries SET
+	entryDate  = (
+	SELECT entryDate 
+	FROM entries 
+	WHERE entries.entryId = users_entries.entryId)
 * 
-* UPDATE users_entries SET
-feedId  = (
-SELECT feedId 
-FROM entries 
-WHERE entries.entryId = users_entries.entryId)
+	* UPDATE users_entries SET
+	feedId  = (
+	SELECT feedId 
+	FROM entries 
+	WHERE entries.entryId = users_entries.entryId)
 
 
 * 
