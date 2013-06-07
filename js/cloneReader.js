@@ -229,6 +229,10 @@ cloneReader = {
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
 		
+		if (forceRefresh == true) { // para que guarde los datos si cambio el filtro
+			this.saveData(false);
+		}
+		
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters 	= $.extend(this.aFilters, aFilters);
 		
@@ -249,10 +253,6 @@ cloneReader = {
 		this.renderEntriesHead();
 		this.selectFilters();
 		this.updateUlMenu();
-		
-		/*if (Object.keys(this.aUserEntries).length > 0 || Object.keys(this.aUserTags).length > 0) {
-			this.saveData(false);
-		}*/
 		
 		lastFilters = $.parseJSON(lastFilters);
 		if (this.aFilters.onlyUnread != lastFilters.onlyUnread) {
