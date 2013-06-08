@@ -174,7 +174,7 @@ option {
 	        right:0; top:30px;
 		}
 			#header div .search span {
-			    background: url(img/glyphicons-halflings) no-repeat scroll -47px 3px transparent;
+			    background: url(img/glyphicons-halflings.png) no-repeat scroll -47px 3px transparent;
 			    height: 20px;
 			    position: absolute;
 			    width: 20px;	
