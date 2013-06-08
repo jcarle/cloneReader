@@ -53,7 +53,7 @@ foreach ($aCss as $fileName) {
 <body>
 	<div id="header">
 		<div>
-		<?php echo anchor('home', 'cloneReader', array('class' => 'logo')); ?>
+		<?php echo anchor('home', 'cloneReader<span/>', array('class' => 'logo')); ?>
 		
 <?php
 $CI = &get_instance();

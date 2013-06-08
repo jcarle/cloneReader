@@ -1256,6 +1256,7 @@ console.timeEnd("t1");
 	
 	resizeWindow: function() {
 		this.hidePopupWindow();
+		$('.content > h1').hide();
 		$('.content').width('auto').css( { 'min-height': 1, 'overflow': 'hidden' });
 		
 		this.$ulFilters.height(1);

@@ -20,9 +20,8 @@ class Entries_Model extends CI_Model {
 		}
 
 		$indexName = 'PRIMARY';
-//SQL_NO_CACHE
 		$query = $this->db
-			->select('SQL_NO_CACHE users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
+			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
 			->join('entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->where('users_entries.userId', $userId);
@@ -128,7 +127,6 @@ class Entries_Model extends CI_Model {
 
 	function getTotalByFeedIdAndUserId($feedId, $userId) {
 		$query = ' SELECT 
-				SQL_NO_CACHE 
 				COUNT(1) AS total FROM ( 
 			    	SELECT 1 
 			    	FROM users_entries FORCE INDEX (indexUnread)
@@ -515,7 +513,6 @@ class Entries_Model extends CI_Model {
 		$limit 		= 100000;
 		
 		$query = ' SELECT
-						SQL_NO_CACHE
 						MAX(entryId) AS entryId
 						FROM  users_entries  
 						WHERE userId  = '.$userId.' ';
@@ -567,39 +564,3 @@ class Entries_Model extends CI_Model {
 		}
 	}
 }
-
-/**
- * 
- * 
- * 
-	
-INSERT INTO users_entries
-(userId, entryId, tagId)
-SELECT userId, entryId, 1 
-FROM entries
-INNER JOIN users_feeds USING (feedId);
-
-INSERT INTO users_entries
-(userId, entryId, tagId)
-SELECT userId, entryId, tagId
-FROM entries
-INNER JOIN users_feeds_tags USING (feedId);
-
-
-
-	UPDATE users_entries SET
-	entryDate  = (
-	SELECT entryDate 
-	FROM entries 
-	WHERE entries.entryId = users_entries.entryId)
-* 
-	* UPDATE users_entries SET
-	feedId  = (
-	SELECT feedId 
-	FROM entries 
-	WHERE entries.entryId = users_entries.entryId)
-
-
-* 
- * 
-*/

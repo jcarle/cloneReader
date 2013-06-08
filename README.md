@@ -9,3 +9,7 @@ Clon de google reader
 Lector de feeds, rss.
 
 Desarrrollado con codeigniter, simplepie, jquery
+
+/*************************************************************************/
+
+demo: http://www.jcarle.com.ar/cloneReader/

@@ -161,10 +161,18 @@ option {
 			position: absolute;
 		    text-shadow:0px 2px 1px white;
 			top: 7px;
-			width: 230px;
+			width: 130px;
 		    margin: 0 0 0 10px;
 			z-index: 9;
 		}
+			#header div .logo span {
+			    background: url("img/beta.icon.gif") no-repeat scroll 0 0 transparent;
+			    height: 45px;
+			    position: absolute;
+			    right: 0;
+			    top: 0;
+			    width: 45px;
+			}
 		#header div .search {
 		    border: 1px solid #CCCCCC;
 		    padding: 0px;
