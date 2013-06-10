@@ -206,17 +206,7 @@ class Entries_Model extends CI_Model {
 			return null;
 		}
 		
-		$query = $this->db->where('entryUrl', $data['entryUrl'])->get('entries')->result_array();
-		//pr($this->db->last_query());
-		if (!empty($query)) {
-			return $query[0]['entryId'];
-		}
-	
-		$this->db->insert('entries', $data);
-		//pr($this->db->last_query());
-		$entryId = $this->db->insert_id();
-		
-		return $entryId; 
+		$this->db->ignore()->insert('entries', $data);
 	}
 
 	function saveUserEntries($userId, $entries) {
@@ -351,20 +341,14 @@ class Entries_Model extends CI_Model {
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
 	}	
 	
-	function saveFeedIcon($feedId) {
-		$query = $this->db
-			->select('feedLink, feedIcon')
-			->where('feedId', $feedId)
-			->get('feeds')->result();
-		//pr($this->db->last_query()); 
-		$row = $query[0];
-		if (trim($row->feedLink) != '' && $row->feedIcon == null) {
+	function saveFeedIcon($feedId, $feedLink, $feedIcon) {
+		if (trim($feedLink) != '' && $feedIcon == null) {
 			$this->load->spark('curl/1.2.1');
-			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$row->feedLink);
-			$parse 			= parse_url($row->feedLink);
-			$row->feedIcon 	= $parse['host'].'.png'; 
-			file_put_contents('./img/'.$row->feedIcon, $img);
-			$this->db->update('feeds', array('feedIcon' => $row->feedIcon), array('feedId' => $feedId));	
+			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
+			$parse 			= parse_url($feedLink);
+			$feedIcon 	= $parse['host'].'.png'; 
+			file_put_contents('./img/'.$feedIcon, $img);
+			$this->db->update('feeds', array('feedIcon' => $feedIcon), array('feedId' => $feedId));	
 		}				
 	}	
 
@@ -372,11 +356,11 @@ class Entries_Model extends CI_Model {
 		set_time_limit(0);
 		
 		$this->db
-			->select('feeds.feedId, feedUrl')
+			->select('feeds.feedId, feedUrl, feedLink, feedIcon')
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
-//->where('feeds.feedId IN (1, 2, 3, 669)')			
+//->where('feeds.feedId IN (166)')			
 			->order_by('feedLastUpdate ASC');
 
 		if (is_null($userId) == false) {
@@ -390,7 +374,7 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {
 			$this->parseRss($row->feedId, $row->feedUrl);
-			$this->saveFeedIcon($row->feedId);
+			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
 		}
 	}		
 
@@ -403,11 +387,10 @@ class Entries_Model extends CI_Model {
 			->get('feeds')->result_array();
 		//pr($this->db->last_query()); 
 		$feed = $query[0];
-
-		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
+		if ($feed['minutes'] != null && (int)$feed['minutes'] > FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
 			return;
 		}
-		
+
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
@@ -419,8 +402,6 @@ class Entries_Model extends CI_Model {
 		}
 	
 		$lastEntryDate = $this->getLastEntryDate($feedId);
-		
-		$this->db->update('feeds', array('feedLastUpdate' => date("Y-m-d H:i:s")), array('feedId' => $feedId));	
 			
 		$rss = $this->cisimplepie->get_items();
 
@@ -444,14 +425,20 @@ class Entries_Model extends CI_Model {
 			}
 			
 			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
-				$this->db->update('feeds', array('statusId' => FEED_STATUS_APPROVED), array('feedId' => $feedId));	
+				$this->db->update('feeds', array(
+					'statusId' 			=> FEED_STATUS_APPROVED,
+					'feedLastUpdate' 	=> date("Y-m-d H:i:s")
+				), array('feedId' => $feedId));	
 				return;
 			}
 			
 			$this->saveEntry($data);
 		}
 
-		$values = array( 'statusId'	=> FEED_STATUS_APPROVED ); 
+		$values = array( 
+			'statusId'			=> FEED_STATUS_APPROVED,
+			'feedLastUpdate' 	=> date("Y-m-d H:i:s")
+		); 
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
 			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
 		}
