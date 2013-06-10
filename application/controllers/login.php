@@ -59,11 +59,22 @@ class Login extends CI_Controller {
 			));
 		}			
 					
+		$aServerData = array('fbApi' => null);
+		switch ($_SERVER['SERVER_NAME']) {
+			case 'jcarle.redirectme.net':
+				$aServerData['fbApi'] = '581547605212584';
+				break;
+			case 'www.jcarle.com.ar':
+				$aServerData['fbApi'] = '470466523040981'; 
+				break;
+		}	
+						
 		if ($this->form_validation->run() == FALSE) {
 			return $this->load->view('includes/template', array(
-				'view'		=> 'login', 
-				'title'		=> 'Ingresar',
-				'form'		=> $form,
+				'view'			=> 'login', 
+				'title'			=> 'Ingresar',
+				'form'			=> $form,
+				'aServerData'	=> $aServerData
 			));
 		}
 		
