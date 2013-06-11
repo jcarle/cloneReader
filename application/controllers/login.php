@@ -2,7 +2,7 @@
 class Login extends CI_Controller {
 
 	function __construct() {
-		parent::__construct();	
+		parent::__construct();
 		
 		$this->load->model('Users_Model');
 	}
@@ -91,6 +91,8 @@ class Login extends CI_Controller {
 
 		$row = $query->row();
 		
+		$this->Menu_Model->destroyMenuSession();
+		
 		$this->session->set_userdata(array(
 			'userId'  		=> $row->userId,
 			'userEmail'		=> $row->userEmail,
@@ -109,6 +111,8 @@ class Login extends CI_Controller {
 				'result' 	=> 'error!' 
 			));
 		}
+		
+		$this->Menu_Model->destroyMenuSession();
 
 		$this->session->set_userdata(array(
 			'userId'  		=> $user->userId,

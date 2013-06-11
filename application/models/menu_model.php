@@ -61,4 +61,12 @@ class Menu_Model extends CI_Model {
 
 		return true;
 	}
+	
+	function destroyMenuSession() {
+		$this->session->set_userdata(array(
+			'MENU_PROFILE' 	=> null,
+			'MENU_PUBLIC'	=> null,
+			'MENU_ADMIN'	=> null
+		));
+	}
 }

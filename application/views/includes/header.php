@@ -13,6 +13,18 @@
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.alert-1.0.js"></script>		
 	
 <?php
+$CI = &get_instance();
+if (!is_array($CI->session->userdata('MENU_PROFILE'))) {
+	$CI->session->set_userdata('MENU_PROFILE', $CI->Menu_Model->getMenu(MENU_PROFILE));
+}
+if (!is_array($CI->session->userdata('MENU_PUBLIC'))) {
+	$CI->session->set_userdata('MENU_PUBLIC', $CI->Menu_Model->getMenu(MENU_PUBLIC));
+}
+if (!is_array($CI->session->userdata('MENU_ADMIN'))) {
+	$CI->session->set_userdata('MENU_ADMIN', $CI->Menu_Model->getMenu(MENU_ADMIN));
+}
+
+
 if (!isset($aJs)) {
 	$aJs = array();
 }
@@ -57,8 +69,7 @@ foreach ($aCss as $fileName) {
 		<?php echo anchor('home', 'cloneReader<span/>', array('class' => 'logo')); ?>
 		
 <?php
-$CI = &get_instance();
-echo renderMenu($CI->Menu_Model->getMenu(MENU_PROFILE), 'menuProfile');
+echo renderMenu($CI->session->userdata('MENU_PROFILE'), 'menuProfile');
 ?>
 
 			<form class="search">
@@ -70,8 +81,8 @@ echo renderMenu($CI->Menu_Model->getMenu(MENU_PROFILE), 'menuProfile');
 	</div>
 	<div class="menu">
 		<div>
-<?php echo renderMenu($CI->Menu_Model->getMenu(MENU_PUBLIC)); ?>
-<?php echo renderMenu($CI->Menu_Model->getMenu(MENU_ADMIN), 'menuAdmin'); ?>
+<?php echo renderMenu($CI->session->userdata('MENU_PUBLIC')); ?>
+<?php echo renderMenu($CI->session->userdata('MENU_ADMIN'), 'menuAdmin'); ?>
 		</div>
 	</div>	
 	
