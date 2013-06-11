@@ -79,7 +79,7 @@ cloneReader = {
 			}
 		, this));		
 		
-		$(document).keydown($.proxy(
+		$(document).keyup($.proxy(
 			function(event) {
 				event.stopPropagation();
 //cn(event['keyCode']);
