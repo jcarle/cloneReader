@@ -387,7 +387,7 @@ class Entries_Model extends CI_Model {
 			->get('feeds')->result_array();
 		//pr($this->db->last_query()); 
 		$feed = $query[0];
-		if ($feed['minutes'] != null && (int)$feed['minutes'] > FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
+		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
 			return;
 		}
 
