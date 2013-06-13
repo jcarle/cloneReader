@@ -82,8 +82,7 @@ class Entries_Model extends CI_Model {
 
 // FIXME: la version de mysql que hay en dreamhost no soporta pasar limit como parametro de una function
 // 	esta harckodeado el valor 1050 ahi adentro! 
-		$query = $this->db->select('feeds.feedId, feeds.statusId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon
-		, countUnread('.$userId.', feeds.feedId, '.TAG_ALL.', '.(FEED_MAX_COUNT + 50).') AS unread', false)
+		$query = $this->db->select('feeds.feedId, feeds.statusId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon, countUnread('.$userId.', feeds.feedId, '.TAG_ALL.', '.(FEED_MAX_COUNT + 50).') AS unread', false)
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
 						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
