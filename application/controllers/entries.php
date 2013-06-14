@@ -34,6 +34,11 @@ class Entries extends CI_Controller {
 	}
 	
 	function select($page = 1) { // busco nuevas entries
+	
+		if ($this->input->post('pushTmpUserEntries') == true) {
+			$this->Entries_Model->pushTmpUserEntries((int)$this->session->userdata('userId'));
+		}
+	
 		return $this->load->view('ajax', array(
 			'code'		=> true,
 			'result' 	=> $this->Entries_Model->select((int)$this->session->userdata('userId'), (array)json_decode($this->input->post('post'))),
@@ -147,7 +152,7 @@ class Entries extends CI_Controller {
 		$entries 	= (array)json_decode($this->input->post('entries'), true);
 		$tags 		= (array)json_decode($this->input->post('tags'), true);
 		
-		$this->Entries_Model->saveUserEntries((int)$this->session->userdata('userId'), $entries);		
+		$this->Entries_Model->saveTmpUsersEntries((int)$this->session->userdata('userId'), $entries);		
 		$this->Entries_Model->saveUserTags((int)$this->session->userdata('userId'), $tags);
 		
 		return $this->load->view('ajax', array(

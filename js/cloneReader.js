@@ -11,6 +11,7 @@ cloneReader = {
 		this.$ulEntries.data('margin-left', this.$ulEntries.css('margin-left'));		
 
 		this.minUnreadEntries 	= 2;
+		this.lastEntries 		= [];
 		this.aEntries	 		= {};
 		this.filters			= null;
 		this.tags				= null;
@@ -229,9 +230,9 @@ cloneReader = {
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
 		
-		if (forceRefresh == true) { // para que guarde los datos si cambio el filtro
+		/*if (forceRefresh == true) { // para que guarde los datos si cambio el filtro
 			this.saveData(false);
-		}
+		}*/
 		
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters 	= $.extend(this.aFilters, aFilters);
@@ -244,6 +245,7 @@ cloneReader = {
 			return;
 		}
 		if (clear == true) {
+			this.saveData(false);
 			this.aFilters['page'] = 1;
 			this.$ulEntries.children().remove();
 			this.$ulEntries.scrollTop(0);
@@ -258,6 +260,16 @@ cloneReader = {
 		if (this.aFilters.onlyUnread != lastFilters.onlyUnread) {
 			this.renderFilters(this.filters, this.$ulFilters, true);
 		}
+
+		if (this.lastEntries.length != 0 && $.inArray($.toJSON(aFilters), ['{"viewType":"detail"}', '{"viewType":"list"}']) != -1) { // si solo cambio el tipo de vista reendereo, no voy hasta el servidor
+			this.renderEntries(this.lastEntries);
+			this.updateUserFilters();
+			return;
+		}
+		
+		if (this.aFilters['page'] == 1) {
+			this.lastEntries = [];
+		}
 		
 		if (!(this.aFilters.id == lastFilters.id && this.aFilters.type == lastFilters.type)) {
 			this.renderUlFilterBranch(this.getFilter(lastFilters));
@@ -270,13 +282,17 @@ cloneReader = {
 		
 		this.ajax = $.ajax({		
 			'url': 		base_url + 'entries/select',
-			'data': 	{ 'post': $.toJSON(this.aFilters) },
+			'data': 	{ 
+				'post': 				$.toJSON(this.aFilters), 
+				'pushTmpUserEntries': 	clear 
+			},
 			'type':		'post'
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
+			cloneReader.lastEntries = $.merge(cloneReader.lastEntries, response.result);
 			cloneReader.renderEntries(response.result);
 		});	
 	},

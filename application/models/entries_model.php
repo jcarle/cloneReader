@@ -81,7 +81,7 @@ class Entries_Model extends CI_Model {
 		$result['filters'][] = & $aFilters['tags'];
 
 // FIXME: la version de mysql que hay en dreamhost no soporta pasar limit como parametro de una function
-// 	esta harckodeado el valor 1050 ahi adentro! 
+// 	esta harckodeado el valor 1050 adentro de countUnread()! 
 		$query = $this->db->select('feeds.feedId, feeds.statusId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon, countUnread('.$userId.', feeds.feedId, '.TAG_ALL.', '.(FEED_MAX_COUNT + 50).') AS unread', false)
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
 						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
@@ -209,17 +209,38 @@ class Entries_Model extends CI_Model {
 		$this->db->ignore()->insert('entries', $data);
 	}
 
-	function saveUserEntries($userId, $entries) {
+	function saveTmpUsersEntries($userId, $entries) { // utilizo una tabla temporal para guardar los leidos y no romper la paginación infinita
+		$aQueries = array();
 		foreach ($entries as $entry) {
+			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.($entry['entryRead'] == true ? 'true' : 'false').', '.($entry['starred'] == true ? 'true' : 'false').') ';
+
+		}
+
+		$query = 'REPLACE INTO tmp_users_entries (userId, entryId, entryRead, starred) VALUES '.implode(', ', $aQueries).';';
+		$this->db->query($query);
+		//pr($this->db->last_query());
+	}
+
+	// guarda los cambios en la tabla users_entries
+	function pushTmpUserEntries($userId) {
+//		$aQueries 	= array();
+		$entries 	= $this->db->where('userId', $userId)->get('tmp_users_entries')->result_array();
+		//pr($this->db->last_query()); 
+		
+		foreach ($entries as $entry) {		
 			if ($entry['starred'] == true) {
+				//$aQueries[] = 
 				$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate)  
-					SELECT '.$userId.', entryId, feedId, '.TAG_STAR.', false, entryDate
-					FROM entries 
-					WHERE entryId = '.$entry['entryId'];
+					SELECT userId, entryId, feedId, '.TAG_STAR.', entryRead, entryDate
+					FROM users_entries 
+					WHERE 	userId	= '.$userId.'
+					AND 	tagId	= '.TAG_ALL.'
+					AND 	entryId = '.$entry['entryId'];
 				$this->db->query($query);
 				//pr($this->db->last_query());	 
 			}
 			else {
+				//$aQueries[] = 'DELETE FROM users_entries WHERE userId = '.$userId.' AND entryId = '.$entry['entryId'].' AND tagId = '.TAG_STAR;
 				$this->db->delete('users_entries', array(
 					'userId'	=> $userId,
 					'entryId'	=> $entry['entryId'],
@@ -227,14 +248,26 @@ class Entries_Model extends CI_Model {
 				));
 			}
 			
+/*			$aQueries[] = 'UPDATE users_entries SET
+				entryRead 		= '.$entry['entryRead'].'
+				WHERE userId	= '.$userId.'
+				AND   entryId	= '.$entry['entryId'];*/				
+			
 			$this->db
 				->where(array(
 					'userId'	=> $userId,
 					'entryId'	=> $entry['entryId'])
 				)
-				->update('users_entries', array('entryRead' => (element('entryRead', $entry) == true)));
-			//pr($this->db->last_query());	
+				->update('users_entries', array('entryRead' => $entry['entryRead']));
+			//pr($this->db->last_query());				
 		}
+	
+//pr(implode(';', $aQueries));		
+//$this->db->conn_id->multi_query(implode(';', $aQueries));
+		//$this->db->query(implode(';', $aQueries));
+		//pr($this->db->last_query());				
+		$this->db->delete('tmp_users_entries', array('userId' => $userId));
+		// TODO: enviar todos estos queries juntos al servidor
 	}
 	
 	function saveUserTags($userId, $tags) {
