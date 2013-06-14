@@ -11,7 +11,8 @@ cloneReader = {
 		this.$ulEntries.data('margin-left', this.$ulEntries.css('margin-left'));		
 
 		this.minUnreadEntries 	= 2;
-		this.lastEntries 		= [];
+		this.isLastPage			= false;
+		this.currentEntries		= []; // para guardar las entries visibles y no volver a pedir al servidor si solo se cambia el tipo de vista
 		this.aEntries	 		= {};
 		this.filters			= null;
 		this.tags				= null;
@@ -230,10 +231,6 @@ cloneReader = {
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
 		
-		/*if (forceRefresh == true) { // para que guarde los datos si cambio el filtro
-			this.saveData(false);
-		}*/
-		
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters 	= $.extend(this.aFilters, aFilters);
 		
@@ -245,7 +242,6 @@ cloneReader = {
 			return;
 		}
 		if (clear == true) {
-			this.saveData(false);
 			this.aFilters['page'] = 1;
 			this.$ulEntries.children().remove();
 			this.$ulEntries.scrollTop(0);
@@ -261,19 +257,22 @@ cloneReader = {
 			this.renderFilters(this.filters, this.$ulFilters, true);
 		}
 
-		if (this.lastEntries.length != 0 && $.inArray($.toJSON(aFilters), ['{"viewType":"detail"}', '{"viewType":"list"}']) != -1) { // si solo cambio el tipo de vista reendereo, no voy hasta el servidor
-			this.renderEntries(this.lastEntries);
+		// Si SOLO cambio el tipo de vista reendereo sin pasar por el servidor
+		if ($.inArray($.toJSON(aFilters), ['{"viewType":"detail"}', '{"viewType":"list"}']) != -1) {
+			this.renderEntries(this.currentEntries);
 			this.updateUserFilters();
 			return;
 		}
 		
 		if (this.aFilters['page'] == 1) {
-			this.lastEntries = [];
+			this.currentEntries = [];
 		}
-		
 		if (!(this.aFilters.id == lastFilters.id && this.aFilters.type == lastFilters.type)) {
 			this.renderUlFilterBranch(this.getFilter(lastFilters));
 		}
+		if (clear == true) {
+			this.saveData(false);
+		}		
 
 		if (this.ajax) {
 			this.ajax.abort();
@@ -292,7 +291,8 @@ cloneReader = {
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
-			cloneReader.lastEntries = $.merge(cloneReader.lastEntries, response.result);
+			cloneReader.isLastPage 		= (response.result.length == 0);
+			cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
 			cloneReader.renderEntries(response.result);
 		});	
 	},
@@ -679,6 +679,9 @@ cloneReader = {
 	
 	getMoreEntries: function() {
 		// busco más entries si esta visible el li 'noResult', o si el li.selected es casi el ultimo
+		if (this.isLastPage == true) { 
+			return;
+		}
 		if (
 			this.$noResult.visible(true) == true 
 			||
