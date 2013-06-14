@@ -419,10 +419,10 @@ cloneReader = {
 
 
 		$entry.find('.read .checkbox').click(function(event) {
-				event.stopPropagation();
-				$checkbox = $(event.target);
-				cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.parent().hasClass('selected'));
-			});				
+			event.stopPropagation();
+			$checkbox = $(event.target);
+			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.parent().hasClass('selected'));
+		});				
 						
 		$entry.css('min-height', $entry.height());
 		$entry.find('img').load(
@@ -640,6 +640,12 @@ cloneReader = {
 			this.renderDetailEntry($div, entry);
 			$div.find('.header .entryDate, .header .star').remove();
 			$entry.append($div);
+			
+			$entry.find('.footer .star').click(function(event) {
+				event.stopPropagation();
+				$star = $(event.target);
+				cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
+			});			
 			
 			this.scrollEntries();
 			
