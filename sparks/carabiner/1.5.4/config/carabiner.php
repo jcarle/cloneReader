@@ -23,7 +23,7 @@
 |
 */
 
-$config['script_dir'] = 'assets/';
+$config['script_dir'] = 'assets/scripts/';
 
 
 /*
@@ -108,7 +108,7 @@ $config['combine'] = TRUE;
 |
 */
 
-$config['minify_js'] = TRUE;
+$config['minify_js'] = FALSE;
 
 
 /*

@@ -17,37 +17,6 @@ $.extend({
 		return o;
 	},
 	
-// TODO: BORRAR ESTE METODO!	
-	/*
-	createElement: function(tagName, parent, value, className, name, inputType, isHTML) {
-		var element = document.createElement(tagName);
-//TODO: revisar si es necesaria esta parte del codigo
-	/*	if (Dom.isMSIE == true && tagName == 'input' && inputType == 'radio') {
-			element = document.createElement('<input type="' + inputType + '" name="' + name + '" >');
-		}
-		else {* /
-			if (name != null) { element.setAttribute('name', name); }
-			if (inputType != null) { element.setAttribute('type', inputType); }
-		//}
-	
-		if (className != null) { element.className = className;}
-		if (parent != null) { parent.appendChild(element); }
-		if (value != null) {
-			if (tagName == 'input') {
-				element.value = value;
-			}
-			else {
-				if (isHTML == true) {
-					element.innerHTML = value;
-				}
-				else {
-					element.appendChild(document.createTextNode(value));
-				}
-			}
-		}
-		return element;
-	},*/
-	
 	linkToObject: function(sTmp){
 		var oParams = {};
 		var aParamName = sTmp.split('&');
@@ -78,7 +47,7 @@ $.extend({
 	    if (value.length == 0) { return true; }
  
     	if(!/^(https?|ftp):\/\//i.test(value)) {
-	        value = 'http://'+value;
+	        value = 'http://' + value;
     	}
 
 	    return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
