@@ -14,6 +14,16 @@ if (!is_array($CI->session->userdata('MENU_ADMIN'))) {
 
 $this->load->spark('carabiner/1.5.4');
 
+$CI->carabiner->minify_js 	= true;
+$CI->carabiner->minify_css	= true;
+
+if ($_SERVER['SERVER_NAME'] == 'http://jcarle.redirectme.net') {
+	$CI->carabiner->minify_js 	= false;
+	$CI->carabiner->minify_css	= false;
+	$CI->carabiner->empty_cache('both');
+}
+
+
 $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery-ui-1.8.21.custom.min.js');
 $CI->carabiner->js('jquery.json-2.3.js');
