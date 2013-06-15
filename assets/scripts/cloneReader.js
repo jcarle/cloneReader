@@ -291,7 +291,7 @@ cloneReader = {
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
-			cloneReader.isLastPage 		= (response.result.length == 0);
+			cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
 			cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
 			cloneReader.renderEntries(response.result);
 		});	

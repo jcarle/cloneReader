@@ -14,3 +14,14 @@
 
     ErrorDocument 404 /index.php
 </IfModule>  
+
+
+# Turn on Expires and set default expires to 3 days
+ExpiresActive on
+ExpiresDefault A259200
+
+# Set up caching on media files for 1 month
+<FilesMatch "\.(ico|gif|jpg|jpeg|png|flv|pdf|swf|mov|mp3|wmv|ppt)$">
+	Header set Cache-Control "public"
+	ExpiresDefault A2419200
+</FilesMatch>
