@@ -110,7 +110,7 @@ class Entries_Model extends CI_Model {
 				'id'		=> $row->feedId, 
 				'name'		=> $row->feedName, 
 				'url'		=> $row->feedUrl,
-				'icon'		=> ($row->feedIcon == null ? site_url().'assets/images/default_feed.png' : site_url().'img/'.$row->feedIcon), 
+				'icon'		=> ($row->feedIcon == null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row->feedIcon), 
 				'count'		=> $row->unread,
 			);
 
@@ -380,7 +380,7 @@ class Entries_Model extends CI_Model {
 			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
 			$parse 			= parse_url($feedLink);
 			$feedIcon 	= $parse['host'].'.png'; 
-			file_put_contents('./img/'.$feedIcon, $img);
+			file_put_contents('./assets/favicons/'.$feedIcon, $img);
 			$this->db->update('feeds', array('feedIcon' => $feedIcon), array('feedId' => $feedId));	
 		}				
 	}	

@@ -25,14 +25,14 @@ class Files_Model extends CI_Model {
 				return array(
 					'tableName'		=> 'files_lodgments',
 					'fieldName' 	=> 'lodgmentId',
-					'folder'		=> '/img/lodgments/'
+					'folder'		=> '/assets/favicons/lodgments/'
 				);
 				break;
 			case 'excursions':
 				return array(	
 					'tableName'		=> 'files_excursions',
 					'fieldName' 	=> 'excursionId',
-					'folder'		=> '/img/excursions/'
+					'folder'		=> '/assets/favicons/excursions/'
 				);
 				break;
 		}
