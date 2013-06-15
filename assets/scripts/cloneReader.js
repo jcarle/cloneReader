@@ -1254,7 +1254,7 @@ console.timeEnd("t1");
 		if (this.$popupForm == null) {
 			this.$popupForm = $('<form> <input /> <button> add</button></form>').addClass('popUpWindow').addClass('popupForm');
 			
-			this.$popupForm.find('input').keydown(function(event) {
+			this.$popupForm.find('input').keyup(function(event) {
 				event.stopPropagation();
 			});
 		}
