@@ -58,10 +58,9 @@ if (isset($aCss)) {
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
-$CI->carabiner->empty_cache('css');
-$CI->carabiner->display('css');
+$CI->carabiner->empty_cache('both', 'yesterday');
 
-$CI->carabiner->empty_cache('js');
+$CI->carabiner->display('css');
 $CI->carabiner->display('js');
 ?>	
 	<title><?php echo $title; ?> - cloneReader</title>
