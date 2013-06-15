@@ -44,6 +44,13 @@ if ($view == 'login') {
 
 
 
+$CI->carabiner->css('default.css');
+$CI->carabiner->css('jquery-ui-1.8.22.custom.css');
+if (isset($aCss)) {
+	foreach ($aCss as $css) {
+		$CI->carabiner->css($css);
+	}
+}
 
 /*
 $this->load->spark('carabiner/1.5.4');
@@ -56,28 +63,13 @@ $this->carabiner->js('jquery-1.7.2.js');*/
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
-
-<?php
-
-?>
-
-	<link rel="stylesheet" href="<?php echo base_url();?>css/default.css" type="text/css"  charset="utf-8" />
-	<link rel="stylesheet" href="<?php echo base_url();?>css/jquery-ui-1.8.22.custom.css" type="text/css" charset="utf-8" />
-	
 <?php
 $CI->carabiner->empty_cache('js');
 $CI->carabiner->display('js');
 
-
-
-if (!isset($aCss)) {
-	$aCss = array();
-}
-foreach ($aCss as $fileName) {
-	echo '<link rel="stylesheet" href="'.base_url().'css/'.$fileName.'" type="text/css" charset="utf-8" />';
-}
+$CI->carabiner->empty_cache('css');
+$CI->carabiner->display('css');
 ?>	
-
 	<title><?php echo $title; ?> - cloneReader</title>
 </head>
 <body>
