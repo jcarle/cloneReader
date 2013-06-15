@@ -61,6 +61,9 @@ if (isset($aCss)) {
 		$CI->carabiner->css($css);
 	}
 }
+
+
+header ('Content-type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE HTML>
 <html lang="en">
