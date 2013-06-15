@@ -118,7 +118,7 @@ option {
 		line-height:25px;
 		padding: 0 0 0 30px;
 		margin:0;
-		background:	url(img/loading.gif) no-repeat scroll 6px center transparent;
+		background:	url(../images/loading.gif) no-repeat scroll 6px center transparent;
 	}
 
 .alert {
@@ -166,7 +166,7 @@ option {
 			z-index: 9;
 		}
 			#header div .logo span {
-			    background: url("img/beta.icon.gif") no-repeat scroll 0 0 transparent;
+			    background: url(../images/beta.icon.gif) no-repeat scroll 0 0 transparent;
 			    height: 45px;
 			    position: absolute;
 			    right: 0;
@@ -182,7 +182,7 @@ option {
 	        right:0; top:30px;
 		}
 			#header div .search span {
-			    background: url(img/glyphicons-halflings.png) no-repeat scroll -47px 3px transparent;
+			    background: url(../images/glyphicons-halflings.png) no-repeat scroll -47px 3px transparent;
 			    height: 20px;
 			    position: absolute;
 			    width: 20px;	
@@ -470,7 +470,7 @@ option {
 						padding: 2px 2px 2px 20px;
 					}
 					.paginatedList table thead tr.tblFilter td .filterClear {
-						background: url(img/iconset.png) no-repeat scroll -174px -48px transparent;
+						background: url(../images/iconset.png) no-repeat scroll -174px -48px transparent;
 						cursor: pointer;
 						height: 20px;
 						left: 44px;
@@ -585,11 +585,11 @@ option {
 			width: auto;
 		}
 		.frmEdit fieldset input.hasDatepicker {
-			background: url(img/calendar.gif) no-repeat scroll 75px 2px transparent;
+			background: url(../images/calendar.gif) no-repeat scroll 75px 2px transparent;
 			width: 87px;
 		}
 		.frmEdit fieldset input.datetime {
-    		background: url(img/calendar.gif) no-repeat scroll 110px 2px transparent;
+    		background: url(../images/calendar.gif) no-repeat scroll 110px 2px transparent;
     		width: 120px;			
 		}
 		.frmEdit fieldset .groupCheckBox {
@@ -654,7 +654,7 @@ option {
 					}
 					.frmEdit fieldset #gallery a  > img,
 					.frmEdit fieldset #gallery a  > .imgCenterFrame {
-						background: url(img/loading.gif) no-repeat scroll center center white;
+						background: url(../images/loading.gif) no-repeat scroll center center white;
 						width: 100px;
 						height: 100px;
 						border-radius: 5px 5px 5px 5px;

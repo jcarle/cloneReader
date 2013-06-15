@@ -43,14 +43,14 @@
 			font-size:20px;
 		}
 		#cloneReader ul.ulMenu li.viewDetail {
-			background: url(img/view_options_details.png) no-repeat scroll center center transparent;
+			background: url(../images/view_options_details.png) no-repeat scroll center center transparent;
 		}
 		#cloneReader ul.ulMenu li.prev {
 			margin:5px 0;
 			border-right: 0 none;		
 		}
 		#cloneReader ul.ulMenu li.viewList {
-			background: url(img/view_options_list.png) no-repeat scroll center center transparent;
+			background: url(../images/view_options_list.png) no-repeat scroll center center transparent;
 			margin:5px 0;
 			border-right: 0 none;
 		}
@@ -138,7 +138,7 @@
 			text-transform: capitalize;
 		}
 		#cloneReader .ulEntries > li.noResult.loading {
-			background: url("img/loading.gif") no-repeat scroll 10px 7px #eee;
+			background: url(../images/loading.gif) no-repeat scroll 10px 7px #eee;
 			padding: 10px 10px 10px 40px !important;
 		}
 		#cloneReader .ulEntries.list > li.noResult.loading {
@@ -197,11 +197,11 @@
 					position: absolute;
 					right: 0px; top: 0px;
 					width:16px; height:16px;
-					background: url(img/star-off.png) no-repeat scroll 0 0 transparent;
+					background: url(../images/star-off.png) no-repeat scroll 0 0 transparent;
 					cursor: pointer;
 				}
 				#cloneReader .ulEntries > li .header .star.selected {
-					background: url(img/star-on.png);
+					background: url(../images/star-on.png);
 				}
 			#cloneReader .ulEntries > li p {
 				margin:0 0 25px 0;
@@ -246,11 +246,11 @@
 				}
 				#cloneReader .ulEntries > li .footer .star {
 					width:16px; 
-					background: url(img/star-off.png) no-repeat scroll center center transparent;
+					background: url(../images/star-off.png) no-repeat scroll center center transparent;
 					cursor: pointer;
 				}
 				#cloneReader .ulEntries > li .footer .star.selected {
-					background-image: url(img/star-on.png);
+					background-image: url(../images/star-on.png);
 				}
 				#cloneReader .ulEntries > li .footer .read {
 					color:gray;
@@ -326,11 +326,11 @@
 			}
 				#cloneReader .ulEntries.list > li .title .star {
 					width:16px; 
-					background: url(img/star-off.png) no-repeat scroll center center transparent;
+					background: url(../images/star-off.png) no-repeat scroll center center transparent;
 					cursor: pointer;
 				}
 				#cloneReader .ulEntries.list > li .title .star.selected {
-					background-image: url(img/star-on.png);					
+					background-image: url(../images/star-on.png);					
 				}
 				#cloneReader .ulEntries.list > li .title .feedName {
 					width: 150px;
