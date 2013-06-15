@@ -91,7 +91,7 @@
 				$(this.divModal)
 					.appendTo($('body'))
 					.css({
-						'background': 	'url(' + base_url + 'css/img/transparent.gif) repeat ' + this.options.modal.bgColor,
+						'background': 	'url(' + base_url + 'assets/styles/img/transparent.gif) repeat ' + this.options.modal.bgColor,
 						'position': 	'absolute',
 						'width': 		$(document).width() + 'px',
 						'height': 		$(document).height() + 'px',

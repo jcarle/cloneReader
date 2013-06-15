@@ -58,13 +58,13 @@ class Entries_Model extends CI_Model {
 					'type'		=> 'tag',
 					'id'		=> TAG_HOME,
 					'name'		=> 'home',
-					'icon'		=> site_url().'css/img/default_feed.png', 
+					'icon'		=> site_url().'assets/styles/img/default_feed.png', 
 				),
 				array(
 					'type'		=> 'tag',
 					'id'		=> TAG_STAR,
 					'name'		=> 'starred', 
-					'icon'		=> site_url().'css/img/star-on.png', 
+					'icon'		=> site_url().'assets/styles/img/star-on.png', 
 				)
 			)
 		);
@@ -110,7 +110,7 @@ class Entries_Model extends CI_Model {
 				'id'		=> $row->feedId, 
 				'name'		=> $row->feedName, 
 				'url'		=> $row->feedUrl,
-				'icon'		=> ($row->feedIcon == null ? site_url().'css/img/default_feed.png' : site_url().'img/'.$row->feedIcon), 
+				'icon'		=> ($row->feedIcon == null ? site_url().'assets/styles/img/default_feed.png' : site_url().'img/'.$row->feedIcon), 
 				'count'		=> $row->unread,
 			);
 

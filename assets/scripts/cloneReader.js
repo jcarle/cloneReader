@@ -389,7 +389,7 @@ cloneReader = {
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
-			.css('background-image', 'url(' + (entry.feedIcon == null ? 'css/img/default_feed.png' : 'img/' + entry.feedIcon) + ')')
+			.css('background-image', 'url(' + (entry.feedIcon == null ? 'assets/styles/img/default_feed.png' : 'img/' + entry.feedIcon) + ')')
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 			

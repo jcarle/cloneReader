@@ -17,7 +17,7 @@ $this->load->spark('carabiner/1.5.4');
 $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
-if ($_SERVER['SERVER_NAME'] == 'http://jcarle.redirectme.net') {
+if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
 	$CI->carabiner->empty_cache('both');
