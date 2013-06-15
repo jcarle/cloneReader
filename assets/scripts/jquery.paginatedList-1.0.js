@@ -61,7 +61,7 @@ cn(aDelete);
 					this.$form.submit();
 				}
 			, this))
-			.css('background', 'url(' + base_url + '/css/img/iconset.png) no-repeat scroll -174px -48px transparent');
+			.css('background', 'url(' + base_url + '/assets/styles/img/iconset.png) no-repeat scroll -174px -48px transparent');
 
 		this.$form.find('tbody tr').click(
 				function (event) {

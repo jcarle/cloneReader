@@ -51,12 +51,6 @@ if (isset($aCss)) {
 		$CI->carabiner->css($css);
 	}
 }
-
-/*
-$this->load->spark('carabiner/1.5.4');
-
-$this->carabiner->js('jquery-1.7.2.js');*/
-
 ?>
 <!DOCTYPE HTML>
 <html lang="en">
@@ -64,11 +58,11 @@ $this->carabiner->js('jquery-1.7.2.js');*/
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
-$CI->carabiner->empty_cache('js');
-$CI->carabiner->display('js');
-
 $CI->carabiner->empty_cache('css');
 $CI->carabiner->display('css');
+
+$CI->carabiner->empty_cache('js');
+$CI->carabiner->display('js');
 ?>	
 	<title><?php echo $title; ?> - cloneReader</title>
 </head>
