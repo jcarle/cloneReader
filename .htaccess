@@ -18,7 +18,7 @@
 
 # Turn on Expires and set default expires to 3 days
 ExpiresActive on
-ExpiresDefault A259200
+ExpiresDefault A0
 
 # Set up caching on media files for 1 month
 <FilesMatch "\.(ico|gif|jpg|jpeg|png|flv|pdf|swf|mov|mp3|wmv|ppt)$">
