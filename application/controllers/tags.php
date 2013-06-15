@@ -1,4 +1,3 @@
-
 <?php 
 class Tags extends CI_Controller {
 
