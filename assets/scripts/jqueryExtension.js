@@ -49,10 +49,10 @@ $.extend({
     	if(!/^(https?|ftp):\/\//i.test(value)) {
 	        value = 'http://' + value;
     	}
-
-		return /^(ftp|https?):\/\/+(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(value);
+    	
+		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        return regexp.test(value);
 	},
-
 	
 	strPad: function(i,l,s) {
 		var o = i.toString();
