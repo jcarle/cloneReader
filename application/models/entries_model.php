@@ -558,7 +558,7 @@ class Entries_Model extends CI_Model {
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 				LIMIT '.$limit;
 		$this->db->query($query);
-		pr($this->db->last_query());
+		//pr($this->db->last_query());
 		
 		// save Custom Tags
 		$query = ' INSERT INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
@@ -576,7 +576,7 @@ class Entries_Model extends CI_Model {
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 					LIMIT '.$limit;
 		$this->db->query($query);
-		pr($this->db->last_query());
+		//pr($this->db->last_query());
 
 		if ($this->db->affected_rows() == $limit) {
 			sleep(2);
