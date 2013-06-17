@@ -184,10 +184,10 @@ class Entries extends CI_Controller {
 			));			
 		}
 
-		
-		$feedId = $this->Entries_Model->addFeed($this->session->userdata('userId'), array('feedUrl' => $this->input->post('feedUrl')));
-
-		$this->Entries_Model->getNewsEntries((int)$this->session->userdata('userId'), $feedId);
+		$userId = (int)$this->session->userdata('userId');
+		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $this->input->post('feedUrl')));
+		$this->Entries_Model->getNewsEntries($userId, $feedId);
+		$this->Entries_Model->saveEntriesTagByUser($userId);
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
