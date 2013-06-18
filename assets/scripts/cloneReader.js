@@ -446,10 +446,10 @@ cloneReader = {
 		var $div 			= $('<div/>').addClass('title').appendTo($entry);
 
 		$('<span />').addClass('star').appendTo($div);
-		$('<span />').addClass('feedName').text(entry.feedName).appendTo($div);
-		$('<span />').addClass('entryContent').text($.stripTags(entry.entryContent, ''))
+		$('<span />').addClass('feedName').html($.stripTags(entry.feedName, '')).appendTo($div);
+		$('<span />').addClass('entryContent').html($.stripTags(entry.entryContent, ''))
 			.appendTo($div)
-			.prepend($('<h2 />').text(entry.entryTitle));
+			.prepend($('<h2 />').html($.stripTags(entry.entryTitle, '')));
 		$('<span />').addClass('entryDate').appendTo($div);
 
 		$entry.find('.feedName, .entryContent').click(function(event) {
