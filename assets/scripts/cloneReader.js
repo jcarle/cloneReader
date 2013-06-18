@@ -674,6 +674,10 @@ cloneReader = {
 	
 	goToEntry: function(next) {
 		var $entry = this.$ulEntries.find('.entry.selected');
+		if ($entry.length == 0 && next != true) {
+			return;
+		}		
+		
 		if ($entry.length == 0) {
 			$entry = this.$ulEntries.find('.entry').first();
 		}
@@ -681,6 +685,7 @@ cloneReader = {
 			$entry = (next == true ? $entry.nextAll('.entry:first') : $entry.prevAll('.entry:first'));
 		}
 		this.selectEntry($entry, true, true);
+		this.$ulEntries.focus();
 	},
 	
 	getMoreEntries: function() {
