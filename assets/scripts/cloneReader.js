@@ -872,7 +872,11 @@ console.timeEnd("t1");
 	},
 	
 	getFilter: function(filter) {
-		return this.indexFilters[filter.type][filter.id];
+		var tmp = this.indexFilters[filter.type][filter.id];
+		if (tmp != null) {
+			return tmp;
+		}	
+		return this.indexFilters['tag'][TAG_ALL];	
 	},
 	
 	getAllParentsByFilter: function(filter){
