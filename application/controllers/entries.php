@@ -151,8 +151,6 @@ class Entries extends CI_Controller {
 	}
 	
 	function saveData() {
-		$this->getAsyncNewsEntries($this->session->userdata('userId'));
-		
 		$entries 	= (array)json_decode($this->input->post('entries'), true);
 		$tags 		= (array)json_decode($this->input->post('tags'), true);
 		
@@ -318,7 +316,7 @@ class Entries extends CI_Controller {
 		}
 		
 		$this->Entries_Model->saveEntriesTagByUser($userId);
-//		$this->Entries_Model->buildCacheNew($userId);		
+		$this->getAsyncNewsEntries($userId);
 	}	
 	
 	function populateMillionsEntries() {

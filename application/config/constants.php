@@ -59,9 +59,9 @@ define('FEED_STATUS_APPROVED', 1);
 define('FEED_STATUS_INVALID_FORMAT', 3);
 define('FEED_STATUS_NOT_FOUND', 404);
 
-define('FEED_TIME_SCAN', 60); 	// 	Cada cuanto MINUTOS busca nuevos feeds
-define('FEED_TIME_SAVE', 5); 	// 	Cada cuanto SEGUNDOS guardan los datos
+define('FEED_TIME_SCAN', 180); 	// 	Cada cuanto MINUTOS busca nuevos feeds
+define('FEED_TIME_SAVE', 10); 	// 	Cada cuanto SEGUNDOS guardan los datos
 define('FEED_TIME_RELOAD', 999);  //  Cada cuanto MINUTOS recarga el menu con feeds
 define('ENTRIES_PAGE_SIZE', 30);
 
-define('PHP_PATH', '/usr/local/bin/php-5.3'); // para los exec() !
+define('PHP_PATH', 'php'); // para los exec() !
