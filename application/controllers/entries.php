@@ -127,13 +127,17 @@ class Entries extends CI_Controller {
 	}
 
 	function getAsyncNewsEntries($userId = null) {
+		exec (PHP_PATH.'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId);
+		return;
+		
+		
 		// TODO: revisar como pedir datos para los users logeados
 		// este metodo tarda casi un segundo creo; otro crontab ?
-		$this->load->spark('curl/1.2.1'); 
+		/*$this->load->spark('curl/1.2.1'); 
 		$this->curl->create(base_url().'entries/getNewsEntries/'.(int)$userId);
 		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
 		//$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
-		$this->curl->execute();
+		$this->curl->execute();*/
 	}	
 	
 	function getNewsEntries($userId = null) {
@@ -147,7 +151,7 @@ class Entries extends CI_Controller {
 	}
 	
 	function saveData() {
-//		$this->getAsyncNewsEntries($this->session->userdata('userId'));
+		$this->getAsyncNewsEntries($this->session->userdata('userId'));
 		
 		$entries 	= (array)json_decode($this->input->post('entries'), true);
 		$tags 		= (array)json_decode($this->input->post('tags'), true);
