@@ -34,14 +34,15 @@ class Entries extends CI_Controller {
 	}
 	
 	function select($page = 1) { // busco nuevas entries
+		$userId = (int)$this->session->userdata('userId');
 	
 		if ($this->input->post('pushTmpUserEntries') == true) {
-			$this->Entries_Model->pushTmpUserEntries((int)$this->session->userdata('userId'));
+			$this->Entries_Model->pushTmpUserEntries($userId);
 		}
 	
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Entries_Model->select((int)$this->session->userdata('userId'), (array)json_decode($this->input->post('post'))),
+			'result' 	=> $this->Entries_Model->select($userId, (array)json_decode($this->input->post('post'))),
 		));
 	}
 
@@ -127,7 +128,7 @@ class Entries extends CI_Controller {
 	}
 
 	function getAsyncNewsEntries($userId = null) {
-		exec (PHP_PATH.'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId);
+		exec(PHP_PATH.'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId.' > /dev/null &');
 		return;
 		
 		
@@ -151,21 +152,12 @@ class Entries extends CI_Controller {
 	}
 	
 	function saveData() {
+		$userId		= (int)$this->session->userdata('userId');
 		$entries 	= (array)json_decode($this->input->post('entries'), true);
 		$tags 		= (array)json_decode($this->input->post('tags'), true);
 		
-		$this->Entries_Model->saveTmpUsersEntries((int)$this->session->userdata('userId'), $entries);		
-		$this->Entries_Model->saveUserTags((int)$this->session->userdata('userId'), $tags);
-		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));		
-	}
-	
-	function saveUserTags() {
-		$tags 		= (array)json_decode($this->input->post('tags'), true);
-		$this->Entries_Model->saveUserTags((int)$this->session->userdata('userId'), $tags);
+		$this->Entries_Model->saveTmpUsersEntries((int)$userId, $entries);		
+		$this->Entries_Model->saveUserTags((int)$userId, $tags);
 		
 		return $this->load->view('ajax', array(
 			'code'		=> true,
@@ -243,7 +235,7 @@ class Entries extends CI_Controller {
 	}	
 
 	function migrateFromGReader() {
-		$userId 	= 1; // FIXME: harckodeta
+		$userId 	= 2; // FIXME: harckodeta
 		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/subscriptions.xml';
 
 		$xml = simplexml_load_file($fileName);
@@ -275,7 +267,7 @@ class Entries extends CI_Controller {
 	}
 	
 	function migrateStarredFromGReader() {
-		$userId 	= 1; // FIXME: harckodeta
+		$userId 	= 2; // FIXME: harckodeta
 		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/starred.json';
 		$json 		= (array)json_decode(file_get_contents($fileName), true);
 

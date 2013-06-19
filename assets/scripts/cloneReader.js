@@ -1031,28 +1031,6 @@ console.timeEnd("t1");
 		};
 	},
 	
-	saveUserTags: function() {
-		if (Object.keys(this.aUserTags).length == 0) {
-			return;
-		}
-		
-		$.ajax({
-			'url': 		base_url + 'entries/saveUserTags',
-			'data': 	{ 
-					'tags': 	$.toJSON(this.aUserTags) 
-			},
-			'type':	 	'post',
-			'async':	false
-		})
-		.done(function(response) {
-			if (response['code'] != true) {
-				return $(document).alert(response['result']);
-			}
-		});			
-
-		this.aUserTags		= {};		
-	},
-	
 	saveData: function(async){
 		if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
 			return;
@@ -1125,7 +1103,7 @@ console.timeEnd("t1");
 			if (response['code'] != true) {
 				return $(document).alert(response['result']);
 			}
-			cloneReader.saveUserTags();
+			cloneReader.saveData(false);
 			cloneReader.loadFilters(true);
 		});
 	},

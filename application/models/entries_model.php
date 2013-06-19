@@ -215,6 +215,9 @@ class Entries_Model extends CI_Model {
 			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.($entry['entryRead'] == true ? 'true' : 'false').', '.($entry['starred'] == true ? 'true' : 'false').') ';
 
 		}
+		if (count($aQueries) == 0) {
+			return;
+		}
 
 		$query = 'REPLACE INTO tmp_users_entries (userId, entryId, entryRead, starred) VALUES '.implode(', ', $aQueries).';';
 		$this->db->query($query);
