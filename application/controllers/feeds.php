@@ -1,4 +1,3 @@
-
 <?php 
 class Feeds extends CI_Controller {
 
