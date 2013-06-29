@@ -53,7 +53,7 @@ class Groups_Model extends CI_Model {
 			}		
 		}
 		
-		$this->Menu_Model->destroyMenuSession();
+		$this->Menu_Model->destroyMenuCache();
 		
 		return true;
 	}

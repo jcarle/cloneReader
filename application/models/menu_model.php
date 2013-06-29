@@ -59,16 +59,18 @@ class Menu_Model extends CI_Model {
 			$menuId = $this->db->insert_id();
 		}
 		
-		$this->destroyMenuSession();
+		$this->destroyMenuCache();
 
 		return true;
 	}
 	
-	function destroyMenuSession() {
-		$this->session->set_userdata(array(
-			'MENU_PROFILE' 	=> null,
-			'MENU_PUBLIC'	=> null,
-			'MENU_ADMIN'	=> null
-		));
+	function destroyMenuCache() {
+		$userId = $this->session->userdata('userId');
+		
+		$this->load->driver('cache', array('adapter' => 'file'));
+		
+		$this->cache->delete('MENU_PROFILE_'.$userId);
+		$this->cache->delete('MENU_PUBLIC_'.$userId);
+		$this->cache->delete('MENU_ADMIN_'.$userId);
 	}
 }
