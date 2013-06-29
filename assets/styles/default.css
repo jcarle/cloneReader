@@ -295,7 +295,7 @@ option {
 				}
 			.menu div ul.menuAdmin {
 			    position: absolute;
-			    right: 0;
+			    right: 8px;
 			    top: 0;				
 			}
 				.menu div ul.menuAdmin > li:first-child {
@@ -303,7 +303,7 @@ option {
 					background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
 					border-color: #CCCCCC #BBBBBB #A0A0A0;
 					border-left: 1px solid #BBBBBB;
-					border-radius: 0;
+					border-radius: 5px;
 					border-right: 1px solid #BBBBBB;
 					border-style: solid;
 					border-width: 1px;
@@ -322,11 +322,12 @@ option {
 				.menu div ul.menuAdmin > li:first-child:hover {
 					box-shadow: 0px 0px 4px #CCC;
 				}
+				.menu div ul.menuAdmin > li.checked,
 				.menu div ul.menuAdmin > li:first-child:active {
-					box-shadow: 0px 0px 4px #CCC inset;
+					box-shadow: 0px 0px 4px #CCC inset !important;
 				}	
 					.menu div ul.menuAdmin > li:first-child > a {
-					    background: url("//ssl.gstatic.com/mail/sprites/general_black-fdf215381348729069456b22e8b32400.png") no-repeat scroll 0 -472px transparent;
+					    background: url(../images/icons_black.png) no-repeat scroll 0 -472px transparent;
 					    display: block;
 					    height: 21px;
 					    margin: 2px auto;
