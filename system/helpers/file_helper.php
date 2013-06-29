@@ -114,11 +114,13 @@ if ( ! function_exists('write_file'))
  * @access	public
  * @param	string	path to file
  * @param	bool	whether to delete any directories found in the path
+ * @param   int
+ * @param   bool    whether to skip deleting .htaccess and index page files 
  * @return	bool
  */
 if ( ! function_exists('delete_files'))
 {
-	function delete_files($path, $del_dir = FALSE, $level = 0)
+	function delete_files($path, $del_dir = FALSE, $level = 0, $htdocs = FALSE) 
 	{
 		// Trim the trailing slash
 		$path = rtrim($path, DIRECTORY_SEPARATOR);
@@ -140,7 +142,7 @@ if ( ! function_exists('delete_files'))
 						delete_files($path.DIRECTORY_SEPARATOR.$filename, $del_dir, $level + 1);
 					}
 				}
-				else
+				elseif ($htdocs === TRUE && ! preg_match('/^(\.htaccess|index\.(html|htm|php))$/', $filename)) 
 				{
 					unlink($path.DIRECTORY_SEPARATOR.$filename);
 				}

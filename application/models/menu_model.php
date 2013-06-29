@@ -50,7 +50,7 @@ class Menu_Model extends CI_Model {
 		);
 		
 
-		if ((int)$menuId != -1) {		
+		if ((int)$menuId != 0) {		
 			$this->db->where('menuId', $menuId);
 			$this->db->update('menu', $values);
 		}
@@ -65,12 +65,7 @@ class Menu_Model extends CI_Model {
 	}
 	
 	function destroyMenuCache() {
-		$userId = $this->session->userdata('userId');
-		
 		$this->load->driver('cache', array('adapter' => 'file'));
-		
-		$this->cache->delete('MENU_PROFILE_'.$userId);
-		$this->cache->delete('MENU_PUBLIC_'.$userId);
-		$this->cache->delete('MENU_ADMIN_'.$userId);
+		$this->cache->clean();
 	}
 }
