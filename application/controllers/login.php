@@ -95,8 +95,6 @@ class Login extends CI_Controller {
 		
 		$this->session->set_userdata(array(
 			'userId'  		=> $row->userId,
-			'userEmail'		=> $row->userEmail,
-			'userFullName' 	=> $row->userFirstName.' '.$row->userLastName
 		));		
 		
 		return true;
@@ -116,8 +114,6 @@ class Login extends CI_Controller {
 
 		$this->session->set_userdata(array(
 			'userId'  		=> $user->userId,
-			'userEmail'		=> $user->userEmail,
-			'userFullName' 	=> $user->userFirstName.' '.$user->userLastName
 		));		
 		
 		return $this->load->view('ajax', array(
