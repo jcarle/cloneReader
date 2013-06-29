@@ -8,7 +8,7 @@ class Users_Model extends CI_Model {
 		return $this->db->get('users');
 	}
 	
-	function loginFB($userEmail, $userLastName, $userFirstsName, $oauth_uid, $oauth_provider) {
+	function loginFB($userEmail, $userLastName, $userFirstName, $oauth_uid, $oauth_provider) {
 		$query = $this->db
 			->where('oauth_uid', $oauth_uid)
 			->where('oauth_provider', $oauth_provider)
@@ -19,7 +19,7 @@ class Users_Model extends CI_Model {
 		
 		$values = array(
 			'userLastName' 		=> $userLastName, 
-			'userFirstsName'	=> $userFirstsName, 
+			'userFirstName'		=> $userFirstName, 
 			'oauth_uid'			=> $oauth_uid, 
 			'oauth_provider'	=> $oauth_provider
 		);		
@@ -50,11 +50,11 @@ class Users_Model extends CI_Model {
 	}
 	
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId AS id, userEmail AS Email, CONCAT(userFirstsName, \' \', userLastName) AS Nombre, countryName AS País, GROUP_CONCAT(groups.groupName) AS Grupos ', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId AS id, userEmail AS Email, CONCAT(userFirstName, \' \', userLastName) AS Nombre, countryName AS País, GROUP_CONCAT(groups.groupName) AS Grupos ', false)
 		 				->join('countries', 'users.countryId = countries.countryId', 'left')
 						->join('users_groups', 'users.userId = users_groups.userId', 'left')
 						->join('groups', 'groups.groupId = users_groups.groupId', 'left')
-						->or_like(array('userFirstsName' => $filter, 'userLastName' => $filter))
+						->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
 						->group_by('users.userId')
 		 				->get('users', $num, $offset);
 						
@@ -63,9 +63,9 @@ class Users_Model extends CI_Model {
 	}
 	
 	function search($filter, $groupId = null){
-		$this->db->select('DISTINCT users.userId AS id, CONCAT(userFirstsName, \' \', userLastName) AS value  ', false)
+		$this->db->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS value  ', false)
 						->join('users_groups', 'users.userId = users_groups.userId')
-						->or_like(array('userFirstsName' => $filter, 'userLastName' => $filter));
+						->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
 		 				
 		if ($groupId != null) {
 			$this->db->where('groupId', $groupId);	
@@ -96,7 +96,7 @@ class Users_Model extends CI_Model {
 		
 		$values = array(
 			'userEmail' 		=> $data['userEmail'],
-			'userFirstsName'	=> $data['userFirstsName'],
+			'userFirstName'		=> $data['userFirstName'],
 			'userLastName'		=> $data['userLastName'],
 			'countryId'			=> $data['countryId']
 		);

@@ -21,7 +21,7 @@ function facebookLogin() {
 						data: 	{
 							'oauth_uid': 		response.id,
 							'userLastName': 	response.last_name,
-							'userFirstsName': 	response.first_name,
+							'userFirstName': 	response.first_name,
 							'userEmail': 		response.email,
 						}
 					})

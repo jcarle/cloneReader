@@ -44,10 +44,10 @@ class Users extends CI_Controller {
 					'label'	=> 'Email',
 					'value'	=> element('userEmail', $data)
 				),
-				'userFirstsName' => array(
+				'userFirstName' => array(
 					'type'	=> 'text',
 					'label'	=> 'Nombre', 
-					'value'	=> element('userFirstsName', $data)
+					'value'	=> element('userFirstName', $data)
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
@@ -76,8 +76,8 @@ class Users extends CI_Controller {
 				'rules' => 'required|valid_email'
 			),
 			array(
-    			'field' => 'userFirstsName',
-				'label' => $form['fields']['userFirstsName']['label'],
+    			'field' => 'userFirstName',
+				'label' => $form['fields']['userFirstName']['label'],
 				'rules' => 'required'
 			),
 			array(

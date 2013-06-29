@@ -348,7 +348,7 @@ option {
 						display: none;
 					    background: white;
 					    border: 1px solid #CCCCCC;
-					    border-radius: 0 0 5px 5px;
+					    border-radius: 5px 5px;
 						box-shadow:0 5px 5px gray;
 					    top: 1px; right: 125px;
 					    text-align: left;

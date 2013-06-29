@@ -96,14 +96,14 @@ class Login extends CI_Controller {
 		$this->session->set_userdata(array(
 			'userId'  		=> $row->userId,
 			'userEmail'		=> $row->userEmail,
-			'userFullName' 	=> $row->userFirstsName.' '.$row->userLastName
+			'userFullName' 	=> $row->userFirstName.' '.$row->userLastName
 		));		
 		
 		return true;
 	}
 	
 	function loginFB() {
-		$user = $this->Users_Model->loginFB($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstsName'), $this->input->post('oauth_uid'), 'facebook');
+		$user = $this->Users_Model->loginFB($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstName'), $this->input->post('oauth_uid'), 'facebook');
 
 		if ($user == null) {
 			return $this->load->view('ajax', array(
@@ -117,7 +117,7 @@ class Login extends CI_Controller {
 		$this->session->set_userdata(array(
 			'userId'  		=> $user->userId,
 			'userEmail'		=> $user->userEmail,
-			'userFullName' 	=> $user->userFirstsName.' '.$user->userLastName
+			'userFullName' 	=> $user->userFirstName.' '.$user->userLastName
 		));		
 		
 		return $this->load->view('ajax', array(

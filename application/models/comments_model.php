@@ -3,7 +3,7 @@ class Comments_Model extends CI_Model {
 	// TODO: quizas haya que modificar un poco esta clase, para que soporte meter comentarios en distintas entidades como hace Files_Model 
 		
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS comments.commentId AS id, commentDesc AS Comentario, DATE_FORMAT(commentDate, \'%Y-%m-%e %H:%i\') AS Fecha, commentScore AS Puntaje, IF(users.userId = 0, commentUserName, CONCAT(userFirstsName, \' \', userLastName)) AS Nombre, excursions.excursionName AS Excursion ', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS comments.commentId AS id, commentDesc AS Comentario, DATE_FORMAT(commentDate, \'%Y-%m-%e %H:%i\') AS Fecha, commentScore AS Puntaje, IF(users.userId = 0, commentUserName, CONCAT(userFirstName, \' \', userLastName)) AS Nombre, excursions.excursionName AS Excursion ', false)
 						->like('commentDesc', $filter)
 						->join('users', 'comments.userId = users.userId', 'inner')						
 						->join('excursions_comments', 'excursions_comments.commentId = comments.commentId', 'inner')
@@ -15,7 +15,7 @@ class Comments_Model extends CI_Model {
 	}
 	
 	function selectByExcursionId($excursionId) {
-		$query = $this->db->select('comments.commentId AS id, commentDesc AS Comentario, DATE_FORMAT(commentDate, \'%Y-%m-%e %H:%i\') AS Fecha, commentScore AS Puntaje, IF(users.userId = 0, commentUserName, CONCAT(userFirstsName, \' \', userLastName)) AS Nombre ', false)
+		$query = $this->db->select('comments.commentId AS id, commentDesc AS Comentario, DATE_FORMAT(commentDate, \'%Y-%m-%e %H:%i\') AS Fecha, commentScore AS Puntaje, IF(users.userId = 0, commentUserName, CONCAT(userFirstName, \' \', userLastName)) AS Nombre ', false)
 						->join('users', 'comments.userId = users.userId', 'inner')						
 						->join('excursions_comments', 'excursions_comments.commentId = comments.commentId', 'inner')
 						->join('excursions', 'excursions.excursionId = excursions_comments.excursionId', 'inner')
@@ -57,7 +57,7 @@ class Comments_Model extends CI_Model {
 	
 	function get($commentId) {
 		$query = $this->db
-				->select('comments.commentId, commentDesc, users.userId, DATE_FORMAT(commentDate, \'%Y-%m-%e %H:%i\') AS commentDate, commentScore, commentUserName, commentUserEmail, CONCAT(userFirstsName, \' \', userLastName) AS userFullName, excursions.excursionId, excursions.excursionName ', false)
+				->select('comments.commentId, commentDesc, users.userId, DATE_FORMAT(commentDate, \'%Y-%m-%e %H:%i\') AS commentDate, commentScore, commentUserName, commentUserEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, excursions.excursionId, excursions.excursionName ', false)
 				->where('comments.commentId', $commentId)
 				->join('users', 'comments.userId = users.userId', 'inner')
 
