@@ -1,16 +1,19 @@
 <?php
 $CI = &get_instance();
 
-if (!is_array($CI->session->userdata('MENU_PROFILE'))) {
-	$CI->session->set_userdata('MENU_PROFILE', $CI->Menu_Model->getMenu(MENU_PROFILE));
-}
-if (!is_array($CI->session->userdata('MENU_PUBLIC'))) {
-	$CI->session->set_userdata('MENU_PUBLIC', $CI->Menu_Model->getMenu(MENU_PUBLIC));
-}
-if (!is_array($CI->session->userdata('MENU_ADMIN'))) {
-	$CI->session->set_userdata('MENU_ADMIN', $CI->Menu_Model->getMenu(MENU_ADMIN));
-}
+$CI->load->driver('cache', array('adapter' => 'file'));
 
+$userId = $this->session->userdata('userId');
+
+if (!$CI->cache->file->get('MENU_PROFILE_'.$userId)) {
+	$CI->cache->file->save('MENU_PROFILE_'.$userId, $CI->Menu_Model->getMenu(MENU_PROFILE));	
+}
+if (!$CI->cache->file->get('MENU_PUBLIC_'.$userId)) {
+	$CI->cache->file->save('MENU_PUBLIC_'.$userId, $CI->Menu_Model->getMenu(MENU_PUBLIC));	
+}
+if (!$CI->cache->file->get('MENU_ADMIN_'.$userId)) {
+	$CI->cache->file->save('MENU_ADMIN_'.$userId, $CI->Menu_Model->getMenu(MENU_ADMIN));	
+}
 
 $this->load->spark('carabiner/1.5.4');
 
@@ -84,7 +87,7 @@ $CI->carabiner->display('js');
 		<?php echo anchor('home', 'cloneReader<span/>', array('class' => 'logo')); ?>
 		
 <?php
-echo renderMenu($CI->session->userdata('MENU_PROFILE'), 'menuProfile');
+echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');
 ?>
 
 			<form class="search">
@@ -96,8 +99,8 @@ echo renderMenu($CI->session->userdata('MENU_PROFILE'), 'menuProfile');
 	</div>
 	<div class="menu">
 		<div>
-<?php echo renderMenu($CI->session->userdata('MENU_PUBLIC')); ?>
-<?php echo renderMenu($CI->session->userdata('MENU_ADMIN'), 'menuAdmin'); ?>
+<?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId)); ?>
+<?php echo renderMenu($CI->cache->file->get('MENU_ADMIN_'.$userId), 'menuAdmin'); ?>
 		</div>
 	</div>	
 	
