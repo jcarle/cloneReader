@@ -51,7 +51,10 @@ cn(aDelete);
 			}
 		, this));
 		
-		this.$form.find('.filterClear')
+		var $input = this.$form.find('input[name=filter]');
+		
+		this.$filterClear = this.$form.find('.filterClear');
+		this.$filterClear
 			.click($.proxy(
 				function (event){
 					if ($(event.target).prev().val().trim() == '') {
@@ -61,7 +64,11 @@ cn(aDelete);
 					this.$form.submit();
 				}
 			, this))
-			.css('background', 'url(' + base_url + '/assets/images/iconset.png) no-repeat scroll -174px -48px transparent');
+			.html('&#10006;')
+			.css( {
+					'left': $input.position().left + 3,
+					'top': 	$input.position().top + 6 
+				} )			
 
 		this.$form.find('tbody tr').click(
 				function (event) {

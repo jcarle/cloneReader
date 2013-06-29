@@ -512,14 +512,32 @@ option {
 						padding: 2px 2px 2px 20px;
 					}
 					.paginatedList table thead tr.tblFilter td .filterClear {
-						background: url(../images/iconset.png) no-repeat scroll -174px -48px transparent;
+						background:-webkit-linear-gradient(#F9F9F9, #E3E3E3);
+						background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+						border-color: #CCCCCC #BBBBBB #A0A0A0;
+						border-radius: 3px 3px 3px 3px;
+						border-style: solid;
+						border-width: 1px;
+						color: gray;
 						cursor: pointer;
-						height: 20px;
-						left: 44px;
+						font-family: comic sans ms;
+						font-size: 12px;
+						font-weight: bold;
+						height: 14px;
+						line-height:14px;
+						left: 60px; /* La position la calculo con js */
 						position: absolute;
-						top: 7px;
-						width: 20px;
-					}				
+						text-align: center;
+						text-transform: lowercase;
+						top: 18px;
+						vertical-align: middle;
+						width: 14px;
+					}
+					.paginatedList table thead tr.tblFilter td .filterClear:hover {
+						box-shadow: 1px 1px 1px #CCCCCC inset;
+						color:black;
+						text-shadow: 0px 1px 0px gray;
+					}
 					.paginatedList table thead tr td, 
 					.paginatedList table thead tr td a  {
 						color:white;
