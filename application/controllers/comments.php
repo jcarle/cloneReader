@@ -19,7 +19,7 @@ class Comments extends CI_Controller {
 			case 'edit':
 				$this->_edit($entityName, $id); break;
 			case 'add':
-				$this->_edit($entityName, -1); break;
+				$this->_edit($entityName, 0); break;
 			case 'selectByExcursionId':
 				$this->_selectByExcursionId($entityName, $id); break;
 			case 'editPopup':
@@ -98,7 +98,7 @@ class Comments extends CI_Controller {
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('commentId', $data, -1)
+					'value'	=> element('commentId', $data, 0)
 				),
 				'userFullName' => array(
 					'type' 		=> 'autocomplete',

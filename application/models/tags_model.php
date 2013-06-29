@@ -30,7 +30,7 @@ class Tags_Model extends CI_Model {
 		);
 		
 
-		if ((int)$tagId != -1) {		
+		if ((int)$tagId != 0) {		
 			$this->db->where('tagId', $tagId);
 			$this->db->update('tags', $values);
 		}

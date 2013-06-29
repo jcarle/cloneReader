@@ -51,7 +51,7 @@ class Feeds extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}
 	
 	function _getFormProperties($feedId) {
@@ -64,7 +64,7 @@ class Feeds extends CI_Controller {
 			'fields'	=> array(
 				'feedId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('feedId', $data, -1)
+					'value'	=> element('feedId', $data, 0)
 				),
 				'feedName' => array(
 					'type'		=> 'text',

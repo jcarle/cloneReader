@@ -8,7 +8,7 @@ class Menu extends CI_Controller {
 	}  
 	
 	function index() {
-		$this->edit(-1);
+		$this->edit(0);
 	}
 	
 	function edit($menuId) {
@@ -23,7 +23,7 @@ class Menu extends CI_Controller {
 			'fields'		=> array(
 				'menuId' => array(
 					'type'	=> 'hidden',
-					'value'	=> element('menuId', $data, -1)
+					'value'	=> element('menuId', $data, 0)
 				),
 				'menuTree' => array(
 					'type'		=> 'tree',
@@ -42,7 +42,7 @@ class Menu extends CI_Controller {
 				'controllerId' => array(
 					'type'		=> 'dropdown',
 					'label'		=> 'Controller', 
-					'source'	=> array('-1' => '-- seleccione --') + array_to_select($this->Controllers_Model->select(true)->result_array(), 'controllerId', 'controllerName'), 
+					'source'	=> array('0' => '-- seleccione --') + array_to_select($this->Controllers_Model->select(true)->result_array(), 'controllerId', 'controllerName'), 
 					'value'		=> element('controllerId', $data)
 				),
 				'menuParentId' => array(
@@ -86,6 +86,6 @@ class Menu extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}		
 }

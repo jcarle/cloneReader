@@ -38,6 +38,8 @@ class Controllers_Model extends CI_Model {
 			$this->db->insert('controllers', $data);
 		}
 		
+		$this->Menu_Model->destroyMenuSession();
+		
 		return true;
 	}
 	

@@ -51,7 +51,7 @@ class Tags extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}
 
 	function _getFormProperties($tagId) {
@@ -64,7 +64,7 @@ class Tags extends CI_Controller {
 			'fields'	=> array(
 				'tagId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('tagId', $data, -1)
+					'value'	=> element('tagId', $data, 0)
 				),
 				'tagName' => array(
 					'type'		=> 'text',

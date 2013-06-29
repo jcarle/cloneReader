@@ -52,6 +52,9 @@ class Groups_Model extends CI_Model {
 				$this->db->insert('groups_controllers', array('groupId' => $groupId, 'controllerId' => $controllerId));			
 			}		
 		}
+		
+		$this->Menu_Model->destroyMenuSession();
+		
 		return true;
 	}
 }

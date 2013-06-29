@@ -102,7 +102,7 @@ class Users_Model extends CI_Model {
 		);
 		
 
-		if ((int)$userId != -1) {		
+		if ((int)$userId != 0) {		
 			$this->db->where('userId', $userId);
 			$this->db->update('users', $values);
 		}

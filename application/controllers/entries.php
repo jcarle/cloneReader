@@ -78,7 +78,7 @@ class Entries extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}
 	
 	function _getFormProperties($entryId) {
@@ -91,7 +91,7 @@ class Entries extends CI_Controller {
 			'fields'	=> array(
 				'entryId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('entryId', $data, -1)
+					'value'	=> element('entryId', $data, 0)
 				),
 				'entryTitle' => array(
 					'type'		=> 'text',

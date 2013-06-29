@@ -186,7 +186,7 @@ class Entries_Model extends CI_Model {
 		);
 		
 
-		if ((int)$entryId != -1) {		
+		if ((int)$entryId != 0) {		
 			$this->db->where('entryId', $entryId);
 			$this->db->update('entries', $values);
 		}

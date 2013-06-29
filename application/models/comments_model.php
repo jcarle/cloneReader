@@ -37,7 +37,7 @@ class Comments_Model extends CI_Model {
 			'commentScore' 	=> element('commentScore', $data)
 		);
 		
-		if ((int)$commentId != -1) {		
+		if ((int)$commentId != 0) {		
 			$this->db->where('commentId', $commentId);
 			$this->db->update('comments', $values);
 		}

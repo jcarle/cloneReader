@@ -37,7 +37,7 @@ class Controllers extends CI_Controller {
 			'fields'	=> array(
 				'controllerId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('controllerId', $data, -1)
+					'value'	=> element('controllerId', $data, 0)
 				),
 				'controllerName' => array(
 					'type'	=> 'text',
@@ -96,6 +96,6 @@ class Controllers extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}		
 }

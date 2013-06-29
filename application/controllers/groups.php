@@ -37,7 +37,7 @@ class Groups extends CI_Controller {
 			'fields'	=> array(
 				'groupId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('groupId', $data, -1)
+					'value'	=> element('groupId', $data, 0)
 				),
 				'groupName' => array(
 					'type'	=> 'text',
@@ -84,6 +84,6 @@ class Groups extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}		
 }

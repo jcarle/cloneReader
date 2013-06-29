@@ -37,7 +37,7 @@ class Users extends CI_Controller {
 			'fields'	=> array(
 				'userId' => array(
 					'type' 	=> 'hidden',
-					'value'	=> element('userId', $data, -1)
+					'value'	=> element('userId', $data, 0)
 				),
 				'userEmail' => array(
 					'type'	=> 'text',
@@ -113,6 +113,6 @@ class Users extends CI_Controller {
 	}
 
 	function add(){
-		$this->edit(-1);
+		$this->edit(0);
 	}		
 }

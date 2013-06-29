@@ -58,6 +58,8 @@ class Menu_Model extends CI_Model {
 			$this->db->insert('menu', $values);
 			$menuId = $this->db->insert_id();
 		}
+		
+		$this->destroyMenuSession();
 
 		return true;
 	}
