@@ -295,15 +295,42 @@ $.extend({
 	},
 	
 	initMenu: function() { // TODO: mover esto de aca!
-		$('.menu div ul.menuAdmin li:has(ul)')
+		$(document).click(
+			function(event) {
+				var $subMenu = $('.menu div ul.menuAdmin li ul:visible');
+				if ($subMenu.length != 0) {
+					if ($.contains($subMenu[0], event.target)) {
+						return;
+					}
+				}
+				$('.menu div ul.menuAdmin li:first').removeClass('checked');
+				$subMenu.hide();
+			}
+		);		
+		
+		$('.menu div ul.menuAdmin li:first')
+			.click(
+				function (event){
+					event.stopPropagation();
+					if ($(this).find('ul').first().is(':visible') == false) {
+						$(this).addClass('checked');
+						$(this).find('ul').first().fadeIn();
+						return;
+					}
+					$(this).removeClass('checked');
+					$(this).find('ul').first().fadeOut();
+				}
+			);
+			
+		$('.menu div ul.menuAdmin li ul li:has(ul)')
 			.hover(
 				function (event){
-					$(this).find('ul').first().fadeIn();
+					$(this).find('ul').first().stop().fadeIn();
 				},
 				function (event){
-					$(this).find('ul').first().hide();
+					$(this).find('ul').first().stop().hide();
 				}
-			);			
+			);									
 	},
 	
 	loadSubForm: function(controller /*, field*/) {

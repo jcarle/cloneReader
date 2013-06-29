@@ -298,23 +298,62 @@ option {
 			    right: 0;
 			    top: 0;				
 			}
+				.menu div ul.menuAdmin > li:first-child {
+					background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+					background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+					border-color: #CCCCCC #BBBBBB #A0A0A0;
+					border-left: 1px solid #BBBBBB;
+					border-radius: 0;
+					border-right: 1px solid #BBBBBB;
+					border-style: solid;
+					border-width: 1px;
+					cursor: pointer;
+					font-size: 12px;
+					outline: medium none;
+					text-align: center;
+					text-shadow:0 1px 0 white;
+					width:26px; height:26px;
+					margin:1px 5px 1px 0 ;
+					-moz-user-select: none;
+					-khtml-user-select: none;
+					-webkit-user-select: none;
+					user-select: none;								
+				}
+				.menu div ul.menuAdmin > li:first-child:hover {
+					box-shadow: 0px 0px 4px #CCC;
+				}
+				.menu div ul.menuAdmin > li:first-child:active {
+					box-shadow: 0px 0px 4px #CCC inset;
+				}	
+					.menu div ul.menuAdmin > li:first-child > a {
+					    background: url("//ssl.gstatic.com/mail/sprites/general_black-fdf215381348729069456b22e8b32400.png") no-repeat scroll 0 -472px transparent;
+					    display: block;
+					    height: 21px;
+					    margin: 2px auto;
+					    opacity: 0.55;
+					    padding: 0;
+					    width: 21px;
+					    text-indent: -9999px;
+					}
+					.menu div ul.menuAdmin > li.checked > a,
+					.menu div ul.menuAdmin > li:first-child > a:hover {
+						opacity: 0.8;
+					}
 				.menu div ul.menuAdmin li {
 					cursor:pointer;
 				}
 					.menu div ul.menuAdmin li a {}
 					.menu div ul.menuAdmin li ul {
 						display: none;
-					    background: #3176CB;
-					    border: 1px solid #333333;
-					    border-radius: 5px 5px 5px 5px;
-					    position: absolute;
-					    right: 0;
+					    background: white;
+					    border: 1px solid #CCCCCC;
+					    border-radius: 0 0 5px 5px;
+						box-shadow:0 5px 5px gray;
+					    top: 1px; right: 125px;
 					    text-align: left;
-					    top: 30px;
 					    width: 150px;
 					    z-index: 9;			
 					    padding:5px 0;
-					    opacity:0.8;			
 					}			
 						.menu div ul.menuAdmin li ul li {
 							float:none;
@@ -324,15 +363,17 @@ option {
 							.menu div ul.menuAdmin li ul li a {
 								font-weight:normal;
 								text-shadow:none;
+								color:black;
 							}
 							.menu div ul.menuAdmin li ul li a:hover {
 								background:white;
 								color:#333333;
+								background:#EEEEEE;
 							}
 						.menu div ul.menuAdmin li ul li ul {
 						    position: absolute;
-						    right: 148px;
-						    top: 0;
+						    right: 150px;
+						    top: -6px;
 						    opacity: 1;
 						}
 						
