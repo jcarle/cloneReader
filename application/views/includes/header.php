@@ -5,13 +5,13 @@ $CI->load->driver('cache', array('adapter' => 'file'));
 
 $userId = $this->session->userdata('userId');
 
-if (!$CI->cache->file->get('MENU_PROFILE_'.$userId)) {
+if (!is_array($CI->cache->file->get('MENU_PROFILE_'.$userId))) {
 	$CI->cache->file->save('MENU_PROFILE_'.$userId, $CI->Menu_Model->getMenu(MENU_PROFILE));	
 }
-if (!$CI->cache->file->get('MENU_PUBLIC_'.$userId)) {
+if (!is_array($CI->cache->file->get('MENU_PUBLIC_'.$userId))) {
 	$CI->cache->file->save('MENU_PUBLIC_'.$userId, $CI->Menu_Model->getMenu(MENU_PUBLIC));	
 }
-if (!$CI->cache->file->get('MENU_ADMIN_'.$userId)) {
+if (!is_array($CI->cache->file->get('MENU_ADMIN_'.$userId))) {
 	$CI->cache->file->save('MENU_ADMIN_'.$userId, $CI->Menu_Model->getMenu(MENU_ADMIN));	
 }
 

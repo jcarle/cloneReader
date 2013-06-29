@@ -91,8 +91,6 @@ class Login extends CI_Controller {
 
 		$row = $query->row();
 		
-		$this->Menu_Model->destroyMenuCache();
-		
 		$this->session->set_userdata(array(
 			'userId'  		=> $row->userId,
 		));		
@@ -109,8 +107,6 @@ class Login extends CI_Controller {
 				'result' 	=> 'error!' 
 			));
 		}
-		
-		$this->Menu_Model->destroyMenuCache();
 
 		$this->session->set_userdata(array(
 			'userId'  		=> $user->userId,

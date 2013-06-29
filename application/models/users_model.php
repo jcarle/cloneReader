@@ -117,6 +117,9 @@ class Users_Model extends CI_Model {
 				$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => $groupId));			
 			}		
 		}
+		
+		$this->Menu_Model->destroyMenuCache();
+		
 		return true;
 	}
 	

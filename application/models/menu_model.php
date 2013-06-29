@@ -66,6 +66,12 @@ class Menu_Model extends CI_Model {
 	
 	function destroyMenuCache() {
 		$this->load->driver('cache', array('adapter' => 'file'));
-		$this->cache->clean();
+
+		$cache = $this->cache->cache_info();
+		foreach ($cache as $key => $value) {
+			if (strrpos($key, 'MENU_') !== FALSE) {
+				$this->cache->delete($key);
+			}
+		}
 	}
 }
