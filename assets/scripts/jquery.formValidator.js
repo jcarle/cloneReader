@@ -1,30 +1,28 @@
-// TODO: renombrar esta classe
-
 ;(function($) {
 	var 
 		methods,
-		formValidator;
+		jForm;
 		
 	methods = {
 		init : function( options ) {
-			if ($(this).data('formValidator') == null) {
-				$(this).data('formValidator', new formValidator($(this), options));
+			if ($(this).data('jForm') == null) {
+				$(this).data('jForm', new jForm($(this), options));
 			}
 			
 			return $(this);
 		},
 		
 		showSubForm: function(controller) {
-			$(this).data('formValidator').showSubForm(controller);
+			$(this).data('jForm').showSubForm(controller);
 			return $(this);			
 		},
 
 		options: function(){
-			return $(this).data('formValidator').options;
+			return $(this).data('jForm').options;
 		}
 	};
 
-	$.fn.formValidator = function( method ) {
+	$.fn.jForm = function( method ) {
 		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -35,7 +33,7 @@
 		}  
 	}
 	
-	formValidator = function($form, options) {
+	jForm = function($form, options) {
 		this.$form 		= $form;
 		this.options 	= $.extend({
 			sendWithAjax: 	true,
@@ -96,7 +94,7 @@
 		, this));
 	}
 	
-	formValidator.prototype = {
+	jForm.prototype = {
 		initFields: function() {
 			for (var fieldName in this.options.fields){
 
@@ -218,7 +216,7 @@
 			var gallery = $('#gallery');
 			this.reloadGallery();
 			
-			$('#fileupload').data( { 'formValidator': this } )
+			$('#fileupload').data( { 'jForm': this } )
 			
 			$('.btnEditPhotos', gallery).click(
 					function () {
@@ -230,12 +228,11 @@
 							resizable: 	false, 
 							title: 		'Editar fotos',
 							close:		function(event, ui) {
-											$(this).data('formValidator').reloadGallery();
+											$(this).data('jForm').reloadGallery();
 										}
 							})
 					}
 				);
-							
 
 			$('#fileupload').fileupload( { autoUpload: true });
 		},
@@ -288,16 +285,16 @@
 					field.$input.html(result);
 					
 					$('a', field.$input)
-						.data( { formValidator: this })
+						.data( { jForm: this })
 						.click(
 							function() {
-								$(this).data('formValidator').showSubForm($(this).attr('href'), field); 
+								$(this).data('jForm').showSubForm($(this).attr('href'), field); 
 								return false;
 							}
 						);
 					
 					$('table tbody tr', field.$input)
-						.data( { formValidator: this })
+						.data( { jForm: this })
 						.each(
 							function (i, tr) {
 								$(tr).click(
@@ -305,7 +302,7 @@
 										if ($(this).attr('href') == null) {
 											return;
 										}
-										$(this).data('formValidator').showSubForm($(this).attr('href'), field); 
+										$(this).data('jForm').showSubForm($(this).attr('href'), field); 
 									}
 								);
 							}
@@ -326,7 +323,7 @@
 					$(result).appendTo($('body'));
 					
 					var $subform = $('#' + frmId);
-					var options = $subform.formValidator('options');
+					var options = $subform.jForm('options');
 					options.frmParentId = this;
 
 					$subform.dialog({  
@@ -355,7 +352,6 @@
 		},
 		
 		loadDropdown: function($field, value) {
-			
 			var controller = this.options.fields[$field.attr('name')].controller;
 			if (value != null) {
 				controller += '/' + value;
@@ -368,9 +364,11 @@
 				.done( $.proxy( 
 				function (result) {
 					$field.children().remove();
-					for (var id in result) {
-						$('<option />').attr('value', id).text(result[id]).appendTo($field);
+					for (var i=0; i<result.length; i++) {
+						$('<option />').attr('value', result[i]['id']).text(result[i]['value']).appendTo($field);
 					}
+					$field.sort();
+					$field.val(this.options.fields[$field.attr('name')].value);
 				}
 			, this));			
 		}

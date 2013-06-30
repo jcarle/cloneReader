@@ -132,7 +132,7 @@ function renderTree($aTree, $value){
 
 <script>
 $(document).ready(function() {
-	$('#<?php echo $form['frmId'] ?>').formValidator(<?php echo json_encode($form); ?>);
+	$('#<?php echo $form['frmId'] ?>').jForm(<?php echo json_encode($form); ?>);
 });	
 </script>
 

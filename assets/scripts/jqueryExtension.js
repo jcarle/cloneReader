@@ -348,7 +348,7 @@ $.extend({
 				$(result).appendTo($('body'));
 				
 				var $subform = $('#' + frmId);
-				var options = $subform.formValidator('options');
+				var options = $subform.jForm('options');
 				options.frmParentId = this;
 
 				$subform.dialog({  

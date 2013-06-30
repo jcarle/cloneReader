@@ -46,12 +46,12 @@ if ($view == 'includes/paginatedList') {
 	$CI->carabiner->js('jquery.paginatedList-1.0.js');
 }
 if ($view == 'includes/formValidation') {
-	$CI->carabiner->js('jquery.formValidator.js');
+	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
 } 
 if ($view == 'login') {
-	$CI->carabiner->js('jquery.formValidator.js');
+	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('loginFB.js');
 }
