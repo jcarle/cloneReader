@@ -79,7 +79,7 @@ class Menu extends CI_Controller {
 		}
 		
 		$this->load->view('includes/template', array(
-			'view'			=> 'includes/formValidation', 
+			'view'			=> 'includes/jForm', 
 			'title'			=> 'Editar menu',
 			'form'			=> $form
 		));		

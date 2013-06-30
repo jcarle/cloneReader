@@ -44,7 +44,7 @@ class Tags extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/formValidation', 
+			'view'		=> 'includes/jForm', 
 			'title'		=> 'Edit Tags',
 			'form'		=> $form	  
 		));		

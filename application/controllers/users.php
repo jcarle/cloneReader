@@ -105,7 +105,7 @@ class Users extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/formValidation', 
+			'view'		=> 'includes/jForm', 
 			'title'		=> 'Editar Usuarios',
 			'form'		=> $form,
 				  

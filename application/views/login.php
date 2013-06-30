@@ -1,5 +1,5 @@
 <?php
-$this->load->view('includes/formValidation');
+$this->load->view('includes/jForm');
 ?>
 
 <a id='fb-login' href='#' onclick='facebookLogin()' >

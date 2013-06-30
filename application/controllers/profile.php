@@ -82,7 +82,7 @@ class Profile extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/formValidation', 
+			'view'		=> 'includes/jForm', 
 			'title'		=> 'Edit Profile',
 			'form'		=> $form,
 				  

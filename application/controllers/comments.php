@@ -59,7 +59,7 @@ class Comments extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/formValidation', 
+			'view'		=> 'includes/jForm', 
 			'title'		=> 'Editar Comentarios',
 			'form'		=> $form,
 		));		
@@ -71,7 +71,7 @@ class Comments extends CI_Controller {
 		$form['isSubForm'] 	= true;
 		$form['title']		= ((int)$commentId < 1 ? 'Nuevo comentario' : 'Editar comentario');
 		
-		$this->load->view('includes/formValidation', array(
+		$this->load->view('includes/jForm', array(
 			'form'			=> $form,
 			'formAction'	=> base_url('comments/'.$entityName.'/edit/'.$commentId)
 		));			

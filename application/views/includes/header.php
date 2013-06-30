@@ -45,7 +45,7 @@ if (isset($aJs)) {
 if ($view == 'includes/paginatedList') { 
 	$CI->carabiner->js('jquery.paginatedList-1.0.js');
 }
-if ($view == 'includes/formValidation') {
+if ($view == 'includes/jForm') {
 	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
