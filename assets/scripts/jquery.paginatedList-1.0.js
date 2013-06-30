@@ -66,7 +66,7 @@ cn(aDelete);
 			, this))
 			.html('&#10006;')
 			.css( {
-					'left': $input.position().left + 3,
+					'left': $input.position().left + 6,
 					'top': 	$input.position().top + 6 
 				} )			
 

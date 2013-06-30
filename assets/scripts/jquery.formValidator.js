@@ -35,8 +35,8 @@
 		}  
 	}
 	
-	formValidator = function(form, options) {
-		this.form 		= $(form);
+	formValidator = function($form, options) {
+		this.$form 		= $form;
 		this.options 	= $.extend({
 			sendWithAjax: 	true,
 			fields:			[],
@@ -50,14 +50,14 @@
 			var urlList = $.utf8Decode();
 			
 			$('<a href="javascript:void(0);" class="btnBack">volver</a>')
-				.appendTo($(this.form))
+				.appendTo($(this.$form))
 				.click(function() {
 					$.goToUrl($.base64Decode($.url().param('urlList')));
 				}
 			);
 		}
 
-		this.form.submit($.proxy(
+		this.$form.submit($.proxy(
 			function() {
 				if ( !this.validate() ) {
 					return false;
@@ -66,8 +66,8 @@
 				if (this.options.sendWithAjax == true) {
 					$.ajax({
 						type: 	'post',
-						url: 	$(this.form).attr('action'),
-						data: 	$(this.form).serialize()
+						url: 	this.$form.attr('action'),
+						data: 	this.$form.serialize()
 					}).
 					done($.proxy(
 						function(response) {
@@ -76,7 +76,7 @@
 							}
 							
 							if (this.options.isSubForm == true) {
-								(this.form).dialog('close');
+								this.$form.dialog('close');
 								return;
 							}							
 							if ($.url().param('urlList') != null) {
@@ -100,36 +100,43 @@
 		initFields: function() {
 			for (var fieldName in this.options.fields){
 
-				var field = this.options.fields[fieldName];
-				field.name 	= fieldName;
-				field.input	= $('*[name="' + field['name'] + '"]', this.form);
+				var field 		= this.options.fields[fieldName];
+				field.name 		= fieldName;
+				field.$input	= $('*[name="' + field['name'] + '"]', this.$form);
 				
 				if (field['type'] != null) {
 					switch (field['type']) {
 						case 'autocomplete':
-							$(field.input)
+							field.$input
 								.data( { 'field': field })
 								.autocomplete( {
 									source: 	field['source'],
 									minLength: 	1,
 									select: 	function( event, ui ) {
-										$('*[name=' + $(event.target).data('field')['fieldId'] + ']', this.form).
+										$('*[name=' + $(event.target).data('field')['fieldId'] + ']', this.$form).
 											val(ui.item.id)
 											.change();
 									}								
 							});
 							break;
 						case 'date':	
-							$(field.input).datepicker({ dateFormat: 'yy-mm-dd' });
+							field.$input.datepicker({ dateFormat: 'yy-mm-dd',  changeMonth: true, changeYear: true });
 							break;
 						case 'datetime':
-							$(field.input).addClass('datetime').datetimepicker({ dateFormat: 'yy-mm-dd' });
+							field.$input.addClass('datetime').datetimepicker({ dateFormat: 'yy-mm-dd' });
 							break;						
 						case 'gallery':
 							this.initFileupload(field);
 							break;
 						case 'subform':
 							this.loadSubForm(field);
+							break;
+						case 'raty':
+							field.$input.raty( {
+				 					score: 		field['value'],
+				  					scoreName: 	field['name'],			
+									path: 		base_url + 'assets/images/',
+								});						
 							break;
 					}
 				}
@@ -146,14 +153,14 @@
 						var subscribe = field.subscribe[i];
 						$(this.getFieldByName(subscribe.field)).bind(
 							subscribe.event,
-							{ input: field.input, callback: subscribe.callback, arguments: subscribe.arguments, applyCallback: subscribe.applyCallback }, 
+							{ $input: field.$input, callback: subscribe.callback, arguments: subscribe.arguments, applyCallback: subscribe.applyCallback }, 
 								$.proxy( 
 									function(event) {
 										if (event.data.applyCallback) {
 											if (eval(event.data.applyCallback) == false) { return; }
 										}
 										
-										var arguments = [event.data.input];
+										var arguments = [event.data.$input];
 										if (event.data.arguments) {
 											for (var i = 0; i<event.data.arguments.length; i++) {
 												arguments.push(eval(event.data.arguments[i]));
@@ -170,6 +177,10 @@
 									}
 								, this)
 						);
+						
+						if (subscribe.runOnInit == true) {
+							$(this.getFieldByName(subscribe.field)).trigger(subscribe.event);							
+						}
 					}
 				}
 			}
@@ -177,14 +188,14 @@
 		
 		validate: function() {
 			for (var i = 0; i<this.options.rules.length; i++){
-				var field = this.options.rules[i];
-				var rules = field['rules'].split('|');
-				var input = this.options.fields[field.field].input;
+				var field 	= this.options.rules[i];
+				var rules 	= field['rules'].split('|');
+				var $input 	= this.options.fields[field.field].$input;
 				
 				for (var z=0; z<rules.length; z++) {
 					if (typeof this[rules[z]] === 'function') {
-						if (this[rules[z]](input) == false) {
-							$(input).alert($.sprintf(this.options.messages[rules[z]], field['label']));
+						if (this[rules[z]]($input) == false) {
+							$input.alert($.sprintf(this.options.messages[rules[z]], field['label']));
 							return false;
 						}
 					}
@@ -194,12 +205,12 @@
 			return true;
 		},
 		
-		required: function(input) {
-			return ( $(input).val().trim() != '');
+		required: function($input) {
+			return ( $input.val().trim() != '');
 		},
 		
-		valid_email: function(input){
-			return $.validateEmail($(input).val());
+		valid_email: function($input){
+			return $.validateEmail($input.val());
 		},
 		
 		initFileupload: function(field) {	
@@ -273,10 +284,10 @@
 				})
 				.done( $.proxy( 
 				function (result) {
-					$(field.input).children().remove();
-					$(field.input).html(result);
+					field.$input.children().remove();
+					field.$input.html(result);
 					
-					$('a', $(field.input))
+					$('a', field.$input)
 						.data( { formValidator: this })
 						.click(
 							function() {
@@ -285,7 +296,7 @@
 							}
 						);
 					
-					$('table tbody tr', $(field.input))
+					$('table tbody tr', field.$input)
 						.data( { formValidator: this })
 						.each(
 							function (i, tr) {
@@ -336,11 +347,32 @@
 		},
 		
 		getFieldByName: function(fieldName){
-			return $('*[name="' + fieldName + '"]', this.form);
+			return $('*[name="' + fieldName + '"]', this.$form);
 		},
 		
-		toogleField: function(field, value) { // TODO: implementar los otros metodos! ( show, hide, etc)
-			$(field).parent().toggle(value);
+		toogleField: function($field, value) { // TODO: implementar los otros metodos! ( show, hide, etc)
+			$field.parent().toggle(value);
+		},
+		
+		loadDropdown: function($field, value) {
+			
+			var controller = this.options.fields[$field.attr('name')].controller;
+			if (value != null) {
+				controller += '/' + value;
+			}
+			
+			$.ajax( {
+				type: 	'get', 
+				url:	controller,
+				})
+				.done( $.proxy( 
+				function (result) {
+					$field.children().remove();
+					for (var id in result) {
+						$('<option />').attr('value', id).text(result[id]).appendTo($field);
+					}
+				}
+			, this));			
 		}
 	}
 })($);

@@ -48,6 +48,7 @@ if ($view == 'includes/paginatedList') {
 if ($view == 'includes/formValidation') {
 	$CI->carabiner->js('jquery.formValidator.js');
 	$CI->carabiner->js('jquery.url.js');
+	$CI->carabiner->js('jquery.raty.js');
 } 
 if ($view == 'login') {
 	$CI->carabiner->js('jquery.formValidator.js');

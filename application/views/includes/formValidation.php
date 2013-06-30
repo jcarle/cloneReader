@@ -45,7 +45,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'dropdown':
 			$aFields[] = '<fieldset>'
 				.form_label($field['label'])
-				.form_dropdown($name, $field['source'], $field['value'])
+				.form_dropdown($name, element('source', $field, array()), $field['value'])
 				.'</fieldset>';
 			break;						
 		case 'groupCheckBox':
@@ -96,6 +96,12 @@ foreach ($form['fields'] as $name => $field) {
 		case 'link':
 			$aFields[] = '<fieldset>'.anchor($field['value'], $field['label'], array('class' => 'link')).'</fieldset>';
 			break;
+		case 'raty':
+			$aFields[] = '<fieldset>'
+					.form_label($field['label']).
+					'<div class="raty" name="'.$name.'" />
+				</fieldset>';		
+			break;		
 	}	
 }
 

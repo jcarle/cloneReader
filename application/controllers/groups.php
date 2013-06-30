@@ -51,7 +51,7 @@ class Groups extends CI_Controller {
 				),
 				'controllers[]' => array(
 					'type'		=> 'groupCheckBox',
-					'label'		=> 'Funciones',
+					'label'		=> 'Controllers',
 					'source'	=> array_to_select($this->Controllers_Model->select(true)->result_array(), 'controllerId', 'controllerName'), 
 					'value'		=> $data['controllers']
 				)

@@ -144,12 +144,12 @@ option {
 		margin: 0 10px 0 0;
 		min-height: 65px;
 		width:auto;
-	    overflow: hidden;
+		overflow: hidden;
 	}
 		#header div .logo {
 			background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 			background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
-		    box-shadow: 0 0 2px #4397F3 inset;
+			box-shadow: 0 0 2px #4397F3 inset;
 			border: 1px solid #CCCCCC;
 			border-radius: 5px 5px 5px 5px;
 			color: #333;
@@ -159,39 +159,39 @@ option {
 			line-height: 50px;
 			padding: 0 10px;
 			position: absolute;
-		    text-shadow:0px 2px 1px white;
+			text-shadow:0px 2px 1px white;
 			top: 7px;
 			width: 130px;
-		    margin: 0 0 0 10px;
+			margin: 0 0 0 10px;
 			z-index: 9;
 		}
 			#header div .logo span {
-			    background: url(../images/beta.icon.gif) no-repeat scroll 0 0 transparent;
-			    height: 45px;
-			    position: absolute;
-			    right: 0;
-			    top: 0;
-			    width: 45px;
+				background: url(../images/beta.icon.gif) no-repeat scroll 0 0 transparent;
+				height: 45px;
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: 45px;
 			}
 		#header div .search {
-		    border: 1px solid #CCCCCC;
-		    padding: 0px;
-		    width: 400px;
-	        line-height: 25px;
-	        position: absolute;
-	        right:0; top:30px;
+			border: 1px solid #CCCCCC;
+			padding: 0px;
+			width: 400px;
+			line-height: 25px;
+			position: absolute;
+			right:0; top:30px;
 		}
 			#header div .search span {
-			    background: url(../images/glyphicons-halflings.png) no-repeat scroll -47px 3px transparent;
-			    height: 20px;
-			    position: absolute;
-			    width: 20px;	
-			    left: 3px; top: 2px;
+				background: url(../images/glyphicons-halflings.png) no-repeat scroll -47px 3px transparent;
+				height: 20px;
+				position: absolute;
+				width: 20px;	
+				left: 3px; top: 2px;
 			}
 			#header div .search input {
-			    border: 0 none;
-			    margin: 0 0 0 20px;
-			    width: 300px;
+				border: 0 none;
+				margin: 0 0 0 20px;
+				width: 300px;
 			}		
 			#header div .search input[type=text]:focus {
 				background: white !important;
@@ -200,15 +200,15 @@ option {
 			#header div .search input.btnSearch {
 				background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 				background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-			    border-radius: 0 0 0 0;
-			    display: inline-block;
-			    margin: 0;
-			    padding: 0px 10px;
-			    width: 70px; height:25px;
+				border-radius: 0 0 0 0;
+				display: inline-block;
+				margin: 0;
+				padding: 0px 10px;
+				width: 70px; height:25px;
 				line-height: 25px;
 				position:absolute;
 				right: 0; top:0;
-			    border-left: 1px solid #CCCCCC;
+				border-left: 1px solid #CCCCCC;
 			}
 			#header div .search input.btnSearch:active,
 			#header div .search input.btnSearch:focus {
@@ -294,9 +294,9 @@ option {
 					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 				}
 			.menu div ul.menuAdmin {
-			    position: absolute;
-			    right: 8px;
-			    top: 0;				
+				position: absolute;
+				right: 8px;
+				top: 0;				
 			}
 				.menu div ul.menuAdmin > li:first-child {
 					background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
@@ -327,14 +327,14 @@ option {
 					box-shadow: 0px 0px 4px #CCC inset !important;
 				}	
 					.menu div ul.menuAdmin > li:first-child > a {
-					    background: url(../images/icons_black.png) no-repeat scroll 0 -472px transparent;
-					    display: block;
-					    height: 21px;
-					    margin: 2px auto;
-					    opacity: 0.55;
-					    padding: 0;
-					    width: 21px;
-					    text-indent: -9999px;
+						background: url(../images/icons_black.png) no-repeat scroll 0 -472px transparent;
+						display: block;
+						height: 21px;
+						margin: 2px auto;
+						opacity: 0.55;
+						padding: 0;
+						width: 21px;
+						text-indent: -9999px;
 					}
 					.menu div ul.menuAdmin > li.checked > a,
 					.menu div ul.menuAdmin > li:first-child > a:hover {
@@ -346,15 +346,15 @@ option {
 					.menu div ul.menuAdmin li a {}
 					.menu div ul.menuAdmin li ul {
 						display: none;
-					    background: white;
-					    border: 1px solid #CCCCCC;
-					    border-radius: 5px 5px;
+						background: white;
+						border: 1px solid #CCCCCC;
+						border-radius: 5px 5px;
 						box-shadow:0 5px 5px gray;
-					    top: 1px; right: 125px;
-					    text-align: left;
-					    width: 150px;
-					    z-index: 9;			
-					    padding:5px 0;
+						top: 1px; right: 125px;
+						text-align: left;
+						width: 150px;
+						z-index: 9;			
+						padding:5px 0;
 					}			
 						.menu div ul.menuAdmin li ul li {
 							float:none;
@@ -372,17 +372,17 @@ option {
 								background:#EEEEEE;
 							}
 						.menu div ul.menuAdmin li ul li ul {
-						    position: absolute;
-						    right: 150px;
-						    top: -6px;
-						    opacity: 1;
+							position: absolute;
+							right: 150px;
+							top: -6px;
+							opacity: 1;
 						}
 						
 .content {
-    background: none repeat scroll 0 0 white;
-    margin: 0 auto;
-    padding: 0;
-    width: 1024px;	
+	background: none repeat scroll 0 0 white;
+	margin: 0 auto;
+	padding: 0;
+	width: 1024px;	
 	border-left: 1px solid #CCCCCC;
 	border-right: 1px solid #CCCCCC;
 	overflow: auto;
@@ -396,11 +396,11 @@ option {
 #footer {
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-    border-top: 1px solid #CCC;
-    border-bottom: 1px solid #CCC;
-    height: 25px; line-height:25px;
-    margin: 0;
-    padding: 0px 10px;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	height: 25px; line-height:25px;
+	margin: 0;
+	padding: 0px 10px;
 }
 
 
@@ -450,8 +450,8 @@ option {
 			width: 226px;
 			border-radius: 3px;
 			border: 1px #CCC solid;
-		    height: 25px;
-		    line-height: 25px;			
+			height: 25px;
+			line-height: 25px;			
 		}
 	#frmLogin input.btnSubmit {
 		margin: 5px 0;
@@ -460,10 +460,10 @@ option {
 	}	
 
 #fb-login {
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    width: 280px;
+	display: block;
+	margin: 0 auto;
+	position: relative;
+	width: 280px;
 }
 	#fb-login img {
 		display: block;
@@ -509,7 +509,7 @@ option {
 					color:white;
 				}
 					.paginatedList table thead tr.tblFilter td input[type="text"] {
-						padding: 2px 2px 2px 20px;
+						padding: 2px 2px 2px 23px;
 					}
 					.paginatedList table thead tr.tblFilter td .filterClear {
 						background:-webkit-linear-gradient(#F9F9F9, #E3E3E3);
@@ -541,6 +541,10 @@ option {
 					.paginatedList table thead tr td, 
 					.paginatedList table thead tr td a  {
 						color:white;
+					}
+					.paginatedList table thead tr td:first-child,
+					.paginatedList table thead tr td:nth-child(2) {
+						width:20px;
 					}
 		.paginatedList table tbody tr {
 			background: white;
@@ -629,28 +633,39 @@ option {
 		.frmEdit fieldset select,
 		.frmEdit fieldset .groupCheckBox,
 		.frmEdit fieldset #gallery,
-		.frmEdit fieldset .link {
+		.frmEdit fieldset .link,
+		.frmEdit fieldset .raty {
 			display: inline-block;
 			width: 700px;
 			border-radius: 3px;
 			border: 1px #CCC solid;
 			height:25px; line-height:25px;
 		}
-		.frmEdit fieldset .link {
-		    border: 0 none;
-		    margin: 0 0 0 155px;
-		    width: auto;
+		.frmEdit fieldset textarea {
+			height:70px;
 		}
+		.frmEdit fieldset select {
+    		padding: 4px 0 0 4px;
+    		width: 710px;
+    	}		
+		.frmEdit fieldset .link {
+			border: 0 none;
+			margin: 0 0 0 155px;
+			width: auto;
+		}
+		.frmEdit fieldset .raty {
+			border: 0 none;
+		}			
 		.frmEdit fieldset input[type=checkbox] {
 			width: auto;
 		}
 		.frmEdit fieldset input.hasDatepicker {
-			background: url(../images/calendar.gif) no-repeat scroll 75px 2px transparent;
+			background: url(../images/calendar.gif) no-repeat scroll 75px 6px transparent;
 			width: 87px;
 		}
 		.frmEdit fieldset input.datetime {
-    		background: url(../images/calendar.gif) no-repeat scroll 110px 2px transparent;
-    		width: 120px;			
+			background: url(../images/calendar.gif) no-repeat scroll 110px 6px transparent;
+			width: 120px;			
 		}
 		.frmEdit fieldset .groupCheckBox {
 			max-height: 300px;
@@ -767,3 +782,11 @@ option {
 	
 
 
+.ui-datepicker select {
+	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+   	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
+	border: 1px solid #CCCCCC;
+	border-radius: 3px 3px 3px 3px;
+	height: auto;
+	padding: 2px 0;	
+}
