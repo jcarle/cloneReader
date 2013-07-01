@@ -41,7 +41,7 @@ class Profile extends CI_Controller {
 					'type'		=> 'dropdown',
 					'label'		=> 'País',
 					'value'		=> element('countryId', $data),
-					'source'	=> array_to_select($this->Countries_Model->select()->result_array(), 'countryId', 'countryName')
+					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
 				),
 			)
 		);

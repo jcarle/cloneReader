@@ -16,7 +16,7 @@ class Controllers_Model extends CI_Model {
 		 	$query->where('controllerActive', true);
 		 }
 
-		return $query->get('controllers');			
+		return $query->get('controllers')->return_array();			
 	}	
 
 	function get($controllerId){

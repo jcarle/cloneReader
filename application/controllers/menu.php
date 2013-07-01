@@ -42,7 +42,7 @@ class Menu extends CI_Controller {
 				'controllerId' => array(
 					'type'		=> 'dropdown',
 					'label'		=> 'Controller', 
-					'source'	=> array('0' => '-- seleccione --') + array_to_select($this->Controllers_Model->select(true)->result_array(), 'controllerId', 'controllerName'), 
+					'source'	=> array('0' => '-- seleccione --') + array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
 					'value'		=> element('controllerId', $data)
 				),
 				'menuParentId' => array(

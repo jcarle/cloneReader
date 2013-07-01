@@ -10,7 +10,7 @@ class Groups_Model extends CI_Model {
 	}
 	
 	function select(){
-		return $this->db->order_by('groupName')->get('groups');
+		return $this->db->order_by('groupName')->order_by('groupName')->get('groups')->result_array();
 	}	
 			
 	function get($groupId){
