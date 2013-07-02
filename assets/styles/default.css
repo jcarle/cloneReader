@@ -268,17 +268,17 @@ option {
 		width: auto;		
 		height: 30px;		
 	}
-		.menu div ul {
+		.menu div ul.menuPublic {
 			list-style: none outside none;
 		}
-			.menu div ul li {
+			.menu div ul.menuPublic li {
 				float: left;
 				border-left:1px white solid;
 			}
-			.menu div ul li:last-child {
+			.menu div ul.menuPublic li:last-child {
 				border-right:1px white solid;
 			}
-				.menu div ul li a {
+				.menu div ul.menuPublic li a {
 					clear: both;
 					color: white;
 					display: block;
@@ -289,68 +289,61 @@ option {
 					text-decoration: none;
 					text-shadow: -1px 1px 0 #333333;
 				}
-				.menu div ul li a:hover {
+				.menu div ul.menuPublic li a:hover {
 					background: -moz-linear-gradient(center top , #3176CB, #4397F3) repeat scroll 0 0 transparent;
 					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 				}
+		.menu div ul.menuAdmin {
+			list-style: none outside none;
+		}				
 			.menu div ul.menuAdmin {
 				position: absolute;
-				right: 8px;
+				right: 0px;
 				top: 0;				
 			}
 				.menu div ul.menuAdmin > li:first-child {
-					background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-					background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-					border-color: #CCCCCC #BBBBBB #A0A0A0;
-					border-left: 1px solid #BBBBBB;
-					border-radius: 5px;
-					border-right: 1px solid #BBBBBB;
-					border-style: solid;
-					border-width: 1px;
 					cursor: pointer;
-					font-size: 12px;
 					outline: medium none;
-					text-align: center;
-					text-shadow:0 1px 0 white;
-					width:26px; height:26px;
-					margin:1px 5px 1px 0 ;
+					margin:1px 0px;
+					border: 0;
+					text-align: right;
 					-moz-user-select: none;
 					-khtml-user-select: none;
 					-webkit-user-select: none;
 					user-select: none;								
 				}
-				.menu div ul.menuAdmin > li:first-child:hover {
-					box-shadow: 0px 0px 4px #CCC;
-				}
-				.menu div ul.menuAdmin > li.checked,
-				.menu div ul.menuAdmin > li:first-child:active {
-					box-shadow: 0px 0px 4px #CCC inset !important;
-				}	
 					.menu div ul.menuAdmin > li:first-child > a {
-						background: url(../images/icons_black.png) no-repeat scroll 0 -472px transparent;
-						display: block;
-						height: 21px;
-						margin: 2px auto;
-						opacity: 0.55;
-						padding: 0;
-						width: 21px;
-						text-indent: -9999px;
+					    line-height: 1px;
+						padding: 2px 6px;
+						display: inline-block;
 					}
-					.menu div ul.menuAdmin > li.checked > a,
-					.menu div ul.menuAdmin > li:first-child > a:hover {
-						opacity: 0.8;
-					}
+						.menu div ul.menuAdmin > li:first-child > a i {
+							font-size: 20px;
+							font-weight: normal;
+							text-shadow: 2px 2px 3px white;
+							opacity: 0.55;
+						}
 				.menu div ul.menuAdmin li {
 					cursor:pointer;
 				}
-					.menu div ul.menuAdmin li a {}
+					.menu div ul.menuAdmin li a {
+						clear: both;
+						color: white;
+						display: block;
+						font-family: arial;
+						font-weight: bold;
+						line-height: 30px;
+						padding: 0 10px;
+						text-decoration: none;
+						text-shadow: -1px 1px 0 #333333;						
+					}
 					.menu div ul.menuAdmin li ul {
 						display: none;
 						background: white;
 						border: 1px solid #CCCCCC;
 						border-radius: 5px 5px;
 						box-shadow:0 5px 5px gray;
-						top: 1px; right: 125px;
+						top: 1px; right: 0px;
 						text-align: left;
 						width: 150px;
 						z-index: 9;			
@@ -481,7 +474,7 @@ option {
 
 	.paginatedList .btnAdd {
 		color: #3176CB;
-		display: block;
+		display: inline-block;
 		margin: 0 0 10px;
 	}
 	.paginatedList table {

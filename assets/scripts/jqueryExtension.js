@@ -311,6 +311,10 @@ $.extend({
 			}
 		);		
 		
+		$('.menu div ul.menuAdmin li a:first')
+			.html('<i class="icon-gear" />')
+			.addClass('btn btn-mini');
+		
 		$('.menu div ul.menuAdmin li:first')
 			.click(
 				function (event){
@@ -324,7 +328,20 @@ $.extend({
 					$(this).find('ul').first().fadeOut();
 				}
 			);
-			
+		
+		$('.menu div ul.menuAdmin li ul li').hover(
+				function (event){
+					$(this).find('a').first().stop().animate({
+					'color': '#333333',
+					'background-color': '#EEEEEE' }, 'slow');
+				},
+				function (event){
+					$(this).find('a').first().stop().animate({
+						'color': '#333333',
+						'background-color': '#FFF' }, 'slow');
+				}
+			);									
+	
 		$('.menu div ul.menuAdmin li ul li:has(ul)')
 			.hover(
 				function (event){

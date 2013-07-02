@@ -264,7 +264,7 @@
 						box-shadow:0 0 4px #CCCCCC inset;
 						cursor: pointer;
 						font-size: 12px;
-						height: 12px;
+						height: 12px; min-height: 12px;
 						line-height: 12px;
 						text-align: center;
 						top: 5px;
