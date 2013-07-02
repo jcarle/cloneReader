@@ -57,9 +57,12 @@ if ($view == 'login') {
 }
 
 
-
-$CI->carabiner->css('default.css');
 $CI->carabiner->css('jquery-ui-1.8.22.custom.css');
+$CI->carabiner->css('bootstrap.min.css');
+$CI->carabiner->css('font-awesome.css');
+$CI->carabiner->css('default.css');
+
+
 if (isset($aCss)) {
 	foreach ($aCss as $css) {
 		$CI->carabiner->css($css);
@@ -100,7 +103,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');
 	</div>
 	<div class="menu">
 		<div>
-<?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId)); ?>
+<?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
 <?php echo renderMenu($CI->cache->file->get('MENU_ADMIN_'.$userId), 'menuAdmin'); ?>
 		</div>
 	</div>	
@@ -108,6 +111,10 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');
 
 <?php
 function renderMenu($aMenu, $className = null){
+	if (empty($aMenu)) {
+		return;
+	}
+	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
 		if ($aMenu[$i]['url'] != null) {
@@ -115,7 +122,7 @@ function renderMenu($aMenu, $className = null){
 		}
 		else {
 			$sTmp .= '	<li><a>'.$aMenu[$i]['label'].'</a>';
-		} 
+		} 	
 		
 		if (count($aMenu[$i]['childs']) > 0) {			
 			$sTmp .= renderMenu($aMenu[$i]['childs']);
