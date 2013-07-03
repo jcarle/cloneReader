@@ -1,7 +1,6 @@
 <!-- TODO: tratar de poner los includes en el header de la page! -->
 <script type="text/javascript" src="<?php echo base_url();?>js/tmpl.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>js/load-image.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>js/bootstrap-image-gallery.min.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.min.css" />

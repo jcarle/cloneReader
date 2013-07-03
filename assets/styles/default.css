@@ -177,6 +177,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	}
 		.menu div ul.menuPublic {
 			list-style: none outside none;
+			margin: 0;
+			position: relative;
 		}
 			.menu div ul.menuPublic li {
 				float: left;
@@ -257,6 +259,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 							float:none;
 							display:block;
 							border:0;
+							position:relative;
 						}
 							.menu div ul.menuAdmin li ul li a {
 								font-weight:normal;
@@ -406,6 +409,12 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 				.paginatedList table thead tr td:nth-child(2) {
 					width:20px;
 				}
+			.paginatedList table tbody tr {
+				cursor: pointer;
+			}
+				.paginatedList table tbody tr td:first-child {
+					cursor: default;
+				} 
 			.paginatedList table tfoot {
 				background: -moz-linear-gradient(top center, #FFFFFF, #CCC) repeat scroll 0 0 transparent;
 				background: -webkit-linear-gradient(white, #CCC);

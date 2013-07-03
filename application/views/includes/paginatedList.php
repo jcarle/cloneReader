@@ -25,10 +25,7 @@
 				</td>
 <?php 
 foreach ($fields as $field) {
-	echo '		<td class="sortAsc">'
-					.$field
-					//.anchor('#href', $field)
-				.'</td>';
+	echo '		<td>'.$field.'</td>';
 } 
 ?>				
 			</tr>
