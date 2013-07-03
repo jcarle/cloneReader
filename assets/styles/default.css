@@ -392,6 +392,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	.paginatedList table {
 		border: 1px solid #BBBBBB;
 		box-shadow: 2px 2px 4px #777777;
+		position:relative;
 	}
 		.paginatedList table thead {
 			background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
@@ -430,126 +431,120 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 					.paginatedList table tfoot tr td span {
 						color:white;
 					}
-					.paginatedList table tfoot tr td div {
-						position:absolute;
-						bottom:4px; right:5px;
-						border:0px #000000 solid;
+					.paginatedList table tfoot tr td .pagination {
+						margin:0;
+						float:right;
 					}
-							.paginatedList table tfoot tr td div a {
-								font-weight: normal;
-								padding:0px 4px 0px 4px;
-								color:white;
-							}
-							.paginatedList table tfoot tr td div a.currentPage {
-								font-weight: bold;
-							}
+						.paginatedList table tfoot tr td .pagination ul {
+							display: inline;
+						}
 
 
-.frmEdit {
+.jForm {
 	border: 1px solid #CCCCCC;
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 2px 2px 6px gray;
 	margin:20px 10px 20px 10px;
 }
-.ui-dialog .frmEdit {
+.ui-dialog .jForm {
 	border: 0 none !important;
 	border-radius: 0 0 0 0;
 	box-shadow: 0 0 0 white;
 	margin: 0;
 	padding: 0 0 35px !important;
 }
-	.frmEdit .btnBack {
+	.jForm .btnBack {
 		color: #3176CB;
 		left: 0;
 		position: absolute;
 		top: -23px;		
 	}
-	.frmEdit fieldset {
+	.jForm fieldset {
 		margin: 5px 0 0;
 		border:0;
 	}
-		.frmEdit fieldset label {
+		.jForm fieldset label {
 			display: inline-block;
 			margin: 0px 0 0 10px;
 			width: 250px;
 			vertical-align: top;
 			height:25px; line-height:25px;
 		}
-		.frmEdit fieldset input,
-		.frmEdit fieldset textarea,
-		.frmEdit fieldset select,
-		.frmEdit fieldset .groupCheckBox,
-		.frmEdit fieldset #gallery,
-		.frmEdit fieldset .link,
-		.frmEdit fieldset .raty {
+		.jForm fieldset input,
+		.jForm fieldset textarea,
+		.jForm fieldset select,
+		.jForm fieldset .groupCheckBox,
+		.jForm fieldset #gallery,
+		.jForm fieldset .link,
+		.jForm fieldset .raty {
 			display: inline-block;
 			width: 700px;
 			border-radius: 3px;
 			border: 1px #CCC solid;
 			height:25px; line-height:25px;
 		}
-		.frmEdit fieldset textarea {
+		.jForm fieldset textarea {
 			height:70px;
 		}
-		.frmEdit fieldset select {
+		.jForm fieldset select {
     		padding: 4px 0 0 4px;
     		width: 710px;
     	}		
-		.frmEdit fieldset .link {
+		.jForm fieldset .link {
 			border: 0 none;
 			margin: 0 0 0 155px;
 			width: auto;
 		}
-		.frmEdit fieldset .raty {
+		.jForm fieldset .raty {
 			border: 0 none;
 		}			
-		.frmEdit fieldset input[type=checkbox] {
+		.jForm fieldset input[type=checkbox] {
 			width: auto;
 		}
-		.frmEdit fieldset input.hasDatepicker {
+		.jForm fieldset input.hasDatepicker {
 			background: url(../images/calendar.gif) no-repeat scroll 75px 6px transparent;
 			width: 87px;
 		}
-		.frmEdit fieldset input.datetime {
+		.jForm fieldset input.datetime {
 			background: url(../images/calendar.gif) no-repeat scroll 110px 6px transparent;
 			width: 120px;			
 		}
-		.frmEdit fieldset .groupCheckBox {
+		.jForm fieldset .groupCheckBox {
 			max-height: 300px;
 			list-style: none outside none;
 			overflow: auto;
 			padding: 0;
 			height:auto;
 		}
-			.frmEdit fieldset .groupCheckBox li {
+			.jForm fieldset .groupCheckBox li {
 				border-bottom: 1px solid #CCCCCC;	
 			}
-			.frmEdit fieldset .groupCheckBox li:last-child {
+			.jForm fieldset .groupCheckBox li:last-child {
 				border:0;
 			}
-				.frmEdit fieldset .groupCheckBox li input {
+				.jForm fieldset .groupCheckBox li input {
 					width: auto;
 				}
-		.frmEdit fieldset.tree ul:first-child {
+		.jForm fieldset.tree ul:first-child {
 			height: 300px;
 			overflow: auto;
 			border: 1px solid #CCCCCC;
 			border-radius: 6px;
 		}		
-		.frmEdit fieldset.tree ul {
+		.jForm fieldset.tree ul {
 			list-style: inside;
 			margin: 4px 10px;
 			padding: 0 10px;
 		}				
-			.frmEdit fieldset.tree ul li {
+			.jForm fieldset.tree ul li {
 			}
-				.frmEdit fieldset.tree ul li a {
+				.jForm fieldset.tree ul li a {
 					color: #3176CB;
 				}
-				.frmEdit fieldset.tree ul li a.selected {
+				.jForm fieldset.tree ul li a.selected {
 					font-weight: bold;	
 				}
-			.frmEdit fieldset #gallery {
+			.jForm fieldset #gallery {
 				background: none repeat scroll 0 0 white;
 				border: 1px solid #CCCCCC;
 				border-radius: 5px 5px 5px 5px;
@@ -557,7 +552,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 				min-height:30px;
 				box-shadow:2px 2px 4px #777777;
 			}
-				.frmEdit fieldset #gallery .btnEditPhotos {
+				.jForm fieldset #gallery .btnEditPhotos {
 					cursor: pointer;
 					display: block;
 					float: none;
@@ -565,17 +560,17 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 					padding: 2px 8px;
 					width: auto;
 				}			
-				.frmEdit fieldset #gallery a {
+				.jForm fieldset #gallery a {
 					border-radius: 5px 5px 5px 5px;
 					border: 1px solid #D6D6D6;		
 					margin:5px 15px; padding:3px;
 					float:left;					
 				}
-					.frmEdit fieldset #gallery a img {
+					.jForm fieldset #gallery a img {
 						max-width: none;
 					}
-					.frmEdit fieldset #gallery a  > img,
-					.frmEdit fieldset #gallery a  > .imgCenterFrame {
+					.jForm fieldset #gallery a  > img,
+					.jForm fieldset #gallery a  > .imgCenterFrame {
 						background: url(../images/loading.gif) no-repeat scroll center center white;
 						width: 100px;
 						height: 100px;
@@ -583,14 +578,14 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 						border: 1px solid #D6D6D6;		
 						display:none;
 					}
-					.frmEdit fieldset .subform {
+					.jForm fieldset .subform {
 						display: inline-block;
 						width: 710px;
 					}
-						.frmEdit fieldset .subform a {
+						.jForm fieldset .subform a {
 							color:#3176CB;
 						}
-						.frmEdit fieldset .subform table {
+						.jForm fieldset .subform table {
 							border: 1px solid #BBBBBB;
 							border-spacing: 0;
 							box-shadow: 2px 2px 4px #777777;
@@ -598,30 +593,30 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 							width: 100%;
 							border-collapse: separate;
 						}
-							.frmEdit fieldset .subform table tr td {
+							.jForm fieldset .subform table tr td {
 								padding:3px;
 							}
-							.frmEdit fieldset .subform table thead {
+							.jForm fieldset .subform table thead {
 								background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
 								background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 								font-weight: bold;
 								color: white;
 								height:20px;
 							}
-								.frmEdit fieldset .subform table thead tr {}
-									.frmEdit fieldset .subform table thead tr td, 
-									.frmEdit fieldset .subform table thead tr td a  {
+								.jForm fieldset .subform table thead tr {}
+									.jForm fieldset .subform table thead tr td, 
+									.jForm fieldset .subform table thead tr td a  {
 										color:white;
 									}
-/*							.frmEdit fieldset .subform table tbody tr { }
-							.frmEdit fieldset .subform table tbody tr:hover {
+/*							.jForm fieldset .subform table tbody tr { }
+							.jForm fieldset .subform table tbody tr:hover {
 								background:#FFFFCC;
 							}
-								.frmEdit fieldset .subform table tbody tr td {
+								.jForm fieldset .subform table tbody tr td {
 									border-top:1px #ccc solid;
 									cursor: pointer;
 								}*/
-	.frmEdit input.btnSubmit {
+	.jForm input.btnSubmit {
 		margin: 5px 0;
 		position: absolute;
 		right: 5px;

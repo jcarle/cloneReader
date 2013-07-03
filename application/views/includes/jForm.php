@@ -2,7 +2,7 @@
 if (!isset($formAction)) {
 	$formAction = base_url().$this->uri->uri_string(); 
 }
-echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'class' => 'frmEdit')); 
+echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm')); 
 
 $this->load->view('includes/formError'); 
 

@@ -17,7 +17,7 @@
 		</fieldset>
 	</form>
 				
-	<table class="table table-hover">
+	<table class="table table-hover table-condensed">
 		<thead>
 			<tr>
 				<td>
@@ -60,7 +60,8 @@ foreach ($query->result() as $row) {
 						Delete
 					</a>
 					<span><?php echo $query->foundRows; ?> rows</span>
-					<div class="divPaginacion">
+					<div class="pagination pagination-small pagination-right">
+						<ul>
 <?php
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
@@ -73,21 +74,24 @@ $this->pagination->initialize(array(
 	'page_query_string'		=> true,
 	'use_page_numbers'		=> true,
 	'query_string_segment' 	=> 'page',
-	'first_tag_close'		=> '',
-	'last_tag_open'			=> '',
-	'last_tag_close'		=> '',
+	'first_tag_open'		=> '<li>',
+	'first_tag_close'		=> '</li>',
+	'last_tag_open'			=> '<li>',
+	'last_tag_close'		=> '</li>',
 	'first_url'				=> '', // Alternative URL for the First Page.
-	'cur_tag_open'			=> '<a class="currentPage">',
-	'cur_tag_close'			=> '</a>',
-	'next_tag_open'			=> '',
-	'next_tag_close'		=> '',
-	'prev_tag_open'			=> '',
-	'prev_tag_close'		=> '',
-	'num_tag_open'			=> '',
+	'cur_tag_open'			=> '<li class="active"><a>',
+	'cur_tag_close'			=> '</a></li>',
+	'next_tag_open'			=> '<li>',
+	'next_tag_close'		=> '</li>',
+	'prev_tag_open'			=> '<li>',
+	'prev_tag_close'		=> '</li>',
+	'num_tag_open'			=> '<li>',
+	'num_tag_close'			=> '</li>',
 )); 
 			
 echo $this->pagination->create_links();
 ?>
+						</ul>
 					</div>
 				</td>
 			</tr>
