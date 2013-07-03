@@ -306,26 +306,25 @@ $.extend({
 						return;
 					}
 				}
-				$('.menu div ul.menuAdmin li:first').removeClass('checked');
+				$('.menu div ul.menuAdmin li a:first').removeClass('active');
 				$subMenu.hide();
 			}
 		);		
 		
 		$('.menu div ul.menuAdmin li a:first')
-			.html('<i class="icon-gear" />')
-			.addClass('btn btn-mini');
-		
-		$('.menu div ul.menuAdmin li:first')
+			.html('<i class="icon-gear icon-2x" />')
+			.addClass('btn btn-mini')
 			.click(
 				function (event){
 					event.stopPropagation();
-					if ($(this).find('ul').first().is(':visible') == false) {
-						$(this).addClass('checked');
-						$(this).find('ul').first().fadeIn();
+					var $li = $(this).parents('li');
+					if ($li.find('ul').first().is(':visible') == false) {
+						$(this).addClass('active');
+						$li.find('ul').first().fadeIn();
 						return;
 					}
-					$(this).removeClass('checked');
-					$(this).find('ul').first().fadeOut();
+					$(this).removeClass('active');
+					$li.find('ul').first().fadeOut();
 				}
 			);
 		

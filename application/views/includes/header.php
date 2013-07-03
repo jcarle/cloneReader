@@ -21,8 +21,8 @@ $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
-	$CI->carabiner->minify_js 	= false;
-	$CI->carabiner->minify_css	= false;
+//	$CI->carabiner->minify_js 	= false;
+//	$CI->carabiner->minify_css	= false;
 	$CI->carabiner->empty_cache('both');
 }
 
@@ -57,8 +57,9 @@ if ($view == 'login') {
 }
 
 
-$CI->carabiner->css('jquery-ui-1.8.22.custom.css');
-$CI->carabiner->css('bootstrap.min.css');
+//$CI->carabiner->css('jquery-ui-1.8.22.custom.css');
+$CI->carabiner->css('bootstrap.css');
+$CI->carabiner->css('bootstrap-responsive.css');
 $CI->carabiner->css('font-awesome.css');
 $CI->carabiner->css('default.css');
 
@@ -94,10 +95,12 @@ $CI->carabiner->display('js');
 echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');
 ?>
 
-			<form class="search">
-				<span ></span>
+			<form class="search  input-prepend input-append">
+				<span class="add-on">
+					<i class="icon-search" ></i>
+				</span>
 				<input type="text" placeholder="search ..." />
-				<input type="submit" value="Search" class="btnSearch"/>
+				<button  class="btnSearch btn">Search</button>
 			</form>
 		</div>
 	</div>

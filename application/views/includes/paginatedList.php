@@ -1,18 +1,24 @@
-<form method="get" class="paginatedList">
+<div class="paginatedList">
 <?php 
 	echo anchor($controller.'/add', 'agregar', array('class'=>'btnAdd')); 
 	$fields = $query->list_fields();
 ?>
-	
-	<table>
+
+	<form method="get" class="tblFilter form-inline">
+		<fieldset>
+			<label>Filtros</label>
+			<div class="input-prepend">
+				<span class="add-on">
+					<i class="icon-remove" ></i>
+				</span>
+				<?php echo form_input('filter', $this->input->get('filter')); ?>
+			</div>
+			<input value="Buscar" type="submit" class="btn" />
+		</fieldset>
+	</form>
+				
+	<table class="table table-hover">
 		<thead>
-			<tr class="tblFilter">
-				<td colspan="<?php echo count($fields) + 1; ?>">Filtros
-					<?php echo form_input('filter', $this->input->get('filter')); ?>
-					<span class="filterClear"></span>
-					<input value="Buscar" type="submit">
-				</td>
-			</tr>
 			<tr>
 				<td>
 					<input type="checkbox">
@@ -52,7 +58,10 @@ foreach ($query->result() as $row) {
 		<tfoot>
 			<tr>
 				<td colspan="<?php echo count($fields) + 1; ?>">
-					<input class="btnDelete" value="Delete" type="button">
+					<a class="btnDelete btn btn-small" >
+						<i class="icon-trash icon-large"></i>
+						Delete
+					</a>
 					<span><?php echo $query->foundRows; ?> rows</span>
 					<div class="divPaginacion">
 <?php

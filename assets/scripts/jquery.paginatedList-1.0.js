@@ -39,7 +39,7 @@
 		this.$form.find('.btnDelete').click($.proxy(
 			function() { 
 				var aDelete = [];
-				var $input = this.$form.find('tr.selected input');
+				var $input = this.$form.find('tr.info input');
 				for (var i=0; i<$input.length; i++) {
 					aDelete.push($($input[i]).val());
 				}
@@ -51,24 +51,18 @@ cn(aDelete);
 			}
 		, this));
 		
-		var $input = this.$form.find('input[name=filter]');
+		this.$filter = this.$form.find('input[name=filter]');
 		
-		this.$filterClear = this.$form.find('.filterClear');
-		this.$filterClear
+		this.$form.find('.icon-remove')
 			.click($.proxy(
 				function (event){
-					if ($(event.target).prev().val().trim() == '') {
+					if (this.$filter.val().trim() == '') {
 						return;
 					}
-					$(event.target).prev().val('');
+					this.$filter.val('');
 					this.$form.submit();
 				}
-			, this))
-			.html('&#10006;')
-			.css( {
-					'left': $input.position().left + 6,
-					'top': 	$input.position().top + 6 
-				} )			
+			, this));
 
 		this.$form.find('tbody tr').click(
 				function (event) {
@@ -103,10 +97,10 @@ cn(aDelete);
 	
 	paginatedList.prototype = {
 		checkedRow: function(row) {
-			$(row).removeClass('selected');
+			$(row).removeClass('info');
 			
 			if ($('input[type=checkbox]', row).is(':checked')) {
-				$(row).addClass('selected');
+				$(row).addClass('info');
 			}
 			
 			

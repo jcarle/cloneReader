@@ -106,7 +106,7 @@ foreach ($form['fields'] as $name => $field) {
 }
 
 echo implode(' ', $aFields);
-echo form_submit(array('value'=> element('btnSubmitValue', $form, 'Guardar'), 'class'=>'btnSubmit'));
+echo form_submit(array('value'=> element('btnSubmitValue', $form, 'Guardar'), 'class'=>'btnSubmit btn btn-small'));
 echo form_close(); 
 
 if ($hasGallery == true) {

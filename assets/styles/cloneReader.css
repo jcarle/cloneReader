@@ -11,7 +11,7 @@
 		background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 		background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
 		padding:0 15px 0 0;
-		margin: 0 0 1px 0;
+		margin: 0 0 2px 0;
 		box-shadow: 0 5px 7px gray;
 		height:40px;
 		z-index: 1;
@@ -210,7 +210,6 @@
 			}
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
-					width: auto;
 				}
 				#cloneReader .ulEntries > li p a {
 					text-decoration: underline;

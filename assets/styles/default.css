@@ -1,13 +1,14 @@
 body, body * {
-	margin:0; padding:0;
-	position:relative;
-	font-family: arial;
-	font-size: 12px;
-	color:black;	
+	font-size: small;
+	color:#333;	
 	outline: 0;
 }
 body {
 	background: #F1F1F1;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    color: #555;
 }
 
 a {
@@ -23,14 +24,6 @@ body.isLoading, body.isLoading * {
 	cursor:wait !important;
 }
 
-input[type=text]:focus,
-input[type=password]:focus,
-textarea:focus,
-select:focus {
-	background-color:#FFFFCC !important;
-	border:1px solid #6C9FE1 !important;
-}
-
 
 select::-moz-focus-inner,
 option::-moz-focus-inner,
@@ -41,58 +34,6 @@ input[type="button"]::-moz-focus-inner,
 input[type="submit"]::-moz-focus-inner,
 input[type="file"] > input[type="button"]::-moz-focus-inner {
 	border: 0; outline: 0;
-}
-
-input[type=text], input[type=password], select, textarea {
-	background:white;
-	font-family: arial, sans-serif, tahoma, verdana; 
-	font-size: 12px;
-	text-decoration: none;
-	font-weight: normal; 
-	color: #000000;
-	margin:0px;
-	padding:0 4px;
-	border:1px #CCCCCC solid;
-	border-radius:3px;
-	height:20px; line-height:20px;
-}
-
-input[type=button], input[type=submit], button {
-	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-	border-color: #CCCCCC #BBBBBB #A0A0A0;
-	border-left: 1px solid #BBBBBB;
-	border-radius: 3px 3px 3px 3px;
-	border-right: 1px solid #BBBBBB;
-	border-style: solid;
-	border-width: 1px;
-	color: #000000;
-	cursor: default;
-	font: 12px arial,sans-serif;
-	height:25px; line-height: 25px;
-	margin:0;
-	outline: medium none;
-	padding:0px 8px;
-	text-align: center;
-	white-space: nowrap;
-}
-
-input[type=button]:active, input[type=submit]:active, button:active {
-	background: -moz-linear-gradient(center top , #EEEEEE, #F9F9F9) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, left top, left bottom,from(#EEEEEE),to(#F9F9F9));
-	border-color:#444444;
-	text-decoration:none;
-}
-
-input::-webkit-input-placeholder {
-	color:#CCCCCC;
-}
-input:-moz-placeholder {
-	color:#CCCCCC;
-}
-
-option {
-	padding:0 4px; outline: 0;
 }
 
 #divWaiting {
@@ -145,6 +86,7 @@ option {
 		min-height: 65px;
 		width:auto;
 		overflow: hidden;
+		position:relative;
 	}
 		#header div .logo {
 			background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
@@ -174,46 +116,9 @@ option {
 				width: 45px;
 			}
 		#header div .search {
-			border: 1px solid #CCCCCC;
-			padding: 0px;
-			width: 400px;
-			line-height: 25px;
 			position: absolute;
-			right:0; top:30px;
+			right:2px; top:30px;
 		}
-			#header div .search span {
-				background: url(../images/glyphicons-halflings.png) no-repeat scroll -47px 3px transparent;
-				height: 20px;
-				position: absolute;
-				width: 20px;	
-				left: 3px; top: 2px;
-			}
-			#header div .search input {
-				border: 0 none;
-				margin: 0 0 0 20px;
-				width: 300px;
-			}		
-			#header div .search input[type=text]:focus {
-				background: white !important;
-				border:0 !important;
-			}
-			#header div .search input.btnSearch {
-				background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-				background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-				border-radius: 0 0 0 0;
-				display: inline-block;
-				margin: 0;
-				padding: 0px 10px;
-				width: 70px; height:25px;
-				line-height: 25px;
-				position:absolute;
-				right: 0; top:0;
-				border-left: 1px solid #CCCCCC;
-			}
-			#header div .search input.btnSearch:active,
-			#header div .search input.btnSearch:focus {
-				box-shadow: 0px 0px 4px #CCC inset;				
-			}			
 		#header div ul {
 			list-style:none;
 			background:black;
@@ -262,11 +167,13 @@ option {
 .menu {
 	background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
 	background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+	position:relative;
 }
 	.menu div {
 		margin: 0 10px;
 		width: auto;		
-		height: 30px;		
+		height: 30px;
+		position:relative;		
 	}
 		.menu div ul.menuPublic {
 			list-style: none outside none;
@@ -318,10 +225,7 @@ option {
 						display: inline-block;
 					}
 						.menu div ul.menuAdmin > li:first-child > a i {
-							font-size: 20px;
-							font-weight: normal;
 							text-shadow: 2px 2px 3px white;
-							opacity: 0.55;
 						}
 				.menu div ul.menuAdmin li {
 					cursor:pointer;
@@ -380,10 +284,11 @@ option {
 	border-right: 1px solid #CCCCCC;
 	overflow: auto;
 }			
-	.content h1{
-		 color:#333333;
-		 font-size:15px;
-		 padding:10px;
+	.content > h1{
+		 font-size:large;
+		 padding:10px 10px 0 10px;
+		 margin: 0;
+		 font-weight: normal;
 	}			
 					
 #footer {
@@ -464,29 +369,27 @@ option {
 
 
 
-.paginatedList, .paginatedList * {
-	margin:0; padding:0; position:relative;
-}
 .paginatedList {
-	margin: 20px auto 20px;
-	width: 977px;
+	margin: 0 10px;
 }
-
 	.paginatedList .btnAdd {
 		color: #3176CB;
 		display: inline-block;
 		margin: 0 0 10px;
 	}
+	.paginatedList form {
+		border-radius: 3px 3px 3px 3px;
+		box-shadow: 0 0 4px gray;
+		margin: 0 0 10px 0;
+		padding: 10px;		
+	}
+		.paginatedList fieldset .icon-remove {
+			cursor: pointer;
+		}	
 	.paginatedList table {
 		border: 1px solid #BBBBBB;
-		border-spacing: 0;
 		box-shadow: 2px 2px 4px #777777;
-		empty-cells: show;
-		width: 100%;
 	}
-		.paginatedList table tr td {
-			padding:3px;
-		}
 		.paginatedList table thead {
 			background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
 			background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
@@ -494,70 +397,15 @@ option {
 			color: white;
 			height:20px;
 		}
-			.paginatedList table thead .tblFilter {
-				
-			}
-				.paginatedList table thead .tblFilter td {
-					border-bottom: 1px solid #BBBBBB;
+				.paginatedList table thead tr td, 
+				.paginatedList table thead tr td a  {
 					color:white;
+				    text-shadow: 1px 1px 0 black;
 				}
-					.paginatedList table thead tr.tblFilter td input[type="text"] {
-						padding: 2px 2px 2px 23px;
-					}
-					.paginatedList table thead tr.tblFilter td .filterClear {
-						background:-webkit-linear-gradient(#F9F9F9, #E3E3E3);
-						background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-						border-color: #CCCCCC #BBBBBB #A0A0A0;
-						border-radius: 3px 3px 3px 3px;
-						border-style: solid;
-						border-width: 1px;
-						color: gray;
-						cursor: pointer;
-						font-family: comic sans ms;
-						font-size: 12px;
-						font-weight: bold;
-						height: 14px;
-						line-height:14px;
-						left: 60px; /* La position la calculo con js */
-						position: absolute;
-						text-align: center;
-						text-transform: lowercase;
-						top: 18px;
-						vertical-align: middle;
-						width: 14px;
-					}
-					.paginatedList table thead tr.tblFilter td .filterClear:hover {
-						box-shadow: 1px 1px 1px #CCCCCC inset;
-						color:black;
-						text-shadow: 0px 1px 0px gray;
-					}
-					.paginatedList table thead tr td, 
-					.paginatedList table thead tr td a  {
-						color:white;
-					}
-					.paginatedList table thead tr td:first-child,
-					.paginatedList table thead tr td:nth-child(2) {
-						width:20px;
-					}
-		.paginatedList table tbody tr {
-			background: white;
-		}
-		.paginatedList table tbody tr:hover {
-			background:#FFFFCC;
-		}
-		.paginatedList table tbody tr.selected {
-			background: none repeat scroll 0 0 #FFCC99;
-		}
-			.paginatedList table tbody tr.selected td {
-				/*color: white !important;*/
-			}
-			.paginatedList table tbody tr td {
-				border-top:1px #ccc solid;
-				cursor: pointer;
-			}
-			.paginatedList table tbody tr td:first-child {
-				cursor: default;
-			}
+				.paginatedList table thead tr td:first-child,
+				.paginatedList table thead tr td:nth-child(2) {
+					width:20px;
+				}
 			.paginatedList table tfoot {
 				background: -moz-linear-gradient(top center, #FFFFFF, #CCC) repeat scroll 0 0 transparent;
 				background: -webkit-linear-gradient(white, #CCC);
@@ -586,16 +434,13 @@ option {
 							.paginatedList table tfoot tr td div a.currentPage {
 								font-weight: bold;
 							}
-						
+
 
 .frmEdit {
 	border: 1px solid #CCCCCC;
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 2px 2px 6px gray;
-	margin:40px auto 20px auto;
-	padding: 0 0 35px;
-	width: 977px;	
-	background: white;
+	margin:20px 10px 20px 10px;
 }
 .ui-dialog .frmEdit {
 	border: 0 none !important;
@@ -759,14 +604,14 @@ option {
 									.frmEdit fieldset .subform table thead tr td a  {
 										color:white;
 									}
-							.frmEdit fieldset .subform table tbody tr { }
+/*							.frmEdit fieldset .subform table tbody tr { }
 							.frmEdit fieldset .subform table tbody tr:hover {
 								background:#FFFFCC;
 							}
 								.frmEdit fieldset .subform table tbody tr td {
 									border-top:1px #ccc solid;
 									cursor: pointer;
-								}
+								}*/
 	.frmEdit input.btnSubmit {
 		margin: 5px 0;
 		position: absolute;
