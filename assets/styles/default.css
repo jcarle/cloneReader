@@ -1,16 +1,12 @@
 body, body * {
-	font-size: small;
-	color:#333;	
 	outline: 0;
-}
-body {
-	background: #F1F1F1;
 }
 
 [class^="icon-"], [class*=" icon-"] {
     color: #555;
 }
 
+/*
 a {
 	text-decoration:none;
 	color:#1155CC;
@@ -18,7 +14,7 @@ a {
 
 body *:focus, body *:active {
 	outline: none;
-}
+}*/
 
 body.isLoading, body.isLoading * {
 	cursor:wait !important;
@@ -29,7 +25,7 @@ body.isLoading, body.isLoading * {
 	color: #FFFFFF;
 }
 
-
+/*
 select::-moz-focus-inner,
 option::-moz-focus-inner,
 button::-moz-focus-inner,
@@ -39,9 +35,16 @@ input[type="button"]::-moz-focus-inner,
 input[type="submit"]::-moz-focus-inner,
 input[type="file"] > input[type="button"]::-moz-focus-inner {
 	border: 0; outline: 0;
-}
+}*/
 
 #divWaiting {
+	display: block;
+    margin: -7px auto 0;
+    opacity: 0.9;
+    text-align: center;
+    position: fixed;
+    width: 140px;
+    /*
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
 	border-color: #CCCCCC #BBBBBB #A0A0A0;
@@ -57,16 +60,31 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	position: fixed;
 	top: 0;
 	width: 120px;
-	color:#6E6E6E;
+	color:#6E6E6E;*/
 }
+/*
 	#divWaiting p {
 		height:25px;
 		line-height:25px;
 		padding: 0 0 0 30px;
 		margin:0;
 		background:	url(../images/loading.gif) no-repeat scroll 6px center transparent;
+	}*/
+	
+	#divWaiting small  {
+	    font-size: small;
+		margin-left: 10px;
 	}
 
+
+.error404 {
+}
+	.error404 i {
+		color: #9D261D;
+		text-shadow: 1px 1px 0 black;	
+	    margin-right: 10px;
+	}
+/*
 .alert {
 	background: none repeat scroll 0 0 #F9F9F9;
 	border: 3px solid #CCCCCC;
@@ -80,6 +98,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	.alert a {
 		font-size: 14px;
 	}
+	
+	*/
 
 #header {
 	background: white;
@@ -283,17 +303,14 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 						}
 						
 .content {
-	background: none repeat scroll 0 0 white;
 	margin: 0 auto;
 	padding: 0;
-	width: 1024px;	
-	border-left: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
-	overflow: auto;
+	max-width: 1024px;	
+	min-width: 240px;
 }			
 	.content > h1{
 		 font-size:large;
-		 padding:10px 10px 0 10px;
+		 padding:10px 0px 0 0px;
 		 margin: 0;
 		 font-weight: normal;
 	}			
@@ -323,24 +340,24 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 			padding: 5px 0 5px 10px;
 		}
 
-.errorsPage {
+/*.errorsPage {
 	background: none repeat scroll 0 0 beige;
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
 	margin: 50px auto;	
 	padding: 30px;	
 	width:400px;
-}
+}*/
 
 #frmLogin {
 	margin: 20px auto;
-	width: 400px;	
+	max-width: 400px;	
 }
 		#frmLogin fieldset .control-label {
-			width: 100px;
+			max-width: 100px;
 		}
 		#frmLogin fieldset input {
-			width: 206px;
+			max-width: 206px;
 		}
 
 #fb-login {
@@ -356,7 +373,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 
 .paginatedList {
-	margin: 0 10px;
+	margin: 0;
 }
 	.paginatedList form {
 		border-radius: 3px 3px 3px 3px;
@@ -422,8 +439,12 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	border: 1px solid #CCCCCC;
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 2px 2px 6px gray;
-	margin:0px 10px 20px 10px;
+	margin:0 auto;
+	padding: 0;
 	position: relative;
+	max-width:750px;
+	font-size: small;
+	color:#333;	
 }
 .ui-dialog .jForm {
 	border: 0 none !important;
@@ -433,29 +454,21 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	padding: 0 0 35px !important;
 }
 	.jForm .control-group {
-		margin: 10px 35px;
-		border:0;
+		margin: 10px 5px;
 	}
 		.jForm .control-label {
 			cursor: default;
-			text-align: left;
-			width: 250px;
-			margin-left: 10px;
 		}
 		.jForm fieldset .raty {
 			display: inline-block;
+			border: 0 none;
 		}    			
-		.jForm fieldset .link {
-			border: 0 none;
-			margin: 0 0 0 115px;
+/*		.jForm fieldset .link {
+			margin: 0 0 0 180px;
+		}*/
+/*		.jForm fieldset input[type=checkbox] {
 			width: auto;
-		}
-		.jForm fieldset .raty {
-			border: 0 none;
-		}			
-		.jForm fieldset input[type=checkbox] {
-			width: auto;
-		}
+		}*/
 		.jForm fieldset .icon-calendar {
 		    color: #3A87AD;
 		}
@@ -578,10 +591,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	    border-radius: 0 0 5px 5px;
 		text-align: right;
 		margin: 0;
-	    padding-right: 35px;
-	}								
-		.jForm .form-actions btn {
-		}	
+	}
 	
 
 

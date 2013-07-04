@@ -253,7 +253,7 @@ $.extend({
 	},
 	
 	showWaiting: function(forceWaiting) {
-		if ($('#divWaiting').length == 0) {
+		/*if ($('#divWaiting').length == 0) {
 			this.divWaiting = document.createElement('div');
 			$(this.divWaiting)
 				.appendTo(document.body)
@@ -272,7 +272,7 @@ $.extend({
 				sheet.appendChild( document.createTextNode(styles) );
 			}
 			head.appendChild( sheet );
-		}
+		}*/
 
 		/*
 		 * TODO:
@@ -285,8 +285,8 @@ $.extend({
 		var isWaiting = ($.countProcess > 0);
 
 	
-		$(this.divWaiting).css( {
-			'display':	isWaiting == true ? '' : 'none',
+		$('#divWaiting').css( {
+			'display':	isWaiting == true ? 'block' : 'none',
 			'z-index': 	$.topZIndex('body > *') + 1
 		} );
 		document.body.className	=  (isWaiting == true ? 'isWaiting' : '');
@@ -390,6 +390,17 @@ $(document).ready(function() {
 	$.initMenu();
 	resizeWindow();
 	
+	$.showWaiting(true);
+	$('a').click(function(event) {
+		var url = $(event.target).attr('href');
+		if (url == null) {
+			return;
+		}
+		$.goToUrl(url);
+	});
+	
+	
+	
 	$.countProcess = 0;
 	
 	$.ajaxSetup({dataType: "json"});
@@ -408,8 +419,7 @@ $(document).ready(function() {
 		}
 	);
 });
-
-
+	
 $(window).resize(function() {
 	resizeWindow();
 });

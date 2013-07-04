@@ -15,42 +15,47 @@ echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'clas
 $this->load->view('includes/formError'); 
 
 $hasGallery = false;
-
-$aFields = array();
+$aFields 	= array();
+$inputSize	= 'span10';
 
 foreach ($form['fields'] as $name => $field) {
+/*
+	$sField = '
+		<fieldset class="control-group">
+			<div class="controls"> %s </div>
+		</fieldset>';
+*/
+	if (isset($field['label'])) {
+		$sField = '
+			<fieldset class="control-group">
+				'.form_label($field['label'], null, array('class' => 'control-label')).'
+				<div class="controls"> %s </div>
+			</fieldset>';
+	}	
+	
 	switch ($field['type']) {
 		case 'hidden':
 			$aFields[] = form_hidden($name, $field['value']);
 			break;
 		case 'text':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'span7')).
-				'</fieldset>';
+			$aFields[] = sprintf($sField, form_input(array('name' => $name, 'value' => $field['value'], 'class' => $inputSize)));
 			break;
 		case 'date':
 		case 'datetime':
 			$aFields[] = '<fieldset class="control-group">'
 				.form_label($field['label'], null, array('class' => 'control-label')).'
-				<div class="input-prepend">
+				<div class="input-append">
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'input-small')).'
 					<span class="add-on">
 						<i class="icon-calendar"></i>
-					</span>
-					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'input-small')).
-				'</fieldset>';
+					</span>					
+				</fieldset>';
 			break;
 		case 'password':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_password($name, $field['value']).
-				'</fieldset>';
+			$aFields[] = sprintf($sField, form_password(array('name' => $name, 'value' => $field['value'], 'class' => $inputSize)));
 			break;			
 		case 'textarea':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_textarea($name, $field['value'], 'class="span7"').
-				'</fieldset>';
+			$aFields[] = sprintf($sField, form_textarea($name, $field['value'], 'class="'.$inputSize.'"'));
 			break;			
 		case 'autocomplete':
 			$aFields[] = '<fieldset class="control-group">'
@@ -60,29 +65,21 @@ foreach ($form['fields'] as $name => $field) {
 				.'</fieldset>';
 			break;			
 		case 'dropdown':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_dropdown($name, element('source', $field, array()), $field['value'], 'class="span7"')
-				.'</fieldset>';
+			$aFields[] = sprintf($sField, form_dropdown($name, element('source', $field, array()), $field['value'], 'class="'.$inputSize.'"'));
 			break;						
 		case 'groupCheckBox':
-			$sTmp = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label')) 				
-				.'<ul class="groupCheckBox">';
+			$sTmp = '<ul class="groupCheckBox '.$inputSize.'">';
 			foreach ($field['source'] as $key => $value) {
 				$sTmp .= '<li>' 
 					.form_checkbox($name, $key, element($key, $field['value']))
 					.form_label($value.' - '.$key)
 					.'</li>';
 			}
-			$sTmp .= '</ul>	</fieldset>';
-			$aFields[] = $sTmp;
+			$sTmp .= '</ul>';
+			$aFields[] = sprintf($sField, $sTmp);
 			break;		
 		case 'checkbox':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_checkbox($name, 'on', $field['checked'])
-				.'</fieldset>';
+			$aFields[] = sprintf($sField, form_checkbox($name, 'on', $field['checked']));
 			break;
 		case 'gallery':
 			$hasGallery = true;
@@ -111,7 +108,11 @@ foreach ($form['fields'] as $name => $field) {
 				.'</fieldset>';			
 			break;
 		case 'link':
-			$aFields[] = '<fieldset class="control-group">'.anchor($field['value'], $field['label'], array('class' => 'link')).'</fieldset>';
+			$sField = '
+			<fieldset class="control-group">
+				<div class="controls"> %s </div>
+			</fieldset>';		
+			$aFields[] = sprintf($sField, anchor($field['value'], $field['label']));
 			break;
 		case 'raty':
 			$aFields[] = '<fieldset class="control-group">'

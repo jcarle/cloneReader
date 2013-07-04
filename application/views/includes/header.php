@@ -77,6 +77,7 @@ header ('Content-type: text/html; charset=utf-8');
 <html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
 $CI->carabiner->empty_cache('both', 'yesterday');
@@ -87,6 +88,11 @@ $CI->carabiner->display('js');
 	<title><?php echo $title; ?> - cloneReader</title>
 </head>
 <body>
+	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
+		<i class="icon-spinner icon-spin icon-large"></i>
+		<small>procesando ...</small>
+	</div>
+	
 	<div id="header">
 		<div>
 		<?php echo anchor('home', 'cloneReader<span/>', array('class' => 'logo')); ?>
@@ -137,7 +143,7 @@ function renderMenu($aMenu, $className = null){
 	return $sTmp;
 }
 ?>
-<div class="content">
+<div class="content row-fluid">
 	<h1><?php echo $title; ?></h1>
 	
 
