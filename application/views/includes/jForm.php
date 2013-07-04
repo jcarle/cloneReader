@@ -2,7 +2,12 @@
 if (!isset($formAction)) {
 	$formAction = base_url().$this->uri->uri_string(); 
 }
-echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm')); 
+
+if (!isset($form['showBtnBack'])) {
+	$form['showBtnBack'] = true;
+}
+
+echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm form-horizontal')); 
 
 $this->load->view('includes/formError'); 
 
@@ -18,39 +23,39 @@ foreach ($form['fields'] as $name => $field) {
 		case 'text':
 		case 'date':
 		case 'datetime':
-			$aFields[] = '<fieldset>'
-				.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_input($name, $field['value']).
 				'</fieldset>';
 			break;
 		case 'password':
-			$aFields[] = '<fieldset>'
-				.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_password($name, $field['value']).
 				'</fieldset>';
 			break;			
 		case 'textarea':
-			$aFields[] = '<fieldset>'
-				.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_textarea($name, $field['value']).
 				'</fieldset>';
 			break;			
 		case 'autocomplete':
-			$aFields[] = '<fieldset>'
-				.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_input($name, reset($field['value']))
 				.form_hidden($field['fieldId'], key($field['value']))
 				.'</fieldset>';
 			break;			
 		case 'dropdown':
-			$aFields[] = '<fieldset>'
-				.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_dropdown($name, element('source', $field, array()), $field['value'])
 				.'</fieldset>';
 			break;						
 		case 'groupCheckBox':
-			$sTmp = '<fieldset>'
-				.form_label($field['label']) 				
+			$sTmp = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label')) 				
 				.'<ul class="groupCheckBox">';
 			foreach ($field['source'] as $key => $value) {
 				$sTmp .= '<li>' 
@@ -62,8 +67,8 @@ foreach ($form['fields'] as $name => $field) {
 			$aFields[] = $sTmp;
 			break;		
 		case 'checkbox':
-			$aFields[] = '<fieldset>'
-				.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_checkbox($name, 'on', $field['checked'])
 				.'</fieldset>';
 			break;
@@ -75,16 +80,16 @@ foreach ($form['fields'] as $name => $field) {
 				'entityId'		=> $field['entityId']
 			);
 			
-			$aFields[] = '<fieldset>'
-					.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+					.form_label($field['label'], null, array('class' => 'control-label'))
 					.'<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery">
 						<input type="button" class="btnEditPhotos" value="Editar fotos" />
 					</div>
 				</fieldset>';
 			break;
 		case 'subform':
-			$aFields[] = '<fieldset>'
-					.form_label($field['label'])
+			$aFields[] = '<fieldset class="control-group">'
+					.form_label($field['label'], null, array('class' => 'control-label'))
 					.'<div name="'.$name.'" class="subform"></div>
 				</fieldset>';
 			break;		
@@ -94,11 +99,11 @@ foreach ($form['fields'] as $name => $field) {
 				.'</fieldset>';			
 			break;
 		case 'link':
-			$aFields[] = '<fieldset>'.anchor($field['value'], $field['label'], array('class' => 'link')).'</fieldset>';
+			$aFields[] = '<fieldset class="control-group">'.anchor($field['value'], $field['label'], array('class' => 'link')).'</fieldset>';
 			break;
 		case 'raty':
-			$aFields[] = '<fieldset>'
-					.form_label($field['label']).
+			$aFields[] = '<fieldset class="control-group">'
+					.form_label($field['label'], null, array('class' => 'control-label')).
 					'<div class="raty" name="'.$name.'" />
 				</fieldset>';		
 			break;		
@@ -106,7 +111,17 @@ foreach ($form['fields'] as $name => $field) {
 }
 
 echo implode(' ', $aFields);
-echo form_submit(array('value'=> element('btnSubmitValue', $form, 'Guardar'), 'class'=>'btnSubmit btn btn-small'));
+echo '<div class="form-actions" >';
+echo 	'<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.element('btnSubmitValue', $form, 'Guardar').'</button> ';
+
+if (element('showBtnBack', $form) == true) {
+	echo 	'<button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"> '.element('btnSubmitValue', $form, 'Cancelar').'</button>';
+}
+//echo anchor('javascript:$.goToUrl($.base64Decode($.url().param(\'urlList\')));', 'Cancelar', array('class' => 'btn') );
+echo '</div>';
+
+
+    
 echo form_close(); 
 
 if ($hasGallery == true) {
@@ -128,8 +143,6 @@ function renderTree($aTree, $value){
 	return $sTmp;
 }
 ?>
-
-
 <script>
 $(document).ready(function() {
 	$('#<?php echo $form['frmId'] ?>').jForm(<?php echo json_encode($form); ?>);

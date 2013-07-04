@@ -38,23 +38,11 @@
 		this.options 	= $.extend({
 			sendWithAjax: 	true,
 			fields:			[],
-			showBtnBack:	true
 		}, options );
 		
 		this.initFields();
 		this.initCallbacks();
 		
-		if (this.options.showBtnBack == true) {
-			var urlList = $.utf8Decode();
-			
-			$('<a href="javascript:void(0);" class="btnBack">volver</a>')
-				.appendTo($(this.$form))
-				.click(function() {
-					$.goToUrl($.base64Decode($.url().param('urlList')));
-				}
-			);
-		}
-
 		this.$form.submit($.proxy(
 			function() {
 				if ( !this.validate() ) {

@@ -24,6 +24,11 @@ body.isLoading, body.isLoading * {
 	cursor:wait !important;
 }
 
+.btn-primary [class^="icon-"], 
+.btn-primary [class*=" icon-"] {
+	color: #FFFFFF;
+}
+
 
 select::-moz-focus-inner,
 option::-moz-focus-inner,
@@ -445,6 +450,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 2px 2px 6px gray;
 	margin:20px 10px 20px 10px;
+	position: relative;
 }
 .ui-dialog .jForm {
 	border: 0 none !important;
@@ -453,22 +459,15 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	margin: 0;
 	padding: 0 0 35px !important;
 }
-	.jForm .btnBack {
-		color: #3176CB;
-		left: 0;
-		position: absolute;
-		top: -23px;		
-	}
-	.jForm fieldset {
-		margin: 5px 0 0;
+	.jForm .control-group {
+		margin: 10px 0;
 		border:0;
 	}
-		.jForm fieldset label {
-			display: inline-block;
-			margin: 0px 0 0 10px;
+		.jForm .control-label {
+			cursor: default;
+			text-align: left;
 			width: 250px;
-			vertical-align: top;
-			height:25px; line-height:25px;
+			margin-left: 10px;
 		}
 		.jForm fieldset input,
 		.jForm fieldset textarea,
@@ -477,11 +476,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 		.jForm fieldset #gallery,
 		.jForm fieldset .link,
 		.jForm fieldset .raty {
-			display: inline-block;
-			width: 700px;
-			border-radius: 3px;
-			border: 1px #CCC solid;
-			height:25px; line-height:25px;
+			width: 710px;
 		}
 		.jForm fieldset textarea {
 			height:70px;
@@ -616,11 +611,17 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 									border-top:1px #ccc solid;
 									cursor: pointer;
 								}*/
-	.jForm input.btnSubmit {
-		margin: 5px 0;
-		position: absolute;
-		right: 5px;
-	}	
+
+	.jForm .form-actions {
+	    border-radius: 0 0 5px 5px;
+		text-align: right;
+		margin: 0;
+	}								
+		.jForm .form-actions btn {
+			/*margin: 5px 0;
+			position: absolute;
+			right: 5px;*/
+		}	
 	
 
 
