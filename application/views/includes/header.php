@@ -57,7 +57,7 @@ if ($view == 'login') {
 }
 
 
-//$CI->carabiner->css('jquery-ui-1.8.22.custom.css');
+$CI->carabiner->css('jquery-ui-1.8.22.custom.css');
 $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-responsive.css');
 $CI->carabiner->css('font-awesome.css');

@@ -15,6 +15,7 @@ class Login extends CI_Controller {
 			'messages' 			=> getRulesMessages(),
 			'showBtnBack'		=> false,
 			'btnSubmitValue'	=>	'Ingresar',	
+			'iconSend' 			=> 'icon-signin',
 			'fields'			=> array(
 				'email' => array(
 					'type'	=> 'text',

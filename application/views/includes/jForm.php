@@ -6,6 +6,9 @@ if (!isset($formAction)) {
 if (!isset($form['showBtnBack'])) {
 	$form['showBtnBack'] = true;
 }
+if (!isset($form['iconSend'])) {
+	$form['iconSend'] = 'icon-save';
+}
 
 echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm form-horizontal')); 
 
@@ -21,11 +24,20 @@ foreach ($form['fields'] as $name => $field) {
 			$aFields[] = form_hidden($name, $field['value']);
 			break;
 		case 'text':
-		case 'date':
-		case 'datetime':
 			$aFields[] = '<fieldset class="control-group">'
 				.form_label($field['label'], null, array('class' => 'control-label'))
 				.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'span7')).
+				'</fieldset>';
+			break;
+		case 'date':
+		case 'datetime':
+			$aFields[] = '<fieldset class="control-group">'
+				.form_label($field['label'], null, array('class' => 'control-label')).'
+				<div class="input-prepend">
+					<span class="add-on">
+						<i class="icon-calendar"></i>
+					</span>
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'input-small')).
 				'</fieldset>';
 			break;
 		case 'password':
@@ -37,7 +49,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'textarea':
 			$aFields[] = '<fieldset class="control-group">'
 				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_textarea($name, $field['value']).
+				.form_textarea($name, $field['value'], 'class="span7"').
 				'</fieldset>';
 			break;			
 		case 'autocomplete':
@@ -112,12 +124,12 @@ foreach ($form['fields'] as $name => $field) {
 
 echo implode(' ', $aFields);
 echo '<div class="form-actions" >';
-echo 	'<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.element('btnSubmitValue', $form, 'Guardar').'</button> ';
+echo 	'<button type="submit" class="btn btn-primary"><i class="'.$form['iconSend'].'"></i> '.element('btnSubmitValue', $form, 'Guardar').'</button> ';
 
 if (element('showBtnBack', $form) == true) {
 	echo 	'<button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"> '.element('btnSubmitValue', $form, 'Cancelar').'</button>';
 }
-//echo anchor('javascript:$.goToUrl($.base64Decode($.url().param(\'urlList\')));', 'Cancelar', array('class' => 'btn') );
+
 echo '</div>';
 
 

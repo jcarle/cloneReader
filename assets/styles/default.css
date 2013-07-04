@@ -212,7 +212,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 			position: absolute;
 			right: 0px;
 			top: 0;
-			z-index: 1;				
+			z-index: 10;
 		}
 				.menu div ul.menuAdmin > li:first-child {
 					cursor: pointer;
@@ -333,36 +333,15 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 }
 
 #frmLogin {
-	border: 1px solid gray;
-	border-radius: 5px 5px 5px 5px;
-	box-shadow: 2px 2px 6px gray;
 	margin: 20px auto;
-	padding: 0 0 35px;
 	width: 400px;	
 }
-	#frmLogin fieldset {
-		margin: 10px 0 0;
-	}
-		#frmLogin fieldset label {
-			display: inline-block;
-			margin: 0px 0 0 10px;
-			width: 145px;
-			line-height:25px;
+		#frmLogin fieldset .control-label {
+			width: 100px;
 		}
 		#frmLogin fieldset input {
-			display: inline-block;
-			padding: 0px 4px;
-			width: 226px;
-			border-radius: 3px;
-			border: 1px #CCC solid;
-			height: 25px;
-			line-height: 25px;			
+			width: 206px;
 		}
-	#frmLogin input.btnSubmit {
-		margin: 5px 0;
-		position: absolute;
-		right: 5px;
-	}	
 
 #fb-login {
 	display: block;
@@ -463,25 +442,9 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 			width: 250px;
 			margin-left: 10px;
 		}
-		/**.jForm fieldset input,
-		.jForm fieldset textarea,
-		.jForm fieldset select,
-		.jForm fieldset .groupCheckBox,
-		.jForm fieldset #gallery,
-		.jForm fieldset .link,
-		.jForm fieldset .raty {
-			width: 710px;
-		}
-		.jForm fieldset textarea {
-			height:70px;
-		}
-		.jForm fieldset select {
-    		padding: 4px 0 0 4px;
-    		width: 710px;
-    	}*/		
 		.jForm fieldset .link {
 			border: 0 none;
-			margin: 0 0 0 155px;
+			margin: 0 0 0 115px;
 			width: auto;
 		}
 		.jForm fieldset .raty {
@@ -489,6 +452,9 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 		}			
 		.jForm fieldset input[type=checkbox] {
 			width: auto;
+		}
+		.jForm fieldset .icon-calendar {
+		    color: #3A87AD;
 		}
 		.jForm fieldset .groupCheckBox {
 			max-height: 300px;
