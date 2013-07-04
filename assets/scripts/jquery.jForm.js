@@ -127,10 +127,22 @@
 					}
 				}
 			}
+			
+			this.$form.find('.groupCheckBox input[type=checkbox]')
+				.click($.proxy(
+					function(event) {
+						this.checkGroupCheckBox($(event.target));
+						//$(event.target).parent().css('background-color', ($(event.target).is(':checked') ? '#D9EDF7' : 'white'));
+					}
+				, this))
+				.each($.proxy(
+					function (i, input) {
+						this.checkGroupCheckBox($(input));
+					}
+				, this));				
 		},
 
 		initCallbacks: function(){
-			
 			for (var fieldName in this.options.fields){
 				var field = this.options.fields[fieldName];
 				
@@ -359,6 +371,10 @@
 					$field.val(this.options.fields[$field.attr('name')].value);
 				}
 			, this));			
+		},
+		
+		checkGroupCheckBox: function($input) { 
+			$input.parent().css('background-color', ($input.is(':checked') ? '#D9EDF7' : 'white'));
 		}
 	}
 })($);
