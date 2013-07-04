@@ -1,7 +1,6 @@
 <div class="paginatedList">
 <?php 
-	echo anchor($controller.'/add', 'agregar', array('class'=>'btnAdd')); 
-	$fields = $query->list_fields();
+$fields = $query->list_fields();
 ?>
 
 	<form method="get" class="tblFilter form-inline">
@@ -58,6 +57,10 @@ foreach ($query->result() as $row) {
 					<a class="btnDelete btn btn-small" >
 						<i class="icon-trash icon-large"></i>
 						Delete
+					</a>
+					<a href="<?php echo base_url($controller.'/add'); ?>" class="btnAdd btn btn-small">
+						<i class="icon-file-alt icon-large"></i>
+						Agregar
 					</a>
 					<span><?php echo $query->foundRows; ?> rows</span>
 					<div class="pagination pagination-small pagination-right">

@@ -380,11 +380,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 .paginatedList {
 	margin: 0 10px;
 }
-	.paginatedList .btnAdd {
-		color: #3176CB;
-		display: inline-block;
-		margin: 0 0 10px;
-	}
 	.paginatedList form {
 		border-radius: 3px 3px 3px 3px;
 		box-shadow: 0 0 4px gray;
@@ -449,7 +444,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	border: 1px solid #CCCCCC;
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 2px 2px 6px gray;
-	margin:20px 10px 20px 10px;
+	margin:0px 10px 20px 10px;
 	position: relative;
 }
 .ui-dialog .jForm {
@@ -460,7 +455,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	padding: 0 0 35px !important;
 }
 	.jForm .control-group {
-		margin: 10px 0;
+		margin: 10px 35px;
 		border:0;
 	}
 		.jForm .control-label {
@@ -469,7 +464,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 			width: 250px;
 			margin-left: 10px;
 		}
-		.jForm fieldset input,
+		/**.jForm fieldset input,
 		.jForm fieldset textarea,
 		.jForm fieldset select,
 		.jForm fieldset .groupCheckBox,
@@ -484,7 +479,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 		.jForm fieldset select {
     		padding: 4px 0 0 4px;
     		width: 710px;
-    	}		
+    	}*/		
 		.jForm fieldset .link {
 			border: 0 none;
 			margin: 0 0 0 155px;
@@ -510,6 +505,8 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 			overflow: auto;
 			padding: 0;
 			height:auto;
+		    border: 1px solid #CCCCCC;
+		    border-radius: 4px 4px 4px 4px;			
 		}
 			.jForm fieldset .groupCheckBox li {
 				border-bottom: 1px solid #CCCCCC;	
@@ -519,6 +516,11 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 			}
 				.jForm fieldset .groupCheckBox li input {
 					width: auto;
+					margin-left: 10px;
+				}
+				.jForm fieldset .groupCheckBox li label {
+				    display: inline-block;
+				    margin-left: 10px;					
 				}
 		.jForm fieldset.tree ul:first-child {
 			height: 300px;
@@ -616,11 +618,9 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	    border-radius: 0 0 5px 5px;
 		text-align: right;
 		margin: 0;
+	    padding-right: 35px;
 	}								
 		.jForm .form-actions btn {
-			/*margin: 5px 0;
-			position: absolute;
-			right: 5px;*/
 		}	
 	
 

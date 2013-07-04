@@ -25,7 +25,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'datetime':
 			$aFields[] = '<fieldset class="control-group">'
 				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_input($name, $field['value']).
+				.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'span7')).
 				'</fieldset>';
 			break;
 		case 'password':
@@ -50,7 +50,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'dropdown':
 			$aFields[] = '<fieldset class="control-group">'
 				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_dropdown($name, element('source', $field, array()), $field['value'])
+				.form_dropdown($name, element('source', $field, array()), $field['value'], 'class="span7"')
 				.'</fieldset>';
 			break;						
 		case 'groupCheckBox':

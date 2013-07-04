@@ -37,7 +37,7 @@
 		this.$form 		= $form;
 		this.options 	= $.extend({
 			sendWithAjax: 	true,
-			fields:			[],
+			fields:			[]
 		}, options );
 		
 		this.initFields();
