@@ -209,12 +209,11 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 				}
 		.menu div ul.menuAdmin {
 			list-style: none outside none;
-		}				
-			.menu div ul.menuAdmin {
-				position: absolute;
-				right: 0px;
-				top: 0;				
-			}
+			position: absolute;
+			right: 0px;
+			top: 0;
+			z-index: 1;				
+		}
 				.menu div ul.menuAdmin > li:first-child {
 					cursor: pointer;
 					outline: medium none;
@@ -490,14 +489,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 		}			
 		.jForm fieldset input[type=checkbox] {
 			width: auto;
-		}
-		.jForm fieldset input.hasDatepicker {
-			background: url(../images/calendar.gif) no-repeat scroll 75px 6px transparent;
-			width: 87px;
-		}
-		.jForm fieldset input.datetime {
-			background: url(../images/calendar.gif) no-repeat scroll 110px 6px transparent;
-			width: 120px;			
 		}
 		.jForm fieldset .groupCheckBox {
 			max-height: 300px;
