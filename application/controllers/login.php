@@ -14,7 +14,7 @@ class Login extends CI_Controller {
 			'frmId'				=> 'frmLogin',
 			'messages' 			=> getRulesMessages(),
 			'showBtnBack'		=> false,
-			'btnSubmitValue'	=>	'Ingresar',	
+			'btnSubmitValue'	=> 'Ingresar',	
 			'iconSend' 			=> 'icon-signin',
 			'fields'			=> array(
 				'email' => array(

@@ -1,41 +1,16 @@
 body, body * {
 	outline: 0;
 }
-
 [class^="icon-"], [class*=" icon-"] {
     color: #555;
 }
-
-/*
-a {
-	text-decoration:none;
-	color:#1155CC;
-}
-
-body *:focus, body *:active {
-	outline: none;
-}*/
-
 body.isLoading, body.isLoading * {
 	cursor:wait !important;
 }
-
 .btn-primary [class^="icon-"], 
 .btn-primary [class*=" icon-"] {
 	color: #FFFFFF;
 }
-
-/*
-select::-moz-focus-inner,
-option::-moz-focus-inner,
-button::-moz-focus-inner,
-input[type="select"]::-moz-focus-inner,
-input[type="reset"]::-moz-focus-inner,
-input[type="button"]::-moz-focus-inner,
-input[type="submit"]::-moz-focus-inner,
-input[type="file"] > input[type="button"]::-moz-focus-inner {
-	border: 0; outline: 0;
-}*/
 
 #divWaiting {
 	display: block;
@@ -44,33 +19,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     text-align: center;
     position: fixed;
     width: 140px;
-    /*
-	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-	border-color: #CCCCCC #BBBBBB #A0A0A0;
-	border-left: 1px solid #BBBBBB;
-	border-radius: 3px 3px 3px 3px;
-	border-right: 1px solid #BBBBBB;
-	border-style: solid;
-	border-width: 1px;
-	box-shadow: 0 4px 10px #8B8B8B;
-	left: 50%;
-	margin: 0 0 0 -60px;
-	padding: 2px 0;
-	position: fixed;
-	top: 0;
-	width: 120px;
-	color:#6E6E6E;*/
 }
-/*
-	#divWaiting p {
-		height:25px;
-		line-height:25px;
-		padding: 0 0 0 30px;
-		margin:0;
-		background:	url(../images/loading.gif) no-repeat scroll 6px center transparent;
-	}*/
-	
 	#divWaiting small  {
 	    font-size: small;
 		margin-left: 10px;
@@ -230,77 +179,53 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 		.menu div ul.menuAdmin {
 			list-style: none outside none;
 			position: absolute;
-			right: 0px;
-			top: 0;
+			right: 1px;
+			top: 1px;
 			z-index: 10;
 		}
-				.menu div ul.menuAdmin > li:first-child {
-					cursor: pointer;
-					outline: medium none;
-					margin:1px 0px;
-					border: 0;
-					text-align: right;
-					-moz-user-select: none;
-					-khtml-user-select: none;
-					-webkit-user-select: none;
-					user-select: none;								
+				.menu div ul.menuAdmin > li:first-child > a {
+				    line-height: 1px;
+					padding: 2px 6px;
 				}
-					.menu div ul.menuAdmin > li:first-child > a {
-					    line-height: 1px;
-						padding: 2px 6px;
-						display: inline-block;
+					.menu div ul.menuAdmin > li:first-child > a i {
+						text-shadow: 2px 2px 3px white;
 					}
-						.menu div ul.menuAdmin > li:first-child > a i {
-							text-shadow: 2px 2px 3px white;
-						}
-				.menu div ul.menuAdmin li {
-					cursor:pointer;
+			.menu div ul.menuAdmin .dropdown-submenu-left {
+  				position: relative;
+			}
+				.menu div ul.menuAdmin .dropdown-submenu-left > .dropdown-menu {
+					  top: 0;
+					  left: -100%;
+					  margin-top: -6px;
+					  margin-left: -1px;
+					  -webkit-border-radius: 6px 0px 6px 6px;
+					     -moz-border-radius: 6px 0px 6px 6px;
+					          border-radius: 6px 0px 6px 6px;
 				}
-					.menu div ul.menuAdmin li a {
-						clear: both;
-						color: white;
-						display: block;
-						font-family: arial;
-						font-weight: bold;
-						line-height: 30px;
-						padding: 0 10px;
-						text-decoration: none;
-						text-shadow: -1px 1px 0 #333333;						
-					}
-					.menu div ul.menuAdmin li ul {
-						display: none;
-						background: white;
-						border: 1px solid #CCCCCC;
-						border-radius: 5px 5px;
-						box-shadow:0 5px 5px gray;
-						top: 1px; right: 0px;
-						text-align: left;
-						width: 150px;
-						z-index: 9;			
-						padding:5px 0;
-					}			
-						.menu div ul.menuAdmin li ul li {
-							float:none;
-							display:block;
-							border:0;
-							position:relative;
-						}
-							.menu div ul.menuAdmin li ul li a {
-								font-weight:normal;
-								text-shadow:none;
-								color:black;
-							}
-							.menu div ul.menuAdmin li ul li a:hover {
-								background:white;
-								color:#333333;
-								background:#EEEEEE;
-							}
-						.menu div ul.menuAdmin li ul li ul {
-							position: absolute;
-							right: 150px;
-							top: -6px;
-							opacity: 1;
-						}
+				.menu div ul.menuAdmin .dropdown-submenu-left:hover > .dropdown-menu {
+				  display: block;
+				}
+				.menu div ul.menuAdmin .dropdown-submenu-left > a:before {
+				  display: block;
+				  content: "  ";
+				  float: left;
+				  width: 0;
+				  height: 0;
+				  border-color: transparent;
+				  border-style: solid;
+				  border-width: 5px 5px 5px 0px;
+				  border-right-color: #CCCCCC;
+				  margin-top: 5px;
+				  margin-left: -10px;
+				}
+				.menu div ul.menuAdmin .dropdown-submenu-left:hover > a:before {
+					border-right-color: white;
+				}
+				.menu div ul.menuAdmin .dropdown-submenu-left > a:after,
+				.menu div ul.menuAdmin .dropdown-submenu-left:hover > a:after {
+					border-color: transparent;
+				}
+
 						
 .content {
 	margin: 0 auto;

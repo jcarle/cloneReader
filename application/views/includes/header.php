@@ -30,9 +30,10 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery-ui-1.8.21.custom.min.js');
 $CI->carabiner->js('jquery.json-2.3.js');
-$CI->carabiner->js('jqueryExtension.js');
 $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.topzindex.js');
+$CI->carabiner->js('bootstrap.js');
+$CI->carabiner->js('jqueryExtension.js');
 $CI->carabiner->js('jquery.alert-1.0.js');		
 
 if (isset($aJs)) {

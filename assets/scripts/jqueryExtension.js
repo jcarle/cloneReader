@@ -298,58 +298,16 @@ $.extend({
 	},
 	
 	initMenu: function() { // TODO: mover esto de aca!
-		$(document).click(
-			function(event) {
-				var $subMenu = $('.menu div ul.menuAdmin li ul:visible');
-				if ($subMenu.length != 0) {
-					if ($.contains($subMenu[0], event.target)) {
-						return;
-					}
-				}
-				$('.menu div ul.menuAdmin li a:first').removeClass('active');
-				$subMenu.hide();
-			}
-		);		
+		$('.menu div ul.menuAdmin li ul').addClass('dropdown-menu');
+		$('.menu div ul.menuAdmin > li > ul').addClass('pull-right');
+		$('.menu div ul.menuAdmin > li > ul > li').addClass('dropdown-submenu dropdown-submenu-left');
+		$('.menu div ul.menuAdmin li:first').addClass('btn-group');
 		
 		$('.menu div ul.menuAdmin li a:first')
 			.html('<i class="icon-gear icon-2x" />')
 			.addClass('btn btn-mini')
-			.click(
-				function (event){
-					event.stopPropagation();
-					var $li = $(this).parents('li');
-					if ($li.find('ul').first().is(':visible') == false) {
-						$(this).addClass('active');
-						$li.find('ul').first().fadeIn();
-						return;
-					}
-					$(this).removeClass('active');
-					$li.find('ul').first().fadeOut();
-				}
-			);
-		
-		$('.menu div ul.menuAdmin li ul li').hover(
-				function (event){
-					$(this).find('a').first().stop().animate({
-					'color': '#333333',
-					'background-color': '#EEEEEE' }, 'slow');
-				},
-				function (event){
-					$(this).find('a').first().stop().animate({
-						'color': '#333333',
-						'background-color': '#FFF' }, 'slow');
-				}
-			);									
-	
-		$('.menu div ul.menuAdmin li ul li:has(ul)')
-			.hover(
-				function (event){
-					$(this).find('ul').first().stop().fadeIn();
-				},
-				function (event){
-					$(this).find('ul').first().stop().hide();
-				}
-			);									
+			.addClass('dropdown-toggle')
+			.attr('data-toggle', 'dropdown');
 	},
 	
 	loadSubForm: function(controller /*, field*/) {

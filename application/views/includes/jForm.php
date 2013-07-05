@@ -19,12 +19,7 @@ $aFields 	= array();
 $inputSize	= 'span10';
 
 foreach ($form['fields'] as $name => $field) {
-/*
-	$sField = '
-		<fieldset class="control-group">
-			<div class="controls"> %s </div>
-		</fieldset>';
-*/
+
 	if (isset($field['label'])) {
 		$sField = '
 			<fieldset class="control-group">
@@ -42,14 +37,13 @@ foreach ($form['fields'] as $name => $field) {
 			break;
 		case 'date':
 		case 'datetime':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label')).'
-				<div class="input-append">
+			$aFields[] = sprintf($sField, 
+				'<div class="input-append">
 					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'input-small')).'
 					<span class="add-on">
 						<i class="icon-calendar"></i>
-					</span>					
-				</fieldset>';
+					</span>
+				</div>');
 			break;
 		case 'password':
 			$aFields[] = sprintf($sField, form_password(array('name' => $name, 'value' => $field['value'], 'class' => $inputSize)));
@@ -115,10 +109,7 @@ foreach ($form['fields'] as $name => $field) {
 			$aFields[] = sprintf($sField, anchor($field['value'], $field['label']));
 			break;
 		case 'raty':
-			$aFields[] = '<fieldset class="control-group">'
-					.form_label($field['label'], null, array('class' => 'control-label')).
-					'<div class="raty" name="'.$name.'" />
-				</fieldset>';		
+			$aFields[] = sprintf($sField, '<div class="raty" name="'.$name.'" />');
 			break;		
 	}	
 }
