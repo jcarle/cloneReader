@@ -3,7 +3,7 @@
 $fields = $query->list_fields();
 ?>
 
-	<form method="get" class="tblFilter form-inline">
+	<form method="get" class="tblFilter form-inline navbar-form navbar-inner">
 		<fieldset>
 			<label>Filtros</label>
 			<div class="input-prepend">

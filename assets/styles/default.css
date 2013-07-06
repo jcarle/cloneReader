@@ -2,7 +2,7 @@ body, body * {
 	outline: 0;
 }
 [class^="icon-"], [class*=" icon-"] {
-    color: #555;
+	color: #555;
 }
 body.isLoading, body.isLoading * {
 	cursor:wait !important;
@@ -14,14 +14,14 @@ body.isLoading, body.isLoading * {
 
 #divWaiting {
 	display: block;
-    margin: -7px auto 0;
-    opacity: 0.9;
-    text-align: center;
-    position: fixed;
-    width: 140px;
+	margin: -7px auto 0;
+	opacity: 0.9;
+	text-align: center;
+	position: fixed;
+	width: 140px;
 }
 	#divWaiting small  {
-	    font-size: small;
+		font-size: small;
 		margin-left: 10px;
 	}
 
@@ -31,7 +31,7 @@ body.isLoading, body.isLoading * {
 	.error404 i {
 		color: #9D261D;
 		text-shadow: 1px 1px 0 black;	
-	    margin-right: 10px;
+		margin-right: 10px;
 	}
 /*
 .alert {
@@ -184,7 +184,7 @@ body.isLoading, body.isLoading * {
 			z-index: 10;
 		}
 				.menu div ul.menuAdmin > li:first-child > a {
-				    line-height: 1px;
+					line-height: 1px;
 					padding: 2px 6px;
 				}
 					.menu div ul.menuAdmin > li:first-child > a i {
@@ -199,8 +199,8 @@ body.isLoading, body.isLoading * {
 					  margin-top: -6px;
 					  margin-left: -1px;
 					  -webkit-border-radius: 6px 0px 6px 6px;
-					     -moz-border-radius: 6px 0px 6px 6px;
-					          border-radius: 6px 0px 6px 6px;
+						 -moz-border-radius: 6px 0px 6px 6px;
+							  border-radius: 6px 0px 6px 6px;
 				}
 				.menu div ul.menuAdmin .dropdown-submenu-left:hover > .dropdown-menu {
 				  display: block;
@@ -301,10 +301,7 @@ body.isLoading, body.isLoading * {
 	margin: 0;
 }
 	.paginatedList form {
-		border-radius: 3px 3px 3px 3px;
-		box-shadow: 0 0 4px gray;
 		margin: 0 0 10px 0;
-		padding: 10px;		
 	}
 		.paginatedList fieldset .icon-remove {
 			cursor: pointer;
@@ -324,7 +321,7 @@ body.isLoading, body.isLoading * {
 				.paginatedList table thead tr td, 
 				.paginatedList table thead tr td a  {
 					color:white;
-				    text-shadow: 1px 1px 0 black;
+					text-shadow: 1px 1px 0 black;
 				}
 				.paginatedList table thead tr td:first-child,
 				.paginatedList table thead tr td:nth-child(2) {
@@ -387,7 +384,7 @@ body.isLoading, body.isLoading * {
 		.jForm fieldset .raty {
 			display: inline-block;
 			border: 0 none;
-		}    			
+		}				
 /*		.jForm fieldset .link {
 			margin: 0 0 0 180px;
 		}*/
@@ -395,7 +392,7 @@ body.isLoading, body.isLoading * {
 			width: auto;
 		}*/
 		.jForm fieldset .icon-calendar {
-		    color: #3A87AD;
+			color: #3A87AD;
 		}
 		.jForm fieldset .groupCheckBox {
 			max-height: 300px;
@@ -403,8 +400,8 @@ body.isLoading, body.isLoading * {
 			overflow: auto;
 			padding: 0;
 			height:auto;
-		    border: 1px solid #CCCCCC;
-		    border-radius: 4px 4px 4px 4px;			
+			border: 1px solid #CCCCCC;
+			border-radius: 4px 4px 4px 4px;			
 		}
 			.jForm fieldset .groupCheckBox li {
 				border-bottom: 1px solid #CCCCCC;	
@@ -417,8 +414,8 @@ body.isLoading, body.isLoading * {
 					margin-left: 10px;
 				}
 				.jForm fieldset .groupCheckBox li label {
-				    display: inline-block;
-				    margin-left: 10px;					
+					display: inline-block;
+					margin-left: 10px;					
 				}
 		.jForm fieldset.tree ul:first-child {
 			height: 300px;
@@ -513,7 +510,7 @@ body.isLoading, body.isLoading * {
 								}*/
 
 	.jForm .form-actions {
-	    border-radius: 0 0 5px 5px;
+		border-radius: 0 0 5px 5px;
 		text-align: right;
 		margin: 0;
 	}

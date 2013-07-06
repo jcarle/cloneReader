@@ -1,7 +1,7 @@
 cloneReader = {
 	init: function(aFilters) {
 		this.$container = $('#cloneReader');
-		this.$ulMenu 	= $('<ul class="ulMenu" />').appendTo(this.$container);
+		this.$toolBar 	= $('<div class="btn-toolbar" />').appendTo(this.$container);
 		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$container); 
 		this.$ulEntries	= $('<ul class="ulEntries"/>').appendTo(this.$container);
 		
@@ -143,38 +143,128 @@ cloneReader = {
 	},
 	
 	renderMenu: function() {
+		this.$toolBar.html(' \
+			<a title="expand" class="expand"> \
+				<i class="icon-exchange"  /> \
+			</a> \
+			<a title="add feed" class="add"> \
+				<i class="icon-plus" /> \
+			</a> \
+			<div class="btn-group feedSettings" > \
+				<a> Feed settings </a> \
+				<a class="dropdown-toggle" data-toggle="dropdown" > \
+					<span class="caret" /> \
+				</a> \
+				<ul class="dropdown-menu popupFeedSettings" /> \
+			</div> \
+			<div class="btn-group filterSort" > \
+				<a/> \
+				<a class="dropdown-toggle" data-toggle="dropdown" > \
+					<span class="caret" /> \
+				</a> \
+				<ul class="dropdown-menu" > \
+					<li class="filterNewestSort"> <a> sort by newest </a> </li> \
+					<li class="filterOldestSort"> <a> sort by oldest </a> </li> \
+				</ul> \
+			</div> \
+			<div class="btn-group filterUnread" > \
+				<a/> \
+				<a class="dropdown-toggle" data-toggle="dropdown" > \
+					<span class="caret" /> \
+				</a> \
+				<ul class="dropdown-menu" > \
+					<li class="filterAllItems"> <a> all items </a> </li> \
+					<li class="filterOnlyUnread" > <a> <span class="count" /> new items </a> </li> \
+				</ul> \
+			</div> \
+			<div class="btn-group" data-toggle="buttons-radio" > \
+				<a class="viewList" title="list view" > \
+					<i class="icon-align-justify" /> \
+				</a> \
+				<a class="viewDetail" title="detail view" > \
+					<i class="icon-th-list" /> \
+				</a> \
+			</div> \
+			<a title="reload" class="reload" > \
+				<i class="icon-refresh" /> \
+			</a> \
+			<div class="btn-group"  > \
+				<a title="prev" class="prev" > \
+					<i class="icon-caret-up" /> \
+				</a> \
+				<a title="next" class="next" > \
+					<i class="icon-caret-down" /> \
+				</a> \
+			</div> \
+		');
+		
+		this.$toolBar.find('> a, > div > a').addClass('btn'); // btn-small');
+		//this.$toolBar.find('i').addClass('icon-large');
+		
+		
+		this.$toolBar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) } );
+		this.$toolBar.find('.next').click(function() { cloneReader.goToEntry(true) });
+		this.$toolBar.find('.prev').click(function() { cloneReader.goToEntry(false) });
+		this.$toolBar.find('.reload').click(function() { cloneReader.loadEntries(true, true, {}) });
+		this.$toolBar.find('.viewDetail').click(function() { cloneReader.loadEntries(true, false, {'viewType': 	'detail'}); });
+		this.$toolBar.find('.viewList').click(function() { cloneReader.loadEntries(true, false, {'viewType': 	'list'}); });
+		this.$toolBar.find('.filterAllItems').click(function() { cloneReader.loadEntries(true, false, { 'onlyUnread': false }); });
+		this.$toolBar.find('.filterOnlyUnread').click(function() { cloneReader.loadEntries(true, false, { 'onlyUnread': true }); });
+		this.$toolBar.find('.filterNewestSort').click(function(event) { cloneReader.loadEntries(true, false, {'sortDesc': true}); });
+		this.$toolBar.find('.filterOldestSort').click(function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); });
+		this.$toolBar.find('.add').click(  function(event) {  
+				event.stopPropagation(); 
+				cloneReader.showPopupForm('add feed url', function() { cloneReader.addFeed(); }, cloneReader.$toolBar.find('li.add')); 
+			}
+		);
+			
+this.$toolBar.find('.feedSettings').click(
+function() { cloneReader.showPopupFeedSettings(); });
+			
+					
+/*
 		this.createMenu([
-			{ 'html': '&#8644;', 	'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) }},
-			{ 'html': '&#9660;', 	'title': 'next',	'class': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
-			{ 'html': '&#9650;', 	'title': 'prev', 	'class': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
-			{ 'html': '&#10226;', 	'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, true, {}) }},
-			{ 'html': '&nbsp;', 	'class': 'viewDetail', 		'title': 'detail view', 	'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'detail'}); }},
-			{ 'html': '&nbsp;', 	'class': 'viewList', 		'title': 'list view', 		'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'list'}); }},
+			/*{ 'icon': 'icon-exchange', 'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) }},
+			
+			{'type': 'div', 'class': 'btn-group', 
+				'childs':  [			
+					{ 'icon': 'icon-caret-down', 	'title': 'next',	'class': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
+					{ 'icon': 'icon-caret-up', 		'title': 'prev', 	'class': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
+				]
+			},*/
+			/*{ 'icon': 'icon-refresh', 				'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, true, {}) }},
+			{'type': 'div', 'class': 'btn-group', 
+				'childs':  [
+					{ 'icon': 'icon-th-list', 			'class': 'viewDetail', 		'title': 'detail view', 	'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'detail'}); }},
+					{ 'icon': 'icon-align-justify', 	'class': 'viewList', 		'title': 'list view', 		'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'list'}); }},
+				]
+			},*/
+/*  
 			{ 'html': '<span />', 	'class': 'filterUnread', 
 				'childs':  [
 					{ 'html': 'all items', 							'class': 'filterAllItems', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': false }); }},
 					{ 'html': '<span class="count" /> new items', 	'class': 'filterOnlyUnread', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': true }); }},
 				]
-			},
-			{ 'html': '<span />', 	'class': 'filterSort', 
+			},*/
+/*			{ 'html': '<span />', 	'class': 'filterSort', 
 				'childs':  [
 					{ 'html': 'sort by newest', 'class': 'filterNewestSort', 'callback': function(event) { cloneReader.loadEntries(true, false, {'sortDesc': true}); }},
 					{ 'html': 'sort by oldest', 'class': 'filterOldestSort', 'callback': function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); }},
 				]
-			},
-			{ 'html': 'Feed settings', 	'class': 'feedSettings', 'callback':  function() { cloneReader.showPopupFeedSettings(); },
+			},*/
+			/*{ 'html': 'Feed settings', 	'class': 'feedSettings', 'callback':  function() { cloneReader.showPopupFeedSettings(); },
 				'childsClassName': 'popupFeedSettings',
 				'childs':  []
-			},
-			{ 'html': '+',  'title': 'add feed', 'class': 'add', 'callback': 
+			},*/
+			/*{ 'html': '+',  'title': 'add feed', 'class': 'add', 'callback': 
 				function(event) { 
 					event.stopPropagation(); 
-					cloneReader.showPopupForm('add feed url', function() { cloneReader.addFeed(); }, cloneReader.$ulMenu.find('li.add')); 
+					cloneReader.showPopupForm('add feed url', function() { cloneReader.addFeed(); }, cloneReader.$toolBar.find('li.add')); 
 				}
-			}
-		], this.$ulMenu);
+			}* /
+		], this.$toolBar);*/
 		
-		this.$ulMenu.find('.add .arrow, .filterUnread, .filterSort, .feedSettings').hide();
+		this.$toolBar.find('.add .arrow, .filterUnread, .filterSort, .feedSettings').hide();
 	},
 
 	showPopupMenu: function($li) {
@@ -195,38 +285,47 @@ cloneReader = {
 		var left 			= $li.offset().left - this.$container.offset().left;
 		var width 			= $li.innerWidth();;
 
-		this.$ulMenu.find('li').removeClass('expanded');
+		this.$toolBar.find('li').removeClass('expanded');
 		$li.addClass('expanded');
 
 		this.showPopupWindow($popUpWindow, top, left, width);
 	},
 	
+	/*
 	createMenu: function(items, $parent) {
 		for (var i=0; i<items.length; i++) {
 			var item 	= items[i];
-			var $li 	= $('<li/>').html(item.html).attr('title', item.title).addClass(item.class).appendTo($parent);
+
+			item = $.extend({'type': 'button', 'html': '', 'icon': ''}, item);
+			var $item 	= $('<' + item.type + '/>').html(item.html + (item.icon != '' ? '<i class="' + item.icon + '"/>' : '')).attr('title', item.title).addClass(item.class).appendTo($parent);
+			$item.after(' '); // FIXME: agrego espacio entre los elementos, sino aparecen todos amontonados; averiguar si se puede resolver con css
+			
+			if (item.type == 'button') {
+				$item.addClass('btn');
+			}
 			if (item.data != null) {
-				$li.data(item.data);
+				$item.data(item.data);
 			}
 			if (item.childs != null) {
-				$('<span class="arrow">&#9660;</span>').appendTo($li);
-				var $popUpWindow = $('<ul/>')
+//				$('<span class="arrow">&#9660;</span>').appendTo($item);
+				/*var $popUpWindow = $('<ul/>')
 					.addClass('popUpWindow')
 					.addClass(item.childsClassName)
-					.hide().appendTo(this.$container);
+					.hide().appendTo(this.$container);* /
 
-				this.createMenu(item.childs, $popUpWindow);
-				$li
+				this.createMenu(item.childs, $item);
+				/*$item
 					.data('popUpWindow', $popUpWindow)
 					.click(function(event) { 
 							event.stopPropagation(); 
 							cloneReader.showPopupMenu($(event.target));
-					});
+					});* /
 			}
 
-			$li.click(item.callback);
+			$item.click(item.callback);
 		}
 	},	
+	*/
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
@@ -250,7 +349,7 @@ cloneReader = {
 		this.renderNotResult(true);
 		this.renderEntriesHead();
 		this.selectFilters();
-		this.updateUlMenu();
+		this.updateToolBar();
 		
 		lastFilters = $.parseJSON(lastFilters);
 		if (this.aFilters.onlyUnread != lastFilters.onlyUnread) {
@@ -584,29 +683,29 @@ cloneReader = {
 		$filter.hide().toggle(this.isVisible(filter, true));		
 	},
 	
-	updateUlMenu: function() {
-		this.$ulMenu.find('.filterSort span:first').text(this.$container.find(this.aFilters.sortDesc == true ? '.popUpWindow .filterNewestSort' : '.popUpWindow .filterOldestSort').text());
-		this.$ulMenu.find('.filterUnread span:first').html(this.$container.find(this.aFilters.onlyUnread == true ? '.popUpWindow .filterOnlyUnread' :  '.popUpWindow .filterAllItems').html());
-		
-		this.$ulMenu.find('li.viewDetail, li.viewList').removeClass('checked');
+	updateToolBar: function() {
+		this.$toolBar.find('.filterSort a:first').text(this.$container.find(this.aFilters.sortDesc == true ? '.filterNewestSort' : '.filterOldestSort').text());
+		this.$toolBar.find('.filterUnread a:first').html(this.$container.find(this.aFilters.onlyUnread == true ? '.filterOnlyUnread a' : '.filterAllItems a').html());
+
+		this.$toolBar.find('.viewDetail, .viewList').removeClass('active');
 		if (this.aFilters.viewType == 'detail') {
-			this.$ulMenu.find('li.viewDetail').addClass('checked');
+			this.$toolBar.find('.viewDetail').addClass('active');
 		}
 		else {
-			this.$ulMenu.find('li.viewList').addClass('checked');
-		}		
+			this.$toolBar.find('.viewList').addClass('active');
+		}
 
-		this.$ulMenu.find('li.feedSettings').hide();
+		this.$toolBar.find('.feedSettings').hide();
 		if (this.aFilters.type == 'feed') {
-			this.$ulMenu.find('li.feedSettings').show();
+			this.$toolBar.find('.feedSettings').show();
 		}
 		
-		this.$ulMenu.find('.filterUnread').hide();
+		this.$toolBar.find('.filterUnread').hide();
 		if (!(this.aFilters.type == 'tag' && this.aFilters.id == TAG_STAR)) {
-			this.$ulMenu.find('.filterUnread').show();
+			this.$toolBar.find('.filterUnread').show();
 		}
 		
-		this.$ulMenu.find('.filterSort').show();
+		this.$toolBar.find('.filterSort').show();
 	},
 
 	updateMenuCount: function() {
@@ -614,7 +713,7 @@ cloneReader = {
 		if (count > FEED_MAX_COUNT) {
 			count = FEED_MAX_COUNT + '+';
 		}
-		this.$ulMenu.find('.filterUnread .count').text(count);
+		this.$toolBar.find('.filterUnread .count').text(count);
 		this.$container.find('.popUpWindow .filterOnlyUnread .count').text(count);
 	},
 	
@@ -1203,10 +1302,19 @@ console.timeEnd("t1");
 			{ 'html': 'New tag', 			'class': 'newTag', 'callback': 
 				function(event) { 
 					event.stopPropagation(); 
-					cloneReader.showPopupForm('enter tag name', function() { cloneReader.addTag(); }, cloneReader.$ulMenu.find('.feedSettings'));
+					cloneReader.showPopupForm('enter tag name', function() { cloneReader.addTag(); }, cloneReader.$toolBar.find('.feedSettings'));
 				}
 			}
 		];
+
+//cn(this.$popupFeedSettings);		
+		
+		/*$('<li><a>Mark all as read</a></li>').appendTo(this.$popupFeedSettings).find('a:last').click(function() { cloneReader.markAsReadFeed(cloneReader.aFilters.id); } );
+
+		$('<li><a>Unsubscribe</a></li>').appendTo(this.$popupFeedSettings).find('a:last').click( 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
+			{ 'html': 'New tag', 			'class': 'newTag', 'callback':*/ 
+		
+		
 
 		for (var i=0; i<this.tags.length; i++) {
 			var tag = this.tags[i];
@@ -1217,11 +1325,27 @@ console.timeEnd("t1");
 				if (hasTag == true) {
 					check = '&#10004';
 				}
-				aItems.push( { 'html': '<span class="check">' + check + '</span>' + tag.tagName,  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  var $filter = $(this); cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), !$filter.hasClass('selected') ); } } );
+				aItems.push( { 'html': tag.tagName,  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  var $filter = $(this); cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), !$filter.hasClass('selected') ); } } );
 			}
 		}
+		
 
-		this.createMenu(aItems, this.$popupFeedSettings);
+		for (var i=0; i<aItems.length; i++) {
+			var item 	= aItems[i];
+			var $item 	= $('<li><a>' + item.html + '</a></li>').appendTo(this.$popupFeedSettings);
+			if (item.data != null) {
+				$item.data(item.data);
+			}
+			$item
+				.click(function(event) { 
+					event.stopPropagation();
+					item.callback(); 
+					//cloneReader.showPopupMenu($(event.target));
+				});
+		}
+			
+
+		//this.createMenu(aItems, this.$popupFeedSettings);
 		this.$popupFeedSettings.find('li.newTag .arrow').hide();
 	},
 	
@@ -1269,7 +1393,7 @@ console.timeEnd("t1");
 	resizeWindow: function() {
 		this.hidePopupWindow();
 		$('.content > h1').hide();
-		$('.content').width('auto').css( { 'min-height': 1, 'overflow': 'hidden' });
+		$('.content').css( { 'max-width': '100%', 'min-height': 1, 'overflow': 'hidden' });
 		
 		this.$ulFilters.height(1);
 		
@@ -1296,7 +1420,7 @@ console.timeEnd("t1");
 	
 	hidePopupWindow: function() {
 		this.$container.find('.popUpWindow').hide();
-		this.$ulMenu.find('li').removeClass('expanded');
+		this.$toolBar.find('li').removeClass('expanded');
 	},
 	
 	humanizeDatetime: function(datetime, format) {
