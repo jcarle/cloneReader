@@ -49,7 +49,7 @@ cloneReader = {
 			cloneReader.resizeWindow();
 			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 		});
-
+		
 		this.$ulEntries.scroll($.proxy(
 			function(event) {
 				this.scrollEntries();
@@ -147,18 +147,18 @@ cloneReader = {
 			<a title="expand" class="expand"> \
 				<i class="icon-exchange"  /> \
 			</a> \
-			<a title="add feed" class="add"> \
+			<a title="add feed" class="add" > \
 				<i class="icon-plus" /> \
 			</a> \
 			<div class="btn-group feedSettings" > \
-				<a> Feed settings </a> \
+				<a class="disabled"> Feed settings </a> \
 				<a class="dropdown-toggle" data-toggle="dropdown" > \
 					<span class="caret" /> \
 				</a> \
 				<ul class="dropdown-menu popupFeedSettings" /> \
 			</div> \
 			<div class="btn-group filterSort" > \
-				<a/> \
+				<a class="disabled"/> \
 				<a class="dropdown-toggle" data-toggle="dropdown" > \
 					<span class="caret" /> \
 				</a> \
@@ -168,7 +168,7 @@ cloneReader = {
 				</ul> \
 			</div> \
 			<div class="btn-group filterUnread" > \
-				<a/> \
+				<a class="disabled"/> \
 				<a class="dropdown-toggle" data-toggle="dropdown" > \
 					<span class="caret" /> \
 				</a> \
@@ -214,12 +214,10 @@ cloneReader = {
 		this.$toolBar.find('.filterOldestSort').click(function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); });
 		this.$toolBar.find('.add').click(  function(event) {  
 				event.stopPropagation(); 
-				cloneReader.showPopupForm('add feed url', function() { cloneReader.addFeed(); }, cloneReader.$toolBar.find('li.add')); 
+				cloneReader.showPopupForm('Add new feed', 'Add feed url', function() { cloneReader.addFeed(); }, cloneReader.$toolBar.find('.add')); 
 			}
 		);
-			
-this.$toolBar.find('.feedSettings').click(
-function() { cloneReader.showPopupFeedSettings(); });
+		this.$toolBar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
 			
 					
 /*
@@ -264,9 +262,12 @@ function() { cloneReader.showPopupFeedSettings(); });
 			}* /
 		], this.$toolBar);*/
 		
-		this.$toolBar.find('.add .arrow, .filterUnread, .filterSort, .feedSettings').hide();
-	},
+		this.$toolBar.find('.filterUnread, .filterSort, .feedSettings').hide();
+		
 
+		
+	},
+/*
 	showPopupMenu: function($li) {
 		if ($li.get(0).tagName != 'LI') {
 			$li = $li.parents('li');
@@ -1302,19 +1303,11 @@ console.timeEnd("t1");
 			{ 'html': 'New tag', 			'class': 'newTag', 'callback': 
 				function(event) { 
 					event.stopPropagation(); 
-					cloneReader.showPopupForm('enter tag name', function() { cloneReader.addTag(); }, cloneReader.$toolBar.find('.feedSettings'));
+					cloneReader.showPopupForm('Add new tag', 'enter tag name', function() { cloneReader.addTag(); }, cloneReader.$toolBar.find('.feedSettings'));
 				}
-			}
+			},
+			{ 'class': 'divider' }
 		];
-
-//cn(this.$popupFeedSettings);		
-		
-		/*$('<li><a>Mark all as read</a></li>').appendTo(this.$popupFeedSettings).find('a:last').click(function() { cloneReader.markAsReadFeed(cloneReader.aFilters.id); } );
-
-		$('<li><a>Unsubscribe</a></li>').appendTo(this.$popupFeedSettings).find('a:last').click( 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
-			{ 'html': 'New tag', 			'class': 'newTag', 'callback':*/ 
-		
-		
 
 		for (var i=0; i<this.tags.length; i++) {
 			var tag = this.tags[i];
@@ -1325,28 +1318,29 @@ console.timeEnd("t1");
 				if (hasTag == true) {
 					check = '&#10004';
 				}
-				aItems.push( { 'html': tag.tagName,  'class': (hasTag == true ? 'selected' : ''), 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  var $filter = $(this); cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), !$filter.hasClass('selected') ); } } );
+				aItems.push( { 'html': (hasTag == true ? '<i class="icon-ok icon-fixed-width" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  
+					var $filter = $(this); 
+					cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), $filter.find('i.icon-ok').length == 0 ); 
+				} } );
 			}
 		}
 		
-
+ 
 		for (var i=0; i<aItems.length; i++) {
 			var item 	= aItems[i];
-			var $item 	= $('<li><a>' + item.html + '</a></li>').appendTo(this.$popupFeedSettings);
-			if (item.data != null) {
-				$item.data(item.data);
+			if (item.class == 'divider') {
+				var $item 	= $('<li class="divider" />').appendTo(this.$popupFeedSettings);
 			}
-			$item
-				.click(function(event) { 
-					event.stopPropagation();
-					item.callback(); 
-					//cloneReader.showPopupMenu($(event.target));
-				});
+			else {
+				var $item 	= $('<li><a>' + item.html + '</a></li>').appendTo(this.$popupFeedSettings);
+				if (item.data != null) {
+					$item.data(item.data);
+				}
+				$item.click(item.callback);
+			} 
 		}
 			
-
-		//this.createMenu(aItems, this.$popupFeedSettings);
-		this.$popupFeedSettings.find('li.newTag .arrow').hide();
+		this.$popupFeedSettings.css({ 'max-height': this.$ulEntries.height(), 'overflow': 'auto' })
 	},
 	
 	feedHasTag: function(feed, tag) {
@@ -1361,18 +1355,35 @@ console.timeEnd("t1");
 		return false;
 	},
 
-	showPopupForm: function(placeholder, callback, $li){
+	showPopupForm: function(title, placeholder, callback, $li){
 		if (this.$popupForm == null) {
-			this.$popupForm = $('<form> <input /> <button> add</button></form>').addClass('popUpWindow').addClass('popupForm');
+			this.$popupForm = $('\
+				<form class="form-inline"> \
+					<fieldset class="btn-group input-append" > \
+						<input type="text"  /> \
+						<button class="btn btn-primary"> <i class="icon-ok" /> </button> \
+					</fieldset> \
+				</form>\
+			');
+//.addClass('popUpWindow').addClass('popupForm');
 			
 			this.$popupForm.find('input').keyup(function(event) {
 				event.stopPropagation();
 			});
 		}
+		
 
-		this.hidePopupWindow();
-		$li.addClass('expanded');
-
+		$li.unbind();
+		//$li.popover('destroy')
+		
+		$li.popover({ 
+			'container': 	'body',
+			'placement': 	'bottom', 
+			'html': 		true,
+			'title': 		title,
+			'content': 		this.$popupForm 
+		});
+		
 		this.$popupForm
 			.unbind()
 			.submit(function(event) {
@@ -1380,14 +1391,10 @@ console.timeEnd("t1");
 				callback();
 				return false;
 			});
-
-		var top		= $li.offset().top + $li.height() - this.$container.offset().top + 1; // FIXME: revisar el '1'
-		var left 	= $li.offset().left - this.$container.offset().left;
-		var width 	= 300;
-
-		this.showPopupWindow(this.$popupForm, top, left, width);
-		
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('').focus();
+					
+
+		$li.popover('show');		
 	},
 	
 	resizeWindow: function() {
@@ -1419,8 +1426,9 @@ console.timeEnd("t1");
 	},
 	
 	hidePopupWindow: function() {
-		this.$container.find('.popUpWindow').hide();
-		this.$toolBar.find('li').removeClass('expanded');
+		this.$container.find('.popover').parent().popover('hide');
+		//this.$container.find('.popUpWindow').hide();
+		//this.$toolBar.find('li').removeClass('expanded');
 	},
 	
 	humanizeDatetime: function(datetime, format) {

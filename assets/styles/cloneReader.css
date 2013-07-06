@@ -19,105 +19,11 @@
 			#cloneReader .btn-toolbar .dropdown-menu li {
 				cursor: pointer;
 			}
-/*
-	#cloneReader .btn-toolbar {
-		list-style:none;
-		display:block;
-		border-top:1px #ccc solid;
-		border-bottom:1px #ccc solid;
-		background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-		background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
-		padding:0 15px 0 0;
-		margin: 0 0 2px 0;
-		box-shadow: 0 5px 7px gray;
-		height:40px;
-		z-index: 1;
-	}
-		#cloneReader .btn-toolbar li {
-			background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-			background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
-			border-color: #CCCCCC #BBBBBB #A0A0A0;
-			border-left: 1px solid #BBBBBB;
-			border-radius: 0;
-			border-right: 1px solid #BBBBBB;
-			border-style: solid;
-			border-width: 1px;
-			cursor: pointer;
-			font-size: 12px;
-			outline: medium none;
-			text-align: center;
-			text-shadow:0 1px 0 white;
-			line-height:30px;
-			width:30px;
-			margin:5px 5px 5px 0 ;
-			float:right;
-			-moz-user-select: none;
-			-khtml-user-select: none;
-			-webkit-user-select: none;
-			user-select: none;			
-		}
-		#cloneReader .btn-toolbar li.reload {
-			font-size:20px;
-		}
-		#cloneReader .btn-toolbar li.viewDetail {
-			background: url(../images/view_options_details.png) no-repeat scroll center center transparent;
-		}
-		#cloneReader .btn-toolbar li.prev {
-			margin:5px 0;
-			border-right: 0 none;		
-		}
-		#cloneReader .btn-toolbar li.viewList {
-			background: url(../images/view_options_list.png) no-repeat scroll center center transparent;
-			margin:5px 0;
-			border-right: 0 none;
-		}
-		#cloneReader .btn-toolbar li:hover {
-			box-shadow: 0px 0px 4px #CCC;
-		}
-		#cloneReader .btn-toolbar li:active {
-			box-shadow: 0px 0px 4px #CCC inset;
-		}
-		
-		#cloneReader .btn-toolbar li.checked,
-		#cloneReader .btn-toolbar li.checked:hover,
-		#cloneReader .btn-toolbar li.checked:active {
-			background-color: #DDDDDD;
-			box-shadow: 0 0 2px gray inset;
-			cursor: default;
-		}
-		#cloneReader .btn-toolbar li.filterUnread,
-		#cloneReader .btn-toolbar li.filterSort,
-		#cloneReader .btn-toolbar li.feedSettings {
-			padding: 0 0 0 15px;
-			width: auto;
-			text-align: right;
-		}*/
 		#cloneReader .btn-toolbar .feedSettings a,
 		#cloneReader .btn-toolbar .filterSort a,
 		#cloneReader .btn-toolbar .filterUnread a {
 			font-size: small;
 		}
-		/*
-			#cloneReader .btn-toolbar li .arrow {
-				border-left: 1px solid #CCCCCC;
-				display: inline-block;
-				font-size: 9px;
-				line-height: 20px;
-				margin: 0 0 0 10px;
-				width: 20px;
-				text-align: center;
-			}
-		#cloneReader .btn-toolbar li.add  {
-			font-size: 20px;
-			font-weight: bold;
-			font-weight: bold;
-		}
-		#cloneReader .btn-toolbar > li.expanded,
-		#cloneReader .btn-toolbar > li.expanded:hover,
-		#cloneReader .btn-toolbar > li.expanded:active {
-			box-shadow: none;
-			background: #DDD;
-		}	*/	
 		#cloneReader .btn-toolbar .expand {
 			float: left;
 		}	
@@ -465,7 +371,7 @@
 
 
 
-
+/*
 	#cloneReader .popUpWindow {
 		background: none repeat scroll 0 0 white;
 		border: 1px solid #CCCCCC;
@@ -510,9 +416,9 @@
 					color: gray;
 					display: inline-block;
 					width: 16px;
-				}
+				}*/
 
-
+/*
 	#cloneReader form.popUpWindow  {
 		padding: 10px;
 	}
@@ -526,7 +432,7 @@
 			height: 25px;
 			line-height: 25px;
 			padding: 0 8px;
-		}
+		}*/
 
 
 .nicescroll-rails div {

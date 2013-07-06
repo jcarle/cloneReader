@@ -253,27 +253,6 @@ $.extend({
 	},
 	
 	showWaiting: function(forceWaiting) {
-		/*if ($('#divWaiting').length == 0) {
-			this.divWaiting = document.createElement('div');
-			$(this.divWaiting)
-				.appendTo(document.body)
-				.attr('id', 'divWaiting')
-				.html('<p>procesando ...</p>');
-			
-	
-			var styles = 'body.isWaiting, body.isWaiting * {cursor:wait !important;}';
-			var head = document.getElementsByTagName('head')[0];
-			var sheet = document.createElement('style');
-			sheet.setAttribute('media', 'all');
-			sheet.setAttribute('type', 'text/css');
-			if(sheet.styleSheet) {
-				sheet.styleSheet.cssText = styles;  // For IE
-			} else {
-				sheet.appendChild( document.createTextNode(styles) );
-			}
-			head.appendChild( sheet );
-		}*/
-
 		/*
 		 * TODO:
 		 * Para forzar que muestre o oculte el div, sumo o resto a la variable countProcess; pensar si hay una forma mas elegante de resolver esto. 
