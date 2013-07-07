@@ -59,21 +59,20 @@ body.isLoading, body.isLoading * {
 	overflow: hidden;
 }
 	#header div {
-		margin: 0 10px 0 0;
+		margin: 0;
+		padding:5px;
 		min-height: 65px;
 		width:auto;
 		overflow: hidden;
 		position:relative;
 	}
 		#header div .logo {
-			left: 0;
-			line-height: 26px;
-			position: absolute;
-			top: 7px;
-			margin: 0 0 0 10px;
+			margin: 0;
+			line-height: 30px;
+			position: relative;
 			z-index: 9;
 			overflow: hidden;
-			padding-right: 50px;
+			padding-right: 60px;
 		}
 			#header div .logo span {
 				font-size: small;
@@ -82,12 +81,15 @@ body.isLoading, body.isLoading * {
 				position: absolute;
 				right: -39px;
 				top: 4px;
+				-webkit-transform: rotate(45deg);
 				transform: rotate(45deg);
 				width: 113px;
 			}
 		#header div .search {
-			position: absolute;
-			right:2px; top:30px;
+			clear: both;
+			float: right;
+			margin: 5px 0;
+			position: relative;
 		}
 		#header div ul {
 			list-style:none;
@@ -111,11 +113,11 @@ body.isLoading, body.isLoading * {
 		#header div ul.menuProfile {
 			background: none repeat scroll 0 0 transparent;
 			list-style: none outside none;
-			position: absolute;
-			right: 0;
-			top: 5px;
+			position: relative;
 			margin: 0;
 			padding: 0;
+			float: right;
+			font-size: small;
 		}			
 			#header div ul.menuProfile  li {
 				float:left;

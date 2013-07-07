@@ -19,7 +19,8 @@
 		#cloneReader .btn-toolbar .filterUnread a {
 			font-size: small;
 		}
-		#cloneReader .btn-toolbar .expand {
+		#cloneReader .btn-toolbar .expand,
+		#cloneReader .btn-toolbar .tooglePageHeader {
 			float: left;
 		}	
 
@@ -184,7 +185,7 @@
 		#cloneReader .ulEntries.list > li.entriesHead {
 			border-bottom: 1px solid #CCCCCC;
 			box-shadow: none;
-			margin: 10px 0 0;
+			margin: 0;
 		}		
 		#cloneReader .ulEntries.list > li:last-child {
 			border: 0 none;

@@ -43,7 +43,7 @@ cloneReader = {
 		this.$ulFilters.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 }); // TODO: revisar los parametros de niceScroll
 		this.$ulEntries.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 });
 		
-		this.maximiseUlEntries(this.aFilters.isMaximized, false);						
+		this.maximiseUlEntries(this.aFilters.isMaximized, false);
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
@@ -143,13 +143,9 @@ cloneReader = {
 	},
 	
 	renderMenu: function() {
-
-// TODO: agregar un boton para ocultar el header de la page!		
-//<a title="expand" class="resizeFull"> <i class="icon-resize-full"  /> </a> \ 
-
-		
 		this.$toolBar.html(' \
 			<a title="expand" class="expand"> <i class="icon-exchange"  /> </a> \
+			<a title="maximize" class="tooglePageHeader"> <i class="icon-resize-full"  /> </a> \
 			<div class="btn-group add" > \
 				<a title="add feed" > <i class="icon-plus" /> </a> \
 			</div>\
@@ -194,10 +190,10 @@ cloneReader = {
 		');
 		
 		this.$toolBar.find('> a, > div > a').addClass('btn'); // btn-small');
-		//this.$toolBar.find('i').addClass('icon-large');
-		
 		
 		this.$toolBar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) } );
+		this.$toolBar.find('.tooglePageHeader').click(function() { cloneReader.tooglePageHeader(!cloneReader.aFilters.isMaximized, true) } );
+		
 		this.$toolBar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$toolBar.find('.prev').click(function() { cloneReader.goToEntry(false) });
 		this.$toolBar.find('.reload').click(function() { cloneReader.loadEntries(true, true, {}) });
@@ -220,8 +216,6 @@ cloneReader = {
 				cloneReader.hidePopupWindow();
 			}
 		);
-		
-		//this.$toolBar.find('*').tooltip({ placement: 'bottom', container: 'body' });
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -1005,6 +999,13 @@ console.timeEnd("t1");
 		else {
 			this.$ulEntries.stop().css(	{ 'margin-left': marginLeft } ); 			
 		}				
+	},
+	
+	tooglePageHeader: function(value) {
+		this.$toolBar, $('#header, .menu:first').fadeToggle('fast', function() {;
+			cloneReader.resizeWindow();
+			cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false);
+		});
 	},
 	
 	updateNiceScroll: function() {
