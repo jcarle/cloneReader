@@ -120,13 +120,13 @@ cloneReader = {
 
 		$(document).click(
 			function(event) {
-				if ($('.alert').length != 0) {
+				if ($('.alert:visible').length != 0) {
 					return;
 				}
 				
-				var $popUpWindow = cloneReader.$container.find('.popUpWindow:visible');
-				if ($popUpWindow.length != 0) {
-					if ($.contains($popUpWindow[0], event.target)) {
+				var $popupForm = cloneReader.$container.find('.popupForm:visible');
+				if ($popupForm.length != 0) {
+					if ($.contains($popupForm[0], event.target)) {
 						return;
 					}
 				}
@@ -143,18 +143,19 @@ cloneReader = {
 	},
 	
 	renderMenu: function() {
+
+// TODO: agregar un boton para ocultar el header de la page!		
+//<a title="expand" class="resizeFull"> <i class="icon-resize-full"  /> </a> \ 
+
+		
 		this.$toolBar.html(' \
-			<a title="expand" class="expand"> \
-				<i class="icon-exchange"  /> \
-			</a> \
-			<a title="add feed" class="add" > \
-				<i class="icon-plus" /> \
-			</a> \
+			<a title="expand" class="expand"> <i class="icon-exchange"  /> </a> \
+			<div class="btn-group add" > \
+				<a title="add feed" > <i class="icon-plus" /> </a> \
+			</div>\
 			<div class="btn-group feedSettings" > \
 				<a class="disabled"> Feed settings </a> \
-				<a class="dropdown-toggle" data-toggle="dropdown" > \
-					<span class="caret" /> \
-				</a> \
+				<a class="dropdown-toggle" data-toggle="dropdown" > <span class="caret" /> </a> \
 				<ul class="dropdown-menu popupFeedSettings" /> \
 			</div> \
 			<div class="btn-group filterSort" > \
@@ -185,16 +186,10 @@ cloneReader = {
 					<i class="icon-th-list" /> \
 				</a> \
 			</div> \
-			<a title="reload" class="reload" > \
-				<i class="icon-refresh" /> \
-			</a> \
+			<a title="reload" class="reload" > <i class="icon-refresh" /> </a> \
 			<div class="btn-group"  > \
-				<a title="prev" class="prev" > \
-					<i class="icon-caret-up" /> \
-				</a> \
-				<a title="next" class="next" > \
-					<i class="icon-caret-down" /> \
-				</a> \
+				<a title="prev" class="prev" > <i class="icon-caret-up" /> </a> \
+				<a title="next" class="next" > <i class="icon-caret-down" /> </a> \
 			</div> \
 		');
 		
@@ -264,6 +259,15 @@ cloneReader = {
 		
 		this.$toolBar.find('.filterUnread, .filterSort, .feedSettings').hide();
 		
+	
+//this.$toolBar.find(".dropdown-toggle, .dropdown-menu li a")
+		this.$toolBar.find('.dropdown-toggle').click(
+			function(event) {
+				cloneReader.hidePopupWindow();
+			}
+		);
+		
+		this.$toolBar.find('*').tooltip({ placement: 'bottom', container: 'body' });
 
 		
 	},
@@ -1301,7 +1305,8 @@ console.timeEnd("t1");
 			{ 'html': 'Mark all as read', 	'callback': function() { cloneReader.markAsReadFeed(cloneReader.aFilters.id); } },
 			{ 'html': 'Unsubscribe', 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
 			{ 'html': 'New tag', 			'class': 'newTag', 'callback': 
-				function(event) { 
+				function(event) {
+cn($(event.target));
 					event.stopPropagation(); 
 					cloneReader.showPopupForm('Add new tag', 'enter tag name', function() { cloneReader.addTag(); }, cloneReader.$toolBar.find('.feedSettings'));
 				}
@@ -1355,34 +1360,25 @@ console.timeEnd("t1");
 		return false;
 	},
 
-	showPopupForm: function(title, placeholder, callback, $li){
+	showPopupForm: function(title, placeholder, callback, $element){
 		if (this.$popupForm == null) {
 			this.$popupForm = $('\
-				<form class="form-inline"> \
+				<form class="form-inline navbar-form navbar-inner popupForm"> \
 					<fieldset class="btn-group input-append" > \
 						<input type="text"  /> \
 						<button class="btn btn-primary"> <i class="icon-ok" /> </button> \
 					</fieldset> \
 				</form>\
 			');
-//.addClass('popUpWindow').addClass('popupForm');
 			
 			this.$popupForm.find('input').keyup(function(event) {
 				event.stopPropagation();
 			});
 		}
 		
-
-		$li.unbind();
-		//$li.popover('destroy')
+		this.hidePopupWindow();
 		
-		$li.popover({ 
-			'container': 	'body',
-			'placement': 	'bottom', 
-			'html': 		true,
-			'title': 		title,
-			'content': 		this.$popupForm 
-		});
+		$element.find('a').addClass('active');
 		
 		this.$popupForm
 			.unbind()
@@ -1392,9 +1388,15 @@ console.timeEnd("t1");
 				return false;
 			});
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('').focus();
-					
 
-		$li.popover('show');		
+		var top		= $element.offset().top + $element.height() - this.$container.offset().top + 2;
+		var left 	= $element.offset().left - this.$container.offset().left;
+		
+		this.$popupForm
+			.css({ 'top': top,  'left': left, 'position': 'absolute' })
+			.appendTo(this.$container)
+			.stop()
+			.fadeIn();			
 	},
 	
 	resizeWindow: function() {
@@ -1426,9 +1428,9 @@ console.timeEnd("t1");
 	},
 	
 	hidePopupWindow: function() {
-		this.$container.find('.popover').parent().popover('hide');
-		//this.$container.find('.popUpWindow').hide();
-		//this.$toolBar.find('li').removeClass('expanded');
+		this.$container.find('.popupForm').hide();
+		this.$toolBar.find('.open').removeClass('open'); //dropdown('hide');
+		this.$toolBar.find('.active').removeClass('active'); //dropdown('hide');
 	},
 	
 	humanizeDatetime: function(datetime, format) {

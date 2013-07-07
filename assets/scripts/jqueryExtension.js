@@ -47,14 +47,14 @@ $.extend({
 	},
 
 	validateUrl: function(value) {
-	    if (value.length == 0) { return true; }
+		if (value.length == 0) { return true; }
  
-    	if(!/^(https?|ftp):\/\//i.test(value)) {
-	        value = 'http://' + value;
-    	}
-    	
+		if(!/^(https?|ftp):\/\//i.test(value)) {
+			value = 'http://' + value;
+		}
+		
 		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-        return regexp.test(value);
+		return regexp.test(value);
 	},
 	
 	strPad: function(i,l,s) {
@@ -67,139 +67,139 @@ $.extend({
 	},	
 	
 	base64Decode: function( data ) {
-	    var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	    var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, dec = "", tmp_arr = [];
+		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, dec = "", tmp_arr = [];
 	
-	    if (!data) {
-	        return data;
-	    }
+		if (!data) {
+			return data;
+		}
 	
-	    data += '';
+		data += '';
 	
-	    do {
-	        h1 = b64.indexOf(data.charAt(i++));
-	        h2 = b64.indexOf(data.charAt(i++));
-	        h3 = b64.indexOf(data.charAt(i++));
-	        h4 = b64.indexOf(data.charAt(i++));
+		do {
+			h1 = b64.indexOf(data.charAt(i++));
+			h2 = b64.indexOf(data.charAt(i++));
+			h3 = b64.indexOf(data.charAt(i++));
+			h4 = b64.indexOf(data.charAt(i++));
 	
-	        bits = h1<<18 | h2<<12 | h3<<6 | h4;
+			bits = h1<<18 | h2<<12 | h3<<6 | h4;
 	
-	        o1 = bits>>16 & 0xff;
-	        o2 = bits>>8 & 0xff;
-	        o3 = bits & 0xff;
+			o1 = bits>>16 & 0xff;
+			o2 = bits>>8 & 0xff;
+			o3 = bits & 0xff;
 	
-	        if (h3 == 64) {
-	            tmp_arr[ac++] = String.fromCharCode(o1);
-	        } else if (h4 == 64) {
-	            tmp_arr[ac++] = String.fromCharCode(o1, o2);
-	        } else {
-	            tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
-	        }
-	    } while (i < data.length);
+			if (h3 == 64) {
+				tmp_arr[ac++] = String.fromCharCode(o1);
+			} else if (h4 == 64) {
+				tmp_arr[ac++] = String.fromCharCode(o1, o2);
+			} else {
+				tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+			}
+		} while (i < data.length);
 	
-	    dec = tmp_arr.join('');
-	    dec = $.utf8Decode(dec);
+		dec = tmp_arr.join('');
+		dec = $.utf8Decode(dec);
 	
-	    return dec;
+		return dec;
 	},
 	
 	base64Encode: function(data) {
-	    var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	    var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, enc="", tmp_arr = [];
+		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, enc="", tmp_arr = [];
 	
-	    if (!data) {
-	        return data;
-	    }
+		if (!data) {
+			return data;
+		}
 	
-	    data = $.utf8Encode(data+'');
+		data = $.utf8Encode(data+'');
 	
-	    do { // pack three octets into four hexets
-	        o1 = data.charCodeAt(i++);
-	        o2 = data.charCodeAt(i++);
-	        o3 = data.charCodeAt(i++);
+		do { // pack three octets into four hexets
+			o1 = data.charCodeAt(i++);
+			o2 = data.charCodeAt(i++);
+			o3 = data.charCodeAt(i++);
 	
-	        bits = o1<<16 | o2<<8 | o3; h1 = bits>>18 & 0x3f;
-	        h2 = bits>>12 & 0x3f;
-	        h3 = bits>>6 & 0x3f;
-	        h4 = bits & 0x3f;
+			bits = o1<<16 | o2<<8 | o3; h1 = bits>>18 & 0x3f;
+			h2 = bits>>12 & 0x3f;
+			h3 = bits>>6 & 0x3f;
+			h4 = bits & 0x3f;
 	
-	        // use hexets to index into b64, and append result to encoded string
-	        tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-	    } while (i < data.length);
+			// use hexets to index into b64, and append result to encoded string
+			tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+		} while (i < data.length);
 	
-	    enc = tmp_arr.join('');
+		enc = tmp_arr.join('');
 	
-	    switch (data.length % 3) {
-	        case 1:
-	            enc = enc.slice(0, -2) + '==';
-	            break;
-	        case 2:
-	            enc = enc.slice(0, -1) + '=';
-	            break;
-	    }
+		switch (data.length % 3) {
+			case 1:
+				enc = enc.slice(0, -2) + '==';
+				break;
+			case 2:
+				enc = enc.slice(0, -1) + '=';
+				break;
+		}
 	
-	    return enc;
+		return enc;
 	},
 	
 	utf8Decode: function( str_data ) {
-	    var tmp_arr = [], i = 0, ac = 0, c1 = 0, c2 = 0, c3 = 0;
+		var tmp_arr = [], i = 0, ac = 0, c1 = 0, c2 = 0, c3 = 0;
 	
-	    str_data += '';
+		str_data += '';
 	
-	    while ( i < str_data.length ) {
-	        c1 = str_data.charCodeAt(i);
-	        if (c1 < 128) {
-	            tmp_arr[ac++] = String.fromCharCode(c1);
-	            i++;
-	        } else if ((c1 > 191) && (c1 < 224)) {
-	            c2 = str_data.charCodeAt(i+1);
-	            tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
-	            i += 2;
-	        } else {
-	            c2 = str_data.charCodeAt(i+1);
-	            c3 = str_data.charCodeAt(i+2);
-	            tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-	            i += 3;
-	        }
-	    }
+		while ( i < str_data.length ) {
+			c1 = str_data.charCodeAt(i);
+			if (c1 < 128) {
+				tmp_arr[ac++] = String.fromCharCode(c1);
+				i++;
+			} else if ((c1 > 191) && (c1 < 224)) {
+				c2 = str_data.charCodeAt(i+1);
+				tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
+				i += 2;
+			} else {
+				c2 = str_data.charCodeAt(i+1);
+				c3 = str_data.charCodeAt(i+2);
+				tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+				i += 3;
+			}
+		}
 	
-	    return tmp_arr.join('');
+		return tmp_arr.join('');
 	},
 	
 	utf8Encode: function( argString ) {
-	    var string = (argString+''); // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+		var string = (argString+''); // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 	
-	    var utftext = "", start, end, stringl = 0;
+		var utftext = "", start, end, stringl = 0;
 	
-	    start = end = 0;
-	    stringl = string.length;
-	    for (var n = 0; n < stringl; n++) {
-	        var c1 = string.charCodeAt(n);
-	        var enc = null;
+		start = end = 0;
+		stringl = string.length;
+		for (var n = 0; n < stringl; n++) {
+			var c1 = string.charCodeAt(n);
+			var enc = null;
 	
-	        if (c1 < 128) {
-	            end++;
-	        }
-	        else if (c1 > 127 && c1 < 2048) {
-	            enc = String.fromCharCode((c1 >> 6) | 192) + String.fromCharCode((c1 & 63) | 128);
-	        }
-	        else {
-	            enc = String.fromCharCode((c1 >> 12) | 224) + String.fromCharCode(((c1 >> 6) & 63) | 128) + String.fromCharCode((c1 & 63) | 128);
-	        }
-	        if (enc !== null) {
-	            if (end > start) {
-	                utftext += string.slice(start, end);
-	            }
-	            utftext += enc;
-	            start = end = n+1;
-	        }
-	    }
+			if (c1 < 128) {
+				end++;
+			}
+			else if (c1 > 127 && c1 < 2048) {
+				enc = String.fromCharCode((c1 >> 6) | 192) + String.fromCharCode((c1 & 63) | 128);
+			}
+			else {
+				enc = String.fromCharCode((c1 >> 12) | 224) + String.fromCharCode(((c1 >> 6) & 63) | 128) + String.fromCharCode((c1 & 63) | 128);
+			}
+			if (enc !== null) {
+				if (end > start) {
+					utftext += string.slice(start, end);
+				}
+				utftext += enc;
+				start = end = n+1;
+			}
+		}
 	
-	    if (end > start) {
-	        utftext += string.slice(start, stringl);
-	    }
+		if (end > start) {
+			utftext += string.slice(start, stringl);
+		}
 	
-	    return utftext;
+		return utftext;
 	},
 	
 	stripTags: function(str, allowed_tags) {
