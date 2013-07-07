@@ -21,8 +21,8 @@ $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
-//	$CI->carabiner->minify_js 	= false;
-//	$CI->carabiner->minify_css	= false;
+	$CI->carabiner->minify_js 	= false;
+	$CI->carabiner->minify_css	= false;
 	$CI->carabiner->empty_cache('both');
 }
 
@@ -96,7 +96,7 @@ $CI->carabiner->display('js');
 	
 	<div id="header">
 		<div>
-		<?php echo anchor('home', 'cloneReader<span/>', array('class' => 'logo')); ?>
+		<?php echo anchor('home', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-large active')); ?>
 		
 <?php
 echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');

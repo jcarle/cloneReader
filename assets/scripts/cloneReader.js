@@ -213,124 +213,16 @@ cloneReader = {
 			}
 		);
 		this.$toolBar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
-			
-					
-/*
-		this.createMenu([
-			/*{ 'icon': 'icon-exchange', 'title': 'expand', 'class': 'expand',	'callback': function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) }},
-			
-			{'type': 'div', 'class': 'btn-group', 
-				'childs':  [			
-					{ 'icon': 'icon-caret-down', 	'title': 'next',	'class': 'next', 	'callback': function() { cloneReader.goToEntry(true) }},
-					{ 'icon': 'icon-caret-up', 		'title': 'prev', 	'class': 'prev', 	'callback': function() { cloneReader.goToEntry(false) }},
-				]
-			},*/
-			/*{ 'icon': 'icon-refresh', 				'title': 'reload', 	'class': 'reload', 'callback': function() { cloneReader.loadEntries(true, true, {}) }},
-			{'type': 'div', 'class': 'btn-group', 
-				'childs':  [
-					{ 'icon': 'icon-th-list', 			'class': 'viewDetail', 		'title': 'detail view', 	'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'detail'}); }},
-					{ 'icon': 'icon-align-justify', 	'class': 'viewList', 		'title': 'list view', 		'callback': function() { cloneReader.loadEntries(true, false, {'viewType': 	'list'}); }},
-				]
-			},*/
-/*  
-			{ 'html': '<span />', 	'class': 'filterUnread', 
-				'childs':  [
-					{ 'html': 'all items', 							'class': 'filterAllItems', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': false }); }},
-					{ 'html': '<span class="count" /> new items', 	'class': 'filterOnlyUnread', 'callback': function() { cloneReader.loadEntries(true, false, { 'onlyUnread': true }); }},
-				]
-			},*/
-/*			{ 'html': '<span />', 	'class': 'filterSort', 
-				'childs':  [
-					{ 'html': 'sort by newest', 'class': 'filterNewestSort', 'callback': function(event) { cloneReader.loadEntries(true, false, {'sortDesc': true}); }},
-					{ 'html': 'sort by oldest', 'class': 'filterOldestSort', 'callback': function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); }},
-				]
-			},*/
-			/*{ 'html': 'Feed settings', 	'class': 'feedSettings', 'callback':  function() { cloneReader.showPopupFeedSettings(); },
-				'childsClassName': 'popupFeedSettings',
-				'childs':  []
-			},*/
-			/*{ 'html': '+',  'title': 'add feed', 'class': 'add', 'callback': 
-				function(event) { 
-					event.stopPropagation(); 
-					cloneReader.showPopupForm('add feed url', function() { cloneReader.addFeed(); }, cloneReader.$toolBar.find('li.add')); 
-				}
-			}* /
-		], this.$toolBar);*/
 		
 		this.$toolBar.find('.filterUnread, .filterSort, .feedSettings').hide();
-		
-	
-//this.$toolBar.find(".dropdown-toggle, .dropdown-menu li a")
 		this.$toolBar.find('.dropdown-toggle').click(
 			function(event) {
 				cloneReader.hidePopupWindow();
 			}
 		);
 		
-		this.$toolBar.find('*').tooltip({ placement: 'bottom', container: 'body' });
-
-		
+		//this.$toolBar.find('*').tooltip({ placement: 'bottom', container: 'body' });
 	},
-/*
-	showPopupMenu: function($li) {
-		if ($li.get(0).tagName != 'LI') {
-			$li = $li.parents('li');
-		}
-
-		var $popUpWindow 	= $li.data('popUpWindow');
-		if ($popUpWindow.is(':visible')) {
-			this.hidePopupWindow();
-			return;
-		} 
-
-		this.hidePopupWindow();
-
-		var $popUpWindow 	= $li.data('popUpWindow');
-		var top				= $li.offset().top + $li.height() - this.$container.offset().top + 1; // FIXME: revisar el '1'
-		var left 			= $li.offset().left - this.$container.offset().left;
-		var width 			= $li.innerWidth();;
-
-		this.$toolBar.find('li').removeClass('expanded');
-		$li.addClass('expanded');
-
-		this.showPopupWindow($popUpWindow, top, left, width);
-	},
-	
-	/*
-	createMenu: function(items, $parent) {
-		for (var i=0; i<items.length; i++) {
-			var item 	= items[i];
-
-			item = $.extend({'type': 'button', 'html': '', 'icon': ''}, item);
-			var $item 	= $('<' + item.type + '/>').html(item.html + (item.icon != '' ? '<i class="' + item.icon + '"/>' : '')).attr('title', item.title).addClass(item.class).appendTo($parent);
-			$item.after(' '); // FIXME: agrego espacio entre los elementos, sino aparecen todos amontonados; averiguar si se puede resolver con css
-			
-			if (item.type == 'button') {
-				$item.addClass('btn');
-			}
-			if (item.data != null) {
-				$item.data(item.data);
-			}
-			if (item.childs != null) {
-//				$('<span class="arrow">&#9660;</span>').appendTo($item);
-				/*var $popUpWindow = $('<ul/>')
-					.addClass('popUpWindow')
-					.addClass(item.childsClassName)
-					.hide().appendTo(this.$container);* /
-
-				this.createMenu(item.childs, $item);
-				/*$item
-					.data('popUpWindow', $popUpWindow)
-					.click(function(event) { 
-							event.stopPropagation(); 
-							cloneReader.showPopupMenu($(event.target));
-					});* /
-			}
-
-			$item.click(item.callback);
-		}
-	},	
-	*/
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		this.hidePopupWindow();
@@ -471,10 +363,13 @@ cloneReader = {
 		else {
 			this.renderListEntry($entry, entry);
 		}
-
+		
 		$entry.find('.star').click(function(event) {
 			event.stopPropagation();
 			$star = $(event.target);
+			if ($star.hasClass('.star') == false) {
+				$star = $star.parents('.star');
+			}
 			cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
 		});
 		
@@ -496,7 +391,10 @@ cloneReader = {
 			.css('background-image', 'url(' + base_url + (entry.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + entry.feedIcon) + ')')
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
-			
+
+		$('<label><i /></label>').addClass('star').appendTo($header);
+		$('<span />').addClass('entryDate').appendTo($header);
+					
 		var $div = $('<div />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
 		if (entry.entryAuthor != '') {
 			$div.html($div.html() + ' by ' + entry.entryAuthor ).appendTo($header);				
@@ -506,9 +404,6 @@ cloneReader = {
 				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
 			}
 		);
-
-		$('<span />').addClass('entryDate').appendTo($header);
-		$('<span />').addClass('star').appendTo($header);
 	
 		var $entryContent = $('<div/>'); // TODO: revisar esta parte, chequear que elimine bien los <scripts>
 		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
@@ -516,18 +411,23 @@ cloneReader = {
 		$entryContent.find('iframe').remove();
 		$('<p/>').html($entryContent.text()).appendTo($entry);
 
-		var $footer = $('<div/>').addClass('footer').appendTo($entry);
+		var $footer = $('<div class="form-inline navbar-form navbar-inner " />').addClass('footer ').appendTo($entry);
 
-		$('<span />').addClass('star').appendTo($footer);
-		$('<span />').addClass('read').html('<span class="checkbox"/>keep unread').appendTo($footer);
+		$('<label class="star checkbox" > <i/> </label>').appendTo($footer);
+		$('<label class="read checkbox" > <i/> <span> keep unread </span> \
+		</label>').appendTo($footer);
 
 
-		$entry.find('.read .checkbox').click(function(event) {
+		$entry.find('.read, .read i').click(function(event) {
 			event.stopPropagation();
 			$checkbox = $(event.target);
-			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.parent().hasClass('selected'));
+			if ($checkbox.hasClass('read') == false) {
+				$checkbox = $checkbox.parents('.read:first');
+			}
+			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.hasClass('selected'));
 		});				
 						
+		$entry.css('min-height', 1);
 		$entry.css('min-height', $entry.height());
 		$entry.find('img').load(
 			function(event) {
@@ -549,7 +449,7 @@ cloneReader = {
 	renderListEntry: function($entry, entry) {
 		var $div 			= $('<div/>').addClass('title').appendTo($entry);
 
-		$('<span />').addClass('star').appendTo($div);
+		$('<label><i /></label>').addClass('star').appendTo($div);
 		$('<span />').addClass('feedName').html($.stripTags(entry.feedName, '')).appendTo($div);
 		$('<span />').addClass('entryContent').html($.stripTags(entry.entryContent, ''))
 			.appendTo($div)
@@ -598,21 +498,27 @@ cloneReader = {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		this.$noResult.css('min-height', this.$ulEntries.height() - 90).appendTo(this.$ulEntries).show();
+		this.$noResult.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
-			this.$noResult.text('loading ...').addClass('loading');
+			this.$noResult.html('<div class="well well-large alert-info"> <i class="icon-spinner icon-spin icon-large"></i> loading ...</div>').addClass('loading');
 		}
 		else {
-			this.$noResult.text('no more entries').removeClass('loading');
+			this.$noResult.html('<div class="well well-large"> no more entries </div>').removeClass('loading');
 		}
 	},
 
 	starEntry: function($entry, value) {
 		$entry.find('.star').removeClass('selected');
+		$entry.find('.star i').removeAttr('class');
 		if (value == true) {
 			$entry.find('.star').addClass('selected');
+			$entry.find('.star i').addClass('icon-star');
 		}
+		else {
+			$entry.find('.star i').addClass('icon-star-empty');
+		}
+		$entry.find('.star i').addClass('icon-large');
 		
 		var entryId = $entry.data('entryId');
 		var starred = (this.aEntries[entryId].starred == 1);
@@ -623,12 +529,17 @@ cloneReader = {
 	},
 
 	readEntry: function($entry, value) {
-		$entry.find('.read .checkbox').html('')
 		$entry.find('.read').removeClass('selected');
+		$entry.find('.read i').removeAttr('class');
+		
 		if (value == false) {
-			$entry.find('.read .checkbox').html('&#10004;')
 			$entry.find('.read').addClass('selected');
+			$entry.find('.read i').addClass('icon-check-sign');
 		}
+		else {
+			$entry.find('.read i').addClass('icon-check-empty');
+		}
+		$entry.find('.read i').addClass('icon-large');
 		
 		var entryId		= $entry.data('entryId');
 		var entryRead	= (this.aEntries[entryId].entryRead == 1);
@@ -719,7 +630,7 @@ cloneReader = {
 			count = FEED_MAX_COUNT + '+';
 		}
 		this.$toolBar.find('.filterUnread .count').text(count);
-		this.$container.find('.popUpWindow .filterOnlyUnread .count').text(count);
+		this.$container.find('.filterOnlyUnread .count').text(count);
 	},
 	
 	selectEntry: function($entry, scrollTo, animate) {
@@ -735,7 +646,7 @@ cloneReader = {
 			this.$ulEntries.find('.entry').removeClass('expanded');
 			this.$ulEntries.find('.entry .detail').remove();
 			
-			this.renderEntry($entry);			
+			this.renderEntry($entry);
 			
 			$entry.addClass('expanded');
 			var entryId = $entry.data('entryId');
@@ -748,8 +659,13 @@ cloneReader = {
 			$entry.find('.footer .star').click(function(event) {
 				event.stopPropagation();
 				$star = $(event.target);
+				if ($star.hasClass('star') == false) {
+					$star = $star.parents('.star');
+				}
 				cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
-			});			
+			});
+			
+			this.starEntry($entry, entry.starred);
 			
 			this.scrollEntries();
 			
@@ -834,9 +750,6 @@ console.time("t1");
 				else {
 					this.loadEntries(true, false, {});
 				}
-				
-				
-				
 				
 console.timeEnd("t1");
 			}
@@ -1131,7 +1044,7 @@ console.timeEnd("t1");
 		this.aUserEntries[entry.entryId] = {
 			'entryId': 		entry.entryId,	
 			'entryRead': 	entry.entryRead,
-			'starred': 		entry.starred				
+			'starred': 		entry.starred
 		};
 	},
 	
@@ -1378,8 +1291,6 @@ cn($(event.target));
 		
 		this.hidePopupWindow();
 		
-		$element.find('a').addClass('active');
-		
 		this.$popupForm
 			.unbind()
 			.submit(function(event) {
@@ -1389,7 +1300,7 @@ cn($(event.target));
 			});
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('').focus();
 
-		var top		= $element.offset().top + $element.height() - this.$container.offset().top + 2;
+		var top		= $element.offset().top + $element.height() - this.$container.offset().top + 2; // FIXME: revisar el -2
 		var left 	= $element.offset().left - this.$container.offset().left;
 		
 		this.$popupForm
@@ -1404,6 +1315,15 @@ cn($(event.target));
 		$('.content > h1').hide();
 		$('.content').css( { 'max-width': '100%', 'min-height': 1, 'overflow': 'hidden' });
 		
+		this.$ulEntries.find('.entry:visible').each(
+			function() {
+				var $entry = $(this);
+				$entry.css('min-height', 1);
+				$entry.css('min-height', $entry.height());
+			}
+		);		
+		
+		this.$ulFilters.css('top', this.$toolBar.outerHeight());
 		this.$ulFilters.height(1);
 		
 		$('.nicescroll-rails').hide(); 
@@ -1419,18 +1339,10 @@ cn($(event.target));
 		
 		this.scrollEntries();
 	},
-
-	showPopupWindow: function($popUpWindow, top, left, width) {
-		$popUpWindow
-			.css({ 'top': top,  'left': left, 'width': width, 'max-height': this.$ulEntries.height() })
-			.appendTo(this.$container)
-			.stop().fadeIn();
-	},
 	
 	hidePopupWindow: function() {
 		this.$container.find('.popupForm').hide();
-		this.$toolBar.find('.open').removeClass('open'); //dropdown('hide');
-		this.$toolBar.find('.active').removeClass('active'); //dropdown('hide');
+		this.$toolBar.find('.open').removeClass('open');
 	},
 	
 	humanizeDatetime: function(datetime, format) {

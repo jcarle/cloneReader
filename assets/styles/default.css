@@ -1,16 +1,19 @@
 body, body * {
 	outline: 0;
 }
-[class^="icon-"], [class*=" icon-"] {
-	color: #555;
-}
 body.isLoading, body.isLoading * {
 	cursor:wait !important;
 }
+
+/*
+[class^="icon-"], [class*=" icon-"] {
+	color: #555;
+}
+/*
 .btn-primary [class^="icon-"], 
 .btn-primary [class*=" icon-"] {
 	color: #FFFFFF;
-}
+}*/
 
 #divWaiting {
 	display: block;
@@ -63,31 +66,24 @@ body.isLoading, body.isLoading * {
 		position:relative;
 	}
 		#header div .logo {
-			background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-			background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
-			box-shadow: 0 0 2px #4397F3 inset;
-			border: 1px solid #CCCCCC;
-			border-radius: 5px 5px 5px 5px;
-			color: #333;
-			font-size: 16px;
-			font-weight: bolder;
 			left: 0;
-			line-height: 50px;
-			padding: 0 10px;
+			line-height: 26px;
 			position: absolute;
-			text-shadow:0px 2px 1px white;
 			top: 7px;
-			width: 130px;
 			margin: 0 0 0 10px;
 			z-index: 9;
+			overflow: hidden;
+			padding-right: 50px;
 		}
 			#header div .logo span {
-				background: url(../images/beta.icon.gif) no-repeat scroll 0 0 transparent;
-				height: 45px;
+				font-size: small;
+				line-height: 19px;
+				padding: 0;
 				position: absolute;
-				right: 0;
-				top: 0;
-				width: 45px;
+				right: -39px;
+				top: 4px;
+				transform: rotate(45deg);
+				width: 113px;
 			}
 		#header div .search {
 			position: absolute;
