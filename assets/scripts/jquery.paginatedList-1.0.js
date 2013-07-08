@@ -24,11 +24,13 @@
 		}  
 	}
 	
-	paginatedList = function($form, options) {
-		this.$form 		= $form;
+	paginatedList = function($content, options) {
+		this.$content	= $content;
+		this.$form 		= this.$content.find('form');
+		this.$table		= this.$content.find('table');
 		this.options 	= $.extend({}, options );
 		
-		this.$form.find('.btnAdd').click(
+		this.$table.find('.btnAdd').click(
 			function (event) {
 				$.goToUrl($(this).attr('href') + '?urlList=' + $.base64Encode(location.href));
 				event.preventDefault;
@@ -36,10 +38,10 @@
 			}
 		);
 
-		this.$form.find('.btnDelete').click($.proxy(
+		this.$table.find('.btnDelete').click($.proxy(
 			function() { 
 				var aDelete = [];
-				var $input = this.$form.find('tr.info input');
+				var $input = this.$table.find('tr.info input');
 				for (var i=0; i<$input.length; i++) {
 					aDelete.push($($input[i]).val());
 				}
@@ -51,6 +53,9 @@ cn(aDelete);
 			}
 		, this));
 		
+		this.$form.on('submit', function() {
+			$.showWaiting(true);
+		});
 		this.$filter = this.$form.find('input[name=filter]');
 		
 		this.$form.find('.icon-remove')
@@ -64,31 +69,31 @@ cn(aDelete);
 				}
 			, this));
 
-		this.$form.find('tbody tr').click(
+		this.$table.find('tbody tr').click(
 				function (event) {
 					$.goToUrl($('a', $(this)).attr('href') + '?urlList=' + $.base64Encode(location.href));
 				}
 		);
 		
-		this.$form.find('tbody tr td:nth-child(1)').click(
+		this.$table.find('tbody tr td:nth-child(1)').click(
 			function(event) {
 				event.stopPropagation();
 			}
 		);
 		
-		this.$form.find('tbody tr td input[type=checkbox]').change( $.proxy(
+		this.$table.find('tbody tr td input[type=checkbox]').change( $.proxy(
 			function(event) {
 				this.checkedRow($(event.target).parent().parent());
 			}
 		, this));
 		
-		this.$form.find('thead tr td input[type=checkbox]').change( $.proxy(
+		this.$table.find('thead tr td input[type=checkbox]').change( $.proxy(
 			function() {
 				this.checkAll();
 			}
 		, this));
 		
-		this.$form.find('tbody tr').each($.proxy(
+		this.$table.find('tbody tr').each($.proxy(
 			function (event, tr){
 				this.checkedRow(tr);
 			}
@@ -104,20 +109,20 @@ cn(aDelete);
 			}
 			
 			
-			this.$form.find('thead tr td input[type=checkbox]').removeAttr('checked', 'checked');
+			this.$table.find('thead tr td input[type=checkbox]').removeAttr('checked', 'checked');
 			if (!$('tbody tr td input[type=checkbox]:not(:checked)').length) {
-				this.$form.find('thead tr td input[type=checkbox]').attr('checked', 'checked');
+				this.$table.find('thead tr td input[type=checkbox]').attr('checked', 'checked');
 			}
 		},
 		
 		checkAll: function() {
-			this.$form.find('tbody tr td input[type=checkbox]').removeAttr('checked', 'checked');
+			this.$table.find('tbody tr td input[type=checkbox]').removeAttr('checked', 'checked');
 			
-			if (this.$form.find('thead tr td input[type=checkbox]').is(':checked')) {
-				this.$form.find('tbody tr td input[type=checkbox]').attr('checked', 'checked');
+			if (this.$table.find('thead tr td input[type=checkbox]').is(':checked')) {
+				this.$table.find('tbody tr td input[type=checkbox]').attr('checked', 'checked');
 			}
 			
-			this.$form.find('tbody tr td input[type=checkbox]').change();
+			this.$table.find('tbody tr td input[type=checkbox]').change();
 		}
 	}
 })($);

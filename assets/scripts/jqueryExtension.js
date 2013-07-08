@@ -261,14 +261,14 @@ $.extend({
 		if (forceWaiting == true) {$.countProcess++;}
 		if (forceWaiting == false) {$.countProcess--;}
 				
-		var isWaiting = ($.countProcess > 0);
+		var isLoading = ($.countProcess > 0);
 
 	
 		$('#divWaiting').css( {
-			'display':	isWaiting == true ? 'block' : 'none',
+			'display':	isLoading == true ? 'block' : 'none',
 			'z-index': 	$.topZIndex('body > *') + 1
 		} );
-		document.body.className	=  (isWaiting == true ? 'isWaiting' : '');
+		document.body.className	=  (isLoading == true ? 'isLoading' : '');
 	},	
 	
 	goToUrl: function(url) {
@@ -333,7 +333,7 @@ $(document).ready(function() {
 		if (url == null) {
 			return;
 		}
-		event.stopPropagetion();
+		event.preventDefault();
 		return $.goToUrl(url);
 	});
 	
@@ -366,7 +366,6 @@ function resizeWindow() {
 	$('.content')
 		.css('min-height', 1)
 		.css('min-height', $(document).outerHeight(true) - $('.menu').offset().top - $('.menu').outerHeight(true) - $('#footer').outerHeight(true) ); 
-
 }
 
 function cn(value) {

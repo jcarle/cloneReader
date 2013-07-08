@@ -3,9 +3,9 @@
 $fields = $query->list_fields();
 ?>
 
-	<form method="get" class="tblFilter form-inline navbar-form navbar-inner">
+	<form method="get" class="form-inline navbar-form navbar-inner">
 		<fieldset>
-			<label>Filtros</label>
+			<label class="checkbox">Filtros</label>
 			<div class="input-prepend">
 				<span class="add-on">
 					<i class="icon-remove" ></i>
