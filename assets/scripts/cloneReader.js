@@ -492,7 +492,7 @@ cloneReader = {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		this.$noResult.appendTo(this.$ulEntries).show();
+		this.$noResult.css('min-height', this.$ulEntries.height() - this.$noResult.find('div').outerHeight() ).appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
 			this.$noResult.html('<div class="well well-large alert-info"> <i class="icon-spinner icon-spin icon-large"></i> loading ...</div>').addClass('loading');
@@ -1313,6 +1313,7 @@ cn($(event.target));
 	
 	resizeWindow: function() {
 		this.hidePopupWindow();
+		$('body').css('overflow', 'hidden');
 		$('.content > h1').hide();
 		$('.content').css( { 'max-width': '100%', 'min-height': 1, 'overflow': 'hidden' });
 		

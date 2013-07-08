@@ -21,8 +21,8 @@ $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
-	$CI->carabiner->minify_js 	= false;
-	$CI->carabiner->minify_css	= false;
+	//$CI->carabiner->minify_js 	= false;
+	//$CI->carabiner->minify_css	= false;
 	$CI->carabiner->empty_cache('both');
 }
 
@@ -88,7 +88,7 @@ $CI->carabiner->display('js');
 ?>	
 	<title><?php echo $title; ?> - cloneReader</title>
 </head>
-<body>
+<body class="container-fluid">
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
 		<i class="icon-spinner icon-spin icon-large"></i>
 		<small>procesando ...</small>

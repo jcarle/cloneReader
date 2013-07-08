@@ -333,7 +333,8 @@ $(document).ready(function() {
 		if (url == null) {
 			return;
 		}
-		$.goToUrl(url);
+		event.stopPropagetion();
+		return $.goToUrl(url);
 	});
 	
 	

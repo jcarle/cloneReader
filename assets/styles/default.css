@@ -5,16 +5,6 @@ body.isLoading, body.isLoading * {
 	cursor:wait !important;
 }
 
-/*
-[class^="icon-"], [class*=" icon-"] {
-	color: #555;
-}
-/*
-.btn-primary [class^="icon-"], 
-.btn-primary [class*=" icon-"] {
-	color: #FFFFFF;
-}*/
-
 #divWaiting {
 	display: block;
 	margin: -7px auto 0;
@@ -61,7 +51,6 @@ body.isLoading, body.isLoading * {
 	#header div {
 		margin: 0;
 		padding:5px;
-		min-height: 65px;
 		width:auto;
 		overflow: hidden;
 		position:relative;
@@ -88,9 +77,12 @@ body.isLoading, body.isLoading * {
 		#header div .search {
 			clear: both;
 			float: right;
-			margin: 5px 0;
+			margin: 5px 0 0 0;
 			position: relative;
 		}
+			#header div .search i {
+				color: #555555;
+			}
 		#header div ul {
 			list-style:none;
 			background:black;
@@ -303,6 +295,7 @@ body.isLoading, body.isLoading * {
 	}
 		.paginatedList fieldset .icon-remove {
 			cursor: pointer;
+			color: #555555;
 		}	
 	.paginatedList table {
 		border: 1px solid #BBBBBB;
