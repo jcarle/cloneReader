@@ -421,12 +421,11 @@ cloneReader = {
 			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.hasClass('selected'));
 		});				
 						
-		$entry.css('min-height', 1);
-		$entry.css('min-height', $entry.height());
+		$entry.css('min-height', 1).css('min-height', $entry.height());
 		$entry.find('img').load(
 			function(event) {
 				var $entry = $(event.target).parents('.entry');
-				$entry.css('min-height', $entry.height());
+				$entry.css('min-height', 1).css('min-height', $entry.height());
 			}
 		);
 		
@@ -1320,8 +1319,7 @@ cn($(event.target));
 		this.$ulEntries.find('.entry:visible').each(
 			function() {
 				var $entry = $(this);
-				$entry.css('min-height', 1);
-				$entry.css('min-height', $entry.height());
+				$entry.css('min-height', 1).css('min-height', $entry.height());
 			}
 		);		
 		

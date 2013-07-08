@@ -159,7 +159,7 @@
 				border-radius: 0 0 4px 0px;
 			}
 				#cloneReader .ulEntries > li .footer label {
-					margin-left: 10px;
+					margin: 0 0 0 10px;
 				}
 				#cloneReader .ulEntries > li .footer .read { }
 				#cloneReader .ulEntries > li .footer .read.selected {
