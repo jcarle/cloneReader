@@ -1325,6 +1325,9 @@ console.timeEnd("t1");
 		$('body').css('overflow', 'hidden');
 		$('.content > h1').hide();
 		$('.content').css( { 'max-width': '100%', 'min-height': 1, 'overflow': 'hidden' });
+		$('#header').css( { 'max-width': '100%' } );
+		$('.menu div').css( { 'max-width': '100%', 'margin': '0 10px', 'width': 'auto' });
+
 		
 		this.$ulEntries.find('.entry:visible').each(
 			function() {

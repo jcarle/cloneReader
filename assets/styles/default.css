@@ -29,7 +29,8 @@ body.isLoading, body.isLoading * {
 
 #header {
 	background: white;
-	width: auto;
+	margin:0 auto;
+	max-width: 1024px;
 	overflow: hidden;
 }
 	#header div {
@@ -124,8 +125,8 @@ body.isLoading, body.isLoading * {
 		color: #555555;
 	}
 	.menu div {
-		margin: 0 10px;
-		width: auto;		
+		margin: 0 auto;
+		max-width: 1004px;		
 		height: 30px;
 		position:relative;		
 	}
