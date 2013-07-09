@@ -270,13 +270,7 @@ body.isLoading, body.isLoading * {
 	display: block;
 	margin: 0 auto;
 	position: relative;
-	width: 280px;
 }
-	#fb-login img {
-		display: block;
-	}
-
-
 
 .paginatedList {
 	margin: 0;

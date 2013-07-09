@@ -2,6 +2,10 @@
 $this->load->view('includes/jForm');
 ?>
 
-<a id='fb-login' href='#' onclick='facebookLogin()' >
-	<img src="<?php echo base_url()?>assets/images/facebook-connect-button.png" border="0"/>
-</a>
+
+
+<button id='fb-login' href='#' onclick='facebookLogin()' class="btn btn-primary btn-large" >
+	<i class="icon-facebook"></i>
+	Facebook Login
+</button>
+

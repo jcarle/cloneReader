@@ -131,6 +131,7 @@
 					padding: 0;
 					border: 0 none;
 					font-size: small;
+					background: transparent;
 				}
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
@@ -325,6 +326,9 @@
 					} 
 					#cloneReader ul.ulFilters li ul li ul li a {
 						margin-left:62px;
+					}
+					#cloneReader ul.ulFilters li ul li ul li a:hover {
+						text-decoration: none;
 					}
 
 
