@@ -1131,44 +1131,52 @@ console.timeEnd("t1");
 	markAsReadFeed: function(feedId) {
 		this.hidePopupWindow();
 
-		if (!(confirm('seguro?'))){ // TODO: hacer un popup mas lindo
-			return;
-		}		
-
-		$.ajax({
-			'type':	 	'post',
-			'url': 		base_url + 'entries/markAsReadFeed',
-			'data': 	{ 'feedId':	feedId 	},
-		})
-		.done(function(response) {
-			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
-			}
-			cloneReader.aEntries = {}
-			cloneReader.loadEntries(true, true, {});
-			cloneReader.loadFilters(true);
-		});		
+		$(document).jAlert( {
+			'msg': 			'Mark all as read?',
+			'isConfirm': 	true,
+			'callback': 	$.proxy(
+				function() {
+					$.ajax({
+						'type':	 	'post',
+						'url': 		base_url + 'entries/markAsReadFeed',
+						'data': 	{ 'feedId':	feedId 	},
+					})
+					.done(function(response) {
+						if (response['code'] != true) {
+							return $(document).jAlert(response['result']);
+						}
+						cloneReader.aEntries = {}
+						cloneReader.loadEntries(true, true, {});
+						cloneReader.loadFilters(true);
+					});
+				}
+			, this)
+		});	
 	},
 	
 	unsubscribeFeed: function(feedId) {
 		this.hidePopupWindow();
-
-		if (!(confirm('seguro?'))){ // TODO: hacer un popup mas lindo
-			return;
-		}		
-
-		$.ajax({
-			'type':	 	'post',
-			'url': 		base_url + 'entries/unsubscribeFeed',
-			'data': 	{ 'feedId':	feedId 	},
-		})
-		.done(function(response) {
-			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
-			}
-			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
-			cloneReader.loadFilters(true);
-		});		
+		
+		$(document).jAlert( {
+			'msg': 			'Unsubscribe feed?',
+			'isConfirm': 	true,
+			'callback': 	$.proxy(		
+				function () {
+					$.ajax({
+						'type':	 	'post',
+						'url': 		base_url + 'entries/unsubscribeFeed',
+						'data': 	{ 'feedId':	feedId 	},
+					})
+					.done(function(response) {
+						if (response['code'] != true) {
+							return $(document).jAlert(response['result']);
+						}
+						cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
+						cloneReader.loadFilters(true);
+					});
+				}
+			, this)
+		});
 	},
 	
 	updateUserFilters: function() {
@@ -1222,7 +1230,6 @@ console.timeEnd("t1");
 			{ 'html': 'Unsubscribe', 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
 			{ 'html': 'New tag', 			'class': 'newTag', 'callback': 
 				function(event) {
-cn($(event.target));
 					event.stopPropagation(); 
 					cloneReader.showPopupForm('Add new tag', 'enter tag name', function() { cloneReader.addTag(); }, cloneReader.$toolBar.find('.feedSettings'));
 				}

@@ -45,18 +45,29 @@
 			this.options 	= $.extend(
 				{
 					msg:			'',
-					callback:		null
+					callback:		null,
+					isConfirm:		false
 				},
 				(typeof options === 'string' ? { msg: options } :
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
-			);						 
+			);
 
-			
-		
 			this.$modal		= $('<div role="dialog" class="modal jAlert" />');
 			this.$body 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modal);
 			this.$footer 	= $('<div />').addClass('modal-footer').appendTo(this.$modal);
-			this.$btn 		= $('<button data-dismiss="modal" class="btn" />').text('Cerrar').appendTo(this.$footer);
+			this.$btn 		= $('<button data-dismiss="modal" class="btn" />').text(this.options.isConfirm == true ? 'Cancelar' : 'Cerrar').appendTo(this.$footer);
+			
+			if (this.options.isConfirm == true) {
+				$('<button data-dismiss="modal" class="btn btn-primary" />')
+					.text('Ok')
+					.on('click', $.proxy(
+						function(event) {
+							this.options.callback();
+							this.$modal.modal('hide');
+						}
+					, this))
+					.appendTo(this.$footer);
+			}
 			
 			// para evitar que se vaya el foco a otro elemento de la pagina con tab
 			$(document).bind('keydown.jAlertKeydown', ($.proxy(
@@ -81,10 +92,13 @@
 				.on('hidden', $.proxy(
 					function(event) {
 						$(document).unbind('keydown.jAlertKeydown');
-						if(this.options.callback instanceof Function) {
-							this.options.callback();
+						
+						if (this.options.isConfirm == false) {
+							if(this.options.callback instanceof Function) {
+								this.options.callback();
+							}
+							this.$input.focus();
 						}
-						this.$input.focus();
 					}
 				, this));
 				
