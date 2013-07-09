@@ -1,4 +1,4 @@
-<div class="alert alert-block error404 ">
+<div class="well error404 ">
 	<i class="icon-warning-sign icon-4x"></i>
-	<small class="text-warning" ><?php echo $message; ?></small>
+	<span><?php echo $message; ?></span>
 </div>

@@ -343,7 +343,7 @@ body.isLoading, body.isLoading * {
 	border: 1px solid #CCCCCC;
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 2px 2px 6px gray;
-	margin:0 auto;
+	margin:0 auto 20px auto;
 	padding: 0;
 	position: relative;
 	max-width:750px;
@@ -501,7 +501,7 @@ body.isLoading, body.isLoading * {
 
 .ui-datepicker select {
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-   	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
+	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
 	height: auto;
