@@ -327,9 +327,9 @@
 					#cloneReader ul.ulFilters li ul li ul li a {
 						margin-left:62px;
 					}
-					#cloneReader ul.ulFilters li ul li ul li a:hover {
-						text-decoration: none;
-					}
+			#cloneReader ul.ulFilters li a:hover {
+				text-decoration: none;
+			}
 
 
 

@@ -109,7 +109,9 @@
 							field.$input.datepicker({ dateFormat: 'yy-mm-dd',  changeMonth: true, changeYear: true });
 							break;
 						case 'datetime':
-							field.$input.addClass('datetime').datetimepicker({ dateFormat: 'yy-mm-dd' });
+							// TODO: agreglar!
+							field.$input.datepicker({ dateFormat: 'yy-mm-dd',  changeMonth: true, changeYear: true });
+							//field.$input.addClass('datetime').datetimepicker({ dateFormat: 'yy-mm-dd' });
 							break;						
 						case 'gallery':
 							this.initFileupload(field);
