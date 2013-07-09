@@ -120,7 +120,7 @@ cloneReader = {
 
 		$(document).click(
 			function(event) {
-				if ($('.alert:visible').length != 0) {
+				if ($('.jAlert:visible').length != 0) {
 					return;
 				}
 				
@@ -279,7 +279,7 @@ cloneReader = {
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 			cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
 			cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
@@ -723,7 +723,7 @@ cloneReader = {
 		.done($.proxy(
 			function(reload, response) {
 				if (response['code'] != true) {
-					return $(document).alert(response['result']);
+					return $(document).jAlert(response['result']);
 				}
 console.time("t1");	
 				if (reload == true) {
@@ -1017,10 +1017,10 @@ console.timeEnd("t1");
 	addFeed: function() {
 		var feedUrl = this.$popupForm.find('input').val();
 		if (feedUrl == '') {
-			return this.$popupForm.find('input').alert('enter a url');
+			return this.$popupForm.find('input').jAlert('enter a url');
 		}
 		if ($.validateUrl(feedUrl) == false) {
-			return this.$popupForm.find('input').alert('enter a valid url');
+			return this.$popupForm.find('input').jAlert('enter a valid url');
 		}
 
 		this.hidePopupWindow();
@@ -1032,7 +1032,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 			
 			cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
@@ -1070,7 +1070,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 		});			
 		
@@ -1081,7 +1081,7 @@ console.timeEnd("t1");
 	addTag: function() {
 		var tagName = this.$popupForm.find('input').val();
 		if (tagName.trim() == '') {
-			return this.$popupForm.find('input').alert('enter a tag name');
+			return this.$popupForm.find('input').jAlert('enter a tag name');
 		}
 
 		this.hidePopupWindow();
@@ -1096,7 +1096,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 			
 			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
@@ -1118,7 +1118,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 			cloneReader.saveData(false);
 			cloneReader.loadFilters(true);
@@ -1139,7 +1139,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 			cloneReader.aEntries = {}
 			cloneReader.loadEntries(true, true, {});
@@ -1161,7 +1161,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
 			cloneReader.loadFilters(true);
@@ -1178,7 +1178,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).alert(response['result']);
+				return $(document).jAlert(response['result']);
 			}
 		});
 	},		

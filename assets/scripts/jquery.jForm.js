@@ -58,7 +58,7 @@
 					done($.proxy(
 						function(response) {
 							if (response['code'] != true) {
-								return $(document).alert(response['result']);
+								return $(document).jAlert(response['result']);
 							}
 							
 							if (this.options.isSubForm == true) {
@@ -196,7 +196,7 @@
 					if (typeof this[rules[z]] === 'function') {
 						if (this[rules[z]]($input) == false) {
 							$input.parents('fieldset').addClass('error');
-							$input.alert($.sprintf(this.options.messages[rules[z]], field['label']));
+							$input.jAlert($.sprintf(this.options.messages[rules[z]], field['label']));
 							return false;
 						}
 					}

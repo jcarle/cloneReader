@@ -23,7 +23,7 @@ $CI->carabiner->minify_css	= true;
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	//$CI->carabiner->minify_js 	= false;
 	//$CI->carabiner->minify_css	= false;
-	$CI->carabiner->empty_cache('both');
+	//$CI->carabiner->empty_cache('both');
 }
 
 
@@ -34,7 +34,7 @@ $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.topzindex.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('jqueryExtension.js');
-$CI->carabiner->js('jquery.alert-1.0.js');		
+$CI->carabiner->js('jquery.jAlert.js');		
 
 if (isset($aJs)) {
 	foreach ($aJs as $js) {

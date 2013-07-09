@@ -1,25 +1,25 @@
 ;(function($) {
 	var 
 		methods,
-		alert;
+		jAlert;
 		
 	methods = {
 		init : function( options ) {
-			if ($(this).data('alert') == null) {
-				$(this).data('alert', new alert($(this), options));
+			if ($(this).data('jAlert') == null) {
+				$(this).data('jAlert', new jAlert($(this), options));
 			}
-			$(this).data('alert').show($(this), options);			
+			$(this).data('jAlert').show($(this), options);			
 			
 			return $(this);
 		},
 
 		hide: function() {
-			$(this).data('alert').hide();
+			$(this).data('jAlert').hide();
 			return $(this);
 		}		
 	};
 
-	$.fn.alert = function( method ) {
+	$.fn.jAlert = function( method ) {
 		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -30,13 +30,13 @@
 		}  
 	}
 	
-	alert = function() {
+	jAlert = function() {
 
 	}
 					
-	alert.prototype = {
+	jAlert.prototype = {
 		/*
-		 * input indica a que elemento se le pasara el foco cuando el alert se cierre
+		 * input indica a que elemento se le pasara el foco cuando el jAlert se cierre
 		 * options puede ser un object cons las propiedades {msg, callback }
 		 * 			tambien puede ser un DomNode o un String, es este caso el pluggin se encarga de mergear las options 
 		 */
@@ -53,13 +53,13 @@
 
 			
 		
-			this.$modal		= $('<div role="dialog" />').addClass('modal');
+			this.$modal		= $('<div role="dialog" class="modal jAlert" />');
 			this.$body 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modal);
 			this.$footer 	= $('<div />').addClass('modal-footer').appendTo(this.$modal);
 			this.$btn 		= $('<button data-dismiss="modal" class="btn" />').text('Cerrar').appendTo(this.$footer);
 			
 			// para evitar que se vaya el foco a otro elemento de la pagina con tab
-			$(document).bind('keydown.alertKeydown', ($.proxy(
+			$(document).bind('keydown.jAlertKeydown', ($.proxy(
 				function(event) {
 					if (event.keyCode == 27) { // esc!
 						this.$modal.modal('hide');
@@ -80,7 +80,7 @@
 				.css({ 'top': 200, })
 				.on('hidden', $.proxy(
 					function(event) {
-						$(document).unbind('keydown.alertKeydown');
+						$(document).unbind('keydown.jAlertKeydown');
 						
 						if(this.options.callback instanceof Function) {
 							this.options.callback();
