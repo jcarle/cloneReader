@@ -54,7 +54,12 @@ class Menu extends CI_Controller {
 					'type'	=> 'text',
 					'label'	=> 'Position', 
 					'value'	=> element('menuPosition', $data)
-				)
+				),
+				'menuIcon' => array(
+					'type'	=> 'text',
+					'label'	=> 'Icon', 
+					'value'	=> element('menuIcon', $data)
+				)				
 			)
 		);
 		

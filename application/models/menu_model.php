@@ -5,7 +5,7 @@ class Menu_Model extends CI_Model {
 		$aMenu = array();
 		
 		if ($fields == null) {
-			$fields = array('menuId AS id', 'menuName AS label', 'controllerUrl AS url', 'controllers.controllerId');
+			$fields = array('menuId AS id', 'menuName AS label', 'menuIcon AS icon', 'controllerUrl AS url', 'controllers.controllerId');
 		}
 
 		$this->db
@@ -46,6 +46,7 @@ class Menu_Model extends CI_Model {
 			'menuName'			=> $data['menuName'],
 			'menuPosition'		=> $data['menuPosition'],
 			'menuParentId' 		=> $data['menuParentId'],
+			'menuIcon' 			=> $data['menuIcon'],
 			'controllerId' 		=> ((int)$data['controllerId'] > 0 ? $data['controllerId'] : null) 
 		);
 		

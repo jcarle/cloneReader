@@ -26,22 +26,6 @@ body.isLoading, body.isLoading * {
 		text-shadow: 1px 1px 0 black;	
 		margin-right: 10px;
 	}
-/*
-.alert {
-	background: none repeat scroll 0 0 #F9F9F9;
-	border: 3px solid #CCCCCC;
-	border-radius: 10px 10px 10px 10px;
-	clear: both;
-	display: block;
-	padding: 20px;
-	text-align: left;
-	width: 300px;
-}
-	.alert a {
-		font-size: 14px;
-	}
-	
-	*/
 
 #header {
 	background: white;
@@ -125,6 +109,9 @@ body.isLoading, body.isLoading * {
 					font-weight: normal;
 					padding: 0 15px;
 				}
+				#header div ul.menuProfile  li a i {
+					color: #555555;
+				}
 				
 
 
@@ -133,6 +120,9 @@ body.isLoading, body.isLoading * {
 	background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 	position:relative;
 }
+	.menu i {
+		color: #555555;
+	}
 	.menu div {
 		margin: 0 10px;
 		width: auto;		

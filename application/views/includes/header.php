@@ -21,9 +21,9 @@ $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
-	//$CI->carabiner->minify_js 	= false;
-	//$CI->carabiner->minify_css	= false;
-	//$CI->carabiner->empty_cache('both');
+	$CI->carabiner->minify_js 	= false;
+	$CI->carabiner->minify_css	= false;
+	$CI->carabiner->empty_cache('both');
 }
 
 
@@ -127,11 +127,16 @@ function renderMenu($aMenu, $className = null){
 	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
+		$icon = '';
+		if ($aMenu[$i]['icon'] != null) {
+			$icon = ' <i class="'.$aMenu[$i]['icon'].'" ></i> ';
+		}
+		
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li>'.anchor(str_replace('::', '/', $aMenu[$i]['url']), $aMenu[$i]['label']);
+			$sTmp .= '	<li> <a href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$aMenu[$i]['label'].'</a>';
 		}
 		else {
-			$sTmp .= '	<li><a>'.$aMenu[$i]['label'].'</a>';
+			$sTmp .= '	<li> <a>'.$icon.$aMenu[$i]['label'].'</a>';
 		} 	
 		
 		if (count($aMenu[$i]['childs']) > 0) {			
