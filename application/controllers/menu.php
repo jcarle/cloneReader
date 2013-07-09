@@ -1,8 +1,8 @@
 <?php 
 class Menu extends CI_Controller {
 
-    function __construct() {
-        parent::__construct();	
+	function __construct() {
+		parent::__construct();	
 		
 		$this->load->model('Controllers_Model');
 	}  
@@ -60,10 +60,10 @@ class Menu extends CI_Controller {
 		
 		$form['rules'] = array( 
 			array(
-    			'field' => 'menuName',
+				'field' => 'menuName',
 				'label' => $form['fields']['menuName']['label'],
 				'rules' => 'required'
-			)			
+			)
 		);
 
 

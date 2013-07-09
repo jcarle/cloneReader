@@ -190,9 +190,12 @@
 				var rules 	= field['rules'].split('|');
 				var $input 	= this.options.fields[field.field].$input;
 				
+				this.$form.find('fieldset').removeClass('error');
+				
 				for (var z=0; z<rules.length; z++) {
 					if (typeof this[rules[z]] === 'function') {
 						if (this[rules[z]]($input) == false) {
+							$input.parents('fieldset').addClass('error');
 							$input.alert($.sprintf(this.options.messages[rules[z]], field['label']));
 							return false;
 						}

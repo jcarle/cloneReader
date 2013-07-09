@@ -51,37 +51,48 @@
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
 			);						 
 
-			this.$div = $('<div />').html(this.options.msg).addClass('alert');
 			
-			this.$div.dialog( {
-				position:	['center', 250],
-				draggable: 	false, 
-				width:		'300', 
-				height: 	'auto',
-				minHeight:	20,
-				modal: 		true, 
-				resizable: 	false, 
-				buttons:	{ 'cerrar': function(){ } }, 
-				close:		$.proxy(
+		
+			this.$modal		= $('<div role="dialog" />').addClass('modal');
+			this.$body 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modal);
+			this.$footer 	= $('<div />').addClass('modal-footer').appendTo(this.$modal);
+			this.$btn 		= $('<button data-dismiss="modal" class="btn" />').text('Cerrar').appendTo(this.$footer);
+			
+			// para evitar que se vaya el foco a otro elemento de la pagina con tab
+			$(document).bind('keydown.alertKeydown', ($.proxy(
+				function(event) {
+					if (event.keyCode == 27) { // esc!
+						this.$modal.modal('hide');
+						return false;
+					}
+					if ($.contains(this.$modal[0], event.target)) {
+						return true;
+					}
+					return false;
+				}
+			, this)));
+			
+			this.$modal
+				.modal( {
+					backdrop: true,
+					keyboard: true
+				})
+				.css({ 'top': 200, })
+				.on('hidden', $.proxy(
 					function(event) {
+						$(document).unbind('keydown.alertKeydown');
+						
 						if(this.options.callback instanceof Function) {
 							this.options.callback();
 						}
 						this.$input.focus();
-						this.$div.parent().detach();
+						//this.$body.parent().detach();
 					}
-				, this)
-			});
-			$('.ui-dialog-titlebar', this.$div.parent()).hide();
-			this.$div.parent().find('button')
-				.removeAttr('class')
-				.unbind()
-				.click(function(event){ 
-					event.stopPropagation(); 
-					$(this).parents('div[role=dialog]').find('.alert').dialog('close') 
-				}) 
-				.focus();
-			this.$div.parent().css({position: 'fixed'}); //.end().dialog('open');
+				, this));
+				
+				$('.modal-backdrop')
+					.css('opacity', 0.3)
+					.unbind();
 		}
 	}
 })($);
