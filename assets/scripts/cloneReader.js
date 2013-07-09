@@ -120,6 +120,9 @@ cloneReader = {
 
 		$(document).click(
 			function(event) {
+				if ($(event.target).parents('.modal').length != 0) {
+					return;
+				}
 				if ($('.jAlert:visible').length != 0) {
 					return;
 				}

@@ -81,12 +81,10 @@
 				.on('hidden', $.proxy(
 					function(event) {
 						$(document).unbind('keydown.jAlertKeydown');
-						
 						if(this.options.callback instanceof Function) {
 							this.options.callback();
 						}
 						this.$input.focus();
-						//this.$body.parent().detach();
 					}
 				, this));
 				
