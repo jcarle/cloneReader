@@ -33,7 +33,7 @@ $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.topzindex.js');
 $CI->carabiner->js('bootstrap.js');
-$CI->carabiner->js('bootstrap-datetimepicker.js');
+$CI->carabiner->js('bootstrap-datetimepicker.min.js');
 $CI->carabiner->js('bootstrap-datetimepicker.es.js');
 $CI->carabiner->js('jqueryExtension.js');
 $CI->carabiner->js('jquery.jAlert.js');		
