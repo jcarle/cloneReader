@@ -51,7 +51,9 @@ if ($view == 'includes/jForm') {
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
-	$CI->carabiner->js('bootstrap-datetimepicker.es.js');	
+	$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+	
+	$CI->carabiner->css('bootstrap-datetimepicker.css');	
 } 
 if ($view == 'login') {
 	$CI->carabiner->js('jquery.jForm.js');
@@ -63,7 +65,6 @@ if ($view == 'login') {
 //$CI->carabiner->css('jquery-ui-1.9.2.custom.css');
 $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-responsive.css');
-$CI->carabiner->css('bootstrap-datetimepicker.css');
 $CI->carabiner->css('font-awesome.css');
 $CI->carabiner->css('default.css');
 
