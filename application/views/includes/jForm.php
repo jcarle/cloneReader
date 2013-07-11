@@ -39,7 +39,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'datetime':
 			$aFields[] = sprintf($sField, 
 				'<div class="input-append">
-					'.form_input(array('name' => $name, 'value' => $field['value'], 'size' => ($field['type'] == 'datetime' ? 14 : 8) )).'
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'size' => ($field['type'] == 'datetime' ? 16 : 8) )).'
 					<span class="add-on"><i class="icon-remove"></i></span>
 					<span class="add-on"><i class="icon-th"></i></span>
 				</div>');

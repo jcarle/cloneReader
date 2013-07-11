@@ -111,7 +111,7 @@
 							var format 		= 'dd-mm-yyyy';
 							var minView		= 'month';
 							if (field['type'] == 'datetime') {
-							 	format 	= 'dd-mm-yyyy hh:ii'; //:ss';
+							 	format 	= 'dd-mm-yyyy hh:ii:ss';
 								minView	= 'hour';
 							}
 
