@@ -39,10 +39,9 @@ foreach ($form['fields'] as $name => $field) {
 		case 'datetime':
 			$aFields[] = sprintf($sField, 
 				'<div class="input-append">
-					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'input-small')).'
-					<span class="add-on">
-						<i class="icon-calendar"></i>
-					</span>
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'size' => ($field['type'] == 'datetime' ? 14 : 8) )).'
+					<span class="add-on"><i class="icon-remove"></i></span>
+					<span class="add-on"><i class="icon-th"></i></span>
 				</div>');
 			break;
 		case 'password':

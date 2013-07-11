@@ -270,6 +270,7 @@ body.isLoading, body.isLoading * {
 	display: block;
 	margin: 0 auto;
 	position: relative;
+	background: #3B5998;
 }
 
 .paginatedList {
@@ -360,14 +361,20 @@ body.isLoading, body.isLoading * {
 		.jForm fieldset .raty {
 			display: inline-block;
 			border: 0 none;
-		}				
+		}			
+		.jForm fieldset .form_datetime input {
+			width:auto;
+		}	
 /*		.jForm fieldset .link {
 			margin: 0 0 0 180px;
 		}*/
 /*		.jForm fieldset input[type=checkbox] {
 			width: auto;
 		}*/
-		.jForm fieldset .icon-calendar {
+		.jForm fieldset .icon-remove {
+			color: #555555;
+		}
+		.jForm fieldset .icon-th {
 			color: #3A87AD;
 		}
 		.jForm fieldset .groupCheckBox {

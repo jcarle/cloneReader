@@ -14,6 +14,9 @@
 			#cloneReader .btn-toolbar .dropdown-menu li {
 				cursor: pointer;
 			}
+			#cloneReader .btn-toolbar .dropdown-menu li.divider {
+				cursor: default;
+			}
 		#cloneReader .btn-toolbar .feedSettings a,
 		#cloneReader .btn-toolbar .filterSort a,
 		#cloneReader .btn-toolbar .filterUnread a {

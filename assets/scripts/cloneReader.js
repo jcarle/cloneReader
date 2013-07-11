@@ -1308,7 +1308,7 @@ console.timeEnd("t1");
 				callback();
 				return false;
 			});
-		this.$popupForm.find('input').attr('placeholder', placeholder).val('').focus();
+		this.$popupForm.find('input').attr('placeholder', placeholder).val('');
 
 		var top		= $element.offset().top + $element.height() - this.$container.offset().top + 2; // FIXME: revisar el -2
 		var left 	= $element.offset().left - this.$container.offset().left;
@@ -1317,7 +1317,9 @@ console.timeEnd("t1");
 			.css({ 'top': top,  'left': left, 'position': 'absolute' })
 			.appendTo(this.$container)
 			.stop()
-			.fadeIn();			
+			.fadeIn();
+			
+		this.$popupForm.find('input').focus();
 	},
 	
 	resizeWindow: function() {

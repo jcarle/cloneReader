@@ -276,6 +276,16 @@ $.extend({
 		location.href = url;
 	},
 	
+	ISODateString: function(d){
+		function pad(n) {return n<10 ? '0'+n : n}
+		return d.getUTCFullYear()+'-'
+		+ pad(d.getUTCMonth()+1)+'-'
+		+ pad(d.getUTCDate()) +' '
+		+ pad(d.getUTCHours())+':'
+		+ pad(d.getUTCMinutes())+':'
+		+ pad(d.getUTCSeconds())
+	},	
+	
 	initMenu: function() { // TODO: mover esto de aca!
 		$('.menu div ul.menuAdmin li ul').addClass('dropdown-menu');
 		$('.menu div ul.menuAdmin > li > ul').addClass('pull-right');

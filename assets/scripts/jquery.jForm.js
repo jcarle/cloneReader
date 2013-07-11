@@ -105,14 +105,41 @@
 									}								
 							});
 							break;
-						case 'date':	
-							field.$input.datepicker({ dateFormat: 'yy-mm-dd',  changeMonth: true, changeYear: true });
-							break;
+						case 'date':
 						case 'datetime':
-							// TODO: agreglar!
-							field.$input.datepicker({ dateFormat: 'yy-mm-dd',  changeMonth: true, changeYear: true });
-							//field.$input.addClass('datetime').datetimepicker({ dateFormat: 'yy-mm-dd' });
-							break;						
+							var inputName 	= field.$input.attr('name');
+							var format 		= 'dd-mm-yyyy';
+							var minView		= 'month';
+							if (field['type'] == 'datetime') {
+							 	format 	= 'dd-mm-yyyy hh:ii'; //:ss';
+								minView	= 'hour';
+							}
+
+							field.$input
+								.data('inputName', inputName)
+								.removeAttr('name')
+								.on('change', 
+									function(event){
+										var $input 	= $(event.target);
+										
+										if ($input.val() == '') {
+											$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val('');
+											return;
+										}
+										
+										var datetimepicker 	= $input.parent().data('datetimepicker');
+										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
+									}
+								);			
+								
+ 							field.$input.parent()
+								.addClass('date form_datetime')
+								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': 'es'});
+
+							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
+							field.$input.parent().datetimepicker('show').datetimepicker('hide');
+							field.$input.change();
+							break;
 						case 'gallery':
 							this.initFileupload(field);
 							break;
