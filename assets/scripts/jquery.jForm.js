@@ -23,7 +23,6 @@
 	};
 
 	$.fn.jForm = function( method ) {
-		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 		} else if ( typeof method === 'object' || ! method ) {
@@ -92,18 +91,42 @@
 				
 				if (field['type'] != null) {
 					switch (field['type']) {
-						case 'autocomplete':
+						case 'typeahead':
+							var $input = field.$input.parent().find('input[name=' + field.fieldId + ']');
 							field.$input
-								.data( { 'field': field })
-								.autocomplete( {
-									source: 	field['source'],
-									minLength: 	1,
-									select: 	function( event, ui ) {
-										$('*[name=' + $(event.target).data('field')['fieldId'] + ']', this.$form).
-											val(ui.item.id)
-											.change();
-									}								
-							});
+								.data( { 'field': field,  '$input': $input, 'map': {} })
+								.change(function(event) {
+									var map 		= $(event.target).data('typeahead').map;
+									var $input		= $(event.target);
+									var $inputId	= $(event.target).data('$input');
+									if (map != null && map[$input.val()] != null) {
+										$inputId.val(map[$input.val()]);
+										return;
+									}
+									$inputId.val('');
+								})
+								.typeahead({
+									source: function (query, process) {
+										var $this = this;
+										var field = $(this)[0].$element.data('field');
+										return $.get(field['source'], { 'query': query},
+											function(data){
+												var options = [];
+												$this['map'] = {}; 
+												$.each(data,function (i,val){
+													options.push(val.value);
+													$this.map[val.value] = val.id; 
+												});
+												return process(options);
+											}
+										);
+									},
+									updater: function (item) {
+										this.$element.data('$input').val(this.map[item]);
+										//this.$element.parent().find('input[name=' + this.$element.data('field').fieldId + ']').val(this.map[item]);
+										return item;
+									}
+								});
 							break;
 						case 'date':
 						case 'datetime':
@@ -235,7 +258,18 @@
 			return true;
 		},
 		
+		numeric: function($input) {
+			return !isNaN($input.val());
+		},
+		
 		required: function($input) {
+			var field = $input.data('field');
+			if (field != null) {
+				if (field.type == 'typeahead') { // Mejorar esta parte, capaz conviene implementar herencia en los fields, en vez de estar enchastrando todos con IF S
+					$input = $input.data('$input');
+				}
+			}
+			
 			return ( $input.val().trim() != '');
 		},
 		

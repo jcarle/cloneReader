@@ -50,12 +50,11 @@ foreach ($form['fields'] as $name => $field) {
 		case 'textarea':
 			$aFields[] = sprintf($sField, form_textarea($name, $field['value'], 'class="'.$inputSize.'"'));
 			break;			
-		case 'autocomplete':
-			$aFields[] = '<fieldset class="control-group">'
-				.form_label($field['label'], null, array('class' => 'control-label'))
-				.form_input($name, reset($field['value']))
-				.form_hidden($field['fieldId'], key($field['value']))
-				.'</fieldset>';
+		case 'typeahead':
+			$aFields[] = sprintf($sField, 
+				form_input(array('name' => $name, 'value' => reset($field['value']), 'class' => $inputSize, 'autocomplete' => 'off')).
+				form_hidden($field['fieldId'], ((int)key($field['value']) == 0 ? '' : (int)key($field['value'])) )
+			);
 			break;			
 		case 'dropdown':
 			$aFields[] = sprintf($sField, form_dropdown($name, element('source', $field, array()), $field['value'], 'class="'.$inputSize.'"'));
@@ -122,9 +121,6 @@ if (element('showBtnBack', $form) == true) {
 }
 
 echo '</div>';
-
-
-    
 echo form_close(); 
 
 if ($hasGallery == true) {

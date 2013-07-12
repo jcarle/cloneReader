@@ -101,10 +101,12 @@
 						}
 					}
 				, this));
+			
+			this.$btn.focus();
 				
-				$('.modal-backdrop')
-					.css('opacity', 0.3)
-					.unbind();
+			$('.modal-backdrop')
+				.css('opacity', 0.3)
+				.unbind();
 		}
 	}
 })($);
