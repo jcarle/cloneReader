@@ -39,9 +39,17 @@ foreach ($query->result() as $row) {
 					'.form_checkbox('chkDelete', $id).'
 					'.anchor($controller.'/edit/'.$id, 'hiden', array('style'=>'display:none')).'
 				</td>';	
-		
 	foreach ($row as $field) {
-		echo '	<td>
+		$class = '';
+		if (is_numeric($field)) {
+			$class = ' class="numeric" ';
+		}
+		$value = str_replace('€', '', str_replace('U$S', '', str_replace('ar$', '', $field))); // TODO: desharkodear!!
+		if (is_numeric($value)) {
+			$class = ' class="numeric" ';
+		}
+		
+		echo '	<td '.$class.'>
 					'.$field.'
 				</td>';		
 	}

@@ -47,9 +47,12 @@
 				}
 
 				if (aDelete.length == 0) { return;  }
-				if (!confirm('Está seguro?')) { return; }
-
-cn(aDelete);				
+				
+				$(document).jAlert( {
+					'msg': 			'Está seguro?',
+					'isConfirm': 	true,
+					'callback': 	function() {}
+				});
 			}
 		, this));
 		

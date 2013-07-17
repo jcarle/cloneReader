@@ -267,8 +267,8 @@
 			}			
 				#cloneReader ul.ulFilters li div a, 
 				#cloneReader ul.ulFilters li div span {
-					line-height:20px;
-					height:20px;
+					line-height:25px;
+					height:25px;
 					font-size:small;
 				}
 				#cloneReader ul.ulFilters li div .icon {
@@ -305,7 +305,7 @@
 		#cloneReader ul.ulFilters li.expand {
 		}
 			#cloneReader ul.ulFilters li .count {
-				font-size: 10px;
+				font-size: smaller;
 				cursor:default;
 				color:gray;
 				position:absolute;

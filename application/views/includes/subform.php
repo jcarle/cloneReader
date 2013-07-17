@@ -1,5 +1,8 @@
-<a href="<?php echo base_url($controller.'-1'); ?>">agregar</a>
-<table>
+<a href="<?php echo base_url($controller.'0'); ?>" class="btn btn-small">
+	<i class="icon-plus"></i>
+</a>
+
+<table class="table table-hover table-condensed">
 	<thead>
 		<tr>
 <?php
@@ -22,7 +25,16 @@ foreach ($query->result() as $row) {
 		<tr href="<?php echo base_url($controller.$id)?>">
 <?		
 	foreach ($row as $field) {
-		echo '	<td>
+		$class = '';
+		if (is_numeric($field)) {
+			$class = ' class="numeric" ';
+		}
+		$value = str_replace('€', '', str_replace('U$S', '', str_replace('ar$', '', $field))); // TODO: desharkodear!!
+		if (is_numeric($value)) {
+			$class = ' class="numeric" ';
+		}
+		
+		echo '	<td '.$class.'>
 					'.$field.'
 				</td>';		
 	}

@@ -341,16 +341,15 @@ body.isLoading, body.isLoading * {
 	margin:0 auto 20px auto;
 	padding: 0;
 	position: relative;
-	max-width:750px;
+	max-width:950px;
 	font-size: small;
 	color:#333;	
 }
-.ui-dialog .jForm {
+.modal .jForm {
 	border: 0 none !important;
 	border-radius: 0 0 0 0;
 	box-shadow: 0 0 0 white;
 	margin: 0;
-	padding: 0 0 35px !important;
 }
 	.jForm .control-group {
 		margin: 10px 5px;
@@ -453,13 +452,7 @@ body.isLoading, body.isLoading * {
 						border: 1px solid #D6D6D6;		
 						display:none;
 					}
-					.jForm fieldset .subform {
-						display: inline-block;
-						width: 710px;
-					}
-						.jForm fieldset .subform a {
-							color:#3176CB;
-						}
+					.jForm fieldset .subform {	}
 						.jForm fieldset .subform table {
 							border: 1px solid #BBBBBB;
 							border-spacing: 0;
@@ -467,31 +460,21 @@ body.isLoading, body.isLoading * {
 							empty-cells: show;
 							width: 100%;
 							border-collapse: separate;
+							margin-top: 10px;
 						}
-							.jForm fieldset .subform table tr td {
-								padding:3px;
-							}
 							.jForm fieldset .subform table thead {
 								background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
 								background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
-								font-weight: bold;
-								color: white;
-								height:20px;
 							}
 								.jForm fieldset .subform table thead tr {}
 									.jForm fieldset .subform table thead tr td, 
 									.jForm fieldset .subform table thead tr td a  {
 										color:white;
+										text-shadow: 1px 1px 0 #555555;
 									}
-/*							.jForm fieldset .subform table tbody tr { }
-							.jForm fieldset .subform table tbody tr:hover {
-								background:#FFFFCC;
-							}
 								.jForm fieldset .subform table tbody tr td {
-									border-top:1px #ccc solid;
 									cursor: pointer;
-								}*/
-
+								}
 	.jForm .form-actions {
 		border-radius: 0 0 5px 5px;
 		text-align: right;
@@ -507,4 +490,8 @@ body.isLoading, body.isLoading * {
 	border-radius: 3px 3px 3px 3px;
 	height: auto;
 	padding: 2px 0;	
+}
+
+table tbody tr td.numeric {
+	text-align: right;
 }

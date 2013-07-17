@@ -45,12 +45,3 @@ function pr($value) {
 function vd($value) {
 	var_dump($value);
 }
-
-function getRulesMessages() { // TODO: mover esto de aca!
-	return array(
-		'required' 		=> 'Por favor, completa el campo "%s"',
-		'valid_email' 	=> 'Por favor ingrese un email válido',
-		'_login' 		=> 'El email o la contraseña ingresados son incorrectos'					
-				
-	);
-}

@@ -33,7 +33,11 @@ foreach ($form['fields'] as $name => $field) {
 			$aFields[] = form_hidden($name, $field['value']);
 			break;
 		case 'text':
-			$aFields[] = sprintf($sField, form_input(array('name' => $name, 'value' => $field['value'], 'class' => $inputSize)));
+			$properties = array('name' => $name, 'value' => $field['value'], 'class' => $inputSize, 'placeholder' => element('placeholder', $field));
+			if (element('disabled', $field) == true) {
+				$properties += array('disabled' => 'disabled');
+			} 
+			$aFields[] = sprintf($sField, form_input($properties));
 			break;
 		case 'date':
 		case 'datetime':
@@ -89,11 +93,8 @@ foreach ($form['fields'] as $name => $field) {
 				</fieldset>';
 			break;
 		case 'subform':
-			$aFields[] = '<fieldset class="control-group">'
-					.form_label($field['label'], null, array('class' => 'control-label'))
-					.'<div name="'.$name.'" class="subform"></div>
-				</fieldset>';
-			break;		
+			$aFields[] = sprintf($sField, '<div name="'.$name.'" class="subform '.$inputSize.'"></div>');
+			break;
 		case 'tree':
 			$aFields[] = '<fieldset class="tree">'
 					.renderTree($field['source'], $field['value'])	
@@ -114,12 +115,10 @@ foreach ($form['fields'] as $name => $field) {
 
 echo implode(' ', $aFields);
 echo '<div class="form-actions" >';
-echo 	'<button type="submit" class="btn btn-primary"><i class="'.$form['iconSend'].'"></i> '.element('btnSubmitValue', $form, 'Guardar').'</button> ';
-
 if (element('showBtnBack', $form) == true) {
-	echo 	'<button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"> '.element('btnSubmitValue', $form, 'Cancelar').'</button>';
+	echo 	' <button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"> '.element('btnSubmitValue', $form, 'Cancelar').'</button> ';
 }
-
+echo 	' <button type="submit" class="btn btn-primary"><i class="'.$form['iconSend'].'"></i> '.element('btnSubmitValue', $form, 'Guardar').'</button> ';
 echo '</div>';
 echo form_close(); 
 

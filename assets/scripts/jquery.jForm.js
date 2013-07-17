@@ -61,7 +61,7 @@
 							}
 							
 							if (this.options.isSubForm == true) {
-								this.$form.dialog('close');
+								this.$form.parent().modal('hide');
 								return;
 							}							
 							if ($.url().param('urlList') != null) {
@@ -90,6 +90,8 @@
 				field.$input	= $('*[name="' + field['name'] + '"]', this.$form);
 				
 				if (field['type'] != null) {
+					field.$input.data( 'field', field);
+					
 					switch (field['type']) {
 						case 'typeahead':
 							var $input = field.$input.parent().find('input[name=' + field.fieldId + ']');
@@ -151,13 +153,14 @@
 										}
 										
 										var datetimepicker 	= $input.parent().data('datetimepicker');
+										datetimepicker.date.setSeconds(0);
 										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
 									}
 								);			
 								
  							field.$input.parent()
 								.addClass('date form_datetime')
-								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': 'es'});
+								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': 'es', 'pickerPosition': 'bottom-left' });
 
 							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
 							field.$input.parent().datetimepicker('show').datetimepicker('hide');
@@ -171,8 +174,8 @@
 							break;
 						case 'raty':
 							field.$input.raty( {
-				 					score: 		field['value'],
-				  					scoreName: 	field['name'],			
+									score: 		field['value'],
+									scoreName: 	field['name'],
 									path: 		base_url + 'assets/images/',
 								});						
 							break;
@@ -229,7 +232,7 @@
 						);
 						
 						if (subscribe.runOnInit == true) {
-							$(this.getFieldByName(subscribe.field)).trigger(subscribe.event);							
+							$(this.getFieldByName(subscribe.field)).trigger(subscribe.event);
 						}
 					}
 				}
@@ -341,11 +344,12 @@
 		
 		loadSubForm: function(field) {
 			$.ajax( {
-				type: 	'get', 
-				url:	field.controller,
-				data:	{ 'frmParent': field.frmParent }
-				})
-				.done( $.proxy( 
+				type: 		'get', 
+				url:		field.controller,
+				data:		{ 'frmParent': field.frmParent },
+				dataType:	'html'
+			})
+			.done( $.proxy( 
 				function (result) {
 					field.$input.children().remove();
 					field.$input.html(result);
@@ -374,39 +378,69 @@
 							}
 						)
 				}
-			, this));	
+			, this));
 		},
 		
 		showSubForm: function(controller, field) {
 			$.ajax( {
-				type: 	'get', 
-				url:	controller
+				type: 		'get', 
+				dataType:	'html',
+				url:		controller
 			})
 			.done( $.proxy( 
-				function (result, a, b) {
-					
+				function (result) {
 					var frmId = $(result).attr('id');	
 					$(result).appendTo($('body'));
 					
 					var $subform = $('#' + frmId);
-					var options = $subform.jForm('options');
+					var options	 = $subform.jForm('options');
 					options.frmParentId = this;
+					
+					var $modal 			= $('<div class="modal" tabindex="-1" role="dialog" />');
+					var $modalBody 		= $('<div class="modal-body" />')
+					var $modalFooter 	= $('<div class="modal-footer" />')
 
-					$subform.dialog({  
-							position:	['center', 150],
-							draggable: 	false, 
-							width:		'auto', 
-							height: 	'auto', 
-							modal: 		true, 
-							resizable: 	false, 
-							title: 		options.title, 
-							close:		function(event, ui) {
-											options.frmParentId.loadSubForm(field)
-											$(this).remove();
-										}
-							})
+					$subform.addClass('row-fluid').appendTo($modal);
+
+// TODO: quitar el btnDelete si estoy agregando!
+					
+					$modalFooter
+						.append($('<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>'))
+						.append($('<button type="button" class="btnDelete btn" >	<i class="icon-trash"></i> Delete </button> '))
+						.append($subform.find('.btn-primary'));
+					
+					$subform.find('.form-actions').remove();
+					$subform.children().appendTo($modalBody);
+					
+					$modalFooter.find('.btnDelete').click(function () {
+						$(document).jAlert('no implementado');
+					});
+					
+					$subform
+						.append('\
+							<div class="modal-header"> \
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button> \
+								<h3 id="myModalLabel">' + options.title + '</h3> \
+							</div> \
+						')
+						.append($modalBody)
+						.append($modalFooter);
+					
+					$modal.modal( { backdrop: true, keyboard: false });
+					$modal.on('hidden', function() {
+						var jForm = $(this).find('form').data('jForm');
+						jForm.options.frmParentId.loadSubForm(field);
+						$(this).remove();
+					});
+					$modal.find('input[type=text]:first').focus();
+
+					$(document).off('focusin.modal');
+					
+					$('.modal-backdrop')
+						.css('opacity', 0.3)
+						.unbind();
 				}
-			, this));				
+			, this));
 		},
 		
 		getFieldByName: function(fieldName){
@@ -417,6 +451,24 @@
 			$field.parent().toggle(value);
 		},
 		
+		calculatePrice: function($field, $price, $currency, $exchange, $total) {
+			if ($currency.val() == 1) { // TODO: desharckodear!
+				$exchange.val(1);
+			}
+
+			if (this.numeric($price) == false) {
+				$price.val(0);
+			}
+			if (this.numeric($exchange) == false) {
+				$exchange.val(0);
+			}
+						
+			var total = ($price.val() * $exchange.val());
+			$price.val(Number($price.val()).toFixed(2)); 
+			$exchange.val(Number($exchange.val()).toFixed(2));
+			$total.val('ar$' + total.toFixed(2)); // TODO: desharckodear!
+		},
+		
 		loadDropdown: function($field, value) {
 			var controller = this.options.fields[$field.attr('name')].controller;
 			if (value != null) {
@@ -425,9 +477,9 @@
 			
 			$.ajax( {
 				type: 	'get', 
-				url:	controller,
-				})
-				.done( $.proxy( 
+				url:	controller
+			})
+			.done( $.proxy( 
 				function (result) {
 					$field.children().remove();
 					for (var i=0; i<result.length; i++) {

@@ -72,7 +72,11 @@
 			// para evitar que se vaya el foco a otro elemento de la pagina con tab
 			$(document).bind('keydown.jAlertKeydown', ($.proxy(
 				function(event) {
+					event.preventDefault();
+					event.stopPropagation();
+					
 					if (event.keyCode == 27) { // esc!
+						
 						this.$modal.modal('hide');
 						return false;
 					}
@@ -88,9 +92,11 @@
 					backdrop: true,
 					keyboard: true
 				})
-				.css({ 'top': 200, })
+				.css({ 'top': 200 })
 				.on('hidden', $.proxy(
 					function(event) {
+						$(this).remove();
+						$('.modal-backdrop').show();
 						$(document).unbind('keydown.jAlertKeydown');
 						
 						if (this.options.isConfirm == false) {
@@ -103,10 +109,18 @@
 				, this));
 			
 			this.$btn.focus();
+			//$(document).focus();
+			$(document).off('focusin.modal');
+			
+			var zIndex = parseInt(this.$modal.css('z-index'));
+			this.$modal.css('z-index', zIndex + 1);
 				
-			$('.modal-backdrop')
-				.css('opacity', 0.3)
-				.unbind();
+			$('.modal-backdrop').hide();
+			
+			$('.modal-backdrop:last')
+				.css( {'opacity': 0.3, 'z-index': parseInt(this.$modal.css('z-index')) } )
+				.unbind()
+				.show();
 		}
 	}
 })($);
