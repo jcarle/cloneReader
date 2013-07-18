@@ -8,7 +8,7 @@ class Login extends CI_Controller {
 	}
 	
 	function index() {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = array(
 			'frmId'				=> 'frmLogin',

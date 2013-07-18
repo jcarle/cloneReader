@@ -12,7 +12,7 @@ class Users extends CI_Controller {
 	}
 	
 	function listing() {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
@@ -27,7 +27,7 @@ class Users extends CI_Controller {
 	}
 	
 	function edit($userId) {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$data = $this->Users_Model->get($userId);
 		

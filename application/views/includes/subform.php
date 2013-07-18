@@ -29,7 +29,7 @@ foreach ($query->result() as $row) {
 		if (is_numeric($field)) {
 			$class = ' class="numeric" ';
 		}
-		$value = str_replace('€', '', str_replace('U$S', '', str_replace('ar$', '', $field))); // TODO: desharkodear!!
+		$value = str_replace('€', '', str_replace('U$S', '', str_replace('AR$', '', $field))); // TODO: desharkodear!!
 		if (is_numeric($value)) {
 			$class = ' class="numeric" ';
 		}

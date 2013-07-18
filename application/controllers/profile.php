@@ -12,7 +12,7 @@ class Profile extends CI_Controller {
 	}
 	
 	function edit() {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);

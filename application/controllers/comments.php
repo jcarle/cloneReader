@@ -29,7 +29,7 @@ class Comments extends CI_Controller {
 	
 	
 	function _listing($entityName) {
-		if (! $this->safety->allowByControllerName(__METHOD__.'::'.$entityName) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__.'::'.$entityName) ) { return errorForbidden(); }
 		
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
@@ -44,7 +44,7 @@ class Comments extends CI_Controller {
 	}
 	
 	function _edit($entityName, $commentId) {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($commentId, false);
 

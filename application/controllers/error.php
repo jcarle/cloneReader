@@ -8,7 +8,7 @@ class Error extends CI_Controller {
 		$this->error404();
 	}
 	
-	function notAuthorized() {
+	function forbidden() {
 		if ($this->input->is_ajax_request()) { 
 			return $this->load->view('ajax', array(
 				'code'		=> false, 
@@ -18,7 +18,7 @@ class Error extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'error', 
-			'title'			=> 'Error 401',
+			'title'			=> 'Error 403',
 			'message'		=> 'No tiene permisos para la acción que desea realizar'
 		));
 	}	

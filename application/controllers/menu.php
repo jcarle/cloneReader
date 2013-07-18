@@ -12,7 +12,7 @@ class Menu extends CI_Controller {
 	}
 	
 	function edit($menuId) {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { redirect('error/notAuthorized'); }
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$data = $this->Menu_Model->get($menuId);
 		
