@@ -45,3 +45,10 @@ function pr($value) {
 function vd($value) {
 	var_dump($value);
 }
+
+function errorForbidden() {
+	$CI = &get_instance();
+	$CI->load->model('Coins_Model');
+	$CI->load->library('../controllers/error');
+	$CI->error->forbidden();	
+}

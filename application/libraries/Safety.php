@@ -17,9 +17,21 @@ class Safety {
 		return ($query->num_rows() > 0);
 	}
 
+	// TODO: emprolijar esta parte!!
 	function allowByControllerName($controllerName) {
+		if (is_array($controllerName)) {
+			$aControllerName = $controllerName;
+		}
+		else {
+			$aControllerName[] =$controllerName;
+		}
+		for ($i=0; $i<count($aControllerName); $i++) {
+			$aControllerName[$i] = str_replace('::', '/', strtolower($aControllerName[$i]));
+		}
+		
 		$query = $this->db
-			->where(array('controllerActive' => true, 'controllerName' => str_replace('::', '/', strtolower($controllerName)), 'userId' => $this->session->userdata('userId')))
+			->where(array('controllerActive' => true, 'userId' => $this->session->userdata('userId')))
+			->where('controllerName IN (\''.implode('\', \'', $aControllerName).'\')')
 			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId')
 			->join('users_groups', 'users_groups.groupId = groups_controllers.groupId')
 			->get('controllers');
