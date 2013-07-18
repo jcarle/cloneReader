@@ -53,8 +53,16 @@
 						type: 	'post',
 						url: 	this.$form.attr('action'),
 						data: 	this.$form.serialize()
-					}).
-					done($.proxy(
+					})
+					.fail(
+						function (result) {
+							result = $.parseJSON(result.responseText);
+							if (result['code'] == false) {
+								return $(document).jAlert(result['result']);
+							}
+						}
+					)					
+					.done($.proxy(
 						function(response) {
 							if (response['code'] != true) {
 								return $(document).jAlert(response['result']);
@@ -346,11 +354,23 @@
 			$.ajax( {
 				type: 		'get', 
 				url:		field.controller,
-				data:		{ 'frmParent': field.frmParent },
-				dataType:	'html'
+				data:		{ 'frmParent': field.frmParent }
 			})
+			.fail(
+				function (result) {
+					result = $.parseJSON(result.responseText);
+					if (result['code'] == false) {
+						return $(document).jAlert(result['result']);
+					}
+				}
+			)
 			.done( $.proxy( 
 				function (result) {
+					if (result['code'] != true) {
+						return $(document).jAlert(result['result']);
+					}
+					
+					result = $(result['result']);
 					field.$input.children().remove();
 					field.$input.html(result);
 					
@@ -384,16 +404,23 @@
 		showSubForm: function(controller, field) {
 			$.ajax( {
 				type: 		'get', 
-				dataType:	'html',
 				url:		controller
 			})
+			.fail(
+				function (result) {
+					result = $.parseJSON(result.responseText);
+					if (result['code'] == false) {
+						return $(document).jAlert(result['result']);
+					}
+				}
+			)			
 			.done( $.proxy( 
 				function (result) {
-					var frmId = $(result).attr('id');	
-					$(result).appendTo($('body'));
+					$(result['result']).appendTo($('body'));
 					
-					var $subform = $('#' + frmId);
-					var options	 = $subform.jForm('options');
+					var frmId 		= $(result['result']).attr('id');
+					var $subform 	= $('#' + frmId);
+					var options	 	= $subform.jForm('options');
 					options.frmParentId = this;
 					
 					var $modal 			= $('<div class="modal" tabindex="-1" role="dialog" />');
