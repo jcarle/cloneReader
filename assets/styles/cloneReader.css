@@ -259,7 +259,7 @@
 	}
 		#cloneReader ul.ulFilters li {
 			position: relative;
-			margin: 5px 0 0 0;
+			margin: 0;
 		}
 			#cloneReader ul.ulFilters li div {}
 			#cloneReader ul.ulFilters li div:hover {
@@ -267,8 +267,8 @@
 			}			
 				#cloneReader ul.ulFilters li div a, 
 				#cloneReader ul.ulFilters li div span {
-					line-height:25px;
-					height:25px;
+					line-height:30px;
+					height:30px;
 					font-size:small;
 				}
 				#cloneReader ul.ulFilters li div .icon {

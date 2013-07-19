@@ -2044,7 +2044,7 @@ class CI_DB_active_record extends CI_DB_driver {
 	
 	function return_query()
 	{
-    	$query = $this->_compile_select();
+		$query = $this->_compile_select();
 		$this->_reset_select();
 		return $query;
 	}	
