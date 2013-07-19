@@ -220,7 +220,7 @@ cloneReader = {
 			}
 		);
 	
-		this.$toolBar.find('a').tooltip( { placement: 'bottom', container: 'body', delay: { show: 500 }  });
+		this.$toolBar.find('a').tooltip( { placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -829,7 +829,7 @@ console.timeEnd("t1");
 				var filter = $($(event.target).parents('li:first')).data('filter');
 				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
 			})
-			.tooltip({ placement: 'bottom', container: 'body', delay: { show: 500 }  });
+			.tooltip({ placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
 
 
 		this.renderCounts(filter);

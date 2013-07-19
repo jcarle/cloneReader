@@ -272,13 +272,13 @@
 					font-size:small;
 				}
 				#cloneReader ul.ulFilters li div .icon {
-					background-position: center center;
-					background-repeat: no-repeat;				
+					background-position: center left;
+					background-repeat: no-repeat;
 					font-size: 10px;
-					left: 0px;
+					left: 5px;
 					position: absolute;
 					top: 0px;
-					width: 30px;
+					width: 20px;
 					text-align: center;	
 				}
 				#cloneReader ul.ulFilters li div .icon.arrow {
@@ -289,7 +289,7 @@
 					color: #333333;
 					cursor: pointer;
 					display: block;
-					margin:0 55px 0 30px;
+					margin:0 55px 0 25px;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
@@ -319,16 +319,16 @@
 				#cloneReader ul.ulFilters li ul  li {
 				}
 					#cloneReader ul.ulFilters li ul  li .icon {
-						left:30px;
+						left:25px;
 					} 
 					#cloneReader ul.ulFilters li ul  li a {
-						margin-left:60px;
+						margin-left:45px;
 					}
 						#cloneReader ul.ulFilters li ul li ul li .icon {
-						left:60px;
+						left:45px;
 					} 
 					#cloneReader ul.ulFilters li ul li ul li a {
-						margin-left:90px;
+						margin-left:65px;
 					}
 			#cloneReader ul.ulFilters li a:hover {
 				text-decoration: none;
@@ -341,4 +341,10 @@
 
 .nicescroll-rails div {
 	cursor: pointer; /* FIXME: mover esto de aca !*/
+}
+
+
+.tooltip {
+	font-size: smaller;
+	letter-spacing: 2px;
 }
