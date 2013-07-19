@@ -219,6 +219,9 @@ cloneReader = {
 				cloneReader.hidePopupWindow();
 			}
 		);
+	
+// TODO: arreglar el tooltipo de la toolbar, bootstrap pone espacios entre los botones	
+//		this.$toolBar.find('a').tooltip({ 'placement': 'bottom'  });
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -826,7 +829,8 @@ console.timeEnd("t1");
 			.click(function (event) {
 				var filter = $($(event.target).parents('li:first')).data('filter');
 				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
-			});
+			})
+			.tooltip({ 'placement': 'bottom'  });
 
 
 		this.renderCounts(filter);

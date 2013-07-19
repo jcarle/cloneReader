@@ -275,10 +275,10 @@
 					background-position: center center;
 					background-repeat: no-repeat;				
 					font-size: 10px;
-					left: 10px;
+					left: 0px;
 					position: absolute;
 					top: 0px;
-					width: 16px;
+					width: 30px;
 					text-align: center;	
 				}
 				#cloneReader ul.ulFilters li div .icon.arrow {
@@ -319,16 +319,16 @@
 				#cloneReader ul.ulFilters li ul  li {
 				}
 					#cloneReader ul.ulFilters li ul  li .icon {
-						left:26px;
+						left:30px;
 					} 
 					#cloneReader ul.ulFilters li ul  li a {
-						margin-left:46px;
+						margin-left:60px;
 					}
 						#cloneReader ul.ulFilters li ul li ul li .icon {
-						left:42px;
+						left:60px;
 					} 
 					#cloneReader ul.ulFilters li ul li ul li a {
-						margin-left:62px;
+						margin-left:90px;
 					}
 			#cloneReader ul.ulFilters li a:hover {
 				text-decoration: none;
