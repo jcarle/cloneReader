@@ -147,19 +147,19 @@ cloneReader = {
 	
 	renderMenu: function() {
 		this.$toolBar.html(' \
-			<a title="expand" class="expand"> <i class="icon-exchange"  /> </a> \
-			<a title="maximize" class="tooglePageHeader"> <i class="icon-resize-full"  /> </a> \
+			<a title="Expand" class="expand"> <i class="icon-exchange"  /> </a> \
+			<a title="Maximize" class="tooglePageHeader"> <i class="icon-resize-full"  /> </a> \
 			<div class="btn-group add" > \
-				<a title="add feed" > <i class="icon-plus" /> </a> \
+				<a title="Add feed" > <i class="icon-plus" /> </a> \
 			</div>\
 			<div class="btn-group feedSettings" > \
-				<a class="disabled"> Feed settings </a> \
-				<a class="dropdown-toggle" data-toggle="dropdown" > <span class="caret" /> </a> \
+				<a class="disabled" title="Feed settings"> Feed settings </a> \
+				<a class="dropdown-toggle" data-toggle="dropdown" title="Feed settings" > <span class="caret" /> </a> \
 				<ul class="dropdown-menu popupFeedSettings" /> \
 			</div> \
 			<div class="btn-group filterSort" > \
-				<a class="disabled"/> \
-				<a class="dropdown-toggle" data-toggle="dropdown" > \
+				<a class="disabled" title="Sort"/> \
+				<a class="dropdown-toggle" data-toggle="dropdown" title="Sort"> \
 					<span class="caret" /> \
 				</a> \
 				<ul class="dropdown-menu" > \
@@ -178,17 +178,17 @@ cloneReader = {
 				</ul> \
 			</div> \
 			<div class="btn-group" data-toggle="buttons-radio" > \
-				<a class="viewList" title="list view" > \
+				<a class="viewList" title="List view" > \
 					<i class="icon-align-justify" /> \
 				</a> \
-				<a class="viewDetail" title="detail view" > \
+				<a class="viewDetail" title="Detail view" > \
 					<i class="icon-th-list" /> \
 				</a> \
 			</div> \
-			<a title="reload" class="reload" > <i class="icon-refresh" /> </a> \
+			<a title="Reload" class="reload" > <i class="icon-refresh" /> </a> \
 			<div class="btn-group"  > \
-				<a title="prev" class="prev" > <i class="icon-caret-up" /> </a> \
-				<a title="next" class="next" > <i class="icon-caret-down" /> </a> \
+				<a title="Prev" class="prev" > <i class="icon-caret-up" /> </a> \
+				<a title="Next" class="next" > <i class="icon-caret-down" /> </a> \
 			</div> \
 		');
 		
@@ -220,8 +220,7 @@ cloneReader = {
 			}
 		);
 	
-// TODO: arreglar el tooltipo de la toolbar, bootstrap pone espacios entre los botones	
-//		this.$toolBar.find('a').tooltip({ 'placement': 'bottom'  });
+		this.$toolBar.find('a').tooltip( { placement: 'bottom', container: 'body', delay: { show: 500 }  });
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -830,7 +829,7 @@ console.timeEnd("t1");
 				var filter = $($(event.target).parents('li:first')).data('filter');
 				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
 			})
-			.tooltip({ 'placement': 'bottom'  });
+			.tooltip({ placement: 'bottom', container: 'body', delay: { show: 500 }  });
 
 
 		this.renderCounts(filter);
