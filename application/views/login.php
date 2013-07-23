@@ -4,8 +4,12 @@ $this->load->view('includes/jForm');
 
 
 
-<button id='fb-login' href='#' onclick='facebookLogin()' class="btn btn-primary btn-large" >
+<button href='#' onclick='facebookLogin()' class="btn btn-facebook" >
 	<i class="icon-facebook"></i>
 	Facebook Login
 </button>
 
+<button href='#' onclick='facebookLogin()' class="btn btn-google" style="display:none">
+	<i class="icon-google-plus"></i>
+	Google Login
+</button>
