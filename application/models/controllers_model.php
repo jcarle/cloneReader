@@ -1,7 +1,7 @@
 <?php
 class Controllers_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select("SQL_CALC_FOUND_ROWS controllerId AS id, controllerName AS Controller, controllerUrl AS Url, IF(controllerActive, 'X', '') AS Activo", false)
+		$query = $this->db->select("SQL_CALC_FOUND_ROWS controllerId, controllerName, controllerUrl, IF(controllerActive, 'X', '') AS controllerActive", false)
 						->like('controllerName', $filter)
 		 				->get("controllers", $num, $offset);
 						

@@ -1,9 +1,10 @@
 <?php
 class Feeds_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS feeds.feedId AS id, feedName AS \'Nombre\', feedUrl AS \'Url\', feedLink AS \'feedLink\' ', false)
-						->like('feedName', $filter)
-		 				->get('feeds', $num, $offset);
+		$query = $this->db
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedUrl, feedLink', false)
+			->like('feedName', $filter)
+		 	->get('feeds', $num, $offset);
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

@@ -16,7 +16,7 @@ $this->load->view('includes/formError');
 
 $hasGallery = false;
 $aFields 	= array();
-$inputSize	= 'span10';
+$inputSize	= 'span11';
 
 foreach ($form['fields'] as $name => $field) {
 

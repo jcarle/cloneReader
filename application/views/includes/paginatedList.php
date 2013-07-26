@@ -1,8 +1,4 @@
 <div class="paginatedList">
-<?php 
-$fields = $query->list_fields();
-?>
-
 	<form method="get" class="form-inline navbar-form navbar-inner">
 		<fieldset>
 			<label class="checkbox">Filtros</label>
@@ -19,19 +15,25 @@ $fields = $query->list_fields();
 	<table class="table table-hover table-condensed">
 		<thead>
 			<tr>
-				<td>
+				<th>
 					<input type="checkbox">
-				</td>
+				</th>
 <?php 
-foreach ($fields as $field) {
-	echo '		<td>'.$field.'</td>';
+foreach ($columns as $columnName) {
+	$class 		= '';
+	$columnName	= $columnName;
+	if (is_array($columnName)) {
+		$class 		= ' class="'.element('class', $columnName).'" ';
+		$columnName	= element('value', $columnName);
+	}
+	echo '		<th '.$class.'>'.$columnName.'</th>';
 } 
 ?>				
 			</tr>
 		</thead>
 		<tbody>
 <?php 				
-foreach ($query->result() as $row) {
+foreach ($data as $row) {
 	$id = reset($row);
 	echo '
 			<tr>
@@ -39,19 +41,13 @@ foreach ($query->result() as $row) {
 					'.form_checkbox('chkDelete', $id).'
 					'.anchor($controller.'/edit/'.$id, 'hiden', array('style'=>'display:none')).'
 				</td>';	
-	foreach ($row as $field) {
-		$class = '';
-		if (is_numeric($field)) {
-			$class = ' class="numeric" ';
-		}
-		$value = str_replace('€', '', str_replace('U$S', '', str_replace('AR$', '', $field))); // TODO: desharkodear!!
-		if (is_numeric($value)) {
-			$class = ' class="numeric" ';
+	foreach ($columns as $fieldName => $columnName) {
+		$class 	= '';
+		if (is_array($columnName)) {
+			$class 		= ' class="'.element('class', $columnName).'" ';
 		}
 		
-		echo '	<td '.$class.'>
-					'.$field.'
-				</td>';		
+		echo '	<td '.$class.'>'.$row[$fieldName].'</td>';
 	}
 	echo '
 			</tr>
@@ -61,7 +57,7 @@ foreach ($query->result() as $row) {
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="<?php echo count($fields) + 1; ?>">
+				<td colspan="<?php echo count($columns) + 1; ?>">
 					<a class="btnDelete btn btn-small" >
 						<i class="icon-trash icon-large"></i>
 						Delete
@@ -70,16 +66,16 @@ foreach ($query->result() as $row) {
 						<i class="icon-file-alt icon-large"></i>
 						Agregar
 					</a>
-					<span><?php echo $query->foundRows; ?> rows</span>
+					<span><?php echo $foundRows; ?> rows</span>
 					<div class="pagination pagination-small pagination-right">
 						<ul>
 <?php
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
-	'last_link'				=> ceil($query->foundRows /PAGE_SIZE),
+	'last_link'				=> ceil($foundRows /PAGE_SIZE),
 	'uri_segment'			=> 3,
 	'base_url'		 		=> current_url().'?filter='.$this->input->get('filter'),	
-	'total_rows'			=> $query->foundRows,
+	'total_rows'			=> $foundRows,
 	'per_page'				=> PAGE_SIZE, 
 	'num_links' 			=> 2,
 	'page_query_string'		=> true,

@@ -1,8 +1,8 @@
 <?php 
 class Users extends CI_Controller {
 
-    function __construct() {
-        parent::__construct();	
+	function __construct() {
+		parent::__construct();	
 		
 		$this->load->model(array('Users_Model', 'Countries_Model', 'Groups_Model'));
 	}  
@@ -16,12 +16,17 @@ class Users extends CI_Controller {
 		
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
+		
+		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+
 				
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Editar Usuarios',
-			'query'			=> $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter')),
+			'columns'		=> array('userId' => '#', 'userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
+			'data'			=> $query->result_array(),
+			'foundRows'		=> $query->foundRows,
 			'pagination'	=> $this->pagination
 		));
 	}
@@ -71,17 +76,17 @@ class Users extends CI_Controller {
 		
 		$form['rules'] 	= array( 
 			array(
-    			'field' => 'userEmail',
+				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
 				'rules' => 'required|valid_email'
 			),
 			array(
-    			'field' => 'userFirstName',
+				'field' => 'userFirstName',
 				'label' => $form['fields']['userFirstName']['label'],
 				'rules' => 'required'
 			),
 			array(
-    			'field' => 'userLastName',
+				'field' => 'userLastName',
 				'label' => $form['fields']['userLastName']['label'],
 				'rules' => 'required'
 			)

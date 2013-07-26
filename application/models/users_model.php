@@ -50,7 +50,7 @@ class Users_Model extends CI_Model {
 	}
 	
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId AS id, userEmail AS Email, CONCAT(userFirstName, \' \', userLastName) AS Nombre, countryName AS País, GROUP_CONCAT(groups.groupName) AS Grupos ', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, GROUP_CONCAT(groups.groupName) AS groupsName ', false)
 		 				->join('countries', 'users.countryId = countries.countryId', 'left')
 						->join('users_groups', 'users.userId = users_groups.userId', 'left')
 						->join('groups', 'groups.groupId = users_groups.groupId', 'left')
@@ -65,7 +65,8 @@ class Users_Model extends CI_Model {
 	function search($filter, $groupId = null){
 		$this->db->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS value  ', false)
 						->join('users_groups', 'users.userId = users_groups.userId')
-						->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
+						->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
+						->order_by('value');
 		 				
 		if ($groupId != null) {
 			$this->db->where('groupId', $groupId);	

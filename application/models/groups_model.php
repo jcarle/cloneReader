@@ -1,7 +1,7 @@
 <?php
 class Groups_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS groupId AS id, groupName AS Nombre, webSiteHome AS HomePage', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS groupId, groupName, webSiteHome', false)
 						->like('groupName', $filter)
 		 				->get('groups', $num, $offset);
 						

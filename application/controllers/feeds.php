@@ -17,11 +17,15 @@ class Feeds extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
+		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+		
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Editar Feeds',
-			'query'			=> $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter')),
+			'columns'		=> array('feedId' => '#', 'feedName' => 'Nombre', 'feedUrl' => 'Url', 'feedLink' => 'feedLink'),
+			'foundRows'		=> $query->foundRows,
+			'data'			=> $query->result_array(),
 			'pagination'	=> $this->pagination
 		));
 	}

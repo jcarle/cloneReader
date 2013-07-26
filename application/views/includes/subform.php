@@ -6,41 +6,41 @@
 	<thead>
 		<tr>
 <?php
-$fields = $query->list_fields();
- 
-foreach ($fields as $field) {
-	echo '	<td class="sortAsc">'.$field.'</td>';
+foreach ($columns as $columnName) {
+	$class 		= '';
+	$columnName	= $columnName;
+	if (is_array($columnName)) {
+		$class 		= ' class="'.element('class', $columnName).'" ';
+		$columnName	= element('value', $columnName);
+	}
+	echo '		<th '.$class.'>'.$columnName.'</th>';
 } 
-?>				
+?>
 		</tr>
 	</thead>
 	<tbody>
 <?php 				
-if (count($query->result()) == 0) {
-	echo '<tr><td colspan="'.(count($fields) + 1).'"> No hay resultados </td></tr>';
+if (count($data) == 0) {
+	echo '<tr class="warning"><td colspan="'.(count($columns) + 1).'"> No hay resultados </td></tr>';
 }
-foreach ($query->result() as $row) {
-	$id = reset($row);
-?>	
-		<tr href="<?php echo base_url($controller.$id)?>">
-<?		
-	foreach ($row as $field) {
-		$class = '';
-		if (is_numeric($field)) {
-			$class = ' class="numeric" ';
+
+foreach ($data as $row) {
+	if (is_array($row)) {
+		$id = reset($row);
+		echo '<tr href="'.base_url($controller.$id).'">';	
+		foreach ($columns as $fieldName => $columnName) {
+			$class 	= '';
+			if (is_array($columnName)) {
+				$class 		= ' class="'.element('class', $columnName).'" ';
+			}
+			
+			echo '	<td '.$class.'>'.$row[$fieldName].'</td>';
 		}
-		$value = str_replace('€', '', str_replace('U$S', '', str_replace('AR$', '', $field))); // TODO: desharkodear!!
-		if (is_numeric($value)) {
-			$class = ' class="numeric" ';
-		}
-		
-		echo '	<td '.$class.'>
-					'.$field.'
-				</td>';		
+		echo '</tr>';
 	}
-	echo '
-		</tr>
-	';
+	else {
+		echo $row;
+	}
 }
 ?>		
 	</tbody>

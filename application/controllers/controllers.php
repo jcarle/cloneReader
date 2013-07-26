@@ -16,12 +16,16 @@ class Controllers extends CI_Controller {
 		
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
+
+		$query = $this->Controllers_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Editar Controles',
-			'query'			=> $this->Controllers_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter')),
+			'columns'		=> array('controllerId' =>  '#', 'controllerName' => 'Controller', 'controllerUrl' => 'Url', 'controllerActive' => 'Activo'),
+			'data'			=> $query->result_array(),
+			'foundRows'		=> $query->foundRows,
 			'pagination'	=> $this->pagination
 		));
 	}
