@@ -2,7 +2,7 @@
 class Tags_Model extends CI_Model {
 	// TODO: quitar el like si $filter esta vacio
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS tags.tagId AS id, tagName AS \'Name\'', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS tags.tagId, tagName', false)
 						->like('tagName', $filter)
 						->order_by('tagId')
 		 				->get('tags', $num, $offset);

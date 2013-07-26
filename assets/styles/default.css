@@ -329,13 +329,13 @@ body.isLoading, body.isLoading * {
 			color: white;
 			height:20px;
 		}
-				.paginatedList table thead tr td, 
-				.paginatedList table thead tr td a  {
+				.paginatedList table thead tr th, 
+				.paginatedList table thead tr th a  {
 					color:white;
 					text-shadow: 1px 1px 0 #555;
 				}
-				.paginatedList table thead tr td:first-child,
-				.paginatedList table thead tr td:nth-child(2) {
+				.paginatedList table thead tr th:first-child,
+				.paginatedList table thead tr th:nth-child(2) {
 					width:20px;
 				}
 			.paginatedList table tbody tr {
@@ -501,13 +501,17 @@ body.isLoading, body.isLoading * {
 								background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 							}
 								.jForm fieldset .subform table thead tr {}
-									.jForm fieldset .subform table thead tr td, 
-									.jForm fieldset .subform table thead tr td a  {
+									.jForm fieldset .subform table thead tr th, 
+									.jForm fieldset .subform table thead tr th a  {
 										color:white;
 										text-shadow: 1px 1px 0 #555555;
 									}
 								.jForm fieldset .subform table tbody tr td {
 									cursor: pointer;
+								}
+								.jForm fieldset .subform table tbody tr.info td,
+								.jForm fieldset .subform table tbody tr.warning td {
+									cursor: default;
 								}
 	.jForm .form-actions {
 		border-radius: 0 0 5px 5px;
@@ -526,6 +530,15 @@ body.isLoading, body.isLoading * {
 	padding: 2px 0;	
 }
 
-table tbody tr td.numeric {
+table .numeric, table .date {
 	text-align: right;
+}
+
+.modal-body {
+	overflow: visible;
+}
+
+.modal-footer {
+	position: relative;
+	z-index: 1;
 }

@@ -141,10 +141,10 @@
 						case 'date':
 						case 'datetime':
 							var inputName 	= field.$input.attr('name');
-							var format 		= 'dd-mm-yyyy';
+							var format 		= 'dd/mm/yyyy';
 							var minView		= 'month';
 							if (field['type'] == 'datetime') {
-							 	format 	= 'dd-mm-yyyy hh:ii:ss';
+							 	format 	= 'dd/mm/yyyy hh:ii:ss';
 								minView	= 'hour';
 							}
 
@@ -493,7 +493,7 @@
 			var total = ($price.val() * $exchange.val());
 			$price.val(Number($price.val()).toFixed(2)); 
 			$exchange.val(Number($exchange.val()).toFixed(2));
-			$total.val('ar$' + total.toFixed(2)); // TODO: desharckodear!
+			$total.val('AR$ ' + total.toFixed(2)); // TODO: desharckodear!
 		},
 		
 		loadDropdown: function($field, value) {

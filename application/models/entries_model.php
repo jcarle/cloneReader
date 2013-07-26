@@ -1,7 +1,7 @@
 <?php
 class Entries_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS entries.entryId AS id, entryTitle AS \'Titulo\', entryUrl AS \'Url\' ', false)
+		$query = $this->db->select('SQL_CALC_FOUND_ROWS entries.entryId, entryTitle, entryUrl', false)
 						->like('entryTitle', $filter)
 		 				->get('entries', $num, $offset);
 						

@@ -297,9 +297,10 @@ $.extend({
 			.addClass('btn btn-mini')
 			.addClass('dropdown-toggle')
 			.attr('data-toggle', 'dropdown');
-	},
+	}
 	
-	loadSubForm: function(controller /*, field*/) {
+	/*
+	loadSubForm: function(controller /*, field* /) {
 		$.ajax( {
 			type: 	'get', 
 			url:	controller
@@ -329,7 +330,7 @@ $.extend({
 						})
 			}
 		, this));				
-	}	
+	}	*/
 });
 
 

@@ -24,11 +24,15 @@ class Entries extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
+		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+		
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Editar Entries',
-			'query'			=> $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter')),
+			'columns'		=> array('entryId' => '#', 'entryTitle' => 'Titulo', 'entryUrl' => 'Url'),
+			'data'			=> $query->result_array(),
+			'foundRows'		=> $query->foundRows,
 			'pagination'	=> $this->pagination
 		));
 	}
