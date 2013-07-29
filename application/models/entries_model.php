@@ -1,9 +1,12 @@
 <?php
 class Entries_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS entries.entryId, entryTitle, entryUrl', false)
-						->like('entryTitle', $filter)
-		 				->get('entries', $num, $offset);
+		$query = $this->db
+			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
+			->join('feeds', 'entries.feedId = feeds.feedId', 'inner') 
+			->like('entryTitle', $filter)
+			->order_by('entries.entryId')
+		 	->get('entries', $num, $offset);
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
@@ -128,15 +131,15 @@ class Entries_Model extends CI_Model {
 	function getTotalByFeedIdAndUserId($feedId, $userId) {
 		$query = ' SELECT 
 				COUNT(1) AS total FROM ( 
-			    	SELECT 1 
-			    	FROM users_entries FORCE INDEX (indexUnread)
-			    	WHERE feedId 		= '.$feedId.'
+					SELECT 1 
+					FROM users_entries FORCE INDEX (indexUnread)
+					WHERE feedId 		= '.$feedId.'
 					AND   userId	 	= '.$userId.'
 					AND   tagId			= '.TAG_ALL.' 
-			    	AND   entryRead 	= false 
+					AND   entryRead 	= false 
 					LIMIT '.(FEED_MAX_COUNT + 50).' 
 			) AS tmp ';
-		$query = $this->db->query($query)->result_array();					
+		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());
 		return $query[0]['total'];
 	}
@@ -154,7 +157,9 @@ class Entries_Model extends CI_Model {
 
 	function get($entryId){
 		$result = $this->db
+				->select('entries.*, feedName', true)
 				->where('entryId', $entryId)
+				->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 				->get('entries')->row_array();
 		return $result;
 	}
@@ -177,18 +182,16 @@ class Entries_Model extends CI_Model {
 		$entryId = $data['entryId'];
 
 		$values = array(
-			'feedId'			=> $data['feedId'],
-			'entryTitle'		=> $data['entryTitle'],
-			'entryContent'		=> $data['entryContent'],
-			'entryAuthor'		=> $data['entryAuthor'],
-			'entryDate'			=> $data['entryDate'],
-			'entryUrl'			=> $data['entryUrl'],
+			'feedId'			=> element('feedId', $data),
+			'entryTitle'		=> element('entryTitle', $data),
+			'entryContent'		=> element('entryContent', $data),
+			'entryAuthor'		=> element('entryAuthor', $data),
+			'entryDate'			=> element('entryDate', $data),
+			'entryUrl'			=> element('entryUrl', $data),
 		);
-		
 
 		if ((int)$entryId != 0) {		
-			$this->db->where('entryId', $entryId);
-			$this->db->update('entries', $values);
+			$this->db->where('entryId', $entryId)->update('entries', $values);
 		}
 		else {
 			$this->db
@@ -196,7 +199,7 @@ class Entries_Model extends CI_Model {
 				->insert('entries', $values);
 			$entryId = $this->db->insert_id();
 		}
-		//pr($this->db->last_query());
+		//pr($this->db->last_query()); 
 
 		return true;
 	}
@@ -208,6 +211,11 @@ class Entries_Model extends CI_Model {
 		
 		$this->db->ignore()->insert('entries', $data);
 	}
+
+	function delete($entryId) {
+		$this->db->delete('entries', array('entryId' => $entryId));
+		return true;
+	}	
 
 	function saveTmpUsersEntries($userId, $entries) { // utilizo una tabla temporal para guardar los leidos y no romper la paginación infinita
 		$aQueries = array();
@@ -553,10 +561,10 @@ class Entries_Model extends CI_Model {
 						ON entries.feedId = users_feeds.feedId
 						AND users_feeds.userId = '.$userId.' 
 					LEFT JOIN users_entries
-						ON    users_entries.userId 		= users_feeds.userId
-						AND   users_entries.entryId 	= entries.entryId
-						AND   users_entries.feedId 		= entries.feedId
-						AND   users_entries.tagId 		= '.TAG_ALL.'
+						ON 		users_entries.userId 	= users_feeds.userId
+						AND 	users_entries.entryId 	= entries.entryId
+						AND 	users_entries.feedId 	= entries.feedId
+						AND 	users_entries.tagId 	= '.TAG_ALL.'
 					WHERE users_entries.userId IS NULL
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 				LIMIT '.$limit;
@@ -573,8 +581,8 @@ class Entries_Model extends CI_Model {
 					LEFT JOIN users_entries
 						ON users_entries.userId  		= users_feeds_tags.userId
 						AND   users_entries.entryId 	= entries.entryId
-						AND   users_entries.feedId		= entries.feedId     
-						AND   users_entries.tagId		= users_feeds_tags.tagId     
+						AND   users_entries.feedId		= entries.feedId 
+						AND   users_entries.tagId		= users_feeds_tags.tagId 
 					WHERE users_entries.userId IS NULL 
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 					LIMIT '.$limit;

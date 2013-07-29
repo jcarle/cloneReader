@@ -22,7 +22,7 @@ class Feeds extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Editar Feeds',
+			'title'			=> 'Edit Feeds',
 			'columns'		=> array('feedId' => '#', 'feedName' => 'Nombre', 'feedUrl' => 'Url', 'feedLink' => 'feedLink'),
 			'foundRows'		=> $query->foundRows,
 			'data'			=> $query->result_array(),
@@ -40,16 +40,17 @@ class Feeds extends CI_Controller {
 		
 		$code = $this->form_validation->run(); 
 		
-		if ($this->input->is_ajax_request()) { // save data			
+		if ($this->input->is_ajax_request()) { // save data
+			$feedId = $this->Feeds_Model->save($this->input->post());			
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Feeds_Model->save($this->input->post()), 
+				'code'		=> ($feedId > 0), 
 				'result' 	=> validation_errors() 
 			));
 		}
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Editar Feeds',
+			'title'		=> 'Edit Feeds',
 			'form'		=> $form	  
 		));		
 	}
@@ -57,6 +58,14 @@ class Feeds extends CI_Controller {
 	function add(){
 		$this->edit(0);
 	}
+	
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Feeds_Model->delete($this->input->post('feedId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}
+
 	
 	function _getFormProperties($feedId) {
 		$data = $this->Feeds_Model->get($feedId);
@@ -88,6 +97,10 @@ class Feeds extends CI_Controller {
 			), 		
 		);
 		
+		if ((int)$feedId > 0) {
+			$form['urlDelete'] = base_url('feeds/delete/');
+		}		
+		
 		$form['rules'] += array( 
 			array(
 				'field' => 'feedName',
@@ -100,9 +113,12 @@ class Feeds extends CI_Controller {
 				'rules' => 'required'
 			),
 		);
-
-		
-
-		return $form;		
+		return $form;
 	}
+
+	function search() { // TODO: implementar la seguridad!
+		return $this->load->view('ajax', array(
+			'result' 	=> $this->Feeds_Model->search($this->input->get('query'))
+		));
+	}	
 }

@@ -29,8 +29,8 @@ class Entries extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Editar Entries',
-			'columns'		=> array('entryId' => '#', 'entryTitle' => 'Titulo', 'entryUrl' => 'Url'),
+			'title'			=> 'Edit Entries',
+			'columns'		=> array('entryId' => '#', 'feedName' => 'Feed', 'entryTitle' => 'Titulo', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
 			'data'			=> $query->result_array(),
 			'foundRows'		=> $query->foundRows,
 			'pagination'	=> $this->pagination
@@ -67,8 +67,8 @@ class Entries extends CI_Controller {
 		$this->form_validation->set_message($form['messages']);
 		
 		$code = $this->form_validation->run(); 
-		
-		if ($this->input->is_ajax_request()) { // save data			
+
+		if ($this->input->is_ajax_request()) { // save data
 			return $this->load->view('ajax', array(
 				'code'		=> $this->Entries_Model->save($this->input->post()), 
 				'result' 	=> validation_errors() 
@@ -77,7 +77,7 @@ class Entries extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Editar Entries',
+			'title'		=> 'Edit Entries',
 			'form'		=> $form	  
 		));		
 	}
@@ -86,6 +86,13 @@ class Entries extends CI_Controller {
 		$this->edit(0);
 	}
 	
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Entries_Model->delete($this->input->post('entryId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}
+
 	function _getFormProperties($entryId) {
 		$data = $this->Entries_Model->get($entryId);
 		
@@ -97,6 +104,13 @@ class Entries extends CI_Controller {
 				'entryId' => array(
 					'type'	=> 'hidden', 
 					'value'	=> element('entryId', $data, 0)
+				),
+				'feedName' => array(
+					'type' 		=> 'typeahead',
+					'label'		=> 'Feed',
+					'fieldId'	=> 'feedId', // field donde va a ir a para el id del typeahead!
+					'source' 	=> base_url('feeds/search/'),
+					'value'		=> array( element('feedId', $data) => element('feedName', $data)), // el value es un array del tipo {key=>value}
 				),
 				'entryTitle' => array(
 					'type'		=> 'text',
@@ -120,6 +134,10 @@ class Entries extends CI_Controller {
 				),								
 			), 		
 		);
+		
+		if ((int)element('entryId', $data) > 0) {
+			$form['urlDelete'] = base_url('entries/delete/');
+		}		
 		
 		$form['rules'] += array( 
 			array(

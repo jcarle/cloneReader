@@ -42,4 +42,9 @@ class Tags_Model extends CI_Model {
 
 		return true;
 	}
+	
+	function delete($tagId) {
+		$this->db->delete('tags', array('tagId' => $tagId));
+		return true;
+	}
 }

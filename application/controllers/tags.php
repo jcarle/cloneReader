@@ -58,6 +58,13 @@ class Tags extends CI_Controller {
 		$this->edit(0);
 	}
 
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Tags_Model->delete($this->input->post('tagId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}
+
 	function _getFormProperties($tagId) {
 		$data = $this->Tags_Model->get($tagId);
 		
@@ -77,6 +84,10 @@ class Tags extends CI_Controller {
 				),				
 			), 		
 		);
+		
+		if ((int)$tagId > 0) {
+			$form['urlDelete'] = base_url('tags/delete/');
+		}
 		
 		$form['rules'] += array( 
 			array(

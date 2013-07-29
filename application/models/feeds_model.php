@@ -58,4 +58,20 @@ class Feeds_Model extends CI_Model {
 
 		return $feedId;
 	}
+	
+	function delete($feedId) {
+		$this->db->delete('feeds', array('feedId' => $feedId));
+		return true;
+	}
+	
+	function search($filter){
+		$filter = $this->db->escape_like_str($filter);
+		
+		return $this->db
+			->select('DISTINCT feedId AS id, feedName AS value  ', false)
+//			->where('statusId', STATUS_ACTIVE)
+			->like('feedName', $filter)
+			->get('feeds', AUTOCOMPLETE_SIZE)->result_array();
+	}	
+	
 }
