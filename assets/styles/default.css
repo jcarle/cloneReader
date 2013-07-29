@@ -333,8 +333,10 @@ body.isLoading, body.isLoading * {
 				.paginatedList table thead tr th a  {
 					color:white;
 					text-shadow: 1px 1px 0 #555;
+					min-width: 25px;
 				}
 				.paginatedList table thead tr th:first-child {
+					min-width: 20px;
 					width:20px;
 				}
 			.paginatedList table tbody tr {
