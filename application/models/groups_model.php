@@ -57,4 +57,9 @@ class Groups_Model extends CI_Model {
 		
 		return true;
 	}
+	
+	function delete($groupId) {
+		$this->db->delete('groups', array('groupId' => $groupId));
+		return true;
+	}
 }

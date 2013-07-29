@@ -1,8 +1,8 @@
 <?php 
 class Groups extends CI_Controller {
 
-    function __construct() {
-        parent::__construct();	
+	function __construct() {
+		parent::__construct();	
 		
 		$this->load->model(array('Groups_Model', 'Controllers_Model'));
 	}  
@@ -39,8 +39,8 @@ class Groups extends CI_Controller {
 			'messages' 	=> getRulesMessages(),
 			'fields'	=> array(
 				'groupId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> element('groupId', $data, 0)
+					'type'		=> 'hidden', 
+					'value'		=> element('groupId', $data, 0),
 				),
 				'groupName' => array(
 					'type'	=> 'text',
@@ -61,9 +61,13 @@ class Groups extends CI_Controller {
 			)
 		);
 		
+		if ((int)element('groupId', $data) > 0) {
+			$form['urlDelete'] = base_url('groups/delete/');
+		}
+		
 		$form['rules'] 	= array( 
 			array(
-    			'field' => 'groupName',
+				'field' => 'groupName',
 				'label' => $form['fields']['groupName']['label'],
 				'rules' => 'required'
 			),
@@ -88,5 +92,12 @@ class Groups extends CI_Controller {
 
 	function add(){
 		$this->edit(0);
-	}		
+	}
+	
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Groups_Model->delete($this->input->post('groupId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}
 }

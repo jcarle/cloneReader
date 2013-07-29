@@ -70,10 +70,10 @@ class Comments extends CI_Controller {
 		$form = $this->_getFormProperties($commentId, true);
 		$form['isSubForm'] 	= true;
 		$form['title']		= ((int)$commentId < 1 ? 'Nuevo comentario' : 'Editar comentario');
+		$form['action']		= base_url('comments/'.$entityName.'/edit/'.$commentId);
 		
 		$this->load->view('includes/jForm', array(
 			'form'			=> $form,
-			'formAction'	=> base_url('comments/'.$entityName.'/edit/'.$commentId)
 		));			
 	}
 	

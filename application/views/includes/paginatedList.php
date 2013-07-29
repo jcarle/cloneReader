@@ -58,11 +58,11 @@ foreach ($data as $row) {
 		<tfoot>
 			<tr>
 				<td colspan="<?php echo count($columns) + 1; ?>">
-					<a class="btnDelete btn btn-small" >
+					<a class="btnDelete btn btn-small btn-danger" >
 						<i class="icon-trash icon-large"></i>
 						Delete
 					</a>
-					<a href="<?php echo base_url($controller.'/add'); ?>" class="btnAdd btn btn-small">
+					<a href="<?php echo base_url($controller.'/add'); ?>" class="btnAdd btn btn-small btn-success">
 						<i class="icon-file-alt icon-large"></i>
 						Agregar
 					</a>

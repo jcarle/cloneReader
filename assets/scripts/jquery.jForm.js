@@ -42,6 +42,26 @@
 		this.initFields();
 		this.initCallbacks();
 		
+		this.$form.find('.btn-danger').click($.proxy(
+			function(event) {
+				event.stopPropagation();
+				
+				$(document).jAlert( {
+					'msg': 			'Está seguro?',
+					'isConfirm': 	true,
+					'callback': 	$.proxy(
+						function() {
+							this.options.clickDelete = true;
+							this.$form.attr('action', this.options.urlDelete);
+							this.sendForm();
+						}
+					, this)
+				});
+				
+				return false;
+			}
+		, this));
+		
 		this.$form.submit($.proxy(
 			function() {
 				if ( !this.validate() ) {
@@ -49,38 +69,7 @@
 				}
 				
 				if (this.options.sendWithAjax == true) {
-					$.ajax({
-						type: 	'post',
-						url: 	this.$form.attr('action'),
-						data: 	this.$form.serialize()
-					})
-					.fail(
-						function (result) {
-							result = $.parseJSON(result.responseText);
-							if (result['code'] == false) {
-								return $(document).jAlert(result['result']);
-							}
-						}
-					)					
-					.done($.proxy(
-						function(response) {
-							if (response['code'] != true) {
-								return $(document).jAlert(response['result']);
-							}
-							
-							if (this.options.isSubForm == true) {
-								this.$form.parent().modal('hide');
-								return;
-							}							
-							if ($.url().param('urlList') != null) {
-								$.goToUrl($.base64Decode($.url().param('urlList')));
-							}
-							if (response['result']['goToUrl'] != null) {
-								$.goToUrl(response['result']['goToUrl']);
-							}
-						}
-					, this));
-					
+					this.sendForm();
 					return false;
 				}
 				
@@ -228,7 +217,7 @@
 											}
 										}
 												
-										var method = event.data.callback;			
+										var method = event.data.callback;
 										if ( this[method] ) {
 											return this[ method ].apply( this, Array.prototype.slice.call( arguments, 0 ));
 										} 
@@ -245,6 +234,40 @@
 					}
 				}
 			}
+		},
+		
+		sendForm: function() {
+			$.ajax({
+				type: 	'post',
+				url: 	this.$form.attr('action'),
+				data: 	this.$form.serialize()
+			})
+			.fail(
+				function (result) {
+					result = $.parseJSON(result.responseText);
+					if (result['code'] == false) {
+						return $(document).jAlert(result['result']);
+					}
+				}
+			)					
+			.done($.proxy(
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).jAlert(response['result']);
+					}
+					
+					if (this.options.isSubForm == true) {
+						this.$form.parent().modal('hide');
+						return;
+					}							
+					if ($.url().param('urlList') != null) {
+						$.goToUrl($.base64Decode($.url().param('urlList')));
+					}
+					if (response['result']['goToUrl'] != null) {
+						$.goToUrl(response['result']['goToUrl']);
+					}
+				}
+			, this));
 		},
 		
 		validate: function() {
@@ -396,7 +419,13 @@
 									}
 								);
 							}
-						)
+						);
+					
+					field.$input.find('tbody .date, tbody .datetime').each(
+						function() {
+							$.formatDate($(this));
+						}
+					);
 				}
 			, this));
 		},
@@ -429,11 +458,9 @@
 
 					$subform.addClass('row-fluid').appendTo($modal);
 
-// TODO: quitar el btnDelete si estoy agregando!
-					
 					$modalFooter
 						.append($('<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>'))
-						.append($('<button type="button" class="btnDelete btn" >	<i class="icon-trash"></i> Delete </button> '))
+						.append($subform.find('.btn-danger'))
 						.append($subform.find('.btn-primary'));
 					
 					$subform.find('.form-actions').remove();

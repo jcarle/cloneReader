@@ -28,10 +28,10 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 
 
 $CI->carabiner->js('jquery-1.7.2.js');
-//$CI->carabiner->js('jquery-ui-1.9.2.custom.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.topzindex.js');
+$CI->carabiner->js('moment.min.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('jqueryExtension.js');
 $CI->carabiner->js('jquery.jAlert.js');		
@@ -61,8 +61,6 @@ if ($view == 'login') {
 	$CI->carabiner->js('loginFB.js');
 }
 
-
-//$CI->carabiner->css('jquery-ui-1.9.2.custom.css');
 $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-responsive.css');
 $CI->carabiner->css('font-awesome.css');

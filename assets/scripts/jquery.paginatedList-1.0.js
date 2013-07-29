@@ -30,6 +30,12 @@
 		this.$table		= this.$content.find('table');
 		this.options 	= $.extend({}, options );
 		
+		this.$table.find('tbody .date, tbody .datetime').each(
+			function() {
+				$.formatDate($(this));
+			}
+		);
+		
 		this.$table.find('.btnAdd').click(
 			function (event) {
 				$.goToUrl($(this).attr('href') + '?urlList=' + $.base64Encode(location.href));
@@ -84,13 +90,13 @@
 			}
 		);
 		
-		this.$table.find('tbody tr td input[type=checkbox]').change( $.proxy(
+		this.$table.find('tbody input[type=checkbox]').change( $.proxy(
 			function(event) {
 				this.checkedRow($(event.target).parent().parent());
 			}
 		, this));
 		
-		this.$table.find('thead tr td input[type=checkbox]').change( $.proxy(
+		this.$table.find('thead input[type=checkbox]').change( $.proxy(
 			function() {
 				this.checkAll();
 			}
@@ -112,20 +118,20 @@
 			}
 			
 			
-			this.$table.find('thead tr td input[type=checkbox]').removeAttr('checked', 'checked');
-			if (!$('tbody tr td input[type=checkbox]:not(:checked)').length) {
-				this.$table.find('thead tr td input[type=checkbox]').attr('checked', 'checked');
+			this.$table.find('thead input[type=checkbox]').removeAttr('checked', 'checked');
+			if (!$('tbody input[type=checkbox]:not(:checked)').length) {
+				this.$table.find('thead input[type=checkbox]').attr('checked', 'checked');
 			}
 		},
 		
 		checkAll: function() {
-			this.$table.find('tbody tr td input[type=checkbox]').removeAttr('checked', 'checked');
+			this.$table.find('tbody input[type=checkbox]').removeAttr('checked', 'checked');
 			
-			if (this.$table.find('thead tr td input[type=checkbox]').is(':checked')) {
-				this.$table.find('tbody tr td input[type=checkbox]').attr('checked', 'checked');
+			if (this.$table.find('thead input[type=checkbox]').is(':checked')) {
+				this.$table.find('tbody input[type=checkbox]').attr('checked', 'checked');
 			}
 			
-			this.$table.find('tbody tr td input[type=checkbox]').change();
+			this.$table.find('tbody input[type=checkbox]').change();
 		}
 	}
 })($);

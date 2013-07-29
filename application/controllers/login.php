@@ -13,9 +13,7 @@ class Login extends CI_Controller {
 		$form = array(
 			'frmId'				=> 'frmLogin',
 			'messages' 			=> getRulesMessages(),
-			'showBtnBack'		=> false,
-			'btnSubmitValue'	=> 'Ingresar',	
-			'iconSend' 			=> 'icon-signin',
+			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Ingresar</button>'),
 			'fields'			=> array(
 				'email' => array(
 					'type'	=> 'text',

@@ -19,7 +19,7 @@ class Menu extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmMenuEdit',
 			'messages' 		=> getRulesMessages(),
-			'showBtnBack' 	=> false,
+			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> Guardar</button> '),
 			'fields'		=> array(
 				'menuId' => array(
 					'type'	=> 'hidden',
@@ -63,6 +63,11 @@ class Menu extends CI_Controller {
 			)
 		);
 		
+		if ((int)$menuId > 0) {
+			$form['urlDelete'] 	= base_url('menu/delete');
+			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> Eliminar </button>');
+		}
+		
 		$form['rules'] = array( 
 			array(
 				'field' => 'menuName',
@@ -92,5 +97,12 @@ class Menu extends CI_Controller {
 
 	function add(){
 		$this->edit(0);
-	}		
+	}
+	
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Menu_Model->delete($this->input->post('menuId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}
 }

@@ -345,10 +345,6 @@ body.isLoading, body.isLoading * {
 					cursor: default;
 				} 
 			.paginatedList table tfoot {
-				background: -moz-linear-gradient(top center, #FFFFFF, #CCC) repeat scroll 0 0 transparent;
-				background: -webkit-linear-gradient(white, #CCC);
-				background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-				background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));				
 				color: #777777;
 				font-weight: normal;
 				height:20px;
@@ -357,7 +353,7 @@ body.isLoading, body.isLoading * {
 					border-top:1px solid #CCCCCC;
 				}
 					.paginatedList table tfoot tr td span {
-						color:white;
+						font-size: small;
 					}
 					.paginatedList table tfoot tr td .pagination {
 						margin:0;
@@ -530,7 +526,7 @@ body.isLoading, body.isLoading * {
 	padding: 2px 0;	
 }
 
-table .numeric, table .date {
+table .numeric, table .date, table .datetime {
 	text-align: right;
 }
 

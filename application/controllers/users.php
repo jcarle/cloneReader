@@ -41,8 +41,8 @@ class Users extends CI_Controller {
 			'messages' 	=> getRulesMessages(),
 			'fields'	=> array(
 				'userId' => array(
-					'type' 	=> 'hidden',
-					'value'	=> element('userId', $data, 0)
+					'type' 		=> 'hidden',
+					'value'		=> element('userId', $data, 0),
 				),
 				'userEmail' => array(
 					'type'	=> 'text',
@@ -73,6 +73,10 @@ class Users extends CI_Controller {
 				)
 			)
 		);
+		
+		if ((int)element('userId', $data) > 0) {
+			$form['urlDelete'] = base_url('users/delete/');
+		}
 		
 		$form['rules'] 	= array( 
 			array(
@@ -119,5 +123,12 @@ class Users extends CI_Controller {
 
 	function add(){
 		$this->edit(0);
-	}		
+	}
+	
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Users_Model->delete($this->input->post('userId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}	
 }

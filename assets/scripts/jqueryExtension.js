@@ -284,7 +284,23 @@ $.extend({
 		+ pad(d.getUTCHours())+':'
 		+ pad(d.getUTCMinutes())+':'
 		+ pad(d.getUTCSeconds())
-	},	
+	},
+	
+	formatDate: function($element) {
+		var value = $element.text();
+		if (value == '') {
+			return;
+		}
+		if (moment($element.text(), 'YYYY-MM-DDTHH:mm:ss').isValid() == false) {
+			return;
+		}
+		
+		var format = 'DD/MM/YYYY';
+		if ($element.hasClass('datetime')) {
+			format += ' HH:mm:ss';
+		}
+		$element.text( moment($element.text(), 'YYYY-MM-DDTHH:mm:ss' ).format( format) );		
+	},
 	
 	initMenu: function() { // TODO: mover esto de aca!
 		$('.menu div ul.menuAdmin li ul').addClass('dropdown-menu');
@@ -298,39 +314,6 @@ $.extend({
 			.addClass('dropdown-toggle')
 			.attr('data-toggle', 'dropdown');
 	}
-	
-	/*
-	loadSubForm: function(controller /*, field* /) {
-		$.ajax( {
-			type: 	'get', 
-			url:	controller
-		})
-		.done( $.proxy( 
-			function (result, a, b) {
-				
-				var frmId = $(result).attr('id');	
-				$(result).appendTo($('body'));
-				
-				var $subform = $('#' + frmId);
-				var options = $subform.jForm('options');
-				options.frmParentId = this;
-
-				$subform.dialog({  
-						position:	['center', 150],
-						draggable: 	false, 
-						width:		'auto', 
-						height: 	'auto', 
-						modal: 		true, 
-						resizable: 	false, 
-						title: 		options.title, 
-						close:		function(event, ui) {
-//										options.frmParentId.loadSubForm(field)
-										$(this).remove();
-									}
-						})
-			}
-		, this));				
-	}	*/
 });
 
 

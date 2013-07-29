@@ -63,16 +63,17 @@ class Users_Model extends CI_Model {
 	}
 	
 	function search($filter, $groupId = null){
-		$this->db->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS value  ', false)
-						->join('users_groups', 'users.userId = users_groups.userId')
-						->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
-						->order_by('value');
+		$this->db
+			->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS value  ', false)
+			->join('users_groups', 'users.userId = users_groups.userId')
+			->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
+			->order_by('value');
 		 				
 		if ($groupId != null) {
 			$this->db->where('groupId', $groupId);	
 		}
 		
-		return $this->db->get('users', 50)->result_array(); // TODO: meter en una constante!
+		return $this->db->get('users', AUTOCOMPLETE_SIZE)->result_array();
 	}	
 		
 	function select(){
@@ -123,6 +124,11 @@ class Users_Model extends CI_Model {
 		
 		return true;
 	}
+	
+	function delete($userId) {
+		$this->db->delete('users', array('userId' => $userId));
+		return true;
+	}		
 	
 	function editProfile($userId, $data){
 		$this->db->where('userId', $userId)->update('users', $data);

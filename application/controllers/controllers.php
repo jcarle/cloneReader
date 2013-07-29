@@ -1,8 +1,8 @@
 <?php 
 class Controllers extends CI_Controller {
 
-    function __construct() {
-        parent::__construct();	
+	function __construct() {
+		parent::__construct();	
 		
 		$this->load->model('Controllers_Model');
 	}  
@@ -40,8 +40,8 @@ class Controllers extends CI_Controller {
 			'messages' 	=> getRulesMessages(),
 			'fields'	=> array(
 				'controllerId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> element('controllerId', $data, 0)
+					'type'		=> 'hidden', 
+					'value'		=> element('controllerId', $data, 0),
 				),
 				'controllerName' => array(
 					'type'	=> 'text',
@@ -61,14 +61,18 @@ class Controllers extends CI_Controller {
 			)
 		);
 		
+		if ((int)element('controllerId', $data, 0) > 0) {
+			$form['urlDelete'] = base_url('controllers/delete/');
+		}
+		
 		$form['rules'] = array( 
 			array(
-    			'field' => 'controllerName',
+				'field' => 'controllerName',
 				'label' => $form['fields']['controllerName']['label'],
 				'rules' => 'required'
 			),
 			array(
-    			'field' => 'controllerUrl',
+				'field' => 'controllerUrl',
 				'label' => $form['fields']['controllerUrl']['label'],
 				'rules' => 'required'
 			),			
@@ -101,5 +105,12 @@ class Controllers extends CI_Controller {
 
 	function add(){
 		$this->edit(0);
-	}		
+	}
+	
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Controllers_Model->delete($this->input->post('controllerId')), 
+			'result' 	=> validation_errors() 
+		));	
+	}
 }

@@ -1,32 +1,22 @@
 <?php 
-if (!isset($formAction)) {
-	$formAction = base_url().$this->uri->uri_string(); 
+if (!isset($form['action'])) {
+	$form['action'] = base_url().$this->uri->uri_string(); 
 }
 
-if (!isset($form['showBtnBack'])) {
-	$form['showBtnBack'] = true;
-}
-if (!isset($form['iconSend'])) {
-	$form['iconSend'] = 'icon-save';
-}
-
-echo form_open($formAction, array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm form-horizontal')); 
+echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm form-horizontal')); 
 
 $this->load->view('includes/formError'); 
 
-$hasGallery = false;
-$aFields 	= array();
-$inputSize	= 'span11';
+$hasGallery 	= false;
+$aFields 		= array();
+$inputSize		= 'span11';
 
 foreach ($form['fields'] as $name => $field) {
-
-	if (isset($field['label'])) {
-		$sField = '
-			<fieldset class="control-group">
-				'.form_label($field['label'], null, array('class' => 'control-label')).'
-				<div class="controls"> %s </div>
-			</fieldset>';
-	}	
+	$sField = '
+		<fieldset class="control-group">
+			'.form_label(element('label', $field), null, array('class' => 'control-label')).'
+			<div class="controls"> %s </div>
+		</fieldset>';
 	
 	switch ($field['type']) {
 		case 'hidden':
@@ -43,7 +33,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'datetime':
 			$aFields[] = sprintf($sField, 
 				'<div class="input-append">
-					'.form_input(array('name' => $name, 'value' => $field['value'], 'size' => ($field['type'] == 'datetime' ? 18 : 9) )).'
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => 'dd/mm/yyyy'.($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
 					<span class="add-on"><i class="icon-remove"></i></span>
 					<span class="add-on"><i class="icon-th"></i></span>
 				</div>');
@@ -114,11 +104,21 @@ foreach ($form['fields'] as $name => $field) {
 }
 
 echo implode(' ', $aFields);
-echo '<div class="form-actions" >';
-if (element('showBtnBack', $form) == true) {
-	echo 	' <button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"> '.element('btnSubmitValue', $form, 'Cancelar').'</button> ';
+
+if (!isset($form['buttons'])) {
+	$form['buttons'] = array();
+	$form['buttons'][] = '<button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> Volver</button> ';
+	if (isset($form['urlDelete'])) {
+		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> Eliminar </button>';
+	}
+	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> Guardar </button> ';	
 }
-echo 	' <button type="submit" class="btn btn-primary"><i class="'.$form['iconSend'].'"></i> '.element('btnSubmitValue', $form, 'Guardar').'</button> ';
+
+
+echo ' <div class="form-actions" > ';
+foreach ($form['buttons'] as $button) {
+	echo $button.' ';
+}
 echo '</div>';
 echo form_close(); 
 

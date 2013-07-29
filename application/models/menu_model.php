@@ -65,6 +65,11 @@ class Menu_Model extends CI_Model {
 		return true;
 	}
 	
+	function delete($menuId) {
+		$this->db->delete('menu', array('menuId' => $menuId));
+		return true;
+	}	
+	
 	function destroyMenuCache() {
 		$this->load->driver('cache', array('adapter' => 'file'));
 

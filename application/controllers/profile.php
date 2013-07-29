@@ -1,8 +1,8 @@
 <?php 
 class Profile extends CI_Controller {
 
-    function __construct() {
-        parent::__construct();	
+	function __construct() {
+		parent::__construct();	
 		
 		$this->load->model(array('Users_Model', 'Countries_Model'));
 	}  
@@ -20,7 +20,7 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmUsersEdit',
 			'messages'	 	=> getRulesMessages(),
-			'showBtnBack'	=> false,
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> Guardar</button>'),
 			'fields'		=> array(
 				'userEmail' => array(
 					'type'	=> 'text',
@@ -48,17 +48,17 @@ class Profile extends CI_Controller {
 		
 		$form['rules'] 	= array( 
 			array(
-    			'field' => 'userEmail',
+				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
 				'rules' => 'required|valid_email'
 			),
 			array(
-    			'field' => 'userFirstName',
+				'field' => 'userFirstName',
 				'label' => $form['fields']['userFirstName']['label'],
 				'rules' => 'required'
 			),
 			array(
-    			'field' => 'userLastName',
+				'field' => 'userLastName',
 				'label' => $form['fields']['userLastName']['label'],
 				'rules' => 'required'
 			)

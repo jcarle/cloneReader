@@ -43,6 +43,11 @@ class Controllers_Model extends CI_Model {
 		return true;
 	}
 	
+	function delete($controllerId) {
+		$this->db->delete('controllers', array('controllerId' => $controllerId));
+		return true;
+	}
+	
 	function exitsController($controllerName, $controllerId) {
 		$this->db->where('controllerName', $controllerName);
 		$this->db->where('controllerId !=', $controllerId);
