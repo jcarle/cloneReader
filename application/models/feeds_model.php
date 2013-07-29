@@ -2,7 +2,7 @@
 class Feeds_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
 		$query = $this->db
-			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedUrl, feedLink, statusId', false)
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedUrl, feedLink, statusId, feedLastUpdate', false)
 			->like('feedName', $filter)
 		 	->get('feeds', $num, $offset);
 						
