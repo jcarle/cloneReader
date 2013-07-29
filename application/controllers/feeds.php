@@ -23,7 +23,7 @@ class Feeds extends CI_Controller {
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Edit Feeds',
-			'columns'		=> array('feedId' => '#', 'feedName' => 'Nombre', 'feedUrl' => 'Url', 'feedLink' => 'feedLink'),
+			'columns'		=> array('feedId' => '#', 'statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink'),
 			'foundRows'		=> $query->foundRows,
 			'data'			=> $query->result_array(),
 			'pagination'	=> $this->pagination
@@ -94,6 +94,18 @@ class Feeds extends CI_Controller {
 					'label'		=> 'Link', 
 					'value'		=> element('feedLink', $data)
 				),				
+				'feedLastUpdate' => array(
+					'type' 		=> 'datetime',
+					'label'		=> 'Last update', 
+					'value'		=> element('feedLastUpdate', $data)
+				),					
+				'statusId' => array(
+					'type' 		=> 'text',
+					'label'		=> 'Status', 
+					'value'		=> element('statusId', $data),
+					'disabled'	=> 'disabled'
+				),									
+							
 			), 		
 		);
 		
