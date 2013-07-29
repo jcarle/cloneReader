@@ -344,6 +344,11 @@ body.isLoading, body.isLoading * {
 				.paginatedList table tbody tr td:first-child {
 					cursor: default;
 				} 
+				.paginatedList table tbody tr td {
+					white-space: normal;
+					word-wrap: break-word;
+					word-break: break-all;				
+				}
 			.paginatedList table tfoot {
 				color: #777777;
 				font-weight: normal;
