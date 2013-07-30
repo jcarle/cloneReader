@@ -13,7 +13,7 @@ class Login extends CI_Controller {
 		$form = array(
 			'frmId'				=> 'frmLogin',
 			'messages' 			=> getRulesMessages(),
-			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Ingresar</button>'),
+			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Login </button>'),
 			'fields'			=> array(
 				'email' => array(
 					'type'	=> 'text',
@@ -82,19 +82,7 @@ class Login extends CI_Controller {
 	
 
 	function _login() {
-		$query = $this->Users_Model->login($this->input->post('email'), $this->input->post('password'));
-
-		if ($query->num_rows() == null) {
-			return false;
-		}
-
-		$row = $query->row();
-		
-		$this->session->set_userdata(array(
-			'userId'  		=> $row->userId,
-		));		
-		
-		return true;
+		return $this->safety->login($this->input->post('email'), $this->input->post('password'));
 	}
 	
 	function loginFB() {

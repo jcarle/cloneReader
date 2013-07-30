@@ -9,6 +9,26 @@ class Safety {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
 		}
 	}
+	
+	function login($email, $password) {
+		$CI = &get_instance();
+		$CI->load->model('Users_Model');
+		
+		$query = $CI->Users_Model->login($email, $password);
+
+		if ($query->num_rows() == null) {
+			return false;
+		}
+
+		$row = $query->row();
+		
+		$CI->session->set_userdata(array(
+			'userId'  		=> $row->userId,
+		));		
+		
+		return true;
+	}
+	
 
 	function isRoot() {
 		$query = $this->db

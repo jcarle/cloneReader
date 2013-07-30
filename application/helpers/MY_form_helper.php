@@ -81,4 +81,4 @@ function getValidationFieldMoney(array $price, array $exchange) {
 			'rules' => 'required|numeric'
 		)
 	);
-}	
+}

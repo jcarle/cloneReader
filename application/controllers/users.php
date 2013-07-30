@@ -23,7 +23,7 @@ class Users extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Editar Usuarios',
+			'title'			=> 'Edit Users',
 			'columns'		=> array('userId' => '#', 'userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
 			'data'			=> $query->result_array(),
 			'foundRows'		=> $query->foundRows,
@@ -115,7 +115,7 @@ class Users extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Editar Usuarios',
+			'title'		=> 'Edit Users',
 			'form'		=> $form,
 				  
 		));		

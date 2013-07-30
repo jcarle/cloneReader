@@ -30,7 +30,7 @@ class Entries extends CI_Controller {
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Edit Entries',
-			'columns'		=> array('entryId' => '#', 'feedName' => 'Feed', 'entryTitle' => 'Titulo', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
+			'columns'		=> array('entryId' => '#', 'feedName' => 'Feed', 'entryTitle' => 'Title', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
 			'data'			=> $query->result_array(),
 			'foundRows'		=> $query->foundRows,
 			'pagination'	=> $this->pagination

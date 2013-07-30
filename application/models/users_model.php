@@ -136,6 +136,24 @@ class Users_Model extends CI_Model {
 		return true;
 	}	
 	
+	function register($userId, $data){
+		$values = array(
+			'userEmail' 	=> element('userEmail', $data),
+			'userPassword' 	=> md5(element('userPassword', $data)),
+			'userFirstName' => element('userFirstName', $data),
+			'userLastName' 	=> element('userLastName', $data),
+			'countryId' 	=> element('countryId', $data)
+		);
+		
+		$this->db->insert('users', $values);
+
+		$userId = $this->db->insert_id();
+
+		$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));			
+
+		return true;
+	}		
+	
 	function exitsEmail($userEmail, $userId) {
 		$this->db->where('userEmail', $userEmail);
 		$this->db->where('userId !=', $userId);
