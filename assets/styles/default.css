@@ -172,16 +172,16 @@ body.isLoading, body.isLoading * {
 						text-shadow: 2px 2px 3px white;
 					}
 			.menu div ul.menuAdmin .dropdown-submenu-left {
-  				position: relative;
+				position: relative;
 			}
 				.menu div ul.menuAdmin .dropdown-submenu-left > .dropdown-menu {
-					  top: 0;
-					  left: -100%;
-					  margin-top: -6px;
-					  margin-left: -1px;
-					  -webkit-border-radius: 6px 0px 6px 6px;
-						 -moz-border-radius: 6px 0px 6px 6px;
-							  border-radius: 6px 0px 6px 6px;
+					top: 0;
+					left: -100%;
+					margin-top: -6px;
+					margin-left: -1px;
+					-webkit-border-radius: 6px 0px 6px 6px;
+					   -moz-border-radius: 6px 0px 6px 6px;
+						    border-radius: 6px 0px 6px 6px;
 				}
 				.menu div ul.menuAdmin .dropdown-submenu-left:hover > .dropdown-menu {
 				  display: block;
@@ -335,39 +335,36 @@ body.isLoading, body.isLoading * {
 					text-shadow: 1px 1px 0 #555;
 					min-width: 25px;
 				}
-				.paginatedList table thead tr th:first-child {
+				.paginatedList table thead tr th.checkbox {
 					min-width: 20px;
 					width:20px;
 				}
 			.paginatedList table tbody tr {
 				cursor: pointer;
 			}
-				.paginatedList table tbody tr td:first-child {
+				.paginatedList table tbody tr td.checkbox {
 					cursor: default;
 				} 
 				.paginatedList table tbody tr td {
-					white-space: normal;
-					word-wrap: break-word;
-					word-break: break-all;				
+					word-break: break-all;
 				}
-			.paginatedList table tfoot {
-				color: #777777;
-				font-weight: normal;
-				height:20px;
+		.paginatedList table .checkbox input[type=checkbox] {
+			margin-left: 0;
+		}				
+	.paginatedList .footer {
+		color: #777777;
+		font-weight: normal;
+	}
+		.paginatedList .footer span {
+			font-size: small;
+		}
+			.paginatedList .footer .pagination {
+				margin:0;
+				float:right;
 			}
-				.paginatedList table tfoot tr td {
-					border-top:1px solid #CCCCCC;
+				.paginatedList .footer .pagination ul {
+					display: inline;
 				}
-					.paginatedList table tfoot tr td span {
-						font-size: small;
-					}
-					.paginatedList table tfoot tr td .pagination {
-						margin:0;
-						float:right;
-					}
-						.paginatedList table tfoot tr td .pagination ul {
-							display: inline;
-						}
 
 
 .jForm {
@@ -534,6 +531,7 @@ body.isLoading, body.isLoading * {
 
 table .numeric, table .date, table .datetime {
 	text-align: right;
+	white-space: nowrap;
 }
 
 .modal-body {

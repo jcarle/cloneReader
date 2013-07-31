@@ -19,13 +19,15 @@ class Groups extends CI_Controller {
 		$query = $this->Groups_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
-			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Editar Grupos',
-			'columns'		=> array('groupId' => '#', 'groupName' => 'Nombre', 'webSiteHome' => 'HomePage'),
-			'data'			=> $query->result_array(),
-			'foundRows'		=> $query->foundRows,
-			'pagination'	=> $this->pagination
+			'list'			=> array(
+				'controller'	=> strtolower(__CLASS__),
+				'columns'		=> array('groupId' => '#', 'groupName' => 'Nombre', 'webSiteHome' => 'HomePage'),
+				'data'			=> $query->result_array(),
+				'foundRows'		=> $query->foundRows,
+				'pagination'	=> $this->pagination
+			)
 		));
 	}
 	

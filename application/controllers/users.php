@@ -21,13 +21,16 @@ class Users extends CI_Controller {
 
 				
 		$this->load->view('includes/template', array(
-			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Edit Users',
-			'columns'		=> array('userId' => '#', 'userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
-			'data'			=> $query->result_array(),
-			'foundRows'		=> $query->foundRows,
-			'pagination'	=> $this->pagination
+			'list'			=> array(
+				'controller'	=> strtolower(__CLASS__),
+				'columns'		=> array('userId' => '#', 'userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
+				'data'			=> $query->result_array(),
+				'foundRows'		=> $query->foundRows,
+				'pagination'	=> $this->pagination,
+				//'allowDelete'	=> true
+			)
 		));
 	}
 	

@@ -20,13 +20,15 @@ class Feeds extends CI_Controller {
 		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
-			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Edit Feeds',
-			'columns'		=> array('feedId' => '#', 'statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink', 'feedLastUpdate' => array('class' => 'datetime', 'value' => 'Last update')),
-			'foundRows'		=> $query->foundRows,
-			'data'			=> $query->result_array(),
-			'pagination'	=> $this->pagination
+			'list'			=> array(
+				'controller'	=> strtolower(__CLASS__),
+				'columns'		=> array('feedId' => '#', 'statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink', 'feedLastUpdate' => array('class' => 'datetime', 'value' => 'Last update')),
+				'foundRows'		=> $query->foundRows,
+				'data'			=> $query->result_array(),
+				'pagination'	=> $this->pagination
+			)
 		));
 	}
 	

@@ -15,11 +15,13 @@
 	<table class="table table-hover table-condensed">
 		<thead>
 			<tr>
-				<th>
-					<input type="checkbox">
-				</th>
-<?php 
-foreach ($columns as $columnName) {
+<?php
+$urlDelete = element('urlDelete', $list);
+if ($urlDelete == true) {
+	echo '<th class="checkbox">	<input type="checkbox"> </th>';	
+}
+
+foreach ($list['columns'] as $columnName) {
 	$class 		= '';
 	$columnName	= $columnName;
 	if (is_array($columnName)) {
@@ -33,15 +35,14 @@ foreach ($columns as $columnName) {
 		</thead>
 		<tbody>
 <?php 				
-foreach ($data as $row) {
+foreach ($list['data'] as $row) {
 	$id = reset($row);
-	echo '
-			<tr>
-				<td>
-					'.form_checkbox('chkDelete', $id).'
-					'.anchor($controller.'/edit/'.$id, 'hiden', array('style'=>'display:none')).'
-				</td>';	
-	foreach ($columns as $fieldName => $columnName) {
+	echo '<tr data-controller="'.base_url($list['controller'].'/edit/'.$id).'">';
+	if ($urlDelete == true) {	
+		echo '<td class="checkbox">'.form_checkbox('chkDelete', $id).'</td>';
+	}	
+	
+	foreach ($list['columns'] as $fieldName => $columnName) {
 		$class 	= '';
 		if (is_array($columnName)) {
 			$class 		= ' class="'.element('class', $columnName).'" ';
@@ -49,33 +50,32 @@ foreach ($data as $row) {
 		
 		echo '	<td '.$class.'>'.$row[$fieldName].'</td>';
 	}
-	echo '
-			</tr>
-	';
+	echo '</tr>';
 }
 ?>		
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="<?php echo count($columns) + 1; ?>">
-					<a class="btnDelete btn btn-small btn-danger" >
-						<i class="icon-trash icon-large"></i>
-						Delete
-					</a>
-					<a href="<?php echo base_url($controller.'/add'); ?>" class="btnAdd btn btn-small btn-success">
-						<i class="icon-file-alt icon-large"></i>
-						Agregar
-					</a>
-					<span><?php echo $foundRows; ?> rows</span>
-					<div class="pagination pagination-small pagination-right">
-						<ul>
+	</table>
+
+	<div class="alert alert-info footer">
+<?php
+if ($urlDelete == true) {
+	echo '<a class="btnDelete btn btn-small btn-danger" > <i class="icon-trash icon-large"></i> Delete </a>';
+}
+?>
+		<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-small btn-success">
+			<i class="icon-file-alt icon-large"></i>
+			Agregar
+		</a>
+		<span><?php echo $list['foundRows']; ?> rows</span>
+		<div class="pagination pagination-small pagination-right">
+			<ul>
 <?php
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
-	'last_link'				=> ceil($foundRows /PAGE_SIZE),
+	'last_link'				=> ceil($list['foundRows'] /PAGE_SIZE),
 	'uri_segment'			=> 3,
 	'base_url'		 		=> current_url().'?filter='.$this->input->get('filter'),	
-	'total_rows'			=> $foundRows,
+	'total_rows'			=> $list['foundRows'],
 	'per_page'				=> PAGE_SIZE, 
 	'num_links' 			=> 2,
 	'page_query_string'		=> true,
@@ -98,14 +98,9 @@ $this->pagination->initialize(array(
 			
 echo $this->pagination->create_links();
 ?>
-						</ul>
-					</div>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-</form>
-
+		</ul>
+	</div>
+</div>
 
 <script>
 $(document).ready(function() {

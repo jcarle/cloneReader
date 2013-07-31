@@ -36,7 +36,7 @@
 			}
 		);
 		
-		this.$table.find('.btnAdd').click(
+		this.$content.find('.btnAdd').click(
 			function (event) {
 				$.goToUrl($(this).attr('href') + '?urlList=' + $.base64Encode(location.href));
 				event.preventDefault;
@@ -44,7 +44,7 @@
 			}
 		);
 
-		this.$table.find('.btnDelete').click($.proxy(
+		this.$content.find('.btnDelete').click($.proxy(
 			function() { 
 				var aDelete = [];
 				var $input = this.$table.find('tr.info input');
@@ -80,11 +80,11 @@
 
 		this.$table.find('tbody tr').click(
 				function (event) {
-					$.goToUrl($('a', $(this)).attr('href') + '?urlList=' + $.base64Encode(location.href));
+					$.goToUrl($(this).data('controller') + '?urlList=' + $.base64Encode(location.href));
 				}
 		);
 		
-		this.$table.find('tbody tr td:nth-child(1)').click(
+		this.$table.find('tbody tr td.checkbox').click(
 			function(event) {
 				event.stopPropagation();
 			}

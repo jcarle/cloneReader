@@ -27,13 +27,15 @@ class Entries extends CI_Controller {
 		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
-			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/paginatedList', 
 			'title'			=> 'Edit Entries',
-			'columns'		=> array('entryId' => '#', 'feedName' => 'Feed', 'entryTitle' => 'Title', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
-			'data'			=> $query->result_array(),
-			'foundRows'		=> $query->foundRows,
-			'pagination'	=> $this->pagination
+			'list'			=> array(
+				'controller'	=> strtolower(__CLASS__),
+				'columns'		=> array('entryId' => '#', 'feedName' => 'Feed', 'entryTitle' => 'Title', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
+				'data'			=> $query->result_array(),
+				'foundRows'		=> $query->foundRows,
+				'pagination'	=> $this->pagination
+			)
 		));
 	}
 	
