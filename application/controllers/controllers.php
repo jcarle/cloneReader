@@ -24,10 +24,11 @@ class Controllers extends CI_Controller {
 			'title'			=> 'Editar Controles',
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('controllerId' =>  '#', 'controllerName' => 'Controller', 'controllerUrl' => 'Url', 'controllerActive' => 'Activo'),
+				'columns'		=> array('controllerName' => 'Controller', 'controllerUrl' => 'Url', 'controllerActive' => 'Activo'),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'pagination'	=> $this->pagination
+				'pagination'	=> $this->pagination,
+				'showId'		=> true
 			)
 		));
 	}

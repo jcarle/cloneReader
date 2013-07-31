@@ -24,7 +24,7 @@ class Feeds extends CI_Controller {
 			'title'			=> 'Edit Feeds',
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('feedId' => '#', 'statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink', 'feedLastUpdate' => array('class' => 'datetime', 'value' => 'Last update')),
+				'columns'		=> array('statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink', 'feedLastUpdate' => array('class' => 'datetime', 'value' => 'Last update')),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
 				'pagination'	=> $this->pagination

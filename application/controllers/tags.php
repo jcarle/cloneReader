@@ -24,11 +24,11 @@ class Tags extends CI_Controller {
 			'title'			=> 'Edit Tags',
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('tagId' => '#', 'tagName' => 'Name'),
+				'columns'		=> array('tagName' => 'Name'),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
-				'urlDelete'		=> 'asa'
+				//'urlDelete'		=> 'asa'
 			)
 		));
 	}

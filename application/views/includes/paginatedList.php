@@ -16,9 +16,13 @@
 		<thead>
 			<tr>
 <?php
-$urlDelete = element('urlDelete', $list);
+$urlDelete 	= element('urlDelete', $list);
+$showId 	= element('showId', $list);
 if ($urlDelete == true) {
 	echo '<th class="checkbox">	<input type="checkbox"> </th>';	
+}
+if ($showId == true) {
+	echo '<th class="numeric"> # </th>';	
 }
 
 foreach ($list['columns'] as $columnName) {
@@ -40,7 +44,10 @@ foreach ($list['data'] as $row) {
 	echo '<tr data-controller="'.base_url($list['controller'].'/edit/'.$id).'">';
 	if ($urlDelete == true) {	
 		echo '<td class="checkbox">'.form_checkbox('chkDelete', $id).'</td>';
-	}	
+	}
+	if ($showId == true) {
+		echo '<td class="numeric">'.$id.'</td>';
+	}
 	
 	foreach ($list['columns'] as $fieldName => $columnName) {
 		$class 	= '';

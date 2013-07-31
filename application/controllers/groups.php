@@ -23,10 +23,11 @@ class Groups extends CI_Controller {
 			'title'			=> 'Editar Grupos',
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('groupId' => '#', 'groupName' => 'Nombre', 'webSiteHome' => 'HomePage'),
+				'columns'		=> array('groupName' => 'Nombre', 'webSiteHome' => 'HomePage'),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'pagination'	=> $this->pagination
+				'pagination'	=> $this->pagination,
+				'showId'		=> true
 			)
 		));
 	}

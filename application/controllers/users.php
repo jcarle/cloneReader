@@ -25,10 +25,11 @@ class Users extends CI_Controller {
 			'title'			=> 'Edit Users',
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('userId' => '#', 'userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
+				'columns'		=> array('userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
+				'showId'		=> true
 			)
 		));
 	}

@@ -31,10 +31,11 @@ class Entries extends CI_Controller {
 			'title'			=> 'Edit Entries',
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('entryId' => '#', 'feedName' => 'Feed', 'entryTitle' => 'Title', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
+				'columns'		=> array('feedName' => 'Feed', 'entryTitle' => 'Title', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'pagination'	=> $this->pagination
+				'pagination'	=> $this->pagination,
+				'showId'		=> false
 			)
 		));
 	}

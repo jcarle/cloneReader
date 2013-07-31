@@ -532,6 +532,7 @@ body.isLoading, body.isLoading * {
 table .numeric, table .date, table .datetime {
 	text-align: right;
 	white-space: nowrap;
+    width: 5px;
 }
 
 .modal-body {
