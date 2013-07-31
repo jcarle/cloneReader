@@ -118,6 +118,7 @@
 					color: gray;
 					float:right;
 					font-size:small;
+					margin-right: 5px;
 				}
 				#cloneReader .ulEntries > li .header .star {
 					float: right;
@@ -223,7 +224,7 @@
 				}
 				#cloneReader .ulEntries.list > li .title .entryContent {
 					color: gray;
-					left: 175px;
+					left: 190px;
 					position: absolute;
 					right: 128px;
 					text-align: left;

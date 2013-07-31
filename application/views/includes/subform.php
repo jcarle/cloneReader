@@ -1,4 +1,4 @@
-<a href="<?php echo base_url($controller.'0'); ?>" class="btn btn-small">
+<a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-small">
 	<i class="icon-plus"></i>
 </a>
 
@@ -6,7 +6,7 @@
 	<thead>
 		<tr>
 <?php
-foreach ($columns as $columnName) {
+foreach ($list['columns'] as $columnName) {
 	$class 		= '';
 	$columnName	= $columnName;
 	if (is_array($columnName)) {
@@ -20,15 +20,15 @@ foreach ($columns as $columnName) {
 	</thead>
 	<tbody>
 <?php 				
-if (count($data) == 0) {
-	echo '<tr class="warning"><td colspan="'.(count($columns) + 1).'"> No hay resultados </td></tr>';
+if (count($list['data']) == 0) {
+	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> No hay resultados </td></tr>';
 }
 
-foreach ($data as $row) {
+foreach ($list['data'] as $row) {
 	if (is_array($row)) {
 		$id = reset($row);
-		echo '<tr href="'.base_url($controller.$id).'">';	
-		foreach ($columns as $fieldName => $columnName) {
+		echo '<tr href="'.base_url($list['controller'].$id).'">';	
+		foreach ($list['columns'] as $fieldName => $columnName) {
 			$class 	= '';
 			if (is_array($columnName)) {
 				$class 		= ' class="'.element('class', $columnName).'" ';

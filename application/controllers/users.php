@@ -29,7 +29,6 @@ class Users extends CI_Controller {
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
-				//'allowDelete'	=> true
 			)
 		));
 	}

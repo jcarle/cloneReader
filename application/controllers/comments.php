@@ -83,9 +83,11 @@ class Comments extends CI_Controller {
 		$query = $this->Comments_Model->selectByExcursionId($excursionId);
 		
 		$this->load->view('includes/subform', array(
-			'controller'	=> strtolower(__CLASS__).'/'.$entityName.'/editPopup/'.$excursionId.'/',
-			'query'			=> $query,
-			'frmParent'		=> $this->input->get('frmParent')
+			'list' 	=> array(
+				'controller'	=> strtolower(__CLASS__).'/'.$entityName.'/editPopup/'.$excursionId.'/',
+				'query'			=> $query,
+				'frmParent'		=> $this->input->get('frmParent')
+			)
 		));		
 	}		
 	
