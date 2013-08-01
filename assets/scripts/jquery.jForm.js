@@ -474,7 +474,7 @@
 						.append('\
 							<div class="modal-header"> \
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button> \
-								<h3 id="myModalLabel">' + options.title + '</h3> \
+								<h3 id="myModalLabel"> <i class="icon-edit"></i> ' + options.title + '</h3> \
 							</div> \
 						')
 						.append($modalBody)
@@ -486,7 +486,7 @@
 						jForm.options.frmParentId.loadSubForm(field);
 						$(this).remove();
 					});
-					$modal.find('input[type=text]:first').focus();
+					$modal.find('select, input[type=text]').first().focus();
 
 					$(document).off('focusin.modal');
 					
@@ -506,21 +506,47 @@
 		},
 		
 		calculatePrice: function($field, $price, $currency, $exchange, $total) {
+			if ($total.data('init-price') == null) {
+				$maskPrice = $price.clone();
+				$price.hide();
+				$maskPrice
+					.removeAttr('name')
+					.insertBefore($price)
+					.autoNumeric('init', { aSep: '.', aDec: ',',  aSign: $currency.find('option:selected').text() +' ' } )
+					.change( function(event) {
+						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
+					});
+					
+				$maskExchange = $exchange.clone();
+				$exchange.hide();
+				$maskExchange
+					.removeAttr('name')
+					.insertBefore($exchange)
+					.autoNumeric('init', { aSep: '.', aDec: ',',  aSign: '' } )
+					.change( function(event) {
+						$(event.target).next().val($(event.target).autoNumeric('get') ).change();;
+					});
+				
+				$total.autoNumeric('init', { aSep: '.', aDec: ',',  aSign: 'AR$ ' } ) // TODO: desharckodear!
+
+				this.$form.bind('submit', $.proxy(
+					function($maskPrice, $maskExchange, event) {
+						$maskPrice.change();
+						$maskExchange.change();
+					}
+				, this, $maskPrice, $maskExchange));
+				
+								
+				$total.data('init-price', true);
+			}
+			
 			if ($currency.val() == 1) { // TODO: desharckodear!
 				$exchange.val(1);
+				$exchange.prev().autoNumeric('set', 1);
 			}
 
-			if (this.numeric($price) == false) {
-				$price.val(0);
-			}
-			if (this.numeric($exchange) == false) {
-				$exchange.val(0);
-			}
-						
-			var total = ($price.val() * $exchange.val());
-			$price.val(Number($price.val()).toFixed(2)); 
-			$exchange.val(Number($exchange.val()).toFixed(2));
-			$total.val('AR$ ' + total.toFixed(2)); // TODO: desharckodear!
+			$price.prev().autoNumeric('update', { aSign: $currency.find('option:selected').text() +' ' } )
+			$total.autoNumeric('set', $price.val() * $exchange.val());
 		},
 		
 		loadDropdown: function($field, value) {

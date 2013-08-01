@@ -39,8 +39,8 @@ function getFieldMoney(array $price, array $currency, array $exchange, array $to
 			'type'	 		=> 'text',
 			'name'			=> $price['name'],
 			'label'			=> $price['label'], 
-			'value'			=> $price['value'],
-			'placeholder'	=> '0.00',
+			'value'			=> element('value', $price, 0),
+			'placeholder'	=> '0,00',
 		),
 		$currency['name']	=> array(
 			'type'			=> 'dropdown',
@@ -53,8 +53,8 @@ function getFieldMoney(array $price, array $currency, array $exchange, array $to
 			'type'	 		=> 'text',
 			'name'			=> $exchange['name'],
 			'label'			=> $exchange['label'], 
-			'value'			=> $exchange['value'],
-			'placeholder'	=> '0.00',
+			'value'			=> element('value', $exchange, 0),
+			'placeholder'	=> '0,00',
 		),
 		$total['name']	=> array(
 			'type'	 		=> 'text',
@@ -62,7 +62,6 @@ function getFieldMoney(array $price, array $currency, array $exchange, array $to
 			'label'			=> $total['label'], 
 			'value'			=> null,
 			'disabled'		=> true,
-			'placeholder'	=> '0.00',
 			'subscribe'		=> $subscribe
 		),		
 	);
@@ -81,4 +80,4 @@ function getValidationFieldMoney(array $price, array $exchange) {
 			'rules' => 'required|numeric'
 		)
 	);
-}
+}	

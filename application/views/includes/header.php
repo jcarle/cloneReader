@@ -50,6 +50,7 @@ if ($view == 'includes/jForm') {
 	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
+	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.es.js');
 	
