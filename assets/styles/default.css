@@ -168,9 +168,7 @@ body.isLoading, body.isLoading * {
 					line-height: 1px;
 					padding: 2px 6px;
 				}
-					.menu div ul.menuAdmin > li:first-child > a i {
-						text-shadow: 2px 2px 3px white;
-					}
+					.menu div ul.menuAdmin > li:first-child > a i { }
 			.menu div ul.menuAdmin .dropdown-submenu-left {
 				position: relative;
 			}
@@ -342,7 +340,8 @@ body.isLoading, body.isLoading * {
 			.paginatedList table tbody tr {
 				cursor: pointer;
 			}
-				.paginatedList table tbody tr td.checkbox {
+				.paginatedList table tbody tr td.checkbox,
+				.paginatedList table tbody tr.warning td{
 					cursor: default;
 				} 
 				.paginatedList table tbody tr td {
@@ -532,7 +531,7 @@ body.isLoading, body.isLoading * {
 table .numeric, table .date, table .datetime {
 	text-align: right;
 	white-space: nowrap;
-    width: 5px;
+	width: 5px;
 }
 
 .modal-body {

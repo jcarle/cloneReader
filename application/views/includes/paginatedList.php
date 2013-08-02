@@ -39,6 +39,9 @@ foreach ($list['columns'] as $columnName) {
 		</thead>
 		<tbody>
 <?php 				
+if (count($list['data']) == 0) {
+	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> No hay resultados </td></tr>';
+}
 foreach ($list['data'] as $row) {
 	$id = reset($row);
 	echo '<tr data-controller="'.base_url($list['controller'].'/edit/'.$id).'">';

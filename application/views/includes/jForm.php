@@ -83,7 +83,14 @@ foreach ($form['fields'] as $name => $field) {
 				</fieldset>';
 			break;
 		case 'subform':
-			$aFields[] = sprintf($sField, '<div name="'.$name.'" class="subform '.$inputSize.'"></div>');
+			$aFields[] = sprintf($sField, '
+				<div name="'.$name.'" class="subform '.$inputSize.'"> 
+					<div class="alert alert-info">
+						<i class="icon-spinner icon-spin icon-large"></i>
+						<small>cargando ...</small>
+					</div>
+				</div>
+			');
 			break;
 		case 'tree':
 			$aFields[] = '<fieldset class="tree">'

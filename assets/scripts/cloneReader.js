@@ -1333,14 +1333,6 @@ console.timeEnd("t1");
 		$('#header').css( { 'max-width': '100%' } );
 		$('.menu div').css( { 'max-width': '100%', 'margin': '0 10px', 'width': 'auto' });
 
-		
-		this.$ulEntries.find('.entry:visible').each(
-			function() {
-				var $entry = $(this);
-				$entry.css('min-height', 1).css('min-height', $entry.height());
-			}
-		);		
-		
 		this.$ulFilters.css('top', this.$toolBar.outerHeight());
 		this.$ulFilters.height(1);
 		

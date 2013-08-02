@@ -8,6 +8,9 @@
 		padding: 3px 8px 3px 3px;
 		text-align: right;
 	}
+		#cloneReader .btn-toolbar i {
+			color: #555;
+		}
 		#cloneReader .btn-toolbar .dropdown-menu {
 			text-align: left;
 		}
@@ -124,7 +127,7 @@
 					float: right;
 				}
 			#cloneReader .ulEntries > li p {
-				margin:0 10px 20px 10px;
+				margin:0 10px 40px 10px;
 				max-width: 100%;
 				overflow: auto;
 				position: relative;	
@@ -153,12 +156,16 @@
 				}
 			#cloneReader .ulEntries > li .footer {
 				min-height: 1px;
-				padding-left:0px;
+				width:100%;
+				display:block;
 				color: #999999;
 				border-bottom: 0;
 				border-left: 0;
 				border-right: 0;
 				border-radius: 0 0 5px 5px;
+				position:absolute;
+				left:0; bottom:0;
+				padding:0px;
 			}
 			#cloneReader .ulEntries > li.selected .footer {
 				border-radius: 0 0 4px 0px;

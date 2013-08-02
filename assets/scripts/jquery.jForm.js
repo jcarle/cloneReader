@@ -527,7 +527,7 @@
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();;
 					});
 				
-				$total.autoNumeric('init', { aSep: '.', aDec: ',',  aSign: 'AR$ ' } ) // TODO: desharckodear!
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: '.', aDec: ',',  aSign: 'AR$ ' } ) // TODO: desharckodear!
 
 				this.$form.bind('submit', $.proxy(
 					function($maskPrice, $maskExchange, event) {
