@@ -426,6 +426,8 @@
 							$.formatDate($(this));
 						}
 					);
+
+					field.$input.change();
 				}
 			, this));
 		},
@@ -479,20 +481,28 @@
 						')
 						.append($modalBody)
 						.append($modalFooter);
-					
+
 					$modal.modal( { backdrop: true, keyboard: false });
 					$modal.on('hidden', function() {
 						var jForm = $(this).find('form').data('jForm');
 						jForm.options.frmParentId.loadSubForm(field);
 						$(this).remove();
+						
+						$('.modal-backdrop').last().show();
 					});
 					$modal.find('select, input[type=text]').first().focus();
 
 					$(document).off('focusin.modal');
 					
-					$('.modal-backdrop')
-						.css('opacity', 0.3)
-						.unbind();
+					var zIndex = $.topZIndex('body > *');
+					$modal.css( { 'z-index': zIndex + 2 });
+					
+					$('.modal-backdrop').hide();
+			
+					$('.modal-backdrop:last')
+						.css( {'opacity': 0.3,  'z-index': zIndex + 1 } )
+						.unbind()
+						.show();
 				}
 			, this));
 		},
@@ -547,6 +557,28 @@
 
 			$price.prev().autoNumeric('update', { aSign: $currency.find('option:selected').text() +' ' } )
 			$total.autoNumeric('set', $price.val() * $exchange.val());
+		},
+		
+		sumValues: function($total, aFieldName) {
+			if ($total.data('init-price') == null) {
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: '.', aDec: ',',  aSign: 'AR$ ' } ) // TODO: desharckodear!
+			}
+			
+			var total = 0;
+			for (var i=0; i<aFieldName.length; i++) {
+				var field = $('*[name="' + aFieldName[i] + '"]').data('field');
+				if (field.type == 'subform') {
+					var value = field.$input.find('input').val();
+				}
+				else {
+					var value = field.$input.val();
+				}
+				if (isNaN(value) == false) {
+					total += Number(value);
+				}
+			}
+			
+			$total.autoNumeric('set', total);
 		},
 		
 		loadDropdown: function($field, value) {

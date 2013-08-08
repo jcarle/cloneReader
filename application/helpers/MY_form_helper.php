@@ -21,7 +21,7 @@ function getFieldMoney(array $price, array $currency, array $exchange, array $to
 	foreach ($aFieldName as $fieldName) {
 		$subscribe[] = array(
 			'field' 		=> $fieldName,
-			'event'			=> 'change',   
+			'event'			=> 'change', 
 			'callback'		=> 'calculatePrice',
 			'arguments'		=> array(
 				'this.getFieldByName(\''.$price['name'].'\')',
@@ -80,4 +80,16 @@ function getValidationFieldMoney(array $price, array $exchange) {
 			'rules' => 'required|numeric'
 		)
 	);
-}	
+}
+
+function subscribeForSumValues($fieldName, array $aFieldName) {
+	foreach ($aFieldName as $fieldName) {
+		$subscribe[] = array(
+			'field' 		=> $fieldName,
+			'event'			=> 'change', 
+			'callback'		=> 'sumValues',
+			'arguments'		=> array( json_encode($aFieldName) )
+		);
+	}
+	return $subscribe;
+}

@@ -112,13 +112,14 @@
 			//$(document).focus();
 			$(document).off('focusin.modal');
 			
-			var zIndex = parseInt(this.$modal.css('z-index'));
-			this.$modal.css('z-index', zIndex + 1);
-				
+			var zIndex = $.topZIndex('body > *');
+			this.$modal.css( { 'z-index': zIndex + 2 });
+
 			$('.modal-backdrop').hide();
 			
+			
 			$('.modal-backdrop:last')
-				.css( {'opacity': 0.3, 'z-index': parseInt(this.$modal.css('z-index')) } )
+				.css( {'opacity': 0.3,  'z-index': zIndex + 1 } )
 				.unbind()
 				.show();
 		}

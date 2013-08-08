@@ -131,13 +131,14 @@
 				max-width: 100%;
 				overflow: auto;
 				position: relative;	
+				font-size: 100%;
 			}
 				#cloneReader .ulEntries > li p * {
 					position: relative;
 					margin: 0; 
 					padding: 0;
 					border: 0 none;
-					font-size: small;
+					font-size: 100%;
 					background: transparent;
 				}
 				#cloneReader .ulEntries > li p img {

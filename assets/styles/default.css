@@ -244,15 +244,6 @@ body.isLoading, body.isLoading * {
 			padding: 5px 0 5px 10px;
 		}
 
-/*.errorsPage {
-	background: none repeat scroll 0 0 beige;
-	border: 1px solid #CCCCCC;
-	border-radius: 3px 3px 3px 3px;
-	margin: 50px auto;	
-	padding: 30px;	
-	width:400px;
-}*/
-
 #frmLogin {
 	margin: 20px auto;
 	max-width: 400px;	
@@ -316,17 +307,22 @@ body.isLoading, body.isLoading * {
 			color: #555555;
 		}	
 	.paginatedList table {
-		border: 1px solid #BBBBBB;
-		box-shadow: 2px 2px 4px #777777;
+		border: 1px solid #ccc;
+		box-shadow: 0 0 5px #ccc;
 		position:relative;
+		border-radius:5px;
+		border-collapse: separate;
+		margin: 0 0 10px 0;
 	}
 		.paginatedList table thead {
-			background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-			background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 			font-weight: bold;
 			color: white;
 			height:20px;
 		}
+			.paginatedList table thead tr th {
+				background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+				background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
+			}
 				.paginatedList table thead tr th, 
 				.paginatedList table thead tr th a  {
 					color:white;
@@ -364,7 +360,18 @@ body.isLoading, body.isLoading * {
 				.paginatedList .footer .pagination ul {
 					display: inline;
 				}
-
+				.paginatedList table thead tr th:first-child {
+					border-top-left-radius:5px;
+				}
+				.paginatedList table thead tr th:last-child {
+					border-top-right-radius:5px;
+				}
+				.paginatedList table tbody tr:last-child td:first-child {
+					border-bottom-left-radius:5px;
+				}
+				.paginatedList table tbody tr:last-child td:last-child {
+					border-bottom-right-radius:5px;
+				}
 
 .jForm {
 	border: 1px solid #CCCCCC;
@@ -484,33 +491,58 @@ body.isLoading, body.isLoading * {
 						border: 1px solid #D6D6D6;		
 						display:none;
 					}
-					.jForm fieldset .subform {	}
-						.jForm fieldset .subform table {
-							border: 1px solid #BBBBBB;
-							border-spacing: 0;
-							box-shadow: 2px 2px 4px #777777;
-							empty-cells: show;
-							width: 100%;
-							border-collapse: separate;
-							margin-top: 10px;
+		.jForm fieldset .subform {	}
+			.jForm fieldset .subform table {
+				border: 1px solid #ccc;
+				border-spacing: 0;
+				border-radius:5px;
+				box-shadow: 0px 0px 5px #ccc;
+				empty-cells: show;
+				width: 100%;
+				border-collapse: separate;
+				margin: 0px 0 0 0;
+			}
+				.jForm fieldset .subform .btnAdd {
+					margin:10px 0 0 0;
+				}
+				.jForm fieldset .subform table thead { }
+					.jForm fieldset .subform table thead tr {}
+					.jForm fieldset .subform table thead tr th, 
+					.jForm fieldset .subform table thead tr th a  {
+						color:white;
+						text-shadow: 1px 1px 0 #555555;
+					}
+						.jForm fieldset .subform table thead tr th {
+							background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
+							background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 						}
-							.jForm fieldset .subform table thead {
-								background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-								background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
-							}
-								.jForm fieldset .subform table thead tr {}
-									.jForm fieldset .subform table thead tr th, 
-									.jForm fieldset .subform table thead tr th a  {
-										color:white;
-										text-shadow: 1px 1px 0 #555555;
-									}
-								.jForm fieldset .subform table tbody tr td {
-									cursor: pointer;
-								}
-								.jForm fieldset .subform table tbody tr.info td,
-								.jForm fieldset .subform table tbody tr.warning td {
-									cursor: default;
-								}
+						.jForm fieldset .subform table thead tr th:first-child {
+							border-top-left-radius:5px;
+						}
+						.jForm fieldset .subform table thead tr th:last-child {
+							border-top-right-radius:5px;
+						}
+						.jForm fieldset .subform table tbody tr td {
+							cursor: pointer;
+						}
+						.jForm fieldset .subform table tbody tr:last-child td:first-child {
+							border-bottom-left-radius:5px;
+						}
+						.jForm fieldset .subform table tbody tr:last-child td:last-child {
+							border-bottom-right-radius:5px;
+						}								
+						.jForm fieldset .subform table tbody tr.info td,
+						.jForm fieldset .subform table tbody tr.warning td {
+							cursor: default;
+						}
+						
+						
+				.jForm fieldset .subform table tbody tr td table  { 
+					box-shadow: none;
+					border: 1px solid #dddddd;
+					border-top: none;
+				}
+										
 	.jForm .form-actions {
 		border-radius: 0 0 5px 5px;
 		text-align: right;
@@ -534,11 +566,80 @@ table .numeric, table .date, table .datetime {
 	width: 5px;
 }
 
+.modal {
+	width: 900px; 
+	margin-left: -450px; 
+}
+
+.modal.jAlert {
+	margin-left: -280px;
+	width: 560px;
+}
 .modal-body {
 	overflow: visible;
 }
-
 .modal-footer {
 	position: relative;
 	z-index: 1;
 }
+.modal-header h3 {
+	text-transform: capitalize;
+}
+@media (max-width: 950px) {
+	.modal,
+	.modal.jAlert {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+		left: 20px;
+		width: auto;
+		margin: 0;
+	}
+}
+
+
+
+
+
+
+/*
+TODO: arreglar las tablas responsives !
+
+	@media only screen and (max-width: 40em) { /*640*/
+/*
+		table { display: block; position: relative; width: 100%; }
+		table thead { display: block; float: left; }
+		table tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
+		table thead tr { display: block; }
+		table th { display: block; }
+		table tbody tr { display: inline-block; vertical-align: top; }
+		table td { display: block; min-height: 1.25em; }
+* /
+		table { display: block; position: relative; width: 100%; }
+		table thead {
+			 
+			display: block; float: left;
+			
+			}
+		table tbody { display: -webkit-box; overflow-x: auto; }
+		table th,
+		table tr,
+		table td {
+			width:auto !important;
+			color: black !important;
+			background: white !important;
+			border-radius:0 !important; 
+			display: block !important; 
+		}
+
+		/* sort out borders * /
+
+		table th { border-bottom: 0; }
+		table td { border-left: 0; border-right: 0; border-bottom: 0; }
+		table tbody tr { border-right: 1px solid #babcbf; }
+		table th:last-child,
+		table td:last-child { border-bottom: 1px solid #babcbf; }
+		
+		 td:nth-of-type(1):before { content: "MFG P/N"; }
+
+	}*/

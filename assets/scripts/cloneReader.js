@@ -384,11 +384,13 @@ cloneReader = {
 	renderDetailEntry: function($entry, entry) {
 		var $header = $('<div/>').addClass('header').appendTo($entry);
 
+var aaa = this.$ulEntries.find(' > li ').index($entry);
+
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
 			.css('background-image', 'url(' + base_url + (entry.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + entry.feedIcon) + ')')
-			.html(entry.entryTitle || '&nbsp;')
+			.html(aaa + ' - ' + entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 
 		$('<label><i /></label>').addClass('star').appendTo($header);
@@ -426,11 +428,22 @@ cloneReader = {
 			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.hasClass('selected'));
 		});				
 						
-		$entry.css('min-height', 1).css('min-height', $entry.height());
+		$entry.css('min-height', $entry.height());
+//		$entry.css('min-height', 1).css('min-height', $entry.height());
 		$entry.find('img').load(
 			function(event) {
 				var $entry = $(event.target).parents('.entry');
-				$entry.css('min-height', 1).css('min-height', $entry.height());
+				if ($entry.visible(true) != true) {
+					return;
+				}
+				$entry.css('min-height', $entry.height());
+				//$entry.css('min-height', 1).css('min-height', $entry.height());
+	/*			
+if (cloneReader.$ulEntries.is(':animated') == true) {				
+	cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+
+	cn('img.load!');
+}*/
 			}
 		);
 		
@@ -683,7 +696,28 @@ cloneReader = {
 		
 		var top = $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop() - 10;
 		if (animate == true) { 
-			this.$ulEntries.stop().animate( {scrollTop: top } );
+			this.$ulEntries.stop().animate( 
+				{  scrollTop: top  }
+				,
+				$.proxy(
+					function($entry, animate) {
+// TODO: revisar esta parte; si durante la aminación se lodearon imagenes, la $entry queda mal posicionada...
+/*cn($entry);
+cn(animate);
+cn(this);						*/
+//var $entry 	= cloneReader.$ulEntries.find('li.selected');
+						var top 	= $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop() - 10;
+						if (top != this.$ulEntries.scrollTop()) {
+/*cn('aaa');
+cn(animate);		
+cn(top);	
+cn(cloneReader.$ulEntries.scrollTop());*/
+							this.scrollToEntry($entry, false);
+//cloneReader.$ulEntries.stop().scrollTop(top);
+						}
+					}
+				, this, $entry, animate) 
+			);
 		}
 		else {
 			this.$ulEntries.stop().scrollTop(top);
@@ -758,6 +792,7 @@ console.timeEnd("t1");
 		if (clear == true) {
 			this.indexFilters 	= { 'tag': {}, 'feed': {}};
 			this.$ulFilters.children().remove();
+			$('.tooltip').remove(); 
 		}
 		
 		for (var i=0; i<filters.length; i++) {
@@ -855,7 +890,7 @@ console.timeEnd("t1");
 		return $filter;
 	},
 	
-	isVisible: function(filter, parentIsVisible) {
+	isVisible: function(filter, parentIsVisible) { // TODO: renombrar a filterIsVisible
 		filter = this.getFilter(filter);
 		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == TAG_HOME)) {
 			return true;

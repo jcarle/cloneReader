@@ -1,7 +1,3 @@
-<a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-small">
-	<i class="icon-plus"></i>
-</a>
-
 <table class="table table-hover table-condensed">
 	<thead>
 		<tr>
@@ -45,3 +41,7 @@ foreach ($list['data'] as $row) {
 ?>		
 	</tbody>
 </table>
+
+<a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-small btnAdd">
+	<i class="icon-plus"> </i> Agregar
+</a>
