@@ -313,63 +313,71 @@
 		
 		initFileupload: function(field) {	
 			this.fileupload = field;	
-			var gallery = $('#gallery');
+			var $gallery = $('#gallery');
 			this.reloadGallery();
 			
 			$('#fileupload').data( { 'jForm': this } )
 			
-			$('.btnEditPhotos', gallery).click(
-					function () {
-						$('#fileupload').dialog( {
-							draggable: 	false, 
-							width:		1000, 
-							height: 	700, 
-							modal: 		true, 
-							resizable: 	false, 
-							title: 		'Editar fotos',
-							close:		function(event, ui) {
-											$(this).data('jForm').reloadGallery();
-										}
-							})
+			$('.btnEditPhotos', $gallery).click( $.proxy(
+				function () {
+					if (this.$fileupload == null) {
+						this.$fileupload = $('#fileupload');
+
+						this.$fileupload.on('hidden', 
+							function() {
+								var jForm = $(this).data('jForm');
+								jForm.reloadGallery();
+							}
+						);
 					}
-				);
+					
+					this.$fileupload.modal( { backdrop: true, keyboard: false });
+					
+					$(document).off('focusin.modal');
+					
+					var zIndex = $.topZIndex('body > *');
+					this.$fileupload.css( { 'z-index': zIndex + 2 });
+					
+					$('.modal-backdrop').hide();
+			
+					$('.modal-backdrop:last')
+						.css( {'opacity': 0.3,  'z-index': zIndex + 1 } )
+						.unbind()
+						.show();
+				}
+			, this));
 
 			$('#fileupload').fileupload( { autoUpload: true });
 		},
 		
 		reloadGallery: function() {
-			var gallery = $('#gallery');
-			
-			$(gallery).children('a').remove();
+			var $gallery = $('#gallery');
+
+			$gallery.children('a').remove();
 			$('tbody', '#fileupload').children().remove();
 			
-			$.getJSON(this.fileupload.urlGet, function (result) {
-				if (result && result.length) {
-					$('#fileupload')
-						.fileupload('option', 'done')
-						.call($('#fileupload'), null, {result: result});
-											
-					for (var i=0; i<result.length; i++) {
-						var photo = result[i];
-						
-						$('<a rel="gallery"/>')
-							.append($('<img>').prop('src', photo.thumbnail_url))
-							.prop('href', photo.url)
-							.prop('title', photo.url /*photo.title*/)
-							.appendTo(gallery);
-					}
-	
-					$('img', gallery).imgCenter( {
-						show: false,
-						createFrame: true,
-						complete:
-							function(img) {
-								$(img).fadeIn('slow', function() {
-									$(img).parent().css('background', 'none');
-								});
-							}
-					});
+			$.ajax({
+				url: this.fileupload.urlGet,
+				data: { }
+			 }).done(function (result) {	
+				$('#fileupload')
+					.fileupload('option', 'done')
+					.call($('#fileupload'), null, {result: result});
+
+				for (var i=0; i<result.files.length; i++) {
+					var photo = result.files[i];
+					
+					$('<a rel="gallery" data-gallery="gallery"/>')
+						.append($('<img>').prop('src', photo.thumbnailUrl))
+						.prop('href', photo.url)
+						.prop('title', ''  /*photo.title*/)
+						.appendTo($gallery);
 				}
+
+				$('img', $gallery).imgCenter( {
+					show: false,
+					createFrame: true,
+				});
 			});
 		},
 		
@@ -467,10 +475,6 @@
 					
 					$subform.find('.form-actions').remove();
 					$subform.children().appendTo($modalBody);
-					
-					$modalFooter.find('.btnDelete').click(function () {
-						$(document).jAlert('no implementado');
-					});
 					
 					$subform
 						.append('\

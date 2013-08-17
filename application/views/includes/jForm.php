@@ -7,7 +7,6 @@ echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), '
 
 $this->load->view('includes/formError'); 
 
-$hasGallery 	= false;
 $aFields 		= array();
 $inputSize		= 'span11';
 
@@ -68,19 +67,19 @@ foreach ($form['fields'] as $name => $field) {
 			$aFields[] = sprintf($sField, form_checkbox($name, 'on', $field['checked']));
 			break;
 		case 'gallery':
-			$hasGallery = true;
-			
 			$fileupload = array ( 
 				'entityName' 	=> $field['entityName'],
 				'entityId'		=> $field['entityId']
 			);
-			
-			$aFields[] = '<fieldset class="control-group">'
-					.form_label($field['label'], null, array('class' => 'control-label'))
-					.'<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery">
-						<input type="button" class="btnEditPhotos" value="Editar fotos" />
+				
+			$aFields[] = sprintf($sField, '
+					<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="span11">
+						<button type="button" class="btn btn-success btnEditPhotos fileinput-button">
+							<i class="icon-picture" ></i>
+							Editar fotos
+						</button>
 					</div>
-				</fieldset>';
+				');
 			break;
 		case 'subform':
 			$aFields[] = sprintf($sField, '
@@ -129,7 +128,7 @@ foreach ($form['buttons'] as $button) {
 echo '</div>';
 echo form_close(); 
 
-if ($hasGallery == true) {
+if (hasGallery($form) == true) {
 	$this->load->view('includes/uploadfile', array('fileupload' => $fileupload ));
 } 
 

@@ -3,14 +3,23 @@ class Files_Model extends CI_Model {
 	function insert($fileName, $fileTitle) {
 		
 		$this->db->insert('files', array(
-									'fileName'		=> $fileName,
-									'fileTitle'		=> $fileTitle
+			'fileName'		=> $fileName,
+			'fileTitle'		=> $fileTitle
 		));
 		
 		return $this->db->insert_id();
 	}
 	
-	function deleteByFileId($fileId) {
+	function deleteByFileId($entityName, $entityId, $fileId) {
+		$aProperties = $this->getPropertyByEntityName($entityName);
+		
+		$data 		= $this->get($fileId);
+		$fileName 	= $data['fileName'];
+		
+		@unlink('.'.$aProperties['folder'].'original/'.$fileName);
+		@unlink('.'.$aProperties['folder'].'thumb/'.$fileName);
+		@unlink('.'.$aProperties['folder'].'large/'.$fileName);
+				
 		return $this->db->where('fileId', $fileId)->delete('files');
 	}
 	
@@ -21,18 +30,18 @@ class Files_Model extends CI_Model {
 	function getPropertyByEntityName($entityName) {
 		// TODO: optimizar para que devuelva al toque si ya lo tiene
 		switch ($entityName) {
-			case 'lodgments':
+			case 'hotels':
 				return array(
-					'tableName'		=> 'files_lodgments',
-					'fieldName' 	=> 'lodgmentId',
-					'folder'		=> '/assets/favicons/lodgments/'
+					'tableName'		=> 'hotels_files',
+					'fieldName' 	=> 'hotelId',
+					'folder'		=> '/assets/images/hotels/'
 				);
 				break;
 			case 'excursions':
 				return array(	
 					'tableName'		=> 'files_excursions',
 					'fieldName' 	=> 'excursionId',
-					'folder'		=> '/assets/favicons/excursions/'
+					'folder'		=> '/img/excursions/'
 				);
 				break;
 		}
@@ -65,6 +74,6 @@ class Files_Model extends CI_Model {
 	function getUrl($entityName, $fileName, $thumb = false){
 		$aProperties = $this->getPropertyByEntityName($entityName);
 
-		return base_url($aProperties['folder'].($thumb == true ? 'thumbs/' : '').$fileName);				
+		return base_url($aProperties['folder'].($thumb == true ? 'thumb/' : 'large/').$fileName);				
 	}
 }

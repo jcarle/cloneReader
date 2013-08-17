@@ -93,3 +93,12 @@ function subscribeForSumValues($fieldName, array $aFieldName) {
 	}
 	return $subscribe;
 }
+
+function hasGallery($form) {
+	foreach ($form['fields'] as $name => $field) {
+		if ($field['type'] == 'gallery') {
+			return true;
+		}
+	}
+	return false;
+}
