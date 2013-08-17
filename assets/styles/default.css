@@ -483,13 +483,28 @@ body.isLoading, body.isLoading * {
 					}
 					.jForm fieldset #gallery a  > img,
 					.jForm fieldset #gallery a  > .imgCenterFrame {
-						background: url(../images/loading.gif) no-repeat scroll center center white;
+						/*background: url(../images/loading.gif) no-repeat scroll center center white; */
 						width: 100px;
 						height: 100px;
 						border-radius: 5px 5px 5px 5px;
 						border: 1px solid #D6D6D6;		
 						display:none;
+						position:relative;
 					}
+						.jForm fieldset #gallery a  .imgCenterFrame p {
+
+							
+    color: #333333;
+    left: 50%;
+    line-height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 20px;							
+						}
+						
 		.jForm fieldset .subform {	}
 			.jForm fieldset .subform table {
 				border: 1px solid #ccc;
@@ -559,7 +574,7 @@ body.isLoading, body.isLoading * {
 	padding: 2px 0;	
 }
 
-table .numeric, table .date, table .datetime {
+table .numeric, table .date, table .datetime, table .text-right {
 	text-align: right;
 	white-space: nowrap;
 	width: 5px;
@@ -568,6 +583,14 @@ table .numeric, table .date, table .datetime {
 .modal {
 	width: 900px; 
 	margin-left: -450px; 
+}
+
+.modal.modal-gallery {
+	width: auto;
+}
+
+#fileupload .modal-body {
+	max-height: none;
 }
 
 .modal.jAlert {
@@ -584,6 +607,11 @@ table .numeric, table .date, table .datetime {
 .modal-header h3 {
 	text-transform: capitalize;
 }
+
+.modal-loading .modal-image {
+  background: url(../images/loadingLarge.gif) center no-repeat;
+}
+
 @media (max-width: 950px) {
 	.modal,
 	.modal.jAlert {
