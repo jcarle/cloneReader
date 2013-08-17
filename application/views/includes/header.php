@@ -34,7 +34,11 @@ $CI->carabiner->js('jquery.topzindex.js');
 $CI->carabiner->js('moment.min.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('jqueryExtension.js');
-$CI->carabiner->js('jquery.jAlert.js');		
+$CI->carabiner->js('jquery.jAlert.js');
+
+$CI->carabiner->css('bootstrap.css');
+$CI->carabiner->css('bootstrap-responsive.css');
+$CI->carabiner->css('font-awesome.css');
 
 if (isset($aJs)) {
 	foreach ($aJs as $js) {
@@ -47,14 +51,35 @@ if ($view == 'includes/paginatedList') {
 	$CI->carabiner->js('jquery.paginatedList-1.0.js');
 }
 if ($view == 'includes/jForm') {
-	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+
+	if (hasGallery($form) == true) {
+		$CI->carabiner->js('tmpl.min.js');
+		$CI->carabiner->js('jquery.ui.widget.js');
+		$CI->carabiner->js('jquery.fileupload.js');
+		$CI->carabiner->js('jquery.fileupload-ui.js');
+		$CI->carabiner->js('jquery.fileupload-process.js');
+		
+		$CI->carabiner->js('jquery.imgCenter.js');
+		$CI->carabiner->js('load-image.js');
+		$CI->carabiner->js('bootstrap-image-gallery.js');
+	}
+
+		
+	$CI->carabiner->js('jquery.jForm.js');		
+		
 	
-	$CI->carabiner->css('bootstrap-datetimepicker.css');	
+	$CI->carabiner->css('bootstrap-datetimepicker.css');
+	
+	if (hasGallery($form) == true) {
+		$CI->carabiner->css('bootstrap-image-gallery.css');
+		$CI->carabiner->css('jquery.fileupload-ui.css');
+	}
+			
 } 
 if ($view == 'login') {
 	$CI->carabiner->js('jquery.jForm.js');
@@ -62,11 +87,8 @@ if ($view == 'login') {
 	$CI->carabiner->js('loginFB.js');
 }
 
-$CI->carabiner->css('bootstrap.css');
-$CI->carabiner->css('bootstrap-responsive.css');
-$CI->carabiner->css('font-awesome.css');
-$CI->carabiner->css('default.css');
 
+$CI->carabiner->css('default.css');
 
 if (isset($aCss)) {
 	foreach ($aCss as $css) {
