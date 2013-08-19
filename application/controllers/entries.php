@@ -264,42 +264,6 @@ class Entries extends CI_Controller {
 			'result' 	=> 'ok',
 		));
 	}	
-	
-	function migrateStarredFromGReader() {
-		$userId 	= 2; // FIXME: harckodeta
-		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/starred.json';
-		$json 		= (array)json_decode(file_get_contents($fileName), true);
-
-		foreach ($json['items'] as $data) {
-			$entryContent = '';
-			if (element('summary', $data) != null) {
-				$entryContent = $data['summary']['content'];
-			}
-			else if (element('content', $data) != null) {
-				$entryContent = $data['content']['content'];
-			}
-
-			$entry = array(
-				'entryTitle' 	=> element('title', $data, '(title unknown)'),
-				'entryUrl'		=> (string)$data['alternate'][0]['href'],
-				'entryAuthor'	=> element('author', $data, null),
-				'entryDate'		=> date('Y-m-d H:i:s', $data['published']),
-				'entryContent' 	=> (string)$entryContent,
-			);
-
-			$feed = array(
-				'feedName'	=> element('title', $data['origin']),
-				'feedUrl' 	=> substr($data['origin']['streamId'], 5),
-				'feedLink'	=> $data['origin']['htmlUrl'],
-				'feedName'	=> element('title', $data['origin'])
-			);
-			
-			$entry['feedId']	= $this->Entries_Model->addFeed($userId, $feed);
-			$entry['entryId'] 	= $this->Entries_Model->saveEntry($entry);
-			
-			$this->Entries_Model->saveUserEntries((int)$userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
-		}
-	}
 
 	function buildCache($userId = null) {
 		if ($userId == null) {

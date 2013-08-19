@@ -163,6 +163,13 @@ class Entries_Model extends CI_Model {
 				->get('entries')->row_array();
 		return $result;
 	}
+
+	function getEntryIdByEntryUrl($entryUrl) {
+		$result = $this->db
+				->where('entryUrl', $entryUrl)
+				->get('entries')->row_array();
+		return $result['entryId'];		
+	} 
 	
 	function getLastEntryDate($feedId) {
 		$query = $this->db
@@ -210,6 +217,8 @@ class Entries_Model extends CI_Model {
 		}
 		
 		$this->db->ignore()->insert('entries', $data);
+		//pr($this->db->last_query());
+		return $this->db->insert_id();
 	}
 
 	function delete($entryId) {
