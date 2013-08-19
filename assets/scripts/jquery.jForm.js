@@ -186,9 +186,9 @@
 										return $(document).jAlert(result['result']);
 									}
 									$(document).jAlert({
-										'msg': 		result['result'],
+										'msg': 		result['result']['msg'],
 										'callback': function() {
-											$.goToUrl(result['goToUrl']);
+											$.goToUrl(result['result']['goToUrl']);
 										}
 									});
 								}	 

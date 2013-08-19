@@ -264,38 +264,6 @@ class Entries extends CI_Controller {
 			'result' 	=> 'ok',
 		));
 	}	
-
-/*	function migrateFromGReader() {
-		$userId 	= 2; // FIXME: harckodeta
-		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/subscriptions.xml';
-
-		$xml = simplexml_load_file($fileName);
-
-		foreach ($xml->xpath('//body/outline') as $tag) {
-			if (count($tag->children()) > 0) {
-				$tagName = (string)$tag['title'];
-
-				foreach ($tag->children() as $feed) {
-					
-					$feed = array(
-						'feedName'	=> (string)$feed->attributes()->title,
-						'feedUrl' 	=> (string)$feed->attributes()->xmlUrl,
-						'feedLink'	=> (string)$feed->attributes()->htmlUrl
-					);
-					$feedId	=  $this->Entries_Model->addFeed($userId, $feed);
-					$this->Entries_Model->addTag($tagName, $userId, $feedId);
-				}
-			}
-			else {
-				$feed = array(
-					'feedName' 	=> (string)$tag->attributes()->title,
-					'feedUrl' 	=> (string)$tag->attributes()->xmlUrl,
-					'feedLink'	=> (string)$tag->attributes()->htmlUrl
-				);
-				$this->Entries_Model->addFeed($userId, $feed);
-			}
-		}
-	}*/
 	
 	function migrateStarredFromGReader() {
 		$userId 	= 2; // FIXME: harckodeta

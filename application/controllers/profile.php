@@ -171,6 +171,6 @@ class Profile extends CI_Controller {
 			}
 		}
 		
-		return $this->load->view('ajax', array('code' => true, 'result' => 'Import success ', 'goToUrl' => base_url('home')));		
+		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => 'Import success ', 'goToUrl' => base_url(''))));		
 	}	
 }
