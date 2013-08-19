@@ -265,7 +265,7 @@ class Entries extends CI_Controller {
 		));
 	}	
 
-	function migrateFromGReader() {
+/*	function migrateFromGReader() {
 		$userId 	= 2; // FIXME: harckodeta
 		$fileName 	= '/home/jcarle/dev/cloneReader/application/cache/subscriptions.xml';
 
@@ -295,7 +295,7 @@ class Entries extends CI_Controller {
 				$this->Entries_Model->addFeed($userId, $feed);
 			}
 		}
-	}
+	}*/
 	
 	function migrateStarredFromGReader() {
 		$userId 	= 2; // FIXME: harckodeta

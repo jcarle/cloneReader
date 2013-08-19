@@ -105,7 +105,24 @@ foreach ($form['fields'] as $name => $field) {
 			break;
 		case 'raty':
 			$aFields[] = sprintf($sField, '<div class="raty" name="'.$name.'" />');
-			break;		
+			break;
+		case 'upload':
+			$aFields[] = sprintf($sField, '
+				<div class="span5">
+					<span class="btn btn-success fileinput-button">
+						<i class="icon-plus icon-white"></i>
+						<span>Add File...</span>
+						<input type="file" name="userfile" >
+					</span>
+				</div>
+				<div class="span5 fileupload-progress fade">
+					<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+						<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
+					</div>
+					<div class="progress-extended">&nbsp;</div>
+				</div>
+			');
+			break;
 	}	
 }
 
@@ -149,7 +166,7 @@ function renderTree($aTree, $value){
 ?>
 <script>
 $(document).ready(function() {
-	$('#<?php echo $form['frmId'] ?>').jForm(<?php echo json_encode($form); ?>);
+	$('#<?php echo element('frmId', $form, 'frmId') ?>').jForm(<?php echo json_encode($form); ?>);
 });	
 </script>
 

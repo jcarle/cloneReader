@@ -176,6 +176,23 @@
 									path: 		base_url + 'assets/images/',
 								});						
 							break;
+						case 'upload':
+							this.$form.attr('enctype', 'multipart/form-data');
+							this.$form.fileupload( { 
+								'autoUpload': 	true,
+								'done': 		function (e, data) {
+									var result = data.result;
+									if (result['code'] == false) {
+										return $(document).jAlert(result['result']);
+									}
+									$(document).jAlert({
+										'msg': 		result['result'],
+										'callback': function() {
+											$.goToUrl(result['goToUrl']);
+										}
+									});
+								}	 
+							});
 					}
 				}
 			}

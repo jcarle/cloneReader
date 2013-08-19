@@ -102,3 +102,12 @@ function hasGallery($form) {
 	}
 	return false;
 }
+
+function hasFieldUpload($form) {
+	foreach ($form['fields'] as $name => $field) {
+		if ($field['type'] == 'upload') {
+			return true;
+		}
+	}
+	return false;
+}

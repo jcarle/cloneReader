@@ -56,6 +56,15 @@ if ($view == 'includes/jForm') {
 	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+	
+	if (hasFieldUpload($form) == true) {
+		$CI->carabiner->js('jquery.ui.widget.js');
+		$CI->carabiner->js('jquery.fileupload.js');
+		$CI->carabiner->js('jquery.fileupload-ui.js');
+		$CI->carabiner->js('jquery.fileupload-process.js');
+				
+		$CI->carabiner->css('jquery.fileupload-ui.css');
+	}	
 
 	if (hasGallery($form) == true) {
 		$CI->carabiner->js('tmpl.min.js');
@@ -79,7 +88,6 @@ if ($view == 'includes/jForm') {
 		$CI->carabiner->css('bootstrap-image-gallery.css');
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
-			
 } 
 if ($view == 'login') {
 	$CI->carabiner->js('jquery.jForm.js');
@@ -121,7 +129,7 @@ $CI->carabiner->display('js');
 	
 	<div id="header">
 		<div>
-		<?php echo anchor('home', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-large active')); ?>
+		<?php echo anchor('', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-large active')); ?>
 		
 <?php
 echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');

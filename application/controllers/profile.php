@@ -5,7 +5,7 @@ class Profile extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model(array('Users_Model', 'Countries_Model'));
-	}  
+	}
 	
 	function index() {
 		$this->edit();
@@ -88,4 +88,89 @@ class Profile extends CI_Controller {
 				  
 		));		
 	}
+
+	function importFeeds() {
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
+		
+		$form = array(
+			'action'	=> base_url('profile/doImportFeeds'),
+			'messages' 	=> getRulesMessages(),
+			'rules'		=> array(),
+			'fields'	=> array(
+				'tagName' => array(
+					'type'		=> 'upload',
+					'label'		=> 'Choose subscriptions.xml', 
+				),				
+			), 		
+			'rules' 	=> array( 
+				array(
+					'field' => 'tagName',
+					'label' => 'Nombre',
+					'rules' => 'required'
+				),
+			),
+			'buttons'	=> array()
+		);
+				
+		$this->load->view('includes/template', array(
+			'view'		=> 'includes/jForm', 
+			'title'		=> 'Import feeds',
+			'form'		=> $form	  
+		));		
+	}
+	
+	function doImportFeeds() {
+		if (! $this->safety->allowByControllerName('profile/importFeeds') ) { return errorForbidden(); }
+		
+		$this->load->model('Entries_Model');
+		
+		$userId = $this->session->userdata('userId');
+		
+		$config	= array(
+			'upload_path' 		=> './application/cache',
+			'allowed_types' 	=> 'xml',
+			'max_size'			=> 1024 * 8,
+			'encrypt_name'		=> false,
+			'is_image'			=> false,
+			'overwrite'			=> true,
+			'file_name'			=> 'import_feeds_'.$userId.'.xml'
+		);
+
+		$this->load->library('upload', $config);
+
+		if (!$this->upload->do_upload()) {
+			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors('', '')));					
+		}
+		
+		
+		$fileName 	= './application/cache/import_feeds_'.$userId.'.xml';
+		$xml 		= simplexml_load_file($fileName);
+
+		foreach ($xml->xpath('//body/outline') as $tag) {
+			if (count($tag->children()) > 0) {
+				$tagName = (string)$tag['title'];
+
+				foreach ($tag->children() as $feed) {
+					
+					$feed = array(
+						'feedName'	=> (string)$feed->attributes()->title,
+						'feedUrl' 	=> (string)$feed->attributes()->xmlUrl,
+						'feedLink'	=> (string)$feed->attributes()->htmlUrl
+					);
+					$feedId	=  $this->Entries_Model->addFeed($userId, $feed);
+					$this->Entries_Model->addTag($tagName, $userId, $feedId);
+				}
+			}
+			else {
+				$feed = array(
+					'feedName' 	=> (string)$tag->attributes()->title,
+					'feedUrl' 	=> (string)$tag->attributes()->xmlUrl,
+					'feedLink'	=> (string)$tag->attributes()->htmlUrl
+				);
+				$this->Entries_Model->addFeed($userId, $feed);
+			}
+		}
+		
+		return $this->load->view('ajax', array('code' => true, 'result' => 'Import success ', 'goToUrl' => base_url('home')));		
+	}	
 }
