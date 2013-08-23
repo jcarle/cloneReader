@@ -38,8 +38,6 @@ class Files extends CI_Controller {
 	function save() {
 		// TODO: implementar seguridat!!
 		
-		// TODO: cambiar los filenames para que sean unicos!
-		
 		$entityName = $this->input->post('entityName');
 		$entityId	= $this->input->post('entityId');
 		
