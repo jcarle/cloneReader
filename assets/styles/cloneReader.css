@@ -1,3 +1,23 @@
+#header div .logo {
+	margin: 0;
+	line-height: 30px;
+	position: relative;
+	z-index: 9;
+	overflow: hidden;
+	padding-right: 60px;
+}
+	#header div .logo span {
+		font-size: small;
+		line-height: 19px;
+		padding: 0;
+		position: absolute;
+		right: -39px;
+		top: 4px;
+		-webkit-transform: rotate(45deg);
+		transform: rotate(45deg);
+		width: 113px;
+	}
+			
 #cloneReader {
 	position:relative;
 }

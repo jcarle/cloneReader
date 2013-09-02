@@ -40,25 +40,6 @@ body.isLoading, body.isLoading * {
 		overflow: hidden;
 		position:relative;
 	}
-		#header div .logo {
-			margin: 0;
-			line-height: 30px;
-			position: relative;
-			z-index: 9;
-			overflow: hidden;
-			padding-right: 60px;
-		}
-			#header div .logo span {
-				font-size: small;
-				line-height: 19px;
-				padding: 0;
-				position: absolute;
-				right: -39px;
-				top: 4px;
-				-webkit-transform: rotate(45deg);
-				transform: rotate(45deg);
-				width: 113px;
-			}
 		#header div .search {
 			clear: both;
 			float: right;
@@ -457,18 +438,13 @@ body.isLoading, body.isLoading * {
 					font-weight: bold;	
 				}
 			.jForm fieldset .gallery {
-				border: 1px solid #CCCCCC;
-				border-radius: 5px 5px 5px 5px;
 				overflow: auto;
 				min-height:30px;
-				box-shadow:2px 2px 4px #777777;
 			}
 				.jForm fieldset .gallery .btnEditPhotos {
 					cursor: pointer;
 					display: block;
 					float: none;
-					margin: 4px 14px;
-					padding: 2px 8px;
 					width: auto;
 				}
 		.jForm fieldset .subform {	}
