@@ -329,8 +329,8 @@
 		},
 		
 		initFileupload: function(field) {	
-			this.fileupload = field;	
-			var $gallery = $('#gallery');
+			this.fileupload 	= field;	
+			var $gallery 		= $('.gallery');
 			this.reloadGallery();
 			
 			$('#fileupload').data( { 'jForm': this } )
@@ -368,9 +368,9 @@
 		},
 		
 		reloadGallery: function() {
-			var $gallery = $('#gallery');
+			var $gallery = $('.gallery');
 
-			$gallery.children('a').remove();
+			$gallery.find('a').remove();
 			$('tbody', '#fileupload').children().remove();
 			
 			$.ajax({
@@ -384,17 +384,14 @@
 				for (var i=0; i<result.files.length; i++) {
 					var photo = result.files[i];
 					
-					$('<a rel="gallery" data-gallery="gallery"/>')
+					$('<a rel="gallery" data-gallery="gallery" class="span2 thumbnail" />')
 						.append($('<img>').prop('src', photo.thumbnailUrl))
 						.prop('href', photo.url)
 						.prop('title', ''  /*photo.title*/)
-						.appendTo($gallery);
+						.appendTo($gallery.find('.thumbnails'));
 				}
 
-				$('img', $gallery).imgCenter( {
-					show: false,
-					createFrame: true,
-				});
+				$('img', $gallery).imgCenter( { show: false, createFrame: true } );
 			});
 		},
 		

@@ -323,15 +323,17 @@ $(document).ready(function() {
 	
 	$.showWaiting(true);
 	$('a').click(function(event) {
+		if (event.button != 0) {
+			return;
+		}
+		
 		var url = $(event.target).attr('href');
 		if (url == null) {
 			return;
 		}
 		event.preventDefault();
 		return $.goToUrl(url);
-	});
-	
-	
+	});	
 	
 	$.countProcess = 0;
 	

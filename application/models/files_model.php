@@ -47,28 +47,41 @@ class Files_Model extends CI_Model {
 		}
 	}
 	
-	function saveFileRelation($entityName, $fileId, $fieldValue ) {
+	function saveFileRelation($entityName, $fileId, $entityId ) {
 		$aProperties = $this->getPropertyByEntityName($entityName);
 		
 		$this->db->insert($aProperties['tableName'], 
 			array(
 				'fileId'				 	=> $fileId,
-				$aProperties['fieldName']	=> $fieldValue
+				$aProperties['fieldName']	=> $entityId
 		));
 	}
 	
-	function getFilesByEntity($entityName, $fieldValue, $fileId = null) {
-		$aProperties = $this->getPropertyByEntityName($entityName);
+	function getFilesByEntity($entityName, $entityId, $fileId = null, $calculateSize = true) {
+		$aProperties 	= $this->getPropertyByEntityName($entityName);
+		$result 		= array();
 		
 		$this->db->select('files.fileId, fileName')
 			->join($aProperties['tableName'], 'files.fileId =  '.$aProperties['tableName'].'.fileId')
-			->where($aProperties['fieldName'], $fieldValue);
+			->where($aProperties['fieldName'], $entityId);
 		if ($fileId != null) {
 			$this->db->where('files.fileId', $fileId);
 		}
-		$query = $this->db->get('files');
+		$query = $this->db->get('files')->result_array();
 		//pr($this->db->last_query());
-		return $query;
+		
+		foreach ($query as $row) {
+			$result[] = array(
+				'name' 				=> $row['fileName'],
+				'url'				=> $this->getUrl($entityName, $row['fileName']),
+				'size'				=> filesize('.'.$aProperties['folder'].'original/'.$row['fileName']), 
+				'thumbnailUrl'		=> $this->getUrl($entityName, $row['fileName'], true),
+				'deleteUrl'			=> base_url('files/remove/'.$entityName.'/'.$entityId.'/'.$row['fileId']),
+				'deleteType'		=> 'DELETE'
+			);
+		}		
+		
+		return $result;
 	}	
 
 	function getUrl($entityName, $fileName, $thumb = false){

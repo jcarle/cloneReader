@@ -73,11 +73,12 @@ foreach ($form['fields'] as $name => $field) {
 			);
 				
 			$aFields[] = sprintf($sField, '
-					<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="span11">
+					<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="span11 gallery well" >
 						<button type="button" class="btn btn-success btnEditPhotos fileinput-button">
 							<i class="icon-picture" ></i>
 							Editar fotos
 						</button>
+						<div class="span12 thumbnails"" ></div>
 					</div>
 				');
 			break;

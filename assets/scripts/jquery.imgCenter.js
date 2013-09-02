@@ -41,8 +41,16 @@
 			var org_image = $(this);
 			
 			if (opts.createFrame == true) {
-				var $div = $('<div />').addClass('imgCenterFrame').append('<p class="icon-spinner icon-spin icon-large" />');
-				$div.insertBefore(org_image).append(org_image).show().css('visibility', 'visible');
+				if (org_image.parent().hasClass('imgCenterFrame') == true) {
+					var $div = org_image.parent();
+					if ($div.find('i').length == 0) {
+						$div.append('<i class="icon-spinner icon-spin icon-large" />');
+					}
+				}
+				else {
+					var $div = $('<div />').addClass('imgCenterFrame').append('<i class="icon-spinner icon-spin icon-large" />');
+					$div.insertBefore(org_image).append(org_image).show().css('visibility', 'visible');
+				}
 			}
 			
 			org_image.hide();
@@ -51,7 +59,7 @@
 			var theParent = org_image;
 			for (var i=0; i <= opts.parentSteps; i++){
 				theParent = theParent.parent();
-			}			
+			}	
 			var parWidth 	= parseInt(theParent.width());
 			var parHeight 	= parseInt(theParent.height());
 			var parAspect 	= parWidth / parHeight;
@@ -122,7 +130,7 @@
 				
 
 				$(org_image).fadeIn('slow', function() {
-					$(org_image).parent().find('p').remove();
+					$(org_image).parent().find('i').remove();
 				});
 
 				opts.complete.call(this, org_image);

@@ -456,55 +456,21 @@ body.isLoading, body.isLoading * {
 				.jForm fieldset.tree ul li a.selected {
 					font-weight: bold;	
 				}
-			.jForm fieldset #gallery {
-				background: none repeat scroll 0 0 white;
+			.jForm fieldset .gallery {
 				border: 1px solid #CCCCCC;
 				border-radius: 5px 5px 5px 5px;
 				overflow: auto;
 				min-height:30px;
 				box-shadow:2px 2px 4px #777777;
 			}
-				.jForm fieldset #gallery .btnEditPhotos {
+				.jForm fieldset .gallery .btnEditPhotos {
 					cursor: pointer;
 					display: block;
 					float: none;
 					margin: 4px 14px;
 					padding: 2px 8px;
 					width: auto;
-				}			
-				.jForm fieldset #gallery a {
-					border-radius: 5px 5px 5px 5px;
-					border: 1px solid #D6D6D6;		
-					margin:5px 15px; padding:3px;
-					float:left;					
 				}
-					.jForm fieldset #gallery a img {
-						max-width: none;
-					}
-					.jForm fieldset #gallery a  > img,
-					.jForm fieldset #gallery a  > .imgCenterFrame {
-						/*background: url(../images/loading.gif) no-repeat scroll center center white; */
-						width: 100px;
-						height: 100px;
-						border-radius: 5px 5px 5px 5px;
-						border: 1px solid #D6D6D6;		
-						display:none;
-						position:relative;
-					}
-						.jForm fieldset #gallery a  .imgCenterFrame p {
-
-							
-    color: #333333;
-    left: 50%;
-    line-height: 20px;
-    margin-left: -10px;
-    margin-top: -10px;
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    width: 20px;							
-						}
-						
 		.jForm fieldset .subform {	}
 			.jForm fieldset .subform table {
 				border: 1px solid #ccc;
@@ -564,6 +530,37 @@ body.isLoading, body.isLoading * {
 	}
 	
 
+
+
+.gallery a.thumbnail {
+	background: white;
+	margin: 10px 10px 0 0;
+}
+	.gallery a img {
+		max-width: none;
+	}
+	.gallery a  > img,
+	.gallery a  > .imgCenterFrame {
+		width: auto;
+		height: 100px;
+		display:none;
+		position:relative;
+	}
+		
+		
+.thumbnail i {
+	color: #333333;
+	left: 50%;
+	line-height: 20px;
+	margin-left: -10px;
+	margin-top: -10px;
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	width: 20px;
+}		
+		
+		
 
 .ui-datepicker select {
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;

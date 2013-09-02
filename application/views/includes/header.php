@@ -89,6 +89,15 @@ if ($view == 'includes/jForm') {
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
 } 
+if (isset($hasGallery) && $hasGallery == true) {
+	$CI->carabiner->js('jquery.imgCenter.js');
+	$CI->carabiner->js('load-image.js');
+	$CI->carabiner->js('bootstrap-image-gallery.js');
+
+	$CI->carabiner->css('bootstrap-image-gallery.css');
+	$CI->carabiner->css('jquery.fileupload-ui.css');
+
+}
 if ($view == 'login') {
 	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');

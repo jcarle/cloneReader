@@ -14,21 +14,8 @@ class Files extends CI_Controller {
 	function _listing($entityName, $entityId, $fileId = null) {
 		// TODO: implementar seguridad!!
 		
-		$result = array('files' => array());
-
-		$aProperties 	= $this->Files_Model->getPropertyByEntityName($entityName);
-		$query 			= $this->Files_Model->getFilesByEntity($entityName, $entityId, $fileId);
-		
-		foreach ($query->result_array() as $row) {
-			$result['files'][] = array(
-				'name' 				=> $row['fileName'],
-				'url'				=> $this->Files_Model->getUrl($entityName, $row['fileName']),
-				'size'				=> filesize('.'.$aProperties['folder'].'original/'.$row['fileName']), 
-				'thumbnailUrl'		=> $this->Files_Model->getUrl($entityName, $row['fileName'], true),
-				'deleteUrl'			=> base_url('files/remove/'.$entityName.'/'.$entityId.'/'.$row['fileId']),
-				'deleteType'		=> 'DELETE'
-			);
-		}
+		$result 			= array('files' => array());
+		$result['files'] 	= $this->Files_Model->getFilesByEntity($entityName, $entityId, $fileId);
 		
 		return $this->load->view('ajax', array(
 			'result' 	=> $result
