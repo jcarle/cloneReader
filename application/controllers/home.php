@@ -8,7 +8,6 @@ class Home extends CI_Controller {
 				'view'			=> 'home', 
 				'title'			=> 'News reader and feeds',
 				'aJs'			=> array('cloneReader.js', 'jquery.visible.min.js', 'jquery.nicescroll.min.js'),
-				'aCss'			=> array('cloneReader.css'),
 				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') )
 			)
 		);

@@ -106,6 +106,7 @@ if ($view == 'login') {
 
 
 $CI->carabiner->css('default.css');
+$CI->carabiner->css('cloneReader.css');
 
 if (isset($aCss)) {
 	foreach ($aCss as $css) {
