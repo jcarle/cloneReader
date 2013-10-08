@@ -1,5 +1,5 @@
 #header div .logo {
-	margin: 0;
+	margin: 5px 0;
 	line-height: 30px;
 	position: relative;
 	z-index: 9;
@@ -21,32 +21,36 @@
 #cloneReader {
 	position:relative;
 }
-	#cloneReader .btn-toolbar {
-		background: #EEEEEE;
+	#cloneReader nav {
+		min-height:0;
+/*		background: #EEEEEE;
 		border-bottom: 1px solid #DDDDDD;
 		margin: 0;
 		padding: 3px 8px 3px 3px;
-		text-align: right;
+		text-align: right;*/
 	}
-		#cloneReader .btn-toolbar i {
+		#cloneReader nav .btn-toolbar {
+			margin:4px 0;
+		} 
+		#cloneReader nav i {
 			color: #555;
 		}
-		#cloneReader .btn-toolbar .dropdown-menu {
+		#cloneReader nav .dropdown-menu {
 			text-align: left;
 		}
-			#cloneReader .btn-toolbar .dropdown-menu li {
+			#cloneReader nav .dropdown-menu li {
 				cursor: pointer;
 			}
-			#cloneReader .btn-toolbar .dropdown-menu li.divider {
+			#cloneReader nav .dropdown-menu li.divider {
 				cursor: default;
 			}
-		#cloneReader .btn-toolbar .feedSettings a,
-		#cloneReader .btn-toolbar .filterSort a,
-		#cloneReader .btn-toolbar .filterUnread a {
+		#cloneReader nav .feedSettings a,
+		#cloneReader nav .filterSort a,
+		#cloneReader nav .filterUnread a {
 			font-size: small;
 		}
-		#cloneReader .btn-toolbar .expand,
-		#cloneReader .btn-toolbar .tooglePageHeader {
+		#cloneReader nav .expand,
+		#cloneReader nav .tooglePageHeader {
 			float: left;
 		}	
 

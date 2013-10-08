@@ -90,42 +90,51 @@
 					field.$input.data( 'field', field);
 					
 					switch (field['type']) {
+						case 'dropdown':
+							field.$input.select2();
+							
+							break;
 						case 'typeahead':
-							var $input = field.$input.parent().find('input[name=' + field.fieldId + ']');
+							if (field.multiple == null) {
+								field.multiple = false;
+							}
+												
+							if (field.placeholder != null) {
+								field.$input.attr('placeholder', field.placeholder);
+							}
+
 							field.$input
-								.data( { 'field': field,  '$input': $input, 'map': {} })
-								.change(function(event) {
-									var map 		= $(event.target).data('typeahead').map;
-									var $input		= $(event.target);
-									var $inputId	= $(event.target).data('$input');
-									if (map != null && map[$input.val()] != null) {
-										$inputId.val(map[$input.val()]);
-										return;
+								.select2({
+									multiple: field.multiple,
+	//								openOnEnter: false,
+									minimumInputLength: 1,
+									ajax: {
+										url: 		field['source'],
+										dataType: 	'json',
+										data: 		function (term, page) {
+											return { 'query': term };
+										},
+										results: 	function (data, page) {
+											return {results: data};
+										}
 									}
-									$inputId.val('');
 								})
-								.typeahead({
-									source: function (query, process) {
-										var $this = this;
-										var field = $(this)[0].$element.data('field');
-										return $.get(field['source'], { 'query': query},
-											function(data){
-												var options = [];
-												$this['map'] = {}; 
-												$.each(data,function (i,val){
-													options.push(val.value);
-													$this.map[val.value] = val.id; 
-												});
-												return process(options);
-											}
-										);
-									},
-									updater: function (item) {
-										this.$element.data('$input').val(this.map[item]);
-										//this.$element.parent().find('input[name=' + this.$element.data('field').fieldId + ']').val(this.map[item]);
-										return item;
+								.on('select2-open', function(event) {
+									$('a > .select2-input').addClass('form-control');
+								})
+								.on('select2-close', function(event) {
+									//$(event.target).parent().find('.form-control').css('border-radius', '4px');
+								})								
+
+								if (field.multiple == false) {
+									if (field.value.id != null && field.value.id != false) { 
+										field.$input.select2('data', field.value);
 									}
-								});
+								}
+								else {
+									field.$input.select2('data', field.value);
+								}
+
 							break;
 						case 'date':
 						case 'datetime':
@@ -269,12 +278,17 @@
 			)					
 			.done($.proxy(
 				function(response) {
+					if (this.options.callback != null) {
+						this.options.callback(response);
+						return;
+					}
+					
 					if (response['code'] != true) {
 						return $(document).jAlert(response['result']);
 					}
 					
 					if (this.options.isSubForm == true) {
-						this.$form.parent().modal('hide');
+						this.$form.parents('.modal').first().modal('hide');
 						return;
 					}							
 					if ($.url().param('urlList') != null) {
@@ -314,13 +328,6 @@
 		},
 		
 		required: function($input) {
-			var field = $input.data('field');
-			if (field != null) {
-				if (field.type == 'typeahead') { // Mejorar esta parte, capaz conviene implementar herencia en los fields, en vez de estar enchastrando todos con IF S
-					$input = $input.data('$input');
-				}
-			}
-			
 			return ( $input.val().trim() != '');
 		},
 		
@@ -340,7 +347,7 @@
 					if (this.$fileupload == null) {
 						this.$fileupload = $('#fileupload');
 
-						this.$fileupload.on('hidden', 
+						this.$fileupload.on('hidden.bs.modal', 
 							function() {
 								var jForm = $(this).data('jForm');
 								jForm.reloadGallery();
@@ -348,19 +355,7 @@
 						);
 					}
 					
-					this.$fileupload.modal( { backdrop: true, keyboard: false });
-					
-					$(document).off('focusin.modal');
-					
-					var zIndex = $.topZIndex('body > *');
-					this.$fileupload.css( { 'z-index': zIndex + 2 });
-					
-					$('.modal-backdrop').hide();
-			
-					$('.modal-backdrop:last')
-						.css( {'opacity': 0.3,  'z-index': zIndex + 1 } )
-						.unbind()
-						.show();
+					$.showModal(this.$fileupload, false);
 				}
 			, this));
 
@@ -369,6 +364,18 @@
 		
 		reloadGallery: function() {
 			var $gallery = $('.gallery');
+			
+			if ($gallery.data('initGallery') != true) {
+				$gallery.find('.thumbnails').click(function(event) {
+					var target 	= event.target;
+	        		var link 	= target.src ? $(target).parents('a').get(0) : target;
+	        		var options = {index: link, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false},
+	        		links 		= this.getElementsByTagName('a');
+	    			blueimp.Gallery(links, options);				
+				});
+				
+				$gallery.data('initGallery', true);
+			}
 
 			$gallery.find('a').remove();
 			$('tbody', '#fileupload').children().remove();
@@ -384,8 +391,8 @@
 				for (var i=0; i<result.files.length; i++) {
 					var photo = result.files[i];
 					
-					$('<a rel="gallery" data-gallery="gallery" class="span2 thumbnail" />')
-						.append($('<img>').prop('src', photo.thumbnailUrl))
+					$('<a class="thumbnail " />')
+						.append($('<img />').prop('src', photo.thumbnailUrl))
 						.prop('href', photo.url)
 						.prop('title', ''  /*photo.title*/)
 						.appendTo($gallery.find('.thumbnails'));
@@ -476,51 +483,46 @@
 					var options	 	= $subform.jForm('options');
 					options.frmParentId = this;
 					
-					var $modal 			= $('<div class="modal" tabindex="-1" role="dialog" />');
+					var $modal			= $('<div class="modal" role="dialog" />');
+					var $modalDialog 	= $('<div class="modal-dialog" />').appendTo($modal);
+					var $modalContent 	= $('<div class="modal-content" />').appendTo($modalDialog);
 					var $modalBody 		= $('<div class="modal-body" />')
 					var $modalFooter 	= $('<div class="modal-footer" />')
 
-					$subform.addClass('row-fluid').appendTo($modal);
+
+					$subform.removeClass('panel').removeClass('panel-default');
+					$subform.addClass('row-fluid').appendTo($modalContent);
 
 					$modalFooter
-						.append($('<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>'))
+						.append($('<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cerrar</button>'))
 						.append($subform.find('.btn-danger'))
 						.append($subform.find('.btn-primary'));
 					
 					$subform.find('.form-actions').remove();
-					$subform.children().appendTo($modalBody);
+					$subform.find('.panel-body').children().appendTo($modalBody);
+					
+					$subform.find('.panel-heading, .panel-body').remove();
 					
 					$subform
 						.append('\
 							<div class="modal-header"> \
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button> \
-								<h3 id="myModalLabel"> <i class="icon-edit"></i> ' + options.title + '</h3> \
+								<h4 id="myModalLabel"> <i class="icon-edit"></i> ' + options.title + '</h4> \
 							</div> \
 						')
 						.append($modalBody)
 						.append($modalFooter);
 
-					$modal.modal( { backdrop: true, keyboard: false });
-					$modal.on('hidden', function() {
+
+					$.showModal($modal, false);
+					$modal.on('hidden.bs.modal', function() {
 						var jForm = $(this).find('form').data('jForm');
 						jForm.options.frmParentId.loadSubForm(field);
+												
 						$(this).remove();
-						
-						$('.modal-backdrop').last().show();
 					});
-					$modal.find('select, input[type=text]').first().focus();
 
-					$(document).off('focusin.modal');
-					
-					var zIndex = $.topZIndex('body > *');
-					$modal.css( { 'z-index': zIndex + 2 });
-					
-					$('.modal-backdrop').hide();
-			
-					$('.modal-backdrop:last')
-						.css( {'opacity': 0.3,  'z-index': zIndex + 1 } )
-						.unbind()
-						.show();
+					$subform.find('select, input[type=text]').first().focus();
 				}
 			, this));
 		},
@@ -615,8 +617,8 @@
 					for (var i=0; i<result.length; i++) {
 						$('<option />').attr('value', result[i]['id']).text(result[i]['value']).appendTo($field);
 					}
-					$field.sort();
 					$field.val(this.options.fields[$field.attr('name')].value);
+					$field.select2();
 				}
 			, this));			
 		},

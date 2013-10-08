@@ -264,11 +264,14 @@ $.extend({
 		var isLoading = ($.countProcess > 0);
 
 	
-		$('#divWaiting').css( {
-			'display':	isLoading == true ? 'block' : 'none',
-			'z-index': 	$.topZIndex('body > *') + 1
-		} );
-		document.body.className	=  (isLoading == true ? 'isLoading' : '');
+		$('#divWaiting').css( { 'display':	isLoading == true ? 'block' : 'none' } );
+		
+		$('#divWaiting').appendTo('body');
+		
+		$('body').removeClass('isLoading');
+		if (isLoading == true) {
+			$('body').addClass('isLoading');
+		}
 	},	
 	
 	goToUrl: function(url) {
@@ -310,9 +313,33 @@ $.extend({
 		
 		$('.menu div ul.menuAdmin li a:first')
 			.html('<i class="icon-gear icon-2x" />')
-			.addClass('btn btn-mini')
+			.addClass('btn btn-xs btn-default')
 			.addClass('dropdown-toggle')
 			.attr('data-toggle', 'dropdown');
+	},
+	
+	showModal: function($modal, keyboard) {
+		$('body').addClass('modal-open');
+		
+		$modal.modal( { 'backdrop': 'static', 'keyboard': keyboard });
+
+		
+		$(document).unbind('hidden.bs.modal');
+		$(document).bind('hidden.bs.modal', function () {
+			$(document.body).removeClass('modal-open');
+			if ($('.modal-backdrop').length > 0) {
+				$('.modal-backdrop').last().show();
+				$('body').addClass('modal-open');
+			}			
+		}); 
+		
+		$(document).off('focusin.modal');
+		
+		$('.modal-backdrop').hide();
+
+		$('.modal-backdrop:last')
+			.css( {'opacity': 0.3  } )
+			.show();		
 	}
 });
 
@@ -359,9 +386,10 @@ $(window).resize(function() {
 });
 
 function resizeWindow() {
+	return;
 	$('.content')
 		.css('min-height', 1)
-		.css('min-height', $(document).outerHeight(true) - $('.menu').offset().top - $('.menu').outerHeight(true) - $('#footer').outerHeight(true) ); 
+		.css('min-height', $(document).outerHeight(true) - $('.menu').offset().top - $('.menu').outerHeight(true) - $('footer').outerHeight(true) ); 
 }
 
 function cn(value) {

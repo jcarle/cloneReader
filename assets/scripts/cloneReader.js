@@ -1,7 +1,7 @@
 cloneReader = {
 	init: function(aFilters) {
 		this.$container = $('#cloneReader');
-		this.$toolBar 	= $('<div class="btn-toolbar" />').appendTo(this.$container);
+		this.$toolBar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$container);
 		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$container); 
 		this.$ulEntries	= $('<ul class="ulEntries"/>').appendTo(this.$container);
 		
@@ -146,53 +146,72 @@ cloneReader = {
 	},
 	
 	renderMenu: function() {
+		
+//<nav class="navbar navbar-default" role="navigation" id="header">		
+
+//<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+
 		this.$toolBar.html(' \
-			<a title="Expand" class="expand"> <i class="icon-exchange"  /> </a> \
-			<a title="Maximize" class="tooglePageHeader"> <i class="icon-resize-full"  /> </a> \
-			<div class="btn-group add" > \
-				<a title="Add feed" > <i class="icon-plus" /> </a> \
-			</div>\
-			<div class="btn-group feedSettings" > \
-				<a class="disabled" title="Feed settings"> Feed settings </a> \
-				<a class="dropdown-toggle" data-toggle="dropdown" title="Feed settings" > <span class="caret" /> </a> \
-				<ul class="dropdown-menu popupFeedSettings" /> \
+			<div class="navbar-header"> \
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex2-collapse"> \
+					<span class="sr-only">Toggle navigation</span> \
+					<span class="icon-bar"></span> \
+					<span class="icon-bar"></span> \
+					<span class="icon-bar"></span> \
+				</button> \
 			</div> \
-			<div class="btn-group filterSort" > \
-				<a class="disabled" title="Sort"/> \
-				<a class="dropdown-toggle" data-toggle="dropdown" title="Sort"> \
-					<span class="caret" /> \
-				</a> \
-				<ul class="dropdown-menu" > \
-					<li class="filterNewestSort"> <a> sort by newest </a> </li> \
-					<li class="filterOldestSort"> <a> sort by oldest </a> </li> \
-				</ul> \
-			</div> \
-			<div class="btn-group filterUnread" > \
-				<a class="disabled"/> \
-				<a class="dropdown-toggle" data-toggle="dropdown" > \
-					<span class="caret" /> \
-				</a> \
-				<ul class="dropdown-menu" > \
-					<li class="filterAllItems"> <a> all items </a> </li> \
-					<li class="filterOnlyUnread" > <a> <span class="count" /> new items </a> </li> \
-				</ul> \
-			</div> \
-			<div class="btn-group" data-toggle="buttons-radio" > \
-				<a class="viewList" title="List view" > \
-					<i class="icon-align-justify" /> \
-				</a> \
-				<a class="viewDetail" title="Detail view" > \
-					<i class="icon-th-list" /> \
-				</a> \
-			</div> \
-			<a title="Reload" class="reload" > <i class="icon-refresh" /> </a> \
-			<div class="btn-group"  > \
-				<a title="Prev" class="prev" > <i class="icon-caret-up" /> </a> \
-				<a title="Next" class="next" > <i class="icon-caret-down" /> </a> \
+			<div class="collapse navbar-collapse navbar-ex2-collapse "> \
+				<div class="btn-toolbar pull-left nav navbar-nav"> \
+					<a title="Expand" class="expand"> <i class="icon-exchange"  /> </a> \
+					<a title="Maximize" class="tooglePageHeader"> <i class="icon-resize-full"  /> </a> \
+				</div> \
+				<div class="btn-toolbar pull-right"> \
+					<div class="btn-group add" > \
+						<a title="Add feed" > <i class="icon-plus" /> </a> \
+					</div>\
+					<div class="btn-group feedSettings" > \
+						<a class="disabled" title="Feed settings"> Feed settings </a> \
+						<a class="dropdown-toggle" data-toggle="dropdown" title="Feed settings" > <span class="caret" /> </a> \
+						<ul class="dropdown-menu popupFeedSettings" /> \
+					</div> \
+					<div class="btn-group filterSort" > \
+						<a class="disabled" title="Sort"/> \
+						<a class="dropdown-toggle" data-toggle="dropdown" title="Sort"> \
+							<span class="caret" /> \
+						</a> \
+						<ul class="dropdown-menu" > \
+							<li class="filterNewestSort"> <a> sort by newest </a> </li> \
+							<li class="filterOldestSort"> <a> sort by oldest </a> </li> \
+						</ul> \
+					</div> \
+					<div class="btn-group filterUnread" > \
+						<a class="disabled"/> \
+						<a class="dropdown-toggle" data-toggle="dropdown" > \
+							<span class="caret" /> \
+						</a> \
+						<ul class="dropdown-menu" > \
+							<li class="filterAllItems"> <a> all items </a> </li> \
+							<li class="filterOnlyUnread" > <a> <span class="count" /> new items </a> </li> \
+						</ul> \
+					</div> \
+					<div class="btn-group" data-toggle="buttons-radio" > \
+						<a class="viewList" title="List view" > \
+							<i class="icon-align-justify" /> \
+						</a> \
+						<a class="viewDetail" title="Detail view" > \
+							<i class="icon-th-list" /> \
+						</a> \
+					</div> \
+					<a title="Reload" class="reload" > <i class="icon-refresh" /> </a> \
+					<div class="btn-group"  > \
+						<a title="Prev" class="prev" > <i class="icon-caret-up" /> </a> \
+						<a title="Next" class="next" > <i class="icon-caret-down" /> </a> \
+					</div> \
+				</div> \
 			</div> \
 		');
 		
-		this.$toolBar.find('> a, > div > a').addClass('btn'); // btn-small');
+		this.$toolBar.find('.btn-toolbar > a, .btn-toolbar > div > a').addClass('btn').addClass('btn-default').addClass('btn-sm');
 		
 		this.$toolBar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) } );
 		this.$toolBar.find('.tooglePageHeader').click(function() { cloneReader.tooglePageHeader(!cloneReader.aFilters.isMaximized, true) } );

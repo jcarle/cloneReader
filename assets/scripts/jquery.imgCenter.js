@@ -78,9 +78,14 @@
 				// reset properties
 				org_image.css({'margin': 0, 'width': 'auto', 'height': 'auto' });
 
+
+					//var tmp = new Image()
+//					var $imgTmp = $('<img />');
+//					$imgTmp.attr('src', $(org_image).attr('src'));
+
 				// Get image properties.		
-				var imgWidth 	= parseInt(org_image.width());
-				var imgHeight 	= parseInt(org_image.height());
+				var imgWidth 	= parseInt(org_image.get(0).width);
+				var imgHeight 	= parseInt(org_image.get(0).height);
 				var imgAspect 	= imgWidth / imgHeight;
 	
 				// Center the image.

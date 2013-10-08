@@ -52,10 +52,12 @@
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
 			);
 
-			this.$modal		= $('<div role="dialog" class="modal jAlert" />');
-			this.$body 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modal);
-			this.$footer 	= $('<div />').addClass('modal-footer').appendTo(this.$modal);
-			this.$btn 		= $('<button data-dismiss="modal" class="btn" />').text(this.options.isConfirm == true ? 'Cancelar' : 'Cerrar').appendTo(this.$footer);
+			this.$modal			= $('<div role="dialog" class="modal in jAlert" />');
+			this.$modalDialog 	= $('<div class="modal-dialog" />').appendTo(this.$modal);
+			this.$modalContent 	= $('<div class="modal-content" />').appendTo(this.$modalDialog);
+			this.$body	 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modalContent);
+			this.$footer	 	= $('<div />').addClass('modal-footer').appendTo(this.$modalContent);
+			this.$btn 			= $('<button data-dismiss="modal" class="btn btn-default" />').text(this.options.isConfirm == true ? 'Cancelar' : 'Cerrar').appendTo(this.$footer);
 			
 			if (this.options.isConfirm == true) {
 				$('<button data-dismiss="modal" class="btn btn-primary" />')
@@ -87,41 +89,24 @@
 				}
 			, this)));
 			
-			this.$modal
-				.modal( {
-					backdrop: true,
-					keyboard: true
-				})
-				.css({ 'top': 200 })
-				.on('hidden', $.proxy(
-					function(event) {
-						$(this).remove();
-						$('.modal-backdrop').show();
-						$(document).unbind('keydown.jAlertKeydown');
+			
+			$.showModal(this.$modal, true);
+			this.$modal.on('hidden.bs.modal', $.proxy(
+				function(event) {
+					$(this).remove();
+					$(document).unbind('keydown.jAlertKeydown');
 						
-						if (this.options.isConfirm == false) {
-							if(this.options.callback instanceof Function) {
-								this.options.callback();
-							}
-							this.$input.focus();
+					if (this.options.isConfirm == false) {
+						if(this.options.callback instanceof Function) {
+							this.options.callback();
 						}
+						this.$input.focus();
 					}
-				, this));
+				}
+			, this));				
 			
 			this.$btn.focus();
-			//$(document).focus();
-			$(document).off('focusin.modal');
-			
-			var zIndex = $.topZIndex('body > *');
-			this.$modal.css( { 'z-index': zIndex + 2 });
-
-			$('.modal-backdrop').hide();
-			
-			
-			$('.modal-backdrop:last')
-				.css( {'opacity': 0.3,  'z-index': zIndex + 1 } )
-				.unbind()
-				.show();
+			$(document).focus();
 		}
 	}
 })($);

@@ -1,56 +1,59 @@
 <?php $this->load->view('includes/gallery'); ?>
 
-
-<div class="modal" tabindex="-1" role="dialog"  style="display:none" id="fileupload">
-	<form action="<?php echo base_url() . 'files/save'; ?>"  method="POST" enctype="multipart/form-data">
-		<?php echo form_hidden('entityName', $fileupload['entityName']); ?>
-		<?php echo form_hidden('entityId', $fileupload['entityId']); ?>		
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-			<h3 id="myModalLabel"> <i class="icon-edit"></i> Editar fotos</h3>
-		</div>
-		
-		<div class="modal-body" >
-			<div class="row-fluid fileupload-buttonbar">
-				<div class="span6">
-					<!-- The fileinput-button span is used to style the file input field as button -->
-					<span class="btn btn-success fileinput-button">
-						<i class="icon-plus icon-white"></i>
-						<span>Agregar fotos...</span>
-						<input type="file" name="userfile" multiple>
-					</span>
-					<button type="submit" class="btn btn-primary start hide">
-						<i class="icon-upload icon-white"></i>
-						<span>Start upload</span>
-					</button>
-					<button type="reset" class="btn btn-warning cancel hide">
-						<i class="icon-ban-circle icon-white"></i>
-						<span>Cancel upload</span>
-					</button>
-					<button type="button" class="btn btn-danger delete">
-						<i class="icon-trash icon-white"></i>
-						<span>Eliminar</span>
-					</button>
-					<input type="checkbox" class="toggle">
-					<!-- The loading indicator is shown during file processing -->
-					<span class="fileupload-loading"></span>
+<div class="modal" style="display:none" id="fileupload">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="<?php echo base_url() . 'files/save'; ?>"  method="POST" enctype="multipart/form-data">
+				<?php echo form_hidden('entityName', $fileupload['entityName']); ?>
+				<?php echo form_hidden('entityId', $fileupload['entityId']); ?>		
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+					<h4 id="myModalLabel"> <i class="icon-edit"></i> Editar fotos</h4>
 				</div>
-				<!-- The global progress information -->
-				<div class="span6 fileupload-progress fade">
-					<!-- The global progress bar -->
-					<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-						<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
+				
+				<div class="modal-body" >
+					<div class="row fileupload-buttonbar">
+						<div class="span6">
+							<!-- The fileinput-button span is used to style the file input field as button -->
+							<span class="btn btn-success fileinput-button">
+								<i class="icon-plus icon-white"></i>
+								<span>Agregar fotos...</span>
+								<input type="file" name="userfile" multiple>
+							</span>
+							<button type="submit" class="btn btn-primary start hide">
+								<i class="icon-upload icon-white"></i>
+								<span>Start upload</span>
+							</button>
+							<button type="reset" class="btn btn-warning cancel hide">
+								<i class="icon-ban-circle icon-white"></i>
+								<span>Cancel upload</span>
+							</button>
+							<button type="button" class="btn btn-danger delete">
+								<i class="icon-trash icon-white"></i>
+								<span>Eliminar</span>
+							</button>
+							<input type="checkbox" class="toggle">
+							<!-- The loading indicator is shown during file processing -->
+							<span class="fileupload-loading"></span>
+						</div>
+						<!-- The global progress information -->
+						<div class="span6 fileupload-progress fade">
+							<!-- The global progress bar -->
+							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+								<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
+							</div>
+							<!-- The extended global progress information -->
+							<div class="progress-extended">&nbsp;</div>
+						</div>
 					</div>
-					<!-- The extended global progress information -->
-					<div class="progress-extended">&nbsp;</div>
-				</div>
-			</div>
-			
-			<div style="overflow: auto; max-height: 500px;">
-				<table role="presentation" class="table table-hover"><tbody class="files"></tbody></table>
-			</div>						
-		</div>		
-	</form>
+					
+					<div style="overflow: auto; max-height: 500px;">
+						<table role="presentation" class="table table-hover"><tbody class="files"></tbody></table>
+					</div>						
+				</div>		
+			</form>
+		</div>
+	</div>
 </div>
 
 

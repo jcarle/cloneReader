@@ -42,6 +42,6 @@ foreach ($list['data'] as $row) {
 	</tbody>
 </table>
 
-<a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-small btnAdd">
+<a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-default btn-sm btnAdd">
 	<i class="icon-plus"> </i> Agregar
 </a>

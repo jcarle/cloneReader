@@ -67,7 +67,8 @@
 		});
 		this.$filter = this.$form.find('input[name=filter]');
 		
-		this.$form.find('.icon-remove')
+		this.$form.find('.icon-remove').parent()
+			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
 				function (event){
 					if (this.$filter.val().trim() == '') {

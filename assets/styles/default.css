@@ -8,10 +8,11 @@ body.isLoading, body.isLoading * {
 #divWaiting {
 	display: block;
 	margin: -7px auto 0;
-	opacity: 0.9;
+	opacity: 0.85;
 	text-align: center;
-	position: fixed;
-	width: 140px;
+	padding: 10px;
+	width: 200px;
+	border-radius:5px;	
 }
 	#divWaiting small  {
 		font-size: small;
@@ -32,69 +33,53 @@ body.isLoading, body.isLoading * {
 	margin:0 auto;
 	max-width: 1024px;
 	overflow: hidden;
+	border:0;
+	box-shadow:none;
 }
-	#header div {
-		margin: 0;
-		padding:5px;
-		width:auto;
-		overflow: hidden;
-		position:relative;
+	#header .search { }
+		#header div .search i {
+			color: #555555;
+		}
+	#header ul.menuProfile  li a {
+		color: #3176CB;
 	}
-		#header div .search {
-			clear: both;
-			float: right;
-			margin: 5px 0 0 0;
-			position: relative;
-		}
-			#header div .search i {
-				color: #555555;
-			}
-		#header div ul {
-			list-style:none;
-			background:black;
-			padding: 5px 20px;
-			margin: 0 0 0 230px;
-		}
-			#header div ul li {
-				display: inline;
-			}
-				#header div ul li a {
-					background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
-					border-radius: 3px;
-					font-family: arial;
-					font-weight: bold;
-					padding: 3px 10px;
-					color: white;
-					text-decoration: none;
-				}
-		#header div ul.menuProfile {
-			background: none repeat scroll 0 0 transparent;
-			list-style: none outside none;
-			position: relative;
-			margin: 0;
-			padding: 0;
-			float: right;
-			font-size: small;
+		#header ul.menuProfile  li a i {
+			color: #555555;
 		}			
-			#header div ul.menuProfile  li {
-				float:left;
-				border-left: 1px solid #CCCCCC;
+@media (min-width: 768px) {
+	#header .navbar-collapse {
+		float:right;
+	}
+	
+	#header .search {
+		clear: both;
+		float: right;
+		margin: 5px 0 0 0;
+		position: relative;
+		max-width:350px;
+	}	
+	#header ul.menuProfile {
+		background: none repeat scroll 0 0 transparent;
+		list-style: none outside none;
+		position: relative;
+		margin: 0;
+		padding: 0;
+		float: right;
+		font-size: small;
+	}			
+		#header ul.menuProfile  li {
+			border-left: 1px solid #CCCCCC;
+		}
+		#header ul.menuProfile  li:last-child {
+			border-right: 1px solid #CCCCCC;
+		}
+			#header ul.menuProfile  li a {
+				background: none repeat scroll 0 0 transparent;
+				display: block;
+				font-weight: normal;
+				padding: 0 15px;
 			}
-			#header div ul.menuProfile  li:last-child {
-				border-right: 1px solid #CCCCCC;
-			}
-				#header div ul.menuProfile  li a {
-					background: none repeat scroll 0 0 transparent;
-					color: #3176CB;
-					display: block;
-					font-weight: normal;
-					padding: 0 15px;
-				}
-				#header div ul.menuProfile  li a i {
-					color: #555555;
-				}
-				
+}		
 
 
 .menu {
@@ -147,7 +132,6 @@ body.isLoading, body.isLoading * {
 		}
 				.menu div ul.menuAdmin > li:first-child > a {
 					line-height: 1px;
-					padding: 2px 6px;
 				}
 					.menu div ul.menuAdmin > li:first-child > a i { }
 			.menu div ul.menuAdmin .dropdown-submenu-left {
@@ -177,9 +161,6 @@ body.isLoading, body.isLoading * {
 				  border-right-color: #CCCCCC;
 				  margin-top: 5px;
 				  margin-left: -10px;
-				}
-				.menu div ul.menuAdmin .dropdown-submenu-left:hover > a:before {
-					border-right-color: white;
 				}
 				.menu div ul.menuAdmin .dropdown-submenu-left > a:after,
 				.menu div ul.menuAdmin .dropdown-submenu-left:hover > a:after {
@@ -229,12 +210,6 @@ body.isLoading, body.isLoading * {
 	margin: 20px auto;
 	max-width: 400px;	
 }
-		#frmLogin fieldset .control-label {
-			max-width: 100px;
-		}
-		#frmLogin fieldset input {
-			max-width: 206px;
-		}
 
 
 .btn-facebook{
@@ -280,13 +255,10 @@ body.isLoading, body.isLoading * {
 .paginatedList {
 	margin: 0 5px;
 }
-	.paginatedList form {
-		margin: 0 0 10px 0;
-	}
-		.paginatedList fieldset .icon-remove {
-			cursor: pointer;
-			color: #555555;
-		}	
+	.paginatedList form {	}
+		.paginatedList form > .form-group {
+			max-width:300px;
+		}
 	.paginatedList table {
 		border: 1px solid #ccc;
 		box-shadow: 0 0 5px #ccc;
@@ -354,27 +326,13 @@ body.isLoading, body.isLoading * {
 					border-bottom-right-radius:5px;
 				}
 
-.jForm {
-	border: 1px solid #CCCCCC;
-	border-radius: 5px 5px 5px 5px;
-	box-shadow: 2px 2px 6px gray;
-	margin:0 5px 20px 5px;
-	padding: 0;
-	position: relative;
-	font-size: small;
-	color:#333;	
-}
-.modal .jForm {
-	border: 0 none !important;
-	border-radius: 0 0 0 0;
-	box-shadow: 0 0 0 white;
-	margin: 0;
-}
+.jForm { }
 	.jForm .control-group {
 		margin: 10px 5px;
 	}
 		.jForm .control-label {
 			cursor: default;
+			font-weight: normal;
 		}
 		.jForm fieldset .raty {
 			display: inline-block;
@@ -382,13 +340,10 @@ body.isLoading, body.isLoading * {
 		}			
 		.jForm fieldset .form_datetime input {
 			width:auto;
+		}
+		.jForm fieldset .form_datetime span {
+			cursor:pointer;
 		}	
-/*		.jForm fieldset .link {
-			margin: 0 0 0 180px;
-		}*/
-/*		.jForm fieldset input[type=checkbox] {
-			width: auto;
-		}*/
 		.jForm fieldset .icon-remove {
 			color: #555555;
 		}
@@ -414,7 +369,7 @@ body.isLoading, body.isLoading * {
 					width: auto;
 					margin-left: 10px;
 				}
-				.jForm fieldset .groupCheckBox li label {
+				.jForm fieldset .groupCheckBox li span {
 					display: inline-block;
 					margin-left: 10px;					
 				}
@@ -446,6 +401,7 @@ body.isLoading, body.isLoading * {
 					display: block;
 					float: none;
 					width: auto;
+					margin:0 0 10px 0;
 				}
 		.jForm fieldset .subform {	}
 			.jForm fieldset .subform table {
@@ -498,29 +454,57 @@ body.isLoading, body.isLoading * {
 					border: 1px solid #dddddd;
 					border-top: none;
 				}
-										
+				
+		.jForm .gallery a.thumbnail {
+			background: white;
+			width:115px;
+			height:115px;
+			display:inline-block;
+		}
 	.jForm .form-actions {
 		border-radius: 0 0 5px 5px;
 		text-align: right;
 		margin: 0;
 	}
 	
+footer {
+	background-color: #F5F5F5;
+	border-top: 1px solid #E5E5E5;
+	margin-top: 70px;
+	padding: 30px 0;
+	text-align: center;
+}
+	footer .footer-links {
+		margin: 10px 0;
+	}
+	footer .footer-links li:first-child {
+		padding-left: 0;
+	}
+	footer .footer-links li {
+		display: inline;
+	}
 
 
+.jForm .controls .gallery a.thumbnail {
+	margin: 10px 10px 0 0;
+}
+
+
+.imgCenterFrame {
+	width: 100%;
+	height: 100%;
+	position:relative;
+}
 
 .gallery a.thumbnail {
 	background: white;
-	margin: 10px 10px 0 0;
+	width:75px;
+	height:75px;
+	display:inline-block;
 }
-	.gallery a img {
-		max-width: none;
-	}
 	.gallery a  > img,
 	.gallery a  > .imgCenterFrame {
-		width: auto;
-		height: 100px;
 		display:none;
-		position:relative;
 	}
 		
 		
@@ -536,6 +520,7 @@ body.isLoading, body.isLoading * {
 	width: 20px;
 }		
 		
+
 		
 
 .ui-datepicker select {
@@ -553,9 +538,17 @@ table .numeric, table .date, table .datetime, table .text-right {
 	width: 5px;
 }
 
+
 .modal {
-	width: 900px; 
-	margin-left: -450px; 
+	overflow: auto;
+}  
+.modal-dialog {
+	max-width: 900px;
+	width: auto; 
+}
+.modal.jAlert .modal-dialog {
+	max-width: 560px;
+	width: auto;
 }
 
 .modal.modal-gallery {
@@ -565,40 +558,6 @@ table .numeric, table .date, table .datetime, table .text-right {
 #fileupload .modal-body {
 	max-height: none;
 }
-
-.modal.jAlert {
-	margin-left: -280px;
-	width: 560px;
-}
-.modal-body {
-	overflow: visible;
-}
-.modal-footer {
-	position: relative;
-	z-index: 1;
-}
-.modal-header h3 {
-	text-transform: capitalize;
-}
-
-.modal-loading .modal-image {
-  background: url(../images/loadingLarge.gif) center no-repeat;
-}
-
-@media (max-width: 950px) {
-	.modal,
-	.modal.jAlert {
-		position: fixed;
-		top: 20px;
-		right: 20px;
-		left: 20px;
-		width: auto;
-		margin: 0;
-	}
-}
-
-
-
 
 
 

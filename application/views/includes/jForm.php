@@ -3,18 +3,22 @@ if (!isset($form['action'])) {
 	$form['action'] = base_url().$this->uri->uri_string(); 
 }
 
-echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'jForm form-horizontal')); 
+echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'panel panel-default jForm form-horizontal', 'role' => 'form' ));
+
+if (isset($title)) {
+	//echo '<div class="panel-heading">'.$title.'</div>';
+}
+echo '	<div class="panel-body"> '; 
 
 $this->load->view('includes/formError'); 
 
 $aFields 		= array();
-$inputSize		= 'span11';
 
 foreach ($form['fields'] as $name => $field) {
 	$sField = '
-		<fieldset class="control-group">
-			'.form_label(element('label', $field), null, array('class' => 'control-label')).'
-			<div class="controls"> %s </div>
+		<fieldset class="form-group">
+			'.form_label(element('label', $field), null, array('class' => 'col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label')).'
+			<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> %s </div>
 		</fieldset>';
 	
 	switch ($field['type']) {
@@ -22,7 +26,7 @@ foreach ($form['fields'] as $name => $field) {
 			$aFields[] = form_hidden($name, $field['value']);
 			break;
 		case 'text':
-			$properties = array('name' => $name, 'value' => $field['value'], 'class' => $inputSize, 'placeholder' => element('placeholder', $field));
+			$properties = array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'placeholder' => element('placeholder', $field));
 			if (element('disabled', $field) == true) {
 				$properties += array('disabled' => 'disabled');
 			} 
@@ -31,33 +35,32 @@ foreach ($form['fields'] as $name => $field) {
 		case 'date':
 		case 'datetime':
 			$aFields[] = sprintf($sField, 
-				'<div class="input-append">
-					'.form_input(array('name' => $name, 'value' => $field['value'], 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => 'dd/mm/yyyy'.($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
-					<span class="add-on"><i class="icon-remove"></i></span>
-					<span class="add-on"><i class="icon-th"></i></span>
+				'<div class="input-group" style="width:1px">
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => 'dd/mm/yyyy'.($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
+					<span class="input-group-addon add-on"><i class="icon-remove"></i></span>
+					<span class="input-group-addon add-on"><i class="icon-th"></i></span>
 				</div>');
 			break;
 		case 'password':
-			$aFields[] = sprintf($sField, form_password(array('name' => $name, 'value' => $field['value'], 'class' => $inputSize)));
+			$aFields[] = sprintf($sField, form_password(array('name' => $name, 'value' => $field['value'], 'class' => 'form-control')));
 			break;			
 		case 'textarea':
-			$aFields[] = sprintf($sField, form_textarea($name, $field['value'], 'class="'.$inputSize.'"'));
+			$aFields[] = sprintf($sField, form_textarea($name, $field['value'], 'class="form-control"'));
 			break;			
 		case 'typeahead':
 			$aFields[] = sprintf($sField, 
-				form_input(array('name' => $name, 'value' => reset($field['value']), 'class' => $inputSize, 'autocomplete' => 'off')).
-				form_hidden($field['fieldId'], ((int)key($field['value']) == 0 ? '' : (int)key($field['value'])) )
+				'<input name="'.$name.'"  class="form-control" />'
 			);
 			break;			
 		case 'dropdown':
-			$aFields[] = sprintf($sField, form_dropdown($name, element('source', $field, array()), $field['value'], 'class="'.$inputSize.'"'));
+			$aFields[] = sprintf($sField, form_dropdown($name, element('source', $field, array()), $field['value'], 'class="form-control"'));
 			break;						
 		case 'groupCheckBox':
-			$sTmp = '<ul class="groupCheckBox '.$inputSize.'">';
+			$sTmp = '<ul class="groupCheckBox ">';
 			foreach ($field['source'] as $key => $value) {
 				$sTmp .= '<li>' 
 					.form_checkbox($name, $key, element($key, $field['value']))
-					.form_label($value.' - '.$key)
+					.'<span>'.$value.' - '.$key.'</span>'
 					.'</li>';
 			}
 			$sTmp .= '</ul>';
@@ -73,18 +76,18 @@ foreach ($form['fields'] as $name => $field) {
 			);
 				
 			$aFields[] = sprintf($sField, '
-					<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="span11 gallery well" >
-						<button type="button" class="btn btn-success btn-small btnEditPhotos fileinput-button">
+					<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >
+						<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">
 							<i class="icon-picture" ></i>
 							Editar fotos
 						</button>
-						<div class="span12 thumbnails"" ></div>
+						<div class="thumbnails" ></div>
 					</div>
 				');
 			break;
 		case 'subform':
 			$aFields[] = sprintf($sField, '
-				<div name="'.$name.'" class="subform '.$inputSize.'"> 
+				<div name="'.$name.'" class="subform "> 
 					<div class="alert alert-info">
 						<i class="icon-spinner icon-spin icon-large"></i>
 						<small>cargando ...</small>
@@ -93,14 +96,14 @@ foreach ($form['fields'] as $name => $field) {
 			');
 			break;
 		case 'tree':
-			$aFields[] = '<fieldset class="tree">'
+			$aFields[] = '<fieldset class="form-group tree">'
 					.renderTree($field['source'], $field['value'])	
 				.'</fieldset>';			
 			break;
 		case 'link':
 			$sField = '
 			<fieldset class="control-group">
-				<div class="controls"> %s </div>
+				<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 col-sm-offset-3 col-md-offset-3 col-lg-offset-3"> %s </div>
 			</fieldset>';		
 			$aFields[] = sprintf($sField, anchor($field['value'], $field['label']));
 			break;
@@ -109,14 +112,14 @@ foreach ($form['fields'] as $name => $field) {
 			break;
 		case 'upload':
 			$aFields[] = sprintf($sField, '
-				<div class="span5">
+				<div class="col-md-5">
 					<span class="btn btn-success fileinput-button">
 						<i class="icon-plus icon-white"></i>
 						<span>Add File...</span>
 						<input type="file" name="userfile" >
 					</span>
 				</div>
-				<div class="span5 fileupload-progress fade">
+				<div class="col-md-5 fileupload-progress fade">
 					<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
 						<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
 					</div>
@@ -131,7 +134,7 @@ echo implode(' ', $aFields);
 
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
-	$form['buttons'][] = '<button type="button" class="btn" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> Volver</button> ';
+	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> Volver</button> ';
 	if (isset($form['urlDelete'])) {
 		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> Eliminar </button>';
 	}
@@ -139,7 +142,8 @@ if (!isset($form['buttons'])) {
 }
 
 
-echo ' <div class="form-actions" > ';
+echo ' </div>
+		<div class="form-actions panel-footer" > ';
 foreach ($form['buttons'] as $button) {
 	echo $button.' ';
 }

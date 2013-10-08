@@ -1,13 +1,9 @@
-<div id="modal-gallery" class="modal modal-gallery hide fade modal-fullscreen " tabindex="-1">
-	<div class="modal-header">
-		<a class="close" data-dismiss="modal">&times;</a>
-		<h3 class="modal-title"></h3>
-	</div>
-	<div class="modal-body"><div class="modal-image"></div></div>
-	<div class="modal-footer">
-		<a class="btn modal-download" target="_blank"><i class="icon-download"></i> Download</a>
-		<a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000"><i class="icon-play icon-white"></i> Slideshow</a>
-		<a class="btn btn-info modal-prev"><i class="icon-arrow-left icon-white"></i> Anterior</a>
-		<a class="btn btn-primary modal-next">Siguiente <i class="icon-arrow-right icon-white"></i></a>
-	</div>
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
 </div>

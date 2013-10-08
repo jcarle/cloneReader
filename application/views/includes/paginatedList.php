@@ -1,16 +1,17 @@
 <div class="paginatedList">
-	<form method="get" class="form-inline navbar-form navbar-inner">
-		<fieldset>
-			<label class="checkbox">Filtros</label>
-			<div class="input-prepend">
-				<span class="add-on">
-					<i class="icon-remove" ></i>
-				</span>
-				<?php echo form_input('filter', $this->input->get('filter')); ?>
+	<div class="panel panel-default" >
+		<form method="get" class="panel-heading form-inline" role="search">
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<i class="icon-remove" ></i>
+					</span>
+					<?php echo form_input(array('name' => 'filter',  'value' => $this->input->get('filter'), 'class' => 'form-control', 'placeholder' => 'buscar')); ?>
+				</div>
 			</div>
-			<input value="Buscar" type="submit" class="btn" />
-		</fieldset>
-	</form>
+			<input value="Buscar" type="submit" class="btn btn-default" />
+		</form>
+	</div>
 				
 	<table class="table table-hover table-condensed">
 		<thead>
@@ -66,19 +67,19 @@ foreach ($list['data'] as $row) {
 		</tbody>
 	</table>
 
-	<div class="alert alert-info footer">
+	<div class="panel panel-default footer">
+		<div class="panel-footer">
 <?php
 if ($urlDelete == true) {
-	echo '<a class="btnDelete btn btn-small btn-danger" > <i class="icon-trash icon-large"></i> Delete </a>';
+	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> Delete </a>';
 }
 ?>
-		<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-small btn-success">
-			<i class="icon-file-alt icon-large"></i>
-			Agregar
-		</a>
-		<span><?php echo $list['foundRows']; ?> rows</span>
-		<div class="pagination pagination-small pagination-right">
-			<ul>
+			<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-sm btn-success">
+				<i class="icon-file-alt icon-large"></i>
+				Agregar
+			</a>
+			<span><?php echo $list['foundRows']; ?> rows</span>
+			<ul class="pagination pagination-small pagination-right">
 <?php
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
@@ -108,7 +109,8 @@ $this->pagination->initialize(array(
 			
 echo $this->pagination->create_links();
 ?>
-		</ul>
+			</ul>
+		</div>
 	</div>
 </div>
 

@@ -30,14 +30,13 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
-$CI->carabiner->js('jquery.topzindex.js');
 $CI->carabiner->js('moment.min.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('jqueryExtension.js');
 $CI->carabiner->js('jquery.jAlert.js');
 
 $CI->carabiner->css('bootstrap.css');
-$CI->carabiner->css('bootstrap-responsive.css');
+$CI->carabiner->css('bootstrap-theme.css');
 $CI->carabiner->css('font-awesome.css');
 
 if (isset($aJs)) {
@@ -46,13 +45,26 @@ if (isset($aJs)) {
 	}
 }
 
+if (!isset($hasForm)) {
+	$hasForm = false;
+}
+if ($view == 'includes/jForm') {
+	$hasForm = true;
+}
+
 // FIXME: pensar si esto se puede resolver de un modo mas elegante
 if ($view == 'includes/paginatedList') { 
 	$CI->carabiner->js('jquery.paginatedList-1.0.js');
 }
-if ($view == 'includes/jForm') {
+if ($hasForm == true) {
+	if (!isset($form)) {
+		$form = array('fields' => array());	
+	}
+	
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
+	$CI->carabiner->js('select2.js');
+	$CI->carabiner->js('select2_locale_es.js');
 	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.es.js');
@@ -74,27 +86,25 @@ if ($view == 'includes/jForm') {
 		$CI->carabiner->js('jquery.fileupload-process.js');
 		
 		$CI->carabiner->js('jquery.imgCenter.js');
-		$CI->carabiner->js('load-image.js');
-		$CI->carabiner->js('bootstrap-image-gallery.js');
+		$CI->carabiner->js('blueimp-gallery.js');
 	}
 
 		
-	$CI->carabiner->js('jquery.jForm.js');		
-		
-	
+	$CI->carabiner->js('jquery.jForm.js');
+	$CI->carabiner->css('select2.css');
+	$CI->carabiner->css('select2-bootstrap.css');
 	$CI->carabiner->css('bootstrap-datetimepicker.css');
 	
 	if (hasGallery($form) == true) {
-		$CI->carabiner->css('bootstrap-image-gallery.css');
+		$CI->carabiner->css('blueimp-gallery.css');
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
 } 
 if (isset($hasGallery) && $hasGallery == true) {
 	$CI->carabiner->js('jquery.imgCenter.js');
-	$CI->carabiner->js('load-image.js');
-	$CI->carabiner->js('bootstrap-image-gallery.js');
+	$CI->carabiner->js('blueimp-gallery.js');
 
-	$CI->carabiner->css('bootstrap-image-gallery.css');
+	$CI->carabiner->css('blueimp-gallery.css');
 	$CI->carabiner->css('jquery.fileupload-ui.css');
 
 }
@@ -131,35 +141,53 @@ $CI->carabiner->display('js');
 ?>	
 	<title><?php echo $title; ?> - cloneReader</title>
 </head>
-<body class="container-fluid">
+<body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
 		<i class="icon-spinner icon-spin icon-large"></i>
 		<small>procesando ...</small>
 	</div>
 	
-	<div id="header">
-		<div>
-		<?php echo anchor('', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-large active')); ?>
-		
-<?php
-echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile');
-?>
-
-			<form class="search  input-prepend input-append">
-				<span class="add-on">
-					<i class="icon-search" ></i>
-				</span>
-				<input type="text" placeholder="search ..." />
-				<button  class="btnSearch btn">Search</button>
-			</form>
+	
+	<nav class="navbar navbar-default" role="navigation" id="header">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<?php echo anchor('', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-lg active')); ?>
 		</div>
-	</div>
-	<div class="menu">
+		<div class="collapse navbar-collapse navbar-ex1-collapse ">
+            
+<?php
+echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav  ');
+?>            
+
+		<ul class="search nav navbar-nav">
+			<li>
+				<form class="form-group  " role="search">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="icon-search" ></i>
+						</span>
+						<input type="text" class="form-control" placeholder="search ..." />
+						<span class="input-group-btn">
+							<button  class="btnSearch btn btn-default">Search</button>
+						</span>
+					</div>
+				</form>
+			</li>
+			</ul>
+		</div>
+	</nav>
+
+	<nav class="menu">
 		<div>
 <?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
 <?php echo renderMenu($CI->cache->file->get('MENU_ADMIN_'.$userId), 'menuAdmin'); ?>
 		</div>
-	</div>	
+	</nav>	
 	
 
 <?php
@@ -192,7 +220,30 @@ function renderMenu($aMenu, $className = null){
 	return $sTmp;
 }
 ?>
-<div class="content row-fluid">
-	<h1><?php echo $title; ?></h1>
+<div class="container content">
+
+<?php
+if (!isset($showTitle)) {
+	$showTitle = true;
+}
+if ($showTitle == true) {
+	echo '	<div class="ddpage-header">
+  				<h1>'. $title .' <small> </small></h1>
+			</div>';
+}
 	
+if (isset($breadcrumb)) {
+	echo '<ol class="breadcrumb">';
+	foreach ($breadcrumb as $link) {
+		if (element('active', $link) == true) {
+			echo '<li class="active"> '.$link['text'].'</li>';			
+		}
+		else {
+			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
+		} 
+	}
+	echo '</ol>';  
+}
+?>		  			
+
 
