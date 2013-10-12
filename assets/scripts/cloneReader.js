@@ -40,14 +40,15 @@ cloneReader = {
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
-		this.$ulFilters.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 }); // TODO: revisar los parametros de niceScroll
-		this.$ulEntries.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 });
+//		this.$ulFilters.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 }); // TODO: revisar los parametros de niceScroll
+//		this.$ulEntries.niceScroll({'cursorcolor': '#CCC', 'cursorwidth': '8', 'scrollspeed': 90, 'mousescrollstep': 65 });
 		
 		this.maximiseUlEntries(this.aFilters.isMaximized, false);
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+			cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false);
 		});
 		
 		this.$ulEntries.scroll($.proxy(
@@ -159,6 +160,7 @@ cloneReader = {
 					<span class="icon-bar"></span> \
 					<span class="icon-bar"></span> \
 				</button> \
+				<button title="Expand" class="navbar-toggle  expand"> <i class="icon-exchange"  /> </button> \
 			</div> \
 			<div class="collapse navbar-collapse navbar-ex2-collapse "> \
 				<div class="btn-toolbar pull-left nav navbar-nav"> \
@@ -1037,8 +1039,9 @@ console.timeEnd("t1");
 		var marginLeft = 0;
 
 		if (value == false) {
-			marginLeft = this.$ulEntries.data('margin-left');
+			marginLeft = this.$ulFilters.outerWidth();
 		}
+		
 		
 		this.aFilters.isMaximized = value;
 // TODO: revisar		
@@ -1109,8 +1112,10 @@ console.timeEnd("t1");
 	},
 	
 	saveData: function(async){
-		if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
-			return;
+		if (this.$ulEntries.getNiceScroll().length != 0) {
+			if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
+				return;
+			}
 		}
 		if (Object.keys(this.aUserEntries).length == 0 && Object.keys(this.aUserTags).length == 0) {
 			return;

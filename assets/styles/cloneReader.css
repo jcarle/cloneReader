@@ -20,14 +20,12 @@
 			
 #cloneReader {
 	position:relative;
+	overflow:hidden;
 }
 	#cloneReader nav {
 		min-height:0;
-/*		background: #EEEEEE;
-		border-bottom: 1px solid #DDDDDD;
-		margin: 0;
-		padding: 3px 8px 3px 3px;
-		text-align: right;*/
+		z-index: 1;
+		margin:0;
 	}
 		#cloneReader nav .btn-toolbar {
 			margin:4px 0;
@@ -62,7 +60,7 @@
 		width: auto;
 		height:500px;
 		overflow: auto;
-		margin:0 0 0 240px;
+		margin:0;
 		padding:0;
 		background:white;
 		position: relative;
@@ -381,4 +379,20 @@
 
 .tooltip {
 	font-size: small;
+}
+
+
+@media (max-width: 768px) {
+	#cloneReader nav .expand {
+	    float: right;
+	    height: 35px;
+	    padding: 0 10px;
+	    vertical-align: middle;	
+	}
+		#cloneReader nav .expand i {
+			color:#CCCCCC;
+		}
+	#cloneReader ul.ulFilters {
+		width: 100%;
+	}
 }
