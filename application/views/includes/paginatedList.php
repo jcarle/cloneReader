@@ -7,9 +7,11 @@
 						<i class="icon-remove" ></i>
 					</span>
 					<?php echo form_input(array('name' => 'filter',  'value' => $this->input->get('filter'), 'class' => 'form-control', 'placeholder' => 'buscar')); ?>
-				</div>
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default">Buscar</button>
+					</span>
+				</div>					
 			</div>
-			<input value="Buscar" type="submit" class="btn btn-default" />
 		</form>
 	</div>
 				

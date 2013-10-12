@@ -306,16 +306,36 @@ $.extend({
 	},
 	
 	initMenu: function() { // TODO: mover esto de aca!
-		$('.menu div ul.menuAdmin li ul').addClass('dropdown-menu');
-		$('.menu div ul.menuAdmin > li > ul').addClass('pull-right');
-		$('.menu div ul.menuAdmin > li > ul > li').addClass('dropdown-submenu dropdown-submenu-left');
-		$('.menu div ul.menuAdmin li:first').addClass('btn-group');
 		
-		$('.menu div ul.menuAdmin li a:first')
-			.html('<i class="icon-gear icon-2x" />')
-			.addClass('btn btn-xs btn-default')
-			.addClass('dropdown-toggle')
-			.attr('data-toggle', 'dropdown');
+		var $iconGear 	= $('ul.menuProfile .icon-gear');
+		var $settings 	= $iconGear.parent();
+		var label		= $settings.text();
+		$settings
+			.addClass('settings').css('cursor', 'pointer')
+			.html('')
+			.append($iconGear)
+			.append('<span>' + label + '</span>');
+
+		
+		$('ul.menuProfile li ul').addClass('dropdown-menu');
+		$('ul.menuProfile > li > ul > li').addClass('dropdown-submenu dropdown-submenu-left');
+		$('ul.menuProfile li a').addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
+			
+
+		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
+			function(event) {
+	        	event.preventDefault(); 
+				event.stopPropagation(); 
+				
+				var expand = $(this).parent().hasClass('open');
+				
+				$('ul.dropdown-menu [data-toggle=dropdown]').parent().removeClass('open');
+				
+				if (expand == false) {
+					$(this).parent().addClass('open');
+				}
+			}
+		);
 	},
 	
 	showModal: function($modal, keyboard) {

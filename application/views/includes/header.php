@@ -44,6 +44,11 @@ if (isset($aJs)) {
 		$CI->carabiner->js($js);
 	}
 }
+if (isset($aCss)) {
+	foreach ($aCss as $css) {
+		$CI->carabiner->css($css);
+	}
+}
 
 if (!isset($hasForm)) {
 	$hasForm = false;
@@ -118,13 +123,6 @@ if ($view == 'login') {
 $CI->carabiner->css('default.css');
 $CI->carabiner->css('cloneReader.css');
 
-if (isset($aCss)) {
-	foreach ($aCss as $css) {
-		$CI->carabiner->css($css);
-	}
-}
-
-
 header ('Content-type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE HTML>
@@ -158,15 +156,11 @@ $CI->carabiner->display('js');
 			</button>
 			<?php echo anchor('', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-lg active')); ?>
 		</div>
-		<div class="collapse navbar-collapse navbar-ex1-collapse ">
-            
-<?php
-echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav  ');
-?>            
 
-		<ul class="search nav navbar-nav">
-			<li>
-				<form class="form-group  " role="search">
+		<div class="navbar-collapse collapse navbar-ex1-collapse ">
+	
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group" >
 					<div class="input-group">
 						<span class="input-group-addon">
 							<i class="icon-search" ></i>
@@ -176,16 +170,17 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 							<button  class="btnSearch btn btn-default">Search</button>
 						</span>
 					</div>
-				</form>
-			</li>
-			</ul>
+				</div>
+			</form>
+<?php
+echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav pull-right');
+?>            
 		</div>
 	</nav>
 
 	<nav class="menu">
 		<div>
 <?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
-<?php echo renderMenu($CI->cache->file->get('MENU_ADMIN_'.$userId), 'menuAdmin'); ?>
 		</div>
 	</nav>	
 	

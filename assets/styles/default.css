@@ -32,54 +32,88 @@ body.isLoading, body.isLoading * {
 	background: white;
 	margin:0 auto;
 	max-width: 1024px;
-	overflow: hidden;
 	border:0;
 	box-shadow:none;
 }
-	#header .search { }
-		#header div .search i {
-			color: #555555;
-		}
-	#header ul.menuProfile  li a {
-		color: #3176CB;
+	#header .navbar-collapse {
+		max-height:none;
 	}
-		#header ul.menuProfile  li a i {
-			color: #555555;
-		}			
+	#header ul.menuProfile  li a { }
+		#header ul.menuProfile  li a i { }		
+		#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
+		    margin: 0 0 0 15px;
+		}
+			
 @media (min-width: 768px) {
 	#header .navbar-collapse {
 		float:right;
 	}
-	
-	#header .search {
-		clear: both;
-		float: right;
-		margin: 5px 0 0 0;
-		position: relative;
+	#header form {
 		max-width:350px;
 	}	
-	#header ul.menuProfile {
-		background: none repeat scroll 0 0 transparent;
-		list-style: none outside none;
-		position: relative;
-		margin: 0;
-		padding: 0;
-		float: right;
-		font-size: small;
-	}			
-		#header ul.menuProfile  li {
-			border-left: 1px solid #CCCCCC;
+	#header ul.menuProfile { }			
+		#header ul.menuProfile .settings span {
+			display:none; 
 		}
-		#header ul.menuProfile  li:last-child {
-			border-right: 1px solid #CCCCCC;
-		}
-			#header ul.menuProfile  li a {
-				background: none repeat scroll 0 0 transparent;
-				display: block;
-				font-weight: normal;
-				padding: 0 15px;
+		#header ul.menuProfile > li { }
+		#header ul.menuProfile > li:last-child { }
+			#header ul.menuProfile > li > a { }
+			#header ul.menuProfile .settings { }
+			#header ul.menuProfile .dropdown-submenu-left {
+				position: relative;
 			}
-}		
+				#header ul.menuProfile .dropdown-submenu-left a {
+					color: #333333;
+				}
+				#header ul.menuProfile .dropdown-submenu-left a:hover {
+					color: white;
+				}
+				#header ul.menuProfile .dropdown-submenu-left > .dropdown-menu {
+					top: 0;
+					left: -100%;
+					margin-top: -6px;
+					margin-left: -1px;
+					-webkit-border-radius: 6px 0px 6px 6px;
+					   -moz-border-radius: 6px 0px 6px 6px;
+						    border-radius: 6px 0px 6px 6px;
+				}
+				#header ul.menuProfile .dropdown-submenu-left:hover > .dropdown-menu {
+				  display: block;
+				}
+				#header ul.menuProfile .dropdown-submenu-left > a:before {
+				  display: block;
+				  content: "  ";
+				  float: left;
+				  width: 0;
+				  height: 0;
+				  border-color: transparent;
+				  border-style: solid;
+				  border-width: 5px 5px 5px 0px;
+				  border-right-color: #CCCCCC;
+				  margin-top: 5px;
+				  margin-left: -10px;
+				}
+				#header ul.menuProfile .dropdown-submenu-left > a:after,
+				#header ul.menuProfile .dropdown-submenu-left:hover > a:after {
+					border-color: transparent;
+				}
+				
+				
+}				
+				
+@media (max-width: 768px) {
+	#header form {
+	    border-top: 0 solid #FF0000;
+	    margin-top: 4px;
+	}		
+	#header ul.menuProfile {
+		float:none !important;
+	}
+	#header ul.menuProfile a {
+		cursor: pointer;
+	}
+}
+				
 
 
 .menu {
@@ -93,7 +127,7 @@ body.isLoading, body.isLoading * {
 	.menu div {
 		margin: 0 auto;
 		max-width: 1004px;		
-		height: 30px;
+		height: 32px;
 		position:relative;		
 	}
 		.menu div ul.menuPublic {
@@ -123,50 +157,6 @@ body.isLoading, body.isLoading * {
 					background: -moz-linear-gradient(center top , #3176CB, #4397F3) repeat scroll 0 0 transparent;
 					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 				}
-		.menu div ul.menuAdmin {
-			list-style: none outside none;
-			position: absolute;
-			right: 1px;
-			top: 1px;
-			z-index: 10;
-		}
-				.menu div ul.menuAdmin > li:first-child > a {
-					line-height: 1px;
-				}
-					.menu div ul.menuAdmin > li:first-child > a i { }
-			.menu div ul.menuAdmin .dropdown-submenu-left {
-				position: relative;
-			}
-				.menu div ul.menuAdmin .dropdown-submenu-left > .dropdown-menu {
-					top: 0;
-					left: -100%;
-					margin-top: -6px;
-					margin-left: -1px;
-					-webkit-border-radius: 6px 0px 6px 6px;
-					   -moz-border-radius: 6px 0px 6px 6px;
-						    border-radius: 6px 0px 6px 6px;
-				}
-				.menu div ul.menuAdmin .dropdown-submenu-left:hover > .dropdown-menu {
-				  display: block;
-				}
-				.menu div ul.menuAdmin .dropdown-submenu-left > a:before {
-				  display: block;
-				  content: "  ";
-				  float: left;
-				  width: 0;
-				  height: 0;
-				  border-color: transparent;
-				  border-style: solid;
-				  border-width: 5px 5px 5px 0px;
-				  border-right-color: #CCCCCC;
-				  margin-top: 5px;
-				  margin-left: -10px;
-				}
-				.menu div ul.menuAdmin .dropdown-submenu-left > a:after,
-				.menu div ul.menuAdmin .dropdown-submenu-left:hover > a:after {
-					border-color: transparent;
-				}
-
 						
 .content {
 	margin: 0 auto;
@@ -257,7 +247,8 @@ body.isLoading, body.isLoading * {
 }
 	.paginatedList form {	}
 		.paginatedList form > .form-group {
-			max-width:300px;
+			max-width:350px;
+			margin-bottom: 0;
 		}
 	.paginatedList table {
 		border: 1px solid #ccc;
