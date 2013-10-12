@@ -68,9 +68,10 @@ class Feeds_Model extends CI_Model {
 		$filter = $this->db->escape_like_str($filter);
 		
 		return $this->db
-			->select('DISTINCT feedId AS id, feedName AS value  ', false)
+			->select('DISTINCT feedId AS id, feedName AS text  ', false)
 //			->where('statusId', STATUS_ACTIVE)
 			->like('feedName', $filter)
+			->order_by('text')
 			->get('feeds', AUTOCOMPLETE_SIZE)->result_array();
 	}	
 	

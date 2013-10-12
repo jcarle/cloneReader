@@ -108,12 +108,11 @@ class Entries extends CI_Controller {
 					'type'	=> 'hidden', 
 					'value'	=> element('entryId', $data, 0)
 				),
-				'feedName' => array(
+				'feedId' => array(
 					'type' 		=> 'typeahead',
 					'label'		=> 'Feed',
-					'fieldId'	=> 'feedId', // field donde va a ir a para el id del typeahead!
 					'source' 	=> base_url('feeds/search/'),
-					'value'		=> array( element('feedId', $data) => element('feedName', $data)), // el value es un array del tipo {key=>value}
+					'value'		=> array( 'id' => element('feedId', $data), 'text' => element('feedName', $data)), 
 				),
 				'entryTitle' => array(
 					'type'		=> 'text',
