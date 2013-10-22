@@ -23,13 +23,20 @@
 	overflow:hidden;
 }
 	#cloneReader nav {
-		min-height:0;
+		/*min-height:0;*/
+		top:60px;
 		z-index: 1;
 		margin:0;
 	}
-		#cloneReader nav .btn-toolbar {
+/*		#cloneReader nav .btn-toolbar {
 			margin:4px 0;
-		} 
+		} */
+		#cloneReader .nav > li {
+			margin-left:5px;
+		}
+		#cloneReader .nav > li:last-child {
+			margin-right:5px;
+		}
 		#cloneReader nav i {
 			color: #555;
 		}
@@ -45,12 +52,37 @@
 		#cloneReader nav .feedSettings a,
 		#cloneReader nav .filterSort a,
 		#cloneReader nav .filterUnread a {
-			font-size: small;
+/*			font-size: small;*/
 		}
 		#cloneReader nav .expand,
 		#cloneReader nav .tooglePageHeader {
-			float: left;
+/*			float: left;*/
 		}	
+		#cloneReader nav .caret {
+			border-bottom-color: #333;
+			border-top-color: #333;
+		}
+		
+		#cloneReader .navbar-collapse {
+			max-height:none;
+		}		
+
+/*
+	#cloneReader nav:first-child {
+		float:left;
+		border:1px red solid;
+	}
+	#cloneReader nav:last-child {
+		float:right;
+		border:1px red solid;
+	}	*/
+	
+			
+@media (min-width: 768px) {
+	#cloneReader nav ul li button .btnLabel {
+		display:none;
+	}
+}		
 
 
 	#cloneReader .ulEntries {
@@ -58,9 +90,11 @@
 		border:0px gray solid;
 		list-style: none;
 		width: auto;
-		height:500px;
-		overflow: auto;
-		margin:0;
+		min-width:200px;
+/*		height:500px;
+		overflow: auto;*/
+		margin: 0;
+		top: 115px;
 		padding:0;
 		background:white;
 		position: relative;
@@ -283,8 +317,8 @@
 
 	#cloneReader ul.ulFilters {
 		width: 240px;
-		position:absolute;
-		left:0; top:44px;
+		position:fixed;
+		left:0; top:115px; 
 		overflow:auto;
 		list-style: none;
 		margin: 0px;
@@ -384,10 +418,10 @@
 
 @media (max-width: 768px) {
 	#cloneReader nav .expand {
-	    float: right;
+/*	    float: right;
 	    height: 35px;
 	    padding: 0 10px;
-	    vertical-align: middle;	
+	    vertical-align: middle;	*/
 	}
 		#cloneReader nav .expand i {
 			color:#CCCCCC;
