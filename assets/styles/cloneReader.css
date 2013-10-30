@@ -27,6 +27,10 @@
 	overflow:hidden;
 	margin-top:111px;
 }
+#cloneReader .popupForm {
+    padding: 5px 10px;
+    width:300px;
+}
 	#cloneReader nav {
 		/*min-height:0;*/
 		top:60px;
@@ -186,6 +190,7 @@
 				}
 				#cloneReader .ulEntries > li .header .star {
 					float: right;
+					cursor:pointer;
 				}
 			#cloneReader .ulEntries > li p {
 				margin:0 10px 40px 10px;
@@ -237,6 +242,7 @@
 					margin: 0 0 0 10px;
 					padding:0px;
 					display:inline-block;
+					cursor: pointer;
 				}
 				#cloneReader .ulEntries > li .footer .read { }
 				#cloneReader .ulEntries > li .footer .read.selected {
@@ -431,6 +437,10 @@
 	    padding: 0 10px;
 	    position:absolute;    
 	}
+	#header .toolbar li {
+		padding-left:15px;
+	}
+	
 
 	#cloneReader {
 		margin-top:62px;
@@ -440,7 +450,7 @@
 		#cloneReader nav .expand i {
 			color:#CCCCCC;
 		}
-	#cloneReader ul.ulFilters {
+		#cloneReader ul.ulFilters {
 		width: 100%;
 		left:0;
 	}
@@ -499,24 +509,28 @@
 			display:none;
 	        height: auto !important;
 		}
+		#cloneReader .popupForm {
+			padding: 10px;
+			width: 100%;
+			left: 0px !important;
+		}
 }
-
 
 
 ::-webkit-scrollbar {
-	width: 7px;
-	height: 10px;
+    width: 8px;
 }
-::-webkit-scrollbar-button:start:decrement,
-::-webkit-scrollbar-button:end:increment  {
-	display: block;
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
 }
-::-webkit-scrollbar-track-piece  {
-	background-color: transparent;
-	-webkit-border-radius: 6px;
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #c1c1c1; 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
-::-webkit-scrollbar-thumb:vertical {
-	-webkit-border-radius: 6px;
-	background: #ccc;
-	border:1px #666 solid;
+::-webkit-scrollbar-thumb:window-inactive {
+	background: transparent; 
 }

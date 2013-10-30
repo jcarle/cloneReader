@@ -185,7 +185,7 @@ console.timeEnd("t1");
 				</ul> \
 				<ul class="nav navbar-nav navbar-right toolbar"> \
 					<li> \
-						<button title="Add feed" > \
+						<button title="Add feed" class="add" > \
 							<i class="icon-plus" /> \
 							<span class="btnLabel">Add Feed</span> \
 						</button> \
@@ -263,7 +263,7 @@ console.timeEnd("t1");
 		this.$toolBar.find('.filterOldestSort').click(function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); });
 		this.$toolBar.find('.add').click(  function(event) {  
 				event.stopPropagation(); 
-				cloneReader.showPopupForm('Add new feed', 'Add feed url', function() { cloneReader.addFeed(); }, cloneReader.$toolBar.find('.add')); 
+				cloneReader.showPopupForm('Add new feed', 'Add feed url', function() { cloneReader.addFeed(); }, $(event.target)); 
 			}
 		);
 		this.$toolBar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
@@ -295,6 +295,11 @@ console.timeEnd("t1");
 			forceRefresh = true;
 		}
 		
+		
+		if (this.isMobile == true) {
+			this.maximiseUlEntries(true, false);
+		}
+				
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
 			return;
 		}
@@ -304,7 +309,7 @@ console.timeEnd("t1");
 			
 			this.lastScroll.entries = 0;
 			$('html,body').scrollTop(0);
-		}		
+		}
 		
 		this.renderNotResult(true);
 		this.renderEntriesHead();
@@ -357,10 +362,6 @@ console.timeEnd("t1");
 	},
 	
 	renderEntries: function(result) {
-		if (this.isMobile == true) {
-			this.maximiseUlEntries(true, false);
-		}
-				
 		this.$ulEntries.removeClass('list');
 		if (this.aFilters.viewType == 'list') {
 			this.$ulEntries.addClass('list');
@@ -503,7 +504,7 @@ $entryContent.find('br').remove();
 		});				
 						
 //		$entry.css('min-height', $entry.height());
-		$entry.css('min-height', 1).css('min-height', $entry.height());
+//		$entry.css('min-height', 1).css('min-height', $entry.height());
 		$entry.find('img').load(
 			function(event) {
 				var $entry = $(event.target).parents('.entry');
@@ -511,7 +512,7 @@ $entryContent.find('br').remove();
 					return;
 				}
 //				$entry.css('min-height', $entry.height());
-				$entry.css('min-height', 1).css('min-height', $entry.height());
+//				$entry.css('min-height', 1).css('min-height', $entry.height());
 	/*			
 if (cloneReader.$ulEntries.is(':animated') == true) {				
 	cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
@@ -1106,7 +1107,7 @@ console.timeEnd("t1");
 			if (value == true) {
 				this.lastScroll.filters = $('body').scrollTop();
 				this.$ulEntries.show();	
-				this.$container.css('min-height', 'auto');
+				this.$container.css('min-height', '0');
 				this.$ulFilters.stop().animate(
 					{ 'left': '-100%' },
 					{
@@ -1452,11 +1453,13 @@ console.timeEnd("t1");
 	showPopupForm: function(title, placeholder, callback, $element){
 		if (this.$popupForm == null) {
 			this.$popupForm = $('\
-				<form class="form-inline navbar-form navbar-inner popupForm"> \
-					<fieldset class="btn-group input-append" > \
-						<input type="text"  /> \
-						<button class="btn btn-primary"> <i class="icon-ok" /> </button> \
-					</fieldset> \
+				<form class="btn-default dropdown-menu form-inline popupForm "> \
+					<div class="input-group"> \
+						<input type="text" class="form-control"  /> \
+						<span class="input-group-btn" > \
+							<button class="btn btn-primary"> <i class="icon-ok" /> </button> \
+						</span> \
+					</div> \
 				</form>\
 			');
 			
@@ -1476,11 +1479,12 @@ console.timeEnd("t1");
 			});
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('');
 
-		var top		= $element.offset().top + $element.height() - this.$container.offset().top + 2; // FIXME: revisar el -2
+		//var top		= $element.offset().top + $element.height() - this.$toolBar.offset().top;
+		var top		= 110; //this.$toolBar.height() + this.$toolBar.offset().top;
 		var left 	= $element.offset().left - this.$container.offset().left;
 		
 		this.$popupForm
-			.css({ 'top': top,  'left': left, 'position': 'absolute' })
+			.css({ 'top': top,  'left': left, 'position': 'fixed' })
 			.appendTo(this.$container)
 			.stop()
 			.fadeIn();
@@ -1527,6 +1531,9 @@ console.timeEnd("t1");
 	hidePopupWindow: function() {
 		this.$container.find('.popupForm').hide();
 		this.$toolBar.find('.open').removeClass('open');
+		if (this.isMobile == true) {
+			$('.navbar-ex1-collapse').collapse('hide')
+		}		
 	},
 	
 	humanizeDatetime: function(datetime, format) {
