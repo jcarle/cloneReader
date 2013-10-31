@@ -1,8 +1,3 @@
-#header {
-	border-bottom:1px #ccc solid;
-    box-shadow: 0 0px 7px #666;
-}
-
 #header div .logo {
 	margin: 5px;
 	position: relative;
@@ -24,6 +19,11 @@
 		transform: rotate(45deg);
 		width: 113px;
 	}
+	
+.mainToolbar .caret {
+    border-bottom-color: #333333;
+    border-top-color: #333333;
+}	
 			
 #cloneReader {
 	position:relative;
@@ -69,11 +69,6 @@
 		#cloneReader nav .tooglePageHeader {
 /*			float: left;*/
 		}	
-		#cloneReader nav .caret {
-			border-bottom-color: #333;
-			border-top-color: #333;
-		}
-		
 		#cloneReader .navbar-collapse {
 			max-height:none;
 		}		
@@ -431,7 +426,7 @@
 
 
 @media (max-width: 768px) {
-	#header .toolbar li {
+	#header .mainToolbar li {
 		padding-left:15px;
 	}
 	#cloneReader {
