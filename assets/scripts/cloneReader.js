@@ -61,7 +61,9 @@ console.timeEnd("t1");
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
-			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+			if (cloneReader.isMobile != true) {
+				cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+			}
 			cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false, true);
 		});
 		
