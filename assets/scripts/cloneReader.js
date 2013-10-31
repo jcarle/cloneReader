@@ -15,6 +15,7 @@ cloneReader = {
 		this.aEntries	 		= {};
 		this.filters			= null;
 		this.tags				= null;
+		this.lastScrollTop 		= 0;
 		this.aUserEntries 		= {};
 		this.aUserTags			= {};
 		this.aFilters 			= $.extend({
@@ -26,11 +27,6 @@ cloneReader = {
 			'viewType': 	'detail',
 			'isMaximized': 	false
 		}, aFilters);		
-
-
-//		this.lastScroll = {'filters': 0, 'entries': 0};
-
-		this.lastScrollTop = 0;
 
 		this.buildCache();
 		this.renderMenu();
@@ -66,9 +62,9 @@ console.timeEnd("t1");
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-//			if (cloneReader.isMobile == false) {
+			if (cloneReader.isMobile == false) {
 				cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false);
-//			}
+			}
 		});
 		
 		$(document).keyup($.proxy(
@@ -1092,21 +1088,10 @@ console.timeEnd("t1");
 		var speed = 250;
 		
 		if (this.isMobile == true) {
-
-			
-
-							
 			if (value == true) {
-//				this.lastScroll.filters = $('html,body').scrollTop();
 				this.$ulEntries.show();	
-
-$('html,body').scrollTop(this.lastScrollTop);			
-this.$ulFilters.css('top', $(window).scrollTop());				
-				
-//				this.$ulFilters.css('top', $('html,body').scrollTop());
-				
-//				this.$ulFilters.css('position', 'absolute');
-//				this.$container.css('min-height', '0');
+				$('html,body').scrollTop(this.lastScrollTop);			
+				this.$ulFilters.css('top', $(window).scrollTop());				
 				this.$ulFilters.stop().animate(
 					{ 'left': '-100%' },
 					{
@@ -1119,26 +1104,17 @@ this.$ulFilters.css('top', $(window).scrollTop());
 				);
 			}
 			else {
-					this.$ulFilters.show();
-					
-this.lastScrollTop = $(window).scrollTop();
-$('html,body').scrollTop(this.lastScrollTop);			
-this.$ulFilters.css('top', $(window).scrollTop());
-
-					
-//				this.$ulFilters.css('position', 'absolute');
-//				$('html,body').scrollTop(cloneReader.lastScroll.filters);
-//				this.$container.css('min-height', this.$ulFilters.height());
+				this.$ulFilters.show();
+				this.lastScrollTop = $(window).scrollTop();
+				$('html,body').scrollTop(this.lastScrollTop);			
+				this.$ulFilters.css('top', $(window).scrollTop());
 				this.$ulFilters.stop().animate(
 					{ 'left': '0'  },
 					{
 						duration: speed ,
 						complete: function() {
 							cloneReader.$ulEntries.hide();
-	//						cloneReader.$ulFilters.css('position', 'relative');
 							cloneReader.$ulFilters.css('top', 0);	
-//							$('html,body').scrollTop(cloneReader.lastScroll.filters);
-							
 						}
 					}
 				);
@@ -1540,9 +1516,9 @@ this.$ulFilters.css('top', $(window).scrollTop());
 	hidePopupWindow: function() {
 		this.$container.find('.popupForm').hide();
 		this.$toolBar.find('.open').removeClass('open');
-		if (this.isMobile == true) {
-//			$('.navbar-ex1-collapse').collapse('hide')
-		}
+/*		if (this.isMobile == true) {
+			$('.navbar-ex1-collapse').collapse('hide')
+		}*/
 	},
 	
 	humanizeDatetime: function(datetime, format) {
