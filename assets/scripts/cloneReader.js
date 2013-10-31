@@ -57,14 +57,12 @@ console.time("t1");
 console.timeEnd("t1");	    
 		});
 		
-		this.maximiseUlEntries(this.aFilters.isMaximized, false);
+		this.maximiseUlEntries(this.aFilters.isMaximized, false, false);
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-			if (cloneReader.isMobile == false) {
-				cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false);
-			}
+			cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false, true);
 		});
 		
 		$(document).keyup($.proxy(
@@ -80,7 +78,7 @@ console.timeEnd("t1");
 						this.loadEntries(true, true, {});
 						break;
 					case 85: // U: expand!			
-						this.maximiseUlEntries(!this.aFilters.isMaximized, true);
+						this.maximiseUlEntries(!this.aFilters.isMaximized, true, false);
 						break;
 					case 83: // S: star
 						var $entry = this.$ulEntries.find('.entry.selected');
@@ -243,7 +241,7 @@ console.timeEnd("t1");
 		this.$toolBar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		//this.$toolBar.find('ul > li > a, .btn-toolbar > div > a').addClass('btn').addClass('btn-default'); //.addClass('btn-sm');
 		
-		this.$toolBar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) } );
+		this.$toolBar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
 		this.$toolBar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$toolBar.find('.prev').click(function() { cloneReader.goToEntry(false) });
 		this.$toolBar.find('.reload').click(function() { cloneReader.loadEntries(true, true, {}) });
@@ -274,7 +272,7 @@ console.timeEnd("t1");
 
 		var $btnExpand = $('<button title="Expand" class="expand navbar-toggle"> <i class="icon-exchange"  /> </button>');
 		$btnExpand.appendTo( $('#header .navbar-header'));			
-		$btnExpand.click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) } );
+		$btnExpand.click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -289,7 +287,7 @@ console.timeEnd("t1");
 		
 		
 		if (this.isMobile == true) {
-			this.maximiseUlEntries(true, false);
+			this.maximiseUlEntries(true, false, false);
 		}
 				
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
@@ -1082,7 +1080,7 @@ console.timeEnd("t1");
 		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
 	
-	maximiseUlEntries: function(value, animate) {
+	maximiseUlEntries: function(value, animate, isResize) {
 		this.aFilters.isMaximized = value;
 		
 		var speed = 250;
@@ -1090,15 +1088,19 @@ console.timeEnd("t1");
 		if (this.isMobile == true) {
 			if (value == true) {
 				this.$ulEntries.show();	
-				$('html,body').scrollTop(this.lastScrollTop);			
-				this.$ulFilters.css('top', $(window).scrollTop());				
+				if (isResize != true) {
+					$('html,body').scrollTop(this.lastScrollTop);			
+					this.$ulFilters.css('top', $(window).scrollTop());
+				}				
 				this.$ulFilters.stop().animate(
 					{ 'left': '-100%' },
 					{
 						duration: speed ,
 						complete: function() {
 							cloneReader.$ulFilters.hide();
-							$('html,body').scrollTop(cloneReader.lastScrollTop);
+							if (isResize != true) {
+								$('html,body').scrollTop(cloneReader.lastScrollTop);
+							}
 						}
 					}
 				);
