@@ -27,8 +27,8 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 }
 
 
-$CI->carabiner->js('jquery-2.0.3.min.js');
-//$CI->carabiner->js('jquery-1.7.2.js');
+//$CI->carabiner->js('jquery-2.0.3.min.js');
+$CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('moment.min.js');
@@ -130,7 +130,7 @@ header ('Content-type: text/html; charset=utf-8');
 <html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />	
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">

@@ -61,7 +61,7 @@ cloneReader = {
 		$(window).scrollStopped(function(){
 console.time("t1");	
     		cloneReader.checkScroll();
-//		    cloneReader.getMoreEntries();
+		    cloneReader.getMoreEntries();
 console.timeEnd("t1");	    
 		});
 		
@@ -296,7 +296,7 @@ console.timeEnd("t1");
 			forceRefresh = true;
 		}
 		
-		if (this.isMobile == true && this.$ulEntries.children().length != 0) { // Si no es la primera carga y es mobile, maximizo al cambiar el filtro
+		if (clear == true && this.isMobile == true && this.$ulEntries.children().length != 0) { // Si no es la primera carga y es mobile, maximizo al cambiar el filtro
 			this.maximiseUlEntries(true, false, false);
 		}
 				
@@ -817,6 +817,9 @@ cn(cloneReader.$ulEntries.scrollTop());*/
 		if (this.isLastPage == true) { 
 			return;
 		}
+		
+		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
+		
 		if (
 			this.$noResult.visible(true) == true 
 			||
