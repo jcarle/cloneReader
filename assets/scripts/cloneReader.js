@@ -1144,7 +1144,7 @@ console.timeEnd("t1");
 		}
 
 
-		this.$ulFilters.show().css({'left': 0, 'top': 100 }); // TODO: desharckodear!
+		this.$ulFilters.show().css({'left': 0, 'top': 101 }); // TODO: desharckodear!
 		this.$ulEntries.show();
 
 // TODO: revisar		
