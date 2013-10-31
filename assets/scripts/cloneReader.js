@@ -28,7 +28,9 @@ cloneReader = {
 		}, aFilters);		
 
 
-		this.lastScroll = {'filters': 0, 'entries': 0};
+//		this.lastScroll = {'filters': 0, 'entries': 0};
+
+		this.lastScrollTop = 0;
 
 		this.buildCache();
 		this.renderMenu();
@@ -64,7 +66,9 @@ console.timeEnd("t1");
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-			cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false);
+//			if (cloneReader.isMobile == false) {
+				cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false);
+//			}
 		});
 		
 		$(document).keyup($.proxy(
@@ -167,88 +171,80 @@ console.timeEnd("t1");
 	renderMenu: function() {
 		this.$toolBar.html(' \
 			<div class="navbar-header"> \
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex2-collapse"> \
-					<span class="sr-only">Toggle navigation</span> \
-					<span class="icon-bar"></span> \
-					<span class="icon-bar"></span> \
-					<span class="icon-bar"></span> \
-				</button> \
 			</div> \
-			<div class="collapse navbar-collapse navbar-ex2-collapse "> \
-				<ul class="nav navbar-nav navbar-left"> \
-					<li> \
-						<button title="Expand" class="expand"> \
-							<i class="icon-exchange"  /> \
-							<span class="btnLabel">Expandir</span> \
+			<ul class="nav navbar-nav navbar-left"> \
+				<li> \
+					<button title="Expand" class="expand"> \
+						<i class="icon-exchange"  /> \
+						<span class="btnLabel">Expandir</span> \
+					</button> \
+				</li> \
+			</ul> \
+			<ul class="nav navbar-nav navbar-right toolbar"> \
+				<li> \
+					<button title="Add feed" class="add" > \
+						<i class="icon-plus" /> \
+						<span class="btnLabel">Add Feed</span> \
+					</button> \
+				</li> \
+				<li> \
+					<div class="btn-group feedSettings" > \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Feed settings"> \
+							<span> Feed settings </span> \
+							<span class="caret" /> \
 						</button> \
-					</li> \
-				</ul> \
-				<ul class="nav navbar-nav navbar-right toolbar"> \
-					<li> \
-						<button title="Add feed" class="add" > \
-							<i class="icon-plus" /> \
-							<span class="btnLabel">Add Feed</span> \
+						<ul class="dropdown-menu popupFeedSettings" /> \
+					</div> \
+				</li> \
+				<li> \
+					<div class="btn-group filterSort" > \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Sort" > \
+							<span/> \
+							<span class="caret" /> \
 						</button> \
-					</li> \
-					<li> \
-						<div class="btn-group feedSettings" > \
-							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Feed settings"> \
-								<span> Feed settings </span> \
-								<span class="caret" /> \
-							</button> \
-							<ul class="dropdown-menu popupFeedSettings" /> \
-						</div> \
-					</li> \
-					<li> \
-						<div class="btn-group filterSort" > \
-							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Sort" > \
-								<span/> \
-								<span class="caret" /> \
-							</button> \
-							<ul class="dropdown-menu" > \
-								<li class="filterNewestSort"> <a> sort by newest </a> </li> \
-								<li class="filterOldestSort"> <a> sort by oldest </a> </li> \
-							</ul> \
-						</div> \
-					</li> \
-					<li> \
-						<div class="btn-group filterUnread" > \
-							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" > \
-								<span/> \
-								<span class="caret" /> \
-							</button> \
-							<ul class="dropdown-menu" > \
-								<li class="filterAllItems"> <a> all items </a> </li> \
-								<li class="filterOnlyUnread" > <a> <span class="count" /> new items </a> </li> \
-							</ul> \
-						</div> \
-					</li> \
-					<li> \
-						<div class="btn-group" data-toggle="buttons-radio" > \
-							<button class="viewList" title="List view" > \
-								<i class="icon-align-justify" /> \
-							</button> \
-							<button class="viewDetail" title="Detail view" > \
-								<i class="icon-th-list" /> \
-							</button> \
-						</div> \
-					</li> \
-					<li> \
-						<button title="Reload" class="reload" > <i class="icon-refresh" /> \
-							<span class="btnLabel">Reload</span> \
-						 </button> \
-					</li> \
-					<li> \
-						<div class="btn-group"  > \
-							<button title="Prev" class="prev" > <i class="icon-caret-up" /> </button> \
-							<button title="Next" class="next" > <i class="icon-caret-down" /> </button> \
-						</div> \
-					</li> \
-				</ul> \
-			</div> \
+						<ul class="dropdown-menu" > \
+							<li class="filterNewestSort"> <a> sort by newest </a> </li> \
+							<li class="filterOldestSort"> <a> sort by oldest </a> </li> \
+						</ul> \
+					</div> \
+				</li> \
+				<li> \
+					<div class="btn-group filterUnread" > \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" > \
+							<span/> \
+							<span class="caret" /> \
+						</button> \
+						<ul class="dropdown-menu" > \
+							<li class="filterAllItems"> <a> all items </a> </li> \
+							<li class="filterOnlyUnread" > <a> <span class="count" /> new items </a> </li> \
+						</ul> \
+					</div> \
+				</li> \
+				<li> \
+					<div class="btn-group" data-toggle="buttons-radio" > \
+						<button class="viewList" title="List view" > \
+							<i class="icon-align-justify" /> \
+						</button> \
+						<button class="viewDetail" title="Detail view" > \
+							<i class="icon-th-list" /> \
+						</button> \
+					</div> \
+				</li> \
+				<li> \
+					<button title="Reload" class="reload" > <i class="icon-refresh" /> \
+						<span class="btnLabel">Reload</span> \
+					 </button> \
+				</li> \
+				<li> \
+					<div class="btn-group"  > \
+						<button title="Prev" class="prev" > <i class="icon-caret-up" /> </button> \
+						<button title="Next" class="next" > <i class="icon-caret-down" /> </button> \
+					</div> \
+				</li> \
+			</ul> \
 		');
 		
-		this.$toolBar.find('.navbar-ex2-collapse button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
+		this.$toolBar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		//this.$toolBar.find('ul > li > a, .btn-toolbar > div > a').addClass('btn').addClass('btn-default'); //.addClass('btn-sm');
 		
 		this.$toolBar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true) } );
@@ -275,10 +271,10 @@ console.timeEnd("t1");
 			}
 		);
 		
-		
+/*		
 		if (this.isMobile != true) {
 			this.$toolBar.find('a').tooltip( { placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
-		}
+		}*/
 
 		var $btnExpand = $('<button title="Expand" class="expand navbar-toggle"> <i class="icon-exchange"  /> </button>');
 		$btnExpand.appendTo( $('#header .navbar-header'));			
@@ -307,7 +303,7 @@ console.timeEnd("t1");
 			this.aFilters['page'] = 1;
 			this.$ulEntries.children().remove();
 			
-			this.lastScroll.entries = 0;
+			this.lastScrollTop = 0;
 			$('html,body').scrollTop(0);
 		}
 		
@@ -393,21 +389,6 @@ console.timeEnd("t1");
 		this.updateMenuCount();
 		this.renderNotResult(false);
 	},
-	
-	/*
-	scrollEntries: function() {
-		var isVisible 	= false;
-		var $entries 	= this.$ulEntries.find('.entry');
-		for (var i=0; i<$entries.length; i++) {
-			var show = this.renderEntry($($entries.get(i)));
-			if (show == true) {
-				isVisible = true;
-			}
-			if (show == false && isVisible == true) {
-				break;
-			}			
-		}
-	},		*/
 	
 	renderEntry: function($entry) {
 		if ($entry.hasClass('noResult') == true) {
@@ -550,7 +531,6 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 					.removeClass('expanded')
 					.removeClass('selected')
 					.find('.detail').remove();
-//				cloneReader.scrollEntries();
 				return;
 			}
 			cloneReader.selectEntry($entry, false, false);
@@ -582,8 +562,9 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
+		
 		this.$noResult
-//.css('min-height', $(window).height() - $('#header').outerHeight() - 50 - this.$noResult.find('div').outerHeight() )
+//			.css('min-height', $(window).height() - $('#header').outerHeight() - 50 - this.$noResult.find('div').outerHeight() )
 			.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
@@ -592,6 +573,8 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 		else {
 			this.$noResult.html('<div class="well well-lg"> no more entries </div>').removeClass('loading');
 		}
+		
+		this.resizeNoResult();
 	},
 
 	starEntry: function($entry, value) {
@@ -759,8 +742,6 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 			
 			this.starEntry($entry, entry.starred);
 			
-//			this.scrollEntries();
-			
 			animate = false;
 		}
 
@@ -774,6 +755,7 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 	
 	scrollToEntry: function($entry, animate) {
 		if ($entry.length == 0) { return; }
+		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
 
 //cn($entry);		
 
@@ -964,12 +946,14 @@ console.timeEnd("t1");
 		
 		if (filter.childs != null) {
 			$filter.append('<ul />').find('.icon').addClass('arrow');
-			$filter.find('.icon').click(
-				function(event) {
-					var $filter	= $($(event.target).parents('li:first'));
-					var filter	= $filter.data('filter');
-					cloneReader.expandFilter(filter, !filter.expanded);
-				});
+			$filter.find('.icon')
+				.addClass('icon-caret-right icon-large')
+				.click(
+					function(event) {
+						var $filter	= $($(event.target).parents('li:first'));
+						var filter	= $filter.data('filter');
+						cloneReader.expandFilter(filter, !filter.expanded);
+					});
 
 			if (filter.expanded == false) { 
 				$filter.find('ul').hide(); 
@@ -1077,9 +1061,11 @@ console.timeEnd("t1");
 		var $filter	= filter.$filter;
 		var $arrow 	= $filter.find('.arrow:first');
 		var $ul 	= $filter.find('ul:first');
+		
+		$arrow.removeClass('icon-caret-right').removeClass('icon-caret-down');
 
 		if (value != true) {
-			$arrow.html('&#9658;')
+			$arrow.addClass('icon-caret-right');
 			$ul.stop().hide('fast', function() { $(this).hide()});
 			return;
 		}
@@ -1092,7 +1078,7 @@ console.timeEnd("t1");
 			}
 		}
 
-		$arrow.html('&#9660;');
+		$arrow.addClass('icon-caret-down');
 		$ul.stop().show('fast', function() { 
 			$(this).show();
 		});
@@ -1103,33 +1089,56 @@ console.timeEnd("t1");
 	maximiseUlEntries: function(value, animate) {
 		this.aFilters.isMaximized = value;
 		
+		var speed = 250;
+		
 		if (this.isMobile == true) {
+
+			
+
+							
 			if (value == true) {
-				this.lastScroll.filters = $('body').scrollTop();
+//				this.lastScroll.filters = $('html,body').scrollTop();
 				this.$ulEntries.show();	
-				this.$container.css('min-height', '0');
+
+$('html,body').scrollTop(this.lastScrollTop);			
+this.$ulFilters.css('top', $(window).scrollTop());				
+				
+//				this.$ulFilters.css('top', $('html,body').scrollTop());
+				
+//				this.$ulFilters.css('position', 'absolute');
+//				this.$container.css('min-height', '0');
 				this.$ulFilters.stop().animate(
 					{ 'left': '-100%' },
 					{
-						duration: 200 ,
+						duration: speed ,
 						complete: function() {
 							cloneReader.$ulFilters.hide();
-							$('body').scrollTop(cloneReader.lastScroll.entries);
+							$('html,body').scrollTop(cloneReader.lastScrollTop);
 						}
 					}
 				);
 			}
 			else {
-				this.lastScroll.entries = $('body').scrollTop();
-				this.$ulFilters.show();
-				this.$container.css('min-height', this.$ulFilters.height());
+					this.$ulFilters.show();
+					
+this.lastScrollTop = $(window).scrollTop();
+$('html,body').scrollTop(this.lastScrollTop);			
+this.$ulFilters.css('top', $(window).scrollTop());
+
+					
+//				this.$ulFilters.css('position', 'absolute');
+//				$('html,body').scrollTop(cloneReader.lastScroll.filters);
+//				this.$container.css('min-height', this.$ulFilters.height());
 				this.$ulFilters.stop().animate(
 					{ 'left': '0'  },
 					{
-						duration: 200 ,
+						duration: speed ,
 						complete: function() {
 							cloneReader.$ulEntries.hide();
-							$('body').scrollTop(cloneReader.lastScroll.filters);
+	//						cloneReader.$ulFilters.css('position', 'relative');
+							cloneReader.$ulFilters.css('top', 0);	
+//							$('html,body').scrollTop(cloneReader.lastScroll.filters);
+							
 						}
 					}
 				);
@@ -1137,24 +1146,13 @@ console.timeEnd("t1");
 			return;
 		}		
 		
-		
-		
-		
-//		this.$ulEntries.css('width', value == true ? '100%' : 'auto');
-//		this.flipsnap._setX(value == true ? -240 : 0);
-		
-		//cloneReader.flipsnap
-		//cloneReader.flipsnap.moveToPoint(0)
-		
-		//this.flipsnap.moveToPoint(value == true ? 1 : 0);
-		
-		
 		var left = 0;
 		if (value == false) {
 			left = this.$ulFilters.outerWidth();
 		}
-		
-		this.$ulFilters.show().css('left', 0);
+
+
+		this.$ulFilters.show().css({'left': 0, 'top': 100 }); // TODO: desharckodear!
 		this.$ulEntries.show();
 
 // TODO: revisar		
@@ -1164,7 +1162,7 @@ console.timeEnd("t1");
 			this.$ulEntries.stop().animate(
 				{ 'margin-left': left }, 
 				{
-					duration: 100 ,
+					duration: speed ,
 				 	complete: function() {
 						cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 						if (cloneReader.aFilters.isMaximized == true) {
@@ -1496,17 +1494,15 @@ console.timeEnd("t1");
 		this.isMobile = $(window).width() <= 768;
 		
 		this.hidePopupWindow();
-		//$(document).css( 'padding-top', '70px'); // 'overflow', 'hidden');
 		
-		$('body').css('background', '#EEEEEE');
-		
+//		$('body').css('background', '#EEEEEE');
 
 		if (this.isMobile == true) {
 			$('.toolbar').appendTo($('#header .navbar-collapse'));
 			this.$toolBar.hide();
 		}
 		else {
-			$('.toolbar').appendTo( this.$toolBar.find('.navbar-ex2-collapse') );
+			$('.toolbar').appendTo( this.$toolBar );
 			this.$toolBar.show();
 		}
 
@@ -1515,25 +1511,38 @@ console.timeEnd("t1");
 		$('#header').addClass('navbar-fixed-top').css( { 'max-width': '100%' } );
 		$('.menu').remove();
 		
-		if (this.isMobile != true) {
-			var height = $(window).outerHeight(true) - 1 - this.$ulEntries.offset().top - $('#footer').outerHeight(true); // TODO: revisar el -1
-			this.$ulFilters
-				.height(1)
-				.height(height);
-		}
-		else {
-			this.$ulEntries.width('auto');
-		}
 
-//		this.scrollEntries();
+		var height = $(window).height() - (this.isMobile == true ? 50 : 100); //FIXME: harckodeta! // - this.$ulEntries.offset().top - $('#footer').outerHeight(true); // TODO: revisar el -1
+		this.$ulFilters.height(height);
+		
+		this.$container.css('min-height', this.$ulFilters.height());
+		
+		this.resizeNoResult();
+	},
+	
+	resizeNoResult: function() {
+		if (this.$noResult == null) { return; }
+		
+		this.$noResult
+			.css('min-height', 
+				$(window).height() 
+//				- $('#header').outerHeight()
+//				- this.$ulEntries.find('.entriesHead').outerHeight()
+//				- this.$ulEntries.offset().top 
+//				- this.$noResult.offset().top
+//				- this.$noResult.find('div').outerHeight()
+				- (this.isMobile == true ? 75 : 130) // FIXME: desharkodear! 
+				)		
+//			.css('border', '1px red solid' )
+		;				
 	},
 	
 	hidePopupWindow: function() {
 		this.$container.find('.popupForm').hide();
 		this.$toolBar.find('.open').removeClass('open');
 		if (this.isMobile == true) {
-			$('.navbar-ex1-collapse').collapse('hide')
-		}		
+//			$('.navbar-ex1-collapse').collapse('hide')
+		}
 	},
 	
 	humanizeDatetime: function(datetime, format) {
