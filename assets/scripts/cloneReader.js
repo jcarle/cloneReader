@@ -27,6 +27,11 @@ cloneReader = {
 			'viewType': 	'detail',
 			'isMaximized': 	false
 		}, aFilters);		
+		
+		
+		if (this.isMobile == true) {
+			this.aFilters.isMaximized = false;
+		}
 
 		this.buildCache();
 		this.renderMenu();
@@ -39,7 +44,6 @@ cloneReader = {
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
-		
 
 		document.addEventListener('touchstart', function(){}, false);
 
@@ -122,8 +126,12 @@ console.timeEnd("t1");
 				cloneReader.hidePopupWindow();
 			}
 		);
+		
+		$('#header .logo').click(function(event) { 
+			if (cloneReader.isMobile != true) {  return;  }
+			cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false);
+		} );		
 	},
-	
 	
 	checkScroll: function() { 
 		if (this.aFilters.viewType == 'list') {
@@ -271,10 +279,6 @@ console.timeEnd("t1");
 		if (this.isMobile != true) {
 			this.$toolBar.find('a').tooltip( { placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
 		}*/
-
-		var $btnExpand = $('<button title="Expand" class="expand navbar-toggle"> <i class="icon-exchange"  /> </button>');
-		$btnExpand.appendTo( $('#header .navbar-header'));			
-		$btnExpand.click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -283,12 +287,11 @@ console.timeEnd("t1");
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters 	= $.extend(this.aFilters, aFilters);
 		
-		if (cloneReader.$ulEntries.children().length == 0) { // Para la primera carga
+		if (this.$ulEntries.children().length == 0) { // Para la primera carga
 			forceRefresh = true;
 		}
 		
-		
-		if (this.isMobile == true) {
+		if (this.isMobile == true && this.$ulEntries.children().length != 0) { // Si no es la primera carga y es mobile, maximizo al cambiar el filtro
 			this.maximiseUlEntries(true, false, false);
 		}
 				
@@ -559,9 +562,7 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
 		
-		this.$noResult
-//			.css('min-height', $(window).height() - $('#header').outerHeight() - 50 - this.$noResult.find('div').outerHeight() )
-			.appendTo(this.$ulEntries).show();
+		this.$noResult.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
 			this.$noResult.html('<div class="alert alert-info"> <i class="icon-spinner icon-spin icon-large"></i> loading ...</div>').addClass('loading');
@@ -1084,8 +1085,8 @@ console.timeEnd("t1");
 	
 	maximiseUlEntries: function(value, animate, isResize) {
 		this.aFilters.isMaximized = value;
-		
-		var speed = 250;
+
+		var speed = 100;
 		
 		if (this.isMobile == true) {
 			if (value == true) {
@@ -1480,10 +1481,12 @@ console.timeEnd("t1");
 		if (this.isMobile == true) {
 			$('.toolbar').appendTo($('#header .navbar-collapse'));
 			this.$toolBar.hide();
+			$('#header .logo').removeAttr('href');
 		}
 		else {
 			$('.toolbar').appendTo( this.$toolBar );
 			this.$toolBar.show();
+			$('#header .logo').attr('href', base_url);
 		}
 
 		$('.content > div > h1').hide();
