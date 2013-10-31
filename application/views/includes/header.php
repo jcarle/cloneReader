@@ -145,7 +145,7 @@ $CI->carabiner->display('js');
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
 		<i class="icon-spinner icon-spin icon-large"></i>
-		<small>procesando ...</small>
+		<small> loading ...</small>
 	</div>
 	
 	
