@@ -795,6 +795,8 @@ cn(cloneReader.$ulEntries.scrollTop());*/
 	},
 	
 	goToEntry: function(next) {
+		this.hideMobileNavbar();
+		
 		var $entry = this.$ulEntries.find('.entry.selected');
 		if ($entry.length == 0 && next != true) {
 			return;
@@ -1091,7 +1093,9 @@ console.timeEnd("t1");
 	maximiseUlEntries: function(value, animate, isResize) {
 		this.aFilters.isMaximized = value;
 		
-		this.hideMobileNavbar();
+		if (isResize == false) {
+			this.hideMobileNavbar();
+		}
 
 		var speed = 100;
 		
@@ -1262,6 +1266,7 @@ console.timeEnd("t1");
 
 	saveUserFeedTag: function(feedId, tagId, append) {
 		this.hidePopupWindow();
+		this.hideMobileNavbar();
 
 		$.ajax({
 			'url': 		base_url + 'entries/saveUserFeedTag',
@@ -1463,7 +1468,7 @@ console.timeEnd("t1");
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('');
 
 		//var top		= $element.offset().top + $element.height() - this.$toolbar.offset().top;
-		var top		= 110; //FIXME: harckodeta! //this.$toolbar.height() + this.$toolbar.offset().top; 
+		var top		= 92; //FIXME: harckodeta! //this.$toolbar.height() + this.$toolbar.offset().top; 
 		var left 	= $element.offset().left - this.$container.offset().left;
 		
 		this.$popupForm
@@ -1472,13 +1477,15 @@ console.timeEnd("t1");
 			.stop()
 			.fadeIn();
 			
-		this.$popupForm.find('input').focus();
+		if (this.isMobile == false) {
+			this.$popupForm.find('input').focus();
+		}
 	},
 	
 	resizeWindow: function() {
 		this.isMobile = $(window).width() <= 768;
 		
-		this.hidePopupWindow();
+		
 
 		if (this.isMobile == true) {
 			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
@@ -1489,6 +1496,7 @@ console.timeEnd("t1");
 			this.$mainToolbar.appendTo( this.$toolbar );
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
+			this.hidePopupWindow();
 		}
 
 		$('.content > div > h1').hide();

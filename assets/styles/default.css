@@ -112,6 +112,12 @@ body.isLoading, body.isLoading * {
 	#header ul.menuProfile a {
 		cursor: pointer;
 	}
+	#header .navbar-nav .open .dropdown-menu {
+		clear: both;
+	}
+		#header .navbar-nav .open .dropdown-menu li {
+			cursor:pointer;
+		}
 }
 				
 
