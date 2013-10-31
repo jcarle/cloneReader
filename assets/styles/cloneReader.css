@@ -1,6 +1,6 @@
 #header {
 	border-bottom:1px #ccc solid;
-    box-shadow: 0 15px 7px -14px #808080;
+    box-shadow: 0 0px 7px #666;
 }
 
 #header div .logo {
@@ -431,18 +431,9 @@
 
 
 @media (max-width: 768px) {
-	#header .navbar-header .expand {
-		color: #CCCCCC;
-	    float: none;
-	    height: 34px;
-	    padding: 0 10px;
-	    position:absolute;    
-	}
 	#header .toolbar li {
 		padding-left:15px;
 	}
-	
-
 	#cloneReader {
 		margin-top:50px;
 	}	
@@ -515,9 +506,18 @@
     		box-shadow: 0 0 5px #808080;
     					
 		}
+		#cloneReader .ulEntries > li .header > a  {
+			margin:0 20px 0 0;
+		}
 		#cloneReader .ulEntries > li .header .entryDate {
 			float:none;
 			display: block;
+		}
+		#cloneReader .ulEntries > li .header .star {
+			float: none;
+			position: absolute;
+			right: 0;
+			top: 0;			
 		}
 		#cloneReader .popupForm {
 			padding: 10px;
