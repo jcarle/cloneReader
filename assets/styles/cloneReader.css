@@ -177,10 +177,9 @@
 				}
 				#cloneReader .ulEntries > li .header div {
 					color: gray;
-					font-size:12px;
+					font-size:small;
 				}
 					#cloneReader .ulEntries > li .header div a {
-						font-size:12px;
 						font-weight:normal;
 						cursor:pointer;
 					}
@@ -515,6 +514,10 @@
     		border: 1px solid #CCCCCC;
     		box-shadow: 0 0 5px #808080;
     					
+		}
+		#cloneReader .ulEntries > li .header .entryDate {
+			float:none;
+			display: block;
 		}
 		#cloneReader .popupForm {
 			padding: 10px;
