@@ -29,7 +29,6 @@ body.isLoading, body.isLoading * {
 	}
 
 #header {
-	background: white;
 	margin:0 auto;
 	max-width: 1024px;
 	border:0;
@@ -101,7 +100,7 @@ body.isLoading, body.isLoading * {
 				
 }				
 				
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 	#header form {
 	    border-top: 0 solid #FF0000;
 	    margin-top: 4px;

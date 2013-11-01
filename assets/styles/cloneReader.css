@@ -426,7 +426,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 	#header .mainToolbar li {
 		padding-left:15px;
 	}

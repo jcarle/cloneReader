@@ -8,7 +8,6 @@ cloneReader = {
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang('es'); // TODO: harckodeta!
 
-		this.isMobile			= $(window).width() <= 768;;
 		this.minUnreadEntries 	= 2;
 		this.isLastPage			= false;
 		this.currentEntries		= []; // para guardar las entries visibles y no volver a pedir al servidor si solo se cambia el tipo de vista
@@ -32,7 +31,8 @@ cloneReader = {
 		if (this.isMobile == true) {
 			this.aFilters.isMaximized = false;
 		}
-
+		
+		this.getIsMobile();
 		this.buildCache();
 		this.renderToolbar();
 		this.loadFilters(false);
@@ -1486,9 +1486,7 @@ console.timeEnd("t1");
 	},
 	
 	resizeWindow: function() {
-		this.isMobile = $(window).width() <= 768;
-		
-		
+		this.getIsMobile();
 
 		if (this.isMobile == true) {
 			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
@@ -1557,7 +1555,14 @@ console.timeEnd("t1");
 			return datetime.fromNow();
 		}
 		return datetime.format('LLL');
-	}	
+	},
+	
+	getIsMobile: function() {
+		$('body').css('overflow', 'hidden');
+		this.isMobile = $(window).width() < 768;		
+		$('body').css('overflow', 'auto');
+cn(this.isMobile);		
+	}
 };
 
 
