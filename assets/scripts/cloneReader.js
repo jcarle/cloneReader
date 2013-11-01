@@ -48,8 +48,6 @@ cloneReader = {
 //		document.addEventListener('touchstart', function(){}, false);
 		
 		$('body').css('background', '#EEEEEE');
-		$('#header').css( { 'border-bottom': '1px #ccc solid', 'box-shadow': '0 0px 7px #666' });
-		
 
 		this.$ulEntries.on({ 'tap' : 
 			function(event){
@@ -1492,12 +1490,14 @@ console.timeEnd("t1");
 			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
 			this.$toolbar.hide();
 			$('#header .logo').removeAttr('href');
+			$('#header').css( { 'box-shadow': '0 0px 7px #666' });
 		}
 		else {
 			this.$mainToolbar.appendTo( this.$toolbar );
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
 			this.hidePopupWindow();
+			$('#header').css( {'box-shadow': 'none' });
 		}
 
 		$('.content > div > h1').hide();

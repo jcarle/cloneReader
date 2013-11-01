@@ -30,9 +30,10 @@ body.isLoading, body.isLoading * {
 
 #header {
 	margin:0 auto;
-	max-width: 1024px;
 	border:0;
 	box-shadow:none;
+	border-radius:0;
+	border-bottom: 1px #ccc solid;
 }
 	#header .navbar-collapse {
 		max-height:none;

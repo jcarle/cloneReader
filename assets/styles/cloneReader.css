@@ -38,10 +38,8 @@
 		top:50px;
 		z-index: 1;
 		margin:0;
+		box-shadow: 0 0px 7px #666;
 	}
-/*		#cloneReader nav .btn-toolbar {
-			margin:4px 0;
-		} */
 		#cloneReader .nav > li {
 			margin-left:5px;
 		}
@@ -160,7 +158,6 @@
 					padding: 0 0px 0 20px;
 					margin: 0;
 					display: inline-block;
-					word-break: break-all;
 				}
 				#cloneReader .ulEntries > li .header a {
 					color:#1155CC;
