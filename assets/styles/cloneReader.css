@@ -203,6 +203,7 @@
 				}
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
+					height:auto;
 				}
 				#cloneReader .ulEntries > li p a {
 					text-decoration: underline;
@@ -360,12 +361,10 @@
 				#cloneReader ul.ulFilters li div span {
 					line-height:30px;
 					height:30px;
-					font-size:small;
 				}
 				#cloneReader ul.ulFilters li div .icon {
 					background-position: center left;
 					background-repeat: no-repeat;
-					font-size: 10px;
 					left: 5px;
 					position: absolute;
 					top: 0px;
@@ -375,6 +374,7 @@
 				#cloneReader ul.ulFilters li div .icon.arrow {
 					margin: 0 5px 0 0;
 					cursor: pointer;
+					color: #666666;
 				}			
 				#cloneReader ul.ulFilters li div a {
 					color: #333333;
@@ -385,6 +385,7 @@
 					text-overflow: ellipsis;
 					white-space: nowrap;
 					font-weight: bold;
+					font-size:small;
 				}
 				#cloneReader ul.ulFilters li.empty > div > a {
 					color:gray;
@@ -518,6 +519,17 @@
 			position: absolute;
 			right: 0;
 			top: 0;			
+		}
+		#cloneReader .ulEntries > li > p {
+			max-height: 150px;
+			overflow: hidden;
+		}
+		#cloneReader .ulEntries > li .btnViewAll {
+			display: block;
+			background: #fff;
+			position: absolute;
+			bottom: 30px;
+			right: 5px;			
 		}
 		#cloneReader .popupForm {
 			left: 5px !important;

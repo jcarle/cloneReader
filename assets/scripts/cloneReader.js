@@ -468,7 +468,7 @@ var aaa = this.$ulEntries.find(' > li ').index($entry);
 		$entryContent.find('iframe').remove();
 $entryContent.find('br').remove();
 
-		$('<p/>').html($entryContent.text()).appendTo($entry);
+		var $p = $('<p/>').html($entryContent.text()).appendTo($entry);
 
 		var $footer = $('<div class="form-actions panel-footer form-inline navbar-form navbar-inner " />').addClass('footer ').appendTo($entry);
 
@@ -485,7 +485,18 @@ $entryContent.find('br').remove();
 			//var linkToApp = aSocial[i].app + aSocial[i].url + entry.entryUrl;
 			$('<a data-rel="external" class="btnSocial icon-large ' + aSocial[i].icon + '" href="' + url + '"  />').appendTo($footer);
 		}
-
+		
+		if (this.isMobile == true) {		
+			if ( $p.get(0).scrollHeight > $p.height()) {
+				$('<button class="btn btn-default  btnViewAll"> <i class="icon-large icon-reorder" /> </button>')
+					.click(function(event) {
+						var $entry = $(event.target).parents('.entry');
+						$entry.find('> p').css( {'max-height': 'none' });
+						$entry.find('.btnViewAll').remove(); 
+					})
+					.appendTo($entry);	
+			}
+		} 
 
 		$entry.find('.read, .read i').click(function(event) {
 			event.stopPropagation();
@@ -962,7 +973,7 @@ console.timeEnd("t1");
 		if (filter.childs != null) {
 			$filter.append('<ul />').find('.icon').addClass('arrow');
 			$filter.find('.icon')
-				.addClass('icon-caret-right icon-large')
+				.addClass('icon-caret-right')
 				.click(
 					function(event) {
 						var $filter	= $($(event.target).parents('li:first'));
@@ -1077,7 +1088,7 @@ console.timeEnd("t1");
 		var $arrow 	= $filter.find('.arrow:first');
 		var $ul 	= $filter.find('ul:first');
 		
-		$arrow.removeClass('icon-caret-right').removeClass('icon-caret-down');
+		$arrow.removeClass('icon-caret-down').removeClass('icon-caret-right');
 
 		if (value != true) {
 			$arrow.addClass('icon-caret-right');
