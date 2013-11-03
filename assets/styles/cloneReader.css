@@ -248,6 +248,13 @@
 					#cloneReader .ulEntries > li .footer .read.selected i {
 						color: #1155CC;
 					}
+					#cloneReader .ulEntries > li .footer .btnSocial {
+						display: inline;
+						margin: 0 0 0 10px;						
+					}
+					#cloneReader .ulEntries > li .footer .btnSocial:hover {
+						text-decoration: none;
+					}
 		#cloneReader .ulEntries > li.noResult {
 			border:0;
 			box-shadow: none;

@@ -473,8 +473,18 @@ $entryContent.find('br').remove();
 		var $footer = $('<div class="form-actions panel-footer form-inline navbar-form navbar-inner " />').addClass('footer ').appendTo($entry);
 
 		$('<label class="star checkbox" > <i/> </label>').appendTo($footer);
-		$('<label class="read checkbox" > <i/> <span> keep unread </span> \
-		</label>').appendTo($footer);
+		$('<label class="read checkbox" > <i/> <span> keep unread </span> </label>').appendTo($footer);
+		
+		var aSocial = [
+			{'icon': 'icon-facebook-sign', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
+			{'icon': 'icon-twitter-sign', 		'app': '',		'url': 'http://www.twitter.com/home?status='},
+			{'icon': 'icon-google-plus-sign', 	'app': 'tw:',	'url': 'http://plus.google.com/share?url='},
+		];
+		for (var i=0; i<aSocial.length; i++) {
+			var url = aSocial[i].url + entry.entryUrl;
+			//var linkToApp = aSocial[i].app + aSocial[i].url + entry.entryUrl;
+			$('<a data-rel="external" class="btnSocial icon-large ' + aSocial[i].icon + '" href="' + url + '"  />').appendTo($footer);
+		}
 
 
 		$entry.find('.read, .read i').click(function(event) {
