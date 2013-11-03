@@ -487,7 +487,7 @@ $entryContent.find('br').remove();
 		}
 		
 		if (this.isMobile == true) {		
-			if ( $p.get(0).scrollHeight > $p.height()) {
+//			if ( $p.get(0).scrollHeight > $p.height()) {
 				$('<button class="btn btn-default  btnViewAll"> <i class="icon-large icon-reorder" /> </button>')
 					.click(function(event) {
 						var $entry = $(event.target).parents('.entry');
@@ -495,7 +495,7 @@ $entryContent.find('br').remove();
 						$entry.find('.btnViewAll').remove(); 
 					})
 					.appendTo($entry);	
-			}
+//			}
 		} 
 
 		$entry.find('.read, .read i').click(function(event) {
