@@ -485,6 +485,9 @@ $entryContent.find('br').remove();
 			//var linkToApp = aSocial[i].app + aSocial[i].url + entry.entryUrl;
 			$('<a data-rel="external" class="btnSocial icon-large ' + aSocial[i].icon + '" href="' + url + '"  />').appendTo($footer);
 		}
+
+/*
+TODO: pensar como mejorar esta parte
 		
 		if (this.isMobile == true) {		
 //			if ( $p.get(0).scrollHeight > $p.height()) {
@@ -496,7 +499,7 @@ $entryContent.find('br').remove();
 					})
 					.appendTo($entry);	
 //			}
-		} 
+		} */
 
 		$entry.find('.read, .read i').click(function(event) {
 			event.stopPropagation();

@@ -520,7 +520,7 @@
 			right: 0;
 			top: 0;			
 		}
-		#cloneReader .ulEntries > li > p {
+		/*#cloneReader .ulEntries > li > p {
 			max-height: 150px;
 			overflow: hidden;
 		}
@@ -530,7 +530,7 @@
 			position: absolute;
 			bottom: 30px;
 			right: 5px;			
-		}
+		}*/
 		#cloneReader .popupForm {
 			left: 5px !important;
 			padding: 50px 10px;
