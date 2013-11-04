@@ -380,13 +380,30 @@ class Entries_Model extends CI_Model {
 		return true;		
 	}
 	
-	
-	function markAsReadFeed($feedId, $userId) {
-		$this->db->update('users_entries', array('entryRead' => true), array('feedId' => $feedId, 'userId' => $userId));
-		//pr($this->db->last_query());
+	function markAllAsFeed($userId, $type, $id) {
+		$aFeedId = array();
+		
+		if ($type == 'tag') {
+			$query = $this->db->select('feedId')
+				->from('users_feeds_tags')
+				->where('tagId', $id)
+				->where('userId', $userId)
+				->get()->result_array();;
+			foreach ($query as $row) {
+				$aFeedId[] = $row['feedId'];
+			}
+		}
+		else {
+			$aFeedId[] = $id;
+		}
+
+
+		$this->db->where('userId', $userId)
+			->where_in('feedId', $aFeedId)
+			->update('users_entries', array('entryRead' => true));
+		//pr($this->db->last_query());  
 		return true;		
 	}	
-	
 	
 	function updateUserFilters($userFilters, $userId){
 		unset($userFilters['page']);

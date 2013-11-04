@@ -192,6 +192,12 @@ console.timeEnd("t1");
 					</button> \
 				</li> \
 				<li> \
+					<button title="Mark all as read" class="btnMarkAllAsFeed" > \
+						<i class="icon-archive" /> \
+						<span>Mark all as read</span> \
+					</button> \
+				</li> \
+				<li> \
 					<div class="btn-group feedSettings" > \
 						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Feed settings"> \
 							<span> Feed settings </span> \
@@ -255,6 +261,12 @@ console.timeEnd("t1");
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		
 		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
+
+// TODO: revisar esta parte, hay que poner un par de ifs para que marque todo como leido cuando estas en la home		
+this.$toolbar.find('.btnMarkAllAsFeed')
+.hide()
+.click( function() { cloneReader.markAllAsFeed(); } );
+ 
 		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$mainToolbar.find('.prev').click(function() { cloneReader.goToEntry(false) });
 		this.$mainToolbar.find('.reload').click(function() { cloneReader.loadEntries(true, true, {}) });
@@ -976,7 +988,7 @@ console.timeEnd("t1");
 		if (filter.childs != null) {
 			$filter.append('<ul />').find('.icon').addClass('arrow');
 			$filter.find('.icon')
-				.addClass('icon-caret-right')
+				.addClass('icon-expand')
 				.click(
 					function(event) {
 						var $filter	= $($(event.target).parents('li:first'));
@@ -1091,10 +1103,10 @@ console.timeEnd("t1");
 		var $arrow 	= $filter.find('.arrow:first');
 		var $ul 	= $filter.find('ul:first');
 		
-		$arrow.removeClass('icon-caret-down').removeClass('icon-caret-right');
+		$arrow.removeClass('icon-collapse').removeClass('icon-expand');
 
 		if (value != true) {
-			$arrow.addClass('icon-caret-right');
+			$arrow.addClass('icon-expand');
 			$ul.stop().hide('fast', function() { $(this).hide()});
 			return;
 		}
@@ -1107,7 +1119,7 @@ console.timeEnd("t1");
 			}
 		}
 
-		$arrow.addClass('icon-caret-down');
+		$arrow.addClass('icon-collapse');
 		$ul.stop().show('fast', function() { 
 			$(this).show();
 		});
@@ -1311,7 +1323,7 @@ console.timeEnd("t1");
 		});
 	},
 	
-	markAsReadFeed: function(feedId) {
+	markAllAsFeed: function(feedId) {
 		this.hidePopupWindow();
 
 		$(document).jAlert( {
@@ -1321,8 +1333,11 @@ console.timeEnd("t1");
 				function() {
 					$.ajax({
 						'type':	 	'post',
-						'url': 		base_url + 'entries/markAsReadFeed',
-						'data': 	{ 'feedId':	feedId 	},
+						'url': 		base_url + 'entries/markAllAsFeed',
+						'data': 	{
+							'type': 	this.aFilters.type,
+							'id': 		this.aFilters.id
+						},
 					})
 					.done(function(response) {
 						if (response['code'] != true) {
@@ -1405,7 +1420,6 @@ console.timeEnd("t1");
 		var feedId = this.aFilters.id;
 
 		var aItems = [
-			{ 'html': 'Mark all as read', 	'callback': function() { cloneReader.markAsReadFeed(cloneReader.aFilters.id); } },
 			{ 'html': 'Unsubscribe', 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
 			{ 'html': 'New tag', 			'class': 'newTag', 'callback': 
 				function(event) {

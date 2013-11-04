@@ -245,8 +245,8 @@ class Entries extends CI_Controller {
 		));
 	}
 	
-	function markAsReadFeed() {
-		$result = $this->Entries_Model->markAsReadFeed($this->input->post('feedId'), (int)$this->session->userdata('userId'));
+	function markAllAsFeed() {
+		$result = $this->Entries_Model->markAllAsFeed((int)$this->session->userdata('userId'), $this->input->post('type'), $this->input->post('id') );
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
