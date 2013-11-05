@@ -16,10 +16,11 @@ function facebookLogin() {
 			if (response.status === 'connected') { // Esta conectado
 				FB.api('/me', function(response) {
 					$.ajax({
-						url: 	base_url + 'login/loginFB',
+						url: 	base_url + 'login/loginRemote',
 						type: 	'post',
 						data: 	{
-							'oauth_uid': 		response.id,
+							'provider':			'facebook',
+							'remoteUserId':		response.id,
 							'userLastName': 	response.last_name,
 							'userFirstName': 	response.first_name,
 							'userEmail': 		response.email,
