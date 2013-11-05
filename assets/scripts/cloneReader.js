@@ -261,13 +261,8 @@ console.timeEnd("t1");
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		
 		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
-
-// TODO: revisar esta parte, hay que poner un par de ifs para que marque todo como leido cuando estas en la home		
-this.$toolbar.find('.btnMarkAllAsFeed')
-.hide()
-.click( function() { cloneReader.markAllAsFeed(); } );
- 
-		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
+		this.$toolbar.find('.btnMarkAllAsFeed').click( function() { cloneReader.markAllAsFeed(); } );
+ 		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$mainToolbar.find('.prev').click(function() { cloneReader.goToEntry(false) });
 		this.$mainToolbar.find('.reload').click(function() { cloneReader.loadEntries(true, true, {}) });
 		this.$mainToolbar.find('.viewDetail').click( function(event) { event.stopPropagation(); cloneReader.loadEntries(true, false, {'viewType': 	'detail'}); } );
@@ -722,7 +717,10 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 		}
 		
 		this.$mainToolbar.find('.filterUnread').hide();
-		if (!(this.aFilters.type == 'tag' && this.aFilters.id == TAG_STAR)) {
+		this.$mainToolbar.find('.btnMarkAllAsFeed').hide();
+		
+		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [TAG_STAR, TAG_HOME]) != -1)) {
+			this.$mainToolbar.find('.btnMarkAllAsFeed').show();
 			this.$mainToolbar.find('.filterUnread').show();
 		}
 		

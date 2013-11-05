@@ -382,15 +382,17 @@ class Entries_Model extends CI_Model {
 	
 	function markAllAsFeed($userId, $type, $id) {
 		$aFeedId = array();
-		
+
 		if ($type == 'tag') {
-			$query = $this->db->select('feedId')
-				->from('users_feeds_tags')
-				->where('tagId', $id)
-				->where('userId', $userId)
-				->get()->result_array();;
-			foreach ($query as $row) {
-				$aFeedId[] = $row['feedId'];
+			if ($id != TAG_ALL) {
+				$query = $this->db->select('feedId')
+					->from('users_feeds_tags')
+					->where('tagId', $id)
+					->where('userId', $userId)
+					->get()->result_array();
+				foreach ($query as $row) {
+					$aFeedId[] = $row['feedId'];
+				}
 			}
 		}
 		else {
@@ -398,10 +400,12 @@ class Entries_Model extends CI_Model {
 		}
 
 
-		$this->db->where('userId', $userId)
-			->where_in('feedId', $aFeedId)
-			->update('users_entries', array('entryRead' => true));
-		//pr($this->db->last_query());  
+		$this->db->where('userId', $userId);
+		if (!empty($aFeedId)) {
+			$this->db->where_in('feedId', $aFeedId);
+		}
+		$this->db->update('users_entries', array('entryRead' => true));
+		//pr($this->db->last_query());   die;
 		return true;		
 	}	
 	
