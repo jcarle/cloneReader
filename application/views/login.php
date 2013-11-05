@@ -9,7 +9,7 @@ $this->load->view('includes/jForm');
 	Facebook Login
 </button>
 
-<button href='#' onclick='facebookLogin()' class="btn btn-google" style="display:none">
+<button href='#' class="btn btn-google" >
 	<i class="icon-google-plus"></i>
 	Google Login
 </button>

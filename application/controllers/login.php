@@ -61,10 +61,12 @@ class Login extends CI_Controller {
 		$aServerData = array('fbApi' => null);
 		switch ($_SERVER['SERVER_NAME']) {
 			case 'jcarle.redirectme.net':
-				$aServerData['fbApi'] = '581547605212584';
+				$aServerData['fbApi'] 		= '581547605212584';
+				$aServerData['googleApi'] 	= '522657157003-rm53dmqk4hnjtrnphpara5odtet8qj0i.apps.googleusercontent.com';
 				break;
 			case 'www.jcarle.com.ar':
-				$aServerData['fbApi'] = '470466523040981'; 
+				$aServerData['fbApi'] 		= '470466523040981'; 
+				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
 				break;
 		}	
 						
@@ -85,8 +87,8 @@ class Login extends CI_Controller {
 		return $this->safety->login($this->input->post('email'), $this->input->post('password'));
 	}
 	
-	function loginFB() {
-		$user = $this->Users_Model->loginFB($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstName'), $this->input->post('oauth_uid'), 'facebook');
+	function loginRemote() {
+		$user = $this->Users_Model->loginRemote($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstName'), $this->input->post('provider'), $this->input->post('remoteUserId') );
 
 		if ($user == null) {
 			return $this->load->view('ajax', array(

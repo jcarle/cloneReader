@@ -118,6 +118,7 @@ if ($view == 'login') {
 	$CI->carabiner->js('jquery.jForm.js');
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('loginFB.js');
+	$CI->carabiner->js('loginGoogle.js');
 }
 
 

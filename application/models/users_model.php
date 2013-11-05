@@ -8,10 +8,12 @@ class Users_Model extends CI_Model {
 		return $this->db->get('users');
 	}
 	
-	function loginFB($userEmail, $userLastName, $userFirstName, $oauth_uid, $oauth_provider) {
+	function loginRemote($userEmail, $userLastName, $userFirstName, $provider, $remoteUserId) {
+		
+		$fieldName = ($provider == 'facebook' ? 'facebookUserId' : 'googleUserId');
+		
 		$query = $this->db
-			->where('oauth_uid', $oauth_uid)
-			->where('oauth_provider', $oauth_provider)
+			->where($fieldName, $remoteUserId)
 			->get('users');
 		if ($query->num_rows() > 0) { // ya existe
 			return $query->row();
@@ -20,8 +22,7 @@ class Users_Model extends CI_Model {
 		$values = array(
 			'userLastName' 		=> $userLastName, 
 			'userFirstName'		=> $userFirstName, 
-			'oauth_uid'			=> $oauth_uid, 
-			'oauth_provider'	=> $oauth_provider
+			$fieldName			=> $remoteUserId, 
 		);		
 
 		// no existe, lo creo
