@@ -70,7 +70,7 @@ class Login extends CI_Controller {
 				break;
 			case 'www.clonereader.com.ar':
 				$aServerData['fbApi'] 		= '605522602845255'; 
-				$aServerData['googleApi'] 	= '';
+				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
 				break;				
 		}	
 						
