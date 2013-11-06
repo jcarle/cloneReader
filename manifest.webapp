@@ -1,0 +1,29 @@
+{
+  "version": "0.1",
+  "name": "cloneReader",
+  "description": "Lector de RSS",
+  "launch_path": "/",
+  "fullscreen": "true",
+  "default_locale": "en",
+  "installs_allowed_from": ["*"],
+  "icons": {
+    "16": "/assets/images/icons/16.png",
+    "48": "/assets/images/icons/48.png",
+    "60": "/assets/images/icons/60.png",
+    "90": "/assets/images/icons/90.png",
+    "120": "/assets/images/icons/120.png",
+    "128": "/assets/images/icons/128.png"
+  },
+  "developer": {
+    "name": "Juan Carle",
+    "url": "http://www.jcarle.com.ar"
+  },
+  "locales": {
+    "en": {
+      "description": "Clone of google reader. Reader of feeds, rss. Responsive. Powered by codeigniter, simplepie, jquery, bootstrap",
+      "developer": {
+        "url": "http://www.jcarle.com.ar"
+      }
+    }
+  }
+}
