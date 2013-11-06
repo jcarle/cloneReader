@@ -68,6 +68,10 @@ class Login extends CI_Controller {
 				$aServerData['fbApi'] 		= '470466523040981'; 
 				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
 				break;
+			case 'www.clonereader.com.ar':
+				$aServerData['fbApi'] 		= '605522602845255'; 
+				$aServerData['googleApi'] 	= '';
+				break;				
 		}	
 						
 		if ($this->form_validation->run() == FALSE) {

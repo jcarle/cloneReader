@@ -1614,7 +1614,9 @@ $.fn.scrollStopped = function(callback) {
 
 $(document).ready(
 	function() {
-		navigator.mozApps.install(base_url + 'manifest.webapp');
+		if ($.browser.mozilla == true) {
+			navigator.mozApps.install(base_url + 'manifest.webapp');
+		}
 	}
 );
 
