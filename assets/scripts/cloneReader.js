@@ -1611,3 +1611,10 @@ $.fn.scrollStopped = function(callback) {
 		$this.data('scrollTimeout', setTimeout(callback, 250, self));
 	});
 };
+
+$(document).ready(
+	function() {
+		navigator.mozApps.install(base_url + 'manifest.webapp');
+	}
+);
+

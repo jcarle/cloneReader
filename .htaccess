@@ -1,5 +1,7 @@
 #RewriteBase /
 
+AddType application/x-web-app-manifest+json .webapp
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
