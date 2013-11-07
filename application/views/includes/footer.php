@@ -7,7 +7,7 @@ if (isset($aServerData)) {
 	$scripts .= 'var SERVER_DATA = '.json_encode($aServerData).'; ';
 }
 
-if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar')) {
+if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
 	$scripts .= "
 
   var _gaq = _gaq || [];
