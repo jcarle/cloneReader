@@ -158,7 +158,7 @@ $CI->carabiner->display('js');
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<?php echo anchor('', 'cloneReader<span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-sm active')); ?>
+			<?php echo anchor('', '<img src="'.base_url().'assets/images/icons/16.png" /> cReader <span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-sm active')); ?>
 		</div>
 
 		<div class="navbar-collapse collapse navbar-ex1-collapse ">
