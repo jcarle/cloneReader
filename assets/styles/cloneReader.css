@@ -5,8 +5,9 @@
 	overflow: hidden;
 	padding-right: 50px;
 /*    text-shadow: 1px 0 0 #3071A9, -1px 0 0 #3071A9, 0 1px 0 #3071A9, 0 -1px 0 #3071A9;	*/
-    box-shadow: 0px 1px 0px #CCCCCC inset, 1px 1px 5px #C1C1C1;
-    font-size: large;    
+    box-shadow: 1px 1px 5px #C1C1C1;
+    font-size: large; 
+    border-radius: 5px;   
 }
 	#header div .logo span {
 		font-size: small;
