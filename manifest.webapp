@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "name": "cloneReader",
+  "name": "cloneReader BETA",
   "description": "Lector de RSS",
   "launch_path": "/",
   "fullscreen": "true",
@@ -12,7 +12,9 @@
     "60": "/assets/images/icons/60.png",
     "90": "/assets/images/icons/90.png",
     "120": "/assets/images/icons/120.png",
-    "128": "/assets/images/icons/128.png"
+    "128": "/assets/images/icons/128.png",
+    "256": "/assets/images/icons/256.png",
+    "512": "/assets/images/icons/512.png"
   },
   "developer": {
     "name": "Juan Carle",
