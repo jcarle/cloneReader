@@ -7,6 +7,7 @@ cloneReader = {
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang('es'); // TODO: harckodeta!
+		this.getIsMobile();
 
 		this.minUnreadEntries 	= 2;
 		this.isLastPage			= false;
@@ -25,13 +26,8 @@ cloneReader = {
 			'type': 		'tag',
 			'viewType': 	'detail',
 			'isMaximized': 	false
-		}, aFilters);		
-		
-		this.getIsMobile();
-		
-		if (this.isMobile == true) {
-			this.aFilters.isMaximized = false;
-		}
+		}, aFilters);	
+		this.isMaximized		= (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
 		
 		this.buildCache();
 		this.renderToolbar();
@@ -44,8 +40,6 @@ cloneReader = {
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
-
-//		document.addEventListener('touchstart', function(){}, false);
 		
 		$('body').css('background', '#EEEEEE');
 
@@ -60,14 +54,14 @@ cloneReader = {
 			cloneReader.getMoreEntries();
 		});
 		
-		this.maximiseUlEntries(this.aFilters.isMaximized, false, false);
+		this.maximiseUlEntries(this.isMaximized, false, false);
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			if (cloneReader.isMobile != true) {
 				cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 			}
-			cloneReader.maximiseUlEntries(cloneReader.aFilters.isMaximized, false, true);
+			cloneReader.maximiseUlEntries(cloneReader.isMaximized, false, true);
 		});
 		
 		$(document).keyup($.proxy(
@@ -83,7 +77,7 @@ cloneReader = {
 						this.loadEntries(true, true, {});
 						break;
 					case 85: // U: expand!			
-						this.maximiseUlEntries(!this.aFilters.isMaximized, true, false);
+						this.maximiseUlEntries(!this.isMaximized, true, false);
 						break;
 					case 83: // S: star
 						var $entry = this.$ulEntries.find('.entry.selected');
@@ -128,7 +122,7 @@ cloneReader = {
 		
 		$('#header .logo').click(function(event) { 
 			if (cloneReader.isMobile != true) {  return;  }
-			cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false);
+			cloneReader.maximiseUlEntries(!cloneReader.isMaximized, true, false);
 		} );		
 	},
 	
@@ -263,7 +257,7 @@ cloneReader = {
 		
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		
-		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
+		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.isMaximized, true, false) } );
 		this.$toolbar.find('.btnInstall').click(function() { cloneReader.install() } );
 		this.$toolbar.find('.btnMarkAllAsFeed').click( function() { cloneReader.markAllAsFeed(); } );
  		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
@@ -323,6 +317,10 @@ cloneReader = {
 			
 			this.lastScrollTop = 0;
 			$('html,body').scrollTop(0);
+		}
+		
+		if (this.isMobile != true) { // Actualizo el valor de isMaximized sino isMobile 
+			this.aFilters.isMaximized = this.isMaximized;
 		}
 		
 		this.renderNotResult(true);
@@ -1141,6 +1139,8 @@ console.timeEnd("t1");
 			this.hideMobileNavbar();
 		}
 
+		this.isMaximized = value;
+		
 		var speed = 100;
 		
 		if (this.isMobile == true) {
@@ -1182,8 +1182,6 @@ console.timeEnd("t1");
 			return;
 		}
 		
-		this.aFilters.isMaximized = value;
-		
 		var left = 0;
 		if (value == false) {
 			left = this.$ulFilters.outerWidth();
@@ -1203,7 +1201,7 @@ console.timeEnd("t1");
 					duration: speed ,
 				 	complete: function() {
 						cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-						if (cloneReader.aFilters.isMaximized == true) {
+						if (cloneReader.isMaximized == true) {
 							cloneReader.$ulFilters.hide();
 						}
 				}
@@ -1211,7 +1209,7 @@ console.timeEnd("t1");
 		}
 		else {
 			this.$ulEntries.stop().css(	{ 'margin-left': left } );
-			if (this.aFilters.isMaximized == true) {
+			if (this.isMaximized == true) {
 				this.$ulFilters.hide();
 			}
 		}				

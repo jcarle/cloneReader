@@ -4,10 +4,9 @@
 	z-index: 9;
 	overflow: hidden;
 	padding-right: 50px;
-/*    text-shadow: 1px 0 0 #3071A9, -1px 0 0 #3071A9, 0 1px 0 #3071A9, 0 -1px 0 #3071A9;	*/
-    box-shadow: 1px 1px 5px #C1C1C1;
-    font-size: large; 
-    border-radius: 5px;   
+	box-shadow: 1px 1px 5px #C1C1C1;
+	font-size: large; 
+	border-radius: 5px;
 }
 	#header div .logo span {
 		font-size: small;
@@ -22,8 +21,8 @@
 	}
 	
 .mainToolbar .caret {
-    border-bottom-color: #333333;
-    border-top-color: #333333;
+	border-bottom-color: #333333;
+	border-top-color: #333333;
 }	
 			
 #cloneReader {
@@ -32,8 +31,8 @@
 	margin-top:100px;
 }
 #cloneReader .popupForm {
-    padding: 5px 10px;
-    width:300px;
+	padding: 5px 10px;
+	width:300px;
 }
 	#cloneReader nav {
 		top:50px;
@@ -308,13 +307,13 @@
 					color: gray;
 					float: left;
 					margin:5px 0px 0 5px;
-				    font-size: medium;
+					font-size: medium;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					white-space: nowrap;					
-				    max-width: 70%;
+					white-space: nowrap;
+					max-width: 70%;
 					height:25px;
-					line-height:25px;					
+					line-height:25px;
 				}
 				#cloneReader .ulEntries.list > li .title .entryDate {
 					float: right;
@@ -357,7 +356,6 @@
 		list-style: none;
 		margin: 0px;
 		padding:0px;
-		box-shadow: 2px 0 5px #CCC;
 	}
 		#cloneReader ul.ulFilters li {
 			position: relative;
@@ -461,7 +459,7 @@
 		border-top:1px #ccc solid;
 	}
 		#cloneReader ul.ulFilters li div .icon {
-		    background-position: center center;
+			background-position: center center;
 			width: 50px;
 			height:50px;
 			margin:0;
@@ -493,14 +491,14 @@
 					margin-left:80px;
 				}				
 		#cloneReader ul.ulEntries {
-    	    border: 0px solid #808080;	
-		    position: relative;
-		    top: 0;
-		    left: 0;
-		    width: auto;
-		    height: auto !important;
-		    display:none;
-		    margin:0 !important;
+			border: 0px solid #808080;	
+			position: relative;
+			top: 0;
+			left: 0;
+			width: auto;
+			height: auto !important;
+			display:none;
+			margin:0 !important;
 		}
 		#cloneReader ul.ulFilters {
 			position: absolute;
@@ -510,12 +508,9 @@
 			z-index: 999;
 			background: white;
 			display:none;
-			/*height: auto !important;*/
 			overflow:auto;
-			
-    		border: 1px solid #CCCCCC;
-    		box-shadow: 0 0 5px #808080;
-    					
+			border: 1px solid #CCCCCC;
+			box-shadow: 0 0 5px #808080;
 		}
 		#cloneReader .ulEntries > li .header > a  {
 			margin:0 20px 0 0;
@@ -528,19 +523,8 @@
 			float: none;
 			position: absolute;
 			right: 0;
-			top: 0;			
+			top: 0;	
 		}
-		/*#cloneReader .ulEntries > li > p {
-			max-height: 150px;
-			overflow: hidden;
-		}
-		#cloneReader .ulEntries > li .btnViewAll {
-			display: block;
-			background: #fff;
-			position: absolute;
-			bottom: 30px;
-			right: 5px;			
-		}*/
 		#cloneReader .popupForm {
 			left: 5px !important;
 			padding: 50px 10px;
@@ -552,18 +536,18 @@
 
 @media (min-width: 768px) {
 	::-webkit-scrollbar {
-	    width: 8px;
+		width: 8px;
 	}
 	::-webkit-scrollbar-track {
-	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-	    -webkit-border-radius: 10px;
-	    border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+		-webkit-border-radius: 10px;
+		border-radius: 10px;
 	}
 	::-webkit-scrollbar-thumb {
-	    -webkit-border-radius: 10px;
-	    border-radius: 10px;
-	    background: #c1c1c1; 
-	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		-webkit-border-radius: 10px;
+		border-radius: 10px;
+		background: #c1c1c1; 
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 	}
 	::-webkit-scrollbar-thumb:window-inactive {
 		background: transparent; 
