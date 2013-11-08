@@ -27,12 +27,12 @@ cloneReader = {
 			'isMaximized': 	false
 		}, aFilters);		
 		
+		this.getIsMobile();
 		
 		if (this.isMobile == true) {
 			this.aFilters.isMaximized = false;
 		}
 		
-		this.getIsMobile();
 		this.buildCache();
 		this.renderToolbar();
 		this.loadFilters(false);
@@ -53,14 +53,11 @@ cloneReader = {
 			function(event){
 				var $entry = $(event.target);
 				cloneReader.selectEntry($entry, false, false);
-	 		} 
+			} 
 		});
-    
 		$(window).scrollStopped(function(){
-console.time("t1");	
-    		cloneReader.checkScroll();
-		    cloneReader.getMoreEntries();
-console.timeEnd("t1");	    
+			cloneReader.checkScroll();
+			cloneReader.getMoreEntries();
 		});
 		
 		this.maximiseUlEntries(this.aFilters.isMaximized, false, false);
@@ -1140,8 +1137,6 @@ console.timeEnd("t1");
 	},
 	
 	maximiseUlEntries: function(value, animate, isResize) {
-		this.aFilters.isMaximized = value;
-		
 		if (isResize == false) {
 			this.hideMobileNavbar();
 		}
@@ -1185,7 +1180,9 @@ console.timeEnd("t1");
 				);
 			}
 			return;
-		}		
+		}
+		
+		this.aFilters.isMaximized = value;
 		
 		var left = 0;
 		if (value == false) {
