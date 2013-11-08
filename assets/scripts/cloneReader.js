@@ -192,6 +192,12 @@ console.timeEnd("t1");
 					</button> \
 				</li> \
 				<li> \
+					<button title="Install" class="btnInstall" style="display:none" > \
+						<i class="icon-download" /> \
+						<span>Install</span> \
+					</button> \
+				</li> \
+				<li> \
 					<button title="Mark all as read" class="btnMarkAllAsFeed" > \
 						<i class="icon-archive" /> \
 						<span>Mark all as read</span> \
@@ -261,6 +267,7 @@ console.timeEnd("t1");
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		
 		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.aFilters.isMaximized, true, false) } );
+		this.$toolbar.find('.btnInstall').click(function() { cloneReader.install() } );
 		this.$toolbar.find('.btnMarkAllAsFeed').click( function() { cloneReader.markAllAsFeed(); } );
  		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$mainToolbar.find('.prev').click(function() { cloneReader.goToEntry(false) });
@@ -284,6 +291,11 @@ console.timeEnd("t1");
 				cloneReader.hidePopupWindow();
 			}
 		);
+		
+		if ($.browser.mozilla == true) {
+// TODO: revisar el instalador, que muestre el boton SOLO si no esta instalado en firefox			
+//			cloneReader.$toolbar.find('.btnInstall').show();					
+		}
 		
 /*		
 		if (this.isMobile != true) {
@@ -551,12 +563,13 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 
 		$('<label><i /></label>').addClass('star').appendTo($div);
 		$('<span />').addClass('feedName').html($.stripTags(entry.feedName, '')).appendTo($div);
+		$('<span />').addClass('entryDate').appendTo($div);
+		
 		$('<span />').addClass('entryContent').html($.stripTags(entry.entryContent, ''))
 			.appendTo($div)
-			.prepend($('<h2 />').html($.stripTags(entry.entryTitle, '')));
-		$('<span />').addClass('entryDate').appendTo($div);
+			.prepend($('<h2 />').html($.stripTags(entry.entryTitle, '')));		
 
-		$entry.find('.feedName, .entryContent').click(function(event) {
+		$entry.find('.title').click(function(event) {
 			var $entry = $(event.target).parents('.entry');
 			
 			if ($entry.hasClass('expanded') == true) {
@@ -566,7 +579,7 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 					.find('.detail').remove();
 				return;
 			}
-			cloneReader.selectEntry($entry, false, false);
+			cloneReader.selectEntry($entry, true, false);
 		});	
 	},
 	
@@ -899,7 +912,7 @@ console.timeEnd("t1");
 		if (clear == true) {
 			this.indexFilters 	= { 'tag': {}, 'feed': {}};
 			this.$ulFilters.children().remove();
-			$('.tooltip').remove(); 
+//			$('.tooltip').remove(); 
 		}
 		
 		for (var i=0; i<filters.length; i++) {
@@ -972,9 +985,10 @@ console.timeEnd("t1");
 				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
 			});
 			
+		/*
 		if (this.isMobile == false) {
 			$filter.find('a').tooltip({ placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
-		}
+		}*/
 
 
 		this.renderCounts(filter);
@@ -1598,6 +1612,10 @@ console.timeEnd("t1");
 		this.isMobile = $(window).width() < 768;		
 		$('body').css('overflow', 'auto');
 cn(this.isMobile);		
+	},
+	
+	install: function() {
+		navigator.mozApps.install(base_url + 'manifest.webapp');
 	}
 };
 
@@ -1612,6 +1630,7 @@ $.fn.scrollStopped = function(callback) {
 	});
 };
 
+/*
 $(document).ready(
 	function() {
 		if ($.browser.mozilla == true) {
@@ -1620,3 +1639,4 @@ $(document).ready(
 	}
 );
 
+*/

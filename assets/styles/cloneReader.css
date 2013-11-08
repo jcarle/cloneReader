@@ -273,7 +273,7 @@
 			padding: 0;
 			border: 0;
 			border-bottom: 1px solid #CCCCCC;
-			min-height:40px !important;
+			min-height:50px !important;
 			font-size:small;
 		}
 		#cloneReader .ulEntries.list > li.entriesHead {
@@ -290,50 +290,59 @@
 			display:block;
 		}
 			#cloneReader .ulEntries.list > li .title {
-				height: 40px;
-				line-height: 40px;
+				height: 50px;
+				cursor: pointer;
 			}
-			#cloneReader .ulEntries.list > li .title * {
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				height: 40px;
-				line-height: 40px;
-				margin: 0 5px;
-				float: left;
-			}		
 			#cloneReader .ulEntries.list > li.expanded .title,
 			#cloneReader .ulEntries.list > li.readed .title {
 				background: #eee;
 			}
+				#cloneReader .ulEntries.list > li .title .star {
+					float: left;
+					margin:5px 0px 0 5px;
+					height:25px;
+					line-height:25px;
+				}			
 				#cloneReader .ulEntries.list > li .title .feedName {
-					width: 150px;
-					cursor: pointer;
+					width: auto;
 					color: gray;
+					float: left;
+					margin:5px 0px 0 5px;
+				    font-size: medium;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;					
+				    max-width: 70%;
+					height:25px;
+					line-height:25px;					
 				}
+				#cloneReader .ulEntries.list > li .title .entryDate {
+					float: right;
+					margin: 5px 10px 0 0;
+   					color: gray;
+   					font-size:smaller;
+				}				
 				#cloneReader .ulEntries.list > li .title .entryContent {
+					float: none;
+					clear:both;
 					color: gray;
-					left: 190px;
-					position: absolute;
-					right: 128px;
 					text-align: left;
-					cursor: pointer;
+					display:block;
+					margin:0 5px 0px 26px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;										
 				}
 					#cloneReader .ulEntries.list > li .title .entryContent h2 {
 						color: #333;
 						font-weight: bold;
 						display: inline;
 						font-size: small;
+						margin: 0 5px 0 0;
 					}
 					#cloneReader .ulEntries.list > li.readed .title	.entryContent h2 {
 						font-weight: normal;
 					}
-				#cloneReader .ulEntries.list > li .title .entryDate {
-					float: right;
-					margin: 0 10px 0 0;
-   					color: gray;
-   					font-size:small;
-				}
 				#cloneReader .ulEntries.list > li .footer {
 					border-radius: 0;
 				}
