@@ -980,7 +980,7 @@ console.timeEnd("t1");
 	
 	isVisible: function(filter, parentIsVisible) { // TODO: renombrar a filterIsVisible
 		filter = this.getFilter(filter);
-		if (filter.type == 'tag' && (filter.id == TAG_STAR || filter.id == TAG_HOME)) {
+		if (filter.type == 'tag' && $.inArray(filter.id, [TAG_STAR, TAG_HOME, TAG_ALL]) != -1) {
 			return true;
 		}		
 		if (parentIsVisible == true && parseInt(this.getCountFilter(filter)) > 0) {
