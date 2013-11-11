@@ -1,7 +1,7 @@
 cloneReader = {
 	init: function(aFilters) {
 		this.$container = $('#cloneReader');
-		this.$toolbar 	= $('<nav class="navbar navbar-default navbar-fixed-top" role="navigation" />').appendTo(this.$container);
+		this.$toolbar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$container);
 		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$container);
 		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$container);		 		
 		
@@ -15,7 +15,6 @@ cloneReader = {
 		this.aEntries	 		= {};
 		this.filters			= null;
 		this.tags				= null;
-		this.lastScrollTop 		= 0;
 		this.aUserEntries 		= {};
 		this.aUserTags			= {};
 		this.aFilters 			= $.extend({
@@ -41,27 +40,28 @@ cloneReader = {
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
-		$('body').css('background', '#EEEEEE');
+		$('body').css('background', '#E5E5E5');
 
-		this.$ulEntries.on({ 'tap' : 
-			function(event){
-				var $entry = $(event.target);
-				cloneReader.selectEntry($entry, false, false);
-			} 
-		});
-		$(window).scrollStopped(function(){
-			cloneReader.checkScroll();
-			cloneReader.getMoreEntries();
-		});
+		this.$ulEntries
+			.on({ 'tap' : 
+				function(event){
+					var $entry = $(event.target);
+					cloneReader.selectEntry($entry, false, false);
+				} 
+			})
+			.scrollStopped(function(){
+				cloneReader.checkScroll();
+				cloneReader.getMoreEntries();
+			});
 		
-		this.maximiseUlEntries(this.isMaximized, false, false);
+		this.maximiseUlEntries(this.isMaximized, false);
 		
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			if (cloneReader.isMobile != true) {
 				cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 			}
-			cloneReader.maximiseUlEntries(cloneReader.isMaximized, false, true);
+			cloneReader.maximiseUlEntries(cloneReader.isMaximized, true);
 		});
 		
 		$(document).keyup($.proxy(
@@ -77,7 +77,7 @@ cloneReader = {
 						this.loadEntries(true, true, {});
 						break;
 					case 85: // U: expand!			
-						this.maximiseUlEntries(!this.isMaximized, true, false);
+						this.maximiseUlEntries(!this.isMaximized, false);
 						break;
 					case 83: // S: star
 						var $entry = this.$ulEntries.find('.entry.selected');
@@ -122,7 +122,7 @@ cloneReader = {
 		
 		$('#header .logo').click(function(event) { 
 			if (cloneReader.isMobile != true) {  return;  }
-			cloneReader.maximiseUlEntries(!cloneReader.isMaximized, true, false);
+			cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false);
 		} );		
 	},
 	
@@ -130,23 +130,20 @@ cloneReader = {
 		if (this.aFilters.viewType == 'list') {
 			return;
 		}
-		if (this.$ulEntries.find('li.selected').length && $(window).scrollTop() == 0) { 
+		if (this.$ulEntries.find('li.selected').length && this.$ulEntries.scrollTop() == 0) { 
 			return;
 		}
 		if (this.$ulEntries.is(':animated') == true) {
 			return;
 		}		
-		
+
 		var top 		= this.$ulEntries.offset().top;
-		var height	 	= $(window).height() - top - 10;
+		var height	 	= this.$ulEntries.outerHeight();
 		var aLi			= this.$ulEntries.find('.entry');
-		var scrollTop	= $(window).scrollTop();
-		
 		
 		for (var i=0; i<aLi.length; i++) {
 			var $entry 	= $(aLi[i]);
 			var offset 	= $entry.find('p:first').offset();
-			offset.top	= offset.top - scrollTop;
 			if (top <= offset.top) { 
 				this.selectEntry($entry, false, false);
 				return;
@@ -257,7 +254,7 @@ cloneReader = {
 		
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		
-		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.isMaximized, true, false) } );
+		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false) } );
 		this.$toolbar.find('.btnInstall').click(function() { cloneReader.install() } );
 		this.$toolbar.find('.btnMarkAllAsFeed').click( function() { cloneReader.markAllAsFeed(); } );
  		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
@@ -287,11 +284,6 @@ cloneReader = {
 // TODO: revisar el instalador, que muestre el boton SOLO si no esta instalado en firefox			
 //			cloneReader.$toolbar.find('.btnInstall').show();					
 		}
-		
-/*		
-		if (this.isMobile != true) {
-			this.$mainToolbar.find('a').tooltip( { placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
-		}*/
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -305,7 +297,7 @@ cloneReader = {
 		}
 		
 		if (clear == true && this.isMobile == true && this.$ulEntries.children().length != 0) { // Si no es la primera carga y es mobile, maximizo al cambiar el filtro
-			this.maximiseUlEntries(true, false, false);
+			this.maximiseUlEntries(true, false);
 		}
 				
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
@@ -314,9 +306,7 @@ cloneReader = {
 		if (clear == true) {
 			this.aFilters['page'] = 1;
 			this.$ulEntries.children().remove();
-			
-			this.lastScrollTop = 0;
-			$('html,body').scrollTop(0);
+			this.$ulEntries.scrollTop(0);
 		}
 		
 		if (this.isMobile != true) { // Actualizo el valor de isMaximized sino isMobile 
@@ -394,7 +384,6 @@ cloneReader = {
 			}
 			
 			var $entry = $('<li/>')
-//					.addClass('clean')
 					.addClass('entry')
 					.data({ 'entryId': entry.entryId } )
 					.appendTo(this.$ulEntries);
@@ -410,21 +399,12 @@ cloneReader = {
 		if ($entry.hasClass('noResult') == true) {
 			return false;
 		}
-/*		if ($entry.visible( true ) == false) {
-			$entry.addClass('clean').children().remove();
-			return false;
-		}*/
-/*		if ($entry.hasClass('clean') == false) {
-			return false;
-		}*/
 		
 		$entry.children().remove();		
 
 		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
 
-//		$entry.removeClass('clean');
-		
 		if (this.aFilters.viewType == 'detail') {
 			this.renderDetailEntry($entry, entry);
 		}
@@ -484,7 +464,7 @@ $entryContent.find('br').remove();
 
 		var $p = $('<p/>').html($entryContent.text()).appendTo($entry);
 
-		var $footer = $('<div class="form-actions panel-footer form-inline navbar-form navbar-inner " />').addClass('footer ').appendTo($entry);
+		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 
 		$('<label class="star checkbox" > <i/> </label>').appendTo($footer);
 		$('<label class="read checkbox" > <i/> <span> keep unread </span> </label>').appendTo($footer);
@@ -752,10 +732,6 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 		if ($entry.hasClass('noResult') == true) { return; }
 		if (this.$ulEntries.find('> li.entry.selected:first').is($entry)) { return; }
 	
-		/*if ($entry.hasClass('clean')) {
-			this.renderEntry($entry);
-		}*/
-		
 		this.$ulEntries.find(' > li.entry.selected').removeClass('selected');
 		$entry.addClass('selected');
 
@@ -799,13 +775,11 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 		if ($entry.length == 0) { return; }
 		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
 
-//cn($entry);		
-
-		var top = $entry.offset().top - this.$ulEntries.offset().top - 5;
-//cn(top);		
+//		var top = $entry.offset().top;
+		var top = $entry.get(0).offsetTop - 10;		
 
 		if (animate == true) { 
-			 $('html,body').stop().animate( 
+			 this.$ulEntries.stop().animate( 
 				{  scrollTop: top  }
 				,
 				$.proxy(
@@ -816,8 +790,8 @@ cn(animate);
 cn(this);						*/
 //var $entry 	= cloneReader.$ulEntries.find('li.selected');
 //						var top 	= $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop() - 10;
-						var top 	= $entry.offset().top - this.$ulEntries.offset().top +  $('body').scrollTop() - 10;
-						if (top != /*this.$ulEntries*/  $('body').scrollTop()) {
+						var top 	= $entry.offset().top - this.$ulEntries.offset().top +  this.$ulEntries.scrollTop() - 10;
+						if (top != this.$ulEntries.scrollTop()) {
 /*cn('aaa');
 cn(animate);		
 cn(top);	
@@ -830,7 +804,7 @@ cn(cloneReader.$ulEntries.scrollTop());*/
 			);
 		}
 		else {
-			$('html,body').stop().scrollTop(top);
+			this.$ulEntries.stop().scrollTop(top);
 		}
 	},
 	
@@ -907,7 +881,6 @@ console.timeEnd("t1");
 		if (clear == true) {
 			this.indexFilters 	= { 'tag': {}, 'feed': {}};
 			this.$ulFilters.children().remove();
-//			$('.tooltip').remove(); 
 		}
 		
 		for (var i=0; i<filters.length; i++) {
@@ -939,8 +912,8 @@ console.timeEnd("t1");
 
 			filter.count = this.getCountFilter(filter);
 			this.renderCounts(filter);
-				
-			if (this.isVisible(filter, $parent.is(':visible')) == true) {
+
+			if (this.isVisible(filter, $parent.hasClass('filterVisible')) == true) {
 				this.renderFilter(filter, $parent, index);
 				index++;
 			}
@@ -980,12 +953,6 @@ console.timeEnd("t1");
 				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
 			});
 			
-		/*
-		if (this.isMobile == false) {
-			$filter.find('a').tooltip({ placement: 'bottom', container: 'body', delay: { show: 500, hide: 100 }  });
-		}*/
-
-
 		this.renderCounts(filter);
 
 		if (filter.icon != null) {
@@ -1004,7 +971,7 @@ console.timeEnd("t1");
 					});
 
 			if (filter.expanded == false) { 
-				$filter.find('ul').hide(); 
+				$filter.find('ul').removeClass('filterVisible');
 			}
 		}
 
@@ -1105,16 +1072,16 @@ console.timeEnd("t1");
 				'expanded': 	value
 			};
 		}
-		
+
 		var $filter	= filter.$filter;
 		var $arrow 	= $filter.find('.arrow:first');
 		var $ul 	= $filter.find('ul:first');
 		
 		$arrow.removeClass('icon-collapse').removeClass('icon-expand');
-
+		
 		if (value != true) {
 			$arrow.addClass('icon-expand');
-			$ul.stop().hide('fast', function() { $(this).hide()});
+			$ul.removeClass('filterVisible');
 			return;
 		}
 
@@ -1127,14 +1094,12 @@ console.timeEnd("t1");
 		}
 
 		$arrow.addClass('icon-collapse');
-		$ul.stop().show('fast', function() { 
-			$(this).show();
-		});
+		$ul.addClass('filterVisible');
 		
 		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
 	
-	maximiseUlEntries: function(value, animate, isResize) {
+	maximiseUlEntries: function(value, isResize) {
 		if (isResize == false) {
 			this.hideMobileNavbar();
 		}
@@ -1145,74 +1110,28 @@ console.timeEnd("t1");
 		
 		if (this.isMobile == true) {
 			if (value == true) {
-				this.$ulEntries.show();	
-				if (isResize != true) {
-					$('html,body').scrollTop(this.lastScrollTop);			
-					this.$ulFilters.css('top', $(window).scrollTop());
-				}				
-				this.$ulFilters.stop().animate(
-					{ 'left': '-100%' },
-					{
-						duration: speed ,
-						complete: function() {
-							cloneReader.$ulFilters.hide();
-							if (isResize != true) {
-								$('html,body').scrollTop(cloneReader.lastScrollTop);
-							}
-						}
-					}
-				);
+				this.$ulFilters.addClass('outside');
 			}
 			else {
-				this.$ulFilters.show();
-				this.lastScrollTop = $(window).scrollTop();
-				$('html,body').scrollTop(this.lastScrollTop);			
-				this.$ulFilters.css('top', $(window).scrollTop());
-				this.$ulFilters.stop().animate(
-					{ 'left': '0'  },
-					{
-						duration: speed ,
-						complete: function() {
-							cloneReader.$ulEntries.hide();
-							cloneReader.$ulFilters.css('top', 0);	
-						}
-					}
-				);
+				this.$ulFilters.removeClass('outside');
 			}
 			return;
 		}
-		
-		var left = 0;
+
+
 		if (value == false) {
-			left = this.$ulFilters.outerWidth();
-		}
-
-
-		this.$ulFilters.show().css({'left': 0, 'top': 101 }); // TODO: desharckodear!
-		this.$ulEntries.show();
-
-// TODO: revisar		
-//		this.updateUserFilters();
-		
-		if (animate == true) {
-			this.$ulEntries.stop().animate(
-				{ 'margin-left': left }, 
-				{
-					duration: speed ,
-				 	complete: function() {
-						cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-						if (cloneReader.isMaximized == true) {
-							cloneReader.$ulFilters.hide();
-						}
-				}
-			});
+			this.$ulEntries.removeClass('maximixed');
 		}
 		else {
-			this.$ulEntries.stop().css(	{ 'margin-left': left } );
-			if (this.isMaximized == true) {
-				this.$ulFilters.hide();
-			}
-		}				
+			this.$ulEntries.addClass('maximixed');
+		}
+		
+		this.$ulEntries.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', 
+			function() {		
+					cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+			});
+			
+		this.updateUserFilters();
 	},
 
 	addFeed: function() {
@@ -1250,12 +1169,6 @@ console.timeEnd("t1");
 	},
 	
 	saveData: function(async){
-/*		if (this.$ulEntries.getNiceScroll().length != 0) {
-			if (this.$ulEntries.getNiceScroll()[0].scrollrunning == true) {
-				return;
-			}
-		}*/
-		
 		if (Object.keys(this.aUserEntries).length == 0 && Object.keys(this.aUserTags).length == 0) {
 			return;
 		}
@@ -1548,15 +1461,13 @@ console.timeEnd("t1");
 		$('.content > div > h1').hide();
 		$('.content').css( { 'max-width': '100%' });
 		$('#header').addClass('navbar-fixed-top').css( { 'max-width': '100%' } );
+
 		$('.menu').remove();
 		
 
-		var height = $(window).height() - (this.isMobile == true ? 50 : 100); //FIXME: harckodeta! // - this.$ulEntries.offset().top - $('#footer').outerHeight(true); // TODO: revisar el -1
-		this.$ulFilters.height(height);
+		var height = $(window).height() - (this.isMobile == true ? $('#header').outerHeight() : 102); //FIXME: harckodeta! // - this.$ulEntries.offset().top - $('#footer').outerHeight(true); // TODO: revisar el -1
 		$('.navbar-ex1-collapse').css('max-height', height);
-		
-		this.$container.css('min-height', this.$ulFilters.height());
-		
+
 		this.resizeNoResult();
 	},
 	
@@ -1565,7 +1476,7 @@ console.timeEnd("t1");
 		
 		this.$noResult
 			.css('min-height', 
-				$(window).height() 
+				this.$ulEntries.height() 
 //				- $('#header').outerHeight()
 //				- this.$ulEntries.find('.entriesHead').outerHeight()
 //				- this.$ulEntries.offset().top 
@@ -1635,3 +1546,4 @@ $(document).ready(
 );
 
 */
+

@@ -178,7 +178,7 @@ $CI->carabiner->display('js');
 			</form>
 <?php
 echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav pull-right');
-?>            
+?>
 		</div>
 	</nav>
 

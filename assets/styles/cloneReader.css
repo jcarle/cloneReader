@@ -28,17 +28,20 @@
 #cloneReader {
 	position:relative;
 	overflow:hidden;
-	margin-top:100px;
+	width:100%;
+	height:calc(100% - 50px);
+	margin-top:50px;
+	position:absolute;
 }
 #cloneReader .popupForm {
 	padding: 5px 10px;
 	width:300px;
 }
 	#cloneReader nav {
-		top:50px;
 		z-index: 1;
-		margin:0;
+		margin:-2px 0 0 0;
 		box-shadow: 0 0px 7px #666;
+		border-radius:0;
 	}
 		#cloneReader .nav > li {
 			margin-left:5px;
@@ -61,26 +64,13 @@
 		#cloneReader nav .feedSettings a,
 		#cloneReader nav .filterSort a,
 		#cloneReader nav .filterUnread a {
-/*			font-size: small;*/
 		}
 		#cloneReader nav .expand,
 		#cloneReader nav .tooglePageHeader {
-/*			float: left;*/
 		}	
 		#cloneReader .navbar-collapse {
 			max-height:none;
 		}		
-
-/*
-	#cloneReader nav:first-child {
-		float:left;
-		border:1px red solid;
-	}
-	#cloneReader nav:last-child {
-		float:right;
-		border:1px red solid;
-	}	*/
-	
 			
 @media (min-width: 768px) {
 	#cloneReader nav ul li button .btnLabel {
@@ -90,15 +80,22 @@
 
 	#cloneReader .ulEntries {
 		display:block;
-		border:0px gray solid;
 		list-style: none;
 		width: auto;
 		min-width:200px;
-		margin: 0 0 0 240px;
+		height:calc(100% - 50px);
+		right:0; left: 240px;
+		top:50px;
 		padding:0;
-		position: relative;
+		position: absolute;
 		overflow-x:auto;
-		background:#EEEEEE;
+		background:#E5E5E5;
+		-webkit-transition: all 0.25s ease 0s;
+		-ms-transition: all 0.25s ease 0s;
+		transition: all 0.25s ease 0s;
+	}
+	#cloneReader .ulEntries.maximixed {
+		left:0;
 	}
 		#cloneReader .ulEntries > li {
 			background:white;
@@ -106,7 +103,7 @@
 			border:1px #CCC solid;
 			border-radius:5px;
 			margin:0px 5px 20px 5px;
-			box-shadow:0 15px 7px -14px gray;
+			box-shadow:0 2px 4px gray;
 			position: relative;
 			min-height: 50px;
 		}
@@ -114,11 +111,6 @@
 			border-left:2px #1155CC solid !important;
 			border-radius:0 5px 5px 0; 
 			padding:0;
-		}
-		#cloneReader .ulEntries > li.clean, 
-		#cloneReader .ulEntries > li.clean.selected {
-			border:0;
-			box-shadow:none;
 		}
 		#cloneReader .ulEntries > li:last-child {
 			border: 0 none;
@@ -133,7 +125,6 @@
 			font-weight: bold;
 			margin:0 0 10px 0px;
 			padding: 10px;
-			box-shadow: 0 15px 7px -14px gray;
 			min-height: 10px !important;
 		}
 		#cloneReader .ulEntries > li.readed {}
@@ -187,7 +178,7 @@
 					cursor:pointer;
 				}
 			#cloneReader .ulEntries > li p {
-				margin:0 10px 40px 10px;
+				margin:0 10px 10px 10px;
 				max-width: 100%;
 				overflow: auto;
 				position: relative;	
@@ -225,10 +216,9 @@
 				border-left: 0;
 				border-right: 0;
 				border-radius: 0 0 5px 5px;
-				position:absolute;
-				left:0; bottom:0;
-				padding:0px;
+				padding:10px 0px;
 				margin:0px;
+				font-size:medium;
 			}
 			#cloneReader .ulEntries > li.selected .footer {
 				border-radius: 0 0 4px 0px;
@@ -245,6 +235,7 @@
 				}
 					#cloneReader .ulEntries > li .footer .read span {
 						font-size:smaller;
+						font-weight: normal;
 					}
 					#cloneReader .ulEntries > li .footer .read.selected i {
 						color: #1155CC;
@@ -294,7 +285,7 @@
 			}
 			#cloneReader .ulEntries.list > li.expanded .title,
 			#cloneReader .ulEntries.list > li.readed .title {
-				background: #eee;
+				background: #F5F5F5;
 			}
 				#cloneReader .ulEntries.list > li .title .star {
 					float: left;
@@ -350,12 +341,13 @@
 	#cloneReader ul.ulFilters {
 		background:white;
 		width: 240px;
-		position:fixed;
-		left:0; top:111px; 
+		position:absolute;
+		left:0; top:50px; 
 		overflow:auto;
 		list-style: none;
 		margin: 0px;
 		padding:0px;
+		height:calc(100% - 50px);
 	}
 		#cloneReader ul.ulFilters li {
 			position: relative;
@@ -415,6 +407,29 @@
 				padding:0;
 				list-style:none;
 				margin-left: 0;
+				height:0;
+/*				opacity:0;*/
+				visibility:hidden;
+				-webkit-transform: translateX(-100%);
+					-o-transform: translateX(-100%);
+					-ms-transform: translateX(-100%);
+					transform: translateX(-100%);
+				-webkit-transition: all 0.25s ease 0s;
+				-ms-transition: all 0.25s ease 0s;
+				transition: all 0.25s ease 0s;
+				-webkit-transform-origin: top;
+				-o-transform-origin: top;
+				-ms-transform-origin: top;
+				transform-origin: top;
+			}
+			#cloneReader ul.ulFilters li ul.filterVisible {
+				-webkit-transform: translateX(0);
+					-o-transform: translateX(0);
+					-ms-transform: translateX(0);
+					transform: translateX(0);
+				height:100%;
+				visibility:visible;
+/*				opacity:1;*/
 			}
 				#cloneReader ul.ulFilters li ul  li {
 				}
@@ -440,12 +455,15 @@
 
 
 @media (max-width: 767px) {
+	#header .navbar-ex1-collapse {
+	}	
 	#header .mainToolbar li {
 		padding-left:15px;
 	}
 	#cloneReader {
-		margin-top:50px;
-	}	
+		
+/*		margin-top:50px;*/
+	}
 	#cloneReader nav .expand {
 	}
 		#cloneReader nav .expand i {
@@ -453,11 +471,32 @@
 		}
 		#cloneReader ul.ulFilters {
 			width: 100%;
-			left:0;
+			-webkit-transition: all 0.25s ease 0s;
+			-ms-transition: all 0.25s ease 0s;
+			transition: all 0.25s ease 0s;
+			position: absolute;
+			top:0px;
+			width: 100%;
+			height: calc(100%);
+			z-index: 999;
+			background: white;
+			overflow:auto;
+			border: 1px solid #CCCCCC;
+			box-shadow: 0 0 5px #808080;
+			-webkit-transform: translateX(0%);
+			-ms-transform: translateX(0%);
+			transform: translateX(0%);			
+		}
+		#cloneReader ul.ulFilters.outside {
+			-webkit-transform: translateX(-100%);
+			-ms-transform: translateX(-100%);
+			transform: translateX(-100%);			
 		}
 	#cloneReader ul.ulFilters li {
-		border-top:1px #ccc solid;
 	}
+		#cloneReader ul.ulFilters li > div {
+			border-bottom:1px #ccc solid;
+		}
 		#cloneReader ul.ulFilters li div .icon {
 			background-position: center center;
 			width: 50px;
@@ -471,7 +510,6 @@
 			height: 50px;
 			line-height: 50px;		
 		}
-		
 		#cloneReader ul.ulFilters li div .icon {
 			left: 0px;
 		}
@@ -496,21 +534,9 @@
 			top: 0;
 			left: 0;
 			width: auto;
-			height: auto !important;
-			display:none;
+			height: calc(100%);
 			margin:0 !important;
-		}
-		#cloneReader ul.ulFilters {
-			position: absolute;
-			top:0px;
-			left:-100%;
-			width: 100%;
-			z-index: 999;
-			background: white;
-			display:none;
 			overflow:auto;
-			border: 1px solid #CCCCCC;
-			box-shadow: 0 0 5px #808080;
 		}
 		#cloneReader .ulEntries > li .header > a  {
 			margin:0 20px 0 0;
