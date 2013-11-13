@@ -104,17 +104,18 @@ class News extends CI_Controller {
 					'label'		=> 'Date', 
 					'value'		=> date('Y-m-d H:i:s') //element('newDate', $data, date('d-m-Y H:i:s', time()) )
 				),
-				'newSef' => array(
-					'type' 		=> 'text',
-					'label'		=> 'Sef', 
-					'value'		=> element('newSef', $data),
-					'disabled'	=> true,	
-				),
 			), 		
 		);
 
 		
 		if ((int)element('newId', $data) > 0) {
+			$form['fields']['newSef'] = array(
+				'type' 		=> 'text',
+				'label'		=> 'Sef', 
+				'value'		=> element('newSef', $data),
+				'disabled'	=> true,	
+			); 
+			
 			$form['urlDelete'] = base_url('news/delete/');
 		}		
 		

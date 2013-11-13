@@ -50,4 +50,14 @@ class News_Model extends CI_Model {
 		return true;
 	}	
 
+	function selectToRss(){
+		$query = $this->db
+			->select(' news.newId, newTitle, newContent, newSef, newDate, CONCAT(userFirstName, \' \', userLastName) AS userFullName ', false)
+			->join('users', 'news.userId = users.userId', 'inner')
+			->order_by('newDate DESC')
+		 	->get('news', 30, 0);
+
+		$query->foundRows = $this->Commond_Model->getFoundRows();
+		return $query;
+	}
 }
