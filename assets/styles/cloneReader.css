@@ -410,10 +410,10 @@
 				height:0;
 /*				opacity:0;*/
 				visibility:hidden;
-				-webkit-transform: translateX(-100%);
-					-o-transform: translateX(-100%);
-					-ms-transform: translateX(-100%);
-					transform: translateX(-100%);
+				-webkit-transform: scaleY(0);
+					-o-transform: scaleY(0);
+					-ms-transform: scaleY(0);
+					transform: scaleY(0);
 				-webkit-transition: all 0.25s ease 0s;
 				-ms-transition: all 0.25s ease 0s;
 				transition: all 0.25s ease 0s;
@@ -423,10 +423,10 @@
 				transform-origin: top;
 			}
 			#cloneReader ul.ulFilters li ul.filterVisible {
-				-webkit-transform: translateX(0);
-					-o-transform: translateX(0);
-					-ms-transform: translateX(0);
-					transform: translateX(0);
+				-webkit-transform: scaleY(1);
+					-o-transform: scaleY(1);
+					-ms-transform: scaleY(1);
+					transform: scaleY(1);
 				height:100%;
 				visibility:visible;
 /*				opacity:1;*/

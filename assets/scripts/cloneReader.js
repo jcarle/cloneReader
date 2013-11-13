@@ -411,8 +411,7 @@ cloneReader = {
 		else {
 			this.renderListEntry($entry, entry);
 		}
-//cn('renderEntry');		
-//cn($entry);		
+
 		$entry.find('.star').click(function(event) {
 			event.stopPropagation();
 			$star = $(event.target);
@@ -424,7 +423,6 @@ cloneReader = {
 		
 		this.starEntry($entry, entry.starred);
 		this.readEntry($entry, (entry.entryRead == true));
-//		$entry.stop().css('opacity', 0).animate( {'opacity': 1}, 'fast');
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
 		
@@ -434,13 +432,11 @@ cloneReader = {
 	renderDetailEntry: function($entry, entry) {
 		var $header = $('<div/>').addClass('header').appendTo($entry);
 
-var aaa = this.$ulEntries.find(' > li ').index($entry);
-
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
 			.css('background-image', 'url(' + base_url + (entry.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + entry.feedIcon) + ')')
-			.html(aaa + ' - ' + entry.entryTitle || '&nbsp;')
+			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 
 		$('<label><i /></label>').addClass('star').appendTo($header);
@@ -460,7 +456,7 @@ var aaa = this.$ulEntries.find(' > li ').index($entry);
 		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
 		$entryContent.find('script').remove();
 		$entryContent.find('iframe').remove();
-$entryContent.find('br').remove();
+		$entryContent.find('br').remove();
 
 		var $p = $('<p/>').html($entryContent.text()).appendTo($entry);
 
@@ -503,25 +499,6 @@ TODO: pensar como mejorar esta parte
 			}
 			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.hasClass('selected'));
 		});				
-						
-//		$entry.css('min-height', $entry.height());
-//		$entry.css('min-height', 1).css('min-height', $entry.height());
-		$entry.find('img').load(
-			function(event) {
-				var $entry = $(event.target).parents('.entry');
-				if ($entry.visible(true) != true) {
-					return;
-				}
-//				$entry.css('min-height', $entry.height());
-//				$entry.css('min-height', 1).css('min-height', $entry.height());
-	/*			
-if (cloneReader.$ulEntries.is(':animated') == true) {				
-	cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
-
-	cn('img.load!');
-}*/
-			}
-		);
 		
 		$entry.find('p').children().removeAttr('class');
 		$entry.find('a').attr('target', '_blank');
@@ -725,9 +702,6 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 	},
 	
 	selectEntry: function($entry, scrollTo, animate) {
-//cn('selectEntry');		
-//cn($entry);		
-
 		if ($entry.length == 0) { return; }
 		if ($entry.hasClass('noResult') == true) { return; }
 		if (this.$ulEntries.find('> li.entry.selected:first').is($entry)) { return; }
@@ -775,33 +749,10 @@ if (cloneReader.$ulEntries.is(':animated') == true) {
 		if ($entry.length == 0) { return; }
 		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
 
-//		var top = $entry.offset().top;
 		var top = $entry.get(0).offsetTop - 10;		
 
 		if (animate == true) { 
-			 this.$ulEntries.stop().animate( 
-				{  scrollTop: top  }
-				,
-				$.proxy(
-					function($entry, animate) {
-// TODO: revisar esta parte; si durante la aminación se lodearon imagenes, la $entry queda mal posicionada...
-/*cn($entry);
-cn(animate);
-cn(this);						*/
-//var $entry 	= cloneReader.$ulEntries.find('li.selected');
-//						var top 	= $entry.offset().top - this.$ulEntries.offset().top + this.$ulEntries.scrollTop() - 10;
-						var top 	= $entry.offset().top - this.$ulEntries.offset().top +  this.$ulEntries.scrollTop() - 10;
-						if (top != this.$ulEntries.scrollTop()) {
-/*cn('aaa');
-cn(animate);		
-cn(top);	
-cn(cloneReader.$ulEntries.scrollTop());*/
-//							this.scrollToEntry($entry, false);
-//cloneReader.$ulEntries.stop().scrollTop(top);
-						}
-					}
-				, this, $entry, animate) 
-			);
+			 this.$ulEntries.stop().animate( {  scrollTop: top  } );
 		}
 		else {
 			this.$ulEntries.stop().scrollTop(top);
@@ -971,7 +922,7 @@ console.timeEnd("t1");
 					});
 
 			if (filter.expanded == false) { 
-				$filter.find('ul').removeClass('filterVisible');
+				this.animateFilter($filter.find('ul'), false);
 			}
 		}
 
@@ -1074,8 +1025,27 @@ console.timeEnd("t1");
 		}
 
 		var $filter	= filter.$filter;
-		var $arrow 	= $filter.find('.arrow:first');
+		
+		if (value != true) {
+			this.animateFilter($filter, value);
+		}
+
 		var $ul 	= $filter.find('ul:first');
+		var index 	= 0;
+		for (var i=0; i<filter.childs.length; i++) {
+			if (this.isVisible(filter.childs[i], true) == true) {
+				this.renderFilter(filter.childs[i], $ul, index);
+				index++;
+			}
+		}
+
+		this.animateFilter($filter, value);
+		this.getFilter(this.aFilters).$filter.addClass('selected');
+	},
+	
+	animateFilter: function($filter, value) {
+		var $ul 	= $filter.find('ul:first');
+		var $arrow 	= $filter.find('.arrow:first');
 		
 		$arrow.removeClass('icon-collapse').removeClass('icon-expand');
 		
@@ -1085,18 +1055,8 @@ console.timeEnd("t1");
 			return;
 		}
 
-		var index = 0;
-		for (var i=0; i<filter.childs.length; i++) {
-			if (this.isVisible(filter.childs[i], true) == true) {
-				this.renderFilter(filter.childs[i], $ul, index);
-				index++;
-			}
-		}
-
 		$arrow.addClass('icon-collapse');
 		$ul.addClass('filterVisible');
-		
-		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
 	
 	maximiseUlEntries: function(value, isResize) {
@@ -1517,7 +1477,6 @@ console.timeEnd("t1");
 		$('body').css('overflow', 'hidden');
 		this.isMobile = $(window).width() < 768;		
 		$('body').css('overflow', 'auto');
-cn(this.isMobile);		
 	},
 	
 	install: function() {
