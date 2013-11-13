@@ -8,6 +8,7 @@ class Rss extends CI_Controller {
 	}
 	
 	function index() {
+		// Es publico, evito la peticion a la db
 //		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$page = (int)$this->input->get('page');

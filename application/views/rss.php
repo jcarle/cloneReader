@@ -6,26 +6,17 @@
 		<atom:link href="<?php echo base_url('feed'); ?>" rel="self" type="application/rss+xml" />
 		<description><?php echo $feedDesc ?></description>
 		<language>es-es</language>
-		<!--define la fecha de la última publicación del contenido en el feed RSS-->
-		<pubDate></pubDate>
+		<pubDate><?php echo $news[0]['newDate']; ?></pubDate>
 		<sy:updatePeriod>hourly</sy:updatePeriod>
-		<!--cada cuántas horas quieres que mire si
-		hay nuevos posts tu feed, entre 0 y 24-->
-		<sy:updateFrequency>1</sy:updateFrequency>
-		<!--define la fecha de la última publicación del contenido en el feed RSS-->
-		<lastBuildDate></lastBuildDate>
+		<sy:updateFrequency>24</sy:updateFrequency>
+		<lastBuildDate><?php echo $news[0]['newDate']; ?></lastBuildDate>
 		<docs>http://www.rssboard.org/rss-specification</docs>
-		<managingEditor>el email del creador del feed</managingEditor>
-		<webMaster>el webmaster</webMaster>
-		<!--obtenemos los posts para nuestro feed-->
+		<managingEditor>jcarle@gmail.com</managingEditor>
+		<webMaster>jcarle@gmail.com</webMaster>
 		<?php 
-pr($news);		
 		foreach ($news as $new){ ?>
 			<item>
 				<title><?php echo $new['newTitle']; ?></title>
-				<!--el enlace permanente de nuestro posts por ejemplo
-				http://localhost/rssCI/titulodelpost/iddelpost, por cada enlace
-				se crearía un enlace permanente-->
 				<link><?php echo base_url('news/'.$new['newSef']) ?></link>
 				<description><![CDATA[<?php echo $new['newContent']; ?>]]></description>
 				<pubDate><?php echo $new['newDate']; ?></pubDate>
