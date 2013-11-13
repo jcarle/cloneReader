@@ -65,10 +65,10 @@ class Users_Model extends CI_Model {
 	
 	function search($filter, $groupId = null){
 		$this->db
-			->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS value  ', false)
+			->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS text  ', false)
 			->join('users_groups', 'users.userId = users_groups.userId')
 			->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
-			->order_by('value');
+			->order_by('text');
 		 				
 		if ($groupId != null) {
 			$this->db->where('groupId', $groupId);	

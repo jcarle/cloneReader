@@ -133,5 +133,11 @@ class Users extends CI_Controller {
 			'code'		=> $this->Users_Model->delete($this->input->post('userId')), 
 			'result' 	=> validation_errors() 
 		));	
-	}	
+	}
+	
+	function search() { // TODO: implementar la seguridad!
+		return $this->load->view('ajax', array(
+			'result' 	=> $this->Users_Model->search($this->input->get('query'), $this->input->get('groupId'))
+		));
+	}
 }
