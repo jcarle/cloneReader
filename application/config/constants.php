@@ -60,7 +60,7 @@ define('TAG_HOME', 3);
 
 define('FEED_MAX_COUNT', 1000);
 
-define('FEED_CLONEREADER', 714); 	// 	id del feed propio, se muestra en el filtro 'home'
+define('FEED_CLONEREADER', 1633); 	// 	id del feed propio, se muestra en el filtro 'home'
 define('FEED_STATUS_PENDING', 0); 	
 define('FEED_STATUS_APPROVED', 1);
 define('FEED_STATUS_INVALID_FORMAT', 3);
@@ -72,3 +72,6 @@ define('FEED_TIME_RELOAD', 999);  //  Cada cuanto MINUTOS recarga el menu con fe
 define('ENTRIES_PAGE_SIZE', 30);
 
 define('PHP_PATH', 'php'); // para los exec() !
+if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
+	define('PHP_PATH', '/usr/local/bin/php-5.3'); // para los exec() !
+}
