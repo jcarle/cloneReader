@@ -71,7 +71,10 @@ define('FEED_TIME_SAVE', 10); 	// 	Cada cuanto SEGUNDOS guardan los datos
 define('FEED_TIME_RELOAD', 999);  //  Cada cuanto MINUTOS recarga el menu con feeds
 define('ENTRIES_PAGE_SIZE', 30);
 
-define('PHP_PATH', 'php'); // para los exec() !
+
 if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
 	define('PHP_PATH', '/usr/local/bin/php-5.3'); // para los exec() !
+}
+else {
+	define('PHP_PATH', 'php'); // para los exec() !	
 }
