@@ -695,13 +695,6 @@ TODO: pensar como mejorar esta parte
 			this.$mainToolbar.find('.filterUnread').show();
 		}
 		
-		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == TAG_HOME) {
-			this.$mainToolbar.hide();
-		}
-		else {
-			this.$mainToolbar.show();
-		}
-		
 		this.$mainToolbar.find('.filterSort').show();
 	},
 
