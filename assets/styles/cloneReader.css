@@ -143,10 +143,11 @@
 			}
 				#cloneReader .ulEntries > li .header > a {
 					color:#1155CC;
-					font-size: large;
+					font-size: larger;
 					font-weight: bold;
+					line-height: normal;
 					background-repeat: no-repeat;
-					background-position: left center;
+					background-position: left 2px;
 					padding: 0 0px 0 20px;
 					margin: 0;
 					display: inline-block;
