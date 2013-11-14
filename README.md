@@ -1,21 +1,31 @@
-Clone of google reader
+Clone of the old google reader. Reader of feeds, rss news.
+Open source.
+Import subscriptions.xml and starred.json from google reader.
+Remote login.
+Responsive.
+Remote Storage.
+Share entries in social networks.
 
-Reader of feeds, rss
+Source: https://github.com/jcarle/cloneReader
 
-Responsive
+Powered with codeigniter, simplepie, jquery, bootstrap 
 
-Powered with codeigniter, simplepie, jquery, bootstrap
 
 /*************************************************************************/
 
-Clon de google reader
+Clon de google reader. Lector de feeds, rss, noticias.
+Open source.
+Importa subscriptions.xml y starred.json de google reader.
+Login remoto.
+Responsive.
+Remote Storage.
+Share entries in social networks.
 
-Lector de feeds, rss.
+Source: https://github.com/jcarle/cloneReader
 
-Responsive
 
 Desarrrollado con codeigniter, simplepie, jquery, bootstrap
 
 /*************************************************************************/
 
-demo: http://www.jcarle.com.ar/cloneReader/
+demo: http://www.clonereader.com.ar/

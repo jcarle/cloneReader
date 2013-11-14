@@ -60,6 +60,7 @@ define('TAG_HOME', 3);
 
 define('FEED_MAX_COUNT', 1000);
 
+define('FEED_CLONEREADER', 714); 	// 	id del feed propio, se muestra en el filtro 'home'
 define('FEED_STATUS_PENDING', 0); 	
 define('FEED_STATUS_APPROVED', 1);
 define('FEED_STATUS_INVALID_FORMAT', 3);

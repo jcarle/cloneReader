@@ -21,7 +21,7 @@ cloneReader = {
 			'page':			1,
 			'onlyUnread':	true,
 			'sortDesc': 	true,
-			'id': 			TAG_ALL, 
+			'id': 			TAG_HOME, 
 			'type': 		'tag',
 			'viewType': 	'detail',
 			'isMaximized': 	false
@@ -426,6 +426,10 @@ cloneReader = {
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
 		
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == TAG_HOME) {
+			$entry.find('.star, .footer, .entryOrigin').remove();
+		} 
+		
 		return true;
 	},
 	
@@ -442,7 +446,7 @@ cloneReader = {
 		$('<label><i /></label>').addClass('star').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
 					
-		var $div = $('<div />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
+		var $div = $('<div class="entryOrigin" />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
 		if (entry.entryAuthor != '') {
 			$div.html($div.html() + ' by ' + entry.entryAuthor ).appendTo($header);				
 		}	
@@ -545,6 +549,8 @@ TODO: pensar como mejorar esta parte
 		
 		this.$entriesHead.text(filter.name);
 		this.$ulEntries.prepend(this.$entriesHead);				
+		
+		$('title').text(filter.name + ' - cloneReader' );
 	},	
 	
 	selectFilters: function() {
@@ -687,6 +693,13 @@ TODO: pensar como mejorar esta parte
 		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [TAG_STAR, TAG_HOME]) != -1)) {
 			this.$mainToolbar.find('.btnMarkAllAsFeed').show();
 			this.$mainToolbar.find('.filterUnread').show();
+		}
+		
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == TAG_HOME) {
+			this.$mainToolbar.hide();
+		}
+		else {
+			this.$mainToolbar.show();
 		}
 		
 		this.$mainToolbar.find('.filterSort').show();
@@ -870,9 +883,9 @@ console.timeEnd("t1");
 			}
 				
 			if (filter.$filter != null && filter.childs != null) {
-				this.renderFilters(filter.childs, filter.$filter.find('ul:first'), false);
 				this.expandFilter(filter, filter.expanded);
-			}				
+				this.renderFilters(filter.childs, filter.$filter.find('ul:first'), false);
+			}
 		}
 		if (selectFilters == true) {
 			this.selectFilters();

@@ -21,6 +21,12 @@ class Entries_Model extends CI_Model {
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_STAR) {
 			$userFilters['onlyUnread'] = false;
 		}
+		
+		// Tag home, lo tienen todos los usuarios
+		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_HOME) {
+			return $this->selectFeedCR($userId, $userFilters);
+		}
+
 
 		$indexName = 'PRIMARY';
 		$query = $this->db
@@ -50,6 +56,20 @@ class Entries_Model extends CI_Model {
 		
 		return $query;
 	}
+	
+	
+	function selectFeedCR($userId, $userFilters) {
+		$query = $this->db
+			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor ', false)
+			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
+			->where('feeds.feedId', FEED_CLONEREADER)
+			->order_by('entries.entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
+			->get('entries ', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)			
+			->result_array();
+		//pr($this->db->last_query()); 
+		
+		return $query;
+	}		
 
 	function selectFilters($userId) {
 		$aFilters = array();
