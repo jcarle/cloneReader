@@ -4,7 +4,7 @@ Reader of feeds, rss
 
 Responsive
 
-Powered by codeigniter, simplepie, jquery, bootstrap
+Powered with codeigniter, simplepie, jquery, bootstrap
 
 /*************************************************************************/
 
