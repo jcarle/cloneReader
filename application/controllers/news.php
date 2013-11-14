@@ -134,4 +134,22 @@ class News extends CI_Controller {
 
 		return $form;		
 	}
+
+	function view($newSef) {
+//		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
+				
+		$new 	= $this->News_Model->getByNewSef($newSef);
+		
+		$this->load->view('includes/template', 
+			array(
+				'view'			=> 'newView', 
+				'title'			=> $new['newTitle'],
+				'new'			=> $new,
+				'breadcrumb'	=> array(
+					array('text' => 'home', 'href' => base_url()),
+					array('text' => $new['newTitle'], 'active' => true),
+				)
+			)
+		);
+	}
 }

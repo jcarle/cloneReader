@@ -17,7 +17,7 @@
 		foreach ($news as $new){ ?>
 			<item>
 				<title><?php echo $new['newTitle']; ?></title>
-				<link><?php echo base_url('news/'.$new['newSef']) ?></link>
+				<link><?php echo base_url('news/view/'.$new['newSef']) ?></link>
 				<description><![CDATA[<?php echo $new['newContent']; ?>]]></description>
 				<pubDate><?php echo $new['newDate']; ?></pubDate>
 				<dc:creator><?php echo $new['userFullName']; ?></dc:creator>

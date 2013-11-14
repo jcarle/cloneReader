@@ -16,10 +16,17 @@ class News_Model extends CI_Model {
 		$result = $this->db
 				->select('news.*', true)
 				->where('newId', $newId)
-//				->join('feeds', 'news.feedId = feeds.feedId', 'inner')
 				->get('news')->row_array();
 		return $result;
 	}
+	
+	function getByNewSef($newSef){
+		$result = $this->db
+				->select('news.*', true)
+				->where('newSef', $newSef)
+				->get('news')->row_array();
+		return $result;
+	}	
 	
 	function save($data){
 		$newId = $data['newId'];

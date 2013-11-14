@@ -130,6 +130,7 @@ header ('Content-type: text/html; charset=utf-8');
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
+	<link rel="alternate" type="application/rss+xml" title="cloneReader Feed" href="<?php echo base_url('rss'); ?>/" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
