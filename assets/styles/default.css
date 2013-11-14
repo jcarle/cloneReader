@@ -41,7 +41,7 @@ body.isLoading, body.isLoading * {
 	#header ul.menuProfile  li a { }
 		#header ul.menuProfile  li a i { }		
 		#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
-		    margin: 0 0 0 15px;
+			margin: 0 0 0 15px;
 		}
 			
 @media (min-width: 768px) {
@@ -103,8 +103,8 @@ body.isLoading, body.isLoading * {
 				
 @media (max-width: 767px) {
 	#header form {
-	    border-top: 0 solid #FF0000;
-	    margin-top: 4px;
+		border-top: 0 solid #FF0000;
+		margin-top: 4px;
 	}		
 	#header ul.menuProfile {
 		float:none !important;
@@ -126,6 +126,7 @@ body.isLoading, body.isLoading * {
 	background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
 	background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 	position:relative;
+	margin:0 0 5px 0;
 }
 	.menu i {
 		color: #555555;

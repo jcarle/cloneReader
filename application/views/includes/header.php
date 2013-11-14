@@ -223,15 +223,6 @@ function renderMenu($aMenu, $className = null){
 <div class="container content">
 
 <?php
-if (!isset($showTitle)) {
-	$showTitle = true;
-}
-if ($showTitle == true) {
-	echo '	<div class="ddpage-header">
-  				<h1>'. $title .' <small> </small></h1>
-			</div>';
-}
-	
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';
 	foreach ($breadcrumb as $link) {
@@ -244,6 +235,13 @@ if (isset($breadcrumb)) {
 	}
 	echo '</ol>';  
 }
-?>		  			
 
-
+if (!isset($showTitle)) {
+	$showTitle = true;
+}
+if ($showTitle == true) {
+	echo '	<div class="page-header">
+				<h2>'. $title .' <small> </small></h2>
+			</div>';
+}
+	

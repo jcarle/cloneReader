@@ -579,3 +579,10 @@
 		background: transparent; 
 	}
 }
+
+
+.newDetail {}
+	.newDetail span {}
+	.newDetail p {
+		white-space: pre;
+	}
