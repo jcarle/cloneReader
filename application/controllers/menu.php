@@ -19,7 +19,7 @@ class Menu extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmMenuEdit',
 			'messages' 		=> getRulesMessages(),
-			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> Guardar</button> '),
+			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').'</button> '),
 			'fields'		=> array(
 				'menuId' => array(
 					'type'	=> 'hidden',
@@ -36,12 +36,12 @@ class Menu extends CI_Controller {
 				),
 				'menuName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Nombre',
+					'label'	=> $this->lang->line('Name'),
 					'value'	=>  element('menuName', $data)
 				),
 				'controllerId' => array(
 					'type'		=> 'dropdown',
-					'label'		=> 'Controller', 
+					'label'		=> $this->lang->line('Controller'), 
 					'source'	=> array('0' => '-- seleccione --') + array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
 					'value'		=> element('controllerId', $data)
 				),
@@ -52,7 +52,7 @@ class Menu extends CI_Controller {
 				),
 				'menuPosition' => array(
 					'type'	=> 'text',
-					'label'	=> 'Position', 
+					'label'	=> $this->lang->line('Position'), 
 					'value'	=> element('menuPosition', $data)
 				),
 				'menuIcon' => array(
@@ -65,7 +65,7 @@ class Menu extends CI_Controller {
 		
 		if ((int)$menuId > 0) {
 			$form['urlDelete'] 	= base_url('menu/delete');
-			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> Eliminar </button>');
+			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>');
 		}
 		
 		$form['rules'] = array( 
@@ -90,7 +90,7 @@ class Menu extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/jForm', 
-			'title'			=> 'Editar menu',
+			'title'			=> $this->lang->line('Edit Menu'),
 			'form'			=> $form
 		));		
 	}

@@ -66,3 +66,4 @@ $lang['Active'] = 'Active';
 $lang['HomePage'] = 'HomePage';
 $lang['Home Page'] = 'Home Page';
 $lang['Controllers'] = 'Controllers'; 
+$lang['Position'] = 'Position';

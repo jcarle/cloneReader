@@ -43,6 +43,9 @@ body.isLoading, body.isLoading * {
 		#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
 			margin: 0 0 0 15px;
 		}
+				#header ul.menuProfile  li a .badge {
+					margin:0 0px 0 5px;
+				}
 			
 @media (min-width: 768px) {
 	#header .navbar-collapse {

@@ -306,7 +306,9 @@ $.extend({
 	},
 	
 	initMenu: function() { // TODO: mover esto de aca!
-		var $iconGear 	= $('ul.menuProfile .icon-gear');
+		var $menuProfile = $('ul.menuProfile');
+		
+		var $iconGear 	= $menuProfile.find('.icon-gear');
 		var $settings 	= $iconGear.parent();
 		var label		= $settings.text();
 		$settings
@@ -318,12 +320,13 @@ $.extend({
 
 		
 		
-		$('.menuProfile .lang-' + langId ).before('<i class="icon-ok icon-fixed-width"></i>');
+		$menuProfile.find('.lang-' + langId ).before('<i class="icon-ok icon-fixed-width"></i>');
+		$menuProfile.find('.icon-flag-alt').parent()
+			.append('<span class="badge pull-right">' + langId + '</span>')
+			.addClass('lang').css('cursor', 'pointer');
 		
-		$('ul.menuProfile .icon-flag-alt').parent().addClass('lang').css('cursor', 'pointer');
-		
-		$('ul.menuProfile li ul').addClass('dropdown-menu');
-		$('ul.menuProfile li a').addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
+		$menuProfile.find('li ul').addClass('dropdown-menu');
+		$menuProfile.find('li a').addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
 
 		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
 			function(event) {
