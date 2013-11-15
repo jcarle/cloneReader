@@ -501,10 +501,10 @@ CREATE TABLE IF NOT EXISTS `menu` (
 
 INSERT INTO `menu` (`menuId`, `menuName`, `menuPosition`, `menuParentId`, `controllerId`, `menuIcon`) VALUES
 (1, 'menuAdmin', 2, 0, NULL, ''),
-(2, 'Edit Users', 1, 14, 3, ''),
-(3, 'Edit Controllers', 2, 14, 5, ''),
-(4, 'Edit Groups', 3, 14, 7, ''),
-(5, 'Edit Menu', 5, 14, 9, ''),
+(2, 'Edit users', 1, 14, 3, ''),
+(3, 'Edit controllers', 2, 14, 5, ''),
+(4, 'Edit groups', 3, 14, 7, ''),
+(5, 'Edit menu', 5, 14, 9, ''),
 (6, 'Preferencias', 10, 10, NULL, 'icon-gear'),
 (7, 'Edit entries', 2, 17, 15, ''),
 (8, 'menuMain', 4, 0, NULL, ''),

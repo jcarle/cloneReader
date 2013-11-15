@@ -21,7 +21,7 @@ class Feeds extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Edit Feeds',
+			'title'			=> $this->lang->line('Edit Feeds'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
 				'columns'		=> array('statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink', 'feedLastUpdate' => array('class' => 'datetime', 'value' => 'Last update')),

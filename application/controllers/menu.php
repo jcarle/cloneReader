@@ -90,7 +90,7 @@ class Menu extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/jForm', 
-			'title'			=> $this->lang->line('Edit Menu'),
+			'title'			=> $this->lang->line('Edit menu'),
 			'form'			=> $form
 		));		
 	}

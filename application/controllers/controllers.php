@@ -21,7 +21,7 @@ class Controllers extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> $this->lang->line('Edit Controllers'),
+			'title'			=> $this->lang->line('Edit controllers'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
 				'columns'		=> array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
@@ -101,7 +101,7 @@ class Controllers extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> $this->lang->line('Edit Controllers'),
+			'title'		=> $this->lang->line('Edit controllers'),
 			'form'		=> $form,
 		));		
 	}

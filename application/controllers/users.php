@@ -22,7 +22,7 @@ class Users extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> $this->lang->line('Edit Users'),
+			'title'			=> $this->lang->line('Edit users'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
 				'columns'		=> array('userEmail' => $this->lang->line('Email'), 'userFullName' => $this->lang->line('Name'), 'countryName' => $this->lang->line('Country'), 'groupsName' => $this->lang->line('Groups') ),
@@ -118,7 +118,7 @@ class Users extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> $this->lang->line('Edit Users'),
+			'title'		=> $this->lang->line('Edit users'),
 			'form'		=> $form,
 				  
 		));		

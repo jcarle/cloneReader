@@ -20,7 +20,7 @@ class Groups extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> $this->lang->line('Edit Groups'),
+			'title'			=> $this->lang->line('Edit groups'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
 				'columns'		=> array('groupName' => $this->lang->line('Name'), 'webSiteHome' => $this->lang->line('HomePage')),
@@ -88,7 +88,7 @@ class Groups extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/jForm', 
-			'title'			=> $this->lang->line('Edit Groups'),
+			'title'			=> $this->lang->line('Edit groups'),
 			'form'			=> $form,
 		));		
 	}
