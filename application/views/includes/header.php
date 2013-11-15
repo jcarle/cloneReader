@@ -164,7 +164,7 @@ $CI->carabiner->display('js');
 
 		<div class="navbar-collapse collapse navbar-ex1-collapse ">
 	
-			<form class="navbar-form navbar-left" role="search">
+			<form class="navbar-form navbar-left" role="search" style="display:none"> <!--  TODO: implementar el buscador!-->
 				<div class="form-group" >
 					<div class="input-group">
 						<span class="input-group-addon">

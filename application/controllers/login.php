@@ -13,23 +13,23 @@ class Login extends CI_Controller {
 		$form = array(
 			'frmId'				=> 'frmLogin',
 			'messages' 			=> getRulesMessages(),
-			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Login </button>'),
+			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> '.$this->lang->line('Login').' </button>'),
 			'fields'			=> array(
 				'email' => array(
 					'type'	=> 'text',
-					'label'	=> 'Email', 
+					'label'	=> $this->lang->line('Email'), 
 					'value'	=> set_value('email')
 				),
 				'password' => array(
 					'type'	=> 'password',
-					'label'	=> 'Contraseña', 
+					'label'	=> $this->lang->line('Password'), 
 					'value'	=> set_value('password')
 				),
-				'link'	=> array(
+/*				'link'	=> array(
 					'type'	=> 'link',
 					'label'	=> 'reset password', 
 					'value'	=> 'users/forgotPassword'				
-				)
+				)*/
 			)
 		);
 		
@@ -77,7 +77,7 @@ class Login extends CI_Controller {
 		if ($this->form_validation->run() == FALSE) {
 			return $this->load->view('includes/template', array(
 				'view'			=> 'login', 
-				'title'			=> 'Ingresar',
+				'title'			=> $this->lang->line('Login'),
 				'form'			=> $form,
 				'aServerData'	=> $aServerData
 			));

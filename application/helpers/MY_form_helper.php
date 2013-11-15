@@ -1,11 +1,12 @@
 <?php
 function getRulesMessages() { // TODO: mover esto de aca!
+	$CI	= &get_instance();
+	
 	return array(
-		'required' 		=> 'Por favor, completa el campo "%s"',
-		'valid_email' 	=> 'Por favor ingrese un email válido',
-		'numeric' 		=> 'Por favor ingrese un número válido en el campo "%s"',
-		'_login' 		=> 'El email o la contraseña ingresados son incorrectos'
-				
+		'required' 		=> $CI->lang->line('Please complete the field "%s"'),
+		'valid_email' 	=> $CI->lang->line('Please enter a valid email address'),
+		'numeric' 		=> $CI->lang->line('Please enter a valid number in the field "%s"'),
+		'_login' 		=> $CI->lang->line('The email or password you entered are incorrect'),
 	);
 }
 

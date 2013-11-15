@@ -1,5 +1,11 @@
 	</div>
 	<!-- <div id="footer"></div> -->
+
+<script>
+var base_url	= '<?php echo base_url(); ?>';
+var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
+var langId		= '<?php echo $this->session->userdata('langId'); ?>';
+</script>
 	
 <?php
 $scripts = '';

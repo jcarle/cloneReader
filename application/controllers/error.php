@@ -12,7 +12,7 @@ class Error extends CI_Controller {
 		if ($this->input->is_ajax_request()) { 
 			return $this->load->view('ajax', array(
 				'code'			=> false, 
-				'result' 		=> 'No tiene permisos para la acción que desea realizar',
+				'result' 		=> $this->lang->line('Not authorized for the action to take'),
 				'status_code'	=> 403
 			));
 		}		
@@ -20,7 +20,7 @@ class Error extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'			=> 'error', 
 			'title'			=> 'Error 403',
-			'message'		=> 'No tiene permisos para la acción que desea realizar',
+			'message'		=> $this->lang->line('Not authorized for the action to take'),
 			'status_code'	=> 403
 		));
 	}	
@@ -29,7 +29,7 @@ class Error extends CI_Controller {
 		if ($this->input->is_ajax_request()) { 
 			return $this->load->view('ajax', array(
 				'code'			=> false, 
-				'result'	 	=> 'La página solicitada no existe',
+				'result'	 	=> $this->lang->line('The page you requested does not exist'),
 				'status_code'	=> 404 
 			));
 		}		
@@ -37,7 +37,7 @@ class Error extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'			=> 'error', 
 			'title'			=> 'Error 404',
-			'message'		=> 'La página solicitada no existe',
+			'message'		=> $this->lang->line('The page you requested does not exist'),
 			'status_code'	=> 404
 		));
 	}		
