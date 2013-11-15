@@ -57,7 +57,7 @@
 			this.$modalContent 	= $('<div class="modal-content" />').appendTo(this.$modalDialog);
 			this.$body	 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modalContent);
 			this.$footer	 	= $('<div />').addClass('modal-footer').appendTo(this.$modalContent);
-			this.$btn 			= $('<button data-dismiss="modal" class="btn btn-default" />').text(this.options.isConfirm == true ? 'Cancelar' : 'Cerrar').appendTo(this.$footer);
+			this.$btn 			= $('<button data-dismiss="modal" class="btn btn-default" />').text(this.options.isConfirm == true ? _msg['Cancel'] : _msg['Close']).appendTo(this.$footer);
 			
 			if (this.options.isConfirm == true) {
 				$('<button data-dismiss="modal" class="btn btn-primary" />')

@@ -10,8 +10,6 @@ class Safety {
 			$this->session->set_userdata('langId', 'en'); // TODO: meter en una constante
 		}
 		
-//$this->session->set_userdata('langId', 'spanish');		
-		
 		$CI->lang->load('default', $this->session->userdata('langId'));
 	}
 	

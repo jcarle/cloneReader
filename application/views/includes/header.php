@@ -147,7 +147,7 @@ $CI->carabiner->display('js');
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
 		<i class="icon-spinner icon-spin icon-large"></i>
-		<small> loading ...</small>
+		<small> <?php echo $this->lang->line('loading ...'); ?></small>
 	</div>
 	
 	
@@ -196,6 +196,8 @@ function renderMenu($aMenu, $className = null){
 		return;
 	}
 	
+	$CI	= &get_instance();
+	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
 		$icon = '';
@@ -204,10 +206,10 @@ function renderMenu($aMenu, $className = null){
 		}
 		
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li> <a href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$aMenu[$i]['label'].'</a>';
+			$sTmp .= '	<li> <a href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
 		}
 		else {
-			$sTmp .= '	<li> <a>'.$icon.$aMenu[$i]['label'].'</a>';
+			$sTmp .= '	<li> <a>'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
 		} 	
 		
 		if (count($aMenu[$i]['childs']) > 0) {			

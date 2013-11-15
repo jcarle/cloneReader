@@ -8,6 +8,14 @@ var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 </script>
 	
 <?php
+if (!isset($langs)) {
+	$langs = array();
+}
+$langs[] = 'Cancel';
+$langs[] = 'Close';
+
+echo langJs($langs);
+
 $scripts = '';
 if (isset($aServerData)) {
 	$scripts .= 'var SERVER_DATA = '.json_encode($aServerData).'; ';
