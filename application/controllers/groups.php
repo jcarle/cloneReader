@@ -20,10 +20,10 @@ class Groups extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Editar Grupos',
+			'title'			=> $this->lang->line('Edit Groups'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('groupName' => 'Nombre', 'webSiteHome' => 'HomePage'),
+				'columns'		=> array('groupName' => $this->lang->line('Name'), 'webSiteHome' => $this->lang->line('HomePage')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -47,17 +47,17 @@ class Groups extends CI_Controller {
 				),
 				'groupName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Nombre', 
+					'label'	=> $this->lang->line('Name'), 
 					'value'	=> element('groupName', $data)
 				),
 				'webSiteHome' => array(
 					'type'	=> 'text',
-					'label'	=> 'Home Page',
+					'label'	=> $this->lang->line('Home Page'),
 					'value'	=> element('webSiteHome', $data)
 				),
 				'controllers[]' => array(
 					'type'		=> 'groupCheckBox',
-					'label'		=> 'Controllers',
+					'label'		=> $this->lang->line('Controllers'),
 					'source'	=> array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
 					'value'		=> $data['controllers']
 				)
@@ -88,7 +88,7 @@ class Groups extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/jForm', 
-			'title'			=> 'Editar Grupos',
+			'title'			=> $this->lang->line('Edit Groups'),
 			'form'			=> $form,
 		));		
 	}

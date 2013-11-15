@@ -314,7 +314,7 @@ $.extend({
 			.html('')
 			.append($iconGear)
 			.append('<span>' + label + '</span>');
-		$settings.parent().find('ul > li').addClass('dropdown-submenu dropdown-submenu-left');	
+		$settings.parent().find('> ul > li').addClass('dropdown-submenu dropdown-submenu-left');	
 
 		
 		

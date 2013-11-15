@@ -21,10 +21,10 @@ class Controllers extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Editar Controles',
+			'title'			=> $this->lang->line('Edit Controllers'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('controllerName' => 'Controller', 'controllerUrl' => 'Url', 'controllerActive' => 'Activo'),
+				'columns'		=> array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -48,17 +48,17 @@ class Controllers extends CI_Controller {
 				),
 				'controllerName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Controller',
+					'label'	=> $this->lang->line('Controller'),
 					'value'	=> element('controllerName', $data)
 				),
 				'controllerUrl' => array(
 					'type'	=> 'text',
-					'label'	=> 'Url', 
+					'label'	=> $this->lang->line('Url'), 
 					'value'	=> element('controllerUrl', $data)
 				),
 				'controllerActive' => array(
 					'type'		=> 'checkbox',
-					'label'		=> 'Activo',
+					'label'		=> $this->lang->line('Active'),
 					'checked'	=> element('controllerActive', $data)
 				)
 			)
@@ -89,7 +89,7 @@ class Controllers extends CI_Controller {
 			if ($this->Controllers_Model->exitsController($this->input->post('controllerName'), (int)$this->input->post('controllerId')) == true) {
 				return $this->load->view('ajax', array(
 					'code'		=> false, 
-					'result' 	=> 'El nombre ingresado ya existe en la base de datos' 
+					'result' 	=> $this->lang->line('El nombre ingresado ya existe en la base de datos') 
 				));
 			}		
 				
@@ -101,7 +101,7 @@ class Controllers extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Editar Controles',
+			'title'		=> $this->lang->line('Edit Controllers'),
 			'form'		=> $form,
 		));		
 	}

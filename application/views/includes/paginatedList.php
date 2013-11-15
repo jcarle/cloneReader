@@ -1,3 +1,6 @@
+<?php
+$CI	= &get_instance();
+?>
 <div class="paginatedList">
 	<div class="panel panel-default" >
 		<form method="get" class="panel-heading form-inline" role="search">
@@ -6,9 +9,9 @@
 					<span class="input-group-addon">
 						<i class="icon-remove" ></i>
 					</span>
-					<?php echo form_input(array('name' => 'filter',  'value' => $this->input->get('filter'), 'class' => 'form-control', 'placeholder' => 'buscar')); ?>
+					<?php echo form_input(array('name' => 'filter',  'value' => $this->input->get('filter'), 'class' => 'form-control', 'placeholder' => $CI->lang->line('search'))); ?>
 					<span class="input-group-btn">
-						<button type="submit" class="btn btn-default">Buscar</button>
+						<button type="submit" class="btn btn-default"><?php echo $CI->lang->line('Search'); ?></button>
 					</span>
 				</div>					
 			</div>
@@ -43,7 +46,7 @@ foreach ($list['columns'] as $columnName) {
 		<tbody>
 <?php 				
 if (count($list['data']) == 0) {
-	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> No hay resultados </td></tr>';
+	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> '.$CI->lang->line('No results').' </td></tr>';
 }
 foreach ($list['data'] as $row) {
 	$id = reset($row);
@@ -73,14 +76,14 @@ foreach ($list['data'] as $row) {
 		<div class="panel-footer">
 <?php
 if ($urlDelete == true) {
-	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> Delete </a>';
+	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> '.$CI->lang->line('Delete').' </a>';
 }
 ?>
 			<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-sm btn-success">
 				<i class="icon-file-alt icon-large"></i>
-				Agregar
+				<?php echo $CI->lang->line('Add'); ?>
 			</a>
-			<span><?php echo $list['foundRows']; ?> rows</span>
+			<span><?php echo sprintf($CI->lang->line('%s rows'), $list['foundRows']); ?> </span>
 			<ul class="pagination pagination-small pagination-right">
 <?php
 $this->pagination->initialize(array(

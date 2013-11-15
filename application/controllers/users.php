@@ -22,10 +22,10 @@ class Users extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Edit Users',
+			'title'			=> $this->lang->line('Edit Users'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('userEmail' => 'Email', 'userFullName' => 'Nombre', 'countryName' => 'País', 'groupsName' => 'Grupos' ),
+				'columns'		=> array('userEmail' => $this->lang->line('Email'), 'userFullName' => $this->lang->line('Name'), 'countryName' => $this->lang->line('Country'), 'groupsName' => $this->lang->line('Groups') ),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -49,28 +49,28 @@ class Users extends CI_Controller {
 				),
 				'userEmail' => array(
 					'type'	=> 'text',
-					'label'	=> 'Email',
+					'label'	=> $this->lang->line('Email'),
 					'value'	=> element('userEmail', $data)
 				),
 				'userFirstName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Nombre', 
+					'label'	=> $this->lang->line('First Name'), 
 					'value'	=> element('userFirstName', $data)
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Apellido', 
+					'label'	=> $this->lang->line('Last Name'), 
 					'value'	=> element('userLastName', $data)
 				),
 				'countryId' => array(
 					'type'		=> 'dropdown',
-					'label'		=> 'País',
+					'label'		=> $this->lang->line('Country'),
 					'value'		=> element('countryId', $data),
 					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
 				),
 				'groups[]' => array(
 					'type'		=> 'groupCheckBox',
-					'label'		=> 'Grupos',
+					'label'		=> $this->lang->line('Groups'),
 					'source'	=> array_to_select($this->Groups_Model->select(), 'groupId', 'groupName'),
 					'value'		=> $data['groups']
 				)
@@ -106,7 +106,7 @@ class Users extends CI_Controller {
 			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId')) == true) {
 				return $this->load->view('ajax', array(
 					'code'		=> false, 
-					'result' 	=> 'El mail ingresado ya existe en la base de datos' 
+					'result' 	=> $this->lang->line('The email entered already exists in the database') 
 				));
 			}
 					
@@ -118,7 +118,7 @@ class Users extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Edit Users',
+			'title'		=> $this->lang->line('Edit Users'),
 			'form'		=> $form,
 				  
 		));		

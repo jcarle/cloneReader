@@ -1,4 +1,6 @@
 <?php 
+$CI	= &get_instance();
+
 if (!isset($form['action'])) {
 	$form['action'] = base_url().$this->uri->uri_string(); 
 }
@@ -79,7 +81,7 @@ foreach ($form['fields'] as $name => $field) {
 					<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >
 						<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">
 							<i class="icon-picture" ></i>
-							Editar fotos
+							'.$CI->lang->line('Edit pictures').'
 						</button>
 						<div class="thumbnails" ></div>
 					</div>
@@ -90,7 +92,7 @@ foreach ($form['fields'] as $name => $field) {
 				<div name="'.$name.'" class="subform "> 
 					<div class="alert alert-info">
 						<i class="icon-spinner icon-spin icon-large"></i>
-						<small>cargando ...</small>
+						<small>'.$CI->lang->line('loading ...').'</small>
 					</div>
 				</div>
 			');
@@ -115,7 +117,7 @@ foreach ($form['fields'] as $name => $field) {
 				<div class="col-md-5">
 					<span class="btn btn-success fileinput-button">
 						<i class="icon-plus icon-white"></i>
-						<span>Add File...</span>
+						<span>'.$CI->lang->line('Add File...').'</span>
 						<input type="file" name="userfile" >
 					</span>
 				</div>
@@ -134,11 +136,11 @@ echo implode(' ', $aFields);
 
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
-	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> Volver</button> ';
+	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$CI->lang->line('Back').' </button> ';
 	if (isset($form['urlDelete'])) {
-		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> Eliminar </button>';
+		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
 	}
-	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> Guardar </button> ';	
+	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
 }
 
 

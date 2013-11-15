@@ -20,31 +20,31 @@ class Register extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmRegister',
 			'messages'	 	=> getRulesMessages(),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> Register</button>'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Register').'</button>'),
 			'fields'		=> array(
 				'userEmail' => array(
 					'type'	=> 'text',
-					'label'	=> 'Email',
+					'label'	=> $this->lang->line('Email'),
 					'value'	=> element('userEmail', $data)
 				),
 				'userPassword' => array(
 					'type'	=> 'password',
-					'label'	=> 'Password',
+					'label'	=> $this->lang->line('Password'),
 					'value'	=> ''
 				),				
 				'userFirstName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Nombre', 
+					'label'	=> $this->lang->line('First Name'), 
 					'value'	=> element('userFirstName', $data)
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
-					'label'	=> 'Apellido', 
+					'label'	=> $this->lang->line('Last Name'), 
 					'value'	=> element('userLastName', $data)
 				),
 				'countryId' => array(
 					'type'		=> 'dropdown',
-					'label'		=> 'País',
+					'label'		=> $this->lang->line('Country'),
 					'value'		=> element('countryId', $data),
 					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
 				),
@@ -76,7 +76,7 @@ class Register extends CI_Controller {
 			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
 				return $this->load->view('ajax', array(
 					'code'		=> false, 
-					'result' 	=> 'El mail ingresado ya existe en la base de datos' 
+					'result' 	=> $this->lang->line('The email entered already exists in the database')
 				));
 			}
 					
@@ -97,7 +97,7 @@ class Register extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Signup',
+			'title'		=> $this->lang->line('Signup'),
 			'form'		=> $form,
 				  
 		));		
