@@ -176,7 +176,7 @@ cloneReader = {
 				<li> \
 					<button title="' + _msg['Add feed'] + '" class="add" > \
 						<i class="icon-plus" /> \
-						<span class="btnLabel">' + _msg['Add Feed'] + '</span> \
+						<span class="btnLabel">' + _msg['Add feed'] + '</span> \
 					</button> \
 				</li> \
 				<li> \
@@ -1211,9 +1211,12 @@ console.timeEnd("t1");
 	
 	markAllAsFeed: function(feedId) {
 		this.hidePopupWindow();
+		
+		var filter = this.getFilter(this.aFilters);
+
 
 		$(document).jAlert( {
-			'msg': 			_msg['Mark all as read?'],
+			'msg': 			$.sprintf( _msg['Mark "%s" as read?'], filter.name),
 			'isConfirm': 	true,
 			'callback': 	$.proxy(
 				function() {
@@ -1241,8 +1244,10 @@ console.timeEnd("t1");
 	unsubscribeFeed: function(feedId) {
 		this.hidePopupWindow();
 		
+		var filter = this.getFilter(this.aFilters);
+		
 		$(document).jAlert( {
-			'msg': 			_msg['Unsubscribe feed?'],
+			'msg': 			$.sprintf( _msg['Unsubscribe "%s"?'], filter.name),
 			'isConfirm': 	true,
 			'callback': 	$.proxy(		
 				function () {
