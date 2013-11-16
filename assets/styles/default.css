@@ -152,6 +152,9 @@ body.isLoading, body.isLoading * {
 			.menu div ul.menuPublic li:last-child {
 				border-right:1px white solid;
 			}
+				.menu div ul.menuPublic > li a {
+					text-transform: lowercase;
+				}
 				.menu div ul.menuPublic li a {
 					clear: both;
 					color: white;

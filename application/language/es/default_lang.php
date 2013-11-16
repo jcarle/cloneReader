@@ -20,20 +20,20 @@ $lang['Borrar'] = 'Delete';
 $lang['%s rows'] = '%s registros';
 $lang['Add'] = 'Agregar';
 $lang['Edit pictures'] = 'Editar fotos';
-$lang['Add File...'] = 'Agregar archivo';
+$lang['Add File'] = 'Agregar archivo';
 $lang['Back'] = 'Volver';
 $lang['Delete'] = 'Eliminar';
+$lang['Are you sure?'] = 'Está seguro?';
+$lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
+$lang['DATE_MOMENT_FORMAT'] = 'DD/MM/YYYY';
 
-
-
-
-$lang['signup'] = 'registrarse';
-$lang['profile'] = 'perfil';
-$lang['login'] = 'iniciar sesión';
-$lang['logout'] = 'salir';
-$lang['language'] = 'idioma';
-$lang['english'] = 'ingles';
-$lang['spanish'] = 'español';
+$lang['Signup'] = 'Registrarse';
+$lang['Profile'] = 'Perfil';
+$lang['Login'] = 'Iniciar sesión';
+$lang['Logout'] = 'Salir';
+$lang['Language'] = 'Idioma';
+$lang['English'] = 'Ingles';
+$lang['Spanish'] = 'Español';
 $lang['Settings'] = 'Preferencias';
 $lang['System'] = 'System';
 $lang['Edit users'] = 'Editar usuarios';
@@ -44,7 +44,7 @@ $lang['Rss'] = 'Rss';
 $lang['Edit feeds'] = 'Editar feeds';
 $lang['Edit entries'] = 'Editar entries';
 $lang['Edit tags'] = 'Editar tags';
-$lang['Edit news'] = 'Editar news';
+$lang['Edit news'] = 'Editar noticias';
 $lang['Import'] = 'Importar';
 $lang['Import feeds'] = 'Importar feeds';
 $lang['Import starred'] = 'Importar starred';
@@ -69,4 +69,14 @@ $lang['HomePage'] = 'HomePage';
 $lang['Home Page'] = 'Home Page';
 $lang['Controllers'] = 'Controladores'; 
 $lang['Position'] = 'Posición';
-
+$lang['Link'] = 'Link';
+$lang['Status'] = 'Estado';
+$lang['Last update'] = 'Ultima actualización';
+$lang['Feed'] = 'Feed';
+$lang['Title'] = 'Titulo';
+$lang['Date'] = 'Fecha';
+$lang['Content'] = 'Contenido';
+$lang['Author'] = 'Autor';
+$lang['Sef'] = 'Sef';
+$lang['Choose %s'] = 'Seleccione %s';
+$lang['Import success'] = 'La importación se completó con éxito';

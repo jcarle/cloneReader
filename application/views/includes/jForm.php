@@ -38,7 +38,7 @@ foreach ($form['fields'] as $name => $field) {
 		case 'datetime':
 			$aFields[] = sprintf($sField, 
 				'<div class="input-group" style="width:1px">
-					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => 'dd/mm/yyyy'.($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
+					'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => $this->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
 					<span class="input-group-addon add-on"><i class="icon-remove"></i></span>
 					<span class="input-group-addon add-on"><i class="icon-th"></i></span>
 				</div>');
@@ -117,7 +117,7 @@ foreach ($form['fields'] as $name => $field) {
 				<div class="col-md-5">
 					<span class="btn btn-success fileinput-button">
 						<i class="icon-plus icon-white"></i>
-						<span>'.$CI->lang->line('Add File...').'</span>
+						<span>'.$CI->lang->line('Add File').'</span>
 						<input type="file" name="userfile" >
 					</span>
 				</div>

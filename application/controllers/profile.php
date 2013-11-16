@@ -99,7 +99,7 @@ class Profile extends CI_Controller {
 			'fields'	=> array(
 				'tagName' => array(
 					'type'		=> 'upload',
-					'label'		=> 'Choose subscriptions.xml', 
+					'label'		=> sprintf($this->lang->line('Choose %s'), 'subscriptions.xml'), 
 				),
 			),	
 			'buttons'	=> array()
@@ -107,7 +107,7 @@ class Profile extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Import feeds',
+			'title'		=> $this->lang->line('Import feeds'),
 			'form'		=> $form	  
 		));		
 	}
@@ -164,7 +164,7 @@ class Profile extends CI_Controller {
 			}
 		}
 		
-		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => 'Import success ', 'goToUrl' => base_url(''))));		
+		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('Import success'), 'goToUrl' => base_url(''))));		
 	}
 
 	function importStarred() {
@@ -177,7 +177,7 @@ class Profile extends CI_Controller {
 			'fields'	=> array(
 				'tagName' => array(
 					'type'		=> 'upload',
-					'label'		=> 'Choose starred.json', 
+					'label'		=> sprintf($this->lang->line('Choose %s'), 'starred.json'), 
 				),				
 			), 		
 			'buttons'	=> array()
@@ -185,8 +185,8 @@ class Profile extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Import starred',
-			'form'		=> $form	  
+			'title'		=> $this->lang->line('Import starred'),
+			'form'		=> $form
 		));		
 	}
 	
@@ -252,6 +252,6 @@ class Profile extends CI_Controller {
 
 		$this->Entries_Model->pushTmpUserEntries($userId);
 
-		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => 'Import success ', 'goToUrl' => base_url(''))));
+		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('Import success'), 'goToUrl' => base_url(''))));
 	}
 }

@@ -47,7 +47,7 @@
 				event.stopPropagation();
 				
 				$(document).jAlert( {
-					'msg': 			'Está seguro?',
+					'msg': 			_msg['Are you sure?'],
 					'isConfirm': 	true,
 					'callback': 	$.proxy(
 						function() {
@@ -139,10 +139,10 @@
 						case 'date':
 						case 'datetime':
 							var inputName 	= field.$input.attr('name');
-							var format 		= 'dd/mm/yyyy';
+							var format 		= _msg['DATE_FORMAT'];
 							var minView		= 'month';
 							if (field['type'] == 'datetime') {
-							 	format 	= 'dd/mm/yyyy hh:ii:ss';
+							 	format 	= _msg['DATE_FORMAT'] + ' hh:ii:ss';
 								minView	= 'hour';
 							}
 
@@ -494,7 +494,7 @@
 					$subform.addClass('row-fluid').appendTo($modalContent);
 
 					$modalFooter
-						.append($('<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cerrar</button>'))
+						.append($('<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>'))
 						.append($subform.find('.btn-danger'))
 						.append($subform.find('.btn-primary'));
 					

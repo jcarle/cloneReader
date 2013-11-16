@@ -21,10 +21,10 @@ class News extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Edit News',
+			'title'			=> $this->lang->line('Edit news'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('userFullName' => 'Autor', 'newTitle' => 'Title', 'newSef' => 'Sef', 'newDate' => array('class' => 'datetime', 'value' => 'Date')),
+				'columns'		=> array('userFullName' => $this->lang->line('Author'), 'newTitle' => $this->lang->line('Title'), 'newSef' => $this->lang->line('Sef'), 'newDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -52,8 +52,8 @@ class News extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Edit News',
-			'form'		=> $form	  
+			'title'		=> $this->lang->line('Edit news'),
+			'form'		=> $form
 		));		
 	}
 
@@ -83,17 +83,17 @@ class News extends CI_Controller {
 				),
 				'newTitle' => array(
 					'type'		=> 'text',
-					'label'		=> 'Title', 
+					'label'		=> $this->lang->line('Title'), 
 					'value'		=> element('newTitle', $data)
 				),				
 				'newContent' => array(
 					'type' 		=> 'textarea',
-					'label'		=> 'Content', 
+					'label'		=> $this->lang->line('Content'), 
 					'value'		=> element('newContent', $data)
 				),
 				'userId' => array(
 					'type' 		=> 'typeahead',
-					'label'		=> 'Autor',
+					'label'		=> $this->lang->line('Author'),
 					'source' 	=> base_url('users/search/'),
 					'value'		=> array( 'id' => element('userId', $data, $this->session->userdata('userId')), 'text' => element('userName', $data, 
 					$user['userFirstName'].' '.$user['userLastName']
@@ -101,8 +101,8 @@ class News extends CI_Controller {
 				),				
 				'newDate' => array(
 					'type' 		=> 'datetime',
-					'label'		=> 'Date', 
-					'value'		=> date('Y-m-d H:i:s') //element('newDate', $data, date('d-m-Y H:i:s', time()) )
+					'label'		=> $this->lang->line('Date'), 
+					'value'		=> element('newDate', $data, date('Y-m-d H:i:s') )
 				),
 			), 		
 		);

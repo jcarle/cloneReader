@@ -55,7 +55,7 @@
 				if (aDelete.length == 0) { return;  }
 				
 				$(document).jAlert( {
-					'msg': 			'Está seguro?',
+					'msg': 			_msg['Are you sure?'],
 					'isConfirm': 	true,
 					'callback': 	function() {}
 				});

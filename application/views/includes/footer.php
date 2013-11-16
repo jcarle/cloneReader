@@ -11,8 +11,11 @@ var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 if (!isset($langs)) {
 	$langs = array();
 }
+$langs[] = 'DATE_FORMAT';
+$langs[] = 'DATE_MOMENT_FORMAT';
 $langs[] = 'Cancel';
 $langs[] = 'Close';
+$langs[] = 'Are you sure?';
 
 echo langJs($langs);
 
