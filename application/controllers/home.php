@@ -8,7 +8,35 @@ class Home extends CI_Controller {
 				'view'			=> 'home', 
 				'title'			=> 'News reader and feeds',
 				'aJs'			=> array('cloneReader.js', 'jquery.visible.min.js' ),
-				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') )
+				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
+				
+				'langs'			=> array(
+					'loading ...',
+					'Expand',
+					'Add feed',
+					'Install',
+					'Mark all as read',
+					'Mark all as read?',
+					'Feed settings',
+					'Sort by newest',
+					'Sort by oldest',
+					'All items',
+					'%s new items',
+					'List view',
+					'Detail view',
+					'Reload',
+					'Prev',
+					'Next',
+					'Add new feed',
+					'Add feed url',
+					'keep unread',
+					'no more entries',
+					'Unsubscribe feed?',
+					'Add new tag',
+					'enter tag name',
+					'Unsubscribe',
+					'New tag',
+				)
 			)
 		);
 	}

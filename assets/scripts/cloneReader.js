@@ -6,7 +6,7 @@ cloneReader = {
 		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$container);		 		
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
-		moment.lang('es'); // TODO: harckodeta!
+		moment.lang(langId);
 		this.getIsMobile();
 
 		this.minUnreadEntries 	= 2;
@@ -166,35 +166,35 @@ cloneReader = {
 		this.$toolbar.html(' \
 			<ul class="nav navbar-nav navbar-left"> \
 				<li> \
-					<button title="Expand" class="expand"> \
+					<button title="' + _msg['Expand'] + '" class="expand"> \
 						<i class="icon-exchange"  /> \
-						<span class="btnLabel">Expandir</span> \
+						<span class="btnLabel">' +  _msg['Expand'] + '</span> \
 					</button> \
 				</li> \
 			</ul> \
 			<ul class="nav navbar-nav navbar-right mainToolbar"> \
 				<li> \
-					<button title="Add feed" class="add" > \
+					<button title="' + _msg['Add feed'] + '" class="add" > \
 						<i class="icon-plus" /> \
-						<span class="btnLabel">Add Feed</span> \
+						<span class="btnLabel">' + _msg['Add Feed'] + '</span> \
 					</button> \
 				</li> \
 				<li> \
 					<button title="Install" class="btnInstall" style="display:none" > \
 						<i class="icon-download" /> \
-						<span>Install</span> \
+						<span>' + _msg['Install'] + '</span> \
 					</button> \
 				</li> \
 				<li> \
-					<button title="Mark all as read" class="btnMarkAllAsFeed" > \
+					<button title="' + _msg['Mark all as read'] + '" class="btnMarkAllAsFeed" > \
 						<i class="icon-archive" /> \
-						<span>Mark all as read</span> \
+						<span>' + _msg['Mark all as read'] + '</span> \
 					</button> \
 				</li> \
 				<li> \
 					<div class="btn-group feedSettings" > \
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Feed settings"> \
-							<span> Feed settings </span> \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="' + _msg['Feed settings'] + '"> \
+							<span> ' + _msg['Feed settings'] +' </span> \
 							<span class="caret" /> \
 						</button> \
 						<ul class="dropdown-menu popupFeedSettings" /> \
@@ -207,8 +207,8 @@ cloneReader = {
 							<span class="caret" /> \
 						</button> \
 						<ul class="dropdown-menu" > \
-							<li class="filterNewestSort"> <a> sort by newest </a> </li> \
-							<li class="filterOldestSort"> <a> sort by oldest </a> </li> \
+							<li class="filterNewestSort"> <a> ' + _msg['Sort by newest'] + ' </a> </li> \
+							<li class="filterOldestSort"> <a> ' + _msg['Sort by oldest'] + ' </a> </li> \
 						</ul> \
 					</div> \
 				</li> \
@@ -219,30 +219,30 @@ cloneReader = {
 							<span class="caret" /> \
 						</button> \
 						<ul class="dropdown-menu" > \
-							<li class="filterAllItems"> <a> all items </a> </li> \
-							<li class="filterOnlyUnread" > <a> <span class="count" /> new items </a> </li> \
+							<li class="filterAllItems"> <a> '+ _msg['All items'] + ' </a> </li> \
+							<li class="filterOnlyUnread" > <a> ' + $.sprintf(_msg['%s new items'], '  <span class="count" /> ')   + ' </a> </li> \
 						</ul> \
 					</div> \
 				</li> \
 				<li> \
 					<div class="btn-group" data-toggle="buttons-radio" > \
-						<button class="viewList" title="List view" > \
+						<button class="viewList" title="' + _msg['List view'] + '" > \
 							<i class="icon-align-justify" /> \
 						</button> \
-						<button class="viewDetail" title="Detail view" > \
+						<button class="viewDetail" title="' + _msg['Detail view'] + '" > \
 							<i class="icon-th-list" /> \
 						</button> \
 					</div> \
 				</li> \
 				<li> \
-					<button title="Reload" class="reload" > <i class="icon-refresh" /> \
-						<span class="btnLabel">Reload</span> \
+					<button title="' + _msg['Reload'] + '" class="reload" > <i class="icon-refresh" /> \
+						<span class="btnLabel">' + _msg['Reload'] + '</span> \
 					 </button> \
 				</li> \
 				<li> \
 					<div class="btn-group"  > \
-						<button title="Prev" class="prev" > <i class="icon-caret-up" /> </button> \
-						<button title="Next" class="next" > <i class="icon-caret-down" /> </button> \
+						<button title="' + _msg['Prev'] + '" class="prev" > <i class="icon-caret-up" /> </button> \
+						<button title="' + _msg['Next'] + '" class="next" > <i class="icon-caret-down" /> </button> \
 					</div> \
 				</li> \
 			</ul> \
@@ -268,7 +268,7 @@ cloneReader = {
 		this.$mainToolbar.find('.filterOldestSort').click(function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); });
 		this.$mainToolbar.find('.add').click(  function(event) {  
 				event.stopPropagation(); 
-				cloneReader.showPopupForm('Add new feed', 'Add feed url', function() { cloneReader.addFeed(); }, $(event.target)); 
+				cloneReader.showPopupForm(_msg['Add new feed'], _msg['Add feed url'], function() { cloneReader.addFeed(); }, $(event.target)); 
 			}
 		);
 		this.$mainToolbar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
@@ -467,7 +467,7 @@ cloneReader = {
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 
 		$('<label class="star checkbox" > <i/> </label>').appendTo($footer);
-		$('<label class="read checkbox" > <i/> <span> keep unread </span> </label>').appendTo($footer);
+		$('<label class="read checkbox" > <i/> <span> ' + _msg['keep unread'] + ' </span> </label>').appendTo($footer);
 		
 		var aSocial = [
 			{'icon': 'icon-facebook-sign', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
@@ -550,7 +550,7 @@ TODO: pensar como mejorar esta parte
 		this.$entriesHead.text(filter.name);
 		this.$ulEntries.prepend(this.$entriesHead);				
 		
-		$('title').text(filter.name + ' - cloneReader' );
+		$('title').text(filter.name + ' | cloneReader' );
 	},	
 	
 	selectFilters: function() {
@@ -570,10 +570,10 @@ TODO: pensar como mejorar esta parte
 		this.$noResult.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
-			this.$noResult.html('<div class="alert alert-info"> <i class="icon-spinner icon-spin icon-large"></i> loading ...</div>').addClass('loading');
+			this.$noResult.html('<div class="alert alert-info"> <i class="icon-spinner icon-spin icon-large"></i> ' + _msg['loading ...'] + '</div>').addClass('loading');
 		}
 		else {
-			this.$noResult.html('<div class="well well-lg"> no more entries </div>').removeClass('loading');
+			this.$noResult.html('<div class="well well-lg"> ' + _msg['no more entries'] + ' </div>').removeClass('loading');
 		}
 		
 		this.resizeNoResult();
@@ -1213,7 +1213,7 @@ console.timeEnd("t1");
 		this.hidePopupWindow();
 
 		$(document).jAlert( {
-			'msg': 			'Mark all as read?',
+			'msg': 			_msg['Mark all as read?'],
 			'isConfirm': 	true,
 			'callback': 	$.proxy(
 				function() {
@@ -1242,7 +1242,7 @@ console.timeEnd("t1");
 		this.hidePopupWindow();
 		
 		$(document).jAlert( {
-			'msg': 			'Unsubscribe feed?',
+			'msg': 			_msg['Unsubscribe feed?'],
 			'isConfirm': 	true,
 			'callback': 	$.proxy(		
 				function () {
@@ -1306,11 +1306,11 @@ console.timeEnd("t1");
 		var feedId = this.aFilters.id;
 
 		var aItems = [
-			{ 'html': 'Unsubscribe', 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
-			{ 'html': 'New tag', 			'class': 'newTag', 'callback': 
+			{ 'html': _msg['Unsubscribe'], 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
+			{ 'html': _msg['New tag'], 			'class': 'newTag', 'callback': 
 				function(event) {
 					event.stopPropagation(); 
-					cloneReader.showPopupForm('Add new tag', 'enter tag name', function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
+					cloneReader.showPopupForm(_msg['Add new tag'], _msg['enter tag name'], function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
 				}
 			},
 			{ 'class': 'divider' }

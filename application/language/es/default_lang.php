@@ -80,3 +80,31 @@ $lang['Author'] = 'Autor';
 $lang['Sef'] = 'Sef';
 $lang['Choose %s'] = 'Seleccione %s';
 $lang['Import success'] = 'La importación se completó con éxito';
+
+
+$lang['Expand'] = 'Expandir';
+$lang['Add feed'] = 'Agregar feed';
+$lang['Install'] = 'Instalar';
+$lang['Mark all as read'] = 'Marcar todo como leído';
+$lang['Mark all as read?'] = 'Marcar todo como leído?';
+$lang['Feed settings'] = 'Opciones del feed';
+$lang['Sort by newest'] = 'Primero mas nuevos';
+$lang['Sort by oldest'] = 'Primero mas antiguos';
+
+$lang['All items'] = 'Todos los items';
+$lang['%s new items'] = '%s nuevos items';
+$lang['List view'] = 'Ver listado';
+$lang['Detail view'] = 'View detalle';
+$lang['Reload'] = 'Recargar';
+$lang['Prev'] = 'Anterior';
+$lang['Next'] = 'Siguiente';
+$lang['Add new feed'] = 'Agregar feed';
+$lang['Add feed url'] = 'url del feed';
+$lang['keep unread'] = 'no leído';
+$lang['no more entries'] = 'no hay más resultados';
+$lang['Unsubscribe feed?'] = 'Unsubscribe feed?';
+$lang['Add new tag'] = 'Agregar nuevo tag';
+$lang['enter tag name'] = 'ingrese el nombre del tag';
+$lang['Unsubscribe'] = 'Desuscribirse';
+$lang['New tag'] = 'Nuevo tag';
+

@@ -82,3 +82,30 @@ $lang['Sef'] = 'Sef';
 $lang['Choose %s'] = 'Choose %s';
 $lang['Import success'] = 'Import success';
 
+
+
+$lang['Expand'] = 'Expand';
+$lang['Add feed'] = 'Add feed';
+$lang['Install'] = 'Install';
+$lang['Mark all as read'] = 'Mark all as read';
+$lang['Mark all as read?'] = 'Mark all as read?';
+$lang['Feed settings'] = 'Feed settings';
+$lang['Sort by newest'] = 'Sort by newest';
+$lang['Sort by oldest'] = 'Sort by oldest';
+
+$lang['All items'] = 'All items';
+$lang['%s new items'] = '%s new items';
+$lang['List view'] = 'List view';
+$lang['Detail view'] = 'Detail view';
+$lang['Reload'] = 'Reload';
+$lang['Prev'] = 'Prev';
+$lang['Next'] = 'Next';
+$lang['Add new feed'] = 'Add new feed';
+$lang['Add feed url'] = 'Add feed url';
+$lang['keep unread'] = 'keep unread';
+$lang['no more entries'] = 'no more entries';
+$lang['Unsubscribe feed?'] = 'Unsubscribe feed?';
+$lang['Add new tag'] = 'Add new tag';
+$lang['enter tag name'] = 'enter tag name';
+$lang['Unsubscribe'] = 'Unsubscribe';
+$lang['New tag'] = 'New tag';

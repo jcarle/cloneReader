@@ -38,6 +38,9 @@ body.isLoading, body.isLoading * {
 	#header .navbar-collapse {
 		max-height:none;
 	}
+	#header ul.menuProfile > li > a:first-child {
+		text-transform: lowercase;
+	}	
 	#header ul.menuProfile  li a { }
 		#header ul.menuProfile  li a i { }		
 		#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
@@ -152,9 +155,6 @@ body.isLoading, body.isLoading * {
 			.menu div ul.menuPublic li:last-child {
 				border-right:1px white solid;
 			}
-				.menu div ul.menuPublic > li a {
-					text-transform: lowercase;
-				}
 				.menu div ul.menuPublic li a {
 					clear: both;
 					color: white;
