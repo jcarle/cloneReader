@@ -21,10 +21,10 @@ class Tags extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Edit Tags',
+			'title'			=> $this->lang->line('Edit tags'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('tagName' => 'Name'),
+				'columns'		=> array('tagName' => $this->lang->line('Name')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -52,7 +52,7 @@ class Tags extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Edit Tags',
+			'title'		=> $this->lang->line('Edit tags'),
 			'form'		=> $form	  
 		));		
 	}
@@ -82,7 +82,7 @@ class Tags extends CI_Controller {
 				),
 				'tagName' => array(
 					'type'		=> 'text',
-					'label'		=> 'Name', 
+					'label'		=> $this->lang->line('Name'), 
 					'value'		=> element('tagName', $data)
 				),				
 			), 		
@@ -95,7 +95,7 @@ class Tags extends CI_Controller {
 		$form['rules'] += array( 
 			array(
 				'field' => 'tagName',
-				'label' => 'Nombre',
+				'label' => $form['fields']['tagName']['label'],
 				'rules' => 'required'
 			),
 		);

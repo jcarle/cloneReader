@@ -28,10 +28,10 @@ class Entries extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> 'Edit Entries',
+			'title'			=> $this->lang->line('Edit entries'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('feedName' => 'Feed', 'entryTitle' => 'Title', 'entryUrl' => 'Url', 'entryDate' => array('class' => 'datetime', 'value' => 'Date')),
+				'columns'		=> array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -79,7 +79,7 @@ class Entries extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Edit Entries',
+			'title'		=> $this->lang->line('Edit entries'),
 			'form'		=> $form	  
 		));		
 	}
@@ -109,28 +109,28 @@ class Entries extends CI_Controller {
 				),
 				'feedId' => array(
 					'type' 		=> 'typeahead',
-					'label'		=> 'Feed',
+					'label'		=> $this->lang->line('Feed'),
 					'source' 	=> base_url('feeds/search/'),
 					'value'		=> array( 'id' => element('feedId', $data), 'text' => element('feedName', $data)), 
 				),
 				'entryTitle' => array(
 					'type'		=> 'text',
-					'label'		=> 'Title', 
+					'label'		=> $this->lang->line('Title'), 
 					'value'		=> element('entryTitle', $data)
 				),				
 				'entryUrl' => array(
 					'type' 		=> 'text',
-					'label'		=> 'Url', 
+					'label'		=> $this->lang->line('Url'), 
 					'value'		=> element('entryUrl', $data)
 				),
 				'entryContent' => array(
 					'type' 		=> 'textarea',
-					'label'		=> 'Content', 
+					'label'		=> $this->lang->line('Content'), 
 					'value'		=> element('entryContent', $data)
 				),
 				'entryDate' => array(
 					'type' 		=> 'datetime',
-					'label'		=> 'Date', 
+					'label'		=> $this->lang->line('Date'), 
 					'value'		=> element('entryDate', $data)
 				),								
 			), 		
@@ -143,12 +143,12 @@ class Entries extends CI_Controller {
 		$form['rules'] += array( 
 			array(
 				'field' => 'entryTitle',
-				'label' => 'Title',
+				'label' => $form['fields']['entryTitle']['label'],
 				'rules' => 'required'
 			),
 			array(
 				'field' => 'entryUrl',
-				'label' => 'Url',
+				'label' => $form['fields']['entryUrl']['label'],
 				'rules' => 'required'
 			),
 		);

@@ -21,10 +21,10 @@ class Feeds extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/paginatedList', 
-			'title'			=> $this->lang->line('Edit Feeds'),
+			'title'			=> $this->lang->line('Edit feeds'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('statusId' => array('class' => 'numeric', 'value' => 'Status'), 'feedName' => 'Name', 'feedUrl' => 'Url', 'feedLink' => 'feedLink', 'feedLastUpdate' => array('class' => 'datetime', 'value' => 'Last update')),
+				'columns'		=> array('statusId' => array('class' => 'numeric', 'value' => $this->lang->line('Status')), 'feedName' => $this->lang->line('Name'), 'feedUrl' => $this->lang->line('Url'), 'feedLink' => $this->lang->line('Link'), 'feedLastUpdate' => array('class' => 'datetime', 'value' => $this->lang->line('Last update'))),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
 				'pagination'	=> $this->pagination
@@ -52,7 +52,7 @@ class Feeds extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/jForm', 
-			'title'		=> 'Edit Feeds',
+			'title'		=> $this->lang->line('Edit feeds'),
 			'form'		=> $form	  
 		));		
 	}
@@ -83,27 +83,27 @@ class Feeds extends CI_Controller {
 				),
 				'feedName' => array(
 					'type'		=> 'text',
-					'label'		=> 'Nombre', 
+					'label'		=> $this->lang->line('Name'), 
 					'value'		=> element('feedName', $data)
 				),				
 				'feedUrl' => array(
 					'type' 		=> 'text',
-					'label'		=> 'Url', 
+					'label'		=> $this->lang->line('Url'), 
 					'value'		=> element('feedUrl', $data)
 				),
 				'feedLink' => array(
 					'type' 		=> 'text',
-					'label'		=> 'Link', 
+					'label'		=> $this->lang->line('Link'), 
 					'value'		=> element('feedLink', $data)
 				),				
 				'feedLastUpdate' => array(
 					'type' 		=> 'datetime',
-					'label'		=> 'Last update', 
+					'label'		=> $this->lang->line('Last update'), 
 					'value'		=> element('feedLastUpdate', $data)
 				),					
 				'statusId' => array(
 					'type' 		=> 'text',
-					'label'		=> 'Status', 
+					'label'		=> $this->lang->line('Status'), 
 					'value'		=> element('statusId', $data),
 					'disabled'	=> 'disabled'
 				),									
@@ -118,12 +118,12 @@ class Feeds extends CI_Controller {
 		$form['rules'] += array( 
 			array(
 				'field' => 'feedName',
-				'label' => 'Nombre',
+				'label' => $form['fields']['feedName']['label'],
 				'rules' => 'required'
 			),
 			array(
 				'field' => 'feedUrl',
-				'label' => 'Url',
+				'label' => $form['fields']['feedUrl']['label'],
 				'rules' => 'required'
 			),
 		);
