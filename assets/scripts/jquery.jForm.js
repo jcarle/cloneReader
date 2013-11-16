@@ -166,7 +166,7 @@
 								
  							field.$input.parent()
 								.addClass('date form_datetime')
-								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': 'es', 'pickerPosition': 'bottom-left' });
+								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': langId, 'pickerPosition': 'bottom-left' });
 
 							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
 							field.$input.parent().datetimepicker('show').datetimepicker('hide');

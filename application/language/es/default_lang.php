@@ -25,7 +25,7 @@ $lang['Back'] = 'Volver';
 $lang['Delete'] = 'Eliminar';
 $lang['Are you sure?'] = 'Está seguro?';
 $lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
-$lang['DATE_MOMENT_FORMAT'] = 'DD/MM/YYYY';
+$lang['MOMENT_DATE_FORMAT'] = 'DD/MM/YYYY';
 
 $lang['Signup'] = 'Registrarse';
 $lang['Profile'] = 'Perfil';

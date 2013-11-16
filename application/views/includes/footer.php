@@ -12,7 +12,7 @@ if (!isset($langs)) {
 	$langs = array();
 }
 $langs[] = 'DATE_FORMAT';
-$langs[] = 'DATE_MOMENT_FORMAT';
+$langs[] = 'MOMENT_DATE_FORMAT';
 $langs[] = 'Cancel';
 $langs[] = 'Close';
 $langs[] = 'Are you sure?';

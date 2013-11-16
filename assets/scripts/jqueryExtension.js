@@ -298,7 +298,7 @@ $.extend({
 			return;
 		}
 		
-		var format = _msg['DATE_MOMENT_FORMAT'];
+		var format = _msg['MOMENT_DATE_FORMAT'];
 		if ($element.hasClass('datetime')) {
 			format += ' HH:mm:ss';
 		}

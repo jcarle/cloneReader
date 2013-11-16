@@ -20,11 +20,13 @@ $this->load->spark('carabiner/1.5.4');
 $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
+  
+ /*
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
 	$CI->carabiner->empty_cache('both');
-}
+}*/
 
 
 //$CI->carabiner->js('jquery-2.0.3.min.js');
@@ -70,10 +72,8 @@ if ($hasForm == true) {
 	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('select2.js');
-	$CI->carabiner->js('select2_locale_es.js');
 	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
-	$CI->carabiner->js('bootstrap-datetimepicker.es.js');
 	
 	if (hasFieldUpload($form) == true) {
 		$CI->carabiner->js('jquery.ui.widget.js');
@@ -83,6 +83,12 @@ if ($hasForm == true) {
 				
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}	
+	
+	
+	if ($this->session->userdata('langId') == 'es') {
+		$CI->carabiner->js('select2_locale_es.js');	
+		$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+	}
 
 	if (hasGallery($form) == true) {
 		$CI->carabiner->js('tmpl.min.js');
@@ -142,7 +148,7 @@ $CI->carabiner->empty_cache('both', 'yesterday');
 $CI->carabiner->display('css');
 $CI->carabiner->display('js');
 ?>	
-	<title><?php echo $title; ?> - cloneReader</title>
+	<title><?php echo $title; ?> | cloneReader</title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">

@@ -14,7 +14,7 @@ $lang['Save'] = 'Save';
 $lang['loading ...'] = 'loading ...';
 $lang['Are you sure?'] = 'Are you sure?';
 $lang['DATE_FORMAT'] = 'mm/dd/yyyy';
-$lang['DATE_MOMENT_FORMAT'] = 'MM/DD/YYYY';
+$lang['MOMENT_DATE_FORMAT'] = 'MM/DD/YYYY';
 
 $lang['search'] = 'search';
 $lang['Search'] = 'Search';
