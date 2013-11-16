@@ -3,13 +3,19 @@ class Langs extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 
-	}  
+	}
 	
 	function index() { }
 	
 	function change($langId) {
-		// TODO: guardar el idioma en la db
+		$this->load->model('Users_Model');
+				
+
 		$this->session->set_userdata('langId', $langId);
+		
+		if ($this->session->userdata('userId') !== USER_ANONYMOUS) {
+			$this->Users_Model->updateLangIdByUserId($langId, $this->session->userdata('userId'));
+		}
 
 		$this->load->library('user_agent');
 		

@@ -172,4 +172,8 @@ class Users_Model extends CI_Model {
 				->get('users')->result_array();
 		return $query[0]['userFilters'];
 	}
+	
+	function updateLangIdByUserId($langId, $userId) {
+			$this->db->where('userId', $userId)->update('users', array('langId' => $langId));
+	}	
 }

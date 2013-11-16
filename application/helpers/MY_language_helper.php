@@ -28,7 +28,7 @@ function langJs($lines)
 
 }
 
-function langISO() {
+function initLang() {
 	$CI = &get_instance();
 	
 	$languages = array(
@@ -42,18 +42,9 @@ function langISO() {
 		$langId = config_item('langId'); 
 	}
 	
-	$langName = element($langId, $languages, $languages['en']);
+	$langName = element($langId, $languages, config_item('langId'));
 	$CI->config->set_item('language', $langName);
 	
 	$CI->session->set_userdata('langId', $langId);
 	$CI->lang->load('default', $langName);	
-	
-//	pr(config_item('language'));
-	vd($langId);
-	vd($langName); 
-	die;	
-	
-	
-
-
 }	

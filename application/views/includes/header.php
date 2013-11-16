@@ -134,7 +134,7 @@ $CI->carabiner->css('cloneReader.css');
 header ('Content-type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="<?php echo $CI->session->userdata('langId'); ?>">
 <head>
 	<link rel="alternate" type="application/rss+xml" title="cloneReader Feed" href="<?php echo base_url('rss'); ?>/" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" charset="utf-8" />

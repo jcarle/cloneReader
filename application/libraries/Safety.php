@@ -6,7 +6,8 @@ class Safety {
 		$this->session 	= $CI->session;
 		
 
-		langISO();
+		initLang();
+		
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
 		}
