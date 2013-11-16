@@ -467,7 +467,7 @@ cloneReader = {
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 
 		$('<label class="star checkbox" > <i/> </label>').appendTo($footer);
-		$('<label class="read checkbox" > <i/> <span> ' + _msg['keep unread'] + ' </span> </label>').appendTo($footer);
+		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
 		
 		var aSocial = [
 			{'icon': 'icon-facebook-sign', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},

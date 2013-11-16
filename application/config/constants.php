@@ -44,7 +44,6 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 //define('DATE_FORMAT_MYSQL', '%d/%m/%Y');
 define('DEFAULT_CURRENCY_NAME', 'AR$');
 define('DEFAULT_CURRENCY_ID', 1);
-define('DEFAULT_LANG_ID', 'en');
 
 define('USER_ANONYMOUS', 1);
 define('AUTOCOMPLETE_SIZE',	50);

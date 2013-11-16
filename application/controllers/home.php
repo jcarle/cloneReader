@@ -29,7 +29,7 @@ class Home extends CI_Controller {
 					'Next',
 					'Add new feed',
 					'Add feed url',
-					'keep unread',
+					'Keep unread',
 					'no more entries',
 					'Unsubscribe "%s"?',
 					'Add new tag',

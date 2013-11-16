@@ -243,6 +243,7 @@
 					#cloneReader .ulEntries > li .footer .read span {
 						font-size:smaller;
 						font-weight: normal;
+						text-transform: lowercase;
 					}
 					#cloneReader .ulEntries > li .footer .read.selected i {
 						color: #1155CC;

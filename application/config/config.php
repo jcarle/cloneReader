@@ -70,6 +70,7 @@ $config['url_suffix'] = '.html';
 |
 */
 $config['language']	= 'english';
+$config['langId']	= 'en';
 
 /*
 |--------------------------------------------------------------------------
