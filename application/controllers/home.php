@@ -36,6 +36,8 @@ class Home extends CI_Controller {
 					'enter tag name',
 					'Unsubscribe',
 					'New tag',
+					'From %s',
+					'From %s by %s',
 				)
 			)
 		);

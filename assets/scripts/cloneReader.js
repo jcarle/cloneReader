@@ -446,10 +446,15 @@ cloneReader = {
 		$('<label><i /></label>').addClass('star').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
 					
-		var $div = $('<div class="entryOrigin" />').html('from <a >' + entry.feedName + '</a>').appendTo($header);
-		if (entry.entryAuthor != '') {
-			$div.html($div.html() + ' by ' + entry.entryAuthor ).appendTo($header);				
-		}	
+		
+		if (entry.entryAuthor == '') {
+			var entryOrigin = $.sprintf(_msg['From %s'], '<a >' + entry.feedName + '</a>');
+		}
+		else {
+			var entryOrigin = $.sprintf(_msg['From %s by %s'], '<a >' + entry.feedName + '</a>', entry.entryAuthor);
+		}
+		var $div = $('<div class="entryOrigin" />').html( entryOrigin).appendTo($header);
+	
 		$div.find('a').click(
 			function() {
 				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
@@ -1481,7 +1486,7 @@ console.timeEnd("t1");
 		if (format == null) {
 			return datetime.fromNow();
 		}
-		return datetime.format('LLL');
+		return datetime.format(format);
 	},
 	
 	getIsMobile: function() {

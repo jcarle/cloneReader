@@ -111,3 +111,5 @@ $lang['Add new tag'] = 'Add new tag';
 $lang['enter tag name'] = 'enter tag name';
 $lang['Unsubscribe'] = 'Unsubscribe';
 $lang['New tag'] = 'New tag';
+$lang['From %s'] = 'From %s';
+$lang['From %s by %s'] =  'From %s by %s'; 
