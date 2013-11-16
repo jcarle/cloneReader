@@ -124,6 +124,10 @@ body.isLoading, body.isLoading * {
 		#header .navbar-nav .open .dropdown-menu li {
 			cursor:pointer;
 		}
+		
+		#header .navbar-nav a {
+			font-size: larger;
+		}
 }
 				
 

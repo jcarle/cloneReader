@@ -8,7 +8,7 @@ class Safety {
 		
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
-			$this->session->set_userdata('langId', 'en'); // TODO: meter en una constante
+			$this->session->set_userdata('langId', DEFAULT_LANG_ID);
 		}
 		
 		$CI->lang->load('default', $this->session->userdata('langId'));

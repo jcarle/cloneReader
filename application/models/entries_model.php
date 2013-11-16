@@ -80,13 +80,13 @@ class Entries_Model extends CI_Model {
 				array(
 					'type'		=> 'tag',
 					'id'		=> TAG_HOME,
-					'name'		=> 'home',
+					'name'		=> $this->lang->line('filterHome'),
 					'icon'		=> site_url().'assets/images/default_feed.png', 
 				),
 				array(
 					'type'		=> 'tag',
 					'id'		=> TAG_STAR,
-					'name'		=> 'starred', 
+					'name'		=> $this->lang->line('filterStarred'), 
 					'icon'		=> site_url().'assets/images/star-on.png', 
 				)
 			)
@@ -95,10 +95,10 @@ class Entries_Model extends CI_Model {
 		$aFilters['tags'] = array(
 			'type'		=> 'tag',
 			'id'		=> TAG_ALL,		
-			'name'		=> 'Subscriptions',
+			'name'		=> $this->lang->line('filterSubscriptions'),
 			'count'		=> 380,
 			'expanded'	=> true,
-			'childs'	=> array()				
+			'childs'	=> array()
 		); 		
 		
 		$result['filters'][] = & $aFilters['tags'];

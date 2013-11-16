@@ -84,6 +84,9 @@ $lang['Import success'] = 'Import success';
 
 
 
+$lang['filterSubscriptions'] = 'subscriptions';
+$lang['filterStarred'] = 'starred';
+$lang['filterHome'] = 'home';
 $lang['Expand'] = 'Expand';
 $lang['Add feed'] = 'Add feed';
 $lang['Install'] = 'Install';

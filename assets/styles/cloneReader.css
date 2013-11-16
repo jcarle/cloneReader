@@ -512,7 +512,7 @@
 		}
 		#cloneReader ul.ulFilters li div a, 
 		#cloneReader ul.ulFilters li div span {
-			font-size: large;
+			font-size: larger;
 			font-weight: normal;
 			height: 50px;
 			line-height: 50px;		
