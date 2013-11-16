@@ -220,7 +220,7 @@ cloneReader = {
 						</button> \
 						<ul class="dropdown-menu" > \
 							<li class="filterAllItems"> <a> '+ _msg['All items'] + ' </a> </li> \
-							<li class="filterOnlyUnread" > <a> ' + $.sprintf(_msg['%s new items'], '  <span class="count" /> ')   + ' </a> </li> \
+							<li class="filterOnlyUnread" > <a> ' + $.sprintf(_msg['%s unread items'], '  <span class="count" /> ')   + ' </a> </li> \
 						</ul> \
 					</div> \
 				</li> \

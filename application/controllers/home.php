@@ -21,7 +21,7 @@ class Home extends CI_Controller {
 					'Sort by newest',
 					'Sort by oldest',
 					'All items',
-					'%s new items',
+					'%s unread items',
 					'List view',
 					'Detail view',
 					'Reload',
