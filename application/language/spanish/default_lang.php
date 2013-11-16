@@ -82,9 +82,9 @@ $lang['Choose %s'] = 'Seleccione %s';
 $lang['Import success'] = 'La importación se completó con éxito';
 
 
-$lang['filterSubscriptions'] = 'subscripciones';
-$lang['filterStarred'] = 'favoritos';
-$lang['filterHome'] = 'inicio';
+$lang['filterSubscriptions'] = 'Subscripciones';
+$lang['filterStarred'] = 'Favoritos';
+$lang['filterHome'] = 'Inicio';
 $lang['Expand'] = 'Expandir';
 $lang['Add feed'] = 'Agregar feed';
 $lang['Install'] = 'Instalar';

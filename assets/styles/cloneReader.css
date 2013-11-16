@@ -49,10 +49,6 @@
 		#cloneReader .nav > li:last-child {
 			margin-right:5px;
 		}
-		#cloneReader .nav li button, 
-		#cloneReader .nav li ul li a {
-			text-transform: lowercase;
-		}
 		#cloneReader nav i {
 			color: #555;
 		}
@@ -80,6 +76,10 @@
 	#cloneReader nav ul li button .btnLabel {
 		display:none;
 	}
+		#cloneReader .nav li button, 
+		#cloneReader .nav li ul li a {
+			text-transform: lowercase;
+		}	
 }		
 
 	#cloneReader .ulEntries {

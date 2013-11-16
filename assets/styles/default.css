@@ -38,9 +38,6 @@ body.isLoading, body.isLoading * {
 	#header .navbar-collapse {
 		max-height:none;
 	}
-	#header ul.menuProfile > li > a:first-child {
-		text-transform: lowercase;
-	}	
 	#header ul.menuProfile  li a { }
 		#header ul.menuProfile  li a i { }		
 		#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
@@ -57,13 +54,16 @@ body.isLoading, body.isLoading * {
 	#header form {
 		max-width:350px;
 	}	
-	#header ul.menuProfile { }			
+	#header ul.menuProfile { }
 		#header ul.menuProfile .settings span {
 			display:none; 
 		}
 		#header ul.menuProfile > li { }
 		#header ul.menuProfile > li:last-child { }
 			#header ul.menuProfile > li > a { }
+			#header ul.menuProfile > li > a:first-child {
+				text-transform: lowercase;
+			}								
 			#header ul.menuProfile .settings { }
 			#header ul.menuProfile .dropdown-submenu-left {
 				position: relative;
@@ -124,12 +124,11 @@ body.isLoading, body.isLoading * {
 		#header .navbar-nav .open .dropdown-menu li {
 			cursor:pointer;
 		}
-		
 		#header .navbar-nav a {
 			font-size: larger;
 		}
 }
-				
+
 
 
 .menu {
