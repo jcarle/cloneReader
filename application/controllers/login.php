@@ -103,6 +103,7 @@ class Login extends CI_Controller {
 
 		$this->session->set_userdata(array(
 			'userId'  		=> $user->userId,
+			'langId'  		=> $user->langId,
 		));		
 		
 		return $this->load->view('ajax', array(

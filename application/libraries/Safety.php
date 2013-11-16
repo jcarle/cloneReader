@@ -26,7 +26,8 @@ class Safety {
 		$row = $query->row();
 		
 		$CI->session->set_userdata(array(
-			'userId'  		=> $row->userId,
+			'userId'  	=> $row->userId,
+			'langId'	=> $row->langId,
 		));		
 		
 		return true;
