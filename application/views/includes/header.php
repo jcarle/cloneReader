@@ -33,6 +33,7 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
+$CI->carabiner->js('jquery.url.js');
 $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('jqueryExtension.js');
@@ -69,7 +70,6 @@ if ($hasForm == true) {
 		$form = array('fields' => array());	
 	}
 	
-	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('select2.js');
 	$CI->carabiner->js('autoNumeric.js');
@@ -122,7 +122,6 @@ if (isset($hasGallery) && $hasGallery == true) {
 }
 if ($view == 'login') {
 	$CI->carabiner->js('jquery.jForm.js');
-	$CI->carabiner->js('jquery.url.js');
 	$CI->carabiner->js('loginFB.js');
 	$CI->carabiner->js('loginGoogle.js');
 }
@@ -248,7 +247,7 @@ if (!isset($showTitle)) {
 	$showTitle = true;
 }
 if ($showTitle == true) {
-	echo '	<div class="page-header">
+	echo '	<div class="aaaapage-header pageTitle">
 				<h2>'. $title .' <small> </small></h2>
 			</div>';
 }

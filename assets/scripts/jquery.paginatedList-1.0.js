@@ -108,6 +108,10 @@
 				this.checkedRow(tr);
 			}
 		, this));
+		
+		if ($.url().param('filter') != '') {
+			this.$filter.focus();
+		}
 	}
 	
 	paginatedList.prototype = {

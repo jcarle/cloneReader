@@ -1434,7 +1434,7 @@ console.timeEnd("t1");
 			$('#header').css( {'box-shadow': 'none' });
 		}
 
-		$('.content > .page-header').remove();
+		$('.content > .pageTitle').remove();
 		$('.content').css( { 'max-width': '100%' });
 		$('#header').addClass('navbar-fixed-top').css( { 'max-width': '100%' } );
 
