@@ -15,6 +15,9 @@ $lang['loading ...'] = 'loading ...';
 $lang['Are you sure?'] = 'Are you sure?';
 $lang['DATE_FORMAT'] = 'mm/dd/yyyy';
 $lang['MOMENT_DATE_FORMAT'] = 'MM/DD/YYYY';
+$lang['NUMBER_DEC_SEP'] = '.';
+$lang['NUMBER_THOUSANDS_SEP'] = ',';
+
 
 $lang['search'] = 'search';
 $lang['Search'] = 'Search';

@@ -26,6 +26,8 @@ $lang['Delete'] = 'Eliminar';
 $lang['Are you sure?'] = 'Está seguro?';
 $lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
 $lang['MOMENT_DATE_FORMAT'] = 'DD/MM/YYYY';
+$lang['NUMBER_DEC_SEP'] = ',';
+$lang['NUMBER_THOUSANDS_SEP'] = '.';
 
 $lang['Signup'] = 'Registrarse';
 $lang['Profile'] = 'Perfil';

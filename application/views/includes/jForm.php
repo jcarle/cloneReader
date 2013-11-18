@@ -144,12 +144,16 @@ if (!isset($form['buttons'])) {
 }
 
 
-echo ' </div>
-		<div class="form-actions panel-footer" > ';
-foreach ($form['buttons'] as $button) {
-	echo $button.' ';
+echo ' </div>';
+
+if (!empty($form['buttons'])) {
+	echo 	'<div class="form-actions panel-footer" > ';
+	foreach ($form['buttons'] as $button) {
+		echo $button.' ';
+	}
+	echo '</div>';
 }
-echo '</div>';
+
 echo form_close(); 
 
 if (hasGallery($form) == true) {

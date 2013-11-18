@@ -83,7 +83,7 @@ if ($urlDelete == true) {
 				<i class="icon-file-alt icon-large"></i>
 				<?php echo $CI->lang->line('Add'); ?>
 			</a>
-			<span><?php echo sprintf($CI->lang->line('%s rows'), $list['foundRows']); ?> </span>
+			<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
 			<ul class="pagination pagination-small pagination-right">
 <?php
 $this->pagination->initialize(array(

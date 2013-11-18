@@ -13,6 +13,8 @@ if (!isset($langs)) {
 }
 $langs[] = 'DATE_FORMAT';
 $langs[] = 'MOMENT_DATE_FORMAT';
+$langs[] = 'NUMBER_DEC_SEP';
+$langs[] = 'NUMBER_THOUSANDS_SEP';
 $langs[] = 'Cancel';
 $langs[] = 'Close';
 $langs[] = 'Are you sure?';

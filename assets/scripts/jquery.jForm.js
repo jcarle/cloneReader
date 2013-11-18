@@ -542,7 +542,7 @@
 				$maskPrice
 					.removeAttr('name')
 					.insertBefore($price)
-					.autoNumeric('init', { aSep: '.', aDec: ',',  aSign: $currency.find('option:selected').text() +' ' } )
+					.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: $currency.find('option:selected').text() +' ' } )
 					.change( function(event) {
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
@@ -552,12 +552,12 @@
 				$maskExchange
 					.removeAttr('name')
 					.insertBefore($exchange)
-					.autoNumeric('init', { aSep: '.', aDec: ',',  aSign: '' } )
+					.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '' } )
 					.change( function(event) {
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();;
 					});
 				
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: '.', aDec: ',',  aSign: 'AR$ ' } ) // TODO: desharckodear!
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: 'AR$ ' } ) // TODO: desharckodear!
 
 				this.$form.bind('submit', $.proxy(
 					function($maskPrice, $maskExchange, event) {
@@ -581,7 +581,7 @@
 		
 		sumValues: function($total, aFieldName) {
 			if ($total.data('init-price') == null) {
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: '.', aDec: ',',  aSign: 'AR$ ' } ) // TODO: desharckodear!
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: 'AR$ ' } ) // TODO: desharckodear!
 			}
 			
 			var total = 0;

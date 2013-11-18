@@ -45,7 +45,7 @@ class Tags extends CI_Controller {
 		
 		if ($this->input->is_ajax_request()) { // save data			
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Tags_Model->save($this->input->post()), 
+				'code'		=> ($this->Tags_Model->save($this->input->post()) > 0), 
 				'result' 	=> validation_errors() 
 			));
 		}
