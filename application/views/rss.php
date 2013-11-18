@@ -5,7 +5,7 @@
 		<link><?php echo base_url(); ?></link>
 		<atom:link href="<?php echo base_url('feed'); ?>" rel="self" type="application/rss+xml" />
 		<description><?php echo $feedDesc ?></description>
-		<language>es-es</language>
+		<language>es-ar</language>
 		<pubDate><?php echo $news[0]['newDate']; ?></pubDate>
 		<sy:updatePeriod>hourly</sy:updatePeriod>
 		<sy:updateFrequency>24</sy:updateFrequency>
