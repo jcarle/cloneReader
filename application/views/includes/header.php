@@ -231,7 +231,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>
 
-	<nav class="menu">
+	<nav class="menu label-primary">
 		<div>
 <?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
 		</div>

@@ -21,7 +21,7 @@ $CI	= &get_instance();
 	<div class="table-responsive">
 		<table class="table table-hover table-condensed">
 			<thead>
-				<tr>
+				<tr class="label-primary">
 <?php
 $urlDelete 	= element('urlDelete', $list);
 $showId 	= element('showId', $list);
@@ -75,18 +75,21 @@ foreach ($list['data'] as $row) {
 	</div>
 	
 	<div class="panel panel-default footer">
-		<div class="panel-footer">
+		<div class="panel-footer row">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 <?php
 if ($urlDelete == true) {
 	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> '.$CI->lang->line('Delete').' </a>';
 }
 ?>
-			<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-sm btn-success">
-				<i class="icon-file-alt icon-large"></i>
-				<?php echo $CI->lang->line('Add'); ?>
-			</a>
-			<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
-			<ul class="pagination pagination-small pagination-right">
+				<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-sm btn-success">
+					<i class="icon-file-alt icon-large"></i>
+					<?php echo $CI->lang->line('Add'); ?>
+				</a>
+				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
+			</div>						
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<ul class="pagination">
 <?php
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
@@ -116,7 +119,8 @@ $this->pagination->initialize(array(
 			
 echo $this->pagination->create_links();
 ?>
-			</ul>
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>

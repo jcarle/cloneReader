@@ -128,8 +128,6 @@ body.isLoading, body.isLoading * {
 
 
 .menu {
-	background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 	position:relative;
 	margin:0 0 5px 0;
 }
@@ -259,18 +257,14 @@ body.isLoading, body.isLoading * {
 		margin: 0 0 10px 0;
 	}
 	.paginatedList table {
-/*		border-radius:5px;
-		border-collapse: separate;*/
+		margin: 0;
 	}
 		.paginatedList table thead {
 			font-weight: bold;
 			color: white;
 			height:20px;
 		}
-			.paginatedList table thead tr th {
-				background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-				background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
-			}
+			.paginatedList table thead tr th { }
 				.paginatedList table thead tr th, 
 				.paginatedList table thead tr th a  {
 					color:white;
@@ -298,11 +292,17 @@ body.isLoading, body.isLoading * {
 		color: #777777;
 		font-weight: normal;
 	}
+	.paginatedList .footer .row {
+		margin:0;
+	}
+	.paginatedList .row > div {
+		padding: 0;
+	}	
 		.paginatedList .footer span {
 			font-size: small;
 		}
 			.paginatedList .footer .pagination {
-				margin:0;
+				margin: 0;
 				float:right;
 			}
 				.paginatedList .footer .pagination ul {
@@ -320,6 +320,13 @@ body.isLoading, body.isLoading * {
 				.paginatedList table tbody tr:last-child td:last-child {
 					border-bottom-right-radius:5px;
 				}
+				
+@media (max-width: 767px) {				
+	.paginatedList .footer .pagination {
+		margin: 5px 0 0 0;
+		float:none;
+	}						
+}
 
 .jForm { }
 	.jForm .control-group {
