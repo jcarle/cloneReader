@@ -1,12 +1,16 @@
 <?php
 class Entries_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db
+		$this->db
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
-			->join('feeds', 'entries.feedId = feeds.feedId', 'inner') 
-			->like('entryTitle', $filter)
-			->order_by('entries.entryId')
-		 	->get('entries', $num, $offset);
+			->join('feeds', 'entries.feedId = feeds.feedId', 'inner');
+			
+		if  ($filter != '') {
+			$this->db->like('entryTitle', $filter);
+		}
+			
+		$query = $this->db->order_by('entries.entryId')
+		 	->get('entries FORCE INDEX (PRIMARY)', $num, $offset);
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
@@ -226,19 +230,33 @@ class Entries_Model extends CI_Model {
 				->insert('entries', $values);
 			$entryId = $this->db->insert_id();
 		}
-		//pr($this->db->last_query()); 
+		//pr($this->db->last_query());
 
 		return true;
 	}
 	
-	function saveEntry($data) {
+	function saveEntry($data, $aTags = null) {
 		if (trim($data['entryUrl']) == '') {
 			return null;
 		}
 		
 		$this->db->ignore()->insert('entries', $data);
 		//pr($this->db->last_query());
-		return $this->db->insert_id();
+		$entryId = $this->db->insert_id();
+		
+		if ((int)$entryId == 0) {
+			$entryId = $this->getEntryIdByEntryUrl($data['entryUrl']);
+		}
+		
+		
+		if (!empty($aTags)) {
+			foreach ($aTags as $tagName) {
+				$tagId = $this->addTag($tagName);
+				$this->db->ignore()->insert('entries_tags', array('entryId' => $entryId, 'tagId' => $tagId));
+			}
+		}
+		
+		return $entryId;
 	}
 
 	function delete($entryId) {
@@ -368,8 +386,9 @@ class Entries_Model extends CI_Model {
 		return $feedId;
 	}
 
-	function addTag($tagName, $userId, $feedId = null) {
-		$tagName = trim($tagName);
+	function addTag($tagName, $userId = null, $feedId = null) {
+		$tagName 	= trim($tagName);
+		$tagId		= null;
 
 		$query = $this->db->where('tagName', $tagName)->get('tags')->result_array();
 		//pr($this->db->last_query());
@@ -382,16 +401,18 @@ class Entries_Model extends CI_Model {
 			//pr($this->db->last_query());
 		}
 
-		$this->db->ignore()->insert('users_tags', array( 'tagId'=> $tagId, 'userId' => $userId ));
-		//pr($this->db->last_query());
-
+		if ($userId != null) {
+// FIXME: no esta guardando los entries que ya existen en el nuevo tag en la tabla 'users_entries'			
+			$this->db->ignore()->insert('users_tags', array( 'tagId'=> $tagId, 'userId' => $userId ));
+			//pr($this->db->last_query());
+		}
 
 		if ($feedId != null) {
 			$this->db->replace('users_feeds_tags', array( 'tagId'=> $tagId, 'feedId'	=> $feedId, 'userId' => $userId ));
 			//pr($this->db->last_query());
 		}
 		
-		return array('tagId' => $tagId);
+		return $tagId;
 	}
 
 	function unsubscribeFeed($feedId, $userId) {
@@ -454,7 +475,7 @@ class Entries_Model extends CI_Model {
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
-//->where('feeds.feedId IN (166)')			
+//->where('feeds.feedId IN (530)')			
 			->order_by('feedLastUpdate ASC');
 
 		if (is_null($userId) == false) {
@@ -496,10 +517,31 @@ class Entries_Model extends CI_Model {
 		}
 	
 		$lastEntryDate = $this->getLastEntryDate($feedId);
+		
+		$langId		= null;
+		$countryId 	= null;
+		$language 	= $this->cisimplepie->get_language();
+		$aLocale = explode('-', $language);
+		if (strlen($language) == 2) {
+			$langId = $language;
+		}
+		else if (count($aLocale) == 2) {
+			$langId		= strtolower($aLocale[0]);
+			$countryId 	= strtolower($aLocale[1]);
+		}
 			
 		$rss = $this->cisimplepie->get_items();
 
 		foreach ($rss as $item) {
+			$aTags = array();
+			if ($categories = $item->get_categories()) {
+				foreach ((array) $categories as $category) {
+					if ($category->get_label() != '') {
+						$aTags[] = $category->get_label();
+					}
+				}
+			}
+			
 			$entryAuthor = '';
 			if ($author = $item->get_author()) {
 				$entryAuthor = $author->get_name();
@@ -526,7 +568,7 @@ class Entries_Model extends CI_Model {
 				return;
 			}
 			
-			$this->saveEntry($data);
+			$this->saveEntry($data, $aTags);
 		}
 
 		$values = array( 
@@ -536,9 +578,19 @@ class Entries_Model extends CI_Model {
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
 			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
 		}
+		if (trim((string)$this->cisimplepie->get_description()) != '') {
+			$values['feedDescription'] = (string)$this->cisimplepie->get_description();
+		}
 		if (trim((string)$this->cisimplepie->get_link()) != '') {
 			$values['feedLink'] = (string)$this->cisimplepie->get_link();
 		}
+		if ($langId != null) {
+			$values['langId'] = $langId;
+		}
+		if ($countryId != null) {
+			$values['countryId'] = $countryId;
+		}
+
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
 	}
 	
