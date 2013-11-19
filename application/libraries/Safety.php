@@ -10,7 +10,9 @@ class Safety {
 		
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
-			redirect('login');
+			if ($this->isCommandLine() != true) {
+				redirect('login');
+			}
 		}
 	}
 	
@@ -78,4 +80,8 @@ class Safety {
 			->where('userId', $userId)
 			->get('users_groups')->result_array();
 	}
+
+	public static function isCommandLine() {
+		return PHP_SAPI === 'cli';
+	}	
 }
