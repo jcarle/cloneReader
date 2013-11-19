@@ -84,7 +84,8 @@ $lang['Author'] = 'Author';
 $lang['Sef'] = 'Sef';
 $lang['Choose %s'] = 'Choose %s';
 $lang['Import success'] = 'Import success';
-
+$lang['Demo'] = 'Demo';
+$lang['Create account'] = 'Create account';
 
 
 $lang['filterSubscriptions'] = 'Subscriptions';
@@ -116,3 +117,4 @@ $lang['Unsubscribe'] = 'Unsubscribe';
 $lang['New tag'] = 'New tag';
 $lang['From %s'] = 'From %s';
 $lang['From %s by %s'] =  'From %s by %s'; 
+

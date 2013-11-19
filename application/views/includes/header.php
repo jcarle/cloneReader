@@ -147,6 +147,49 @@ $CI->carabiner->empty_cache('both', 'yesterday');
 $CI->carabiner->display('css');
 $CI->carabiner->display('js');
 ?>	
+	<script type="text/javascript">
+		var base_url	= '<?php echo base_url(); ?>';
+		var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
+		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
+	
+<?php
+if (!isset($langs)) {
+	$langs = array();
+}
+$langs[] = 'DATE_FORMAT';
+$langs[] = 'MOMENT_DATE_FORMAT';
+$langs[] = 'NUMBER_DEC_SEP';
+$langs[] = 'NUMBER_THOUSANDS_SEP';
+$langs[] = 'Cancel';
+$langs[] = 'Close';
+$langs[] = 'Are you sure?';
+
+echo langJs($langs);
+
+$scripts = '';
+if (isset($aServerData)) {
+	$scripts .= 'var SERVER_DATA = '.json_encode($aServerData).'; ';
+}
+
+if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
+	$scripts .= "
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-41589815-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+	";
+}
+if ($scripts != '') {
+	echo $scripts;
+}
+?>
+	</script>	
 	<title><?php echo $title; ?> | cloneReader</title>
 </head>
 <body>
@@ -193,9 +236,34 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 <?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
 		</div>
 	</nav>	
+	<div class="container content">
+<?php
+if (isset($breadcrumb)) {
+	echo '<ol class="breadcrumb">';
+	foreach ($breadcrumb as $link) {
+		if (element('active', $link) == true) {
+			echo '<li class="active"> '.$link['text'].'</li>';			
+		}
+		else {
+			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
+		} 
+	}
+	echo '</ol>';  
+}
+
+if (!isset($showTitle)) {
+	$showTitle = true;
+}
+if ($showTitle == true) {
+	echo '	<div class="aaaapage-header pageTitle">
+				<h2>'. $title .' <small> </small></h2>
+			</div>';
+}
 	
 
-<?php
+
+
+
 function renderMenu($aMenu, $className = null){
 	if (empty($aMenu)) {
 		return;
@@ -226,29 +294,4 @@ function renderMenu($aMenu, $className = null){
 	$sTmp .= '</ul>';
 	return $sTmp;
 }
-?>
-<div class="container content">
 
-<?php
-if (isset($breadcrumb)) {
-	echo '<ol class="breadcrumb">';
-	foreach ($breadcrumb as $link) {
-		if (element('active', $link) == true) {
-			echo '<li class="active"> '.$link['text'].'</li>';			
-		}
-		else {
-			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
-		} 
-	}
-	echo '</ol>';  
-}
-
-if (!isset($showTitle)) {
-	$showTitle = true;
-}
-if ($showTitle == true) {
-	echo '	<div class="aaaapage-header pageTitle">
-				<h2>'. $title .' <small> </small></h2>
-			</div>';
-}
-	

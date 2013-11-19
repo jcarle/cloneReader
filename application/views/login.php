@@ -11,13 +11,13 @@ $this->load->view('includes/jForm');
 			<li class="list-group-item"> 
 				<a href="<?php echo base_url('demo'); ?>" class="btn btn-success" >
 					<i class="icon-rss"></i>
-		Demo
+					<?php echo $this->lang->line('Demo'); ?>
 				</a>		
 			</li>	
 			<li class="list-group-item">
 				<a href="<?php echo base_url('register'); ?>" class="btn btn-info" >
 					<i class="icon-user"></i>
-		Create account
+					<?php echo $this->lang->line('Create account'); ?>
 				</a>
 			</li>	
 			<li class="list-group-item">

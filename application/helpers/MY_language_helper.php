@@ -22,7 +22,7 @@ function langJs($lines)
 	}
 
 	$json = json_encode($json);
-	$script = '<script type="text/javascript">var _msg = ' . $json . ';</script>' . "\n";
+	$script = 'var _msg = ' . $json . ';' . "\n";
 
 	return $script;
 

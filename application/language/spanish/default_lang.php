@@ -82,6 +82,8 @@ $lang['Author'] = 'Autor';
 $lang['Sef'] = 'Sef';
 $lang['Choose %s'] = 'Seleccione %s';
 $lang['Import success'] = 'La importación se completó con éxito';
+$lang['Demo'] = 'Demo';
+$lang['Create account'] = 'Crear cuenta';
 
 
 $lang['filterSubscriptions'] = 'Subscripciones';
