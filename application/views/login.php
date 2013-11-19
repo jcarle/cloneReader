@@ -9,7 +9,7 @@ $this->load->view('includes/jForm');
 		
 		<ul class="list-group">
 			<li class="list-group-item"> 
-				<a href="<?php echo base_url('demo'); ?>" class="btn btn-success" >
+				<a href="<?php echo base_url(''); ?>" class="btn btn-success" >
 					<i class="icon-rss"></i>
 					<?php echo $this->lang->line('Demo'); ?>
 				</a>		

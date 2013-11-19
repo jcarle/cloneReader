@@ -10,6 +10,7 @@ class Safety {
 		
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
+			redirect('login');
 		}
 	}
 	
