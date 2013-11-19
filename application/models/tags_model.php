@@ -40,7 +40,7 @@ class Tags_Model extends CI_Model {
 		}
 		//pr($this->db->last_query());
 
-		return true;
+		return $tagId;
 	}
 	
 	function delete($tagId) {
