@@ -29,11 +29,17 @@ class Feeds_Model extends CI_Model {
 		$feedId = (int)element('feedId', $data);
 		
 		if (trim($data['feedUrl']) == '') {
-			vd($data);
 			return null;
 		}
 		
-		$values = array('feedUrl' => $data['feedUrl'], 'statusId' => FEED_STATUS_PENDING);
+		$values = array(
+			'feedUrl' 			=> $data['feedUrl'], 
+			'feedDescription' 	=> $data['feedDescription'],
+			'statusId' 			=> FEED_STATUS_PENDING,
+			'countryId'			=> $data['countryId'],
+			'langId'			=> $data['langId'],
+		);
+		
 		if (isset($data['feedName'])) {
 			$values['feedName'] = $data['feedName'];
 		}

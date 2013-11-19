@@ -27,11 +27,11 @@ class Feeds extends CI_Controller {
 				'columns'		=> array(
 					'statusId' 			=> array('class' => 'numeric', 'value' => $this->lang->line('Status')), 
 					'feedName' 			=> $this->lang->line('Name'),  
-					'feedDescription' 	=> $this->lang->line('Description'),  
+//					'feedDescription' 	=> $this->lang->line('Description'),  
 					'countryName' 		=> $this->lang->line('Country'),
 					'langName' 			=> $this->lang->line('Language'),
 					'feedUrl' 			=> $this->lang->line('Url'), 
-					'feedLink' 			=> $this->lang->line('Link'), 
+//					'feedLink' 			=> $this->lang->line('Link'), 
 					'feedLastUpdate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Last update'))
 				),
 				'foundRows'		=> $query->foundRows,
