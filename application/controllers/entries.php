@@ -157,7 +157,7 @@ class Entries extends CI_Controller {
 	}
 
 	function getAsyncNewsEntries($userId = null) {
-		exec(PHP_PATH.'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId.' > /dev/null &');
+		exec(config_item('PHP_PATH').'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId.' > /dev/null &');
 		return;
 		
 		
