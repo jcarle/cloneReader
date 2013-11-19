@@ -23,7 +23,7 @@ class Groups extends CI_Controller {
 			'title'			=> $this->lang->line('Edit groups'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('groupName' => $this->lang->line('Name'), 'webSiteHome' => $this->lang->line('HomePage')),
+				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('HomePage')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -50,10 +50,10 @@ class Groups extends CI_Controller {
 					'label'	=> $this->lang->line('Name'), 
 					'value'	=> element('groupName', $data)
 				),
-				'webSiteHome' => array(
+				'groupHomePage' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Home Page'),
-					'value'	=> element('webSiteHome', $data)
+					'value'	=> element('groupHomePage', $data)
 				),
 				'controllers[]' => array(
 					'type'		=> 'groupCheckBox',

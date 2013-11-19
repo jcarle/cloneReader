@@ -414,7 +414,7 @@ CREATE TABLE IF NOT EXISTS `files` (
 CREATE TABLE IF NOT EXISTS `groups` (
   `groupId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `groupName` char(255) DEFAULT NULL,
-  `webSiteHome` char(255) NOT NULL,
+  `groupHomePage` char(255) NOT NULL,
   `systemGroup` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`groupId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
@@ -423,7 +423,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
 -- Dumping data for table `groups`
 --
 
-INSERT INTO `groups` (`groupId`, `groupName`, `webSiteHome`, `systemGroup`) VALUES
+INSERT INTO `groups` (`groupId`, `groupName`, `groupHomePage`, `systemGroup`) VALUES
 (1, 'Usuario Anomino', '', 1),
 (2, 'root', '', 1),
 (3, 'default', '', 1);
