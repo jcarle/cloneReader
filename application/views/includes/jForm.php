@@ -55,7 +55,12 @@ foreach ($form['fields'] as $name => $field) {
 			);
 			break;			
 		case 'dropdown':
-			$aFields[] = sprintf($sField, form_dropdown($name, element('source', $field, array()), $field['value'], 'class="form-control"'));
+			$source = element('source', $field, array());
+			if (element('appendNullOption', $field) == true) {
+				$source = array('-1' => '-- '.$this->lang->line('Choose').' --') + $source;
+			}
+		
+			$aFields[] = sprintf($sField, form_dropdown($name, $source, $field['value'], 'class="form-control"'));
 			break;						
 		case 'groupCheckBox':
 			$sTmp = '<ul class="groupCheckBox ">';

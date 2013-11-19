@@ -1,10 +1,17 @@
 <?php
 class Feeds_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
-		$query = $this->db
-			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedUrl, feedLink, statusId, feedLastUpdate', false)
-			->like('feedName', $filter)
-		 	->get('feeds', $num, $offset);
+		$this->db
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastUpdate', false)
+			->join('countries', 'countries.countryId = feeds.countryId', 'left')
+			->join('languages', 'languages.langId = feeds.langId', 'left');
+			
+		if ($filter != '') {
+			$this->db->like('feedName', $filter);
+		}
+		
+		
+		$query = $this->db->get('feeds', $num, $offset);
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

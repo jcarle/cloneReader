@@ -84,7 +84,8 @@ $lang['Choose %s'] = 'Seleccione %s';
 $lang['Import success'] = 'La importación se completó con éxito';
 $lang['Demo'] = 'Demo';
 $lang['Create account'] = 'Crear cuenta';
-
+$lang['Description'] = 'Descripción';
+$lang['Choose'] = 'Seleccione';
 
 $lang['filterSubscriptions'] = 'Subscripciones';
 $lang['filterStarred'] = 'Favoritos';

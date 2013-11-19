@@ -86,6 +86,8 @@ $lang['Choose %s'] = 'Choose %s';
 $lang['Import success'] = 'Import success';
 $lang['Demo'] = 'Demo';
 $lang['Create account'] = 'Create account';
+$lang['Description'] = 'Description';
+$lang['Choose'] = 'Choose';
 
 
 $lang['filterSubscriptions'] = 'Subscriptions';

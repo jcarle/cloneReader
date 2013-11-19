@@ -24,7 +24,16 @@ class Feeds extends CI_Controller {
 			'title'			=> $this->lang->line('Edit feeds'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('statusId' => array('class' => 'numeric', 'value' => $this->lang->line('Status')), 'feedName' => $this->lang->line('Name'), 'feedUrl' => $this->lang->line('Url'), 'feedLink' => $this->lang->line('Link'), 'feedLastUpdate' => array('class' => 'datetime', 'value' => $this->lang->line('Last update'))),
+				'columns'		=> array(
+					'statusId' 			=> array('class' => 'numeric', 'value' => $this->lang->line('Status')), 
+					'feedName' 			=> $this->lang->line('Name'),  
+					'feedDescription' 	=> $this->lang->line('Description'),  
+					'countryName' 		=> $this->lang->line('Country'),
+					'langName' 			=> $this->lang->line('Language'),
+					'feedUrl' 			=> $this->lang->line('Url'), 
+					'feedLink' 			=> $this->lang->line('Link'), 
+					'feedLastUpdate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Last update'))
+				),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
 				'pagination'	=> $this->pagination
@@ -72,6 +81,8 @@ class Feeds extends CI_Controller {
 	function _getFormProperties($feedId) {
 		$data = $this->Feeds_Model->get($feedId);
 		
+		$this->load->model(array('Languages_Model', 'Countries_Model'));
+		
 		$form = array(
 			'frmId'		=> 'frmFeedEdit',
 			'messages' 	=> getRulesMessages(),
@@ -85,7 +96,12 @@ class Feeds extends CI_Controller {
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Name'), 
 					'value'		=> element('feedName', $data)
-				),				
+				),
+				'feedDescription' => array(
+					'type'		=> 'text',
+					'label'		=> $this->lang->line('Description'), 
+					'value'		=> element('feedDescription', $data)
+				),
 				'feedUrl' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Url'), 
@@ -96,6 +112,23 @@ class Feeds extends CI_Controller {
 					'label'		=> $this->lang->line('Link'), 
 					'value'		=> element('feedLink', $data)
 				),				
+				'countryId' => array(
+					'type'				=> 'dropdown',
+					'label'				=> $this->lang->line('Country'),
+					'value'				=> element('countryId', $data),
+					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'appendNullOption' 	=> true
+				),
+				'langId' => array(
+					'type'				=> 'dropdown',
+					'label'				=> $this->lang->line('Language'),
+					'value'				=> element('langId', $data),
+					'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
+					'appendNullOption' 	=> true
+				),				
+				
+				
+								
 				'feedLastUpdate' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Last update'), 
