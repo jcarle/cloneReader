@@ -32,6 +32,7 @@
 	height:calc(100% - 50px);
 	margin-top:50px;
 	position:absolute;
+	left:0;
 }
 #cloneReader .popupForm {
 	padding: 5px 10px;
@@ -468,10 +469,7 @@
 	#header .mainToolbar li {
 		padding-left:15px;
 	}
-	#cloneReader {
-		
-/*		margin-top:50px;*/
-	}
+	#cloneReader { }
 	#cloneReader nav .expand {
 	}
 		#cloneReader nav .expand i {

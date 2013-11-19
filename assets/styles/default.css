@@ -176,7 +176,6 @@ body.isLoading, body.isLoading * {
 						
 .content {
 	margin: 0 auto;
-	padding: 0;
 	max-width: 1024px;	
 	min-width: 240px;
 }			
@@ -212,15 +211,7 @@ body.isLoading, body.isLoading * {
 			padding: 5px 0 5px 10px;
 		}
 
-#frmLogin {
-	margin: 20px auto;
-	max-width: 400px;	
-}
-
-
 .btn-facebook{
-	display: block;
-	margin: 0 auto;
 	color:#ffffff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
 	background-color:#506fb0;
@@ -238,8 +229,6 @@ body.isLoading, body.isLoading * {
 	background-color:#3b5998;
 }
 .btn-google{
-	display: block;
-	margin: 5px auto 0 auto;	
 	color:#ffffff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
 	background-color:#d55b57;
