@@ -18,9 +18,10 @@ $CI	= &get_instance();
 		</form>
 	</div>
 				
-	<table class="table table-hover table-condensed">
-		<thead>
-			<tr>
+	<div class="table-responsive">
+		<table class="table table-hover table-condensed">
+			<thead>
+				<tr>
 <?php
 $urlDelete 	= element('urlDelete', $list);
 $showId 	= element('showId', $list);
@@ -69,9 +70,10 @@ foreach ($list['data'] as $row) {
 	echo '</tr>';
 }
 ?>		
-		</tbody>
-	</table>
-
+			</tbody>
+		</table>
+	</div>
+	
 	<div class="panel panel-default footer">
 		<div class="panel-footer">
 <?php

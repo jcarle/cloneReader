@@ -66,6 +66,7 @@ class Menu extends CI_Controller {
 		if ((int)$menuId > 0) {
 			$form['urlDelete'] 	= base_url('menu/delete');
 			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>');
+			array_unshift($form['buttons'], '<button type="button" class="btn btn-default" onclick="$.goToUrl(\''.base_url('menu').'\');" ><i class="icon-arrow-left"></i> '.$this->lang->line('Cancel').' </button>');
 		}
 		
 		$form['rules'] = array( 

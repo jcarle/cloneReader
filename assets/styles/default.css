@@ -251,13 +251,16 @@ body.isLoading, body.isLoading * {
 			max-width:350px;
 			margin-bottom: 0;
 		}
-	.paginatedList table {
+	.paginatedList .table-responsive {
 		border: 1px solid #ccc;
 		box-shadow: 0 0 5px #ccc;
 		position:relative;
 		border-radius:5px;
-		border-collapse: separate;
 		margin: 0 0 10px 0;
+	}
+	.paginatedList table {
+/*		border-radius:5px;
+		border-collapse: separate;*/
 	}
 		.paginatedList table thead {
 			font-weight: bold;
