@@ -1,12 +1,9 @@
-#header div .logo {
+#header div .navbar-brand {
 	margin: 5px;
-	position: relative;
-	z-index: 9;
-	overflow: hidden;
-	padding-right: 50px;
+	padding: 0;
 	box-shadow: 1px 1px 5px #C1C1C1;
-	font-size: large; 
 	border-radius: 5px;
+	overflow: hidden;
 }
 	#header div .logo span {
 		font-size: small;

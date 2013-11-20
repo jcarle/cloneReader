@@ -8,7 +8,7 @@
 				<?php echo form_hidden('entityId', $fileupload['entityId']); ?>		
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-					<h4 id="myModalLabel"> <i class="icon-edit"></i> Editar fotos</h4>
+					<h4 id="myModalLabel"> <i class="icon-edit"></i> <?php echo $this->lang->line('Edit pictures'); ?> </h4>
 				</div>
 				
 				<div class="modal-body" >
@@ -17,7 +17,7 @@
 							<!-- The fileinput-button span is used to style the file input field as button -->
 							<span class="btn btn-success fileinput-button">
 								<i class="icon-plus icon-white"></i>
-								<span>Agregar fotos...</span>
+								<span> <?php echo $this->lang->line('Add photos'); ?> </span>
 								<input type="file" name="userfile" multiple>
 							</span>
 							<button type="submit" class="btn btn-primary start hide">
@@ -30,7 +30,7 @@
 							</button>
 							<button type="button" class="btn btn-danger delete">
 								<i class="icon-trash icon-white"></i>
-								<span>Eliminar</span>
+								<span> <?php echo $this->lang->line('Delete'); ?> </span>
 							</button>
 							<input type="checkbox" class="toggle">
 							<!-- The loading indicator is shown during file processing -->
@@ -86,7 +86,7 @@
 			{% if (!i) { %}
 				<button class="btn btn-warning cancel">
 					<i class="icon-ban-circle icon-white"></i>
-					<span>Cancel</span>
+					<span> <?php echo $this->lang->line('Cancel'); ?></span>
 				</button>
 			{% } %}
 		</td>
@@ -118,7 +118,7 @@
 		<td class="text-right">
 			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 				<i class="icon-trash icon-white"></i>
-				<span>Eliminar</span>
+				<span> <?php echo $this->lang->line('Delete'); ?> </span>
 			</button>
 			<input type="checkbox" name="delete" value="1" class="toggle">
 		</td>

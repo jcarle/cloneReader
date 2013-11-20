@@ -47,4 +47,5 @@ function initLang() {
 
 	$CI->session->set_userdata('langId', $langId);
 	$CI->lang->load('default', $langName);	
+	$CI->lang->load(config_item('siteId'), $langName);	
 }	

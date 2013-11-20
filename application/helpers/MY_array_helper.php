@@ -51,3 +51,7 @@ function errorForbidden() {
 	$CI->load->library('../controllers/error');
 	$CI->error->forbidden();	
 }
+
+function formatCurrency($value, $currencyName = DEFAULT_CURRENCY_NAME) { 
+	return $currencyName.' '.number_format($value, 2, ',', '.'); // TODO: desharckodaear!
+}

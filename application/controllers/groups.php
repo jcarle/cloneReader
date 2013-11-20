@@ -23,7 +23,7 @@ class Groups extends CI_Controller {
 			'title'			=> $this->lang->line('Edit groups'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('HomePage')),
+				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('Home page')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
 				'pagination'	=> $this->pagination,
@@ -52,7 +52,7 @@ class Groups extends CI_Controller {
 				),
 				'groupHomePage' => array(
 					'type'	=> 'text',
-					'label'	=> $this->lang->line('Home Page'),
+					'label'	=> $this->lang->line('Home page'),
 					'value'	=> element('groupHomePage', $data)
 				),
 				'controllers[]' => array(

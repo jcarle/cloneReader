@@ -426,10 +426,7 @@ body.isLoading, body.isLoading * {
 						color:white;
 						text-shadow: 1px 1px 0 #555555;
 					}
-						.jForm fieldset .subform table thead tr th {
-							background: -moz-linear-gradient(center top , #4397F3, #3176CB) repeat scroll 0 0 transparent;
-							background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
-						}
+						.jForm fieldset .subform table thead tr th { }
 						.jForm fieldset .subform table thead tr th:first-child {
 							border-top-left-radius:5px;
 						}

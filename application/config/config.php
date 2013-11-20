@@ -359,9 +359,6 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
-/* End of file config.php */
-/* Location: ./application/config/config.php */
-
 
 // para los exec() !
 $config['PHP_PATH'] = 'php';
@@ -370,3 +367,11 @@ if (isset($_SERVER['SERVER_NAME'])) {
 		$config['PHP_PATH'] = '/usr/local/bin/php-5.3'; // para los exec() !
 	}
 }
+
+
+$config['siteName'] = 'cloneReader BETA';
+$config['siteId'] = 'cloneReader';
+
+
+/* End of file config.php */
+/* Location: ./application/config/config.php */

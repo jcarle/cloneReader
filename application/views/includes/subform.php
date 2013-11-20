@@ -43,5 +43,5 @@ foreach ($list['data'] as $row) {
 </table>
 
 <a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-default btn-sm btnAdd">
-	<i class="icon-plus"> </i> Agregar
+	<i class="icon-plus"> </i> <?php echo $this->lang->line('Add'); ?>
 </a>

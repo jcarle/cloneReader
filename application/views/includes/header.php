@@ -130,7 +130,7 @@ if ($view == 'login') {
 
 
 $CI->carabiner->css('default.css');
-$CI->carabiner->css('cloneReader.css');
+$CI->carabiner->css( config_item('siteId').'.css');
 
 header ('Content-type: text/html; charset=utf-8');
 ?>
@@ -209,7 +209,7 @@ if (!empty($aScripts)) {
 }
 ?>
 	</script>	
-	<title><?php echo $title; ?> | cloneReader</title>
+	<title><?php echo $title.' | '.config_item('siteName'); ?> </title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
@@ -226,7 +226,7 @@ if (!empty($aScripts)) {
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<?php echo anchor('', '<img src="'.base_url().'assets/images/icons/16.png?v1.2" /> cReader <span class="btn btn-primary active"> <i class="icon-certificate"></i> beta</span>', array('class' => 'logo btn btn-success btn-sm active')); ?>
+			<a class="navbar-brand" href="<?php echo base_url()?>"> <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url()?>assets/images/logo.png" >  </a>
 		</div>
 
 		<div class="navbar-collapse collapse navbar-ex1-collapse ">

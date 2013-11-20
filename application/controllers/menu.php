@@ -40,10 +40,11 @@ class Menu extends CI_Controller {
 					'value'	=>  element('menuName', $data)
 				),
 				'controllerId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('Controller'), 
-					'source'	=> array('0' => '-- seleccione --') + array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
-					'value'		=> element('controllerId', $data)
+					'type'				=> 'dropdown',
+					'label'				=> $this->lang->line('Controller'), 
+					'source'			=> array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
+					'value'				=> element('controllerId', $data),
+					'appendNullOption' 	=> true,
 				),
 				'menuParentId' => array(
 					'type'	=> 'text',
