@@ -2,7 +2,7 @@
 class Feeds_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastUpdate', false)
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastScan, feedLastEntryDate', false)
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
 			

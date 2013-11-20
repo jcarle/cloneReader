@@ -1,5 +1,13 @@
 <?php
 $CI	= &get_instance();
+
+$filters = element('filters', $list);
+/*
+if ($filters != null) {
+	$form = array('fields' => $filters);
+	$this->load->view('includes/jForm', array('form' => $form));
+}
+vd($filters);*/
 ?>
 <div class="paginatedList">
 	<div class="panel panel-default" >
@@ -15,7 +23,40 @@ $CI	= &get_instance();
 					</span>
 				</div>					
 			</div>
+<?php
+/*if ($filters != null) {
+	echo '
+		<button type="submit" class="btn btn-default btnFilter">
+			<i class="icon-filter" ></i>
+		</button>
+	';
+}*/	
+?>			
 		</form>
+<?php		
+/*
+if ($filters != null) {		
+	$form = array(
+		'fields' => $filters,
+		'buttons' => array('<button type="submit" class="btn btn-default"> <i class="icon-filter" ></i> '.$CI->lang->line('Search').'</button>')
+	);
+//	$this->load->view('includes/jForm', array('form' => $form));			
+	
+	echo '
+		<div class="modal" role="dialog" >
+			<div class="modal-dialog" >
+				<div class="modal-content" >
+					<div class="modal-body" >';
+$this->load->view('includes/jForm', array('form' => $form));
+echo '				
+					</div>
+					<div class="modal-footer" >
+					</div>
+				</div>
+			</div>
+		</div>';	
+}*/
+?>
 	</div>
 				
 	<div class="table-responsive">
@@ -124,10 +165,4 @@ echo $this->pagination->create_links();
 		</div>
 	</div>
 </div>
-
-<script>
-$(document).ready(function() {
-	$('.paginatedList').paginatedList();
-});	
-</script>
 

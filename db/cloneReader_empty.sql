@@ -382,7 +382,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   `feedName` varchar(255) NOT NULL,
   `feedUrl` varchar(255) NOT NULL,
   `feedLink` varchar(255) NOT NULL,
-  `feedLastUpdate` datetime NOT NULL,
+  `feedLastScan` datetime NOT NULL,
   `statusId` int(10) unsigned NOT NULL,
   `feedIcon` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`feedId`),

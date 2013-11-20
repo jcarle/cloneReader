@@ -62,7 +62,9 @@ if ($view == 'includes/jForm') {
 }
 
 // FIXME: pensar si esto se puede resolver de un modo mas elegante
+$hasPaginatedList = false;
 if ($view == 'includes/paginatedList') { 
+	$hasPaginatedList = true;
 	$CI->carabiner->js('jquery.paginatedList-1.0.js');
 }
 if ($hasForm == true) {
@@ -153,6 +155,8 @@ $CI->carabiner->display('js');
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 	
 <?php
+$aScripts = array();
+
 if (!isset($langs)) {
 	$langs = array();
 }
@@ -164,15 +168,15 @@ $langs[] = 'Cancel';
 $langs[] = 'Close';
 $langs[] = 'Are you sure?';
 
-echo langJs($langs);
+$aScripts[] = langJs($langs);
 
-$scripts = '';
+
 if (isset($aServerData)) {
-	$scripts .= 'var SERVER_DATA = '.json_encode($aServerData).'; ';
+	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
 }
 
 if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
-	$scripts .= "
+	$aScripts[] = "
 
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-41589815-1']);
@@ -185,8 +189,23 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 	})();
 	";
 }
-if ($scripts != '') {
-	echo $scripts;
+
+if ($hasForm == true) {
+	$aScripts[] = '
+		$(document).ready(function() {
+			$(\'#'. element('frmId', $form, 'frmId').'\').jForm('.json_encode($form).');
+		});';
+}
+
+if ($hasPaginatedList == true) {
+	$aScripts[] = '
+		$(document).ready(function() {
+			$(\'.paginatedList\').paginatedList();
+		});	';
+}
+
+if (!empty($aScripts)) {
+	echo implode(' ', $aScripts);
 }
 ?>
 	</script>	

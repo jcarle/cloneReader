@@ -5,10 +5,10 @@ if (!isset($form['action'])) {
 	$form['action'] = base_url().$this->uri->uri_string(); 
 }
 
-echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'panel panel-default jForm form-horizontal', 'role' => 'form' ));
+echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'panel panel-default  jForm form-horizontal', 'role' => 'form' ));
 
 if (isset($title)) {
-	//echo '<div class="panel-heading">'.$title.'</div>';
+//	echo '<div class="panel-heading">'.$title.'</div>';
 }
 echo '	<div class="panel-body"> '; 
 
@@ -179,10 +179,3 @@ function renderTree($aTree, $value){
 	$sTmp .= '</ul>';
 	return $sTmp;
 }
-?>
-<script>
-$(document).ready(function() {
-	$('#<?php echo element('frmId', $form, 'frmId') ?>').jForm(<?php echo json_encode($form); ?>);
-});	
-</script>
-

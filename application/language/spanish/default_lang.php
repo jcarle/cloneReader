@@ -116,3 +116,4 @@ $lang['Unsubscribe'] = 'Desuscribirse';
 $lang['New tag'] = 'Nuevo tag';
 $lang['From %s'] = 'De %s';
 $lang['From %s by %s'] =  'De %s por %s';
+$lang['Last entry'] = 'Última entrada';

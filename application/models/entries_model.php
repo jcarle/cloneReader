@@ -473,10 +473,10 @@ class Entries_Model extends CI_Model {
 		$this->db
 			->select('feeds.feedId, feedUrl, feedLink, feedIcon')
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-			->where('feedLastUpdate < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
+			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 //->where('feeds.feedId IN (530)')			
-			->order_by('feedLastUpdate ASC');
+			->order_by('feedLastScan ASC');
 
 		if (is_null($userId) == false) {
 			$this->db->where('users_feeds.userId', $userId);
@@ -497,7 +497,7 @@ class Entries_Model extends CI_Model {
 	function parseRss($feedId, $feedUrl) {
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
-			->select('TIMESTAMPDIFF(MINUTE, feedLastUpdate, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
+			->select('TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
 			->where('feeds.feedId', $feedId)
 			->get('feeds')->result_array();
 		//pr($this->db->last_query()); 
@@ -562,8 +562,8 @@ class Entries_Model extends CI_Model {
 			
 			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
 				$this->db->update('feeds', array(
-					'statusId' 			=> FEED_STATUS_APPROVED,
-					'feedLastUpdate' 	=> date("Y-m-d H:i:s")
+					'statusId' 		=> FEED_STATUS_APPROVED,
+					'feedLastScan' 	=> date("Y-m-d H:i:s")
 				), array('feedId' => $feedId));	
 				return;
 			}
@@ -573,7 +573,8 @@ class Entries_Model extends CI_Model {
 
 		$values = array( 
 			'statusId'			=> FEED_STATUS_APPROVED,
-			'feedLastUpdate' 	=> date("Y-m-d H:i:s")
+			'feedLastScan' 		=> date("Y-m-d H:i:s"),
+			'feedLastEntryDate' => $this->getLastEntryDate($feedId),
 		); 
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
 			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			

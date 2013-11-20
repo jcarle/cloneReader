@@ -4,7 +4,7 @@ class Feeds extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model('Feeds_Model');
+		$this->load->model(array('Feeds_Model', 'Status_Model'));
 	}  
 	
 	function index() {
@@ -31,12 +31,29 @@ class Feeds extends CI_Controller {
 					'countryName' 		=> $this->lang->line('Country'),
 					'langName' 			=> $this->lang->line('Language'),
 					'feedUrl' 			=> $this->lang->line('Url'), 
-					'feedLink' 			=> $this->lang->line('Link'), 
-					'feedLastUpdate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Last update'))
+					'feedLink' 			=> $this->lang->line('Link'),
+					'feedLastEntryDate'	=> array('class' => 'datetime', 'value' => $this->lang->line('Last entry')),
+					'feedLastScan' 		=> array('class' => 'datetime', 'value' => $this->lang->line('Last update'))
 				),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
-				'pagination'	=> $this->pagination
+// TODO: hacer que pida la pagination desde adentro de la vista				
+//				'pagination'	=> $this->pagination,
+				'filters'	=> array(
+					'filter' => array(
+						'type' 			=> 'text',
+						'label'			=> $this->lang->line('Url'), 
+						'value'		 	=> $this->input->get('filter'), 
+						'placeholder' 	=> $this->lang->line('search'),
+					),
+					'statusId' => array(
+						'type'				=> 'dropdown',
+						'label'				=> $this->lang->line('Status'),
+						'value'				=> $this->input->get('statusId'),
+						'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
+						'appendNullOption' 	=> true
+					),
+				)
 			)
 		));
 	}
@@ -125,23 +142,24 @@ class Feeds extends CI_Controller {
 					'value'				=> element('langId', $data),
 					'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
 					'appendNullOption' 	=> true
-				),				
-				
-				
-								
-				'feedLastUpdate' => array(
+				),
+				'feedLastEntryDate' => array(
+					'type' 		=> 'datetime',
+					'label'		=> $this->lang->line('Last entry'), 
+					'value'		=> element('feedLastEntryDate', $data)
+				),
+				'feedLastScan' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Last update'), 
-					'value'		=> element('feedLastUpdate', $data)
+					'value'		=> element('feedLastScan', $data)
 				),					
 				'statusId' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Status'), 
 					'value'		=> element('statusId', $data),
 					'disabled'	=> 'disabled'
-				),									
-							
-			), 		
+				),
+			),
 		);
 		
 		if ((int)$feedId > 0) {
