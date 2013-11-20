@@ -1,6 +1,7 @@
-<table class="table table-hover table-condensed">
-	<thead>
-		<tr>
+<div class="table-responsive">
+	<table class="table table-hover table-condensed">
+		<thead>
+			<tr class="label-primary">
 <?php
 foreach ($list['columns'] as $columnName) {
 	$class 		= '';
@@ -12,9 +13,9 @@ foreach ($list['columns'] as $columnName) {
 	echo '		<th '.$class.'>'.$columnName.'</th>';
 } 
 ?>
-		</tr>
-	</thead>
-	<tbody>
+			</tr>
+		</thead>
+		<tbody>
 <?php 				
 if (count($list['data']) == 0) {
 	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> No hay resultados </td></tr>';
@@ -39,9 +40,9 @@ foreach ($list['data'] as $row) {
 	}
 }
 ?>		
-	</tbody>
-</table>
-
+		</tbody>
+	</table>
+</div>
 <a href="<?php echo base_url($list['controller'].'0'); ?>" class="btn btn-default btn-sm btnAdd">
 	<i class="icon-plus"> </i> <?php echo $this->lang->line('Add'); ?>
 </a>
