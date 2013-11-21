@@ -95,13 +95,13 @@ function subscribeForCrFormSumValues($fieldName, array $aFieldName) {
 	return $subscribe;
 }
 
-function hasGallery($form) {
+function getCrFieldGallery($form) {
 	foreach ($form['fields'] as $name => $field) {
 		if ($field['type'] == 'gallery') {
-			return true;
+			return $field;
 		}
 	}
-	return false;
+	return null;
 }
 
 function hasFieldUpload($form) {
