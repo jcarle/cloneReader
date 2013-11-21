@@ -241,88 +241,88 @@ body.isLoading, body.isLoading * {
 }
 
 
-.paginatedList {
+.crList {
 	margin: 0 5px;
 }
-	.paginatedList form {	}
-		.paginatedList form > .form-group {
+	.crList form {	}
+		.crList form > .form-group {
 			max-width:350px;
 			margin-bottom: 0;
 		}
-	.paginatedList .table-responsive {
+	.crList .table-responsive {
 		border: 1px solid #ccc;
 		box-shadow: 0 0 5px #ccc;
 		position:relative;
 		border-radius:5px;
 		margin: 0 0 10px 0;
 	}
-	.paginatedList table {
+	.crList table {
 		margin: 0;
 	}
-		.paginatedList table thead {
+		.crList table thead {
 			font-weight: bold;
 			color: white;
 			height:20px;
 		}
-			.paginatedList table thead tr th { }
-				.paginatedList table thead tr th, 
-				.paginatedList table thead tr th a  {
+			.crList table thead tr th { }
+				.crList table thead tr th, 
+				.crList table thead tr th a  {
 					color:white;
 					text-shadow: 1px 1px 0 #555;
 					min-width: 25px;
 				}
-				.paginatedList table thead tr th.checkbox {
+				.crList table thead tr th.checkbox {
 					min-width: 20px;
 					width:20px;
 				}
-			.paginatedList table tbody tr {
+			.crList table tbody tr {
 				cursor: pointer;
 			}
-				.paginatedList table tbody tr td.checkbox,
-				.paginatedList table tbody tr.warning td{
+				.crList table tbody tr td.checkbox,
+				.crList table tbody tr.warning td{
 					cursor: default;
 				} 
-				.paginatedList table tbody tr td {
+				.crList table tbody tr td {
 					word-break: break-all;
 				}
-		.paginatedList table .checkbox input[type=checkbox] {
+		.crList table .checkbox input[type=checkbox] {
 			margin-left: 0;
 		}				
-	.paginatedList .footer {
+	.crList .footer {
 		color: #777777;
 		font-weight: normal;
 	}
-	.paginatedList .footer .row {
+	.crList .footer .row {
 		margin:0;
 	}
-	.paginatedList .row > div {
+	.crList .row > div {
 		padding: 0;
 	}	
-		.paginatedList .footer span {
+		.crList .footer span {
 			font-size: small;
 		}
-			.paginatedList .footer .pagination {
+			.crList .footer .pagination {
 				margin: 0;
 				float:right;
 			}
-				.paginatedList .footer .pagination ul {
+				.crList .footer .pagination ul {
 					display: inline;
 				}
-				.paginatedList table thead tr th:first-child {
+				.crList table thead tr th:first-child {
 					border-top-left-radius:5px;
 				}
-				.paginatedList table thead tr th:last-child {
+				.crList table thead tr th:last-child {
 					border-top-right-radius:5px;
 				}
-				.paginatedList table tbody tr:last-child td:first-child {
+				.crList table tbody tr:last-child td:first-child {
 					border-bottom-left-radius:5px;
 				}
-				.paginatedList table tbody tr:last-child td:last-child {
+				.crList table tbody tr:last-child td:last-child {
 					border-bottom-right-radius:5px;
 				}
 				
 @media (max-width: 767px) {				
-	.paginatedList .footer .pagination {
+	.crList .footer .pagination {
 		margin: 5px 0 0 0;
 		float:none;
 	}						

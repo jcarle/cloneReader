@@ -27,7 +27,7 @@ class Entries extends CI_Controller {
 		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
-			'view'			=> 'includes/paginatedList', 
+			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit entries'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),

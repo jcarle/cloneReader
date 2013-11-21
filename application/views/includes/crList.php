@@ -9,7 +9,7 @@ if ($filters != null) {
 }
 vd($filters);*/
 ?>
-<div class="paginatedList">
+<div class="crList">
 	<div class="panel panel-default" >
 		<form method="get" class="panel-heading form-inline" role="search">
 			<div class="form-group">

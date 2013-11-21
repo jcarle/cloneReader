@@ -1,19 +1,19 @@
 ;(function($) {
 	var 
 		methods,
-		paginatedList;
+		crList;
 		
 	methods = {
 		init : function( options ) {
-			if ($(this).data('paginatedList') == null) {
-				$(this).data('paginatedList', new paginatedList($(this), options));
+			if ($(this).data('crList') == null) {
+				$(this).data('crList', new crList($(this), options));
 			}
 			
 			return $(this);
 		}		
 	};
 
-	$.fn.paginatedList = function( method ) {
+	$.fn.crList = function( method ) {
 		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -24,7 +24,7 @@
 		}  
 	}
 	
-	paginatedList = function($content, options) {
+	crList = function($content, options) {
 		this.$content	= $content;
 		this.$form 		= this.$content.find('form');
 		this.$table		= this.$content.find('table');
@@ -114,7 +114,7 @@
 		}
 	}
 	
-	paginatedList.prototype = {
+	crList.prototype = {
 		checkedRow: function(row) {
 			$(row).removeClass('info');
 			

@@ -62,10 +62,10 @@ if ($view == 'includes/crForm') {
 }
 
 // FIXME: pensar si esto se puede resolver de un modo mas elegante
-$hasPaginatedList = false;
-if ($view == 'includes/paginatedList') { 
-	$hasPaginatedList = true;
-	$CI->carabiner->js('jquery.paginatedList-1.0.js');
+$hasCrList = false;
+if ($view == 'includes/crList') { 
+	$hasCrList = true;
+	$CI->carabiner->js('crList.js');
 }
 if ($hasForm == true) {
 	if (!isset($form)) {
@@ -104,7 +104,7 @@ if ($hasForm == true) {
 	}
 
 		
-	$CI->carabiner->js('jquery.crForm.js');
+	$CI->carabiner->js('crForm.js');
 	$CI->carabiner->css('select2.css');
 	$CI->carabiner->css('select2-bootstrap.css');
 	$CI->carabiner->css('bootstrap-datetimepicker.css');
@@ -123,7 +123,7 @@ if (isset($hasGallery) && $hasGallery == true) {
 
 }
 if ($view == 'login') {
-	$CI->carabiner->js('jquery.crForm.js');
+	$CI->carabiner->js('crForm.js');
 	$CI->carabiner->js('loginFB.js');
 	$CI->carabiner->js('loginGoogle.js');
 }
@@ -197,10 +197,10 @@ if ($hasForm == true) {
 		});';
 }
 
-if ($hasPaginatedList == true) {
+if ($hasCrList == true) {
 	$aScripts[] = '
 		$(document).ready(function() {
-			$(\'.paginatedList\').paginatedList();
+			$(\'.crList\').crList();
 		});	';
 }
 

@@ -36,7 +36,7 @@ class Comments extends CI_Controller {
 		
 		$this->load->view('includes/template', array(
 			'controller'	=> strtolower(__CLASS__).'/'.$entityName,
-			'view'			=> 'includes/paginatedList', 
+			'view'			=> 'includes/crList', 
 			'title'			=> 'Editar Comentarios',
 			'query'			=> $this->Comments_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter')),
 			'pagination'	=> $this->pagination

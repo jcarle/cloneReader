@@ -21,7 +21,7 @@ class Users extends CI_Controller {
 
 				
 		$this->load->view('includes/template', array(
-			'view'			=> 'includes/paginatedList', 
+			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit users'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
