@@ -4,7 +4,7 @@ class Feeds extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Feeds_Model', 'Status_Model'));
+		$this->load->model(array('Feeds_Model', 'Status_Model', 'Languages_Model', 'Countries_Model'));
 	}  
 	
 	function index() {
@@ -17,7 +17,7 @@ class Feeds extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('statusId'), $this->input->get('countryId'), $this->input->get('langId'));
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -38,12 +38,6 @@ class Feeds extends CI_Controller {
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
 				'filters'	=> array(
-					'filter' => array(
-						'type' 			=> 'text',
-						'label'			=> $this->lang->line('Url'), 
-						'value'		 	=> $this->input->get('filter'), 
-						'placeholder' 	=> $this->lang->line('search'),
-					),
 					'statusId' => array(
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Status'),
@@ -51,6 +45,20 @@ class Feeds extends CI_Controller {
 						'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
 						'appendNullOption' 	=> true
 					),
+					'countryId' => array(
+						'type'				=> 'dropdown',
+						'label'				=> $this->lang->line('Country'),
+						'value'				=> $this->input->get('countryId'),
+						'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+						'appendNullOption' 	=> true
+					),
+					'langId' => array(
+						'type'				=> 'dropdown',
+						'label'				=> $this->lang->line('Language'),
+						'value'				=> $this->input->get('langId'),
+						'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
+						'appendNullOption' 	=> true
+					),					
 				)
 			)
 		));
@@ -95,8 +103,6 @@ class Feeds extends CI_Controller {
 	
 	function _getFormProperties($feedId) {
 		$data = $this->Feeds_Model->get($feedId);
-		
-		$this->load->model(array('Languages_Model', 'Countries_Model'));
 		
 		$form = array(
 			'frmId'		=> 'frmFeedEdit',

@@ -1,15 +1,23 @@
 <?php
 class Feeds_Model extends CI_Model {
-	function selectToList($num, $offset, $filter){
+	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastScan, feedLastEntryDate', false)
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
 			
-		if ($filter != '') {
+		if ($filter != null) {
 			$this->db->like('feedName', $filter);
 		}
-		
+		if ($statusId != null) {
+			$this->db->where('feeds.statusId', $statusId);
+		}
+		if ($countryId != null) {
+			$this->db->where('feeds.countryId', $countryId);
+		}
+		if ($langId != null) {
+			$this->db->where('feeds.langId', $langId);
+		}
 		
 		$query = $this->db->get('feeds', $num, $offset);
 						
