@@ -54,7 +54,7 @@
 
 				if (aDelete.length == 0) { return;  }
 				
-				$(document).jAlert( {
+				$(document).crAlert( {
 					'msg': 			_msg['Are you sure?'],
 					'isConfirm': 	true,
 					'callback': 	function() {}

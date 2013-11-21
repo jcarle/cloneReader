@@ -161,8 +161,14 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
-if (hasGallery($form) == true) {
-	$this->load->view('includes/uploadfile', array('fileupload' => $fileupload ));
+$fieldGallery = getCrFieldGallery($form);
+if ($fieldGallery != null) {
+	$this->load->view('includes/uploadfile', array(
+		'fileupload' => array ( 
+			'entityName' 	=> $fieldGallery['entityName'],
+			'entityId'		=> $fieldGallery['entityId']
+		) 
+	));
 } 
 
 

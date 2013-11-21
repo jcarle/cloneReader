@@ -106,7 +106,7 @@ cloneReader = {
 				if ($(event.target).parents('.modal').length != 0) {
 					return;
 				}
-				if ($('.jAlert:visible').length != 0) {
+				if ($('.crAlert:visible').length != 0) {
 					return;
 				}
 				
@@ -355,7 +355,7 @@ cloneReader = {
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
+				return $(document).crAlert(response['result']);
 			}
 			cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
 			cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
@@ -813,7 +813,7 @@ TODO: pensar como mejorar esta parte
 		.done($.proxy(
 			function(reload, response) {
 				if (response['code'] != true) {
-					return $(document).jAlert(response['result']);
+					return $(document).crAlert(response['result']);
 				}
 console.time("t1");	
 				if (reload == true) {
@@ -1108,10 +1108,10 @@ console.timeEnd("t1");
 	addFeed: function() {
 		var feedUrl = this.$popupForm.find('input').val();
 		if (feedUrl == '') {
-			return this.$popupForm.find('input').jAlert('enter a url');
+			return this.$popupForm.find('input').crAlert('enter a url');
 		}
 		if ($.validateUrl(feedUrl) == false) {
-			return this.$popupForm.find('input').jAlert('enter a valid url');
+			return this.$popupForm.find('input').crAlert('enter a valid url');
 		}
 
 		this.hidePopupWindow();
@@ -1123,7 +1123,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
+				return $(document).crAlert(response['result']);
 			}
 			
 			cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
@@ -1158,7 +1158,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
+				return $(document).crAlert(response['result']);
 			}
 		});			
 		
@@ -1169,7 +1169,7 @@ console.timeEnd("t1");
 	addTag: function() {
 		var tagName = this.$popupForm.find('input').val();
 		if (tagName.trim() == '') {
-			return this.$popupForm.find('input').jAlert('enter a tag name');
+			return this.$popupForm.find('input').crAlert('enter a tag name');
 		}
 
 		this.hidePopupWindow();
@@ -1184,7 +1184,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
+				return $(document).crAlert(response['result']);
 			}
 			
 			cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
@@ -1207,7 +1207,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
+				return $(document).crAlert(response['result']);
 			}
 			cloneReader.saveData(false);
 			cloneReader.loadFilters(true);
@@ -1220,7 +1220,7 @@ console.timeEnd("t1");
 		var filter = this.getFilter(this.aFilters);
 
 
-		$(document).jAlert( {
+		$(document).crAlert( {
 			'msg': 			$.sprintf( _msg['Mark "%s" as read?'], filter.name),
 			'isConfirm': 	true,
 			'callback': 	$.proxy(
@@ -1235,7 +1235,7 @@ console.timeEnd("t1");
 					})
 					.done(function(response) {
 						if (response['code'] != true) {
-							return $(document).jAlert(response['result']);
+							return $(document).crAlert(response['result']);
 						}
 						cloneReader.aEntries = {}
 						cloneReader.loadEntries(true, true, {});
@@ -1251,7 +1251,7 @@ console.timeEnd("t1");
 		
 		var filter = this.getFilter(this.aFilters);
 		
-		$(document).jAlert( {
+		$(document).crAlert( {
 			'msg': 			$.sprintf( _msg['Unsubscribe "%s"?'], filter.name),
 			'isConfirm': 	true,
 			'callback': 	$.proxy(		
@@ -1263,7 +1263,7 @@ console.timeEnd("t1");
 					})
 					.done(function(response) {
 						if (response['code'] != true) {
-							return $(document).jAlert(response['result']);
+							return $(document).crAlert(response['result']);
 						}
 						cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
 						cloneReader.loadFilters(true);
@@ -1283,7 +1283,7 @@ console.timeEnd("t1");
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
-				return $(document).jAlert(response['result']);
+				return $(document).crAlert(response['result']);
 			}
 		});
 	},		

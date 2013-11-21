@@ -54,11 +54,17 @@ $(document).ready(function() {
 });
 </script>
 <?php
-/*
-// TODO: revisar! 
-if (hasGallery($form) == true) {
-	$this->load->view('includes/uploadfile', array('fileupload' => $fileupload ));
-} */
+
+$fieldGallery = getCrFieldGallery($form);
+if ($fieldGallery != null) {
+	$this->load->view('includes/uploadfile', array(
+		'fileupload' => array ( 
+			'entityName' 	=> $fieldGallery['entityName'],
+			'entityId'		=> $fieldGallery['entityId']
+		) 
+	));
+}
+
 
 
 

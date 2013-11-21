@@ -40,7 +40,4 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
-if (hasGallery($form) == true) {
-	$this->load->view('includes/uploadfile', array('fileupload' => $fileupload ));
-} 
 

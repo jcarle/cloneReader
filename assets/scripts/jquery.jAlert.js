@@ -1,25 +1,25 @@
 ;(function($) {
 	var 
 		methods,
-		jAlert;
+		crAlert;
 		
 	methods = {
 		init : function( options ) {
-			if ($(this).data('jAlert') == null) {
-				$(this).data('jAlert', new jAlert($(this), options));
+			if ($(this).data('crAlert') == null) {
+				$(this).data('crAlert', new crAlert($(this), options));
 			}
-			$(this).data('jAlert').show($(this), options);			
+			$(this).data('crAlert').show($(this), options);
 			
 			return $(this);
 		},
 
 		hide: function() {
-			$(this).data('jAlert').hide();
+			$(this).data('crAlert').hide();
 			return $(this);
 		}		
 	};
 
-	$.fn.jAlert = function( method ) {
+	$.fn.crAlert = function( method ) {
 		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -30,13 +30,13 @@
 		}  
 	}
 	
-	jAlert = function() {
+	crAlert = function() {
 
 	}
 					
-	jAlert.prototype = {
+	crAlert.prototype = {
 		/*
-		 * input indica a que elemento se le pasara el foco cuando el jAlert se cierre
+		 * input indica a que elemento se le pasara el foco cuando el crAlert se cierre
 		 * options puede ser un object cons las propiedades {msg, callback }
 		 * 			tambien puede ser un DomNode o un String, es este caso el pluggin se encarga de mergear las options 
 		 */
@@ -52,7 +52,7 @@
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
 			);
 
-			this.$modal			= $('<div role="dialog" class="modal in jAlert" />');
+			this.$modal			= $('<div role="dialog" class="modal in crAlert" />');
 			this.$modalDialog 	= $('<div class="modal-dialog" />').appendTo(this.$modal);
 			this.$modalContent 	= $('<div class="modal-content" />').appendTo(this.$modalDialog);
 			this.$body	 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modalContent);
@@ -72,7 +72,7 @@
 			}
 			
 			// para evitar que se vaya el foco a otro elemento de la pagina con tab
-			$(document).bind('keydown.jAlertKeydown', ($.proxy(
+			$(document).bind('keydown.crAlertKeydown', ($.proxy(
 				function(event) {
 					event.preventDefault();
 					event.stopPropagation();
@@ -94,7 +94,7 @@
 			this.$modal.on('hidden.bs.modal', $.proxy(
 				function(event) {
 					$(this).remove();
-					$(document).unbind('keydown.jAlertKeydown');
+					$(document).unbind('keydown.crAlertKeydown');
 						
 					if (this.options.isConfirm == false) {
 						if(this.options.callback instanceof Function) {

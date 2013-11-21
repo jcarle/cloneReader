@@ -542,7 +542,7 @@ table .numeric, table .date, table .datetime, table .text-right {
 	max-width: 900px;
 	width: auto; 
 }
-.modal.jAlert .modal-dialog {
+.modal.crAlert .modal-dialog {
 	max-width: 560px;
 	width: auto;
 }

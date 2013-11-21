@@ -46,7 +46,7 @@
 			function(event) {
 				event.stopPropagation();
 				
-				$(document).jAlert( {
+				$(document).crAlert( {
 					'msg': 			_msg['Are you sure?'],
 					'isConfirm': 	true,
 					'callback': 	$.proxy(
@@ -192,9 +192,9 @@
 								'done': 		function (e, data) {
 									var result = data.result;
 									if (result['code'] == false) {
-										return $(document).jAlert(result['result']);
+										return $(document).crAlert(result['result']);
 									}
-									$(document).jAlert({
+									$(document).crAlert({
 										'msg': 		result['result']['msg'],
 										'callback': function() {
 											$.goToUrl(result['result']['goToUrl']);
@@ -272,7 +272,7 @@
 				function (result) {
 					result = $.parseJSON(result.responseText);
 					if (result['code'] == false) {
-						return $(document).jAlert(result['result']);
+						return $(document).crAlert(result['result']);
 					}
 				}
 			)					
@@ -284,7 +284,7 @@
 					}
 					
 					if (response['code'] != true) {
-						return $(document).jAlert(response['result']);
+						return $(document).crAlert(response['result']);
 					}
 					
 					if (this.options.isSubForm == true) {
@@ -313,7 +313,7 @@
 					if (typeof this[rules[z]] === 'function') {
 						if (this[rules[z]]($input) == false) {
 							$input.parents('fieldset').addClass('has-error');
-							$input.jAlert($.sprintf(this.options.messages[rules[z]], field['label']));
+							$input.crAlert($.sprintf(this.options.messages[rules[z]], field['label']));
 							return false;
 						}
 					}
@@ -412,14 +412,14 @@
 				function (result) {
 					result = $.parseJSON(result.responseText);
 					if (result['code'] == false) {
-						return $(document).jAlert(result['result']);
+						return $(document).crAlert(result['result']);
 					}
 				}
 			)
 			.done( $.proxy( 
 				function (result) {
 					if (result['code'] != true) {
-						return $(document).jAlert(result['result']);
+						return $(document).crAlert(result['result']);
 					}
 					
 					result = $(result['result']);
@@ -470,7 +470,7 @@
 				function (result) {
 					result = $.parseJSON(result.responseText);
 					if (result['code'] == false) {
-						return $(document).jAlert(result['result']);
+						return $(document).crAlert(result['result']);
 					}
 				}
 			)			

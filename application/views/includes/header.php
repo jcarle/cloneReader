@@ -37,7 +37,7 @@ $CI->carabiner->js('jquery.url.js');
 $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('jqueryExtension.js');
-$CI->carabiner->js('jquery.jAlert.js');
+$CI->carabiner->js('crAlert.js');
 
 $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-theme.css');
@@ -59,6 +59,11 @@ if (!isset($hasForm)) {
 }
 if ($view == 'includes/crForm') {
 	$hasForm = true;
+}
+
+
+if (!isset($hasGallery)) {
+	$hasGallery = false;
 }
 
 // FIXME: pensar si esto se puede resolver de un modo mas elegante
@@ -92,7 +97,12 @@ if ($hasForm == true) {
 		$CI->carabiner->js('bootstrap-datetimepicker.es.js');
 	}
 
-	if (hasGallery($form) == true) {
+	if (!isset($hasGallery)) {
+		$hasGallery = (getCrFieldGallery($form) != null);
+	}
+
+
+	if ($hasGallery == true) {
 		$CI->carabiner->js('tmpl.min.js');
 		$CI->carabiner->js('jquery.ui.widget.js');
 		$CI->carabiner->js('jquery.fileupload.js');
@@ -109,12 +119,12 @@ if ($hasForm == true) {
 	$CI->carabiner->css('select2-bootstrap.css');
 	$CI->carabiner->css('bootstrap-datetimepicker.css');
 	
-	if (hasGallery($form) == true) {
+	if ($hasGallery == true) {
 		$CI->carabiner->css('blueimp-gallery.css');
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
 } 
-if (isset($hasGallery) && $hasGallery == true) {
+if ($hasGallery == true) {
 	$CI->carabiner->js('jquery.imgCenter.js');
 	$CI->carabiner->js('blueimp-gallery.js');
 
