@@ -73,7 +73,7 @@ class Tags extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmTagEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagId' => array(

@@ -19,7 +19,7 @@ class Groups extends CI_Controller {
 		$query = $this->Groups_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
-			'view'			=> 'includes/paginatedList', 
+			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit groups'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
@@ -39,7 +39,7 @@ class Groups extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmGroupsEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'fields'	=> array(
 				'groupId' => array(
 					'type'		=> 'hidden', 
@@ -87,7 +87,7 @@ class Groups extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'			=> 'includes/jForm', 
+			'view'			=> 'includes/crForm', 
 			'title'			=> $this->lang->line('Edit groups'),
 			'form'			=> $form,
 		));		

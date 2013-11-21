@@ -41,7 +41,7 @@ class Users extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmUsersEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'fields'	=> array(
 				'userId' => array(
 					'type' 		=> 'hidden',

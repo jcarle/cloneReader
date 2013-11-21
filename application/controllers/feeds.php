@@ -102,7 +102,7 @@ class Feeds extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmFeedEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'feedId' => array(

@@ -100,7 +100,7 @@ class Entries extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmEntryEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'entryId' => array(

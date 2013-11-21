@@ -96,7 +96,7 @@ class Comments extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 

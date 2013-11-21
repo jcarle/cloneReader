@@ -74,7 +74,7 @@ class News extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmNewEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'newId' => array(

@@ -20,7 +20,7 @@ class Controllers extends CI_Controller {
 		$query = $this->Controllers_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
 		$this->load->view('includes/template', array(
-			'view'			=> 'includes/paginatedList', 
+			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit controllers'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
@@ -40,7 +40,7 @@ class Controllers extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmControllersEdit',
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'fields'	=> array(
 				'controllerId' => array(
 					'type'		=> 'hidden', 
@@ -100,7 +100,7 @@ class Controllers extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/jForm', 
+			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit controllers'),
 			'form'		=> $form,
 		));		

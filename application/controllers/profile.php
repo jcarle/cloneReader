@@ -19,7 +19,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmUsersEdit',
-			'messages'	 	=> getRulesMessages(),
+			'messages'	 	=> getCrFormRulesMessages(),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(
@@ -94,7 +94,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'action'	=> base_url('profile/doImportFeeds'),
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagName' => array(
@@ -172,7 +172,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'action'	=> base_url('profile/doImportStarred'),
-			'messages' 	=> getRulesMessages(),
+			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagName' => array(

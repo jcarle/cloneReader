@@ -1,5 +1,5 @@
 <?php
-function getRulesMessages() { // TODO: mover esto de aca!
+function getCrFormRulesMessages() { // TODO: mover esto de aca!
 	$CI	= &get_instance();
 	
 	return array(

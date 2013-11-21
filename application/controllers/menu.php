@@ -18,7 +18,7 @@ class Menu extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmMenuEdit',
-			'messages' 		=> getRulesMessages(),
+			'messages' 		=> getCrFormRulesMessages(),
 			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').'</button> '),
 			'fields'		=> array(
 				'menuId' => array(
