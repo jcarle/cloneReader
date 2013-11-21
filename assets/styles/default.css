@@ -373,7 +373,7 @@ body.isLoading, body.isLoading * {
 				}
 				.crForm fieldset .groupCheckBox li span {
 					display: inline-block;
-					margin-left: 10px;
+					margin-left: 10px;					
 				}
 		.crForm fieldset.tree ul:first-child {
 			height: 300px;
@@ -442,7 +442,7 @@ body.isLoading, body.isLoading * {
 						.crForm fieldset .subform table tbody tr:last-child td:last-child {
 							border-bottom-right-radius:5px;
 						}								
-						.crForm fieldset .subform table tbody tr.info td,
+						.crForm fieldset .subform table tbody tr.success td,
 						.crForm fieldset .subform table tbody tr.warning td {
 							cursor: default;
 						}
@@ -451,7 +451,6 @@ body.isLoading, body.isLoading * {
 					border: 1px solid #dddddd;
 					border-top: none;
 				}
-				
 		.crForm .gallery a.thumbnail {
 			background: white;
 			width:115px;

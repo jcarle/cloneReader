@@ -478,41 +478,11 @@
 				function (result) {
 					$(result['result']).appendTo($('body'));
 					
-					var frmId 		= $(result['result']).attr('id');
-					var $subform 	= $('#' + frmId);
-					var options	 	= $subform.crForm('options');
+					var frmId 			= $(result['result']).find('form').attr('id');
+					var $subform 		= $('#' + frmId);
+					var options	 		= $subform.crForm('options');
+					var $modal			= $subform.parents('.modal');
 					options.frmParentId = this;
-					
-					var $modal			= $('<div class="modal" role="dialog" />');
-					var $modalDialog 	= $('<div class="modal-dialog" />').appendTo($modal);
-					var $modalContent 	= $('<div class="modal-content" />').appendTo($modalDialog);
-					var $modalBody 		= $('<div class="modal-body" />')
-					var $modalFooter 	= $('<div class="modal-footer" />')
-
-
-					$subform.removeClass('panel').removeClass('panel-default');
-					$subform.addClass('row-fluid').appendTo($modalContent);
-
-					$modalFooter
-						.append($('<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>'))
-						.append($subform.find('.btn-danger'))
-						.append($subform.find('.btn-primary'));
-					
-					$subform.find('.form-actions').remove();
-					$subform.find('.panel-body').children().appendTo($modalBody);
-					
-					$subform.find('.panel-heading, .panel-body').remove();
-					
-					$subform
-						.append('\
-							<div class="modal-header"> \
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button> \
-								<h4 id="myModalLabel"> <i class="icon-edit"></i> ' + options.title + '</h4> \
-							</div> \
-						')
-						.append($modalBody)
-						.append($modalFooter);
-
 
 					$.showModal($modal, false);
 					$modal.on('hidden.bs.modal', function() {
