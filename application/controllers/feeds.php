@@ -37,8 +37,6 @@ class Feeds extends CI_Controller {
 				),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
-// TODO: hacer que pida la pagination desde adentro de la vista				
-//				'pagination'	=> $this->pagination,
 				'filters'	=> array(
 					'filter' => array(
 						'type' 			=> 'text',

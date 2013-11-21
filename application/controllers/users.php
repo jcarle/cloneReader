@@ -28,7 +28,6 @@ class Users extends CI_Controller {
 				'columns'		=> array('userEmail' => $this->lang->line('Email'), 'userFullName' => $this->lang->line('Name'), 'countryName' => $this->lang->line('Country'), 'groupsName' => $this->lang->line('Groups') ),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'pagination'	=> $this->pagination,
 				'showId'		=> true
 			)
 		));

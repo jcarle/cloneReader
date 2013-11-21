@@ -26,7 +26,6 @@ class Groups extends CI_Controller {
 				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('Home page')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'pagination'	=> $this->pagination,
 				'showId'		=> true
 			)
 		));

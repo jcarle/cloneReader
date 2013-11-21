@@ -27,7 +27,6 @@ class Controllers extends CI_Controller {
 				'columns'		=> array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'pagination'	=> $this->pagination,
 				'showId'		=> true
 			)
 		));
