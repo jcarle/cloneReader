@@ -351,7 +351,7 @@ function appendCrListJsAndCss($view, $list, $aScripts) {
 	
 	$filters = element('filters', $list);
 	if ($filters != null) {
-		$aScripts = appendCrFormJsAndCss($view, array('fields' => $filters, 'frmId' => 'frmCrList'), null, null, $aScripts);
+		$aScripts = appendCrFormJsAndCss($view, array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), null, null, $aScripts);
 	}
 		
 	return $aScripts; 	

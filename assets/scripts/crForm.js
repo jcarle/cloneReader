@@ -34,9 +34,11 @@
 	
 	crForm = function($form, options) {
 		this.$form 		= $form;
+		this.$btnSubmit	= this.$form.find('button[type=submit]');
 		this.options 	= $.extend({
 			sendWithAjax: 	true,
-			fields:			[]
+			fields:			[],
+			rules: 			[]
 		}, options );
 		
 		this.initFields();
@@ -62,20 +64,26 @@
 			}
 		, this));
 		
-		this.$form.submit($.proxy(
-			function() {
-				if ( !this.validate() ) {
-					return false;
+		this.$form
+			.submit($.proxy(
+				function() {
+					if ( !this.validate() ) {
+						return false;
+					}
+					
+					if (this.options.sendWithAjax == true) {
+						this.sendForm();
+						return false;
+					}
+					
+					return true; 
 				}
-				
-				if (this.options.sendWithAjax == true) {
-					this.sendForm();
-					return false;
+			, this))
+			.change($.proxy(
+				function() {
+					this.changeField();
 				}
-				
-				return true; 
-			}
-		, this));
+			, this));
 	}
 	
 	crForm.prototype = {
@@ -92,13 +100,12 @@
 					switch (field['type']) {
 						case 'dropdown':
 							field.$input.select2();
-							
 							break;
 						case 'typeahead':
 							if (field.multiple == null) {
 								field.multiple = false;
 							}
-												
+
 							if (field.placeholder != null) {
 								field.$input.attr('placeholder', field.placeholder);
 							}
@@ -180,10 +187,13 @@
 							break;
 						case 'raty':
 							field.$input.raty( {
-									score: 		field['value'],
-									scoreName: 	field['name'],
-									path: 		base_url + 'assets/images/',
-								});						
+								score: 		field['value'],
+								scoreName: 	field['name'],
+								path: 		base_url + 'assets/images/',
+								click:		$.proxy(function() {
+									this.changeField();
+								}, this)
+							});
 							break;
 						case 'upload':
 							this.$form.attr('enctype', 'multipart/form-data');
@@ -595,6 +605,10 @@
 		
 		checkGroupCheckBox: function($input) { 
 			$input.parent().css('background-color', ($input.is(':checked') ? '#D9EDF7' : 'white'));
-		}
+		},
+		
+		changeField: function() {
+			this.$btnSubmit.removeAttr('disabled');
+		}		
 	}
 })($);

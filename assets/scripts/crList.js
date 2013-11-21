@@ -29,7 +29,9 @@
 		this.$form 			= this.$crList.find('form');
 		this.$table			= this.$crList.find('table');
 		this.$crFilterList	= this.$crList.find('.crFilterList');
+		this.$btnFilter		= this.$crFilterList.prev();
 		this.options	 	= $.extend({}, options );
+		this.hasFilter		= (this.$crFilterList.find('input[value!=""], select[value!=""]').length != 0);
 		
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
@@ -72,10 +74,12 @@
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
 				function (event){
-					if (this.$filter.val().trim() == '') {
+					if (this.$filter.val().trim() == '' && this.hasFilter == false) {
 						return;
 					}
-					this.$filter.val('');
+					
+					this.$btnFilter.removeClass('btn-info');
+					this.$form.find('input, select').val('');
 					this.$form.submit();
 				}
 			, this));
@@ -112,6 +116,14 @@
 		
 		if ($.url().param('filter') != '') {
 			this.$filter.focus();
+		}
+	
+		this.$crFilterList.click(function(event) {
+			event.stopPropagation();
+		});	
+
+		if (this.hasFilter == true) {
+			this.$btnFilter.addClass('btn-info');
 		}
 	}
 	

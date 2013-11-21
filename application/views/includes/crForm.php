@@ -24,7 +24,7 @@ if (!isset($form['buttons'])) {
 	if (isset($form['urlDelete'])) {
 		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
 	}
-	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
+	$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
 }
 
 
