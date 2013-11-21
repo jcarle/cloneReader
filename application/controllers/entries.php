@@ -78,7 +78,7 @@ class Entries extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/jForm', 
+			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit entries'),
 			'form'		=> $form	  
 		));		

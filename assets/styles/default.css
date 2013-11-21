@@ -328,31 +328,31 @@ body.isLoading, body.isLoading * {
 	}						
 }
 
-.jForm { }
-	.jForm .control-group {
+.crForm { }
+	.crForm .control-group {
 		margin: 10px 5px;
 	}
-		.jForm .control-label {
+		.crForm .control-label {
 			cursor: default;
 			font-weight: normal;
 		}
-		.jForm fieldset .raty {
+		.crForm fieldset .raty {
 			display: inline-block;
 			border: 0 none;
 		}			
-		.jForm fieldset .form_datetime input {
+		.crForm fieldset .form_datetime input {
 			width:auto;
 		}
-		.jForm fieldset .form_datetime span {
+		.crForm fieldset .form_datetime span {
 			cursor:pointer;
 		}	
-		.jForm fieldset .icon-remove {
+		.crForm fieldset .icon-remove {
 			color: #555555;
 		}
-		.jForm fieldset .icon-th {
+		.crForm fieldset .icon-th {
 			color: #3A87AD;
 		}
-		.jForm fieldset .groupCheckBox {
+		.crForm fieldset .groupCheckBox {
 			max-height: 300px;
 			list-style: none outside none;
 			overflow: auto;
@@ -361,52 +361,52 @@ body.isLoading, body.isLoading * {
 			border: 1px solid #CCCCCC;
 			border-radius: 4px 4px 4px 4px;			
 		}
-			.jForm fieldset .groupCheckBox li {
+			.crForm fieldset .groupCheckBox li {
 				border-bottom: 1px solid #CCCCCC;	
 			}
-			.jForm fieldset .groupCheckBox li:last-child {
+			.crForm fieldset .groupCheckBox li:last-child {
 				border:0;
 			}
-				.jForm fieldset .groupCheckBox li input {
+				.crForm fieldset .groupCheckBox li input {
 					width: auto;
 					margin-left: 10px;
 				}
-				.jForm fieldset .groupCheckBox li span {
+				.crForm fieldset .groupCheckBox li span {
 					display: inline-block;
-					margin-left: 10px;					
+					margin-left: 10px;
 				}
-		.jForm fieldset.tree ul:first-child {
+		.crForm fieldset.tree ul:first-child {
 			height: 300px;
 			overflow: auto;
 			border: 1px solid #CCCCCC;
 			border-radius: 6px;
 		}		
-		.jForm fieldset.tree ul {
+		.crForm fieldset.tree ul {
 			list-style: inside;
 			margin: 4px 10px;
 			padding: 0 10px;
 		}				
-			.jForm fieldset.tree ul li {
+			.crForm fieldset.tree ul li {
 			}
-				.jForm fieldset.tree ul li a {
+				.crForm fieldset.tree ul li a {
 					color: #3176CB;
 				}
-				.jForm fieldset.tree ul li a.selected {
+				.crForm fieldset.tree ul li a.selected {
 					font-weight: bold;	
 				}
-			.jForm fieldset .gallery {
+			.crForm fieldset .gallery {
 				overflow: auto;
 				min-height:30px;
 			}
-				.jForm fieldset .gallery .btnEditPhotos {
+				.crForm fieldset .gallery .btnEditPhotos {
 					cursor: pointer;
 					display: block;
 					float: none;
 					width: auto;
 					margin:0 0 10px 0;
 				}
-		.jForm fieldset .subform {	}
-			.jForm fieldset .subform table {
+		.crForm fieldset .subform {	}
+			.crForm fieldset .subform table {
 				border: 1px solid #ccc;
 				border-spacing: 0;
 				border-radius:5px;
@@ -416,51 +416,49 @@ body.isLoading, body.isLoading * {
 				border-collapse: separate;
 				margin: 0px 0 0 0;
 			}
-				.jForm fieldset .subform .btnAdd {
+				.crForm fieldset .subform .btnAdd {
 					margin:10px 0 0 0;
 				}
-				.jForm fieldset .subform table thead { }
-					.jForm fieldset .subform table thead tr {}
-					.jForm fieldset .subform table thead tr th, 
-					.jForm fieldset .subform table thead tr th a  {
+				.crForm fieldset .subform table thead { }
+					.crForm fieldset .subform table thead tr {}
+					.crForm fieldset .subform table thead tr th, 
+					.crForm fieldset .subform table thead tr th a  {
 						color:white;
 						text-shadow: 1px 1px 0 #555555;
 					}
-						.jForm fieldset .subform table thead tr th { }
-						.jForm fieldset .subform table thead tr th:first-child {
+						.crForm fieldset .subform table thead tr th { }
+						.crForm fieldset .subform table thead tr th:first-child {
 							border-top-left-radius:5px;
 						}
-						.jForm fieldset .subform table thead tr th:last-child {
+						.crForm fieldset .subform table thead tr th:last-child {
 							border-top-right-radius:5px;
 						}
-						.jForm fieldset .subform table tbody tr td {
+						.crForm fieldset .subform table tbody tr td {
 							cursor: pointer;
 						}
-						.jForm fieldset .subform table tbody tr:last-child td:first-child {
+						.crForm fieldset .subform table tbody tr:last-child td:first-child {
 							border-bottom-left-radius:5px;
 						}
-						.jForm fieldset .subform table tbody tr:last-child td:last-child {
+						.crForm fieldset .subform table tbody tr:last-child td:last-child {
 							border-bottom-right-radius:5px;
 						}								
-						.jForm fieldset .subform table tbody tr.info td,
-						.jForm fieldset .subform table tbody tr.warning td {
+						.crForm fieldset .subform table tbody tr.info td,
+						.crForm fieldset .subform table tbody tr.warning td {
 							cursor: default;
 						}
-						
-						
-				.jForm fieldset .subform table tbody tr td table  { 
+				.crForm fieldset .subform table tbody tr td table  { 
 					box-shadow: none;
 					border: 1px solid #dddddd;
 					border-top: none;
 				}
 				
-		.jForm .gallery a.thumbnail {
+		.crForm .gallery a.thumbnail {
 			background: white;
 			width:115px;
 			height:115px;
 			display:inline-block;
 		}
-	.jForm .form-actions {
+	.crForm .form-actions {
 		border-radius: 0 0 5px 5px;
 		text-align: right;
 		margin: 0;
@@ -484,7 +482,7 @@ footer {
 	}
 
 
-.jForm .controls .gallery a.thumbnail {
+.crForm .controls .gallery a.thumbnail {
 	margin: 10px 10px 0 0;
 }
 

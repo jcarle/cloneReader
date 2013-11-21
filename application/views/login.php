@@ -2,7 +2,7 @@
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 	
 <?php
-$this->load->view('includes/jForm');
+$this->load->view('includes/crForm');
 ?>
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">

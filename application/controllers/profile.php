@@ -82,7 +82,7 @@ class Profile extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/jForm', 
+			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit Profile'),
 			'form'		=> $form,
 				  
@@ -106,7 +106,7 @@ class Profile extends CI_Controller {
 		);
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/jForm', 
+			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import feeds'),
 			'form'		=> $form	  
 		));		
@@ -184,7 +184,7 @@ class Profile extends CI_Controller {
 		);
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/jForm', 
+			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import starred'),
 			'form'		=> $form
 		));		

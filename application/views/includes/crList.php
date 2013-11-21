@@ -5,7 +5,7 @@ $filters = element('filters', $list);
 /*
 if ($filters != null) {
 	$form = array('fields' => $filters);
-	$this->load->view('includes/jForm', array('form' => $form));
+	$this->load->view('includes/crForm', array('form' => $form));
 }
 vd($filters);*/
 ?>
@@ -40,14 +40,14 @@ if ($filters != null) {
 		'fields' => $filters,
 		'buttons' => array('<button type="submit" class="btn btn-default"> <i class="icon-filter" ></i> '.$CI->lang->line('Search').'</button>')
 	);
-//	$this->load->view('includes/jForm', array('form' => $form));			
+//	$this->load->view('includes/crForm', array('form' => $form));			
 	
 	echo '
 		<div class="modal" role="dialog" >
 			<div class="modal-dialog" >
 				<div class="modal-content" >
 					<div class="modal-body" >';
-$this->load->view('includes/jForm', array('form' => $form));
+$this->load->view('includes/crForm', array('form' => $form));
 echo '				
 					</div>
 					<div class="modal-footer" >

@@ -1,28 +1,28 @@
 ;(function($) {
 	var 
 		methods,
-		jForm;
+		crForm;
 		
 	methods = {
 		init : function( options ) {
-			if ($(this).data('jForm') == null) {
-				$(this).data('jForm', new jForm($(this), options));
+			if ($(this).data('crForm') == null) {
+				$(this).data('crForm', new crForm($(this), options));
 			}
 			
 			return $(this);
 		},
 		
 		showSubForm: function(controller) {
-			$(this).data('jForm').showSubForm(controller);
+			$(this).data('crForm').showSubForm(controller);
 			return $(this);			
 		},
 
 		options: function(){
-			return $(this).data('jForm').options;
+			return $(this).data('crForm').options;
 		}
 	};
 
-	$.fn.jForm = function( method ) {
+	$.fn.crForm = function( method ) {
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 		} else if ( typeof method === 'object' || ! method ) {
@@ -32,7 +32,7 @@
 		}  
 	}
 	
-	jForm = function($form, options) {
+	crForm = function($form, options) {
 		this.$form 		= $form;
 		this.options 	= $.extend({
 			sendWithAjax: 	true,
@@ -78,7 +78,7 @@
 		, this));
 	}
 	
-	jForm.prototype = {
+	crForm.prototype = {
 		initFields: function() {
 			for (var fieldName in this.options.fields){
 
@@ -340,7 +340,7 @@
 			var $gallery 		= $('.gallery');
 			this.reloadGallery();
 			
-			$('#fileupload').data( { 'jForm': this } )
+			$('#fileupload').data( { 'crForm': this } )
 			
 			$('.btnEditPhotos', $gallery).click( $.proxy(
 				function () {
@@ -349,8 +349,8 @@
 
 						this.$fileupload.on('hidden.bs.modal', 
 							function() {
-								var jForm = $(this).data('jForm');
-								jForm.reloadGallery();
+								var crForm = $(this).data('crForm');
+								crForm.reloadGallery();
 							}
 						);
 					}
@@ -427,16 +427,16 @@
 					field.$input.html(result);
 					
 					$('a', field.$input)
-						.data( { jForm: this })
+						.data( { crForm: this })
 						.click(
 							function() {
-								$(this).data('jForm').showSubForm($(this).attr('href'), field); 
+								$(this).data('crForm').showSubForm($(this).attr('href'), field); 
 								return false;
 							}
 						);
 					
 					$('table tbody tr', field.$input)
-						.data( { jForm: this })
+						.data( { crForm: this })
 						.each(
 							function (i, tr) {
 								$(tr).click(
@@ -444,7 +444,7 @@
 										if ($(this).attr('href') == null) {
 											return;
 										}
-										$(this).data('jForm').showSubForm($(this).attr('href'), field); 
+										$(this).data('crForm').showSubForm($(this).attr('href'), field); 
 									}
 								);
 							}
@@ -480,7 +480,7 @@
 					
 					var frmId 		= $(result['result']).attr('id');
 					var $subform 	= $('#' + frmId);
-					var options	 	= $subform.jForm('options');
+					var options	 	= $subform.crForm('options');
 					options.frmParentId = this;
 					
 					var $modal			= $('<div class="modal" role="dialog" />');
@@ -516,8 +516,8 @@
 
 					$.showModal($modal, false);
 					$modal.on('hidden.bs.modal', function() {
-						var jForm = $(this).find('form').data('jForm');
-						jForm.options.frmParentId.loadSubForm(field);
+						var crForm = $(this).find('form').data('crForm');
+						crForm.options.frmParentId.loadSubForm(field);
 												
 						$(this).remove();
 					});

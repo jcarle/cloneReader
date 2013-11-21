@@ -57,7 +57,7 @@ if (isset($aCss)) {
 if (!isset($hasForm)) {
 	$hasForm = false;
 }
-if ($view == 'includes/jForm') {
+if ($view == 'includes/crForm') {
 	$hasForm = true;
 }
 
@@ -104,7 +104,7 @@ if ($hasForm == true) {
 	}
 
 		
-	$CI->carabiner->js('jquery.jForm.js');
+	$CI->carabiner->js('jquery.crForm.js');
 	$CI->carabiner->css('select2.css');
 	$CI->carabiner->css('select2-bootstrap.css');
 	$CI->carabiner->css('bootstrap-datetimepicker.css');
@@ -123,7 +123,7 @@ if (isset($hasGallery) && $hasGallery == true) {
 
 }
 if ($view == 'login') {
-	$CI->carabiner->js('jquery.jForm.js');
+	$CI->carabiner->js('jquery.crForm.js');
 	$CI->carabiner->js('loginFB.js');
 	$CI->carabiner->js('loginGoogle.js');
 }
@@ -193,7 +193,7 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 if ($hasForm == true) {
 	$aScripts[] = '
 		$(document).ready(function() {
-			$(\'#'. element('frmId', $form, 'frmId').'\').jForm('.json_encode($form).');
+			$(\'#'. element('frmId', $form, 'frmId').'\').crForm('.json_encode($form).');
 		});';
 }
 

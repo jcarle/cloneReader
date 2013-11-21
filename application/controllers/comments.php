@@ -59,7 +59,7 @@ class Comments extends CI_Controller {
 		}
 				
 		$this->load->view('includes/template', array(
-			'view'		=> 'includes/jForm', 
+			'view'		=> 'includes/crForm', 
 			'title'		=> 'Editar Comentarios',
 			'form'		=> $form,
 		));		
@@ -72,7 +72,7 @@ class Comments extends CI_Controller {
 		$form['title']		= ((int)$commentId < 1 ? 'Nuevo comentario' : 'Editar comentario');
 		$form['action']		= base_url('comments/'.$entityName.'/edit/'.$commentId);
 		
-		$this->load->view('includes/jForm', array(
+		$this->load->view('includes/crForm', array(
 			'form'			=> $form,
 		));			
 	}
