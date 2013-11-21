@@ -1,18 +1,11 @@
 <?php
-$CI	= &get_instance();
-
-$filters = element('filters', $list);
-/*
-if ($filters != null) {
-	$form = array('fields' => $filters);
-	$this->load->view('includes/crForm', array('form' => $form));
-}
-vd($filters);*/
+$CI			= &get_instance();
+$filters 	= element('filters', $list);
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
-		<form method="get" class="panel-heading form-inline" role="search">
-			<div class="form-group">
+		<form method="get" class="panel-heading form-inline" id="frmCrList" role="search">
+			<div class="btn-group">
 				<div class="input-group">
 					<span class="input-group-addon">
 						<i class="icon-remove" ></i>
@@ -24,39 +17,11 @@ vd($filters);*/
 				</div>					
 			</div>
 <?php
-/*if ($filters != null) {
-	echo '
-		<button type="submit" class="btn btn-default btnFilter">
-			<i class="icon-filter" ></i>
-		</button>
-	';
-}*/	
+if ($filters != null) {
+	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));			
+}
 ?>			
 		</form>
-<?php		
-/*
-if ($filters != null) {		
-	$form = array(
-		'fields' => $filters,
-		'buttons' => array('<button type="submit" class="btn btn-default"> <i class="icon-filter" ></i> '.$CI->lang->line('Search').'</button>')
-	);
-//	$this->load->view('includes/crForm', array('form' => $form));			
-	
-	echo '
-		<div class="modal" role="dialog" >
-			<div class="modal-dialog" >
-				<div class="modal-content" >
-					<div class="modal-body" >';
-$this->load->view('includes/crForm', array('form' => $form));
-echo '				
-					</div>
-					<div class="modal-footer" >
-					</div>
-				</div>
-			</div>
-		</div>';	
-}*/
-?>
 	</div>
 				
 	<div class="table-responsive">
@@ -165,4 +130,3 @@ echo $this->pagination->create_links();
 		</div>
 	</div>
 </div>
-

@@ -28,6 +28,20 @@ function langJs($lines)
 
 }
 
+/**
+ * lags que se utilizan en js
+ */
+function getLangToJs($langs) {
+	$langs[] = 'DATE_FORMAT';
+	$langs[] = 'MOMENT_DATE_FORMAT';
+	$langs[] = 'NUMBER_DEC_SEP';
+	$langs[] = 'NUMBER_THOUSANDS_SEP';
+	$langs[] = 'Cancel';
+	$langs[] = 'Close';
+	$langs[] = 'Are you sure?';
+	return $langs;	
+}
+
 function initLang() {
 	$CI = &get_instance();
 	

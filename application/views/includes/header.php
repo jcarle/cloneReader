@@ -20,13 +20,13 @@ $this->load->spark('carabiner/1.5.4');
 $CI->carabiner->minify_js 	= true;
 $CI->carabiner->minify_css	= true;
 
-  
- /*
+$aScripts = array();
+
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
 	$CI->carabiner->empty_cache('both');
-}*/
+}
 
 
 //$CI->carabiner->js('jquery-2.0.3.min.js');
@@ -54,89 +54,8 @@ if (isset($aCss)) {
 	}
 }
 
-if (!isset($hasForm)) {
-	$hasForm = false;
-}
-if ($view == 'includes/crForm') {
-	$hasForm = true;
-}
-
-
-if (!isset($hasGallery)) {
-	$hasGallery = false;
-}
-
-// FIXME: pensar si esto se puede resolver de un modo mas elegante
-$hasCrList = false;
-if ($view == 'includes/crList') { 
-	$hasCrList = true;
-	$CI->carabiner->js('crList.js');
-}
-if ($hasForm == true) {
-	if (!isset($form)) {
-		$form = array('fields' => array());	
-	}
-	
-	$CI->carabiner->js('jquery.raty.js');
-	$CI->carabiner->js('select2.js');
-	$CI->carabiner->js('autoNumeric.js');
-	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
-	
-	if (hasFieldUpload($form) == true) {
-		$CI->carabiner->js('jquery.ui.widget.js');
-		$CI->carabiner->js('jquery.fileupload.js');
-		$CI->carabiner->js('jquery.fileupload-ui.js');
-		$CI->carabiner->js('jquery.fileupload-process.js');
-				
-		$CI->carabiner->css('jquery.fileupload-ui.css');
-	}	
-	
-	
-	if ($this->session->userdata('langId') == 'es') {
-		$CI->carabiner->js('select2_locale_es.js');	
-		$CI->carabiner->js('bootstrap-datetimepicker.es.js');
-	}
-
-	if (!isset($hasGallery)) {
-		$hasGallery = (getCrFieldGallery($form) != null);
-	}
-
-
-	if ($hasGallery == true) {
-		$CI->carabiner->js('tmpl.min.js');
-		$CI->carabiner->js('jquery.ui.widget.js');
-		$CI->carabiner->js('jquery.fileupload.js');
-		$CI->carabiner->js('jquery.fileupload-ui.js');
-		$CI->carabiner->js('jquery.fileupload-process.js');
-		
-		$CI->carabiner->js('jquery.imgCenter.js');
-		$CI->carabiner->js('blueimp-gallery.js');
-	}
-
-		
-	$CI->carabiner->js('crForm.js');
-	$CI->carabiner->css('select2.css');
-	$CI->carabiner->css('select2-bootstrap.css');
-	$CI->carabiner->css('bootstrap-datetimepicker.css');
-	
-	if ($hasGallery == true) {
-		$CI->carabiner->css('blueimp-gallery.css');
-		$CI->carabiner->css('jquery.fileupload-ui.css');
-	}
-} 
-if ($hasGallery == true) {
-	$CI->carabiner->js('jquery.imgCenter.js');
-	$CI->carabiner->js('blueimp-gallery.js');
-
-	$CI->carabiner->css('blueimp-gallery.css');
-	$CI->carabiner->css('jquery.fileupload-ui.css');
-
-}
-if ($view == 'login') {
-	$CI->carabiner->js('crForm.js');
-	$CI->carabiner->js('loginFB.js');
-	$CI->carabiner->js('loginGoogle.js');
-}
+$aScripts = appendCrFormJsAndCss($view, (isset($form) ? $form : null), (isset($hasForm) ? $hasForm : null), (isset($hasGallery) ? $hasGallery : null), $aScripts); 
+$aScripts = appendCrListJsAndCss($view, (isset($list) ? $list : null), $aScripts);
 
 
 $CI->carabiner->css('default.css');
@@ -165,19 +84,12 @@ $CI->carabiner->display('js');
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 	
 <?php
-$aScripts = array();
+
 
 if (!isset($langs)) {
 	$langs = array();
 }
-$langs[] = 'DATE_FORMAT';
-$langs[] = 'MOMENT_DATE_FORMAT';
-$langs[] = 'NUMBER_DEC_SEP';
-$langs[] = 'NUMBER_THOUSANDS_SEP';
-$langs[] = 'Cancel';
-$langs[] = 'Close';
-$langs[] = 'Are you sure?';
-
+$langs  = getLangToJs($langs);
 $aScripts[] = langJs($langs);
 
 
@@ -200,23 +112,7 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 	";
 }
 
-if ($hasForm == true) {
-	$aScripts[] = '
-		$(document).ready(function() {
-			$(\'#'. element('frmId', $form, 'frmId').'\').crForm('.json_encode($form).');
-		});';
-}
-
-if ($hasCrList == true) {
-	$aScripts[] = '
-		$(document).ready(function() {
-			$(\'.crList\').crList();
-		});	';
-}
-
-if (!empty($aScripts)) {
-	echo implode(' ', $aScripts);
-}
+echo implode(' ', $aScripts);
 ?>
 	</script>	
 	<title><?php echo $title.' | '.config_item('siteName'); ?> </title>
@@ -284,7 +180,7 @@ if (!isset($showTitle)) {
 	$showTitle = true;
 }
 if ($showTitle == true) {
-	echo '	<div class="aaaapage-header pageTitle">
+	echo '	<div class="pageTitle">
 				<h2>'. $title .' <small> </small></h2>
 			</div>';
 }

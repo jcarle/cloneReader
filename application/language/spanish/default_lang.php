@@ -8,11 +8,15 @@ $lang['The email or password you entered are incorrect'] = 'El email o la contra
 $lang['The email entered already exists in the database'] = 'El mail ingresado ya existe en la base de datos';
 $lang['The name entered already exists in the database'] = 'El nombre ingresado ya existe en la base de datos';
 
+$lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
+$lang['MOMENT_DATE_FORMAT'] = 'DD/MM/YYYY';
+$lang['NUMBER_DEC_SEP'] = ',';
+$lang['NUMBER_THOUSANDS_SEP'] = '.';
+
 $lang['Save'] = 'Guardar';
 $lang['Cancel'] = 'Cancelar';
 $lang['Close'] = 'Cerrar';
 $lang['loading ...'] = 'procesando ...';
-
 $lang['search'] = 'buscar';
 $lang['Search'] = 'Buscar';
 $lang['No results'] = 'No hay resultados';
@@ -24,11 +28,9 @@ $lang['Add File'] = 'Agregar archivo';
 $lang['Add photos'] = 'Agregar fotos';
 $lang['Back'] = 'Volver';
 $lang['Delete'] = 'Eliminar';
+$lang['Filter'] = 'Filtrar';
 $lang['Are you sure?'] = 'Está seguro?';
-$lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
-$lang['MOMENT_DATE_FORMAT'] = 'DD/MM/YYYY';
-$lang['NUMBER_DEC_SEP'] = ',';
-$lang['NUMBER_THOUSANDS_SEP'] = '.';
+
 
 $lang['Signup'] = 'Registrarse';
 $lang['Profile'] = 'Perfil';
@@ -85,3 +87,7 @@ $lang['Pictures'] = 'Fotos';
 $lang['Type'] = 'Tipo';
 $lang['From'] = 'Desde';
 $lang['To'] = 'Hasta';
+$lang['Currency'] = 'Moneda';
+$lang['Exchange rate'] =  'Tipo de cambio';
+
+

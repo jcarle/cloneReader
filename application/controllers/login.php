@@ -80,6 +80,7 @@ class Login extends CI_Controller {
 				'title'			=> $this->lang->line('Login'),
 				'form'			=> $form,
 				'aServerData'	=> $aServerData,
+				'aJs'			=> array('loginFB.js', 'loginGoogle.js'),
 			));
 		}
 		

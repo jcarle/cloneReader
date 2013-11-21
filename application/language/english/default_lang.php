@@ -30,6 +30,7 @@ $lang['Add File'] = 'Add File';
 $lang['Add photos'] = 'Add photos';
 $lang['Back'] = 'Back';
 $lang['Delete'] = 'Delete';
+$lang['Filter'] = 'Filter';
 
 
 $lang['Signup'] = 'Signup';
@@ -91,4 +92,5 @@ $lang['Pictures'] = 'Pictures';
 $lang['Type'] = 'Type';
 $lang['From'] = 'From';
 $lang['To'] = 'To';
-
+$lang['Currency'] = 'Currency';
+$lang['Exchange rate'] =  'Exchange rate';

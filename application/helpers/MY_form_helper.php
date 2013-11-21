@@ -104,13 +104,13 @@ function getCrFieldGallery($form) {
 	return null;
 }
 
-function hasFieldUpload($form) {
+function getCrFieldUpload($form) {
 	foreach ($form['fields'] as $name => $field) {
 		if ($field['type'] == 'upload') {
-			return true;
+			return $field;
 		}
 	}
-	return false;
+	return null;
 }
 
 
@@ -159,7 +159,7 @@ function renderCrFormFields($form) {
 			case 'dropdown':
 				$source = element('source', $field, array());
 				if (element('appendNullOption', $field) == true) {
-					$source = array('-1' => '-- '.$CI->lang->line('Choose').' --') + $source;
+					$source = array('' => '-- '.$CI->lang->line('Choose').' --') + $source;
 				}
 			
 				$aFields[] = sprintf($sField, form_dropdown($name, $source, $field['value'], 'class="form-control"'));
@@ -256,3 +256,104 @@ function renderCrFormTree($aTree, $value){
 	$sTmp .= '</ul>';
 	return $sTmp;
 }
+
+
+/**
+ * Apendeo js y css y agrego items al script que va a inicializar los objetos en el header
+ */
+function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
+	$CI = &get_instance();
+	
+	if ($hasForm == true) {
+		if (!isset($form)) {
+			$form = array('fields' => array());	
+		}
+	}
+
+	if (is_array(element('fields', $form))) {
+		$hasForm = true;
+	}
+	if ($view == 'includes/crForm') {
+		$hasForm = true;
+	}	
+	
+	if ($hasForm != true) {
+		return $aScripts;
+	}
+
+	if ($hasGallery != true) {
+		$hasGallery = (getCrFieldGallery($form) != null);
+	}
+	
+	$CI->carabiner->js('crForm.js');
+	$CI->carabiner->js('jquery.raty.js');
+	$CI->carabiner->js('select2.js');
+	$CI->carabiner->js('autoNumeric.js');
+	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
+	
+	$CI->carabiner->css('select2.css');
+	$CI->carabiner->css('select2-bootstrap.css');
+	$CI->carabiner->css('bootstrap-datetimepicker.css');
+	
+	if ($CI->session->userdata('langId') == 'es') {
+		$CI->carabiner->js('select2_locale_es.js');	
+		$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+	}
+	
+	if (getCrFieldUpload($form) != null) {
+		$CI->carabiner->js('jquery.ui.widget.js');
+		$CI->carabiner->js('jquery.fileupload.js');
+		$CI->carabiner->js('jquery.fileupload-ui.js');
+		$CI->carabiner->js('jquery.fileupload-process.js');
+				
+		$CI->carabiner->css('jquery.fileupload-ui.css');
+	}	
+
+	if ($hasGallery == true) {
+		$CI->carabiner->js('tmpl.min.js');
+		$CI->carabiner->js('jquery.ui.widget.js');
+		$CI->carabiner->js('jquery.fileupload.js');
+		$CI->carabiner->js('jquery.fileupload-ui.js');
+		$CI->carabiner->js('jquery.fileupload-process.js');
+		$CI->carabiner->js('jquery.imgCenter.js');
+		$CI->carabiner->js('blueimp-gallery.js');
+
+		$CI->carabiner->css('blueimp-gallery.css');
+		$CI->carabiner->css('jquery.fileupload-ui.css');
+	}
+	
+	$aScripts[] = '
+		$(document).ready(function() {
+			$(\'#'. element('frmId', $form, 'frmId').'\').crForm('.json_encode($form).');
+		});';	
+		
+	
+	return $aScripts;
+}
+
+/**
+ * Apendeo js y css y agrego items al script que va a inicializar los objetos en el header
+ */
+function appendCrListJsAndCss($view, $list, $aScripts) {
+	$CI = &get_instance();
+	
+	if ($view != 'includes/crList') {
+		return $aScripts; 
+	}
+	
+	$CI->carabiner->js('crList.js');
+	
+	$aScripts[] = '
+		$(document).ready(function() {
+			$(\'.crList\').crList();
+		});	';
+		
+	
+	$filters = element('filters', $list);
+	if ($filters != null) {
+		$aScripts = appendCrFormJsAndCss($view, array('fields' => $filters, 'frmId' => 'frmCrList'), null, null, $aScripts);
+	}
+		
+	return $aScripts; 	
+}
+

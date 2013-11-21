@@ -245,10 +245,29 @@ body.isLoading, body.isLoading * {
 	margin: 0 5px;
 }
 	.crList form {	}
-		.crList form > .form-group {
-			max-width:350px;
+		.crList form > .btn-group:first-child {
+			width:calc(100% - 41px);
+			max-width: 500px;
+		}		
+		.crList form > .btn-group {
 			margin-bottom: 0;
 		}
+		.crList form  .crFilterList {
+			padding: 0;
+			min-width: 250px;
+			left: auto;
+			right: 0;
+		}
+			.crList form  .crFilterList .form-group {
+				display: block;
+				margin-bottom: 15px;			
+			}
+			.crList form  .crFilterList .form-group > label,
+			.crList form  .crFilterList .form-group > div {
+				width:100%;
+				display: block;
+				text-align: left;
+			}
 	.crList .table-responsive {
 		border: 1px solid #ccc;
 		box-shadow: 0 0 5px #ccc;
@@ -321,7 +340,7 @@ body.isLoading, body.isLoading * {
 					border-bottom-right-radius:5px;
 				}
 				
-@media (max-width: 767px) {				
+@media (max-width: 767px) {	
 	.crList .footer .pagination {
 		margin: 5px 0 0 0;
 		float:none;

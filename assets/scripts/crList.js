@@ -24,11 +24,12 @@
 		}  
 	}
 	
-	crList = function($content, options) {
-		this.$content	= $content;
-		this.$form 		= this.$content.find('form');
-		this.$table		= this.$content.find('table');
-		this.options 	= $.extend({}, options );
+	crList = function($crList, options) {
+		this.$crList		= $crList;
+		this.$form 			= this.$crList.find('form');
+		this.$table			= this.$crList.find('table');
+		this.$crFilterList	= this.$crList.find('.crFilterList');
+		this.options	 	= $.extend({}, options );
 		
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
@@ -36,7 +37,7 @@
 			}
 		);
 		
-		this.$content.find('.btnAdd').click(
+		this.$crList.find('.btnAdd').click(
 			function (event) {
 				$.goToUrl($(this).attr('href') + '?urlList=' + $.base64Encode(location.href));
 				event.preventDefault;
@@ -44,7 +45,7 @@
 			}
 		);
 
-		this.$content.find('.btnDelete').click($.proxy(
+		this.$crList.find('.btnDelete').click($.proxy(
 			function() { 
 				var aDelete = [];
 				var $input = this.$table.find('tr.info input');

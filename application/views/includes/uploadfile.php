@@ -8,7 +8,7 @@
 				<?php echo form_hidden('entityId', $fileupload['entityId']); ?>		
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-					<h4 id="myModalLabel"> <i class="icon-edit"></i> <?php echo $this->lang->line('Edit pictures'); ?> </h4>
+					<h4> <i class="icon-edit"></i> <?php echo $this->lang->line('Edit pictures'); ?> </h4>
 				</div>
 				
 				<div class="modal-body" >
