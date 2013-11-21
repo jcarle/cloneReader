@@ -42,10 +42,10 @@ class Feeds_Model extends CI_Model {
 		
 		$values = array(
 			'feedUrl' 			=> $data['feedUrl'], 
-			'feedDescription' 	=> $data['feedDescription'],
+			'feedDescription' 	=> element('feedDescription', $data),
 			'statusId' 			=> FEED_STATUS_PENDING,
-			'countryId'			=> $data['countryId'],
-			'langId'			=> $data['langId'],
+			'countryId'			=> element('countryId', $data),
+			'langId'			=> element('langId', $data),
 		);
 		
 		if (isset($data['feedName'])) {

@@ -170,7 +170,6 @@ body.isLoading, body.isLoading * {
 						
 .content {
 	margin: 0 auto;
-	max-width: 1024px;	
 	min-width: 240px;
 }			
 	.content > h1{
