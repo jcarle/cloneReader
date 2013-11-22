@@ -5,16 +5,8 @@
 	border-radius: 5px;
 	overflow: hidden;
 }
-	#header div .logo span {
-		font-size: small;
-		line-height: 19px;
-		padding: 0;
-		position: absolute;
-		right: -39px;
-		top: 4px;
-		-webkit-transform: rotate(45deg);
-		transform: rotate(45deg);
-		width: 113px;
+	#header .logo  {
+		cursor: pointer;
 	}
 	
 .mainToolbar .caret {
@@ -27,7 +19,6 @@
 	overflow:hidden;
 	width:100%;
 	height:calc(100% - 50px);
-	margin-top:50px;
 	position:absolute;
 	left:0;
 }
