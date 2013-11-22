@@ -7,10 +7,10 @@ class Safety {
 		
 
 		initLang();
-		
+
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
-			if ($this->isCommandLine() != true) {
+			if ($this->isCommandLine() != true && uri_string() != 'rss') {
 				redirect('login');
 			}
 		}
