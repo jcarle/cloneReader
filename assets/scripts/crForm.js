@@ -145,6 +145,10 @@
 							break;
 						case 'date':
 						case 'datetime':
+							if ($.inArray(field.$input.val(), ['0000-00-00', '0000-00-00 00:00:00']) != -1) {
+								field.$input.val('');
+							}
+
 							var inputName 	= field.$input.attr('name');
 							var format 		= _msg['DATE_FORMAT'];
 							var minView		= 'month';
