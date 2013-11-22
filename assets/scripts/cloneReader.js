@@ -7,7 +7,7 @@ cloneReader = {
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang(langId);
-		this.getIsMobile();
+		this.isMobile = $.isMobile();
 
 		this.minUnreadEntries 	= 2;
 		this.isLastPage			= false;
@@ -1418,7 +1418,7 @@ console.timeEnd("t1");
 	},
 	
 	resizeWindow: function() {
-		this.getIsMobile();
+		this.isMobile = $.isMobile();
 
 		if (this.isMobile == true) {
 			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
@@ -1483,10 +1483,6 @@ console.timeEnd("t1");
 			return datetime.fromNow();
 		}
 		return datetime.format(format);
-	},
-	
-	getIsMobile: function() {
-		this.isMobile = $(window).width() < 768;		
 	},
 	
 	install: function() {

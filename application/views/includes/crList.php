@@ -97,11 +97,15 @@ if ($urlDelete == true) {
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				<ul class="pagination">
 <?php
+$url = parse_url($_SERVER['REQUEST_URI']);
+parse_str(element('query', $url), $params);
+unset($params['page']);
+
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
 	'last_link'				=> ceil($list['foundRows'] /PAGE_SIZE),
 	'uri_segment'			=> 3,
-	'base_url'		 		=> current_url().'?filter='.$this->input->get('filter'),	
+	'base_url'		 		=> current_url().'?'.http_build_query($params),
 	'total_rows'			=> $list['foundRows'],
 	'per_page'				=> PAGE_SIZE, 
 	'num_links' 			=> 2,

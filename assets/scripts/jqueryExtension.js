@@ -38,6 +38,10 @@ $.extend({
 		return sHref;
 	},
 	
+	isMobile: function() {
+		return $(window).width() < 768;		
+	},	
+	
 	validateEmail: function(value) {
 		if (value == '') {
 			return true;
@@ -356,7 +360,7 @@ $.extend({
 			if ($('.modal-backdrop').length > 0) {
 				$('.modal-backdrop').last().show();
 				$('body').addClass('modal-open');
-			}			
+			}
 		}); 
 		
 		$(document).off('focusin.modal');
