@@ -36,7 +36,7 @@ $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.url.js');
 $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
-$CI->carabiner->js('jqueryExtension.js');
+$CI->carabiner->js('crFuncions.js');
 $CI->carabiner->js('crAlert.js');
 
 $CI->carabiner->css('bootstrap.css');
