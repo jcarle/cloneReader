@@ -17,7 +17,12 @@ class Feeds extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('statusId'), $this->input->get('countryId'), $this->input->get('langId'));
+		$statusId = $this->input->get('statusId');
+		if ($statusId === false) {
+			$statusId = '';
+		}
+		
+		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'));
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -41,7 +46,7 @@ class Feeds extends CI_Controller {
 					'statusId' => array(
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Status'),
-						'value'				=> $this->input->get('statusId'),
+						'value'				=> $statusId,
 						'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
 						'appendNullOption' 	=> true
 					),

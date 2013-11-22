@@ -132,7 +132,7 @@ echo implode(' ', $aScripts);
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<?php echo base_url()?>"> <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url()?>assets/images/logo.png" >  </a>
+			<a class="navbar-brand logo" href="<?php echo base_url()?>"> <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url()?>assets/images/logo.png" >  </a>
 		</div>
 
 		<div class="navbar-collapse collapse navbar-ex1-collapse ">

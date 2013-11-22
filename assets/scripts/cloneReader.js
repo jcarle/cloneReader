@@ -40,7 +40,7 @@ cloneReader = {
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
-		$('body').css('background', '#E5E5E5');
+		$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
 
 		this.$ulEntries
 			.on({ 'tap' : 
@@ -1436,13 +1436,9 @@ console.timeEnd("t1");
 
 		$('.content > .pageTitle').remove();
 		$('.content').css( { 'max-width': '100%' });
-		$('#header').addClass('navbar-fixed-top').css( { 'max-width': '100%' } );
+		$('#header').addClass('nulllllnavbar-fixed-top').css( { 'max-width': '100%' } );
 
 		$('.menu').remove();
-		
-
-		var height = $(window).height() - (this.isMobile == true ? $('#header').outerHeight() : 102); //FIXME: harckodeta! // - this.$ulEntries.offset().top - $('#footer').outerHeight(true); // TODO: revisar el -1
-		$('.navbar-ex1-collapse').css('max-height', height);
 
 		this.resizeNoResult();
 	},
@@ -1490,9 +1486,7 @@ console.timeEnd("t1");
 	},
 	
 	getIsMobile: function() {
-		$('body').css('overflow', 'hidden');
 		this.isMobile = $(window).width() < 768;		
-		$('body').css('overflow', 'auto');
 	},
 	
 	install: function() {
