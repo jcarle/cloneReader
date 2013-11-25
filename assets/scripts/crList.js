@@ -114,7 +114,7 @@
 			}
 		, this));
 		
-		if ($.url().param('filter').trim() != '' && $.isMobile() == false) {
+		if ($.trim($.url().param('filter')) != '' && $.isMobile() == false) {
 			this.$filter.focus();
 		}
 	
