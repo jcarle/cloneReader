@@ -94,3 +94,4 @@ $lang['From'] = 'From';
 $lang['To'] = 'To';
 $lang['Currency'] = 'Currency';
 $lang['Exchange rate'] =  'Exchange rate';
+$lang['Remote login'] = 'Remote login';

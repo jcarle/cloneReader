@@ -110,7 +110,8 @@ class Users extends CI_Controller {
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Groups'),
 					'source'	=> array_to_select($this->Groups_Model->select(), 'groupId', 'groupName'),
-					'value'		=> $data['groups']
+					'value'		=> $data['groups'],
+					'showId'	=> true,
 				)
 			)
 		);

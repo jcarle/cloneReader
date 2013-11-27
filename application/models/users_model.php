@@ -50,14 +50,44 @@ class Users_Model extends CI_Model {
 		return $query->row();
 	}
 	
-	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, GROUP_CONCAT(groups.groupName) AS groupsName ', false)
-		 				->join('countries', 'users.countryId = countries.countryId', 'left')
-						->join('users_groups', 'users.userId = users_groups.userId', 'left')
-						->join('groups', 'groups.groupId = users_groups.groupId', 'left')
-						->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
-						->group_by('users.userId')
-		 				->get('users', $num, $offset);
+	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null ){
+		$this->db
+			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, 
+			IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, 
+			IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
+			->join('countries', 'users.countryId = countries.countryId', 'left')
+			->join('languages', 'users.langId = languages.langId', 'left')
+			->join('users_groups', 'users.userId = users_groups.userId', 'left')
+			->join('groups', 'groups.groupId = users_groups.groupId', 'left');
+						
+		if ($filter != null) {	
+			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
+		}
+		if ($countryId != null) {
+			$this->db->where('users.countryId', $countryId);
+		} 
+		if ($langId != null) {
+			$this->db->where('users.langId', $langId);
+		}
+		
+		if ($aRemoteLogin != null) {
+			$aTmp = array();
+			if (element('facebook', $aRemoteLogin)) {
+				$aTmp[] = 'facebookUserId IS NOT NULL';
+			}
+			if (element('google', $aRemoteLogin)) {
+				$aTmp[] = 'googleUserId IS NOT NULL';
+			}
+			if (!empty($aTmp)) {
+				$this->db->where('('.implode(' OR ', $aTmp). ' )');
+			}
+		}
+		
+		$query = $this->db
+			->group_by('users.userId')
+			->get('users', $num, $offset);
+						
+//pr($this->db->last_query()); die;
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
