@@ -31,7 +31,7 @@
 		this.$crFilterList	= this.$crList.find('.crFilterList');
 		this.$btnFilter		= this.$crFilterList.prev();
 		this.options	 	= $.extend({}, options );
-		this.hasFilter		= (this.$crFilterList.find('input[value!=""], select[value!=""]').length != 0);
+		this.hasFilter		= (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
 		
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
@@ -79,7 +79,8 @@
 					}
 					
 					this.$btnFilter.removeClass('btn-info');
-					this.$form.find('input, select').val('');
+					this.$form.find('input[type=text], select').val('');
+					this.$form.find('input:checked').attr('checked', false);
 					this.$form.submit();
 				}
 			, this));

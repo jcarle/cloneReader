@@ -380,19 +380,24 @@ body.isLoading, body.isLoading * {
 			border-radius: 4px 4px 4px 4px;			
 		}
 			.crForm fieldset .groupCheckBox li {
-				border-bottom: 1px solid #CCCCCC;	
+				border: none;
+				border-bottom: 1px solid #CCCCCC;
+				margin: 0;
+				padding: 0 0 0 5px;	
 			}
 			.crForm fieldset .groupCheckBox li:last-child {
 				border:0;
 			}
-				.crForm fieldset .groupCheckBox li input {
-					width: auto;
-					margin-left: 10px;
+			.crForm fieldset .groupCheckBox li.active {
+				background: #D9EDF7;
+			}
+				.crForm fieldset .groupCheckBox li .checkbox {
+					padding-left: 20px;
 				}
-				.crForm fieldset .groupCheckBox li span {
-					display: inline-block;
-					margin-left: 10px;					
-				}
+					.crForm fieldset .groupCheckBox li .checkbox input {
+						float: left;
+						margin-left: -20px;
+					}
 		.crForm fieldset.tree ul:first-child {
 			height: 300px;
 			overflow: auto;

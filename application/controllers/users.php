@@ -4,7 +4,7 @@ class Users extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Users_Model', 'Countries_Model', 'Groups_Model'));
+		$this->load->model(array('Users_Model', 'Countries_Model', 'Languages_Model', 'Groups_Model'));
 	}  
 	
 	function index() {
@@ -17,18 +17,57 @@ class Users extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+		$aRemoteLogin = array();
+		if (is_array($this->input->get('remoteLogin'))) {
+			foreach ($this->input->get('remoteLogin') as $provider) {
+				$aRemoteLogin[$provider] = $provider;
+			}
+		}		
+		
+		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin );
 
-				
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit users'),
 			'list'			=> array(
 				'controller'	=> strtolower(__CLASS__),
-				'columns'		=> array('userEmail' => $this->lang->line('Email'), 'userFullName' => $this->lang->line('Name'), 'countryName' => $this->lang->line('Country'), 'groupsName' => $this->lang->line('Groups') ),
+				'columns'		=> array(
+					'userEmail' 		=> $this->lang->line('Email'), 
+					'userFullName' 		=> $this->lang->line('Name'), 
+					'countryName' 		=> $this->lang->line('Country'), 
+					'langName' 			=> $this->lang->line('Language'),
+					'groupsName' 		=> $this->lang->line('Groups'),
+					'facebookUserId'	=> 'Facebook', 
+					'googleUserId'		=> 'Google',
+				),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'showId'		=> true
+				'showId'		=> true,
+				'filters'		=> array(
+					'countryId' => array(
+						'type'				=> 'dropdown',
+						'label'				=> $this->lang->line('Country'),
+						'value'				=> $this->input->get('countryId'),
+						'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+						'appendNullOption'	=> true,
+					),				
+					'langId' => array(
+						'type'				=> 'dropdown',
+						'label'				=> $this->lang->line('Language'), 
+						'value'				=> $this->input->get('langId'),
+						'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
+						'appendNullOption'	=> true,
+					),
+					'remoteLogin[]' => array(
+						'type'		=> 'groupCheckBox',
+						'label'		=> $this->lang->line('Remote login'),
+						'source'	=> array(
+							'facebook' 	=> 'Facebook',
+							'google' 	=> 'Google',
+						), 
+						'value'		=> $aRemoteLogin
+					)
+				)
 			)
 		));
 	}

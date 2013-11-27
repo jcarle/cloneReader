@@ -382,10 +382,10 @@
 			if ($gallery.data('initGallery') != true) {
 				$gallery.find('.thumbnails').click(function(event) {
 					var target 	= event.target;
-	        		var link 	= target.src ? $(target).parents('a').get(0) : target;
-	        		var options = {index: link, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false},
-	        		links 		= this.getElementsByTagName('a');
-	    			blueimp.Gallery(links, options);				
+					var link 	= target.src ? $(target).parents('a').get(0) : target;
+					var options = {index: link, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false},
+					links 		= this.getElementsByTagName('a');
+					blueimp.Gallery(links, options);
 				});
 				
 				$gallery.data('initGallery', true);
@@ -608,7 +608,11 @@
 		},
 		
 		checkGroupCheckBox: function($input) { 
-			$input.parent().css('background-color', ($input.is(':checked') ? '#D9EDF7' : 'white'));
+			var $li = $input.parents('li');
+			$li.removeClass('active');
+			if ($input.is(':checked') == true) {
+				$li.addClass('active');
+			}
 		},
 		
 		changeField: function() {

@@ -165,12 +165,18 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, form_dropdown($name, $source, $field['value'], 'class="form-control"'));
 				break;						
 			case 'groupCheckBox':
+				$showId = element('showId', $field, false);
 				$sTmp = '<ul class="groupCheckBox ">';
 				foreach ($field['source'] as $key => $value) {
-					$sTmp .= '<li>' 
-						.form_checkbox($name, $key, element($key, $field['value']))
-						.'<span>'.$value.' - '.$key.'</span>'
-						.'</li>';
+					$sTmp .= 
+						'<li>
+							<div class="checkbox">
+								 <label>' 
+									.form_checkbox($name, $key, element($key, $field['value']))
+									.$value.($showId == true ? ' - '.$key : '').'
+								</label>
+							</div>
+						</li>';
 				}
 				$sTmp .= '</ul>';
 				$aFields[] = sprintf($sField, $sTmp);
