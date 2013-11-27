@@ -6,6 +6,8 @@ class Safety {
 		$this->session 	= $CI->session;
 		
 
+//$CI->output->enable_profiler(TRUE);
+
 		initLang();
 
 		if ($this->session->userdata('userId') == null) {
