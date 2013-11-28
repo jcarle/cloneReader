@@ -37,6 +37,7 @@ class Users extends CI_Controller {
 					'countryName' 		=> $this->lang->line('Country'), 
 					'langName' 			=> $this->lang->line('Language'),
 					'groupsName' 		=> $this->lang->line('Groups'),
+					'userDateAdd'		=> array('class' => 'datetime', 'value' => $this->lang->line('Record date')),
 					'facebookUserId'	=> 'Facebook', 
 					'googleUserId'		=> 'Google',
 				),

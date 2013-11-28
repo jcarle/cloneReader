@@ -90,4 +90,4 @@ $lang['To'] = 'Hasta';
 $lang['Currency'] = 'Moneda';
 $lang['Exchange rate'] =  'Tipo de cambio';
 $lang['Remote login'] = 'Login remoto';
-
+$lang['Record date'] = 'Fecha de registro';
