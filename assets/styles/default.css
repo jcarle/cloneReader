@@ -77,32 +77,30 @@ body.isLoading, body.isLoading * {
 					margin-left: -1px;
 					-webkit-border-radius: 6px 0px 6px 6px;
 					   -moz-border-radius: 6px 0px 6px 6px;
-						    border-radius: 6px 0px 6px 6px;
+							border-radius: 6px 0px 6px 6px;
 				}
 				#header ul.menuProfile .dropdown-submenu-left:hover > .dropdown-menu {
 				  display: block;
 				}
 				#header ul.menuProfile .dropdown-submenu-left > a:before {
-				  display: block;
-				  content: "  ";
-				  float: left;
-				  width: 0;
-				  height: 0;
-				  border-color: transparent;
-				  border-style: solid;
-				  border-width: 5px 5px 5px 0px;
-				  border-right-color: #CCCCCC;
-				  margin-top: 5px;
-				  margin-left: -10px;
+					display: block;
+					content: "  ";
+					float: left;
+					width: 0;
+					height: 0;
+					border-color: transparent;
+					border-style: solid;
+					border-width: 5px 5px 5px 0px;
+					border-right-color: #CCCCCC;
+					margin-top: 5px;
+					margin-left: -10px;
 				}
 				#header ul.menuProfile .dropdown-submenu-left > a:after,
 				#header ul.menuProfile .dropdown-submenu-left:hover > a:after {
 					border-color: transparent;
 				}
-				
-				
-}				
-				
+}
+
 @media (max-width: 767px) {
 	#header form {
 		border-top: 0 solid #FF0000;
@@ -136,9 +134,9 @@ body.isLoading, body.isLoading * {
 	}
 	.menu div {
 		margin: 0 auto;
-		max-width: 1004px;		
+		max-width: 1004px;
 		height: 32px;
-		position:relative;		
+		position:relative;
 	}
 		.menu div ul.menuPublic {
 			list-style: none outside none;
@@ -429,51 +427,54 @@ body.isLoading, body.isLoading * {
 					margin:0 0 10px 0;
 				}
 		.crForm fieldset .subform {	}
+			.crForm fieldset .subform .table-responsive {
+				border: 1px solid #DDDDDD;
+				box-shadow: 0 0 5px #CCCCCC;
+				margin: 0 0 10px;
+				position: relative;	
+				overflow-x: auto;
+				overflow-y: hidden;
+			}
 			.crForm fieldset .subform table {
-				border: 1px solid #ccc;
-				border-spacing: 0;
-				border-radius:5px;
-				box-shadow: 0px 0px 5px #ccc;
-				empty-cells: show;
-				width: 100%;
-				border-collapse: separate;
-				margin: 0px 0 0 0;
+				margin-bottom: 0; 
 			}
 				.crForm fieldset .subform .btnAdd {
 					margin:10px 0 0 0;
 				}
 				.crForm fieldset .subform table thead { }
-					.crForm fieldset .subform table thead tr {}
+					.crForm fieldset .subform table thead tr { }
 					.crForm fieldset .subform table thead tr th, 
 					.crForm fieldset .subform table thead tr th a  {
 						color:white;
 						text-shadow: 1px 1px 0 #555555;
 					}
-						.crForm fieldset .subform table thead tr th { }
-						.crForm fieldset .subform table thead tr th:first-child {
-							border-top-left-radius:5px;
-						}
-						.crForm fieldset .subform table thead tr th:last-child {
-							border-top-right-radius:5px;
+						.crForm fieldset .subform table thead tr th {
+							border-bottom: 1px solid #DDDDDD;
 						}
 						.crForm fieldset .subform table tbody tr td {
 							cursor: pointer;
 						}
-						.crForm fieldset .subform table tbody tr:last-child td:first-child {
-							border-bottom-left-radius:5px;
-						}
-						.crForm fieldset .subform table tbody tr:last-child td:last-child {
-							border-bottom-right-radius:5px;
-						}								
 						.crForm fieldset .subform table tbody tr.success td,
 						.crForm fieldset .subform table tbody tr.warning td {
 							cursor: default;
 						}
-				.crForm fieldset .subform table tbody tr td table  { 
-					box-shadow: none;
+				.crForm fieldset .subform table tbody tr td table { 
 					border: 1px solid #dddddd;
-					border-top: none;
+					border-collapse: collapse;
+					border-spacing: 0;
+					border-radius: 4px;
+					border-collapse: separate;
+					margin-bottom: 0;
 				}
+					.crForm fieldset .subform table tbody tr td table tr td {
+						border-top: 1px solid #DDDDDD;
+						line-height: 1.42857;
+						padding: 8px;
+						vertical-align: top;
+					}
+					.crForm fieldset .subform table tbody tr td table tr:first-child td {
+						border-top:none;
+					}
 		.crForm .gallery a.thumbnail {
 			background: white;
 			width:115px;

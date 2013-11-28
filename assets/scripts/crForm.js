@@ -29,7 +29,7 @@
 			return methods.init.apply( this, arguments );
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
-		}  
+		}
 	}
 	
 	crForm = function($form, options) {
@@ -43,6 +43,7 @@
 		
 		this.initFields();
 		this.initCallbacks();
+		this.resizeWindow();
 		
 		this.$form.find('.btn-danger').click($.proxy(
 			function(event) {
@@ -84,6 +85,12 @@
 					this.changeField();
 				}
 			, this));
+			
+		$(window).resize($.proxy(
+			function() {
+				this.resizeWindow();
+			}
+		, this));
 	}
 	
 	crForm.prototype = {
@@ -471,6 +478,7 @@
 					);
 
 					field.$input.change();
+					this.resizeWindow();
 				}
 			, this));
 		},
@@ -617,6 +625,11 @@
 		
 		changeField: function() {
 			this.$btnSubmit.removeAttr('disabled');
-		}		
+		},
+		
+		resizeWindow: function() {
+			var width = this.$form.width();
+			this.$form.find('.table-responsive').css('max-width', width - 30 );
+		}
 	}
 })($);

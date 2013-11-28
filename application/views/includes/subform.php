@@ -1,5 +1,5 @@
 <div class="table-responsive">
-	<table class="table table-hover table-condensed">
+	<table class="table table-hover">
 		<thead>
 			<tr class="label-primary">
 <?php
