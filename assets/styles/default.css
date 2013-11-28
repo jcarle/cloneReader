@@ -428,7 +428,8 @@ body.isLoading, body.isLoading * {
 				}
 		.crForm fieldset .subform {	}
 			.crForm fieldset .subform .table-responsive {
-				border: 1px solid #DDDDDD;
+				border: 1px solid #CCCCCC;
+				border-radius: 5px;
 				box-shadow: 0 0 5px #CCCCCC;
 				margin: 0 0 10px;
 				position: relative;	
