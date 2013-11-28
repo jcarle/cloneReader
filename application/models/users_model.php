@@ -38,7 +38,8 @@ class Users_Model extends CI_Model {
 		}
 
 		// creo el usuario
-		$values['userEmail'] = $userEmail;
+		$values['userEmail'] 	= $userEmail;
+		$values['userDateAdd'] 	= date("Y-m-d H:i:s");
 		$this->db->insert('users', $values);			
 		$userId = $this->db->insert_id();
 
@@ -138,6 +139,7 @@ class Users_Model extends CI_Model {
 			$this->db->update('users', $values);
 		}
 		else {
+			$values['userDateAdd'] 	= date("Y-m-d H:i:s");
 			$this->db->insert('users', $values);
 			$userId = $this->db->insert_id();
 		}
@@ -171,7 +173,8 @@ class Users_Model extends CI_Model {
 			'userPassword' 	=> md5(element('userPassword', $data)),
 			'userFirstName' => element('userFirstName', $data),
 			'userLastName' 	=> element('userLastName', $data),
-			'countryId' 	=> element('countryId', $data)
+			'countryId' 	=> element('countryId', $data),
+			'userDateAdd' 	=> date("Y-m-d H:i:s"),
 		);
 		
 		$this->db->insert('users', $values);
