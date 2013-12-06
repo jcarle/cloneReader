@@ -153,7 +153,7 @@ function renderCrFormFields($form) {
 				break;			
 			case 'typeahead':
 				$aFields[] = sprintf($sField, 
-					'<input name="'.$name.'"  class="form-control" />'
+					'<input name="'.$name.'"  type="text" class="form-control" />'
 				);
 				break;			
 			case 'dropdown':
@@ -349,16 +349,16 @@ function appendCrListJsAndCss($view, $list, $aScripts) {
 	
 	$CI->carabiner->js('crList.js');
 	
-	$aScripts[] = '
-		$(document).ready(function() {
-			$(\'.crList\').crList();
-		});	';
-		
-	
 	$filters = element('filters', $list);
 	if ($filters != null) {
 		$aScripts = appendCrFormJsAndCss($view, array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), null, null, $aScripts);
 	}
+	
+
+	$aScripts[] = '
+		$(document).ready(function() {
+			$(\'.crList\').crList();
+		});	';
 		
 	return $aScripts; 	
 }

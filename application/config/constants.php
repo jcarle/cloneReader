@@ -57,6 +57,7 @@ define('MENU_PUBLIC', 8);
 define('TAG_ALL', 1);
 define('TAG_STAR', 2);
 define('TAG_HOME', 3);
+define('TAG_BROWSE', 4);
 
 define('FEED_MAX_COUNT', 1000);
 
