@@ -37,6 +37,7 @@ class Home extends CI_Controller {
 					'New tag',
 					'From %s',
 					'From %s by %s',
+					'Subscribe',
 				)
 			)
 		);

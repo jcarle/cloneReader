@@ -14,6 +14,7 @@ $lang['Demo'] = 'Demo';
 
 $lang['filterSubscriptions'] = 'Subscripciones';
 $lang['filterStarred'] = 'Favoritos';
+$lang['filterBrowse'] = 'Navegar';
 $lang['filterHome'] = 'Inicio';
 $lang['Expand'] = 'Expandir';
 $lang['Add feed'] = 'Agregar feed';
@@ -42,3 +43,4 @@ $lang['New tag'] = 'Nuevo tag';
 $lang['From %s'] = 'De %s';
 $lang['From %s by %s'] =  'De %s por %s';
 $lang['Last entry'] = 'Última entrada';
+$lang['Subscribe'] = 'Subscribirse';

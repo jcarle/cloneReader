@@ -19,6 +19,7 @@ $lang['Import starred'] = 'Import starred';
 
 $lang['filterSubscriptions'] = 'Subscriptions';
 $lang['filterStarred'] = 'Starred';
+$lang['filterBrowse'] = 'Browse';
 $lang['filterHome'] = 'Home';
 $lang['Expand'] = 'Expand';
 $lang['Add feed'] = 'Add feed';
@@ -47,3 +48,4 @@ $lang['New tag'] = 'New tag';
 $lang['From %s'] = 'From %s';
 $lang['From %s by %s'] =  'From %s by %s'; 
 $lang['Last entry'] = 'Last entry';
+$lang['Subscribe'] = 'Subscribe';

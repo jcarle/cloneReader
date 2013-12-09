@@ -333,6 +333,29 @@
 				#cloneReader .ulEntries.list > li .footer {
 					border-radius: 0;
 				}
+				#cloneReader .ulEntries > li.browseTags {
+					margin: 0 5px 20px;
+					border:0;
+					padding:0;
+				    background: transparent;
+				    box-shadow: none;
+				}
+					#cloneReader .ulEntries > li.browseTags div h4 {
+						background-position: left 2px;
+						background-repeat: no-repeat;
+						padding: 0 0 0 20px;
+					}
+					#cloneReader .ulEntries > li.browseTags div .feedLink {
+						margin:10px 0 0 0;					
+					}
+					#cloneReader .ulEntries > li.browseTags div p {
+						margin:10px 0 0 0;
+						padding: 0;
+					}
+					#cloneReader .ulEntries > li.browseTags div button {
+						display:block;
+						margin:10px 0 0 0;
+					}
 
 
 	#cloneReader ul.ulFilters {
