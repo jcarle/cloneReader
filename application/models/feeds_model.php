@@ -1,6 +1,6 @@
 <?php
 class Feeds_Model extends CI_Model {
-	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null){
+	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $showInTagBrowse = null){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastScan, feedLastEntryDate', false)
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
@@ -18,8 +18,16 @@ class Feeds_Model extends CI_Model {
 		if ($langId != null) {
 			$this->db->where('feeds.langId', $langId);
 		}
+		if ($tagId != null) {
+			$this->db->join('feeds_tags', 'feeds_tags.feedId = feeds.feedId', 'inner');
+			$this->db->where('feeds_tags.tagId', $tagId);
+		}		
+		if ($showInTagBrowse == true) {
+			$this->db->where('feeds.showInTagBrowse', true);
+		}
 		
 		$query = $this->db->get('feeds', $num, $offset);
+		//pr($this->db->last_query()); die;
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
@@ -46,6 +54,7 @@ class Feeds_Model extends CI_Model {
 			'statusId' 			=> FEED_STATUS_PENDING,
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
+			'showInTagBrowse'	=> (element('showInTagBrowse', $data) == 'on'),
 		);
 		
 		if (isset($data['feedName'])) {
@@ -96,4 +105,18 @@ class Feeds_Model extends CI_Model {
 			->get('feeds', AUTOCOMPLETE_SIZE)->result_array();
 	}	
 	
+	
+	/**
+	 * Busca tags que tengan feeds. 
+	 */
+	function searchTags($filter){
+		$filter = $this->db->escape_like_str($filter);
+
+		return $this->db
+			->select('DISTINCT tags.tagId AS id, tagName AS text  ', false)
+			->join('feeds_tags', 'feeds_tags.tagId = tags.tagId ', 'inner')
+			->like('tagName', $filter)
+			->order_by('text')
+			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
+	}	
 }

@@ -49,3 +49,4 @@ $lang['From %s'] = 'From %s';
 $lang['From %s by %s'] =  'From %s by %s'; 
 $lang['Last entry'] = 'Last entry';
 $lang['Subscribe'] = 'Subscribe';
+$lang['Show in "%s" tag?'] = 'Show in "%s" tag?';

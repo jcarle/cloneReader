@@ -47,4 +47,25 @@ class Tags_Model extends CI_Model {
 		$this->db->delete('tags', array('tagId' => $tagId));
 		return true;
 	}
+	
+	function search($filter){
+		$filter = $this->db->escape_like_str($filter);
+
+		return $this->db
+			->select('DISTINCT tags.tagId AS id, tagName AS text  ', false)
+			->like('tagName', $filter)
+			->order_by('text')
+			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
+	}
+	
+	function selectByFeedId($feedId) {
+		$query = $this->db
+			->select(' tags.tagId, tagName ', false)
+			->join('feeds_tags', 'feeds_tags.tagId = tags.tagId', 'inner')
+			->where('feedId', $feedId)
+			->order_by('tagName')
+			->get('tags')->result_array();
+						
+		return $query;
+	}	
 }
