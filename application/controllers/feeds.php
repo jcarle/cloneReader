@@ -4,7 +4,7 @@ class Feeds extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Feeds_Model', 'Status_Model', 'Languages_Model', 'Countries_Model'));
+		$this->load->model(array('Feeds_Model', 'Status_Model', 'Languages_Model', 'Countries_Model', 'Tags_Model'));
 	}  
 	
 	function index() {
@@ -22,7 +22,15 @@ class Feeds extends CI_Controller {
 			$statusId = '';
 		}
 		
-		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'));
+
+		$tag 	= null;
+		$tagId = $this->input->get('tagId');
+		if ($tagId != null) {
+			$tag = $this->Tags_Model->get($tagId);
+		}
+		$showInTagBrowse = $this->input->get('showInTagBrowse') == 'on';		
+		
+		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $showInTagBrowse);
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -63,7 +71,20 @@ class Feeds extends CI_Controller {
 						'value'				=> $this->input->get('langId'),
 						'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
 						'appendNullOption' 	=> true
-					),					
+					),
+					'tagId' => array(
+						'type' 			=> 'typeahead',
+						'label'			=> 'Tags',
+						'source' 		=> base_url('feeds/searchTags/'),
+						'value'			=> array( 'id' => element('tagId', $tag), 'text' => element('tagName', $tag)), 
+						'multiple'		=> false,
+						'placeholder' 	=> 'tags'
+					),
+					'showInTagBrowse' => array(
+						'type' 			=> 'checkbox',
+						'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('filterBrowse')),
+						'checked'		=> $showInTagBrowse,
+					),
 				)
 			)
 		));
@@ -107,6 +128,12 @@ class Feeds extends CI_Controller {
 
 	
 	function _getFormProperties($feedId) {
+		$tags = array();
+		$query = $this->Tags_Model->selectByFeedId($feedId);
+		foreach ($query as $data) {
+			$tags[] = array('id' => $data['tagId'], 'text' => $data['tagName']);
+		}		
+				
 		$data = $this->Feeds_Model->get($feedId);
 		
 		$form = array(
@@ -168,6 +195,19 @@ class Feeds extends CI_Controller {
 					'value'		=> element('statusId', $data),
 					'disabled'	=> 'disabled'
 				),
+				'aTagId' => array(
+					'type' 			=> 'typeahead',
+					'label'			=> 'Tags',
+					'source' 		=> base_url('tags/search/'),
+					'value'			=> $tags,
+					'multiple'		=> true,
+					'placeholder' 	=> 'tags'
+				),
+				'showInTagBrowse' => array(
+					'type' 			=> 'checkbox',
+					'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('filterBrowse')),
+					'checked'		=> element('showInTagBrowse', $data),
+				),
 			),
 		);
 		
@@ -193,6 +233,12 @@ class Feeds extends CI_Controller {
 	function search() { // TODO: implementar la seguridad!
 		return $this->load->view('ajax', array(
 			'result' 	=> $this->Feeds_Model->search($this->input->get('query'))
+		));
+	}
+	
+	function searchTags() { // TODO: implementar la seguridad!
+		return $this->load->view('ajax', array(
+			'result' 	=> $this->Feeds_Model->searchTags($this->input->get('query'))
 		));
 	}	
 }

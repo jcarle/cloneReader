@@ -27,6 +27,7 @@ cloneReader = {
 			'isMaximized': 	false
 		}, aFilters);	
 		this.isMaximized		= (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
+		this.aSystemTags		= [TAG_ALL, TAG_STAR, TAG_HOME, TAG_BROWSE];
 		
 		this.buildCache();
 		this.renderToolbar();
@@ -344,6 +345,13 @@ cloneReader = {
 			this.ajax.abort();
 			this.ajax = null;
 		}
+		
+		
+		if (this.isBrowseTags()) {
+			this.browseTags();
+			return;
+		}
+		
 		
 		this.ajax = $.ajax({		
 			'url': 		base_url + 'entries/select',
@@ -672,10 +680,16 @@ TODO: pensar como mejorar esta parte
 		if (count == 0) {
 			$filter.addClass('empty');
 		}
-		$filter.hide().toggle(this.isVisible(filter, true));		
+		$filter.hide().toggle(this.filterIsVisible(filter, true));		
 	},
 	
 	updateToolBar: function() {
+		if (this.isBrowseTags() == true) {
+			this.$mainToolbar.hide();
+			return;
+		}
+		this.$mainToolbar.show();
+		
 		this.$mainToolbar.find('.filterSort span:first').text(this.$mainToolbar.find(this.aFilters.sortDesc == true ? '.filterNewestSort' : '.filterOldestSort').text());
 		this.$mainToolbar.find('.filterUnread span:first').html(this.$mainToolbar.find(this.aFilters.onlyUnread == true ? '.filterOnlyUnread a' : '.filterAllItems a').html());
 
@@ -789,6 +803,10 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	getMoreEntries: function() {
+		if (this.isBrowseTags() == true) {
+			return;
+		}
+		
 		// busco más entries si esta visible el li 'noResult', o si el li.selected es casi el ultimo
 		if (this.isLastPage == true) { 
 			return;
@@ -875,7 +893,7 @@ console.timeEnd("t1");
 			filter.count = this.getCountFilter(filter);
 			this.renderCounts(filter);
 
-			if (this.isVisible(filter, $parent.hasClass('filterVisible')) == true) {
+			if (this.filterIsVisible(filter, $parent.hasClass('filterVisible')) == true) {
 				this.renderFilter(filter, $parent, index);
 				index++;
 			}
@@ -920,6 +938,10 @@ console.timeEnd("t1");
 		if (filter.icon != null) {
 			$filter.find('.icon').css('background-image', 'url(' + filter.icon + ')');
 		}
+		if (filter.classIcon != null) {
+			$filter.find('.icon').addClass(filter.classIcon);
+		}				
+
 		
 		if (filter.childs != null) {
 			$filter.append('<ul />').find('.icon').addClass('arrow');
@@ -940,9 +962,9 @@ console.timeEnd("t1");
 		return $filter;
 	},
 	
-	isVisible: function(filter, parentIsVisible) { // TODO: renombrar a filterIsVisible
+	filterIsVisible: function(filter, parentIsVisible) {
 		filter = this.getFilter(filter);
-		if (filter.type == 'tag' && $.inArray(filter.id, [TAG_STAR, TAG_HOME, TAG_ALL]) != -1) {
+		if (filter.type == 'tag' && $.inArray(filter.id, this.aSystemTags) != -1) {
 			return true;
 		}		
 		if (parentIsVisible == true && parseInt(this.getCountFilter(filter)) > 0) {
@@ -1044,7 +1066,7 @@ console.timeEnd("t1");
 		var $ul 	= $filter.find('ul:first');
 		var index 	= 0;
 		for (var i=0; i<filter.childs.length; i++) {
-			if (this.isVisible(filter.childs[i], true) == true) {
+			if (this.filterIsVisible(filter.childs[i], true) == true) {
 				this.renderFilter(filter.childs[i], $ul, index);
 				index++;
 			}
@@ -1103,6 +1125,24 @@ console.timeEnd("t1");
 			});
 			
 		this.updateUserFilters();
+	},
+	
+	subscribeFeed: function(feedId) {
+		$.ajax({
+			'url': 		base_url + 'entries/subscribeFeed',
+			'data': 	{  'feedId': feedId },
+			'type':	 	'post',
+		})
+		.done($.proxy(
+			function(feedId, response) {
+				if (response['code'] != true) {
+					return $(document).crAlert(response['result']);
+				}
+				
+				cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': feedId }); 
+				cloneReader.loadFilters(true);
+			}
+		, this, feedId));
 	},
 
 	addFeed: function() {
@@ -1328,7 +1368,7 @@ console.timeEnd("t1");
 
 		for (var i=0; i<this.tags.length; i++) {
 			var tag = this.tags[i];
-			if (tag.tagId != TAG_ALL && tag.tagId != TAG_STAR && tag.tagId != TAG_HOME) {
+			if ($.inArray(tag.tagId, this.aSystemTags) == -1) {
 				var filter	= this.indexFilters['tag'][tag.tagId];
 				var check 	= '';
 				var hasTag 	= this.feedHasTag(this.getFilter(this.aFilters), filter);
@@ -1470,6 +1510,108 @@ console.timeEnd("t1");
 			if ($('.navbar-ex1-collapse').is(':visible') == true) {
 				$('.navbar-ex1-collapse').collapse('hide');
 			}
+		}
+	},
+	
+	isBrowseTags: function() {
+		if (this.aFilters.type == 'tag' && this.aFilters.id == TAG_BROWSE) {
+			return true;
+		}
+		return false;
+	},		
+	
+	browseTags: function() {
+		this.ajax = $.ajax({		
+			'url': 		base_url + 'entries/browseTags',
+			'type':		'post'
+		})
+		.done(function(response) {
+			if (response['code'] != true) {
+				return $(document).crAlert(response['result']);
+			}
+			cloneReader.renderBrowseTags(response.result);
+		});			
+	},
+	
+	renderBrowseTags: function(result) {
+		this.$ulEntries.removeClass('list');
+		
+		this.updateToolBar();
+		
+		if (result.length == 0) {
+			this.renderNotResult(false);
+			return;
+		}
+		
+		this.$noResult.hide();
+		
+		var $li = $('<li class="browseTags"></li>').appendTo(this.$ulEntries);
+		var $ul = $('<div class="list-group"></div>').appendTo($li);
+		
+		for (var i=0; i<result.length; i++) {
+			var tag = result[i];
+			
+			var $tag = $('<a class="list-group-item" href="javascript:void(0);"><i class="icon icon-tag"></i> ' + tag.tagName + ' </a>').appendTo($ul);
+			$tag
+				.data('tag', tag)
+				.click($.proxy(
+					function(event) {
+						var $tag = $(event.target);
+						
+						$tag.parent().find('div.list-group-item').remove();
+						
+						if ($tag.hasClass('active')) {
+							$tag.removeClass('active');
+							return;
+						}
+						
+						$tag.parent().find('.list-group-item').removeClass('active');
+						$tag.addClass('active');
+
+						this.ajax = $.ajax({		
+							'url': 		base_url + 'entries/browseFeedsByTagId',
+							'data': 	{ 'tagId': $tag.data('tag').tagId },
+
+						})
+						.done($.proxy(
+							function($tag, response) {
+								if (response['code'] != true) {
+									return $(document).crAlert(response['result']);
+								}
+								
+								for (var i=0; i<response.result.length; i++) {
+									var feed 	= response.result[i];
+									var feedId 	= feed.feedId;
+									
+// TODO: refactorizar, para que no metan tags html.  ej "Sinergia sin control"
+									var $feed = $(
+									'<div class="list-group-item">\
+										<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
+										<p class="list-group-item-text">' + (feed.feedDescription == null ? '' : feed.feedDescription) + '</p>  \
+										<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
+										<button title="' + _msg['Subscribe'] + '" class="btn btn-success" type="button"> \
+											<i class="icon-plus"  /> \
+											<span class="btnLabel">' +  _msg['Subscribe'] + '</span> \
+										</button> \
+									</div>');
+									
+									$feed.find('button').click($.proxy(
+										function(feedId) {
+											this.subscribeFeed(feedId);
+										}
+									, this, feedId));
+									
+									
+									$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')')
+									$tag.after($feed);
+								}
+								
+								//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
+								this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!! 
+							}
+						, this, $tag));
+					}
+				,this));
 		}
 	},
 	

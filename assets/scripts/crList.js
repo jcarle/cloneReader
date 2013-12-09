@@ -32,7 +32,7 @@
 		this.$btnFilter		= this.$crFilterList.prev();
 		this.options	 	= $.extend({}, options );
 		this.hasFilter		= (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
-		
+
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
 				$.formatDate($(this));
