@@ -4,7 +4,7 @@ class Entries extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model('Entries_Model');
+		$this->load->model(array('Entries_Model', 'Feeds_Model'));
 	}  
 	
 	/*
@@ -24,7 +24,14 @@ class Entries extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+		$feed 	= null;
+		$feedId = $this->input->get('feedId');
+		if ($feedId != null) {
+			$feed = $this->Feeds_Model->get($feedId);
+		}
+		
+		
+		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $feedId);
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -34,7 +41,15 @@ class Entries extends CI_Controller {
 				'columns'		=> array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'showId'		=> false
+				'showId'		=> false,
+				'filters'		=> array(
+					'feedId' => array(
+						'type' 		=> 'typeahead',
+						'label'		=> $this->lang->line('Feed'),
+						'source' 	=> base_url('feeds/search/'),
+						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
+					),				
+				)
 			)
 		));
 	}
@@ -209,7 +224,7 @@ class Entries extends CI_Controller {
 		$userId = (int)$this->session->userdata('userId');
 		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $this->input->post('feedUrl')));
 		$this->Entries_Model->getNewsEntries($userId, $feedId);
-		$this->Entries_Model->saveEntriesTagByUser($userId);
+		$this->Entries_Model->saveEntriesTagByUser($userId, $feedId);
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
@@ -234,6 +249,19 @@ class Entries extends CI_Controller {
 			'result' 	=> ($result === true ? 'ok': $result),
 		));
 	}
+	
+	function subscribeFeed() {
+		$feedId = $this->input->post('feedId');
+		$userId = (int)$this->session->userdata('userId');
+		$result = $this->Entries_Model->subscribeFeed($feedId, $userId);
+
+		$this->Entries_Model->saveEntriesTagByUser($userId, $feedId);
+
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> 'ok',
+		));
+	}	
 	
 	function unsubscribeFeed() {
 		$result = $this->Entries_Model->unsubscribeFeed($this->input->post('feedId'), (int)$this->session->userdata('userId'));
@@ -269,6 +297,28 @@ class Entries extends CI_Controller {
 		
 		$this->Entries_Model->saveEntriesTagByUser($userId);
 		$this->getAsyncNewsEntries($userId);
+	}	
+	
+	function browseTags() {
+		$query = $this->Entries_Model->browseTags($this->session->userdata('userId'));
+		
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> $query,
+		));		
+	}
+	
+	function browseFeedsByTagId() {
+		$query = $this->Entries_Model->browseFeedsByTagId($this->session->userdata('userId'), $this->input->get('tagId'));
+		
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> $query,
+		));		
+	}	
+	
+	function processTagRating() {
+		$this->Entries_Model->processTagRating();
 	}	
 	
 	function populateMillionsEntries() {

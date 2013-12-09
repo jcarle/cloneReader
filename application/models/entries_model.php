@@ -1,6 +1,6 @@
 <?php
 class Entries_Model extends CI_Model {
-	function selectToList($num, $offset, $filter){
+	function selectToList($num, $offset, $filter, $feedId = null){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner');
@@ -8,10 +8,16 @@ class Entries_Model extends CI_Model {
 		if  ($filter != '') {
 			$this->db->like('entryTitle', $filter);
 		}
+		if ($feedId != null) {
+			$this->db->where('feeds.feedId', $feedId);
+			
+		}
 			
 		$query = $this->db->order_by('entries.entryId')
 		 	->get('entries FORCE INDEX (PRIMARY)', $num, $offset);
-						
+
+		//pr($this->db->last_query()); die;
+
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}
@@ -92,7 +98,15 @@ class Entries_Model extends CI_Model {
 					'id'		=> TAG_STAR,
 					'name'		=> $this->lang->line('filterStarred'), 
 					'icon'		=> site_url().'assets/images/star-on.png', 
-				)
+				),
+				array(
+					'type'			=> 'tag',
+					'id'			=> TAG_BROWSE,
+					'name'			=> $this->lang->line('filterBrowse'), 
+					'classIcon'		=> 'icon-tags', 
+				)				
+				
+				
 			)
 		);
 
@@ -249,7 +263,7 @@ class Entries_Model extends CI_Model {
 		}
 		
 		
-		if (!empty($aTags)) {
+		if (!empty($aTags) && $entryId != null) {
 			foreach ($aTags as $tagName) {
 				$tagId = $this->addTag($tagName);
 				$this->db->ignore()->insert('entries_tags', array('entryId' => $entryId, 'tagId' => $tagId));
@@ -380,25 +394,25 @@ class Entries_Model extends CI_Model {
 		$this->load->model('Feeds_Model');
 		$feedId = $this->Feeds_Model->save($feed);
 
-		$this->db->ignore()->insert('users_feeds', array( 'feedId'	=> $feedId, 'userId' => $userId ));
+		$this->subscribeFeed($feedId, $userId);
 		//pr($this->db->last_query());
 		
 		return $feedId;
 	}
 
 	function addTag($tagName, $userId = null, $feedId = null) {
-		$tagName 	= trim($tagName);
+		$tagName 	= substr(trim($tagName), 0, 200);
 		$tagId		= null;
 
 		$query = $this->db->where('tagName', $tagName)->get('tags')->result_array();
-		//pr($this->db->last_query());
+		pr($this->db->last_query()); 
 		if (!empty($query)) {
 			$tagId = $query[0]['tagId'];
 		}
 		else {
 			$this->db->insert('tags', array( 'tagName'	=> $tagName ));
 			$tagId = $this->db->insert_id();
-			//pr($this->db->last_query());
+			pr($this->db->last_query());
 		}
 
 		if ($userId != null) {
@@ -415,8 +429,18 @@ class Entries_Model extends CI_Model {
 		return $tagId;
 	}
 
+	function subscribeFeed($feedId, $userId) {
+		$this->db->ignore()->insert('users_feeds', array( 'feedId'	=> $feedId, 'userId' => $userId ));
+		//pr($this->db->last_query());		
+		
+		return true;		
+	}
+	
 	function unsubscribeFeed($feedId, $userId) {
 		$this->db->delete('users_feeds', array('feedId' => $feedId, 'userId' => $userId));
+		//pr($this->db->last_query());
+		
+		$this->db->delete('users_entries', array('feedId' => $feedId, 'userId' => $userId, 'tagId <>' => TAG_STAR));
 		//pr($this->db->last_query());
 		return true;		
 	}
@@ -448,6 +472,41 @@ class Entries_Model extends CI_Model {
 		$this->db->update('users_entries', array('entryRead' => true));
 		//pr($this->db->last_query());   die;
 		return true;		
+	}	
+	
+	
+	function browseTags($userId) {
+		$query = ' SELECT * FROM (
+						SELECT DISTINCT tags.tagId, tagName, countTotal
+						FROM tags 
+						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
+						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
+						WHERE tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.') 
+						AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
+						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
+						AND feeds.langId = \''.$this->session->userdata('langId').'\'
+						ORDER BY countTotal DESC LIMIT 100
+					) AS tmp
+					ORDER BY tagName ';
+		$query = $this->db->query($query)->result_array();
+		//pr($this->db->last_query());   die;			
+		return $query;
+	}
+	
+	function browseFeedsByTagId($userId, $tagId) {
+		$query = ' SELECT DISTINCT feeds.feedId, feedName, feedUrl, feedLink, feeds.feedIcon, feedDescription
+						FROM tags 
+						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
+						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
+						WHERE tags.tagId = '.(INT)$tagId.'
+						AND tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.') 
+						AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
+						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
+						AND feeds.langId = \''.$this->session->userdata('langId').'\'
+						ORDER BY feedName ASC LIMIT 100 ';	
+		$query = $this->db->query($query)->result_array();
+		//pr($this->db->last_query());   die;			
+		return $query;
 	}	
 	
 	function updateUserFilters($userFilters, $userId){
@@ -640,7 +699,7 @@ class Entries_Model extends CI_Model {
 		}
 	}
 	
-	function saveEntriesTagByUser($userId) {
+	function saveEntriesTagByUser($userId, $feedId = null) {
 		// TODO: paginar este proceso para que guarde TODAS las entradas nuevas sin tener que relodear
 		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
 		$entryId 	= null;
@@ -650,6 +709,10 @@ class Entries_Model extends CI_Model {
 						MAX(entryId) AS entryId
 						FROM  users_entries  
 						WHERE userId  = '.$userId.' ';
+		if ($feedId != null) {
+// TODO: filtrar por fecha en este caso, asi si el tipo se subscribe por primera vez no le guarda entradas de hace 700 años			
+			$query .= ' AND feedId = '.$feedId;
+		}
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());	
 		if (!empty($query)) {
@@ -696,5 +759,74 @@ class Entries_Model extends CI_Model {
 			sleep(2);
 			$this->saveEntriesTagByUser($userId);
 		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	function processTagRating() {
+		set_time_limit(0);
+		
+		$aSystenTags 	= array(TAG_ALL, TAG_STAR, TAG_HOME);
+		$dayOfLastEntry = 7;
+		
+		$this->db->query('DELETE FROM feeds_tags ');
+		
+		$this->db->update('tags', array('countFeeds' => 0, 'countEntries' => 0, 'countUsers' => 0, 'countTotal' => 0));
+		
+		$query = ' SELECT feedId, tagId, COUNT(tagId) AS countEntries
+			FROM entries_tags
+			INNER JOIN tags USING (tagId)
+			INNER JOIN entries USING (entryId)
+			INNER JOIN feeds USING (feedId)
+			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
+			AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
+			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
+			AND feeds.showInTagBrowse = TRUE 
+			GROUP BY feedId, tagId 
+			HAVING countEntries >5 ';
+		$query = $this->db->query($query)->result_array();		
+		foreach ($query as $row) {		
+			$update = 'UPDATE tags SET 
+				countFeeds		= countFeeds + 1,
+				countEntries 	= countEntries + '.$row['countEntries'].'
+				WHERE tagId 	= '.$row['tagId'];
+			$this->db->query($update);
+			//pr($this->db->last_query()); 
+			
+			$update = 'REPLACE INTO feeds_tags (feedId, tagId) VALUES ('.$row['feedId'].', '.$row['tagId'].') ';
+			$this->db->query($update);
+		}
+		
+		
+		$query = ' SELECT feedId, tagId, COUNT(*) AS countUsers
+			FROM users_feeds_tags
+			INNER JOIN tags USING (tagId)
+			INNER JOIN feeds USING (feedId)
+			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
+			AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
+			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
+			AND feeds.showInTagBrowse = TRUE 
+			GROUP BY feedId, userId  ';
+		$query = $this->db->query($query)->result_array();		
+		foreach ($query as $row) {		
+			$update = 'UPDATE tags SET 
+				countUsers		= countUsers + 1
+				WHERE tagId 	= '.$row['tagId'];
+			$this->db->query($update);
+			//pr($this->db->last_query()); 
+			
+			$update = 'REPLACE INTO feeds_tags (feedId, tagId) VALUES ('.$row['feedId'].', '.$row['tagId'].') ';
+			$this->db->query($update);			
+		}		
+		
+		
+		$update = ' UPDATE tags SET countTotal = (countFeeds * 2) + (countUsers + 10)  WHERE tagId NOT IN ('.implode(', ', $aSystenTags).')   ';
+		$this->db->query($update);
 	}
 }
