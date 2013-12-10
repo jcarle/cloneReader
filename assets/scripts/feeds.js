@@ -6,6 +6,7 @@ $.Feeds = {
 			url: base_url + 'feeds/scan/' + feedId,
 			data: { }
 		 }).done(function (result) {	
+			$.showWaiting(true);
 			location.reload();
 		});		
 	}

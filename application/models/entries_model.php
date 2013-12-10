@@ -480,9 +480,7 @@ class Entries_Model extends CI_Model {
 						FROM tags 
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
-						WHERE tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.') 
-						AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
-						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
+						WHERE feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
 						AND (feeds.langId IS NULL OR feeds.langId = \''.$this->session->userdata('langId').'\')
 						ORDER BY countTotal DESC LIMIT 50
 					) AS tmp
@@ -498,8 +496,6 @@ class Entries_Model extends CI_Model {
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE tags.tagId = '.(INT)$tagId.'
-						AND tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.') 
-						AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
 						AND (feeds.langId IS NULL OR feeds.langId = \''.$this->session->userdata('langId').'\')
 						ORDER BY feedName ASC LIMIT 50 ';	
@@ -619,6 +615,7 @@ class Entries_Model extends CI_Model {
 			}
 			
 			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
+				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF
 				$this->db->update('feeds', array(
 					'statusId' 		=> FEED_STATUS_APPROVED,
 					'feedLastScan' 	=> date("Y-m-d H:i:s")
@@ -820,7 +817,7 @@ class Entries_Model extends CI_Model {
 		}		
 		
 		
-		$update = ' UPDATE tags SET countTotal = (countFeeds * 2) + (countUsers + 10)  WHERE tagId NOT IN ('.implode(', ', $aSystenTags).')   ';
+		$update = ' UPDATE tags SET countTotal = (countFeeds * 1) + (countUsers + 10)  WHERE tagId NOT IN ('.implode(', ', $aSystenTags).')   ';
 		$this->db->query($update);
 	}
 }
