@@ -102,8 +102,9 @@ class Feeds_Model extends CI_Model {
 		$this->db
 			->where('feedId', $feedId)
 			->update('feeds', array(
-				'feedLastScan' 	=> null, 
-				'statusId' 		=> 0,
+				'feedLastScan' 			=> null,
+				'feedLastEntryDate'		=> null, 
+				'statusId' 				=> 0,
 			));		
 			
 		$this->load->model('Entries_Model');

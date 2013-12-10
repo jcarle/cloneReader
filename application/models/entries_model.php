@@ -556,7 +556,7 @@ class Entries_Model extends CI_Model {
 	function parseRss($feedId, $feedUrl) {
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
-			->select('TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
+			->select('feedLastEntryDate, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
 			->where('feeds.feedId', $feedId)
 			->get('feeds')->result_array();
 		//pr($this->db->last_query()); 
@@ -575,7 +575,7 @@ class Entries_Model extends CI_Model {
 			return $this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
 		}
 	
-		$lastEntryDate = $this->getLastEntryDate($feedId);
+		$lastEntryDate = $feed['feedLastEntryDate'];
 		
 		$langId		= null;
 		$countryId 	= null;
