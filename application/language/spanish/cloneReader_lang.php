@@ -12,10 +12,10 @@ $lang['Import starred'] = 'Importar starred';
 $lang['Feed'] = 'Feed';
 $lang['Demo'] = 'Demo';
 
-$lang['filterSubscriptions'] = 'Subscripciones';
-$lang['filterStarred'] = 'Favoritos';
-$lang['filterBrowse'] = 'Navegar';
-$lang['filterHome'] = 'Inicio';
+$lang['@tag-all'] = 'Subscripciones';
+$lang['@tag-star'] = 'Favoritos';
+$lang['@tag-browse'] = 'Navegar';
+$lang['@tag-home'] = 'Inicio';
 $lang['Expand'] = 'Expandir';
 $lang['Add feed'] = 'Agregar feed';
 $lang['Install'] = 'Instalar';

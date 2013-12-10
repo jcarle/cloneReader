@@ -219,7 +219,7 @@ class Feeds extends CI_Controller {
 				),
 				'feedSuggest' => array(
 					'type' 			=> 'checkbox',
-					'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('filterBrowse')),
+					'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('@tag-browse')),
 					'checked'		=> element('feedSuggest', $data),
 				),
 			),

@@ -17,10 +17,10 @@ $lang['Import'] = 'Import';
 $lang['Import feeds'] = 'Import feeds';
 $lang['Import starred'] = 'Import starred';
 
-$lang['filterSubscriptions'] = 'Subscriptions';
-$lang['filterStarred'] = 'Starred';
-$lang['filterBrowse'] = 'Browse';
-$lang['filterHome'] = 'Home';
+$lang['@tag-all'] = 'Subscriptions';
+$lang['@tag-star'] = 'Starred';
+$lang['@tag-browse'] = 'Browse';
+$lang['@tag-home'] = 'Home';
 $lang['Expand'] = 'Expand';
 $lang['Add feed'] = 'Add feed';
 $lang['Install'] = 'Install';

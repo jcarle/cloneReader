@@ -90,19 +90,19 @@ class Entries_Model extends CI_Model {
 				array(
 					'type'		=> 'tag',
 					'id'		=> TAG_HOME,
-					'name'		=> $this->lang->line('filterHome'),
+					'name'		=> $this->lang->line('@tag-home'),
 					'icon'		=> site_url().'assets/images/default_feed.png', 
 				),
 				array(
 					'type'		=> 'tag',
 					'id'		=> TAG_STAR,
-					'name'		=> $this->lang->line('filterStarred'), 
+					'name'		=> $this->lang->line('@tag-star'), 
 					'icon'		=> site_url().'assets/images/star-on.png', 
 				),
 				array(
 					'type'			=> 'tag',
 					'id'			=> TAG_BROWSE,
-					'name'			=> $this->lang->line('filterBrowse'), 
+					'name'			=> $this->lang->line('@tag-browse'), 
 					'classIcon'		=> 'icon-tags', 
 				)				
 				
@@ -113,7 +113,7 @@ class Entries_Model extends CI_Model {
 		$aFilters['tags'] = array(
 			'type'		=> 'tag',
 			'id'		=> TAG_ALL,		
-			'name'		=> $this->lang->line('filterSubscriptions'),
+			'name'		=> $this->lang->line('@tag-all'),
 			'count'		=> 380,
 			'expanded'	=> true,
 			'childs'	=> array()
@@ -405,14 +405,14 @@ class Entries_Model extends CI_Model {
 		$tagId		= null;
 
 		$query = $this->db->where('tagName', $tagName)->get('tags')->result_array();
-		pr($this->db->last_query()); 
+		//pr($this->db->last_query()); 
 		if (!empty($query)) {
 			$tagId = $query[0]['tagId'];
 		}
 		else {
 			$this->db->insert('tags', array( 'tagName'	=> $tagName ));
 			$tagId = $this->db->insert_id();
-			pr($this->db->last_query());
+			//pr($this->db->last_query());
 		}
 
 		if ($userId != null) {
@@ -767,7 +767,7 @@ class Entries_Model extends CI_Model {
 		// Completo datos en la tabla tags y feeds_tags, basado en los tags de cada entry, y en como tageo cada user un feed.
 		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
 		
-		$aSystenTags 	= array(TAG_ALL, TAG_STAR, TAG_HOME);
+		$aSystenTags 	= array(TAG_ALL, TAG_STAR, TAG_HOME, TAG_BROWSE);
 		$dayOfLastEntry = 7;
 		
 		$this->db->query('DELETE FROM feeds_tags ');
