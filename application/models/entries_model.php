@@ -484,8 +484,8 @@ class Entries_Model extends CI_Model {
 						WHERE tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.') 
 						AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND feeds.langId = \''.$this->session->userdata('langId').'\'
-						ORDER BY countTotal DESC LIMIT 100
+						AND (feeds.langId IS NULL OR feeds.langId = \''.$this->session->userdata('langId').'\')
+						ORDER BY countTotal DESC LIMIT 50
 					) AS tmp
 					ORDER BY tagName ';
 		$query = $this->db->query($query)->result_array();
@@ -502,8 +502,8 @@ class Entries_Model extends CI_Model {
 						AND tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.') 
 						AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND feeds.langId = \''.$this->session->userdata('langId').'\'
-						ORDER BY feedName ASC LIMIT 100 ';	
+						AND (feeds.langId IS NULL OR feeds.langId = \''.$this->session->userdata('langId').'\')
+						ORDER BY feedName ASC LIMIT 50 ';	
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());   die;			
 		return $query;
@@ -761,16 +761,11 @@ class Entries_Model extends CI_Model {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	function processTagRating() {
+	function processTagBrowse() {
 		set_time_limit(0);
+		
+		// Completo datos en la tabla tags y feeds_tags, basado en los tags de cada entry, y en como tageo cada user un feed.
+		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
 		
 		$aSystenTags 	= array(TAG_ALL, TAG_STAR, TAG_HOME);
 		$dayOfLastEntry = 7;
@@ -787,9 +782,9 @@ class Entries_Model extends CI_Model {
 			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
 			AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
-			AND feeds.showInTagBrowse = TRUE 
+			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, tagId 
-			HAVING countEntries >5 ';
+			HAVING countEntries > 5 ';
 		$query = $this->db->query($query)->result_array();		
 		foreach ($query as $row) {		
 			$update = 'UPDATE tags SET 
@@ -811,7 +806,7 @@ class Entries_Model extends CI_Model {
 			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
 			AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
-			AND feeds.showInTagBrowse = TRUE 
+			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, userId  ';
 		$query = $this->db->query($query)->result_array();		
 		foreach ($query as $row) {		

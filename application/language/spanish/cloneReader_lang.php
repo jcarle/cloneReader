@@ -45,3 +45,4 @@ $lang['From %s by %s'] =  'De %s por %s';
 $lang['Last entry'] = 'Última entrada';
 $lang['Subscribe'] = 'Subscribirse';
 $lang['Show in "%s" tag?'] = 'Mostrar en el tag "%s"?';
+$lang['Only feed suggest'] = 'Solo feeds sugeridos';

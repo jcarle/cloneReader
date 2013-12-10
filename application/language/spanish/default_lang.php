@@ -30,7 +30,7 @@ $lang['Back'] = 'Volver';
 $lang['Delete'] = 'Eliminar';
 $lang['Filter'] = 'Filtrar';
 $lang['Are you sure?'] = 'Está seguro?';
-
+$lang['User'] = 'Usuario';
 
 $lang['Signup'] = 'Registrarse';
 $lang['Profile'] = 'Perfil';

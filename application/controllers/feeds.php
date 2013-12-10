@@ -4,7 +4,7 @@ class Feeds extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Feeds_Model', 'Status_Model', 'Languages_Model', 'Countries_Model', 'Tags_Model'));
+		$this->load->model(array('Feeds_Model', 'Status_Model', 'Languages_Model', 'Countries_Model', 'Tags_Model', 'Users_Model'));
 	}  
 	
 	function index() {
@@ -28,9 +28,15 @@ class Feeds extends CI_Controller {
 		if ($tagId != null) {
 			$tag = $this->Tags_Model->get($tagId);
 		}
-		$showInTagBrowse = $this->input->get('showInTagBrowse') == 'on';		
+		$user 	= null;
+		$userId = $this->input->get('userId');
+		if ($userId != null) {
+			$user = $this->Users_Model->get($userId);
+		}		
 		
-		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $showInTagBrowse);
+		$feedSuggest = $this->input->get('feedSuggest') == 'on';		
+		
+		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest);
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -80,10 +86,18 @@ class Feeds extends CI_Controller {
 						'multiple'		=> false,
 						'placeholder' 	=> 'tags'
 					),
-					'showInTagBrowse' => array(
+					'userId' => array(
+						'type' 			=> 'typeahead',
+						'label'			=> $this->lang->line('User'),
+						'source' 		=> base_url('users/search/'),
+						'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
+						'multiple'		=> false,
+						'placeholder' 	=> $this->lang->line('User')
+					),					
+					'feedSuggest' => array(
 						'type' 			=> 'checkbox',
-						'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('filterBrowse')),
-						'checked'		=> $showInTagBrowse,
+						'label'			=> $this->lang->line('Only feed suggest'),
+						'checked'		=> $feedSuggest,
 					),
 				)
 			)
@@ -203,10 +217,10 @@ class Feeds extends CI_Controller {
 					'multiple'		=> true,
 					'placeholder' 	=> 'tags'
 				),
-				'showInTagBrowse' => array(
+				'feedSuggest' => array(
 					'type' 			=> 'checkbox',
 					'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('filterBrowse')),
-					'checked'		=> element('showInTagBrowse', $data),
+					'checked'		=> element('feedSuggest', $data),
 				),
 			),
 		);

@@ -317,8 +317,8 @@ class Entries extends CI_Controller {
 		));		
 	}	
 	
-	function processTagRating() {
-		$this->Entries_Model->processTagRating();
+	function processTagBrowse() {
+		$this->Entries_Model->processTagBrowse();
 	}	
 	
 	function populateMillionsEntries() {

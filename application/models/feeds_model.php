@@ -1,6 +1,6 @@
 <?php
 class Feeds_Model extends CI_Model {
-	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $showInTagBrowse = null){
+	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastScan, feedLastEntryDate', false)
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
@@ -21,9 +21,13 @@ class Feeds_Model extends CI_Model {
 		if ($tagId != null) {
 			$this->db->join('feeds_tags', 'feeds_tags.feedId = feeds.feedId', 'inner');
 			$this->db->where('feeds_tags.tagId', $tagId);
-		}		
-		if ($showInTagBrowse == true) {
-			$this->db->where('feeds.showInTagBrowse', true);
+		}
+		if ($userId != null) {
+			$this->db->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner');
+			$this->db->where('users_feeds.userId', $userId);
+		}
+		if ($feedSuggest == true) {
+			$this->db->where('feeds.feedSuggest', true);
 		}
 		
 		$query = $this->db->get('feeds', $num, $offset);
@@ -54,7 +58,7 @@ class Feeds_Model extends CI_Model {
 			'statusId' 			=> FEED_STATUS_PENDING,
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
-			'showInTagBrowse'	=> (element('showInTagBrowse', $data) == 'on'),
+			'feedSuggest'		=> (element('feedSuggest', $data) == 'on'),
 		);
 		
 		if (isset($data['feedName'])) {
