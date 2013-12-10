@@ -780,7 +780,7 @@ class Entries_Model extends CI_Model {
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
 			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, tagId 
-			HAVING countEntries > 5 ';
+			HAVING countEntries > 10 ';
 		$query = $this->db->query($query)->result_array();		
 		foreach ($query as $row) {		
 			$update = 'UPDATE tags SET 
