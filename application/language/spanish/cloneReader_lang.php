@@ -46,3 +46,4 @@ $lang['Last entry'] = 'Última entrada';
 $lang['Subscribe'] = 'Subscribirse';
 $lang['Show in "%s" tag?'] = 'Mostrar en el tag "%s"?';
 $lang['Only feed suggest'] = 'Solo feeds sugeridos';
+$lang['Scan'] = 'Scanear';

@@ -98,6 +98,19 @@ class Feeds_Model extends CI_Model {
 		return true;
 	}
 	
+	function scan($feedId) {
+		$this->db
+			->where('feedId', $feedId)
+			->update('feeds', array(
+				'feedLastScan' 	=> null, 
+				'statusId' 		=> 0,
+			));		
+			
+		$this->load->model('Entries_Model');
+		
+		$this->Entries_Model->getNewsEntries(null, $feedId);
+	}
+	
 	function search($filter){
 		$filter = $this->db->escape_like_str($filter);
 		

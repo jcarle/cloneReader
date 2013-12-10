@@ -125,7 +125,8 @@ class Feeds extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit feeds'),
-			'form'		=> $form	  
+			'form'		=> $form,
+			'aJs'		=> array('feeds.js')
 		));		
 	}
 
@@ -224,10 +225,14 @@ class Feeds extends CI_Controller {
 				),
 			),
 		);
-		
+
+		$form['buttons'] = array();
+		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
-			$form['urlDelete'] = base_url('feeds/delete/');
-		}		
+			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info" onclick="$.Feeds.scanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
+		}
+		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> '.$this->lang->line('Save').' </button> ';	
 		
 		$form['rules'] += array( 
 			array(
@@ -242,6 +247,15 @@ class Feeds extends CI_Controller {
 			),
 		);
 		return $form;
+	}
+
+	function scan($feedId) {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+				
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> $this->Feeds_Model->scan($feedId)
+		));				
 	}
 
 	function search() { // TODO: implementar la seguridad!

@@ -14,7 +14,7 @@ class Entries_Model extends CI_Model {
 		}
 			
 		$query = $this->db->order_by('entries.entryId')
-		 	->get('entries FORCE INDEX (PRIMARY)', $num, $offset);
+		 	->get('entries ', $num, $offset);
 
 		//pr($this->db->last_query()); die;
 
@@ -530,7 +530,7 @@ class Entries_Model extends CI_Model {
 		set_time_limit(0);
 		
 		$this->db
-			->select('feeds.feedId, feedUrl, feedLink, feedIcon')
+			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')

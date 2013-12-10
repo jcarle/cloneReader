@@ -54,7 +54,6 @@
 					'isConfirm': 	true,
 					'callback': 	$.proxy(
 						function() {
-							this.options.clickDelete = true;
 							this.$form.attr('action', this.options.urlDelete);
 							this.sendForm();
 						}
