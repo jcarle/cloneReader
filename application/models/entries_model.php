@@ -474,7 +474,6 @@ class Entries_Model extends CI_Model {
 		return true;		
 	}	
 	
-	
 	function browseTags($userId) {
 		$query = ' SELECT * FROM (
 						SELECT DISTINCT tags.tagId, tagName, countTotal
@@ -616,7 +615,7 @@ class Entries_Model extends CI_Model {
 			);
 			
 			if ($data['entryDate'] == null) {
-				return $this->updateFeedStatus($feedId, FEED_STATUS_INVALID_FORMAT);
+				$data['entryDate'] = date("Y-m-d H:i:s");
 			}
 			
 			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo

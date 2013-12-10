@@ -54,7 +54,6 @@ class Feeds_Model extends CI_Model {
 		
 		$values = array(
 			'feedUrl' 			=> $data['feedUrl'], 
-			'feedDescription' 	=> element('feedDescription', $data),
 			'statusId' 			=> FEED_STATUS_PENDING,
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
@@ -67,7 +66,9 @@ class Feeds_Model extends CI_Model {
 		if (isset($data['feedLink'])) {
 			$values['feedLink']	= $data['feedLink'];
 		}
-		
+		if (isset($data['feedDescription'])) {
+			$values['feedDescription']	= $data['feedDescription'];
+		}
 
 		$query = $this->db->where('feedUrl', $values['feedUrl'])->get('feeds')->result_array();
 		//pr($this->db->last_query());
