@@ -39,6 +39,7 @@ $lang['Logout'] = 'Salir';
 $lang['Language'] = 'Idioma';
 $lang['English'] = 'Ingles';
 $lang['Spanish'] = 'Español';
+$lang['Portuguese'] = 'Portugués';
 $lang['Settings'] = 'Preferencias';
 $lang['System'] = 'Sistema';
 $lang['Edit users'] = 'Editar usuarios';

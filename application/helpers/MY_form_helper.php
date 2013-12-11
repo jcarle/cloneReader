@@ -301,10 +301,17 @@ function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
 	$CI->carabiner->css('select2-bootstrap.css');
 	$CI->carabiner->css('bootstrap-datetimepicker.css');
 	
-	if ($CI->session->userdata('langId') == 'es') {
-		$CI->carabiner->js('select2_locale_es.js');	
-		$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+	switch ($CI->session->userdata('langId')) {
+		case 'es':
+			$CI->carabiner->js('select2_locale_es.js');	
+			$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+			break;
+		case 'pt':
+			$CI->carabiner->js('select2_locale_pt-BR.js');	
+			$CI->carabiner->js('bootstrap-datetimepicker.pt-BR.js');
+			break;			
 	}
+	
 	
 	if (getCrFieldUpload($form) != null) {
 		$CI->carabiner->js('jquery.ui.widget.js');
