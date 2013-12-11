@@ -1,43 +1,42 @@
 <?php
-$lang['Not authorized for the action to take'] = 'Not authorized for the action to take';
-$lang['The page you requested does not exist'] = 'The page you requested does not exist';
-$lang['Please complete the field "%s"'] = 'Please complete the field "%s"';
-$lang['Please enter a valid email address'] = 'Please enter a valid email address';
-$lang['Please enter a valid number in the field "%s"'] = 'Please enter a valid number in the field "%s"';
-$lang['The email or password you entered are incorrect'] = 'The email or password you entered are incorrect';
-$lang['The email entered already exists in the database'] = 'The email entered already exists in the database';
-$lang['The name entered already exists in the database'] = 'The name entered already exists in the database';
+$lang['Not authorized for the action to take'] = 'Não autorizado para a ação a ser tomada';
+$lang['The page you requested does not exist'] = 'A página solicitada não existe';
+$lang['Please complete the field "%s"'] = 'Por favor, preencha o campo "%s"';
+$lang['Please enter a valid email address'] = 'Por favor insira um endereço de e-mail válido';
+$lang['Please enter a valid number in the field "%s"'] = 'Por favor insira um número válido no campo "%s"';
+$lang['The email or password you entered are incorrect'] = 'O e-mail ou password que introduziu estão incorrectos';
+$lang['The email entered already exists in the database'] = 'O e-mail já existe no banco de dados';
+$lang['The name entered already exists in the database'] = 'O nome já existe no banco de dados';
 
-$lang['Cancel'] = 'Cancel';
-$lang['Close'] = 'Close';
-$lang['Save'] = 'Save';
-$lang['loading ...'] = 'loading ...';
-$lang['Are you sure?'] = 'Are you sure?';
-$lang['User'] = 'User';
+$lang['Cancel'] = 'Cancelar';
+$lang['Close'] = 'Fechar';
+$lang['Save'] = 'Salvar';
+$lang['loading ...'] = 'carregamento ...';
+$lang['Are you sure?'] = 'Você tem certeza?';
+$lang['User'] = 'Usuário';
 $lang['DATE_FORMAT'] = 'mm/dd/yyyy';
 $lang['MOMENT_DATE_FORMAT'] = 'MM/DD/YYYY';
 $lang['NUMBER_DEC_SEP'] = '.';
 $lang['NUMBER_THOUSANDS_SEP'] = ',';
 
 
-$lang['search'] = 'search';
-$lang['Search'] = 'Search';
-$lang['No results'] = 'No results';
-$lang['Borrar'] = 'Borrar';
-$lang['%s rows'] = '%s rows';
-$lang['Add'] = 'Add';
-$lang['Edit pictures'] = 'Edit pictures';
-$lang['Add File'] = 'Add File';
-$lang['Add photos'] = 'Add photos';
-$lang['Back'] = 'Back';
-$lang['Delete'] = 'Delete';
-$lang['Filter'] = 'Filter';
+$lang['search'] = 'pesquisa';
+$lang['Search'] = 'Pesquisa';
+$lang['No results'] = 'nenhum resultado';
+$lang['%s rows'] = 'linhas %s';
+$lang['Add'] = 'Adicionar';
+$lang['Edit pictures'] = 'Editar imagens';
+$lang['Add File'] = 'Adicionar arquivo';
+$lang['Add photos'] = 'Adicionar fotos';
+$lang['Back'] = 'Voltar';
+$lang['Delete'] = 'Eliminar';
+$lang['Filter'] = 'Filtro';
 
 
-$lang['Signup'] = 'Signup';
-$lang['Profile'] = 'Profile';
+$lang['Signup'] = 'Registre-se';
+$lang['Profile'] = 'Perfil';
 $lang['Login'] = 'Login';
-$lang['Logout'] = 'Logout';
+$lang['Logout'] = 'Sair';
 $lang['Language'] = 'Language';
 $lang['English'] = 'English';
 $lang['Spanish'] = 'Spanish';

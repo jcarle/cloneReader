@@ -20,7 +20,6 @@ $lang['loading ...'] = 'procesando ...';
 $lang['search'] = 'buscar';
 $lang['Search'] = 'Buscar';
 $lang['No results'] = 'No hay resultados';
-$lang['Borrar'] = 'Delete';
 $lang['%s rows'] = '%s registros';
 $lang['Add'] = 'Agregar';
 $lang['Edit pictures'] = 'Editar fotos';

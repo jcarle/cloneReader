@@ -23,7 +23,6 @@ $lang['NUMBER_THOUSANDS_SEP'] = ',';
 $lang['search'] = 'search';
 $lang['Search'] = 'Search';
 $lang['No results'] = 'No results';
-$lang['Borrar'] = 'Borrar';
 $lang['%s rows'] = '%s rows';
 $lang['Add'] = 'Add';
 $lang['Edit pictures'] = 'Edit pictures';
