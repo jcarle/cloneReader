@@ -49,7 +49,7 @@ function initLang() {
 		'en' => 'english',
 		'es' => 'spanish',
 		'de' => 'deutsch',
-		'pt' => 'portuguese-br',
+		'pt' => 'portuguese',
 	);
 	
 	$langId = $CI->session->userdata('langId');
