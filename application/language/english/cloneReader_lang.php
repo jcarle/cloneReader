@@ -8,15 +8,6 @@ $lang['Import'] = 'Import';
 $lang['Import feeds'] = 'Import feeds';
 $lang['Import starred'] = 'Import starred';
 
-$lang['Rss'] = 'Rss';
-$lang['Edit feeds'] = 'Edit feeds';
-$lang['Edit entries'] = 'Edit entries';
-$lang['Edit tags'] = 'Edit tags';
-$lang['Edit news'] = 'Edit news';
-$lang['Import'] = 'Import';
-$lang['Import feeds'] = 'Import feeds';
-$lang['Import starred'] = 'Import starred';
-
 $lang['@tag-all'] = 'Subscriptions';
 $lang['@tag-star'] = 'Starred';
 $lang['@tag-browse'] = 'Browse';

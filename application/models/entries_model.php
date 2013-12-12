@@ -481,7 +481,7 @@ class Entries_Model extends CI_Model {
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND (feeds.langId IS NULL OR feeds.langId = \''.$this->session->userdata('langId').'\')
+						AND feeds.langId = \''.$this->session->userdata('langId').'\'
 						ORDER BY countTotal DESC LIMIT 50
 					) AS tmp
 					ORDER BY tagName ';
@@ -497,7 +497,7 @@ class Entries_Model extends CI_Model {
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE tags.tagId = '.(INT)$tagId.'
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND (feeds.langId IS NULL OR feeds.langId = \''.$this->session->userdata('langId').'\')
+						AND feeds.langId = \''.$this->session->userdata('langId').'\'
 						ORDER BY feedName ASC LIMIT 50 ';	
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());   die;			
@@ -759,6 +759,7 @@ class Entries_Model extends CI_Model {
 	
 	function processTagBrowse() {
 		set_time_limit(0);
+
 		
 		// Completo datos en la tabla tags y feeds_tags, basado en los tags de cada entry, y en como tageo cada user un feed.
 		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
