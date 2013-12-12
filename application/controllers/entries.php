@@ -209,20 +209,31 @@ class Entries extends CI_Controller {
 	}
 
 	function addFeed() {
+		$feedUrl = $this->input->post('feedUrl');
+		
 		$this->load->spark('ci-simplepie/1.0.1/');
-		$this->cisimplepie->set_feed_url($this->input->post('feedUrl'));
+		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
 		if ($this->cisimplepie->error() != '' ) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> $this->cisimplepie->error(),
-			));			
+			
+			$feedUrl = $this->cisimplepie->subscribe_url(); // trato de obtener el rss de la url
+			$this->cisimplepie->set_feed_url($feedUrl);
+			$this->cisimplepie->enable_cache(false);
+			$this->cisimplepie->init();
+			$this->cisimplepie->handle_content_type();
+			if ($this->cisimplepie->error() != '' ) {
+				return $this->load->view('ajax', array(
+					'code'		=> false,
+					'result' 	=> $this->cisimplepie->error(),
+				));			
+			}
 		}
+		
 
 		$userId = (int)$this->session->userdata('userId');
-		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $this->input->post('feedUrl')));
+		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
 		$this->Entries_Model->getNewsEntries($userId, $feedId);
 		$this->Entries_Model->saveEntriesTagByUser($userId, $feedId);
 
