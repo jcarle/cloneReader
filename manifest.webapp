@@ -37,7 +37,7 @@
       "developer": {
         "url": "http://www.jcarle.com.ar"
       }
-    } ,
+    },
     "pt": {
       "description": "Clone do google reader. Reader of feeds, rss. Responsive. Desenvolvido por codeigniter, simplepie, jquery, bootstrap",
       "developer": {
