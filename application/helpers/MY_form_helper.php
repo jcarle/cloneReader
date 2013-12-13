@@ -182,11 +182,11 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, $sTmp);
 				break;		
 			case 'checkbox':
-				//$aFields[] = sprintf($sField, form_checkbox($name, 'on', $field['checked']));
-				
 				$aFields[] = '
 					<fieldset class="form-group">
-						<div class=" col-sm-offset-3 col-sm-9 col-md-offset-3 col-md-9  col-lg-offset-3 col-lg-9 ">
+						<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 ">
+						</div>
+						<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 ">
 							<div class="checkbox" >
 								<label>
 									'.form_checkbox($name, 'on', $field['checked']).' '. element('label', $field) .' 
