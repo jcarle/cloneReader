@@ -29,6 +29,7 @@ $lang['Add photos'] = 'Agregar fotos';
 $lang['Back'] = 'Volver';
 $lang['Delete'] = 'Eliminar';
 $lang['Filter'] = 'Filtrar';
+$lang['Sort'] = 'Ordenar';
 $lang['Are you sure?'] = 'Está seguro?';
 $lang['User'] = 'Usuario';
 

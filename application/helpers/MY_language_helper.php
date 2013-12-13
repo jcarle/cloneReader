@@ -46,10 +46,10 @@ function initLang() {
 	$CI = &get_instance();
 	
 	$languages = array(
-		'en' => 'english',
-		'es' => 'spanish',
-		'de' => 'deutsch',
-		'pt' => 'portuguese',
+		'en' 		=> 'english',
+		'es'	 	=> 'spanish',
+		'de' 		=> 'deutsch',
+		'pt-br' 	=> 'portuguese-br',
 	);
 	
 	$langId = $CI->session->userdata('langId');

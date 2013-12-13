@@ -204,10 +204,10 @@ function renderMenu($aMenu, $className = null){
 		}
 		
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li> <a href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
+			$sTmp .= '	<li> <a title="'.$CI->lang->line($aMenu[$i]['label']).'" href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
 		}
 		else {
-			$sTmp .= '	<li> <a>'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
+			$sTmp .= '	<li> <a title="'.$CI->lang->line($aMenu[$i]['label']).'">'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
 		} 	
 		
 		if (count($aMenu[$i]['childs']) > 0) {			

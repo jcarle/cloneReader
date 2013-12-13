@@ -203,7 +203,7 @@ cloneReader = {
 				</li> \
 				<li> \
 					<div class="btn-group filterSort" > \
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Sort" > \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="' + _msg['Sort'] + '" > \
 							<span/> \
 							<span class="caret" /> \
 						</button> \

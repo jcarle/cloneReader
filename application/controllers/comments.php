@@ -42,6 +42,8 @@ class Comments extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($commentId, false);
+		
+		
 
 		$this->form_validation->set_rules($form['rules']);
 		$this->form_validation->set_message($form['messages']);
@@ -146,6 +148,17 @@ class Comments extends CI_Controller {
 			),			
 		);	
 		
+		if ((int)element('commentId', $data) > 0) {
+			$form['urlDelete'] = base_url('comments/delete/');
+		}
+		
 		return $form;				
+	}
+
+	function delete() {
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Comments_Model->delete($this->input->post('commenId')), 
+			'result' 	=> validation_errors() 
+		));	
 	}	
 }

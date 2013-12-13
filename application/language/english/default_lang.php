@@ -32,7 +32,7 @@ $lang['Add photos'] = 'Add photos';
 $lang['Back'] = 'Back';
 $lang['Delete'] = 'Delete';
 $lang['Filter'] = 'Filter';
-
+$lang['Sort'] = 'Sort';
 
 $lang['Signup'] = 'Signup';
 $lang['Profile'] = 'Profile';

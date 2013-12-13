@@ -4,7 +4,7 @@ $lang['The page you requested does not exist'] = 'A página solicitada não exis
 $lang['Please complete the field "%s"'] = 'Por favor, preencha o campo "%s"';
 $lang['Please enter a valid email address'] = 'Por favor insira um endereço de e-mail válido';
 $lang['Please enter a valid number in the field "%s"'] = 'Por favor insira um número válido no campo "%s"';
-$lang['The email or password you entered are incorrect'] = 'O e-mail ou password que introduziu estão incorrectos';
+$lang['The email or password you entered are incorrect'] = 'O e-mail ou senha que introduziu estão incorrectos';
 $lang['The email entered already exists in the database'] = 'O e-mail já existe no banco de dados';
 $lang['The name entered already exists in the database'] = 'O nome já existe no banco de dados';
 
@@ -12,7 +12,7 @@ $lang['Cancel'] = 'Cancelar';
 $lang['Close'] = 'Fechar';
 $lang['Save'] = 'Salvar';
 $lang['Send'] = 'Enviar';
-$lang['loading ...'] = 'processando ...';
+$lang['loading ...'] = 'carregando ...';
 $lang['Are you sure?'] = 'Você tem certeza?';
 $lang['User'] = 'Usuário';
 $lang['DATE_FORMAT'] = 'mm/dd/yyyy';
@@ -32,7 +32,7 @@ $lang['Add photos'] = 'Adicionar fotos';
 $lang['Back'] = 'Voltar';
 $lang['Delete'] = 'Eliminar';
 $lang['Filter'] = 'Filtro';
-
+$lang['Sort'] = 'Ordem';
 
 $lang['Signup'] = 'Registre-se';
 $lang['Profile'] = 'Perfil';
@@ -43,7 +43,7 @@ $lang['Language'] = 'Idioma';
 $lang['English'] = 'Inglês';
 $lang['Spanish'] = 'Espanhol';
 $lang['Portuguese'] = 'Português';
-$lang['Settings'] = 'Configurações';
+$lang['Settings'] = 'Configurar';
 $lang['System'] = 'Sistema';
 $lang['Edit users'] = 'Edite os usuários';
 $lang['Edit controllers'] = 'Editar controladores';
@@ -53,7 +53,7 @@ $lang['Edit comments'] = 'Editar comentários';
 
 
 $lang['Email'] = 'E-mail';
-$lang['Password'] = 'Password';
+$lang['Password'] = 'Senha';
 $lang['Facebook Login'] = 'Facebook Login';
 $lang['Google Login'] = 'Google Login';
 $lang['First Name'] = 'Nome';

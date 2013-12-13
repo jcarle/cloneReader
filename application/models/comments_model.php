@@ -54,5 +54,10 @@ class Comments_Model extends CI_Model {
 				->get('comments')->row_array();
 		//pr($this->db->last_query());				
 		return $query;		
-	}	
+	}
+	
+	function delete($commentId) {
+		$this->db->delete('comments', array('commentId' => $commentId));
+		return true;
+	}
 }
