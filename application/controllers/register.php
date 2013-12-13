@@ -20,7 +20,7 @@ class Register extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmRegister',
 			'messages'	 	=> getCrFormRulesMessages(),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Register').'</button>'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> '.$this->lang->line('Register').'</button>'),
 			'fields'		=> array(
 				'userEmail' => array(
 					'type'	=> 'text',
