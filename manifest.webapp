@@ -31,6 +31,18 @@
       "developer": {
         "url": "http://www.jcarle.com.ar"
       }
-    }
+    },
+    "es": {
+      "description": "Clon de google reader. Lector de feeds, rss, noticias. Responsive. Desarrrollado con codeigniter, simplepie, jquery, bootstrap",
+      "developer": {
+        "url": "http://www.jcarle.com.ar"
+      }
+    } ,
+    "pt": {
+      "description": "Clone do google reader. Reader of feeds, rss. Responsive. Desenvolvido por codeigniter, simplepie, jquery, bootstrap",
+      "developer": {
+        "url": "http://www.jcarle.com.ar"
+      }
+    }       
   }
 }
