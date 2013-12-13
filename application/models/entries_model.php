@@ -529,7 +529,7 @@ class Entries_Model extends CI_Model {
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
-//->where('feeds.feedId IN (530)')			
+//->where('feeds.feedId IN (530)')
 			->order_by('feedLastScan ASC');
 
 		if (is_null($userId) == false) {
@@ -574,13 +574,9 @@ class Entries_Model extends CI_Model {
 		
 		$langId		= null;
 		$countryId 	= null;
-		$language 	= $this->cisimplepie->get_language();
-		$aLocale = explode('-', $language);
-		if (strlen($language) == 2) {
-			$langId = $language;
-		}
-		else if (count($aLocale) == 2) {
-			$langId		= strtolower($aLocale[0]);
+		$langId 	= strtolower($this->cisimplepie->get_language());
+		$aLocale 	= explode('-', $langId);
+		if (count($aLocale) == 2) {
 			$countryId 	= strtolower($aLocale[1]);
 		}
 			
