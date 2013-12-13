@@ -299,6 +299,9 @@
 			.done($.proxy(
 				function(response) {
 					if (this.options.callback != null) {
+						if (typeof this.options.callback == 'string') {
+							eval('this.options.callback = ' + this.options.callback);
+						}
 						this.options.callback(response);
 						return;
 					}

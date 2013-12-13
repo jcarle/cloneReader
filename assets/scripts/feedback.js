@@ -1,20 +1,12 @@
 $.Feedback = {
-	init: function() { 
-
-//		var options	 	= $('#frmCommentEdit').jForm('options');
-//		options.callback = $.proxy(function(response) { this.onSaveFeedback(); }, this);
-		
-//			'frmId'		=> 'frmCommentEdit',
-//			'callback' 	=> 'function(response) { $.Feedback.onSaveFeedback(); };',
-		
-		
-	},
+	init: function() { 	},
 	
 	onSaveFeedback: function() {
-		alert('aasdfa sdf');
+		var $alert = $('<div class="alert alert-success"> <strong>' + _msg['Thanks for contacting us'] + ' </strong> </div>');
+		$('#frmCommentEdit')
+			.hide()
+			.parent().append($alert);
+			
+		$alert.hide().fadeIn();
 	}
 };
-
-$(document).ready(function() {
-	$.Feedback.init();
-});	

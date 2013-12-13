@@ -101,3 +101,4 @@ $lang['Exchange rate'] =  'Exchange rate';
 $lang['Remote login'] = 'Remote login';
 $lang['Record date'] = 'Record date';
 $lang['Comment'] = 'Comment';
+$lang['Thanks for contacting us'] = 'Thanks for contacting us';

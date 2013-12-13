@@ -95,3 +95,4 @@ $lang['Exchange rate'] =  'Tipo de cambio';
 $lang['Remote login'] = 'Login remoto';
 $lang['Record date'] = 'Fecha de registro';
 $lang['Comment'] = 'Comentario';
+$lang['Thanks for contacting us'] = 'Gracias por contactar con nosotros';

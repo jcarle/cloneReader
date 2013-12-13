@@ -27,6 +27,7 @@ class Feedback extends CI_Controller {
 
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
+			'callback' 	=> 'function(response) { $.Feedback.onSaveFeedback(); };',
 			'messages' 	=> getCrFormRulesMessages(),
 			'fields' => array( 
 				'commentId' => array(
@@ -84,7 +85,8 @@ class Feedback extends CI_Controller {
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Feedback'),
 			'form'		=> $form,
-			'aJs'		=> array('feedback.js')
+			'aJs'		=> array('feedback.js'),
+			'langs'		=> array( 'Thanks for contacting us' )
 		));		
 	}
 }

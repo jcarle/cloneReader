@@ -14,11 +14,9 @@ class Comments_Model extends CI_Model {
 		$commentId = $data['commentId'];
 		
 		$values = array(
-			'commentDesc'	=> $data['commentDesc'],
 			'userId'		=> element('userId', $data),
 			'commentDesc' 	=> element('commentDesc', $data),
 			'commentDate' 	=> element('commentDate', $data),
-			'commentScore' 	=> element('commentScore', $data)
 		);
 		
 		if ((int)$commentId != 0) {		
@@ -30,12 +28,8 @@ class Comments_Model extends CI_Model {
 			$commentId = $this->db->insert_id();
 		}
 		
-		
 		$this->db->where('commentId', $commentId);
-		$result = $this->db->delete('excursions_comments');
-		if ((int)$data['userId'] > 0) {
-			$this->db->insert('excursions_comments', array('commentId' => $commentId, 'excursionId' => $data['excursionId']));			
-		}
+
 		return true;
 	}	
 	
