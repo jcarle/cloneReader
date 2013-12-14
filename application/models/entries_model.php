@@ -481,7 +481,7 @@ class Entries_Model extends CI_Model {
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND feeds.langId LIKE \''.$this->session->userdata('langId').'%\'
+						AND feeds.langId LIKE \''.substr($this->session->userdata('langId'), 0, 2).'%\'
 						ORDER BY countTotal DESC LIMIT 50
 					) AS tmp
 					ORDER BY tagName ';
@@ -497,7 +497,7 @@ class Entries_Model extends CI_Model {
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE tags.tagId = '.(INT)$tagId.'
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND feeds.langId LIKE \''.$this->session->userdata('langId').'%\'
+						AND feeds.langId LIKE \''.substr($this->session->userdata('langId'), 0, 2).'%\'
 						ORDER BY feedName ASC LIMIT 50 ';	
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());   die;			
