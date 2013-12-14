@@ -451,7 +451,7 @@ cloneReader = {
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 
-		$('<label><i /></label>').addClass('star').appendTo($header);
+		$('<label title="' + _msg['Star'] + '"><i /></label>').addClass('star').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
 					
 		
@@ -479,7 +479,7 @@ cloneReader = {
 
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 
-		$('<label class="star checkbox" > <i/> </label>').appendTo($footer);
+		$('<label class="star checkbox" title="' + _msg['Star'] + '" > <i/> </label>').appendTo($footer);
 		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
 		
 		var aSocial = [

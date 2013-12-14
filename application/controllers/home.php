@@ -39,6 +39,7 @@ class Home extends CI_Controller {
 					'From %s by %s',
 					'Subscribe',
 					'Sort',
+					'Star',
 				)
 			)
 		);
