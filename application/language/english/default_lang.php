@@ -102,3 +102,5 @@ $lang['Remote login'] = 'Remote login';
 $lang['Record date'] = 'Record date';
 $lang['Comment'] = 'Comment';
 $lang['Thanks for contacting us'] = 'Thanks for contacting us';
+$lang['Last access'] = 'Last access';
+$lang['Fix language'] = 'Fix language';

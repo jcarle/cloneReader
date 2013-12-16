@@ -1,6 +1,13 @@
 <?php
 class Feeds_Model extends CI_Model {
 	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null){
+		$languages = null;
+		if ($langId != null) { // Busca lenguages relacionados: si el filtro esta seteado en 'en', trae resultados con 'en-us', 'en-uk', etc tambien
+			// TODO: poner un ckeckbox para definir si queres aplicar el filtro asi o no
+			$this->load->model('Languages_Model');
+			$languages = $this->Languages_Model->getRelatedLangs($langId);
+		}
+				
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastScan, feedLastEntryDate', false)
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
@@ -15,8 +22,8 @@ class Feeds_Model extends CI_Model {
 		if ($countryId != null) {
 			$this->db->where('feeds.countryId', $countryId);
 		}
-		if ($langId != null) {
-			$this->db->where('feeds.langId', $langId);
+		if ($languages != null) {
+			$this->db->where('feeds.langId IN (\''.implode('\', \'', $languages).'\')' );
 		}
 		if ($tagId != null) {
 			$this->db->join('feeds_tags', 'feeds_tags.feedId = feeds.feedId', 'inner');
@@ -58,6 +65,7 @@ class Feeds_Model extends CI_Model {
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
 			'feedSuggest'		=> (element('feedSuggest', $data) == 'on'),
+			'fixLocale'			=> (element('fixLocale', $data) == 'on'),
 		);
 		
 		if (isset($data['feedName'])) {
@@ -138,4 +146,11 @@ class Feeds_Model extends CI_Model {
 			->order_by('text')
 			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
 	}	
+	
+	function saveFeedIcon($feedId) {
+		$feed = $this->get($feedId);
+		$this->load->model('Entries_Model');
+		$this->Entries_Model->saveFeedIcon($feed['feedId'], $feed['feedLink'], null);
+		return true;
+	}
 }

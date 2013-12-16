@@ -44,3 +44,5 @@ $lang['Show in "%s" tag?'] = 'Mostrar na "%s" tag?';
 $lang['Only feed suggest'] = 'Apenas alimentar sugerem';
 $lang['Scan'] = 'Scanear';
 $lang['Star'] = 'Favorito';
+$lang['Fix language'] = 'Fix idioma';
+$lang['Download icon'] = 'Download icon';

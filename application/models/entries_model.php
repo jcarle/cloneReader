@@ -475,13 +475,16 @@ class Entries_Model extends CI_Model {
 	}	
 	
 	function browseTags($userId) {
+		$this->load->model('Languages_Model');
+		$languages = $this->Languages_Model->getRelatedLangs($this->session->userdata('langId'));
+		
 		$query = ' SELECT * FROM (
 						SELECT DISTINCT tags.tagId, tagName, countTotal
 						FROM tags 
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND feeds.langId LIKE \''.substr($this->session->userdata('langId'), 0, 2).'%\'
+						AND feeds.langId IN (\''.implode('\' , \'', $languages).'\')
 						ORDER BY countTotal DESC LIMIT 50
 					) AS tmp
 					ORDER BY tagName ';
@@ -491,13 +494,16 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function browseFeedsByTagId($userId, $tagId) {
+		$this->load->model('Languages_Model');
+		$languages = $this->Languages_Model->getRelatedLangs($this->session->userdata('langId'));
+				
 		$query = ' SELECT DISTINCT feeds.feedId, feedName, feedUrl, feedLink, feeds.feedIcon, feedDescription
 						FROM tags 
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
 						WHERE tags.tagId = '.(INT)$tagId.'
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
-						AND feeds.langId LIKE \''.substr($this->session->userdata('langId'), 0, 2).'%\'
+						AND feeds.langId IN (\''.implode('\' , \'', $languages).'\')
 						ORDER BY feedName ASC LIMIT 50 ';	
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());   die;			
@@ -525,7 +531,7 @@ class Entries_Model extends CI_Model {
 		set_time_limit(0);
 		
 		$this->db
-			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon', false)
+			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
@@ -542,13 +548,13 @@ class Entries_Model extends CI_Model {
 		$query = $this->db->get('feeds');
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {
-			$this->parseRss($row->feedId, $row->feedUrl);
+			$this->parseRss($row->feedId, $row->feedUrl, $row->fixLocale);
 			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
 		}
 	}		
 
 	// TODO: mover estos metodos de aca
-	function parseRss($feedId, $feedUrl) {
+	function parseRss($feedId, $feedUrl, $fixLocale = false) {
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
 			->select('feedLastEntryDate, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
@@ -574,10 +580,12 @@ class Entries_Model extends CI_Model {
 		
 		$langId		= null;
 		$countryId 	= null;
-		$langId 	= strtolower($this->cisimplepie->get_language());
-		$aLocale 	= explode('-', $langId);
-		if (count($aLocale) == 2) {
-			$countryId 	= strtolower($aLocale[1]);
+		if ($fixLocale == false) {
+			$langId 	= strtolower($this->cisimplepie->get_language());
+			$aLocale 	= explode('-', $langId);
+			if (count($aLocale) == 2) {
+				$countryId 	= strtolower($aLocale[1]);
+			}
 		}
 			
 		$rss = $this->cisimplepie->get_items();

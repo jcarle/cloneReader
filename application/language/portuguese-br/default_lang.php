@@ -100,3 +100,4 @@ $lang['Remote login'] = 'Remote login';
 $lang['Record date'] = 'Data de registro';
 $lang['Comment'] = 'Comentário';
 $lang['Thanks for contacting us'] = 'Obrigado por entrar em contato conosco';
+$lang['Last access'] = 'Último acesso';

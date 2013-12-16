@@ -48,7 +48,6 @@ function initLang() {
 	$languages = array(
 		'en' 		=> 'english',
 		'es'	 	=> 'spanish',
-		'de' 		=> 'deutsch',
 		'pt-br' 	=> 'portuguese-br',
 	);
 	

@@ -254,6 +254,10 @@ function renderCrFormFields($form) {
 					</div>
 				');
 				break;
+			case 'logo':
+				// TODO: mejorar este field, agregar el btn upload, etc
+				$aFields[] = sprintf($sField, '<img src="'.$field['value'].'" />');				
+				break;
 		}	
 	}	
 	

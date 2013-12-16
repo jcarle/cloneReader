@@ -44,3 +44,4 @@ $lang['Show in "%s" tag?'] = 'Show in "%s" tag?';
 $lang['Only feed suggest'] = 'Only feed suggest';
 $lang['Scan'] = 'Scanear';
 $lang['Star'] = 'Star';
+$lang['Download icon'] = 'Download icon';

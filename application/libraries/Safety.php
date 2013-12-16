@@ -35,6 +35,8 @@ class Safety {
 			'langId'	=> $row->langId,
 		));		
 		
+		$CI->Users_Model->updateUserLastAccess();
+		
 		return true;
 	}
 	

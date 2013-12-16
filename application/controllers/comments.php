@@ -157,7 +157,7 @@ class Comments extends CI_Controller {
 
 	function delete() {
 		return $this->load->view('ajax', array(
-			'code'		=> $this->Comments_Model->delete($this->input->post('commenId')), 
+			'code'		=> $this->Comments_Model->delete($this->input->post('commentId')), 
 			'result' 	=> validation_errors() 
 		));	
 	}	

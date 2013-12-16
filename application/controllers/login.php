@@ -107,6 +107,8 @@ class Login extends CI_Controller {
 			'langId'  		=> $user->langId,
 		));		
 		
+		$this->Users_Model->updateUserLastAccess();
+		
 		return $this->load->view('ajax', array(
 			'code'		=> true, 
 			'result' 	=> '' 

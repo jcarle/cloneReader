@@ -165,6 +165,12 @@ class Feeds extends CI_Controller {
 					'label'		=> $this->lang->line('Name'), 
 					'value'		=> element('feedName', $data)
 				),
+				'feedIcon' => array(
+					'type'		=> 'logo',
+					'label'		=> 'Icon', //$this->lang->line('Icon'), 
+					'value'		=> (element('feedIcon', $data) == null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.element('feedIcon', $data)), 
+					
+				),
 				'feedDescription' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Description'), 
@@ -223,6 +229,12 @@ class Feeds extends CI_Controller {
 					'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('@tag-browse')),
 					'checked'		=> element('feedSuggest', $data),
 				),
+				'fixLocale' => array(
+					'type' 			=> 'checkbox',
+					'label'			=> sprintf($this->lang->line('Fix language')),
+					'checked'		=> element('fixLocale', $data),
+				),
+				
 			),
 		);
 
@@ -230,7 +242,10 @@ class Feeds extends CI_Controller {
 		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';
-			$form['buttons'][] = '<button type="button" class="btn btn-info" onclick="$.Feeds.scanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.scanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
+			
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="icon-picture"></i> '.$this->lang->line('Download icon').' </button>';
+			
 		}
 		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> '.$this->lang->line('Save').' </button> ';	
 		
@@ -257,6 +272,16 @@ class Feeds extends CI_Controller {
 			'result' 	=> $this->Feeds_Model->scan($feedId)
 		));				
 	}
+	
+	function saveFeedIcon($feedId) {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+				
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> $this->Feeds_Model->saveFeedIcon($feedId)
+		));				
+	}	
+	
 
 	function search() { // TODO: implementar la seguridad!
 		return $this->load->view('ajax', array(

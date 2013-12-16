@@ -50,10 +50,16 @@ class Users_Model extends CI_Model {
 			->get('users');
 		return $query->row();
 	}
+
+	function updateUserLastAccess() {
+		$this->db
+			->where('userId', $this->session->userdata('userId'))
+			->update('users', array('userLastAccess' => date("Y-m-d H:i:s")));		
+	}
 	
 	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null ){
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
+			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
 			->join('countries', 'users.countryId = countries.countryId', 'left')
 			->join('languages', 'users.langId = languages.langId', 'left')
 			->join('users_groups', 'users.userId = users_groups.userId', 'left')
