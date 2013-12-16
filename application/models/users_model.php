@@ -26,15 +26,17 @@ class Users_Model extends CI_Model {
 		);		
 
 		// no existe, lo creo
-		$query = $this->db
-			->where('userEmail', $userEmail)
-			->get('users');
-		
-		if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
-			$this->db
+		if (trim($userEmail) != '') {
+			$query = $this->db
 				->where('userEmail', $userEmail)
-				->update('users', $values);
-			return $query->row();
+				->get('users');
+			
+			if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
+				$this->db
+					->where('userEmail', $userEmail)
+					->update('users', $values);
+				return $query->row();
+			}
 		}
 
 		// creo el usuario
