@@ -533,7 +533,7 @@ class Entries_Model extends CI_Model {
 			$this->load->spark('curl/1.2.1');
 			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
 			$parse 			= parse_url($feedLink);
-			$feedIcon 	= $parse['host'].'.png'; 
+			$feedIcon 		= $parse['host'].'.png'; 
 			file_put_contents('./assets/favicons/'.$feedIcon, $img);
 			$this->db->update('feeds', array('feedIcon' => $feedIcon), array('feedId' => $feedId));	
 		}				
@@ -664,6 +664,15 @@ class Entries_Model extends CI_Model {
 		}
 
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
+		
+		
+		$this->cisimplepie->__destruct();
+		unset($rss);
+		unset($item);
+		unset($feed);
+		unset($categories);
+		
+echo "Memory usage: " . number_format(memory_get_usage());				
 	}
 	
 	function populateMillionsEntries() {
