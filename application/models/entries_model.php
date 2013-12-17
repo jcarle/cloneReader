@@ -203,6 +203,8 @@ class Entries_Model extends CI_Model {
 	}
 
 	function getEntryIdByEntryUrl($entryUrl) {
+		$entryUrl = substr(trim($entryUrl), 0, 255);
+		
 		$result = $this->db
 				->where('entryUrl', $entryUrl)
 				->get('entries')->row_array();
