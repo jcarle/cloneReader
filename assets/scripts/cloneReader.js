@@ -131,7 +131,7 @@ cloneReader = {
 		if (this.aFilters.viewType == 'list') {
 			return;
 		}
-		if (this.$ulEntries.find('li.selected').length && this.$ulEntries.scrollTop() == 0) { 
+		if (this.$ulEntries.find('li.selected').length == 0 && this.$ulEntries.scrollTop() == 0) { 
 			return;
 		}
 		if (this.$ulEntries.is(':animated') == true) {
