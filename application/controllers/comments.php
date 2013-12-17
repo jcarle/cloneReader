@@ -27,7 +27,7 @@ class Comments extends CI_Controller {
 				'controller'	=> strtolower(__CLASS__),
 				'columns'		=> array(
 					'commentDesc'		=> $this->lang->line('Description'),
-					'commentDate'		=> $this->lang->line('Date'),
+					'commentDate'		=> array('class' => 'datetime', 'value' => $this->lang->line('Date')),
 					'commentUserName'	=> $this->lang->line('Name'), 
 					'commentUserEmail'	=> $this->lang->line('Email'),
 				),
