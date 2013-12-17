@@ -11,7 +11,7 @@ class Users_Model extends CI_Model {
 	function loginRemote($userEmail, $userLastName, $userFirstName, $provider, $remoteUserId) {
 		
 		$fieldName = ($provider == 'facebook' ? 'facebookUserId' : 'googleUserId');
-		
+
 		$query = $this->db
 			->where($fieldName, $remoteUserId)
 			->get('users');
@@ -25,24 +25,25 @@ class Users_Model extends CI_Model {
 			$fieldName			=> $remoteUserId, 
 		);		
 
-		// no existe, lo creo
-		if (trim($userEmail) != '') {
-			$query = $this->db
-				->where('userEmail', $userEmail)
-				->get('users');
-			
-			if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
-				$this->db
-					->where('userEmail', $userEmail)
-					->update('users', $values);
-				return $query->row();
-			}
+		if (trim($userEmail) == '') {
+			$userEmail = null;
 		}
+		
+		$query = $this->db
+			->where('userEmail', $userEmail)
+			->get('users');
+		if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
+			$this->db
+				->where('userId', $query->row()->userId)
+				->update('users', $values);
+				return $query->row();
+		}
+
 
 		// creo el usuario
 		$values['userEmail'] 	= $userEmail;
 		$values['userDateAdd'] 	= date("Y-m-d H:i:s");
-		$this->db->insert('users', $values);			
+		$this->db->insert('users', $values);
 		$userId = $this->db->insert_id();
 
 		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));			
