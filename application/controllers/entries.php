@@ -235,7 +235,11 @@ class Entries extends CI_Controller {
 		$userId = (int)$this->session->userdata('userId');
 		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
 		$this->Entries_Model->getNewsEntries($userId, $feedId);
-		$this->Entries_Model->saveEntriesTagByUser($userId, $feedId);
+		
+		// primero guardo todas las novedades en el usuario, ya que puede cambiar el MAX(entryId) al guardar el nuevo, y perderse entries
+		$this->Entries_Model->saveEntriesTagByUser($userId);
+		// guardo las entries en el user
+		$this->Entries_Model->saveUserEntries($userId, $feedId);		
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
@@ -266,7 +270,10 @@ class Entries extends CI_Controller {
 		$userId = (int)$this->session->userdata('userId');
 		$result = $this->Entries_Model->subscribeFeed($feedId, $userId);
 
-		$this->Entries_Model->saveEntriesTagByUser($userId, $feedId);
+		// primero guardo todas las novedades en el usuario, ya que puede cambiar el MAX(entryId) al guardar el nuevo, y perderse entries
+		$this->Entries_Model->saveEntriesTagByUser($userId);
+		// guardo las entries en el user
+		$this->Entries_Model->saveUserEntries($userId, $feedId);
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,

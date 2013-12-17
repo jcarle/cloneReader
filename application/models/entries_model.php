@@ -14,7 +14,7 @@ class Entries_Model extends CI_Model {
 		}
 			
 		$query = $this->db->order_by('entries.entryId')
-		 	->get('entries ', $num, $offset);
+		 	->get('entries FORCE INDEX ( PRIMARY ) ', $num, $offset);
 
 		//pr($this->db->last_query()); die;
 
@@ -476,6 +476,16 @@ class Entries_Model extends CI_Model {
 		return true;		
 	}	
 	
+	function saveUserEntries($userId, $feedId) {
+		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 		
+						SELECT '.$userId.', entries.entryId, entries.feedId, '.TAG_ALL.', FALSE , entries.entryDate
+						FROM entries 
+						WHERE feedId = '.$feedId.'
+						ORDER BY entryId DESC
+						LIMIT 100 '; // TODO: meter en una constante!
+		$this->db->query($query);
+	}
+	
 	function browseTags($userId) {
 		$this->load->model('Languages_Model');
 		$languages = $this->Languages_Model->getRelatedLangs($this->session->userdata('langId'));
@@ -701,22 +711,19 @@ class Entries_Model extends CI_Model {
 		}
 	}
 	
-	function saveEntriesTagByUser($userId, $feedId = null) {
+	function saveEntriesTagByUser($userId) {
 		// TODO: paginar este proceso para que guarde TODAS las entradas nuevas sin tener que relodear
 		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
 		$entryId 	= null;
-		$limit 		= 100000;
+		$limit 		= 1000;
 		
 		$query = ' SELECT
 						MAX(entryId) AS entryId
 						FROM  users_entries  
-						WHERE userId  = '.$userId.' ';
-		if ($feedId != null) {
-// TODO: filtrar por fecha en este caso, asi si el tipo se subscribe por primera vez no le guarda entradas de hace 700 años			
-			$query .= ' AND feedId = '.$feedId;
-		}
+						WHERE userId  	= '.$userId.' 
+						AND   tagId 	= '.TAG_ALL;
 		$query = $this->db->query($query)->result_array();
-		//pr($this->db->last_query());	
+		//pr($this->db->last_query()); die;
 		if (!empty($query)) {
 			$entryId = $query[0]['entryId'];
 		}		
