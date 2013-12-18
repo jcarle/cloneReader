@@ -29,14 +29,16 @@ class Users_Model extends CI_Model {
 			$userEmail = null;
 		}
 		
-		$query = $this->db
-			->where('userEmail', $userEmail)
-			->get('users');
-		if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
-			$this->db
-				->where('userId', $query->row()->userId)
-				->update('users', $values);
-				return $query->row();
+		if ($userEmail != null) {
+			$query = $this->db
+				->where('userEmail', $userEmail)
+				->get('users');
+			if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
+				$this->db
+					->where('userId', $query->row()->userId)
+					->update('users', $values);
+					return $query->row();
+			}
 		}
 
 
@@ -49,7 +51,7 @@ class Users_Model extends CI_Model {
 		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));			
 
 		$query = $this->db
-			->where('userEmail', $userEmail)
+			->where($fieldName, $remoteUserId)
 			->get('users');
 		return $query->row();
 	}
