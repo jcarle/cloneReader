@@ -542,6 +542,8 @@ class Entries_Model extends CI_Model {
 	function getNewsEntries($userId = null, $feedId = null) {
 		set_time_limit(0);
 		
+$baseMemory = memory_get_usage();
+		
 		$this->db
 			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
@@ -561,6 +563,7 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {
 			$this->parseRss($row->feedId, $row->feedUrl, $row->fixLocale);
+vd("Memory usage: " . number_format( memory_get_usage() - $baseMemory));
 			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
 		}
 	}		
@@ -667,12 +670,11 @@ class Entries_Model extends CI_Model {
 		
 		
 		$this->cisimplepie->__destruct();
-		unset($rss);
-		unset($item);
-		unset($feed);
-		unset($categories);
+		unset($this->cisimplepie);
+		unset($rss, $feed, $item, $aTags, $categories, $data, $item);
+
 		
-echo "Memory usage: " . number_format(memory_get_usage());				
+//echo "Memory usage: " . number_format(memory_get_usage());				*/
 	}
 	
 	function populateMillionsEntries() {
