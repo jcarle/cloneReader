@@ -563,8 +563,8 @@ $baseMemory = memory_get_usage();
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {
 			$this->parseRss($row->feedId, $row->feedUrl, $row->fixLocale);
-vd("Memory usage: " . number_format( memory_get_usage() - $baseMemory));
 			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
+//vd("Memory usage: " . number_format( memory_get_usage() - $baseMemory));			
 		}
 	}		
 
