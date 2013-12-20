@@ -65,6 +65,7 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
 
+define('PHP_PATH', 'php'); // para los exec() !
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

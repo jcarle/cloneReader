@@ -360,15 +360,6 @@ $config['proxy_ips'] = '';
 
 
 
-// para los exec() !
-$config['PHP_PATH'] = 'php';
-if (isset($_SERVER['SERVER_NAME'])) {
-	if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
-		$config['PHP_PATH'] = '/usr/local/bin/php-5.3'; // para los exec() !
-	}
-}
-
-
 $config['siteName'] = 'cloneReader BETA';
 $config['siteId'] = 'cloneReader';
 

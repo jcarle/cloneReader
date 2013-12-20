@@ -67,6 +67,8 @@ define('FEED_STATUS_APPROVED', 1);
 define('FEED_STATUS_INVALID_FORMAT', 3);
 define('FEED_STATUS_NOT_FOUND', 404);
 
+define('FEED_MAX_RETRIES', 10); // maxima cantidad de reintentos si un feed tiene algun error 
+
 define('FEED_TIME_SCAN', 180); 	// 	Cada cuanto MINUTOS busca nuevos feeds
 define('FEED_TIME_SAVE', 10); 	// 	Cada cuanto SEGUNDOS guardan los datos
 define('FEED_TIME_RELOAD', 999);  //  Cada cuanto MINUTOS recarga el menu con feeds
