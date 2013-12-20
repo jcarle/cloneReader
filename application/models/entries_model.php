@@ -384,13 +384,6 @@ class Entries_Model extends CI_Model {
 								
 		return true;
 	}
-	
-	function updateFeedStatus($feedId, $statusId) {
-		$this->db
-			->where('feedId', $feedId)
-			->update('feeds', array('statusId' => $statusId ));
-		//pr($this->db->last_query());		
-	}	
 
 	function addFeed($userId, $feed) {
 		$this->load->model('Feeds_Model');
@@ -527,29 +520,17 @@ class Entries_Model extends CI_Model {
 		$this->load->model('Users_Model');
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
 	}	
-	
-	function saveFeedIcon($feedId, $feedLink, $feedIcon) {
-		if (trim($feedLink) != '' && $feedIcon == null) {
-			$this->load->spark('curl/1.2.1');
-			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
-			$parse 			= parse_url($feedLink);
-			$feedIcon 		= $parse['host'].'.png'; 
-			file_put_contents('./assets/favicons/'.$feedIcon, $img);
-			$this->db->update('feeds', array('feedIcon' => $feedIcon), array('feedId' => $feedId));	
-		}				
-	}	
 
 	function getNewsEntries($userId = null, $feedId = null) {
 		set_time_limit(0);
-		
-$baseMemory = memory_get_usage();
 		
 		$this->db
 			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
-//->where('feeds.feedId IN (530)')
+			->where('feedMaxRetries < '.FEED_MAX_RETRIES)
+//->where('feeds.feedId IN (530, 512, 555, 989)')
 			->order_by('feedLastScan ASC');
 
 		if (is_null($userId) == false) {
@@ -560,122 +541,17 @@ $baseMemory = memory_get_usage();
 		}
 		 
 		$query = $this->db->get('feeds');
-		//pr($this->db->last_query()); 
+		//vd($this->db->last_query()); 
+		$count = 0;
 		foreach ($query->result() as $row) {
-			$this->parseRss($row->feedId, $row->feedUrl, $row->fixLocale);
-			$this->saveFeedIcon($row->feedId, $row->feedLink, $row->feedIcon);
-//vd("Memory usage: " . number_format( memory_get_usage() - $baseMemory));			
+			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php feeds/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');
+			
+			$count++;
+			if ($count % 100 == 0) {
+				sleep(20);
+			}
 		}
 	}		
-
-	// TODO: mover estos metodos de aca
-	function parseRss($feedId, $feedUrl, $fixLocale = false) {
-		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
-		$query = $this->db
-			->select('feedLastEntryDate, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
-			->where('feeds.feedId', $feedId)
-			->get('feeds')->result_array();
-		//pr($this->db->last_query()); 
-		$feed = $query[0];
-		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
-			return;
-		}
-
-		$this->load->spark('ci-simplepie/1.0.1/');
-		$this->cisimplepie->set_feed_url($feedUrl);
-		$this->cisimplepie->enable_cache(false);
-		$this->cisimplepie->init();
-		$this->cisimplepie->handle_content_type();
-
-		if ($this->cisimplepie->error() ) {
-			return $this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
-		}
-	
-		$lastEntryDate = $feed['feedLastEntryDate'];
-		
-		$langId		= null;
-		$countryId 	= null;
-		if ($fixLocale == false) {
-			$langId 	= strtolower($this->cisimplepie->get_language());
-			$aLocale 	= explode('-', $langId);
-			if (count($aLocale) == 2) {
-				$countryId 	= strtolower($aLocale[1]);
-			}
-		}
-			
-		$rss = $this->cisimplepie->get_items();
-
-		foreach ($rss as $item) {
-			$aTags = array();
-			if ($categories = $item->get_categories()) {
-				foreach ((array) $categories as $category) {
-					if ($category->get_label() != '') {
-						$aTags[] = $category->get_label();
-					}
-				}
-			}
-			
-			$entryAuthor = '';
-			if ($author = $item->get_author()) {
-				$entryAuthor = $author->get_name();
-			}
-
-			$data = array(
-				'feedId' 		=> $feedId,
-				'entryTitle'	=> $item->get_title(),
-				'entryContent'	=> (string)$item->get_content(),
-				'entryDate'		=> $item->get_date('Y-m-d H:i:s'),
-				'entryUrl'		=> (string)$item->get_link(),
-				'entryAuthor'	=> (string)$entryAuthor,
-			);
-			
-			if ($data['entryDate'] == null) {
-				$data['entryDate'] = date("Y-m-d H:i:s");
-			}
-			
-			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
-				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF
-				$this->db->update('feeds', array(
-					'statusId' 		=> FEED_STATUS_APPROVED,
-					'feedLastScan' 	=> date("Y-m-d H:i:s")
-				), array('feedId' => $feedId));	
-				return;
-			}
-			
-			$this->saveEntry($data, $aTags);
-		}
-
-		$values = array( 
-			'statusId'			=> FEED_STATUS_APPROVED,
-			'feedLastScan' 		=> date("Y-m-d H:i:s"),
-			'feedLastEntryDate' => $this->getLastEntryDate($feedId),
-		); 
-		if (trim((string)$this->cisimplepie->get_title()) != '') {
-			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
-		}
-		if (trim((string)$this->cisimplepie->get_description()) != '') {
-			$values['feedDescription'] = (string)$this->cisimplepie->get_description();
-		}
-		if (trim((string)$this->cisimplepie->get_link()) != '') {
-			$values['feedLink'] = (string)$this->cisimplepie->get_link();
-		}
-		if ($langId != null) {
-			$values['langId'] = $langId;
-		}
-		if ($countryId != null) {
-			$values['countryId'] = $countryId;
-		}
-
-		$this->db->update('feeds', $values, array('feedId' => $feedId));
-		
-		
-		$this->cisimplepie->__destruct();
-		unset($this->cisimplepie);
-		unset($rss, $feed, $item, $aTags, $categories, $data, $item);
-
-		
-//echo "Memory usage: " . number_format(memory_get_usage());				*/
-	}
 	
 	function populateMillionsEntries() {
 		ini_set('memory_limit', '-1');

@@ -107,6 +107,8 @@ class Feeds_Model extends CI_Model {
 		return true;
 	}
 	
+	
+// TODO: quitar este metodo, llamar a scanFeed 	
 	function scan($feedId) {
 		$this->db
 			->where('feedId', $feedId)
@@ -147,10 +149,154 @@ class Feeds_Model extends CI_Model {
 			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
 	}	
 	
-	function saveFeedIcon($feedId) {
-		$feed = $this->get($feedId);
-		$this->load->model('Entries_Model');
-		$this->Entries_Model->saveFeedIcon($feed['feedId'], $feed['feedLink'], null);
-		return true;
+	function saveFeedIcon($feedId, $feed = null) {
+		if ($feed == null) {
+			$feed = $this->get($feedId);
+			$this->load->model('Entries_Model');
+		 	$feedLink = $feed['feedLink'];
+		 	$feedIcon = $feed['feedIcon'];
+		}
+		
+		if (trim($feedLink) != '' && $feedIcon == null) {
+			$this->load->spark('curl/1.2.1');
+			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
+			$parse 			= parse_url($feedLink);
+			$feedIcon 		= $parse['host'].'.png'; 
+			file_put_contents('./assets/favicons/'.$feedIcon, $img);
+			$this->db->update('feeds', array('feedIcon' => $feedIcon), array('feedId' => $feedId));	
+		}
+
+		return true;				
 	}
+	
+	function updateFeedStatus($feedId, $statusId) {
+		$this->db
+			->where('feedId', $feedId)
+			->set('statusId', $statusId)
+			->update('feeds');
+		//pr($this->db->last_query());		
+	}
+	
+	function scanFeed($feedId) {
+		$this->load->model('Entries_Model');
+//sleep(5);
+		
+
+		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
+		$query = $this->db
+			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
+			->where('feeds.feedId', $feedId)
+			->get('feeds')->result_array();
+		//pr($this->db->last_query()); 
+		$feed = $query[0];
+		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
+//			return;
+		}
+		
+		$feedUrl		= $feed['feedUrl']; 
+		$fixLocale		= $feed['fixLocale'];
+		$feedMaxRetries = $feed['feedMaxRetries'];
+
+		$this->load->spark('ci-simplepie/1.0.1/');
+		$this->cisimplepie->set_feed_url($feedUrl);
+		$this->cisimplepie->enable_cache(false);
+		$this->cisimplepie->init();
+		$this->cisimplepie->handle_content_type();
+
+		if ($this->cisimplepie->error() ) {
+			if ($feedMaxRetries < FEED_MAX_RETRIES) { 
+				$this->db
+					->where('feedId', $feedId)
+					->set('feedMaxRetries',	' feedMaxRetries + 1 ', false)
+					->set('feedLastScan', date("Y-m-d H:i:s"))
+					->update('feeds');			
+			}
+			else {
+				$this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
+			}
+			return;
+		}
+
+		$lastEntryDate = $feed['feedLastEntryDate'];
+		
+		$langId		= null;
+		$countryId 	= null;
+		if ($fixLocale == false) {
+			$langId 	= strtolower($this->cisimplepie->get_language());
+			$aLocale 	= explode('-', $langId);
+			if (count($aLocale) == 2) {
+				$countryId 	= strtolower($aLocale[1]);
+			}
+		}
+
+		$rss = $this->cisimplepie->get_items();
+
+		foreach ($rss as $item) {
+			$aTags = array();
+			if ($categories = $item->get_categories()) {
+				foreach ((array) $categories as $category) {
+					if ($category->get_label() != '') {
+						$aTags[] = $category->get_label();
+					}
+				}
+			}
+			unset($categories, $category);
+			
+			$entryAuthor = '';
+			if ($author = $item->get_author()) {
+				$entryAuthor = $author->get_name();
+			}
+
+			$data = array(
+				'feedId' 		=> $feedId,
+				'entryTitle'	=> $item->get_title(),
+				'entryContent'	=> (string)$item->get_content(),
+				'entryDate'		=> $item->get_date('Y-m-d H:i:s'),
+				'entryUrl'		=> (string)$item->get_link(),
+				'entryAuthor'	=> (string)$entryAuthor,
+			);
+
+			if ($data['entryDate'] == null) {
+				$data['entryDate'] = date("Y-m-d H:i:s");
+			}
+
+			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
+				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF y va a hacer queries al pedo
+				$this->db->update('feeds', array(
+					'statusId' 			=> FEED_STATUS_APPROVED,
+					'feedLastScan' 		=> date("Y-m-d H:i:s"),
+					'feedMaxRetries'	=> 0,
+				), array('feedId' => $feedId));	
+				return;
+			}
+
+			$this->Entries_Model->saveEntry($data, $aTags);
+		}
+
+		$values = array( 
+			'statusId'			=> FEED_STATUS_APPROVED,
+			'feedLastScan' 		=> date("Y-m-d H:i:s"),
+			'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
+			'feedMaxRetries'	=> 0,
+		); 
+		if (trim((string)$this->cisimplepie->get_title()) != '') {
+			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
+		}
+		if (trim((string)$this->cisimplepie->get_description()) != '') {
+			$values['feedDescription'] = (string)$this->cisimplepie->get_description();
+		}
+		if (trim((string)$this->cisimplepie->get_link()) != '') {
+			$values['feedLink'] = (string)$this->cisimplepie->get_link();
+		}
+		if ($langId != null) {
+			$values['langId'] = $langId;
+		}
+		if ($countryId != null) {
+			$values['countryId'] = $countryId;
+		}
+
+		$this->db->update('feeds', $values, array('feedId' => $feedId));
+		
+		$this->saveFeedIcon($feedId, $feed);
+	}	
 }

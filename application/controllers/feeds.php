@@ -273,6 +273,14 @@ class Feeds extends CI_Controller {
 		));				
 	}
 	
+	function scanFeed($feedId) {
+		// TODO: implementar seguridad! 
+		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+		
+		$this->Feeds_Model->scanFeed($feedId);
+die;		
+	}
+	
 	function saveFeedIcon($feedId) {
 		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
 				
