@@ -142,7 +142,6 @@ class Feeds extends CI_Controller {
 			'result' 	=> validation_errors() 
 		));	
 	}
-
 	
 	function _getFormProperties($feedId) {
 		$tags = array();
@@ -244,7 +243,7 @@ class Feeds extends CI_Controller {
 		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';
-			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.scanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
 			
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="icon-picture"></i> '.$this->lang->line('Download icon').' </button>';
 			
@@ -267,13 +266,22 @@ class Feeds extends CI_Controller {
 		return $form;
 	}
 
-	function scanFeed($feedId, $forceScan = false) {
+	function scanFeed($feedId) {
 		// TODO: implementar seguridad! 
-		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }		
+				
+		$this->Feeds_Model->scanFeed($feedId);
+	}
+	
+	function resetAndScanFeed($feedId) {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+		
+		$this->Feeds_Model->resetFeed($feedId);
+		$this->Feeds_Model->scanFeed($feedId);
 				
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Feeds_Model->scanFeed($feedId, $forceScan)
+			'result' 	=> true
 		));				
 	}
 	

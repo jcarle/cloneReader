@@ -1,9 +1,9 @@
 $.Feeds = {
 	init: function() { },
 	
-	scanFeed: function(feedId) {
+	resetAndScanFeed: function(feedId) {
 		$.ajax({
-			url: base_url + 'feeds/scanFeed/' + feedId + '/true',
+			url: base_url + 'feeds/resetAndScanFeed/' + feedId + '/true',
 			data: { }
 		 }).done(function (result) {	
 			$.showWaiting(true);

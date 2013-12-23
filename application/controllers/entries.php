@@ -237,7 +237,7 @@ class Entries extends CI_Controller {
 		$userId = (int)$this->session->userdata('userId');
 		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
 		
-		$this->Feeds_Model->scanFeed($feedId, true);
+		$this->Feeds_Model->scanFeed($feedId);
 		
 		// primero guardo todas las novedades en el usuario, ya que puede cambiar el MAX(entryId) al guardar el nuevo, y perderse entries
 		$this->Entries_Model->saveEntriesTagByUser($userId);

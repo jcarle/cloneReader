@@ -164,20 +164,20 @@ class Feeds_Model extends CI_Model {
 			->update('feeds');
 		//pr($this->db->last_query());		
 	}
-	
-	function scanFeed($feedId, $forceScan = false) {
+
+	function resetFeed($feedId) { // Reseteo las propiedades del feed para reescanear
+		$this->db
+			->where('feedId', $feedId)
+			->update('feeds', array(
+				'feedLastScan' 			=> null,
+				'feedLastEntryDate'		=> null, 
+				'statusId' 				=> 0,
+			));
+	}
+					
+	function scanFeed($feedId) {
 		$this->load->model('Entries_Model');
 //sleep(5);
-
-		if ($forceScan == true) {
-			$this->db
-				->where('feedId', $feedId)
-				->update('feeds', array(
-					'feedLastScan' 			=> null,
-					'feedLastEntryDate'		=> null, 
-					'statusId' 				=> 0,
-				));
-		}		
 
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
