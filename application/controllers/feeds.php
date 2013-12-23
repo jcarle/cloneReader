@@ -135,6 +135,8 @@ class Feeds extends CI_Controller {
 	}
 	
 	function delete() {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+				
 		return $this->load->view('ajax', array(
 			'code'		=> $this->Feeds_Model->delete($this->input->post('feedId')), 
 			'result' 	=> validation_errors() 
@@ -246,6 +248,7 @@ class Feeds extends CI_Controller {
 			
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="icon-picture"></i> '.$this->lang->line('Download icon').' </button>';
 			
+			$form['urlDelete'] = base_url('feeds/delete/');
 		}
 		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> '.$this->lang->line('Save').' </button> ';	
 		
@@ -264,21 +267,14 @@ class Feeds extends CI_Controller {
 		return $form;
 	}
 
-	function scan($feedId) {
-		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+	function scanFeed($feedId, $forceScan = false) {
+		// TODO: implementar seguridad! 
+		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
 				
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Feeds_Model->scan($feedId)
+			'result' 	=> $this->Feeds_Model->scanFeed($feedId, $forceScan)
 		));				
-	}
-	
-	function scanFeed($feedId) {
-		// TODO: implementar seguridad! 
-		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
-		
-		$this->Feeds_Model->scanFeed($feedId);
-die;		
 	}
 	
 	function saveFeedIcon($feedId) {

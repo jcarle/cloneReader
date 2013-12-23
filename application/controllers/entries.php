@@ -171,7 +171,7 @@ class Entries extends CI_Controller {
 	}
 
 	function getAsyncNewsEntries($userId = null) {
-		exec(config_item('PHP_PATH').'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId.' > /dev/null &');
+		exec(PHP_PATH.'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId.' > /dev/null &');
 		return;
 		
 		
@@ -210,17 +210,18 @@ class Entries extends CI_Controller {
 
 	function addFeed() {
 		$feedUrl = $this->input->post('feedUrl');
-		
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
+		$this->cisimplepie->force_feed(true);
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
+		
 		if ($this->cisimplepie->error() != '' ) {
-			
-			$feedUrl = $this->cisimplepie->subscribe_url(); // trato de obtener el rss de la url
+			// Si hay un error, vuelvo a preguntarle a simplepie con force_feed = true; para que traiga el rss por defecto
 			$this->cisimplepie->set_feed_url($feedUrl);
 			$this->cisimplepie->enable_cache(false);
+			$this->cisimplepie->force_feed(false);
 			$this->cisimplepie->init();
 			$this->cisimplepie->handle_content_type();
 			if ($this->cisimplepie->error() != '' ) {
@@ -229,12 +230,14 @@ class Entries extends CI_Controller {
 					'result' 	=> $this->cisimplepie->error(),
 				));			
 			}
+			$feedUrl = $this->cisimplepie->subscribe_url();
 		}
-		
+
 
 		$userId = (int)$this->session->userdata('userId');
 		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
-		$this->Entries_Model->getNewsEntries($userId, $feedId);
+		
+		$this->Feeds_Model->scanFeed($feedId, true);
 		
 		// primero guardo todas las novedades en el usuario, ya que puede cambiar el MAX(entryId) al guardar el nuevo, y perderse entries
 		$this->Entries_Model->saveEntriesTagByUser($userId);

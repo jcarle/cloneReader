@@ -3,7 +3,7 @@ $.Feeds = {
 	
 	scanFeed: function(feedId) {
 		$.ajax({
-			url: base_url + 'feeds/scan/' + feedId,
+			url: base_url + 'feeds/scanFeed/' + feedId + '/true',
 			data: { }
 		 }).done(function (result) {	
 			$.showWaiting(true);

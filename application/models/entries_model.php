@@ -521,7 +521,7 @@ class Entries_Model extends CI_Model {
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
 	}	
 
-	function getNewsEntries($userId = null, $feedId = null) {
+	function getNewsEntries($userId = null, $feedId = null, $async = true) {
 		set_time_limit(0);
 		
 		$this->db
@@ -544,10 +544,10 @@ class Entries_Model extends CI_Model {
 		//vd($this->db->last_query()); 
 		$count = 0;
 		foreach ($query->result() as $row) {
-			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php feeds/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');
+			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php feeds/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log '.($async == true ? '&' : ''));
 			
 			$count++;
-			if ($count % 100 == 0) {
+			if ($count % 40 == 0) {
 				sleep(20);
 			}
 		}

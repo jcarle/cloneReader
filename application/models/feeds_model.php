@@ -64,8 +64,6 @@ class Feeds_Model extends CI_Model {
 			'statusId' 			=> FEED_STATUS_PENDING,
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
-			'feedSuggest'		=> (element('feedSuggest', $data) == 'on'),
-			'fixLocale'			=> (element('fixLocale', $data) == 'on'),
 		);
 		
 		if (isset($data['feedName'])) {
@@ -77,6 +75,12 @@ class Feeds_Model extends CI_Model {
 		if (isset($data['feedDescription'])) {
 			$values['feedDescription']	= $data['feedDescription'];
 		}
+		if (isset($data['feedSuggest'])) {
+			$values['feedSuggest'] = ($data['feedSuggest'] == 'on');
+		}
+		if (isset($data['fixLocale'])) {
+			$values['fixLocale'] = ($data['fixLocale'] == 'on');
+		}		
 
 		$query = $this->db->where('feedUrl', $values['feedUrl'])->get('feeds')->result_array();
 		//pr($this->db->last_query());
@@ -105,22 +109,6 @@ class Feeds_Model extends CI_Model {
 	function delete($feedId) {
 		$this->db->delete('feeds', array('feedId' => $feedId));
 		return true;
-	}
-	
-	
-// TODO: quitar este metodo, llamar a scanFeed 	
-	function scan($feedId) {
-		$this->db
-			->where('feedId', $feedId)
-			->update('feeds', array(
-				'feedLastScan' 			=> null,
-				'feedLastEntryDate'		=> null, 
-				'statusId' 				=> 0,
-			));		
-			
-		$this->load->model('Entries_Model');
-		
-		$this->Entries_Model->getNewsEntries(null, $feedId);
 	}
 	
 	function search($filter){
@@ -153,9 +141,9 @@ class Feeds_Model extends CI_Model {
 		if ($feed == null) {
 			$feed = $this->get($feedId);
 			$this->load->model('Entries_Model');
-		 	$feedLink = $feed['feedLink'];
-		 	$feedIcon = $feed['feedIcon'];
 		}
+		$feedLink = $feed['feedLink'];
+		$feedIcon = $feed['feedIcon'];
 		
 		if (trim($feedLink) != '' && $feedIcon == null) {
 			$this->load->spark('curl/1.2.1');
@@ -177,20 +165,29 @@ class Feeds_Model extends CI_Model {
 		//pr($this->db->last_query());		
 	}
 	
-	function scanFeed($feedId) {
+	function scanFeed($feedId, $forceScan = false) {
 		$this->load->model('Entries_Model');
 //sleep(5);
-		
+
+		if ($forceScan == true) {
+			$this->db
+				->where('feedId', $feedId)
+				->update('feeds', array(
+					'feedLastScan' 			=> null,
+					'feedLastEntryDate'		=> null, 
+					'statusId' 				=> 0,
+				));
+		}		
 
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
 			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
 			->where('feeds.feedId', $feedId)
 			->get('feeds')->result_array();
-		//pr($this->db->last_query()); 
+		//pr($this->db->last_query());  die;
 		$feed = $query[0];
 		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
-//			return;
+			return;
 		}
 		
 		$feedUrl		= $feed['feedUrl']; 
@@ -296,7 +293,7 @@ class Feeds_Model extends CI_Model {
 		}
 
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
-		
-		$this->saveFeedIcon($feedId, $feed);
+
+		$this->saveFeedIcon($feedId, (element('feedLink', $feed) != '' ? $feed : null));
 	}	
 }
