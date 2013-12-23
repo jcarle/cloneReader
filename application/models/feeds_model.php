@@ -64,6 +64,8 @@ class Feeds_Model extends CI_Model {
 			'statusId' 			=> FEED_STATUS_PENDING,
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
+			'feedSuggest' 		=> element('feedSuggest', $data) == 'on',
+			'fixLocale' 		=> element('fixLocale', $data) == 'on',
 		);
 		
 		if (isset($data['feedName'])) {
@@ -75,12 +77,6 @@ class Feeds_Model extends CI_Model {
 		if (isset($data['feedDescription'])) {
 			$values['feedDescription']	= $data['feedDescription'];
 		}
-		if (isset($data['feedSuggest'])) {
-			$values['feedSuggest'] = ($data['feedSuggest'] == 'on');
-		}
-		if (isset($data['fixLocale'])) {
-			$values['fixLocale'] = ($data['fixLocale'] == 'on');
-		}		
 
 		$query = $this->db->where('feedUrl', $values['feedUrl'])->get('feeds')->result_array();
 		//pr($this->db->last_query());

@@ -235,7 +235,7 @@ class Entries extends CI_Controller {
 
 
 		$userId = (int)$this->session->userdata('userId');
-		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl));
+		$feedId = $this->Entries_Model->addFeed($userId, array('feedUrl' => $feedUrl, 'feedSuggest' => true, 'fixLocale' => false));
 		
 		$this->Feeds_Model->scanFeed($feedId);
 		
