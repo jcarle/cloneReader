@@ -172,6 +172,7 @@ class Feeds_Model extends CI_Model {
 				'feedLastScan' 			=> null,
 				'feedLastEntryDate'		=> null, 
 				'statusId' 				=> 0,
+				'feedMaxRetries'		=> 0,
 			));
 	}
 					

@@ -548,7 +548,7 @@ class Entries_Model extends CI_Model {
 			
 			$count++;
 			if ($count % 40 == 0) {
-				sleep(20);
+				sleep(10);
 			}
 		}
 	}		
