@@ -665,7 +665,7 @@ class Entries_Model extends CI_Model {
 		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
 		
 		$aSystenTags 	= array(TAG_ALL, TAG_STAR, TAG_HOME, TAG_BROWSE);
-		$dayOfLastEntry = 7;
+		$dayOfLastEntry = 21;
 		
 		$this->db->query('DELETE FROM feeds_tags ');
 		
