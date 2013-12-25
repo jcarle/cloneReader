@@ -16,6 +16,12 @@ class Safety {
 				redirect('login');
 			}
 		}
+		
+		if ($this->session->userdata('userId') != USER_ANONYMOUS && $this->session->userdata('last_activity') < time()) {
+			$CI = &get_instance();
+			$CI->load->model('Users_Model');			
+			$CI->Users_Model->updateUserLastAccess();
+		} 
 	}
 	
 	function login($email, $password) {
