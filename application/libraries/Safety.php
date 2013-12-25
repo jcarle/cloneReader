@@ -17,10 +17,12 @@ class Safety {
 			}
 		}
 		
-		if ($this->session->userdata('userId') != USER_ANONYMOUS && $this->session->userdata('last_activity') < time()) {
-			$CI = &get_instance();
-			$CI->load->model('Users_Model');			
-			$CI->Users_Model->updateUserLastAccess();
+		if ($this->session->userdata('userId') != USER_ANONYMOUS) {
+			if (($this->session->userdata('last_activity') + config_item('sess_time_to_update')) < time()) {
+				$CI = &get_instance();
+				$CI->load->model('Users_Model');			
+				$CI->Users_Model->updateUserLastAccess();
+			}
 		} 
 	}
 	
