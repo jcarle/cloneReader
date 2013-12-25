@@ -25,7 +25,6 @@ $aScripts = array();
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
-	$CI->carabiner->empty_cache('both');
 }
 
 
@@ -73,8 +72,7 @@ header ('Content-type: text/html; charset=utf-8');
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />	
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
-$CI->carabiner->empty_cache('both', 'yesterday');
-
+//$CI->carabiner->empty_cache('both', 'yesterday');
 $CI->carabiner->display('css');
 $CI->carabiner->display('js');
 ?>	
