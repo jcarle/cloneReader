@@ -18,7 +18,7 @@ class Safety {
 		}
 		
 		if ($this->session->userdata('userId') != USER_ANONYMOUS) {
-			if (($this->session->userdata('last_activity') + config_item('sess_time_to_update')) < time()) {
+			if ($this->session->userdata('last_activity') == $this->session->now) {
 				$CI = &get_instance();
 				$CI->load->model('Users_Model');			
 				$CI->Users_Model->updateUserLastAccess();
