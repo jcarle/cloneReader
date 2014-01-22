@@ -558,7 +558,8 @@ class Entries_Model extends CI_Model {
 			DELETE FROM entries
 			WHERE entryDate < DATE_ADD(NOW(), INTERVAL -'.ENTRIES_MONTH_DELETE.' MONTH)
 			AND entryId NOT IN ( SELECT entryId  FROM users_entries WHERE tagId = '.TAG_STAR.' ) ';
-		$this->db->query($query);
+// TODO: 			
+//		$this->db->query($query);
 	}	
 	
 	function populateMillionsEntries() {
