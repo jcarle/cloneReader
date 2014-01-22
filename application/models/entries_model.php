@@ -234,7 +234,7 @@ class Entries_Model extends CI_Model {
 			'entryContent'		=> element('entryContent', $data),
 			'entryAuthor'		=> element('entryAuthor', $data),
 			'entryDate'			=> element('entryDate', $data),
-			'entryUrl'			=> element('entryUrl', $data),
+			'entryUrl'			=> substr(trim(element('entryUrl', $data)), 0, 255),
 		);
 
 		if ((int)$entryId != 0) {		
@@ -551,7 +551,15 @@ class Entries_Model extends CI_Model {
 				sleep(10);
 			}
 		}
-	}		
+	}	
+
+	function deleteOldEntries() {
+		$query = '
+			DELETE FROM entries
+			WHERE entryDate < DATE_ADD(NOW(), INTERVAL -'.ENTRIES_MONTH_DELETE.' MONTH)
+			AND entryId NOT IN ( SELECT entryId  FROM users_entries WHERE tagId = '.TAG_STAR.' ) ';
+		$this->db->query($query);
+	}	
 	
 	function populateMillionsEntries() {
 		ini_set('memory_limit', '-1');

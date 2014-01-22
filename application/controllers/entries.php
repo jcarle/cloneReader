@@ -340,6 +340,10 @@ class Entries extends CI_Controller {
 	
 	function processTagBrowse() {
 		$this->Entries_Model->processTagBrowse();
+	}
+	
+	function deleteOldEntries() {
+		$this->Entries_Model->deleteOldEntries();
 	}	
 	
 	function populateMillionsEntries() {
