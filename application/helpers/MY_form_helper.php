@@ -130,6 +130,7 @@ function renderCrFormFields($form) {
 				$aFields[] = form_hidden($name, $field['value']);
 				break;
 			case 'text':
+			case 'numeric':
 				$properties = array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'placeholder' => element('placeholder', $field));
 				if (element('disabled', $field) == true) {
 					$properties += array('disabled' => 'disabled');

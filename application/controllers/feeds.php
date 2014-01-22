@@ -210,7 +210,7 @@ class Feeds extends CI_Controller {
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Last update'), 
 					'value'		=> element('feedLastScan', $data)
-				),					
+				),
 				'statusId' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Status'), 
@@ -242,6 +242,27 @@ class Feeds extends CI_Controller {
 		$form['buttons'] = array();
 		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
+			
+			$form['fields']['entriesCount'] = array(
+				'type' 		=> 'numeric',
+				'label'		=> $this->lang->line('Count entries'), 
+				'value'		=> $this->Feeds_Model->countEntriesByFeedId($feedId),
+				'disabled'	=> 'disabled',
+				'mDec'		=> 0,
+			);
+			$form['fields']['starredCount'] = array(
+				'type' 		=> 'numeric',
+				'label'		=> $this->lang->line('Count starred'), 
+				'value'		=> $this->Feeds_Model->countEntriesStarredByFeedId($feedId),
+				'disabled'	=> 'disabled',
+				'mDec'		=> 0,
+			);
+			$form['fields']['linkViewEntries'] = array(
+				'type' 		=> 'link',
+				'label'		=> $this->lang->line('View entries'), 
+				'value'		=> site_url('entries/listing?feedId='.$feedId),
+			);
+			
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
 			

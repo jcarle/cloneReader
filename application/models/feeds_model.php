@@ -292,5 +292,24 @@ class Feeds_Model extends CI_Model {
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
 
 		$this->saveFeedIcon($feedId, (element('feedLink', $feed) != '' ? $feed : null));
-	}	
+	}
+
+	function countEntriesByFeedId($feedId) {
+		$query = ' SELECT COUNT(1) AS total 
+			FROM entries
+			WHERE feedId 		= '.$feedId.' ';
+		$query = $this->db->query($query)->result_array();
+		//pr($this->db->last_query());
+		return $query[0]['total'];
+	}
+	
+	function countEntriesStarredByFeedId($feedId) {
+		$query = ' SELECT COUNT(1) AS total 
+			FROM users_entries
+			WHERE 	feedId 	= '.$feedId.' 
+			AND 	tagId	= '.TAG_STAR;
+		$query = $this->db->query($query)->result_array();
+		//pr($this->db->last_query());
+		return $query[0]['total'];
+	}
 }

@@ -46,3 +46,6 @@ $lang['Scan'] = 'Scanear';
 $lang['Star'] = 'Favorito';
 $lang['Fix language'] = 'Fix idioma';
 $lang['Download icon'] = 'Download icon';
+$lang['Count entries'] = 'Contagem entradas';
+$lang['Count starred'] = 'Contagem favoritos';
+$lang['View entries'] = 'Ver entries';

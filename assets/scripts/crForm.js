@@ -222,6 +222,18 @@
 									});
 								}	 
 							});
+						case 'numeric':
+							$maskNumeric = field.$input.clone();
+							field.$input.hide();
+							$maskNumeric
+								.removeAttr('name')
+								.insertBefore(field.$input)
+								.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: field.mDec } )
+								.change( function(event) {
+									$(event.target).next().val($(event.target).autoNumeric('get') ).change();
+								});
+											
+							break;
 					}
 				}
 			}

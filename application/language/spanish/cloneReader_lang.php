@@ -6,7 +6,7 @@ $lang['Edit tags'] = 'Editar tags';
 $lang['Edit news'] = 'Editar noticias';
 $lang['Import'] = 'Importar';
 $lang['Import feeds'] = 'Importar feeds';
-$lang['Import starred'] = 'Importar starred';
+$lang['Import starred'] = 'Importar favoritos';
 
 
 $lang['Feed'] = 'Feed';
@@ -49,3 +49,6 @@ $lang['Only feed suggest'] = 'Solo feeds sugeridos';
 $lang['Scan'] = 'Scanear';
 $lang['Star'] = 'Favorito';
 $lang['Download icon'] = 'Download icono';
+$lang['Count entries'] = 'Cantidad de entries'; 
+$lang['Count starred'] = 'Cantidad de favoritos';
+$lang['View entries'] = 'Ver entries';

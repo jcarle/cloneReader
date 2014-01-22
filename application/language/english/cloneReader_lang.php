@@ -45,3 +45,6 @@ $lang['Only feed suggest'] = 'Only feed suggest';
 $lang['Scan'] = 'Scanear';
 $lang['Star'] = 'Star';
 $lang['Download icon'] = 'Download icon';
+$lang['Count entries'] = 'Count entries';
+$lang['Count starred'] = 'Count starred';
+$lang['View entries'] = 'View entries';
