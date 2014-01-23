@@ -267,6 +267,7 @@ class Feeds extends CI_Controller {
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
 			
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="icon-picture"></i> '.$this->lang->line('Download icon').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-warning btnDownloadIcon" onclick="$.Feeds.deleteOldEntriesByFeedId('.$feedId.');"><i class="icon-remove"></i> '.$this->lang->line('Remove old entries').' </button>';			
 			
 			$form['urlDelete'] = base_url('feeds/delete/');
 		}
@@ -326,5 +327,14 @@ class Feeds extends CI_Controller {
 		return $this->load->view('ajax', array(
 			'result' 	=> $this->Feeds_Model->searchTags($this->input->get('query'))
 		));
+	}
+	
+	function deleteOldEntriesByFeedId($feedId) {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+			
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> $this->Feeds_Model->deleteOldEntriesByFeedId($feedId)
+		));	
 	}	
 }
