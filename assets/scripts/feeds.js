@@ -19,5 +19,21 @@ $.Feeds = {
 			$.showWaiting(true);
 			location.reload();
 		});		
-	}	
+	},
+	
+	deleteOldEntriesByFeedId: function(feedId) {
+		$(document).crAlert( {
+			'msg': 			_msg['Are you sure?'],
+			'isConfirm': 	true,
+			'callback': 	function() {
+				$.ajax({
+					url: base_url + 'feeds/deleteOldEntriesByFeedId/' + feedId,
+					data: { }
+				 }).done(function (result) {	
+					$.showWaiting(true);
+					location.reload();
+				});				
+			}
+		});		
+	}
 };

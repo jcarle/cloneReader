@@ -49,3 +49,4 @@ $lang['Download icon'] = 'Download icon';
 $lang['Count entries'] = 'Contagem entradas';
 $lang['Count starred'] = 'Contagem favoritos';
 $lang['View entries'] = 'Ver entries';
+$lang['Remove old entries'] = 'Retirar las entradas antiguas';

@@ -52,3 +52,4 @@ $lang['Download icon'] = 'Download icono';
 $lang['Count entries'] = 'Cantidad de entries'; 
 $lang['Count starred'] = 'Cantidad de favoritos';
 $lang['View entries'] = 'Ver entries';
+$lang['Remove old entries'] = 'Eliminar entries antiguas';

@@ -553,15 +553,6 @@ class Entries_Model extends CI_Model {
 		}
 	}	
 
-	function deleteOldEntries() {
-		$query = '
-			DELETE FROM entries
-			WHERE entryDate < DATE_ADD(NOW(), INTERVAL -'.ENTRIES_MONTH_DELETE.' MONTH)
-			AND entryId NOT IN ( SELECT entryId  FROM users_entries WHERE tagId = '.TAG_STAR.' ) ';
-// TODO: 			
-//		$this->db->query($query);
-	}	
-	
 	function populateMillionsEntries() {
 		ini_set('memory_limit', '-1');
 				

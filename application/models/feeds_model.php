@@ -312,4 +312,38 @@ class Feeds_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return $query[0]['total'];
 	}
+	
+	
+	function deleteOldEntriesByFeedId($feedId) {
+		$feedId 			= (int)$feedId;
+		$minEntriesKeep		= 50;
+		$monthsTokeep		= 3;
+		
+		$query = '
+			DELETE FROM entries
+			WHERE feedId = '.$feedId.' 
+			AND entryId NOT IN (
+				SELECT entryId
+				FROM ( 
+						SELECT * 
+						FROM 
+							(
+							SELECT * FROM entries 
+							WHERE feedId = '.$feedId.' 
+							ORDER BY entries.entryDate DESC LIMIT '.$minEntriesKeep.'
+							) AS lastEntries
+					UNION ALL
+							SELECT *
+							FROM entries 
+							WHERE feedId = '.$feedId.'
+							AND  entryDate > DATE_ADD(NOW(), INTERVAL -'.$monthsTokeep.' MONTH)
+					UNION ALL
+						SELECT entries.*
+						FROM entries 
+						WHERE feedId = '.$feedId.'
+						AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.TAG_STAR.' AND feedId = '.$feedId.') 
+				) AS entries
+			) ';
+		return $this->db->query($query);
+	}
 }
