@@ -23,20 +23,39 @@ if ($filters != null) {
 }
 
 if ($sort != null) {
+	$url = parse_url($_SERVER['REQUEST_URI']);
+	parse_str(element('query', $url), $params);
+	unset($params['orderBy']);
+	unset($params['orderDir']);
+	
+	$aTmp 			= array_keys($sort);
+	$defaultOrderBy = $aTmp[0];	
+	
+	$orderBy 	= $this->input->get('orderBy');
+	if (array_key_exists((string)$orderBy, $sort) === false) {
+		$orderBy 	= $defaultOrderBy;
+	}
+	$orderDir 	= $this->input->get('orderDir') == 'desc' ? 'desc' : 'asc';
 ?>
 	<div class="btn-group">
-		
-		<input type="hidden" name="sort" value="<?php echo $this->input->get('sort'); ?>" />
-		<input type="hidden" name="order" value="<?php echo $this->input->get('order'); ?>" />
-		
+		<input type="hidden" name="orderBy"  value="<?php echo $orderBy; ?>" />
+		<input type="hidden" name="orderDir" value="<?php echo $orderDir; ?>" />
 		<div class="dropdown">
-			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnSort" type="button" data-toggle="dropdown">
+			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder <?php if ($orderBy != $defaultOrderBy || $orderDir != 'asc') { echo ' btn-info '; } ?>" type="button" data-toggle="dropdown">
 				<i class="icon-sort-by-attributes" ></i>
 			</button>	
 			<ul class="dropdown-menu pull-right" role="menu">
 <?
 foreach ($sort as $key => $value) {
-	echo '<li><a href="javascript:void(0);" data-sort="'.$key.'" data-order="'.($this->input->get('order') != true).'">'.$value.'</a></li>';
+	$params['orderBy'] 	= $key;
+	$params['orderDir'] = ($orderBy == $key ? ($orderDir == 'desc' ? 'asc' : 'desc') : 'asc');
+	$icon				= '';
+	
+	if ($orderBy == $key) {
+		$icon = '<i class="'.($orderDir == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down').' icon-fixed-width" ></i>';
+	}
+	
+	echo '<li><a href="'.current_url().'?'.http_build_query($params).'">'.$icon.' '.$value.'</a></li>';
 }
 ?>
 			</ul>

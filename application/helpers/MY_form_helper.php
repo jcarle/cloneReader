@@ -378,7 +378,6 @@ function appendCrListJsAndCss($view, $list, $aScripts) {
 		$aScripts = appendCrFormJsAndCss($view, array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), null, null, $aScripts);
 	}
 	
-
 	$aScripts[] = '
 		$(document).ready(function() {
 			$(\'.crList\').crList();

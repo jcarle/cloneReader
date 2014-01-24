@@ -14,7 +14,7 @@ class Entries_Model extends CI_Model {
 		}
 			
 		$query = $this->db->order_by('entries.entryId')
-		 	->get('entries FORCE INDEX ( PRIMARY ) ', $num, $offset);
+		 	->get('entries ', $num, $offset);
 
 		//pr($this->db->last_query()); die;
 

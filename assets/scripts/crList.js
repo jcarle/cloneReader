@@ -10,7 +10,7 @@
 			}
 			
 			return $(this);
-		}		
+		}
 	};
 
 	$.fn.crList = function( method ) {
@@ -20,7 +20,7 @@
 		} else if ( typeof method === 'object' || ! method ) {
 			return methods.init.apply( this, arguments );
 		} else {
-			$.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
+			$.error( 'Method ' +  method + ' does not exist on crList' );
 		}  
 	}
 	
@@ -29,12 +29,10 @@
 		this.$form 			= this.$crList.find('form');
 		this.$table			= this.$crList.find('table');
 		this.$crFilterList	= this.$crList.find('.crFilterList');
+		this.$btnOrder		= this.$crList.find('.btnOrder');
 		this.$btnFilter		= this.$crFilterList.prev();
 		this.options	 	= $.extend({}, options );
 		this.hasFilter		= (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
-		this.hasSort		= this.$form.find('input[name=sort]').val() != '';
-		this.$btnSort		= this.$crList.find('.btnSort');
-
 
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
@@ -77,12 +75,9 @@
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
 				function (event){
-					if (this.$filter.val().trim() == '' && this.hasFilter == false && this.hasSort == false) {
-						return;
-					}
-					
 					this.$btnFilter.removeClass('btn-info');
-					this.$form.find('input[type=text], input[name=sort], input[name=order], select').val('');
+					this.$btnOrder.removeClass('btn-info');
+					this.$form.find('input[type=text], input[name=orderBy], input[name=orderDir], select').val('');
 					this.$form.find('input:checked').attr('checked', false);
 					this.$form.submit();
 				}
@@ -131,7 +126,6 @@
 		}
 		
 		this.fixFormSize();
-		this.initSort();
 	}
 	
 	crList.prototype = {
@@ -140,8 +134,8 @@
 			if (this.$btnFilter.length != 0) {
 				width += this.$btnFilter.outerWidth(true) + 4; // FIXME: space html
 			}
-			if (this.$btnSort.length != 0) {
-				width += this.$btnSort.outerWidth(true) + 4; // FIXME: space html
+			if (this.$btnOrder.length != 0) {
+				width += this.$btnOrder.outerWidth(true) + 4; // FIXME: space html
 			}
 
 			this.$crList.find('form > .btn-group').first().css('width', 'calc(100% - ' + width + 'px)');
@@ -169,35 +163,6 @@
 			}
 			
 			this.$table.find('tbody input[type=checkbox]').change();
-		},
-		
-		initSort: function() {
-			var aSort = this.$btnSort.parent().find('ul li a');
-						
-			for (var i=0; i<aSort.length; i++) {
-				var $sort = $(aSort[i]);
-				
-				$sort.click($.proxy(
-					function(event) {
-						var data = $(event.target).data();
-						this.sortList(data.sort, data.order);
-					}
-				, this));
-				
-				if ($.url().param('sort') == $sort.data('sort')) {
-					$sort.html('<i class="' + ($.url().param('order') == true ? 'icon-arrow-up' : 'icon-arrow-down') + ' icon-fixed-width" />' + $sort.text());
-				}
-			}
-			
-			if (this.hasSort == true) {
-				this.$btnSort.addClass('btn-info');
-			}			
-		},
-		
-		sortList: function(sort, order) {
-			this.$form.find('input[name=sort]').val(sort);
-			this.$form.find('input[name=order]').val(order);
-			this.$form.submit();
 		}
 	}
 })($);
