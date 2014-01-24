@@ -1,6 +1,7 @@
 <?php
 $CI			= &get_instance();
 $filters 	= element('filters', $list);
+$sort  		= element('sort', $list);
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
@@ -14,11 +15,34 @@ $filters 	= element('filters', $list);
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default"><?php echo $CI->lang->line('Search'); ?></button>
 					</span>
-				</div>					
+				</div>
 			</div>
 <?php
 if ($filters != null) {
 	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));			
+}
+
+if ($sort != null) {
+?>
+	<div class="btn-group">
+		
+		<input type="hidden" name="sort" value="<?php echo $this->input->get('sort'); ?>" />
+		<input type="hidden" name="order" value="<?php echo $this->input->get('order'); ?>" />
+		
+		<div class="dropdown">
+			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnSort" type="button" data-toggle="dropdown">
+				<i class="icon-sort-by-attributes" ></i>
+			</button>	
+			<ul class="dropdown-menu pull-right" role="menu">
+<?
+foreach ($sort as $key => $value) {
+	echo '<li><a href="javascript:void(0);" data-sort="'.$key.'" data-order="'.($this->input->get('order') != true).'">'.$value.'</a></li>';
+}
+?>
+			</ul>
+		</div>
+	</div>
+<?	
 }
 ?>			
 		</form>

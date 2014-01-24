@@ -243,7 +243,6 @@ body.isLoading, body.isLoading * {
 }
 	.crList form {	}
 		.crList form > .btn-group:first-child {
-			width:calc(100% - 41px);
 			max-width: 500px;
 		}		
 		.crList form > .btn-group {
