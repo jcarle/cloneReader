@@ -334,7 +334,7 @@ $.extend({
 
 		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
 			function(event) {
-	        	event.preventDefault(); 
+				event.preventDefault(); 
 				event.stopPropagation(); 
 				
 				var expand = $(this).parent().hasClass('open');

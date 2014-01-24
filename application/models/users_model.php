@@ -62,7 +62,7 @@ class Users_Model extends CI_Model {
 			->update('users', array('userLastAccess' => date("Y-m-d H:i:s")));		
 	}
 	
-	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null ){
+	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null, $sort = 'userId', $order = true ){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
 			->join('countries', 'users.countryId = countries.countryId', 'left')
@@ -93,6 +93,11 @@ class Users_Model extends CI_Model {
 			}
 		}
 		
+		if (!in_array($sort, array('userId', 'userLastAccess' ))) {
+			$sort = 'userId';
+		}
+		$this->db->order_by($sort, $order == true ? 'ASC' : 'DESC');
+
 		$query = $this->db
 			->group_by('users.userId')
 			->get('users', $num, $offset);

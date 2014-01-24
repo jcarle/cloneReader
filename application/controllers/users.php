@@ -24,7 +24,7 @@ class Users extends CI_Controller {
 			}
 		}		
 		
-		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin );
+		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin, $this->input->get('sort'), $this->input->get('order') );
 
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -69,6 +69,10 @@ class Users extends CI_Controller {
 						), 
 						'value'		=> $aRemoteLogin
 					)
+				),
+				'sort' => array(
+					'userId'			=> '#',
+					'userLastAccess'	=> $this->lang->line('Last access')
 				)
 			)
 		));
