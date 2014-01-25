@@ -334,7 +334,7 @@ class Feeds extends CI_Controller {
 			
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Feeds_Model->deleteOldEntriesByFeedId($feedId)
+			'result' 	=> 'affected rows: '.$this->Feeds_Model->deleteOldEntriesByFeedId($feedId)
 		));	
 	}	
 }

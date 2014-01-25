@@ -29,10 +29,16 @@ $.Feeds = {
 				$.ajax({
 					url: base_url + 'feeds/deleteOldEntriesByFeedId/' + feedId,
 					data: { }
-				 }).done(function (result) {	
-					$.showWaiting(true);
-					location.reload();
-				});				
+				 }).done(function (result) {
+				 		
+				 	$(document).crAlert( {
+				 		'msg': 			result.result,
+				 		'callback': 	function() {
+							$.showWaiting(true);
+							location.reload();
+						}
+					})
+				});
 			}
 		});		
 	}
