@@ -314,6 +314,16 @@ class Feeds_Model extends CI_Model {
 	}
 	
 	
+	function deleteOldEntries() {
+		$query = $this->db
+			->select('feedId, feedName  ')
+			->get('feeds')->result_array();
+		foreach ($query as $row) {
+			$affectedRows = $this->deleteOldEntriesByFeedId($row['feedId']);
+			echo $row['feedName'].' ('.$row['feedId'].') - <span style="'.($affectedRows > 0 ? ' color: #FF0000; font-weight: bold;' : '').'"> affected rows: '.$affectedRows.'</span><br/>';
+		}
+	}
+	
 	function deleteOldEntriesByFeedId($feedId) {
 		$feedId 			= (int)$feedId;
 		$minEntriesKeep		= 50;
@@ -344,6 +354,7 @@ class Feeds_Model extends CI_Model {
 						AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.TAG_STAR.' AND feedId = '.$feedId.') 
 				) AS entries
 			) ';
-		return $this->db->query($query);
+		$this->db->query($query);
+		return $this->db->affected_rows();
 	}
 }

@@ -48,7 +48,7 @@ if ($sort != null) {
 <?
 foreach ($sort as $key => $value) {
 	$params['orderBy'] 	= $key;
-	$params['orderDir'] = ($orderBy == $key ? ($orderDir == 'desc' ? 'asc' : 'desc') : 'asc');
+	$params['orderDir'] = ($orderDir == 'desc' ? 'asc' : 'desc');
 	$icon				= '';
 	
 	if ($orderBy == $key) {

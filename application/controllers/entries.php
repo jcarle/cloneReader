@@ -339,7 +339,15 @@ class Entries extends CI_Controller {
 	}	
 	
 	function processTagBrowse() {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+		
 		$this->Entries_Model->processTagBrowse();
+	}
+	
+	function deleteOldEntries() {
+		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+			
+		$this->Feeds_Model->deleteOldEntries();
 	}
 	
 	function populateMillionsEntries() {
