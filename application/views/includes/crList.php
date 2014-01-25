@@ -27,6 +27,7 @@ if ($sort != null) {
 	parse_str(element('query', $url), $params);
 	unset($params['orderBy']);
 	unset($params['orderDir']);
+	unset($params['page']);
 	
 	$aTmp 			= array_keys($sort);
 	$defaultOrderBy = $aTmp[0];	
