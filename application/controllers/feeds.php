@@ -218,10 +218,12 @@ class Feeds extends CI_Controller {
 					'value'		=> element('feedLastScan', $data)
 				),
 				'statusId' => array(
-					'type' 		=> 'text',
-					'label'		=> $this->lang->line('Status'), 
-					'value'		=> element('statusId', $data),
-					'disabled'	=> 'disabled'
+					'type'				=> 'dropdown',
+					'label'				=> $this->lang->line('Status'),
+					'value'				=> element('countryId', $data),
+					'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
+					'value'				=> element('statusId', $data),
+					'disabled'			=> 'disabled'
 				),
 				'aTagId' => array(
 					'type' 			=> 'typeahead',

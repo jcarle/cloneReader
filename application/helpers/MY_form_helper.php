@@ -162,8 +162,13 @@ function renderCrFormFields($form) {
 				if (element('appendNullOption', $field) == true) {
 					$source = array('' => '-- '.$CI->lang->line('Choose').' --') + $source;
 				}
+
+				$properties = array('class="form-control"');
+				if (element('disabled', $field) == true) {
+					$properties[] = 'disabled="disabled"';
+				}
 			
-				$aFields[] = sprintf($sField, form_dropdown($name, $source, $field['value'], 'class="form-control"'));
+				$aFields[] = sprintf($sField, form_dropdown($name, $source, $field['value'], implode(' ', $properties)));
 				break;						
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);

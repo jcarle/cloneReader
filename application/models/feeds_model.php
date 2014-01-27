@@ -215,7 +215,9 @@ class Feeds_Model extends CI_Model {
 			$this->db
 				->where('feedId', $feedId)
 				->set('feedMaxRetries',	' feedMaxRetries + 1 ', false)
+				->set('statusId', FEED_STATUS_PENDING)
 				->set('feedLastScan', date("Y-m-d H:i:s"))
+				->set('feedLastEntryDate', $this->Entries_Model->getLastEntryDate($feedId))
 				->update('feeds');
 			if (($feedMaxRetries + 1) >= FEED_MAX_RETRIES) {
 				$this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
@@ -279,7 +281,7 @@ class Feeds_Model extends CI_Model {
 			$this->Entries_Model->saveEntry($data, $aTags);
 		}
 
-		$values = array( 
+		$values = array(
 			'statusId'			=> FEED_STATUS_APPROVED,
 			'feedLastScan' 		=> date("Y-m-d H:i:s"),
 			'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
