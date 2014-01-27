@@ -110,13 +110,26 @@ body.isLoading, body.isLoading * {
 		float:none !important;
 	}
 	#header ul.menuProfile a {
+		padding-bottom: 10px;
+		padding-top: 10px;		
 		cursor: pointer;
 	}
+	#header ul.menuProfile ul a {
+		padding-left:45px;
+	}
+	#header ul.menuProfile ul li ul li a {
+		padding-left:60px;
+	}	
 	#header .navbar-nav .open .dropdown-menu {
 		clear: both;
+		padding:0;
+	}
+	#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
+		margin:0;
 	}
 		#header .navbar-nav .open .dropdown-menu li {
 			cursor:pointer;
+			border-top: 1px #E7E7E7 solid;
 		}
 		#header .navbar-nav a {
 			font-size: larger;
