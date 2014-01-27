@@ -9,7 +9,8 @@ class Feeds_Model extends CI_Model {
 		}
 				
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusId, countryName, langName, feedLastScan, feedLastEntryDate', false)
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate', false)
+			->join('status', 'status.statusId = feeds.statusId', 'left')
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
 			
@@ -95,9 +96,7 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		if ((int)$feedId != 0) {
-			$this->db
-				->where('feedId', $feedId)
-				->update('feeds', $values);
+			$this->db->update('feeds', $values, array('feedId' => $feedId));
 		}
 		else {
 			$this->db->insert('feeds', $values);
@@ -141,9 +140,7 @@ class Feeds_Model extends CI_Model {
 	
 	function saveFeedIcon($feedId, $feed = null, $force = false) {
 		if ($force == true) {
-			$this->db
-				->where('feedId', $feedId)
-				->update('feeds', array( 'feedIcon' => null, ));	
+			$this->db->update('feeds', array( 'feedIcon' => null), array('feedId' => $feedId) );	
 		}
 		
 		if ($feed == null) {
@@ -166,22 +163,20 @@ class Feeds_Model extends CI_Model {
 	}
 	
 	function updateFeedStatus($feedId, $statusId) {
-		$this->db
-			->where('feedId', $feedId)
-			->set('statusId', $statusId)
-			->update('feeds');
+		$this->db->update('feeds', array('statusId' => $statusId), array('feedId' => $feedId));
 		//pr($this->db->last_query());		
 	}
 
 	function resetFeed($feedId) { // Reseteo las propiedades del feed para reescanear
-		$this->db
-			->where('feedId', $feedId)
-			->update('feeds', array(
+		$this->db->update('feeds', 
+			array(
 				'feedLastScan' 			=> null,
 				'feedLastEntryDate'		=> null, 
 				'statusId' 				=> 0,
 				'feedMaxRetries'		=> 0,
-			));
+			),
+			array('feedId' => $feedId)
+		);
 	}
 
 	function scanFeed($feedId) {
@@ -212,14 +207,15 @@ class Feeds_Model extends CI_Model {
 		$this->cisimplepie->handle_content_type();
 
 		if ($this->cisimplepie->error() ) {
-			$this->db
-				->where('feedId', $feedId)
-				->update('feeds', array(
+			$this->db->update('feeds', 
+				array(
 					'feedMaxRetries'	=> $feedMaxRetries + 1,
 					'statusId'			=> FEED_STATUS_PENDING,
 					'feedLastScan'		=> date("Y-m-d H:i:s"),
 					'feedLastEntryDate'	=> $this->Entries_Model->getLastEntryDate($feedId),
-				));
+				),
+				array('feedId' => $feedId)
+			);
 			if (($feedMaxRetries + 1) >= FEED_MAX_RETRIES) {
 				$this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
 			}
@@ -271,11 +267,14 @@ class Feeds_Model extends CI_Model {
 
 			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
 				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF y va a hacer queries al pedo
-				$this->db->update('feeds', array(
-					'statusId' 			=> FEED_STATUS_APPROVED,
-					'feedLastScan' 		=> date("Y-m-d H:i:s"),
-					'feedMaxRetries'	=> 0,
-				), array('feedId' => $feedId));	
+				$this->db->update('feeds', 
+					array(
+						'statusId' 			=> FEED_STATUS_APPROVED,
+						'feedLastScan' 		=> date("Y-m-d H:i:s"),
+						'feedMaxRetries'	=> 0,
+					), 
+					array('feedId' => $feedId)
+				);
 				return;
 			}
 

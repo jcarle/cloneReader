@@ -42,11 +42,12 @@ class Feeds extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit feeds'),
 			'list'			=> array(
+				'showId' => true,
 				'controller'	=> strtolower(__CLASS__),
 				'columns'		=> array(
-					'statusId' 			=> array('class' => 'numeric', 'value' => $this->lang->line('Status')), 
 					'feedName' 			=> $this->lang->line('Name'),  
 					'feedDescription' 	=> $this->lang->line('Description'),  
+					'statusName' 		=> $this->lang->line('Status'),
 					'countryName' 		=> $this->lang->line('Country'),
 					'langName' 			=> $this->lang->line('Language'),
 					'feedUrl' 			=> $this->lang->line('Url'), 
