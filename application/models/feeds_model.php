@@ -133,7 +133,13 @@ class Feeds_Model extends CI_Model {
 			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
 	}	
 	
-	function saveFeedIcon($feedId, $feed = null) {
+	function saveFeedIcon($feedId, $feed = null, $force = false) {
+		if ($force == true) {
+			$this->db
+				->where('feedId', $feedId)
+				->update('feeds', array( 'feedIcon' => null, ));	
+		}
+		
 		if ($feed == null) {
 			$feed = $this->get($feedId);
 			$this->load->model('Entries_Model');
@@ -171,7 +177,7 @@ class Feeds_Model extends CI_Model {
 				'feedMaxRetries'		=> 0,
 			));
 	}
-					
+
 	function scanFeed($feedId) {
 		$this->load->model('Entries_Model');
 //sleep(5);
@@ -317,17 +323,20 @@ class Feeds_Model extends CI_Model {
 	function deleteOldEntries() {
 		$query = $this->db
 			->select('feedId, feedName  ')
-			->get('feeds')->result_array();
+			->get('feeds')
+			->order_by('feedId')
+			->result_array();
 		foreach ($query as $row) {
 			$affectedRows = $this->deleteOldEntriesByFeedId($row['feedId']);
 			echo $row['feedName'].' ('.$row['feedId'].') - <span style="'.($affectedRows > 0 ? ' color: #FF0000; font-weight: bold;' : '').'"> affected rows: '.$affectedRows.'</span><br/>';
 		}
 	}
 	
-	function deleteOldEntriesByFeedId($feedId) {
+	function deleteOldEntriesByFeedId($feedId, $count = 0) {
 		$feedId 			= (int)$feedId;
 		$minEntriesKeep		= 50;
 		$monthsTokeep		= 3;
+		$limit				= 500;
 		
 		$query = '
 			DELETE FROM entries
@@ -343,18 +352,26 @@ class Feeds_Model extends CI_Model {
 							ORDER BY entries.entryDate DESC LIMIT '.$minEntriesKeep.'
 							) AS lastEntries
 					UNION ALL
-							SELECT *
-							FROM entries 
-							WHERE feedId = '.$feedId.'
-							AND  entryDate > DATE_ADD(NOW(), INTERVAL -'.$monthsTokeep.' MONTH)
+						SELECT *
+						FROM entries 
+						WHERE feedId = '.$feedId.'
+						AND  entryDate > DATE_ADD(NOW(), INTERVAL -'.$monthsTokeep.' MONTH)
 					UNION ALL
 						SELECT entries.*
 						FROM entries 
 						WHERE feedId = '.$feedId.'
 						AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.TAG_STAR.' AND feedId = '.$feedId.') 
 				) AS entries
-			) ';
+			) 
+			LIMIT '.$limit;
 		$this->db->query($query);
-		return $this->db->affected_rows();
+
+		$affectedrRows = $this->db->affected_rows();
+		$count += $affectedrRows;;
+		if ($affectedrRows != 0) {
+			sleep(1);
+			return $this->deleteOldEntriesByFeedId($feedId, $count);
+		}
+		return $count;
 	}
 }

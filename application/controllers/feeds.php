@@ -312,7 +312,7 @@ class Feeds extends CI_Controller {
 				
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> $this->Feeds_Model->saveFeedIcon($feedId)
+			'result' 	=> $this->Feeds_Model->saveFeedIcon($feedId, null, true)
 		));				
 	}	
 	
