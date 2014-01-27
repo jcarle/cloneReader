@@ -1,30 +1,10 @@
-.form-control .select2-choice, 
-.form-control .select2-choices {
-    border: 0 !important;
-    border-radius: 4px 3px 3px 4px !important;
-    box-shadow: 1px 1px rgba(0, 0, 0, 0.045) inset !important;
-    background-image: none !important;
-    height: 31px;
-    line-height: 31px;    
-}
-.form-control .select2-choices {
-	border-radius: 4px 3px 3px 4px !important;
-}
-.form-control.select2-dropdown-open .select2-choice {
-	background: none;
+.form-control .select2-choice {
+    border: 0;
+    border-radius: 2px;
 }
 
 .form-control .select2-choice .select2-arrow {
-    border-radius: 0 0px 0px 0;   
-    background:#EEEEEE !important;
-    border-left: 1px solid #CCCCCC;
-}
-	.form-control .select2-choice .select2-arrow b {
-		background-position: 0 3px;
-	}
-.form-control.select2-dropdown-open .select2-choice .select2-arrow {
-	background:white !important;
-	border-left: 0;
+    border-radius: 0 2px 2px 0;   
 }
 
 .form-control.select2-container {
@@ -32,24 +12,9 @@
     padding: 0px;
 }
 
-.form-control .select2-search-choice {
-	background:#EEEEEE !important;
-    line-height: 17px !important;
-}
-.form-control .select2-search-choice-close {
-	top:5px;
-}
-
 .form-control.select2-container.select2-dropdown-open {
-    border-color: #66AFE9;
-    border-radius: 4px 4px 0 0;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.045) inset, 0 0 8px rgba(102, 175, 233, 0.6);
-}
-
-.select2-drop-active {
-    border-color: #66AFE9;
-	/*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);*/	
-	box-shadow: 0 4px 5px rgba(0, 0, 0, 0.045);
+    border-color: #5897FB;
+    border-radius: 3px 3px 0 0;
 }
 
 .form-control .select2-container.select2-dropdown-open .select2-choices {
@@ -119,14 +84,4 @@
 .control-group.success .select2-container .select2-choice div {
     border-left: 1px solid #468847 !important;
     background: #DFF0D8 !important;
-}
-
-.select2-no-results {
-	color:#555555;
-}
-
-.select2-search-field input {
-	height: 28px;
-	display: block;
-	padding:0 5px !important;	
 }
