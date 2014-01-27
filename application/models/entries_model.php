@@ -1,6 +1,6 @@
 <?php
 class Entries_Model extends CI_Model {
-	function selectToList($num, $offset, $filter, $feedId = null){
+	function selectToList($num, $offset, $filter, $feedId = null, $orderBy = 'entryId', $orderDir = 'asc'){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner');
@@ -13,8 +13,13 @@ class Entries_Model extends CI_Model {
 			
 		}
 			
-		$query = $this->db->order_by('entries.entryId')
-		 	->get('entries ', $num, $offset);
+		if (!in_array($orderBy, array('entryId', 'entryDate' ))) {
+			$orderBy = 'entryId';
+		}
+		$this->db->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc');
+
+		
+		$query = $this->db->get('entries ', $num, $offset);
 
 		//pr($this->db->last_query()); die;
 

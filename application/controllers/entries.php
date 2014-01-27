@@ -31,7 +31,7 @@ class Entries extends CI_Controller {
 		}
 		
 		
-		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $feedId);
+		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $feedId, $this->input->get('orderBy'), $this->input->get('orderDir'));
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -49,7 +49,11 @@ class Entries extends CI_Controller {
 						'source' 	=> base_url('feeds/search/'),
 						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
 					),				
-				)
+				),
+				'sort' => array(
+					'entryId'			=> '#',
+					'entryDate'			=> $this->lang->line('Date'),
+				)				
 			)
 		));
 	}
