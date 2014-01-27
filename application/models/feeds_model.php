@@ -37,7 +37,7 @@ class Feeds_Model extends CI_Model {
 			$this->db->where('feeds.feedSuggest', true);
 		}
 		
-		if (!in_array($orderBy, array( 'feedId', 'feedName', 'feedLastEntryDate' ))) {
+		if (!in_array($orderBy, array( 'feedId', 'feedName', 'feedLastEntryDate', 'feedLastScan' ))) {
 			$orderBy = 'feedId';
 		}
 		$this->db->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc');

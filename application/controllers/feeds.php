@@ -104,6 +104,7 @@ class Feeds extends CI_Controller {
 					'feedId'			=> '#',
 					'feedName'			=> $this->lang->line('Name'),
 					'feedLastEntryDate'	=> $this->lang->line('Last entry'),
+					'feedLastScan' 		=> $this->lang->line('Last update'),
 				)				
 			)
 		));
