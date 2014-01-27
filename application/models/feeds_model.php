@@ -1,6 +1,6 @@
 <?php
 class Feeds_Model extends CI_Model {
-	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null){
+	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null, $orderBy = '', $orderDir = ''){
 		$languages = null;
 		if ($langId != null) { // Busca lenguages relacionados: si el filtro esta seteado en 'en', trae resultados con 'en-us', 'en-uk', etc tambien
 			// TODO: poner un ckeckbox para definir si queres aplicar el filtro asi o no
@@ -36,6 +36,12 @@ class Feeds_Model extends CI_Model {
 		if ($feedSuggest == true) {
 			$this->db->where('feeds.feedSuggest', true);
 		}
+		
+		if (!in_array($orderBy, array( 'feedId', 'feedName', 'feedLastEntryDate' ))) {
+			$orderBy = 'feedId';
+		}
+		$this->db->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc');
+		
 		
 		$query = $this->db->get('feeds', $num, $offset);
 		//pr($this->db->last_query()); die;
@@ -298,6 +304,15 @@ class Feeds_Model extends CI_Model {
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
 
 		$this->saveFeedIcon($feedId, (element('feedLink', $feed) != '' ? $feed : null));
+	}
+
+	function countUsersByFeedId($feedId) {
+		$query = ' SELECT COUNT(1) AS total 
+			FROM users_feeds
+			WHERE feedId 		= '.$feedId.' ';
+		$query = $this->db->query($query)->result_array();
+		//pr($this->db->last_query());
+		return $query[0]['total'];
 	}
 
 	function countEntriesByFeedId($feedId) {

@@ -36,7 +36,7 @@ class Feeds extends CI_Controller {
 		
 		$feedSuggest = $this->input->get('feedSuggest') == 'on';		
 		
-		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest);
+		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest, $this->input->get('orderBy'), $this->input->get('orderDir') );
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crList', 
@@ -99,7 +99,12 @@ class Feeds extends CI_Controller {
 						'label'			=> $this->lang->line('Only feed suggest'),
 						'checked'		=> $feedSuggest,
 					),
-				)
+				),
+				'sort' => array(
+					'feedId'			=> '#',
+					'feedName'			=> $this->lang->line('Name'),
+					'feedLastEntryDate'	=> $this->lang->line('Last entry'),
+				)				
 			)
 		));
 	}
@@ -243,6 +248,13 @@ class Feeds extends CI_Controller {
 		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
 			
+			$form['fields']['usersCount'] = array(
+				'type' 		=> 'numeric',
+				'label'		=> $this->lang->line('Count users'), 
+				'value'		=> $this->Feeds_Model->countUsersByFeedId($feedId),
+				'disabled'	=> 'disabled',
+				'mDec'		=> 0,
+			);			
 			$form['fields']['entriesCount'] = array(
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count entries'), 
