@@ -43,6 +43,9 @@ class Comments_Model extends CI_Model {
 		);
 		
 		$this->db->insert('comments', $values);
+		
+		$this->sendEmail($data);
+		
 		return true;
 	}
 	
@@ -59,5 +62,18 @@ class Comments_Model extends CI_Model {
 	function delete($commentId) {
 		$this->db->delete('comments', array('commentId' => $commentId));
 		return true;
+	}
+	
+	function sendEmail($data) {
+		$this->load->library('email');
+		
+		$this->email->from('your@example.com', 'Your Name');
+		$this->email->to('jcarle@gmail.com');
+		$this->email->subject('Email Test');
+		$this->email->message('Testing the email class.');
+		
+		$this->email->send();
+		
+		echo $this->email->print_debugger();	die;	
 	}
 }
