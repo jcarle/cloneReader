@@ -535,7 +535,7 @@ class Entries_Model extends CI_Model {
 			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
 			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
 			->where('feedMaxRetries < '.FEED_MAX_RETRIES)
-//->where('feeds.feedId IN (530, 512, 555, 989)')
+//->where('feeds.feedId IN (340, 512, 555, 989)')
 			->order_by('feedLastScan ASC');
 
 		if (is_null($userId) == false) {

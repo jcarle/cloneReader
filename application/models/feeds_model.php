@@ -185,6 +185,8 @@ class Feeds_Model extends CI_Model {
 	}
 
 	function scanFeed($feedId) {
+		set_time_limit(0);
+		
 		$this->load->model('Entries_Model');
 //sleep(5);
 
@@ -206,7 +208,6 @@ class Feeds_Model extends CI_Model {
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
-		$this->cisimplepie->set_item_limit(50); // TODO: meter en una constante!
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
 
@@ -236,9 +237,9 @@ class Feeds_Model extends CI_Model {
 			}
 		}
 
-		$rss = $this->cisimplepie->get_items();
+		$rss = $this->cisimplepie->get_items(0, 50); // TODO: meter en una constante!
 
-		foreach ($rss as $item) {
+		foreach ($rss as $item) { 
 			$aTags = array();
 			if ($categories = $item->get_categories()) {
 				foreach ((array) $categories as $category) {
