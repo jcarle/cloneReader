@@ -230,9 +230,10 @@ function renderCrFormFields($form) {
 				break;
 			case 'link':
 				$sField = '
-				<fieldset class="control-group">
-					<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 col-sm-offset-3 col-md-offset-3 col-lg-offset-3"> %s </div>
-				</fieldset>';		
+					<fieldset class="form-group">
+						'.form_label('', null, array('class' => 'col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label')).'
+						<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> %s </div>
+					</fieldset>';
 				$aFields[] = sprintf($sField, anchor($field['value'], $field['label']));
 				break;
 			case 'raty':

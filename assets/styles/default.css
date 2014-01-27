@@ -244,7 +244,18 @@ body.isLoading, body.isLoading * {
 	.crList form {	}
 		.crList form > .btn-group:first-child {
 			max-width: 500px;
-		}		
+			width:100%;
+		}
+		.crList form.hasBtnFilter > .btn-group:first-child {
+			width: calc(100% - 41px);
+		}
+		.crList form.hasBtnOrder > .btn-group:first-child {
+			width: calc(100% - 44px);
+		}
+		.crList form.hasBtnFilter.hasBtnOrder > .btn-group:first-child {
+			width: calc(100% - 85px);
+		}
+		
 		.crList form > .btn-group {
 			margin-bottom: 0;
 		}
@@ -580,45 +591,13 @@ table .numeric, table .date, table .datetime, table .text-right {
 }
 
 
+.table-force-responsive {
+	width: 100%;
+	margin-bottom: 15px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	border: 1px solid #dddddd;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+	-webkit-overflow-scrolling: touch;
+}
 
-/*
-TODO: arreglar las tablas responsives !
-
-	@media only screen and (max-width: 40em) { /*640*/
-/*
-		table { display: block; position: relative; width: 100%; }
-		table thead { display: block; float: left; }
-		table tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
-		table thead tr { display: block; }
-		table th { display: block; }
-		table tbody tr { display: inline-block; vertical-align: top; }
-		table td { display: block; min-height: 1.25em; }
-* /
-		table { display: block; position: relative; width: 100%; }
-		table thead {
-			 
-			display: block; float: left;
-			
-			}
-		table tbody { display: -webkit-box; overflow-x: auto; }
-		table th,
-		table tr,
-		table td {
-			width:auto !important;
-			color: black !important;
-			background: white !important;
-			border-radius:0 !important; 
-			display: block !important; 
-		}
-
-		/* sort out borders * /
-
-		table th { border-bottom: 0; }
-		table td { border-left: 0; border-right: 0; border-bottom: 0; }
-		table tbody tr { border-right: 1px solid #babcbf; }
-		table th:last-child,
-		table td:last-child { border-bottom: 1px solid #babcbf; }
-		
-		 td:nth-of-type(1):before { content: "MFG P/N"; }
-
-	}*/
