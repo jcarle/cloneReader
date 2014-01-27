@@ -206,6 +206,7 @@ class Feeds_Model extends CI_Model {
 		$this->load->spark('ci-simplepie/1.0.1/');
 		$this->cisimplepie->set_feed_url($feedUrl);
 		$this->cisimplepie->enable_cache(false);
+		$this->cisimplepie->set_item_limit(50); // TODO: meter en una constante!
 		$this->cisimplepie->init();
 		$this->cisimplepie->handle_content_type();
 
