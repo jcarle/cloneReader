@@ -67,10 +67,15 @@ class Comments_Model extends CI_Model {
 	function sendEmail($data) {
 		$this->load->library('email');
 		
-		$this->email->from('your@example.com', 'Your Name');
-		$this->email->to('jcarle@gmail.com');
-		$this->email->subject('Email Test');
-		$this->email->message('Testing the email class.');
+		$this->email->from(element('commentUserEmail', $data), element('commentUserName', $data));
+		$this->email->to('jcarle@gmail.com');  // TODO: desharckodear!
+		$this->email->subject('cReader - Comentario de '.element('commentUserName', $data));
+		$this->email->message('
+			Fecha: '.date("Y-m-d H:i:s").'
+			Nombre: '.element('commentUserName', $data).'
+			Email: '.element('commentUserEmail', $data).'
+			Comentario: '.element('commentDesc', $data)
+		);
 		
 		$this->email->send();
 		
