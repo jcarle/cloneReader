@@ -214,11 +214,12 @@ class Feeds_Model extends CI_Model {
 		if ($this->cisimplepie->error() ) {
 			$this->db
 				->where('feedId', $feedId)
-				->set('feedMaxRetries',	' feedMaxRetries + 1 ', false)
-				->set('statusId', FEED_STATUS_PENDING)
-				->set('feedLastScan', date("Y-m-d H:i:s"))
-				->set('feedLastEntryDate', $this->Entries_Model->getLastEntryDate($feedId))
-				->update('feeds');
+				->update('feeds', array(
+					'feedMaxRetries'	=> $feedMaxRetries + 1,
+					'statusId'			=> FEED_STATUS_PENDING,
+					'feedLastScan'		=> date("Y-m-d H:i:s"),
+					'feedLastEntryDate'	=> $this->Entries_Model->getLastEntryDate($feedId),
+				));
 			if (($feedMaxRetries + 1) >= FEED_MAX_RETRIES) {
 				$this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
 			}
