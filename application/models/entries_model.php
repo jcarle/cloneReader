@@ -202,11 +202,11 @@ class Entries_Model extends CI_Model {
 		return $result;
 	}
 
-	function getEntryIdByEntryUrl($entryUrl) {
+	function getEntryIdByFeedIdAndEntryUrl($feedId, $entryUrl) {
 		$entryUrl = substr(trim($entryUrl), 0, 255);
 		
 		$result = $this->db
-				->where('entryUrl', $entryUrl)
+				->where(array( 'feedId' => $feedId,'entryUrl' => $entryUrl ))
 				->get('entries')->row_array();
 		return $result['entryId'];		
 	} 
@@ -261,7 +261,7 @@ class Entries_Model extends CI_Model {
 		$entryId = $this->db->insert_id();
 		
 		if ((int)$entryId == 0) {
-			$entryId = $this->getEntryIdByEntryUrl($data['entryUrl']);
+			$entryId = $this->getEntryIdByFeedIdAndEntryUrl($data['feedId'], $data['entryUrl']);
 		}
 		
 		

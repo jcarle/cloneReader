@@ -244,7 +244,7 @@ class Profile extends CI_Controller {
 			$entry['feedId']	= $this->Entries_Model->addFeed($userId, $feed);
 			$entry['entryId'] 	= $this->Entries_Model->saveEntry($entry);
 			if ($entry['entryId'] == null) {
-				$entry['entryId'] = $this->Entries_Model->getEntryIdByEntryUrl($entry['entryUrl']);
+				$entry['entryId'] = $this->Entries_Model->getEntryIdByFeedIdAndEntryUrl($entry['feedId'], $entry['entryUrl']);
 			}
 			
 			$this->Entries_Model->saveTmpUsersEntries((int)$userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
