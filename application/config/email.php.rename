@@ -1,5 +1,6 @@
 <?php
-// Rename this file to emal.php
+
+// Rename this file to email.php and set email settings 
 
 $config	= array(
 	'protocol' 			=> 'smtp',
