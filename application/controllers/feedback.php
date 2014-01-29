@@ -37,7 +37,7 @@ class Feedback extends CI_Controller {
 				'commentUserName' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Name'), 
-					'value'		=> element('userFirstName', $data).' '.element('userLastName', $data),
+					'value'		=> trim(element('userFirstName', $data).' '.element('userLastName', $data)),
 				),						
 				'commentUserEmail' => array(
 					'type' 		=> 'text',

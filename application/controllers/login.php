@@ -25,11 +25,11 @@ class Login extends CI_Controller {
 					'label'	=> $this->lang->line('Password'), 
 					'value'	=> set_value('password')
 				),
-/*				'link'	=> array(
+				'link'	=> array(
 					'type'	=> 'link',
-					'label'	=> 'reset password', 
-					'value'	=> 'users/forgotPassword'				
-				)*/
+					'label'	=> $this->lang->line('Reset password'), 
+					'value'	=> base_url('profile/forgotPassword'),
+				)
 			)
 		);
 		
