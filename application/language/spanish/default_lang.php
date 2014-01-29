@@ -99,3 +99,4 @@ $lang['Comment'] = 'Comentario';
 $lang['Thanks for contacting us'] = 'Gracias por contactar con nosotros';
 $lang['Last access'] = 'Ultimo acceso';
 $lang['Fix language'] = 'Fijar idioma';
+$lang['Reset password'] = 'Resetear contraseña';

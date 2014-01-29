@@ -385,7 +385,7 @@ $(document).ready(function() {
 		}
 		
 		var url = $(event.target).attr('href');
-		if (url == null) {
+		if (url == null || url.substr(0, 1) == '#') {
 			return;
 		}
 		event.preventDefault();
