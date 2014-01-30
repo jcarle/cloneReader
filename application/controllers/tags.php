@@ -95,7 +95,7 @@ class Tags extends CI_Controller {
 			array(
 				'field' => 'tagName',
 				'label' => $form['fields']['tagName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);
 

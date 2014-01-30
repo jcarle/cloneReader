@@ -55,17 +55,17 @@ class Register extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'required|valid_email'
+				'rules' => 'trim|required|valid_email'
 			),
 			array(
 				'field' => 'userFirstName',
 				'label' => $form['fields']['userFirstName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'userLastName',
 				'label' => $form['fields']['userLastName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			)
 		);		
 

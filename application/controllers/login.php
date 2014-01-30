@@ -37,12 +37,12 @@ class Login extends CI_Controller {
 			array(
 				'field' => 'email',
 				'label' => $form['fields']['email']['label'],
-				'rules' => 'required|valid_email|callback__login'
+				'rules' => 'trim|required|valid_email|callback__login'
 			),
 			array(				 
 				'field' => 'password',
 				'label' => $form['fields']['password']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			)
 		);		
 		

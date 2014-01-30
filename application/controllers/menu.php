@@ -74,7 +74,7 @@ class Menu extends CI_Controller {
 			array(
 				'field' => 'menuName',
 				'label' => $form['fields']['menuName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			)
 		);
 

@@ -27,6 +27,8 @@ class Profile extends CI_Controller {
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);
 		
+		$this->load->helper('email');
+		
 		$form = array(
 			'frmId'			=> 'frmEditProfile',
 			'action'		=> base_url('profile/saveEditProfile/'),
@@ -46,7 +48,7 @@ class Profile extends CI_Controller {
 				'userEmail' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Email'),
-					'value'		=> element('userEmail', $data),
+					'value'		=> valid_email(element('userEmail', $data)) == true ? element('userEmail', $data) : '',
 					'disabled' 	=> true
 				),
 				'countryId' => array(
@@ -62,12 +64,12 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'userFirstName',
 				'label' => $form['fields']['userFirstName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'userLastName',
 				'label' => $form['fields']['userLastName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			)
 		);		
 		
@@ -97,18 +99,27 @@ class Profile extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		$this->form_validation->set_message($form['messages']);
 		
-		
-//					$message 	= array('notification' => $this->lang->line('Data updated successfully'));
+		if ($this->form_validation->run() == FALSE) {
+			$code 		= false;
+			$message 	= validation_errors();
+		}
+		else {		
+			$this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post());
+			$code 		= true;
+			$message 	= array('notification' => $this->lang->line('Data updated successfully'));
+		}
 		
 		return $this->load->view('ajax', array(
-			'code'		=> $this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post()), 
-			'result' 	=> validation_errors() 
-		));		
+			'code'		=> $code,
+			'result' 	=> $message
+		));
 	}
 
 
 	function frmChangeEmail() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+
+		$this->load->helper('email');
 
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);
@@ -122,7 +133,7 @@ class Profile extends CI_Controller {
 				'userEmail' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Email'),
-					'value'	=> element('userEmail', $data)
+					'value'	=> valid_email(element('userEmail', $data)) == true ? element('userEmail', $data) : '',
 				),
 			)
 		);
@@ -131,7 +142,7 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'required|valid_email'
+				'rules' => 'trim|required|valid_email'
 			),
 		);		
 
@@ -194,17 +205,17 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'passwordOld',
 				'label' => $form['fields']['passwordOld']['label'],
-				'rules' => 'required|callback__checkPassword'
+				'rules' => 'trim|required|callback__checkPassword'
 			),
 			array(
 				'field' => 'passwordNew',
 				'label' => $form['fields']['passwordNew']['label'],
-				'rules' => 'required|matches[passwordRepeatNew]'
+				'rules' => 'trim|required|matches[passwordRepeatNew]'
 			),
 			array(
 				'field' => 'passwordRepeatNew',
 				'label' => $form['fields']['passwordRepeatNew']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			)
 		);		
 		
@@ -262,6 +273,12 @@ class Profile extends CI_Controller {
 	function frmRemoveAccount() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
+		
+		return $this->load->view('ajax', array(
+			'code'		=> false,
+			'result' 	=> 'no implementado'
+		));				
+				
 		$userId = $this->session->userdata('userId');		
 	}
 		
@@ -481,7 +498,7 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'required|valid_email'
+				'rules' => 'trim|required|valid_email'
 			),
 		);		
 

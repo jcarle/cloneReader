@@ -293,12 +293,12 @@ class Feeds extends CI_Controller {
 			array(
 				'field' => 'feedName',
 				'label' => $form['fields']['feedName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'feedUrl',
 				'label' => $form['fields']['feedUrl']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);
 		return $form;

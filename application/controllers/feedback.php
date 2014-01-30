@@ -57,17 +57,17 @@ class Feedback extends CI_Controller {
 			array(
 				'field' => 'commentUserName',
 				'label' => $form['fields']['commentUserName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'commentUserEmail',
 				'label' => $form['fields']['commentUserEmail']['label'],
-				'rules' => 'required|valid_email'
+				'rules' => 'trim|required|valid_email'
 			),			
 			array(
 				'field' => 'commentDesc',
 				'label' => $form['fields']['commentDesc']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);	
 

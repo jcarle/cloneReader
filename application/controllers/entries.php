@@ -162,12 +162,12 @@ class Entries extends CI_Controller {
 			array(
 				'field' => 'entryTitle',
 				'label' => $form['fields']['entryTitle']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'entryUrl',
 				'label' => $form['fields']['entryUrl']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);
 
