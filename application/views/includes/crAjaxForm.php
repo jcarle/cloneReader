@@ -8,7 +8,7 @@ if (!isset($form['action'])) {
 echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'panel panel-default crForm form-horizontal', 'role' => 'form' ));
 
 if (isset($title)) {
-//	echo '<div class="panel-heading">'.$title.'</div>';
+	echo '<div class="panel-heading">'.$title.'</div>';
 }
 echo '	<div class="panel-body"> '; 
 

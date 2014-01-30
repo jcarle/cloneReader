@@ -3,17 +3,20 @@
 		
 		<ul class="nav nav-pills nav-stacked userProfile" >
 			<li>
-				<a href="#editProfile" data-toggle="tab" >Edit profile</a>
+				<a href="#editProfile" data-toggle="tab" ><?php echo $this->lang->line('Edit profile'); ?></a>
 			</li>
 			<li>
-				<a href="#changeEmail" data-toggle="tab">Change email</a>
+				<a href="#changeEmail" data-toggle="tab"><?php echo $this->lang->line('Change email'); ?></a>
 			</li>
 			<li>
-				<a href="#changePassword" data-toggle="tab">Change password</a>
+				<a href="#changePassword" data-toggle="tab"><?php echo $this->lang->line('Change password'); ?></a>
 			</li>
 			<li>
-				<a href="#removeAccount" data-toggle="tab">Remove account</a>
+				<a href="#removeAccount" data-toggle="tab"><?php echo $this->lang->line('Remove account'); ?></a>
 			</li>
+			<li>
+				<a href="#removeAccount" data-toggle="tab"><?php echo $this->lang->line('Download OPML'); ?></a>
+			</li>			
 		</ul>
 
 	</div>

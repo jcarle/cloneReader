@@ -39,7 +39,7 @@ $.Profile = {
 				$content.children().remove();
 				$content.html(result);
 				
-				$('.content > .pageTitle h2').text(result.title);
+				$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 			}
 		, this));
 

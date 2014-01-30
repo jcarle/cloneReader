@@ -84,7 +84,7 @@ class Profile extends CI_Controller {
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'profile', 
-			'title'		=> $this->lang->line('Edit Profile'),
+			'title'		=> $this->lang->line('Edit profile'),
 			'hasForm'	=> true,
 			'aJs'		=> array('profile.js'),
 //			'form'		=> $form,
@@ -102,7 +102,6 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmUsersEdit',
-			'title'			=> $this->lang->line('Edit Profile'),
 			'action'		=> base_url('profile/saveEditProfile/'),
 			'messages'	 	=> getCrFormRulesMessages(),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
@@ -173,6 +172,7 @@ class Profile extends CI_Controller {
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
 			'form'			=> $form,
+			'title'			=> $this->lang->line('Edit profile'),
 			'code'			=> true
 		));
 		
@@ -180,7 +180,7 @@ class Profile extends CI_Controller {
 			/*	
 		$this->load->view('includes/template', array(
 			'view'		=> 'profile', 
-			'title'		=> $this->lang->line('Edit Profile'),
+			'title'		=> $this->lang->line('Edit profile'),
 			'form'		=> $form,
 				  
 		));*/
@@ -197,7 +197,6 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmUsersEdit',
 			'messages'	 	=> getCrFormRulesMessages(),
-			'title'			=> $this->lang->line('Edit Email'),
 			'action'		=> base_url('profile/saveEditProfile/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
@@ -245,6 +244,7 @@ class Profile extends CI_Controller {
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
 			'form'			=> $form,
+			'title'			=> $this->lang->line('Change email'),
 			'code'			=> true
 		));
 
