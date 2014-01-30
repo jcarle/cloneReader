@@ -8,6 +8,7 @@ function getCrFormRulesMessages() { // TODO: mover esto de aca!
 		'numeric' 			=> $CI->lang->line('Please enter a valid number in the field "%s"'),
 		'_login' 			=> $CI->lang->line('The email or password you entered are incorrect'),
 		'_checkPassword' 	=> $CI->lang->line('The password you entered are incorrect'),
+		'_exitsEmail'		=> 'The email not exists in the database', // TODO: traducir!
 	);
 }
 
@@ -132,7 +133,7 @@ function renderCrFormFields($form) {
 				break;
 			case 'text':
 			case 'numeric':
-				$properties = array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'placeholder' => element('placeholder', $field));
+				$properties = array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control', 'placeholder' => element('placeholder', $field));
 				if (element('disabled', $field) == true) {
 					$properties += array('disabled' => 'disabled');
 				} 

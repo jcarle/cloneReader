@@ -133,6 +133,10 @@ class Users_Model extends CI_Model {
 		return $result;
 	}	
 	
+	function getByUserEmail($userEmail) {
+		return $this->db->where('userEmail', $userEmail)->get('users')->row_array();
+	}	
+	
 	function getGroups($userId){
 		return $this->db
 					->where('userId', $userId)
@@ -227,6 +231,14 @@ class Users_Model extends CI_Model {
 
 	function updateUserFiltersByUserId($userFilters, $userId) {
 			$this->db->where('userId', $userId)->update('users', array('userFilters' => json_encode($userFilters)));
+	}
+	
+	function updateResetPasswordKey($userId, $resetPasswordKey) {
+		$this->db->update('users', array('resetPasswordKey' => md5($resetPasswordKey), 'resetPasswordDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
+	}
+	
+	function checkResetPasswordKey() {
+return true;		
 	}
 
 	function getUserFiltersByUserId($userId) {

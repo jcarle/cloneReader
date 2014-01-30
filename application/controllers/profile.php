@@ -475,21 +475,20 @@ class Profile extends CI_Controller {
 	
 	
 	
+	function _exitsEmail() {
+		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
+	}	
 	
-	
-	
-	function forgotPassword() {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+	function _getFrmForgotPassword() {
 		$form = array(
-			'frmId'			=> 'frmUsersEdit',
+			'frmId'			=> 'frmForgotPassword',
 			'messages'	 	=> getCrFormRulesMessages(),
+			'action'		=> base_url('profile/sendEmailToResetPassword/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Send').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Email'),
-					'value'	=> ''
 				),
 			)
 		);
@@ -498,26 +497,27 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'trim|required|valid_email'
+				'rules' => 'trim|required|valid_email|callback__exitsEmail'
 			),
-		);		
-
+		);	
+		
+		return $form;
+	}	
+	
+	function forgotPassword() {
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
+		
+		$form = $this->_getFrmForgotPassword();
 		$this->form_validation->set_rules($form['rules']);
 		$this->form_validation->set_message($form['messages']);
-		
+
+/*		
 		if ($this->input->is_ajax_request()) { // save data
-			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('The email entered already exists in the database')
-				));
-			}
-					
 			return $this->load->view('ajax', array(
 				'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
 				'result' 	=> validation_errors() 
 			));
-		}
+		}*/
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
@@ -525,5 +525,118 @@ class Profile extends CI_Controller {
 			'form'		=> $form,
 				  
 		));		
-	}	
+	}
+	
+	function sendEmailToResetPassword() {
+		$form = $this->_getFrmForgotPassword();
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);			
+		
+		if ($this->form_validation->run() == FALSE) {
+			return $this->load->view('ajax', array(
+				'code'		=> false,
+				'result' 	=> validation_errors()
+			));	
+		}
+
+
+
+		$this->load->library('email');
+
+		$user 				= $this->Users_Model->getByUserEmail($this->input->post('userEmail'));
+		$resetPasswordKey 	= random_string('alnum', 20);
+		
+		$this->Users_Model->updateResetPasswordKey($user['userId'], $resetPasswordKey);
+
+		// TODO: traducir todo esto!
+		$this->email->from('clonereader@gmail.com', 'cReader BETA');
+		$this->email->to($user['userEmail']); 
+		$this->email->subject('cReader - Reset password');
+		$this->email->message(sprintf('Hello %s, <p>To reset your cReader password, click here %s  </p> Regards', $user['userFirstName'], base_url('profile/resetPassword/'.$resetPasswordKey)));
+		$this->email->send();
+		//echo $this->email->print_debugger();	die;	
+
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> array( 'notification' => 'We have sent you an email with instructions to reset your password.'),
+		));	
+	}
+	
+	function resetPassword($resetPasswordKey) {
+		if ($this->Users_Model->checkResetPasswordKey($resetPasswordKey) == false) {
+			return error404();
+		}
+		
+		$form = $this->_getFrmResetPassword();
+		
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);			
+
+		$this->load->view('includes/template', array(
+			'view'			=> 'includes/crForm',
+			'form'			=> $form,
+			'title'			=> $this->lang->line('Reset password'),
+			'code'			=> true
+		));		
+	}
+	
+	
+	
+	function _getFrmResetPassword() {
+		$form = array(
+			'frmId'			=> 'frmResetPassword',
+			'messages' 		=> getCrFormRulesMessages(),
+			'action'		=> base_url('profile/saveResetPassword/'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Reset password').' </button>'),			
+			'fields'		=> array(
+				'passwordNew' => array(
+					'type'	=> 'password',
+					'label'	=> $this->lang->line('New password'), 
+				),
+				'passwordRepeatNew' => array(
+					'type'	=> 'password',
+					'label'	=> $this->lang->line('Repeat new password'), 
+				),				
+			)
+		);
+		
+		$form['rules'] = array( 
+			array(
+				'field' => 'passwordNew',
+				'label' => $form['fields']['passwordNew']['label'],
+				'rules' => 'trim|required|matches[passwordRepeatNew]'
+			),
+			array(
+				'field' => 'passwordRepeatNew',
+				'label' => $form['fields']['passwordRepeatNew']['label'],
+				'rules' => 'trim|required'
+			)
+		);		
+		
+		return $form;
+	}
+
+	function saveResetPassword() {
+		$form = $this->_getFrmResetPassword();
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);			
+		
+		if ($this->form_validation->run() == FALSE) {
+			$code 		= false;
+			$message 	= validation_errors();
+		}
+		else {
+			
+			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
+			$code 		= true;
+			$message 	= array('notification' => $this->lang->line('Data updated successfully'));
+		}
+		
+		return $this->load->view('ajax', array(
+			'code'		=> $code,
+			'result' 	=> $message 
+		));				
+	}
+	
+		
 }
