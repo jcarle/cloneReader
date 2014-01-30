@@ -39,11 +39,23 @@ $.Profile = {
 				$content.children().remove();
 				$content.html(result);
 				
+				//$content
+				//'callback' 	=> 'function(response) { $.Feedback.onSaveProfile(); };',
+				
 				$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 			}
 		, this));
 
-	}		
+	},
+	
+	onSaveProfile: function() {
+		var $alert = $('<div class="alert alert-success"> <strong>dada' + _msg[''] + ' </strong> </div>');
+		$('#frmCommentEdit')
+			.hide()
+			.parent().append($alert);
+			
+		$alert.hide().fadeIn();
+	}
 };
 
 

@@ -256,6 +256,15 @@ $.extend({
 		return str;
 	},
 	
+	showNotification: function(msg, className){
+		if (className == null) {
+			className = 'alert-success';
+		}
+		$div = $('<div class="alert ' + className +' fade in navbar-fixed-top">' + msg + '</div>')
+			.appendTo('body')
+			.fadeTo('slow', 0.9).delay(1500).slideUp('slow');
+	},
+	
 	showWaiting: function(forceWaiting) {
 		/*
 		 * TODO:

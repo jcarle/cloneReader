@@ -101,7 +101,7 @@ class Profile extends CI_Controller {
 		$data 	= $this->Users_Model->get($userId);
 		
 		$form = array(
-			'frmId'			=> 'frmUsersEdit',
+			'frmId'			=> 'frmEditProfile',
 			'action'		=> base_url('profile/saveEditProfile/'),
 			'messages'	 	=> getCrFormRulesMessages(),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
@@ -185,7 +185,18 @@ class Profile extends CI_Controller {
 				  
 		));*/
 		
-	}	
+	}
+
+	function saveEditProfile() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$userId = $this->session->userdata('userId');
+		
+		return $this->load->view('ajax', array(
+			'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
+			'result' 	=> validation_errors() 
+		));		
+	}
 
 
 	function frmChangeEmail() {
@@ -197,7 +208,7 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmUsersEdit',
 			'messages'	 	=> getCrFormRulesMessages(),
-			'action'		=> base_url('profile/saveEditProfile/'),
+			'action'		=> base_url('profile/saveChangeEmail/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(

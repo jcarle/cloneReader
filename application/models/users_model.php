@@ -178,7 +178,13 @@ class Users_Model extends CI_Model {
 	}		
 	
 	function editProfile($userId, $data){
-		$this->db->where('userId', $userId)->update('users', $data);
+		$values = array(
+			'userFirstName' => element('userFirstName', $data),
+			'userLastName' 	=> element('userLastName', $data),
+			'countryId' 	=> element('countryId', $data),
+		);		
+		
+		$this->db->where('userId', $userId)->update('users', $values);
 
 		return true;
 	}	
