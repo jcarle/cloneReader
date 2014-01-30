@@ -14,81 +14,11 @@ class Profile extends CI_Controller {
 	function edit() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
-		/*
-		$userId = $this->session->userdata('userId');
-		$data 	= $this->Users_Model->get($userId);
-		
-		$form = array(
-			'frmId'			=> 'frmUsersEdit',
-			'messages'	 	=> getCrFormRulesMessages(),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
-			'fields'		=> array(
-				'userEmail' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Email'),
-					'value'	=> element('userEmail', $data)
-				),
-				'userFirstName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('First Name'), 
-					'value'	=> element('userFirstName', $data)
-				),
-				'userLastName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Last Name'), 
-					'value'	=> element('userLastName', $data)
-				),
-				'countryId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('Country'),
-					'value'		=> element('countryId', $data),
-					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
-				),
-			)
-		);
-		
-		$form['rules'] 	= array( 
-			array(
-				'field' => 'userEmail',
-				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'required|valid_email'
-			),
-			array(
-				'field' => 'userFirstName',
-				'label' => $form['fields']['userFirstName']['label'],
-				'rules' => 'required'
-			),
-			array(
-				'field' => 'userLastName',
-				'label' => $form['fields']['userLastName']['label'],
-				'rules' => 'required'
-			)
-		);		
-
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-		
-		if ($this->input->is_ajax_request()) { // save data
-			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('The email entered already exists in the database')
-				));
-			}
-					
-			return $this->load->view('ajax', array(
-				'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
-				'result' 	=> validation_errors() 
-			));
-		}*/
-				
 		$this->load->view('includes/template', array(
 			'view'		=> 'profile', 
 			'title'		=> $this->lang->line('Edit profile'),
 			'hasForm'	=> true,
 			'aJs'		=> array('profile.js'),
-//			'form'		=> $form,
-				  
 		));		
 	}
 
@@ -104,6 +34,7 @@ class Profile extends CI_Controller {
 			'frmId'			=> 'frmEditProfile',
 			'action'		=> base_url('profile/saveEditProfile/'),
 			'messages'	 	=> getCrFormRulesMessages(),
+			'callback' 		=> ' function(response) { $.showNotification(\''.$this->lang->line('Data updated successfully').'\'); }; ',
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userFirstName' => array(
@@ -146,28 +77,6 @@ class Profile extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 		$this->form_validation->set_message($form['messages']);
-	
-	
-/*		
-		if ($this->input->is_ajax_request()) { // save data
-			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('The email entered already exists in the database')
-				));
-			}
-					
-			return $this->load->view('ajax', array(
-				'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
-				'result' 	=> validation_errors() 
-			));
-		}
-*/
-
-//		$form 				= $this->_getTravelTransportFormProperties($travelId, $travelTransportId);
-//		$form['isSubForm'] 	= true;
-//		$form['title']		= $this->lang->line('Edit transports');
-
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -175,16 +84,6 @@ class Profile extends CI_Controller {
 			'title'			=> $this->lang->line('Edit profile'),
 			'code'			=> true
 		));
-		
-			
-			/*	
-		$this->load->view('includes/template', array(
-			'view'		=> 'profile', 
-			'title'		=> $this->lang->line('Edit profile'),
-			'form'		=> $form,
-				  
-		));*/
-		
 	}
 
 	function saveEditProfile() {
@@ -229,28 +128,6 @@ class Profile extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 		$this->form_validation->set_message($form['messages']);
-	
-	
-/*		
-		if ($this->input->is_ajax_request()) { // save data
-			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('The email entered already exists in the database')
-				));
-			}
-					
-			return $this->load->view('ajax', array(
-				'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
-				'result' 	=> validation_errors() 
-			));
-		}
-*/
-
-//		$form 				= $this->_getTravelTransportFormProperties($travelId, $travelTransportId);
-		$form['isSubForm'] 	= true;
-		$form['title']		= $this->lang->line('Edit transports');
-		$form['action']		= base_url('profile/saveTravelTransport/');
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -260,12 +137,84 @@ class Profile extends CI_Controller {
 		));
 
 	}
+	
+	function saveChangeEmail() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$userId = $this->session->userdata('userId');
+		
+		if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
+			return $this->load->view('ajax', array(
+				'code'		=> false, 
+				'result' 	=> $this->lang->line('The email entered already exists in the database')
+			));
+		}
+		
+		$result = true; // $this->Users_Model->editProfile($userId, $this->input->post()), 
+				
+		return $this->load->view('ajax', array(
+			'code'		=> $result,
+			'result' 	=> validation_errors() 
+		));		
+				
+	}
+	
 
 	function frmChangePassword() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$userId = $this->session->userdata('userId');
+				
+		$form = array(
+			'frmId'				=> 'frmChangePassword',
+			'messages' 			=> getCrFormRulesMessages(),
+			'action'			=> base_url('profile/saveChangePassword/'),
+			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),			
+			'fields'			=> array(
+				'passwordOld' => array(
+					'type'	=> 'password',
+					'label'	=> $this->lang->line('Old password'), 
+				),
+				'passwordNew' => array(
+					'type'	=> 'password',
+					'label'	=> $this->lang->line('New password'), 
+				),
+				'passwordRepeatNew' => array(
+					'type'	=> 'password',
+					'label'	=> $this->lang->line('Repeat new password'), 
+				),				
+			)
+		);
+		
+		$form['rules'] = array( 
+			array(
+				'field' => 'passwordOld',
+				'label' => $form['fields']['passwordOld']['label'],
+				'rules' => 'required'
+			)
+		);		
+		
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);
+
+		$this->load->view('ajax', array(
+			'view'			=> 'includes/crAjaxForm',
+			'form'			=> $form,
+			'title'			=> $this->lang->line('Change password'),
+			'code'			=> true
+		));
+	}
+	
+	function saveChangePassword() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$userId = $this->session->userdata('userId');		
 	}
 	
 	function frmRemoveAccount() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
+		$userId = $this->session->userdata('userId');		
 	}
 		
 		

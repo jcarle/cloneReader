@@ -17,6 +17,10 @@ $.Profile = {
 	},
 	
 	loadTab: function(controller, $content) {
+		if ($content.children().length > 0) {
+			return;
+		}
+		
 		$.ajax( {
 			type: 		'get', 
 			url:		controller,
@@ -38,9 +42,6 @@ $.Profile = {
 				result = $(result['result']);
 				$content.children().remove();
 				$content.html(result);
-				
-				//$content
-				//'callback' 	=> 'function(response) { $.Feedback.onSaveProfile(); };',
 				
 				$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 			}
