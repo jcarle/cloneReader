@@ -108,3 +108,4 @@ $lang['Data updated successfully'] = 'Datos actualizados con éxito';
 $lang['Old password'] = 'Contraseña actual';
 $lang['New password'] = 'Nueva contraseña';
 $lang['Repeat new password'] = 'Repetir contraseña';
+$lang['The password you entered are incorrect'] = 'La contraseña ingresada es incorrecta';

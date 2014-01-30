@@ -18,6 +18,7 @@ $.Profile = {
 	
 	loadTab: function(controller, $content) {
 		if ($content.children().length > 0) {
+			$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 			return;
 		}
 		

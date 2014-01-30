@@ -23,10 +23,7 @@ class Profile extends CI_Controller {
 	}
 
 
-
-	function frmEditProfile() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-
+	function _getFrmEditProfile() {
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);
 		
@@ -34,7 +31,6 @@ class Profile extends CI_Controller {
 			'frmId'			=> 'frmEditProfile',
 			'action'		=> base_url('profile/saveEditProfile/'),
 			'messages'	 	=> getCrFormRulesMessages(),
-			'callback' 		=> ' function(response) { $.showNotification(\''.$this->lang->line('Data updated successfully').'\'); }; ',
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userFirstName' => array(
@@ -74,7 +70,15 @@ class Profile extends CI_Controller {
 				'rules' => 'required'
 			)
 		);		
+		
+		return $form;
+	}
+		
 
+	function frmEditProfile() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+
+		$form = $this->_getFrmEditProfile();
 		$this->form_validation->set_rules($form['rules']);
 		$this->form_validation->set_message($form['messages']);
 		
@@ -89,10 +93,15 @@ class Profile extends CI_Controller {
 	function saveEditProfile() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
-		$userId = $this->session->userdata('userId');
+		$form = $this->_getFrmEditProfile();
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);
+		
+		
+//					$message 	= array('notification' => $this->lang->line('Data updated successfully'));
 		
 		return $this->load->view('ajax', array(
-			'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
+			'code'		=> $this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post()), 
 			'result' 	=> validation_errors() 
 		));		
 	}
@@ -159,18 +168,13 @@ class Profile extends CI_Controller {
 				
 	}
 	
-
-	function frmChangePassword() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-		
-		$userId = $this->session->userdata('userId');
-				
+	function _getFrmChangePassword() {
 		$form = array(
-			'frmId'				=> 'frmChangePassword',
-			'messages' 			=> getCrFormRulesMessages(),
-			'action'			=> base_url('profile/saveChangePassword/'),
-			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),			
-			'fields'			=> array(
+			'frmId'			=> 'frmChangePassword',
+			'messages' 		=> getCrFormRulesMessages(),
+			'action'		=> base_url('profile/saveChangePassword/'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),			
+			'fields'		=> array(
 				'passwordOld' => array(
 					'type'	=> 'password',
 					'label'	=> $this->lang->line('Old password'), 
@@ -190,12 +194,33 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'passwordOld',
 				'label' => $form['fields']['passwordOld']['label'],
+				'rules' => 'required|callback__checkPassword'
+			),
+			array(
+				'field' => 'passwordNew',
+				'label' => $form['fields']['passwordNew']['label'],
+				'rules' => 'required|matches[passwordRepeatNew]'
+			),
+			array(
+				'field' => 'passwordRepeatNew',
+				'label' => $form['fields']['passwordRepeatNew']['label'],
 				'rules' => 'required'
 			)
 		);		
 		
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
+		$this->form_validation->set_message($form['messages']);	
+		
+		return $form;
+	}
+
+	function frmChangePassword() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$form = $this->_getFrmChangePassword();
+		
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);			
 
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -208,8 +233,31 @@ class Profile extends CI_Controller {
 	function saveChangePassword() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
-		$userId = $this->session->userdata('userId');		
+		
+		$form = $this->_getFrmChangePassword();
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);			
+		
+		if ($this->form_validation->run() == FALSE) {
+			$code 		= false;
+			$message 	= validation_errors();
+		}
+		else {
+			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
+			$code 		= true;
+			$message 	= array('notification' => $this->lang->line('Data updated successfully'));
+		}
+		
+		return $this->load->view('ajax', array(
+			'code'		=> $code,
+			'result' 	=> $message 
+		));				
 	}
+	
+	function _checkPassword() {
+		return $this->Users_Model->checkPassword($this->session->userdata('userId'), $this->input->post('passwordOld'));
+	}
+	
 	
 	function frmRemoveAccount() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }

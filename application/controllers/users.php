@@ -119,12 +119,17 @@ class Users extends CI_Controller {
 					'source'	=> array_to_select($this->Groups_Model->select(), 'groupId', 'groupName'),
 					'value'		=> $data['groups'],
 					'showId'	=> true,
-				)
+				),
 			)
 		);
 		
 		if ((int)element('userId', $data) > 0) {
-			$form['urlDelete'] = base_url('users/delete/');
+			$form['urlDelete'] 		= base_url('users/delete/');
+			$form['fields']['link']	= array(
+				'type'	=> 'link',
+				'label'	=> $this->lang->line('View feeds'), 
+				'value'	=> base_url('feeds/listing/?userId='.$userId),
+			);
 		}
 		
 		$form['rules'] 	= array( 

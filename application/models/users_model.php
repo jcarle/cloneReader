@@ -187,7 +187,7 @@ class Users_Model extends CI_Model {
 		$this->db->where('userId', $userId)->update('users', $values);
 
 		return true;
-	}	
+	}
 	
 	function register($userId, $data){
 		$values = array(
@@ -213,6 +213,17 @@ class Users_Model extends CI_Model {
 		$this->db->where('userId !=', $userId);
 		return ($this->db->get('users')->num_rows() > 0);		
 	}
+	
+	function checkPassword($userId, $userPassword) {
+		$query = $this->db
+			->where( array('userId' => $userId, 'userPassword' => md5($userPassword)) )
+			->get('users');	
+		return ((int)$query->num_rows() > 0);
+	}
+	
+	function updatePassword($userId, $userPassword) {
+		 $this->db->update('users', array('userPassword' => md5($userPassword)), array('userId' => $userId ));
+	}	
 
 	function updateUserFiltersByUserId($userFilters, $userId) {
 			$this->db->where('userId', $userId)->update('users', array('userFilters' => json_encode($userFilters)));
