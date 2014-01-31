@@ -73,6 +73,9 @@ class Profile extends CI_Controller {
 			)
 		);		
 		
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);		
+		
 		return $form;
 	}
 		
@@ -81,8 +84,6 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 
 		$form = $this->_getFrmEditProfile();
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -96,8 +97,6 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$form = $this->_getFrmEditProfile();
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		if ($this->form_validation->run() == FALSE) {
 			$code 		= false;
@@ -229,9 +228,6 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$form = $this->_getFrmChangePassword();
-		
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);			
 
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -244,10 +240,7 @@ class Profile extends CI_Controller {
 	function saveChangePassword() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
-		
 		$form = $this->_getFrmChangePassword();
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);			
 		
 		if ($this->form_validation->run() == FALSE) {
 			$code 		= false;
@@ -330,7 +323,7 @@ class Profile extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload()) {
-			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors('', '')));					
+			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors('', '')));
 		}
 		
 		
@@ -569,9 +562,6 @@ class Profile extends CI_Controller {
 		
 		$form = $this->_getFrmResetPassword();
 		
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);			
-
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crForm',
 			'form'			=> $form,
@@ -612,14 +602,15 @@ class Profile extends CI_Controller {
 				'rules' => 'trim|required'
 			)
 		);		
-		
+
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message($form['messages']);
+				
 		return $form;
 	}
 
 	function saveResetPassword() {
 		$form = $this->_getFrmResetPassword();
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);			
 		
 		if ($this->form_validation->run() == FALSE) {
 			$code 		= false;
