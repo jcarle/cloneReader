@@ -86,7 +86,6 @@ class Users extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmUsersEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'fields'	=> array(
 				'userId' => array(
 					'type' 		=> 'hidden',
@@ -151,7 +150,6 @@ class Users extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		if ($this->input->is_ajax_request()) { // save data
 			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId')) == true) {

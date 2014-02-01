@@ -12,7 +12,6 @@ class Login extends CI_Controller {
 		
 		$form = array(
 			'frmId'				=> 'frmLogin',
-			'messages' 			=> getCrFormRulesMessages(),
 			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> '.$this->lang->line('Login').' </button>'),
 			'fields'			=> array(
 				'email' => array(
@@ -37,7 +36,7 @@ class Login extends CI_Controller {
 			array(
 				'field' => 'email',
 				'label' => $form['fields']['email']['label'],
-				'rules' => 'trim|required|valid_email|callback__login'
+				'rules' => 'trim|required|valid_email|callback__validate_login'
 			),
 			array(				 
 				'field' => 'password',
@@ -47,8 +46,6 @@ class Login extends CI_Controller {
 		);		
 		
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-
 
 		if ($this->input->is_ajax_request()) {
 			$code = $this->form_validation->run(); 
@@ -88,7 +85,7 @@ class Login extends CI_Controller {
 	}
 	
 
-	function _login() {
+	function _validate_login() {
 		return $this->safety->login($this->input->post('email'), $this->input->post('password'));
 	}
 	

@@ -42,11 +42,7 @@ class Comments extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($commentId, false);
-		
-		
-
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		if ($this->input->is_ajax_request()) { // save data			
 			return $this->load->view('ajax', array(
@@ -84,7 +80,6 @@ class Comments extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 

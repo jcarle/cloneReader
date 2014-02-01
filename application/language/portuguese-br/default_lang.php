@@ -1,9 +1,6 @@
 <?php
 $lang['Not authorized for the action to take'] = 'Não autorizado para a ação a ser tomada';
 $lang['The page you requested does not exist'] = 'A página solicitada não existe';
-$lang['Please complete the field "%s"'] = 'Por favor, preencha o campo "%s"';
-$lang['Please enter a valid email address'] = 'Por favor insira um endereço de e-mail válido';
-$lang['Please enter a valid number in the field "%s"'] = 'Por favor insira um número válido no campo "%s"';
 $lang['The email or password you entered are incorrect'] = 'O e-mail ou senha que introduziu estão incorrectos';
 $lang['The email entered already exists in the database'] = 'O e-mail já existe no banco de dados';
 $lang['The name entered already exists in the database'] = 'O nome já existe no banco de dados';

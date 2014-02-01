@@ -84,7 +84,6 @@ class Entries extends CI_Controller {
 		$form = $this->_getFormProperties($entryId);
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		$code = $this->form_validation->run(); 
 
@@ -118,7 +117,6 @@ class Entries extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmEntryEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'entryId' => array(

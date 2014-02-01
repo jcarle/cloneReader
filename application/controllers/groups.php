@@ -38,7 +38,6 @@ class Groups extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmGroupsEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'fields'	=> array(
 				'groupId' => array(
 					'type'		=> 'hidden', 
@@ -77,8 +76,7 @@ class Groups extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-		
+
 		if ($this->input->is_ajax_request()) { // save data					
 			return $this->load->view('ajax', array(
 				'code'		=> $this->Groups_Model->save($this->input->post()), 

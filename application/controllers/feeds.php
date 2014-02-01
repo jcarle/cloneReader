@@ -117,8 +117,7 @@ class Feeds extends CI_Controller {
 		$form = $this->_getFormProperties($feedId);
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-		
+
 		$code = $this->form_validation->run(); 
 		
 		if ($this->input->is_ajax_request()) { // save data
@@ -161,7 +160,6 @@ class Feeds extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmFeedEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'feedId' => array(

@@ -19,7 +19,6 @@ class Register extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmRegister',
-			'messages'	 	=> getCrFormRulesMessages(),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> '.$this->lang->line('Register').'</button>'),
 			'fields'		=> array(
 				'userEmail' => array(
@@ -70,7 +69,6 @@ class Register extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		if ($this->input->is_ajax_request()) { // save data
 			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {

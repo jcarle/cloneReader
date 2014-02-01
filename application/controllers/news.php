@@ -36,10 +36,6 @@ class News extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($newId);
-
-		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-		
 		$code = $this->form_validation->run(); 
 
 		if ($this->input->is_ajax_request()) { // save data
@@ -73,7 +69,6 @@ class News extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmNewEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'newId' => array(
@@ -131,7 +126,9 @@ class News extends CI_Controller {
 			),
 		);
 
-		return $form;		
+		$this->form_validation->set_rules($form['rules']);
+
+		return $form;
 	}
 
 	function view($newSef) {

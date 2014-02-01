@@ -32,7 +32,6 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmEditProfile',
 			'action'		=> base_url('profile/saveEditProfile/'),
-			'messages'	 	=> getCrFormRulesMessages(),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userFirstName' => array(
@@ -74,8 +73,7 @@ class Profile extends CI_Controller {
 		);		
 		
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);		
-		
+
 		return $form;
 	}
 		
@@ -125,7 +123,6 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmUsersEdit',
-			'messages'	 	=> getCrFormRulesMessages(),
 			'action'		=> base_url('profile/saveChangeEmail/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
@@ -146,7 +143,6 @@ class Profile extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -181,7 +177,6 @@ class Profile extends CI_Controller {
 	function _getFrmChangePassword() {
 		$form = array(
 			'frmId'			=> 'frmChangePassword',
-			'messages' 		=> getCrFormRulesMessages(),
 			'action'		=> base_url('profile/saveChangePassword/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),			
 			'fields'		=> array(
@@ -219,7 +214,6 @@ class Profile extends CI_Controller {
 		);		
 		
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);	
 		
 		return $form;
 	}
@@ -285,7 +279,6 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'action'	=> base_url('profile/doImportFeeds'),
-			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagName' => array(
@@ -363,7 +356,6 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'action'	=> base_url('profile/doImportStarred'),
-			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagName' => array(
@@ -475,7 +467,6 @@ class Profile extends CI_Controller {
 	function _getFrmForgotPassword() {
 		$form = array(
 			'frmId'			=> 'frmForgotPassword',
-			'messages'	 	=> getCrFormRulesMessages(),
 			'action'		=> base_url('profile/sendEmailToResetPassword/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Send').' </button>'),
 			'fields'		=> array(
@@ -502,28 +493,17 @@ class Profile extends CI_Controller {
 		
 		$form = $this->_getFrmForgotPassword();
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 
-/*		
-		if ($this->input->is_ajax_request()) { // save data
-			return $this->load->view('ajax', array(
-				'code'		=> $this->Users_Model->editProfile($userId, $this->input->post()), 
-				'result' 	=> validation_errors() 
-			));
-		}*/
-				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Reset password'),
 			'form'		=> $form,
-				  
-		));		
+		));
 	}
 	
 	function sendEmailToResetPassword() {
 		$form = $this->_getFrmForgotPassword();
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);			
 		
 		if ($this->form_validation->run() == FALSE) {
 			return $this->load->view('ajax', array(
@@ -575,7 +555,6 @@ class Profile extends CI_Controller {
 	function _getFrmResetPassword() {
 		$form = array(
 			'frmId'			=> 'frmResetPassword',
-			'messages' 		=> getCrFormRulesMessages(),
 			'action'		=> base_url('profile/saveResetPassword/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Reset password').' </button>'),			
 			'fields'		=> array(
@@ -604,8 +583,7 @@ class Profile extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-				
+
 		return $form;
 	}
 

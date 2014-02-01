@@ -3,16 +3,11 @@ function getCrFormRulesMessages() { // TODO: mover esto de aca!
 	$CI	= &get_instance();
 	
 	return array(
-		'required' 			=> $CI->lang->line('Please complete the field "%s"'),
-		'valid_email' 		=> $CI->lang->line('Please enter a valid email address'),
-		'numeric' 			=> $CI->lang->line('Please enter a valid number in the field "%s"'),
-		'_login' 			=> $CI->lang->line('The email or password you entered are incorrect'),
+//		'_login' 			=> $CI->lang->line('The email or password you entered are incorrect'),
 		'_checkPassword' 	=> $CI->lang->line('The password you entered are incorrect'),
-		'_exitsEmail'		=> 'The email not exists in the database', // TODO: traducir!
+		'_exitsEmail'		=> $CI->lang->line('The email not exists in the database'),
 	);
 }
-
-
 
 function getCrFormFieldMoney(array $price, array $currency, array $exchange, array $total) {
 	$CI = &get_instance();

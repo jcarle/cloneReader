@@ -38,7 +38,6 @@ class Tags extends CI_Controller {
 		$form = $this->_getFormProperties($tagId);
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		$code = $this->form_validation->run(); 
 		
@@ -72,7 +71,6 @@ class Tags extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmTagEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagId' => array(

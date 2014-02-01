@@ -5,7 +5,7 @@ class Menu extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model('Controllers_Model');
-	}  
+	}
 	
 	function index() {
 		$this->edit(0);
@@ -18,7 +18,6 @@ class Menu extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmMenuEdit',
-			'messages' 		=> getCrFormRulesMessages(),
 			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').'</button> '),
 			'fields'		=> array(
 				'menuId' => array(
@@ -78,9 +77,7 @@ class Menu extends CI_Controller {
 			)
 		);
 
-
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
 		
 		if ($this->input->is_ajax_request()) { // save data
 			$code = $this->form_validation->run(); 

@@ -39,7 +39,6 @@ class Controllers extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmControllersEdit',
-			'messages' 	=> getCrFormRulesMessages(),
 			'fields'	=> array(
 				'controllerId' => array(
 					'type'		=> 'hidden', 
@@ -81,8 +80,7 @@ class Controllers extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		$this->form_validation->set_message($form['messages']);
-		
+
 		if ($this->input->is_ajax_request()) { // save data			
 		
 			if ($this->Controllers_Model->exitsController($this->input->post('controllerName'), (int)$this->input->post('controllerId')) == true) {
