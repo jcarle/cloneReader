@@ -48,15 +48,6 @@ $.Profile = {
 			}
 		, this));
 
-	},
-	
-	onSaveProfile: function() {
-		var $alert = $('<div class="alert alert-success"> <strong>dada' + _msg[''] + ' </strong> </div>');
-		$('#frmCommentEdit')
-			.hide()
-			.parent().append($alert);
-			
-		$alert.hide().fadeIn();
 	}
 };
 

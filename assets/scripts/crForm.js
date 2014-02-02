@@ -322,6 +322,9 @@
 						return $(document).crAlert(response['result']);
 					}
 					
+					if (response['result']['notification'] != null) {
+						$.showNotification(response['result']['notification']); 
+					}
 					if (this.options.isSubForm == true) {
 						this.$form.parents('.modal').first().modal('hide');
 						return;
@@ -332,11 +335,13 @@
 					if (response['result']['goToUrl'] != null) {
 						$.goToUrl(response['result']['goToUrl']);
 					}
+
 				}
 			, this));
 		},
 		
 		validate: function() {
+return true;			
 			for (var i = 0; i<this.options.rules.length; i++){
 				var field 	= this.options.rules[i];
 				var rules 	= field['rules'].split('|');

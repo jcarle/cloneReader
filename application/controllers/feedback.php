@@ -27,7 +27,7 @@ class Feedback extends CI_Controller {
 
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
-			'callback' 	=> 'function(response) { $.Feedback.onSaveFeedback(); };',
+			'callback' 	=> 'function(response) { $.Feedback.onSaveFeedback(response); };',
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 
@@ -72,9 +72,14 @@ class Feedback extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 		
-		if ($this->input->is_ajax_request()) { // save data			
+		if ($this->input->is_ajax_request()) { // save data
+			$code = $this->form_validation->run();
+			if ($code === TRUE) {	
+				$this->Comments_Model->saveFeedback($this->input->post());
+			}
+
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Comments_Model->saveFeedback($this->input->post()), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
