@@ -5,7 +5,7 @@ class Feeds extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model(array('Feeds_Model', 'Status_Model', 'Languages_Model', 'Countries_Model', 'Tags_Model', 'Users_Model'));
-	}  
+	}
 	
 	function index() {
 		$this->listing();
@@ -116,14 +116,16 @@ class Feeds extends CI_Controller {
 		
 		$form = $this->_getFormProperties($feedId);
 
-		$this->form_validation->set_rules($form['rules']);
-
-		$code = $this->form_validation->run(); 
+		if (isSubmitCrForm() === true) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->Feeds_Model->save($this->input->post());
+			}
+		}		 
 		
-		if ($this->input->is_ajax_request()) { // save data
-			$feedId = $this->Feeds_Model->save($this->input->post());			
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
-				'code'		=> ($feedId > 0), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
@@ -131,7 +133,7 @@ class Feeds extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit feeds'),
-			'form'		=> $form,
+			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true)),
 			'aJs'		=> array('feeds.js')
 		));		
 	}
@@ -150,97 +152,74 @@ class Feeds extends CI_Controller {
 	}
 	
 	function _getFormProperties($feedId) {
-		$tags = array();
-		$query = $this->Tags_Model->selectByFeedId($feedId);
-		foreach ($query as $data) {
-			$tags[] = array('id' => $data['tagId'], 'text' => $data['tagName']);
-		}		
-				
-		$data = $this->Feeds_Model->get($feedId);
-		
 		$form = array(
 			'frmId'		=> 'frmFeedEdit',
 			'rules'		=> array(),
 			'fields'	=> array(
 				'feedId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('feedId', $data, 0)
+					'value'	=> $feedId
 				),
 				'feedName' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Name'), 
-					'value'		=> element('feedName', $data)
 				),
 				'feedIcon' => array(
 					'type'		=> 'logo',
-					'label'		=> 'Icon', //$this->lang->line('Icon'), 
-					'value'		=> (element('feedIcon', $data) == null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.element('feedIcon', $data)), 
-					
+					'label'		=> $this->lang->line('Icon'), 
 				),
 				'feedDescription' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Description'), 
-					'value'		=> element('feedDescription', $data)
 				),
 				'feedUrl' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Url'), 
-					'value'		=> element('feedUrl', $data)
 				),
 				'feedLink' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Link'), 
-					'value'		=> element('feedLink', $data)
 				),				
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'value'				=> element('countryId', $data),
 					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
 					'appendNullOption' 	=> true
 				),
 				'langId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Language'),
-					'value'				=> element('langId', $data),
 					'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
 					'appendNullOption' 	=> true
 				),
 				'feedLastEntryDate' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Last entry'), 
-					'value'		=> element('feedLastEntryDate', $data)
 				),
 				'feedLastScan' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Last update'), 
-					'value'		=> element('feedLastScan', $data)
 				),
 				'statusId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Status'),
-					'value'				=> element('countryId', $data),
 					'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
-					'value'				=> element('statusId', $data),
 					'disabled'			=> 'disabled'
 				),
 				'aTagId' => array(
 					'type' 			=> 'typeahead',
 					'label'			=> 'Tags',
 					'source' 		=> base_url('tags/search/'),
-					'value'			=> $tags,
 					'multiple'		=> true,
 					'placeholder' 	=> 'tags'
 				),
 				'feedSuggest' => array(
 					'type' 			=> 'checkbox',
 					'label'			=> sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('@tag-browse')),
-					'checked'		=> element('feedSuggest', $data),
 				),
 				'fixLocale' => array(
 					'type' 			=> 'checkbox',
 					'label'			=> sprintf($this->lang->line('Fix language')),
-					'checked'		=> element('fixLocale', $data),
 				),
 				
 			),
@@ -299,6 +278,9 @@ class Feeds extends CI_Controller {
 				'rules' => 'trim|required'
 			),
 		);
+		
+		$this->form_validation->set_rules($form['rules']);
+		
 		return $form;
 	}
 

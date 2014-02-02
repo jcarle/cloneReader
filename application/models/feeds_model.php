@@ -55,8 +55,23 @@ class Feeds_Model extends CI_Model {
 		return $this->db->get('feeds');
 	}
 
-	function get($feedId){
-		return $this->db->where('feeds.feedId', $feedId)->get('feeds')->row_array();
+	function get($feedId, $getTags = false, $getIcon = false){
+		$result = $this->db->where('feeds.feedId', $feedId)->get('feeds')->row_array();
+		
+		if ($getTags == true) {
+			$result['aTagId'] = array();
+			$query = $this->Tags_Model->selectByFeedId($feedId);
+			foreach ($query as $data) {
+				$result['aTagId'][] = array('id' => $data['tagId'], 'text' => $data['tagName']);
+			}
+		}
+
+
+		if ($getIcon == true) {
+			$result['feedIcon'] = (element('feedIcon', $result) == null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.element('feedIcon', $result));
+		}
+		
+		return $result;
 	}	
 	
 	function save($data){

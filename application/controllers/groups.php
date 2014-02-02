@@ -34,36 +34,31 @@ class Groups extends CI_Controller {
 	function edit($groupId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
-		$data = $this->Groups_Model->get($groupId);
-		
 		$form = array(
 			'frmId'		=> 'frmGroupsEdit',
 			'fields'	=> array(
 				'groupId' => array(
 					'type'		=> 'hidden', 
-					'value'		=> element('groupId', $data, 0),
+					'value'		=> $groupId,
 				),
 				'groupName' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Name'), 
-					'value'	=> element('groupName', $data)
 				),
 				'groupHomePage' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Home page'),
-					'value'	=> element('groupHomePage', $data)
 				),
 				'controllers[]' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Controllers'),
 					'source'	=> array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
-					'value'		=> $data['controllers'],
 					'showId'	=> true
 				)
 			)
 		);
 		
-		if ((int)element('groupId', $data) > 0) {
+		if ((int)$groupId > 0) {
 			$form['urlDelete'] = base_url('groups/delete/');
 		}
 		
@@ -77,9 +72,16 @@ class Groups extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 
-		if ($this->input->is_ajax_request()) { // save data					
+		if (isSubmitCrForm() === true) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->Groups_Model->save($this->input->post());
+			}
+		}
+
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Groups_Model->save($this->input->post()), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
@@ -87,7 +89,7 @@ class Groups extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crForm', 
 			'title'			=> $this->lang->line('Edit groups'),
-			'form'			=> $form,
+			'form'			=> populateCrForm($form, $this->Groups_Model->get($groupId)),
 		));		
 	}
 

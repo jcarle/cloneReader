@@ -14,7 +14,7 @@ function isSubmitCrForm() {
 
 /**
  * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista
- * TODO: implementar que los sources de los dropdown se llenen con este metodo!
+ * TODO: implementar que los sources de [dropdown, menuTree] se llenen con este metodo
  */
 function populateCrForm($form, $data) {
 	foreach ($form['fields'] as $fieldName => $fieldValue) {
@@ -22,6 +22,9 @@ function populateCrForm($form, $data) {
 			case 'hidden':
 			case 'text':
 			case 'dropdown':
+			case 'datetime':
+			case 'logo':
+			case 'typeahead':
 				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
 				break;
 			case 'checkbox':
@@ -29,6 +32,7 @@ function populateCrForm($form, $data) {
 				break;
 			case 'groupCheckBox':
 				$form['fields'][$fieldName]['value'] = element(str_replace('[]', '', $fieldName), $data);
+				break;
 		}
 	}
 	

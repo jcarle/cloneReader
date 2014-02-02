@@ -106,3 +106,4 @@ $lang['Last access'] = 'Last access';
 $lang['Fix language'] = 'Fix language';
 $lang['Reset password'] = 'Reset password';
 $lang['Change email'] = 'Change email';
+$lang['Icon'] = 'Icon';
