@@ -236,11 +236,16 @@ class Users_Model extends CI_Model {
 	}
 	
 	function updateResetPasswordKey($userId, $resetPasswordKey) {
-		$this->db->update('users', array('resetPasswordKey' => md5($resetPasswordKey), 'resetPasswordDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
+		$this->db->update('users', array('resetPasswordKey' => $resetPasswordKey, 'resetPasswordDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
 	}
 	
-	function checkResetPasswordKey() {
-return true;		
+	function checkResetPasswordKey($resetPasswordKey) {
+		$query = $this->db
+			->where('resetPasswordKey', $resetPasswordKey) 
+			->where('DATE_ADD(resetPasswordDate, INTERVAL '.URL_SECRET_TIME.' MINUTE)  > NOW()')
+			->get('users');	
+
+		return ($query->num_rows() > 0);
 	}
 
 	function getUserFiltersByUserId($userId) {

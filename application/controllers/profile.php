@@ -367,7 +367,7 @@ class Profile extends CI_Controller {
 	}
 	
 	function doImportStarred() {
-		if (! $this->safety->allowByControllerName('profile/importFeeds') ) { return errorForbidden(); }
+		if (! $this->safety->allowByControllerName('profile/importStarred') ) { return errorForbidden(); }
 		
 		$this->load->model('Entries_Model');
 		
@@ -591,9 +591,9 @@ class Profile extends CI_Controller {
 		}
 		else {
 			
-			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
+//			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
 			$code 		= true;
-			$message 	= array('notification' => $this->lang->line('Data updated successfully'));
+			$message 	= array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login'));
 		}
 		
 		return $this->load->view('ajax', array(

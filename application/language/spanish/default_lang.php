@@ -113,3 +113,5 @@ $lang['Old password'] = 'Contraseña actual';
 $lang['New password'] = 'Nueva contraseña';
 $lang['Repeat new password'] = 'Repetir contraseña';
 $lang['Icon'] = 'Icono';
+$lang['Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'] = 'Hola %s, <p>Para resetear tu contraseña de cReader, ingresa en %s  </p> Saludos';
+$lang['We have sent you an email with instructions to reset your password'] = 'Te hemos mandado un email con instrucciones para restablecer tu contraseña';

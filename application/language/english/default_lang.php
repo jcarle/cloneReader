@@ -107,6 +107,6 @@ $lang['Fix language'] = 'Fix language';
 $lang['Reset password'] = 'Reset password';
 $lang['Change email'] = 'Change email';
 $lang['Icon'] = 'Icon';
-
+$lang['Data updated successfully'] = 'Data updated successfully';
 $lang['Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'] = 'Hello %s, <p>To reset your cReader password, click here %s  </p> Regards';
 $lang['We have sent you an email with instructions to reset your password'] = 'We have sent you an email with instructions to reset your password';
