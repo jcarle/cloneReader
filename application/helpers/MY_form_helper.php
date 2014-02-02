@@ -1,9 +1,4 @@
 <?php
-function getCrFormRulesMessages() { // TODO: mover esto de aca!
-	$CI	= &get_instance();
-	
-}
-
 function getCrFormFieldMoney(array $price, array $currency, array $exchange, array $total) {
 	$CI = &get_instance();
 	$CI->load->model('Coins_Model');

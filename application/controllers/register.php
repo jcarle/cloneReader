@@ -54,7 +54,7 @@ class Register extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'trim|required|valid_email|callback_validate_exitsEmail'
+				'rules' => 'trim|required|valid_email|callback__validate_exitsEmail'
 			),
 			array(
 				'field' => 'userFirstName',

@@ -135,7 +135,7 @@ class Users extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'trim|required|valid_email'
+				'rules' => 'trim|required|valid_email|callback__validate_exitsEmail'
 			),
 			array(
 				'field' => 'userFirstName',
@@ -152,13 +152,6 @@ class Users extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		
 		if ($this->input->is_ajax_request()) { // save data
-			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId')) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('The email entered already exists in the database') 
-				));
-			}
-					
 			return $this->load->view('ajax', array(
 				'code'		=> $this->Users_Model->save($this->input->post()), 
 				'result' 	=> validation_errors() 
@@ -189,4 +182,8 @@ class Users extends CI_Controller {
 			'result' 	=> $this->Users_Model->search($this->input->get('query'), $this->input->get('groupId'))
 		));
 	}
+	
+	function _validate_exitsEmail() {
+		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId'));
+	}	
 }

@@ -2,7 +2,6 @@
 $lang['_validate_login'] = 'The email or password you entered are incorrect';
 $lang['_validate_password']	= 'The password you entered are incorrect';
 $lang['_validate_exitsEmail'] = 'The email entered already exists in the database';
-
 $lang['_validate_notExitsEmail'] = 'The email not exists in the database';
 
 $lang['Not authorized for the action to take'] = 'Not authorized for the action to take';
