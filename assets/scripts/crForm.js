@@ -322,6 +322,16 @@
 						return $(document).crAlert(response['result']);
 					}
 					
+					if (response['result']['msg'] != null && response['result']['goToUrl'] != null) {
+						$(document).crAlert({
+							'msg': 		response['result']['msg'],
+							'callback': function() {
+								$.goToUrl(response['result']['goToUrl']);
+							}
+						});
+						return;
+					}
+
 					if (response['result']['notification'] != null) {
 						$.showNotification(response['result']['notification']); 
 					}
@@ -341,8 +351,6 @@
 		},
 		
 		validate: function() {
-// TODO:			
-return true;			
 			for (var i = 0; i<this.options.rules.length; i++){
 				var field 	= this.options.rules[i];
 				var rules 	= field['rules'].split('|');

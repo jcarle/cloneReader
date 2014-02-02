@@ -531,11 +531,12 @@ class Profile extends CI_Controller {
 	}
 	
 	function resetPassword($resetPasswordKey) {
-		if ($this->Users_Model->checkResetPasswordKey($resetPasswordKey) == false) {
+		$user = $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
+		if (empty($user)) {
 			return error404();
 		}
 		
-		$form = $this->_getFrmResetPassword();
+		$form = $this->_getFrmResetPassword($resetPasswordKey);
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crForm',
@@ -547,12 +548,16 @@ class Profile extends CI_Controller {
 	
 	
 	
-	function _getFrmResetPassword() {
+	function _getFrmResetPassword($resetPasswordKey) {
 		$form = array(
 			'frmId'			=> 'frmResetPassword',
 			'action'		=> base_url('profile/saveResetPassword/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Reset password').' </button>'),			
 			'fields'		=> array(
+				'resetPasswordKey' => array(
+					'type'	=> 'hidden',
+					'value' => $resetPasswordKey, 
+				),			
 				'passwordNew' => array(
 					'type'	=> 'password',
 					'label'	=> $this->lang->line('New password'), 
@@ -583,15 +588,20 @@ class Profile extends CI_Controller {
 	}
 
 	function saveResetPassword() {
-		$form = $this->_getFrmResetPassword();
+		$resetPasswordKey 	= $this->input->post('resetPasswordKey');
+		$user 				= $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
+		if (empty($user)) {
+			return error404();
+		}
+		
+		$form = $this->_getFrmResetPassword($resetPasswordKey);
 		
 		if ($this->form_validation->run() == FALSE) {
 			$code 		= false;
 			$message 	= validation_errors();
 		}
 		else {
-			
-//			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
+			$this->Users_Model->updatePassword($user['userId'], $this->input->post('passwordNew'));		
 			$code 		= true;
 			$message 	= array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login'));
 		}

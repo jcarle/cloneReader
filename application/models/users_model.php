@@ -228,8 +228,14 @@ class Users_Model extends CI_Model {
 	}
 	
 	function updatePassword($userId, $userPassword) {
-		 $this->db->update('users', array('userPassword' => md5($userPassword)), array('userId' => $userId ));
-	}	
+		$values = array(
+			'userPassword' 			=> md5($userPassword),
+			'resetPasswordKey'		=> null,
+			'resetPasswordDate'		=> null,
+		);
+		
+		$this->db->update('users', $values, array('userId' => $userId));
+	}
 
 	function updateUserFiltersByUserId($userFilters, $userId) {
 			$this->db->where('userId', $userId)->update('users', array('userFilters' => json_encode($userFilters)));
@@ -239,13 +245,13 @@ class Users_Model extends CI_Model {
 		$this->db->update('users', array('resetPasswordKey' => $resetPasswordKey, 'resetPasswordDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
 	}
 	
-	function checkResetPasswordKey($resetPasswordKey) {
+	function getUserByResetPasswordKey($resetPasswordKey) {
 		$query = $this->db
 			->where('resetPasswordKey', $resetPasswordKey) 
 			->where('DATE_ADD(resetPasswordDate, INTERVAL '.URL_SECRET_TIME.' MINUTE)  > NOW()')
-			->get('users');	
+			->get('users')->row_array();	
 
-		return ($query->num_rows() > 0);
+		return $query;
 	}
 
 	function getUserFiltersByUserId($userId) {
