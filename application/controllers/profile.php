@@ -480,7 +480,9 @@ class Profile extends CI_Controller {
 				'label' => $form['fields']['userEmail']['label'],
 				'rules' => 'trim|required|valid_email|callback__validate_notExitsEmail'
 			),
-		);	
+		);
+		
+		$this->form_validation->set_rules($form['rules']);
 		
 		return $form;
 	}	
@@ -489,7 +491,6 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFrmForgotPassword();
-		$this->form_validation->set_rules($form['rules']);
 
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
@@ -500,16 +501,13 @@ class Profile extends CI_Controller {
 	
 	function sendEmailToResetPassword() {
 		$form = $this->_getFrmForgotPassword();
-		$this->form_validation->set_rules($form['rules']);
-		
+
 		if ($this->form_validation->run() == FALSE) {
 			return $this->load->view('ajax', array(
 				'code'		=> false,
 				'result' 	=> validation_errors()
 			));	
 		}
-
-
 
 		$this->load->library('email');
 
@@ -521,14 +519,14 @@ class Profile extends CI_Controller {
 		// TODO: traducir todo esto!
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($user['userEmail']); 
-		$this->email->subject('cReader - Reset password');
-		$this->email->message(sprintf('Hello %s, <p>To reset your cReader password, click here %s  </p> Regards', $user['userFirstName'], base_url('profile/resetPassword/'.$resetPasswordKey)));
+		$this->email->subject('cReader - '.$this->lang->line('Reset password'));
+		$this->email->message(sprintf($this->lang->line('Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'), $user['userFirstName'], base_url('profile/resetPassword/'.$resetPasswordKey)));
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 
 		return $this->load->view('ajax', array(
 			'code'		=> true,
-			'result' 	=> array( 'notification' => 'We have sent you an email with instructions to reset your password.'),
+			'result' 	=> array( 'notification' => $this->lang->line('We have sent you an email with instructions to reset your password')),
 		));	
 	}
 	

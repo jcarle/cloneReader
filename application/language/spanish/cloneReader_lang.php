@@ -55,3 +55,5 @@ $lang['Count starred'] = 'Cantidad de favoritos';
 $lang['View entries'] = 'Ver entries';
 $lang['Remove old entries'] = 'Eliminar entries antiguas';
 $lang['View feeds'] = 'Ver feeds';
+$lang['Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'] = 'Hola %s, <p>Para resetear tu contraseña de cReader, ingresa en %s  </p> Saludos';
+$lang['We have sent you an email with instructions to reset your password'] = 'Te hemos mandado un email con instrucciones para restablecer tu contraseña';
