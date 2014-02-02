@@ -12,11 +12,22 @@ class News_Model extends CI_Model {
 		return $query;
 	}
 
-	function get($newId){
+	function get($newId, $isfForm = false){
 		$result = $this->db
 				->select('news.*', true)
 				->where('newId', $newId)
 				->get('news')->row_array();
+				
+		if ($isfForm == true) {
+			$userId = element('userId', $result);
+			if ($userId == null) {
+				$userId = $this->session->userdata('userId');
+			}
+				
+			$user = $this->Users_Model->get($userId);
+			$result['userId'] = array( 'id' => $user['userId'], 'text' => $user['userFirstName'].' '.$user['userLastName']);
+		}
+		
 		return $result;
 	}
 	

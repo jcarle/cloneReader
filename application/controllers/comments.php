@@ -42,14 +42,16 @@ class Comments extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($commentId, false);
-		$this->form_validation->set_rules($form['rules']);
 		
-		if ($this->input->is_ajax_request()) { // save data
+		if (isSubmitCrForm() === true) {
 			$code = $this->form_validation->run();
-			if ($code === TRUE) {
+			if ($code == true) {
 				$this->Comments_Model->save($this->input->post());
 			}
-					
+		}
+		
+		
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
 				'code'		=> $code, 
 				'result' 	=> validation_errors() 
@@ -59,7 +61,7 @@ class Comments extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit comments'),
-			'form'		=> $form,
+			'form'		=> populateCrForm($form, $this->Comments_Model->get($commentId)),
 		));		
 	}
 	
@@ -68,36 +70,30 @@ class Comments extends CI_Controller {
 	}
 
 	function _getFormProperties($commentId) {
-		$data = $this->Comments_Model->get($commentId);
-		
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
+			'buttons' 	=> array('<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('commentId', $data, 0)
+					'value'	=> $commentId,
 				),
 				'commentUserName' => array(
 					'type' 			=> 'text',
 					'label'			=> $this->lang->line('Name'),
-					'value'			=> element('commentUserName', $data),
 					'disabled'		=> 'disabled', 
 				),
 				'commentUserEmail' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Email'), 
-					'value'		=> element('commentUserEmail', $data)
-				),										
-								
+				),
 				'commentDesc' => array(
 					'type'		=> 'textarea',
 					'label'		=> $this->lang->line('Description'), 
-					'value'		=> element('commentDesc', $data)
 				),
 				'commentDate' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Date'), 
-					'value'		=> element('commentDate', $data)
 				),		
 			)
 		);
@@ -106,18 +102,22 @@ class Comments extends CI_Controller {
 			array(
 				'field' => 'commentDesc',
 				'label' => $form['fields']['commentDesc']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'commentDate',
 				'label' => $form['fields']['commentDate']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),			
 		);	
 		
-		if ((int)element('commentId', $data) > 0) {
+		if ((int)$commentId > 0) {
 			$form['urlDelete'] = base_url('comments/delete/');
+			
+			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';			
 		}
+
+		$this->form_validation->set_rules($form['rules']);
 		
 		return $form;
 	}

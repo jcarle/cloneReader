@@ -71,9 +71,9 @@ class Feedback extends CI_Controller {
 		);	
 
 		$this->form_validation->set_rules($form['rules']);
+		$code = $this->form_validation->run();
 		
 		if ($this->input->is_ajax_request()) { // save data
-			$code = $this->form_validation->run();
 			if ($code === TRUE) {	
 				$this->Comments_Model->saveFeedback($this->input->post());
 			}

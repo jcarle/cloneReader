@@ -101,12 +101,12 @@ function getCrFormValidationFieldMoney(array $price, array $exchange) {
 		array(
 			'field' => $price['name'],
 			'label' => $price['label'],
-			'rules' => 'required|numeric'
+			'rules' => 'trim|required|numeric'
 		),
 		array(
 			'field' => $exchange['name'],
 			'label' => $exchange['label'],
-			'rules' => 'required|numeric'
+			'rules' => 'trim|required|numeric'
 		)
 	);
 }

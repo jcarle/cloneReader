@@ -36,19 +36,25 @@ class News extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($newId);
-		$code = $this->form_validation->run(); 
 
-		if ($this->input->is_ajax_request()) { // save data
+		if (isSubmitCrForm() === true) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->News_Model->save($this->input->post());
+			}
+		}
+		
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
-				'code'		=> $this->News_Model->save($this->input->post()), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
-				
+
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit news'),
-			'form'		=> $form
+			'form'		=> populateCrForm($form, $this->News_Model->get($newId, true)),
 		));		
 	}
 
@@ -64,50 +70,40 @@ class News extends CI_Controller {
 	}
 
 	function _getFormProperties($newId) {
-		$data = $this->News_Model->get($newId);
-		$user = $this->Users_Model->get($this->session->userdata('userId'));
-		
 		$form = array(
 			'frmId'		=> 'frmNewEdit',
 			'rules'		=> array(),
 			'fields'	=> array(
 				'newId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('newId', $data, 0)
+					'value'	=> $newId
 				),
 				'newTitle' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Title'), 
-					'value'		=> element('newTitle', $data)
 				),				
 				'newContent' => array(
 					'type' 		=> 'textarea',
 					'label'		=> $this->lang->line('Content'), 
-					'value'		=> element('newContent', $data)
 				),
 				'userId' => array(
 					'type' 		=> 'typeahead',
 					'label'		=> $this->lang->line('Author'),
 					'source' 	=> base_url('users/search/'),
-					'value'		=> array( 'id' => element('userId', $data, $this->session->userdata('userId')), 'text' => element('userName', $data, 
-					$user['userFirstName'].' '.$user['userLastName']
-					)), 
-				),				
+				),
 				'newDate' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Date'), 
-					'value'		=> element('newDate', $data, date('Y-m-d H:i:s') )
 				),
 			), 		
 		);
 
 		
-		if ((int)element('newId', $data) > 0) {
+		if ((int)$newId > 0) {
 			$form['fields']['newSef'] = array(
 				'type' 		=> 'text',
 				'label'		=> 'Sef', 
-				'value'		=> element('newSef', $data),
-				'disabled'	=> true,	
+				'disabled'	=> true,
 			); 
 			
 			$form['urlDelete'] = base_url('news/delete/');
@@ -117,12 +113,12 @@ class News extends CI_Controller {
 			array(
 				'field' => 'newTitle',
 				'label' => 'Title',
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 			array(
 				'field' => 'newContent',
 				'label' => 'Sef',
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);
 

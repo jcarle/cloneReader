@@ -66,7 +66,7 @@ class Groups extends CI_Controller {
 			array(
 				'field' => 'groupName',
 				'label' => $form['fields']['groupName']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);		
 

@@ -65,12 +65,12 @@ class Controllers extends CI_Controller {
 			array(
 				'field' => 'controllerName',
 				'label' => $form['fields']['controllerName']['label'],
-				'rules' => 'required|callback__validate_exitsName'
+				'rules' => 'trim|required|callback__validate_exitsName'
 			),
 			array(
 				'field' => 'controllerUrl',
 				'label' => $form['fields']['controllerUrl']['label'],
-				'rules' => 'required'
+				'rules' => 'trim|required'
 			),
 		);		
 
