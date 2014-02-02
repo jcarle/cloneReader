@@ -198,12 +198,17 @@ class Entries_Model extends CI_Model {
 		return $query->result_array();
 	}
 
-	function get($entryId){
+	function get($entryId, $isfForm = false){
 		$result = $this->db
 				->select('entries.*, feedName', true)
 				->where('entryId', $entryId)
 				->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 				->get('entries')->row_array();
+				
+		if ($isfForm == true) {
+			$result['feedId'] = array( 'id' => element('feedId', $result), 'text' => element('feedName', $result));
+		}
+
 		return $result;
 	}
 

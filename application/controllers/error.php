@@ -40,5 +40,5 @@ class Error extends CI_Controller {
 			'message'		=> $this->lang->line('The page you requested does not exist'),
 			'status_code'	=> 404
 		));
-	}		
+	}
 }

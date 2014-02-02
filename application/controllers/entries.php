@@ -82,14 +82,17 @@ class Entries extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = $this->_getFormProperties($entryId);
-
-		$this->form_validation->set_rules($form['rules']);
 		
-		$code = $this->form_validation->run(); 
+		if (isSubmitCrForm() === true) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->Entries_Model->save($this->input->post());
+			}
+		} 
 
-		if ($this->input->is_ajax_request()) { // save data
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Entries_Model->save($this->input->post()), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
@@ -97,7 +100,7 @@ class Entries extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit entries'),
-			'form'		=> $form	  
+			'form'		=> populateCrForm($form, $this->Entries_Model->get($entryId, true)),
 		));		
 	}
 
@@ -113,50 +116,48 @@ class Entries extends CI_Controller {
 	}
 
 	function _getFormProperties($entryId) {
-		$data = $this->Entries_Model->get($entryId);
-		
 		$form = array(
 			'frmId'		=> 'frmEntryEdit',
 			'rules'		=> array(),
 			'fields'	=> array(
 				'entryId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('entryId', $data, 0)
+					'value'	=> $entryId,
 				),
 				'feedId' => array(
 					'type' 		=> 'typeahead',
 					'label'		=> $this->lang->line('Feed'),
 					'source' 	=> base_url('feeds/search/'),
-					'value'		=> array( 'id' => element('feedId', $data), 'text' => element('feedName', $data)), 
 				),
 				'entryTitle' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Title'), 
-					'value'		=> element('entryTitle', $data)
 				),				
 				'entryUrl' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Url'), 
-					'value'		=> element('entryUrl', $data)
 				),
 				'entryContent' => array(
 					'type' 		=> 'textarea',
 					'label'		=> $this->lang->line('Content'), 
-					'value'		=> element('entryContent', $data)
 				),
 				'entryDate' => array(
 					'type' 		=> 'datetime',
 					'label'		=> $this->lang->line('Date'), 
-					'value'		=> element('entryDate', $data)
-				),								
-			), 		
+				),
+			),
 		);
 		
-		if ((int)element('entryId', $data) > 0) {
+		if ((int)$entryId > 0) {
 			$form['urlDelete'] = base_url('entries/delete/');
 		}		
 		
-		$form['rules'] += array( 
+		$form['rules'] += array(
+			array(
+				'field' => 'feedId',
+				'label' => $form['fields']['feedId']['label'],
+				'rules' => 'trim|required'
+			),		 
 			array(
 				'field' => 'entryTitle',
 				'label' => $form['fields']['entryTitle']['label'],
@@ -168,8 +169,10 @@ class Entries extends CI_Controller {
 				'rules' => 'trim|required'
 			),
 		);
+		
+		$this->form_validation->set_rules($form['rules']);
 
-		return $form;		
+		return $form;
 	}
 
 	function getAsyncNewsEntries($userId = null) {

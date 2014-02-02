@@ -37,13 +37,16 @@ class Tags extends CI_Controller {
 		
 		$form = $this->_getFormProperties($tagId);
 
-		$this->form_validation->set_rules($form['rules']);
+		if (isSubmitCrForm() === true) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->Tags_Model->save($this->input->post());
+			}
+		}
 		
-		$code = $this->form_validation->run(); 
-		
-		if ($this->input->is_ajax_request()) { // save data			
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
-				'code'		=> ($this->Tags_Model->save($this->input->post()) > 0), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
@@ -51,7 +54,7 @@ class Tags extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit tags'),
-			'form'		=> $form	  
+			'form'		=> populateCrForm($form, $this->Tags_Model->get($tagId)),
 		));		
 	}
 
@@ -67,22 +70,19 @@ class Tags extends CI_Controller {
 	}
 
 	function _getFormProperties($tagId) {
-		$data = $this->Tags_Model->get($tagId);
-		
 		$form = array(
 			'frmId'		=> 'frmTagEdit',
 			'rules'		=> array(),
 			'fields'	=> array(
 				'tagId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('tagId', $data, 0)
+					'value'	=> $tagId,
 				),
 				'tagName' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Name'), 
-					'value'		=> element('tagName', $data)
-				),				
-			), 		
+				),
+			),
 		);
 		
 		if ((int)$tagId > 0) {
@@ -96,8 +96,10 @@ class Tags extends CI_Controller {
 				'rules' => 'trim|required'
 			),
 		);
+		
+		$this->form_validation->set_rules($form['rules']);
 
-		return $form;		
+		return $form;
 	}
 
 	function search() { // TODO: implementar la seguridad!

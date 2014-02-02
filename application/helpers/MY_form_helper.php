@@ -25,6 +25,7 @@ function populateCrForm($form, $data) {
 			case 'datetime':
 			case 'logo':
 			case 'typeahead':
+			case 'textarea':
 				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
 				break;
 			case 'checkbox':
