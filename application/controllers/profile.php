@@ -285,7 +285,7 @@ class Profile extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import feeds'),
-			'form'		=> $form	  
+			'form'		=> $form
 		));		
 	}
 
@@ -341,7 +341,7 @@ class Profile extends CI_Controller {
 			}
 		}
 		
-		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('Import success'), 'goToUrl' => base_url(''))));		
+		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''))));		
 	}
 
 	function importStarred() {
@@ -428,7 +428,7 @@ class Profile extends CI_Controller {
 
 		$this->Entries_Model->pushTmpUserEntries($userId);
 
-		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('Import success'), 'goToUrl' => base_url(''))));
+		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''))));
 	}
 	
 	

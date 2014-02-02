@@ -81,6 +81,7 @@ $lang['Content'] = 'Contenido';
 $lang['Author'] = 'Autor';
 $lang['Sef'] = 'Sef';
 $lang['Choose %s'] = 'Seleccione %s';
+$lang['The import was successful'] = 'La importación se realizó con éxito';
 $lang['Create account'] = 'Crear cuenta';
 $lang['Description'] = 'Descripción';
 $lang['Choose'] = 'Seleccione';
