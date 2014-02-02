@@ -11,7 +11,7 @@ $lang['The page you requested does not exist'] = 'The page you requested does no
 
 
 $lang['The name entered already exists in the database'] = 'The name entered already exists in the database';
-$lang['The email not exists in the database'] = 'The email not exists in the database';
+
 
 $lang['Cancel'] = 'Cancel';
 $lang['Close'] = 'Close';

@@ -71,16 +71,15 @@ class Register extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		
 		if ($this->input->is_ajax_request()) { // save data
-					
-			$code = $this->Users_Model->register($userId, $this->input->post());
-			if ($code != true) {
+			if ($this->form_validation->run() == FALSE) {
 				return $this->load->view('ajax', array(
-					'code'		=> $code, 
+					'code'		=> false, 
 					'result' 	=> validation_errors() 
 				));
 			}
 			
-			$code = $this->safety->login($this->input->post('userEmail'), $this->input->post('userPassword'));
+			$this->Users_Model->register($userId, $this->input->post());
+			$this->safety->login($this->input->post('userEmail'), $this->input->post('userPassword'));
 			return $this->load->view('ajax', array(
 				'code'		=> true, 
 				'result' 	=> array('goToUrl' => base_url('home')) 
@@ -96,6 +95,6 @@ class Register extends CI_Controller {
 	}
 
 	function _validate_exitsEmail() {
-		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
+		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
 	}
 }

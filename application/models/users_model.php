@@ -213,9 +213,11 @@ class Users_Model extends CI_Model {
 	}		
 	
 	function exitsEmail($userEmail, $userId) {
-		$this->db->where('userEmail', $userEmail);
-		$this->db->where('userId !=', $userId);
-		return ($this->db->get('users')->num_rows() > 0);		
+		$query = $this->db
+			->where('userEmail', $userEmail)
+			->where('userId !=', $userId)
+			->get('users');		
+		return ($query->num_rows() > 0);
 	}
 	
 	function checkPassword($userId, $userPassword) {
