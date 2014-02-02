@@ -138,7 +138,7 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'trim|required|valid_email'
+				'rules' => 'trim|required|valid_email|callback__validate_exitsEmail'
 			),
 		);		
 
@@ -157,13 +157,6 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$userId = $this->session->userdata('userId');
-		
-		if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
-			return $this->load->view('ajax', array(
-				'code'		=> false, 
-				'result' 	=> $this->lang->line('The email entered already exists in the database')
-			));
-		}
 		
 		$result = true; // $this->Users_Model->editProfile($userId, $this->input->post()), 
 				
@@ -199,7 +192,7 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'passwordOld',
 				'label' => $form['fields']['passwordOld']['label'],
-				'rules' => 'trim|required|callback__checkPassword'
+				'rules' => 'trim|required|callback__validate_password'
 			),
 			array(
 				'field' => 'passwordNew',
@@ -252,7 +245,7 @@ class Profile extends CI_Controller {
 		));				
 	}
 	
-	function _checkPassword() {
+	function _validate_password() {
 		return $this->Users_Model->checkPassword($this->session->userdata('userId'), $this->input->post('passwordOld'));
 	}
 	
@@ -460,9 +453,13 @@ class Profile extends CI_Controller {
 	
 	
 	
-	function _exitsEmail() {
+	function _validate_notExitsEmail() {
+		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
+	}
+	
+	function _validate_exitsEmail() {
 		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
-	}	
+	}
 	
 	function _getFrmForgotPassword() {
 		$form = array(
@@ -481,7 +478,7 @@ class Profile extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'trim|required|valid_email|callback__exitsEmail'
+				'rules' => 'trim|required|valid_email|callback__validate_notExitsEmail'
 			),
 		);	
 		
