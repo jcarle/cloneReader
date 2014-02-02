@@ -102,6 +102,15 @@ $lang['Comment'] = 'Comentário';
 $lang['Thanks for contacting us'] = 'Obrigado por entrar em contato conosco';
 $lang['Last access'] = 'Último acesso';
 $lang['Reset password'] = 'Redefinição de senha';
+
+$lang['Change email'] = 'Alterar e-mail';
+$lang['Change password'] = 'Alterar senha';
+$lang['Remove account'] = 'Remover conta';
+$lang['Download OPML'] = 'Baixar OPML';
+$lang['Current password'] = 'Current senha';
+$lang['New password'] = 'Novo senha';
+$lang['Repeat new password'] = 'Repetição novo senha';
+
 $lang['Icon'] = 'Ícone';
 $lang['Data updated successfully'] = 'Dados atualizados com sucesso';
 $lang['Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'] = 'Olá %s, <p> Para redefinir sua senha CReader, clique aqui %s </ p> Saudações';

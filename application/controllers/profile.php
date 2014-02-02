@@ -171,11 +171,11 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmChangePassword',
 			'action'		=> base_url('profile/saveChangePassword/'),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),			
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),
 			'fields'		=> array(
 				'passwordOld' => array(
 					'type'	=> 'password',
-					'label'	=> $this->lang->line('Old password'), 
+					'label'	=> $this->lang->line('Current password'), 
 				),
 				'passwordNew' => array(
 					'type'	=> 'password',
@@ -184,7 +184,7 @@ class Profile extends CI_Controller {
 				'passwordRepeatNew' => array(
 					'type'	=> 'password',
 					'label'	=> $this->lang->line('Repeat new password'), 
-				),				
+				),
 			)
 		);
 		
