@@ -1,4 +1,40 @@
 <?php
+function isSubmitCrForm() {
+	$CI = &get_instance();
+	
+	if ($CI->input->is_ajax_request()) {
+		return true;
+	}
+	if ($CI->input->post() != false) {
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista
+ * TODO: implementar que los sources de los dropdown se llenen con este metodo!
+ */
+function populateCrForm($form, $data) {
+	foreach ($form['fields'] as $fieldName => $fieldValue) {
+		switch ($form['fields'][$fieldName]['type']) {
+			case 'hidden':
+			case 'text':
+			case 'dropdown':
+				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
+				break;
+			case 'checkbox':
+				$form['fields'][$fieldName]['checked'] = element($fieldName, $data);
+				break;
+			case 'groupCheckBox':
+				$form['fields'][$fieldName]['value'] = element(str_replace('[]', '', $fieldName), $data);
+		}
+	}
+	
+	return $form;
+} 
+
 function getCrFormFieldMoney(array $price, array $currency, array $exchange, array $total) {
 	$CI = &get_instance();
 	$CI->load->model('Coins_Model');

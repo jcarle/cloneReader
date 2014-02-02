@@ -35,37 +35,32 @@ class Controllers extends CI_Controller {
 	function edit($controllerId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
-		$data = $this->Controllers_Model->get($controllerId);
-		
 		$form = array(
 			'frmId'		=> 'frmControllersEdit',
 			'fields'	=> array(
 				'controllerId' => array(
 					'type'		=> 'hidden', 
-					'value'		=> element('controllerId', $data, 0),
+					'value'		=> $controllerId,
 				),
 				'controllerName' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Controller'),
-					'value'	=> element('controllerName', $data)
 				),
 				'controllerUrl' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Url'), 
-					'value'	=> element('controllerUrl', $data)
 				),
 				'controllerActive' => array(
 					'type'		=> 'checkbox',
 					'label'		=> $this->lang->line('Active'),
-					'checked'	=> element('controllerActive', $data)
 				)
 			)
 		);
 		
-		if ((int)element('controllerId', $data, 0) > 0) {
+		if ((int)$controllerId > 0) {
 			$form['urlDelete'] = base_url('controllers/delete/');
 		}
-		
+
 		$form['rules'] = array( 
 			array(
 				'field' => 'controllerName',
@@ -76,28 +71,29 @@ class Controllers extends CI_Controller {
 				'field' => 'controllerUrl',
 				'label' => $form['fields']['controllerUrl']['label'],
 				'rules' => 'required'
-			),			
+			),
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
 
-		if ($this->input->is_ajax_request()) { // save data			
+		if (isSubmitCrForm() === true) {
 			$code = $this->form_validation->run();
-			
-			if ($code === TRUE) {	
+			if ($code == true) {
 				$this->Controllers_Model->save($this->input->post());
 			}
-				
+		}
+		
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
 				'code'		=> $code, 
 				'result' 	=> validation_errors()  
 			));
 		}
-				
+
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit controllers'),
-			'form'		=> $form,
+			'form'		=> populateCrForm($form, $this->Controllers_Model->get($controllerId)),
 		));		
 	}
 

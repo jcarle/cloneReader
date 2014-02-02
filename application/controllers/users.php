@@ -82,47 +82,40 @@ class Users extends CI_Controller {
 	function edit($userId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
-		$data = $this->Users_Model->get($userId);
-		
 		$form = array(
 			'frmId'		=> 'frmUsersEdit',
 			'fields'	=> array(
 				'userId' => array(
 					'type' 		=> 'hidden',
-					'value'		=> element('userId', $data, 0),
+					'value'		=> $userId,
 				),
 				'userEmail' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Email'),
-					'value'	=> element('userEmail', $data)
 				),
 				'userFirstName' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('First Name'), 
-					'value'	=> element('userFirstName', $data)
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Last Name'), 
-					'value'	=> element('userLastName', $data)
 				),
 				'countryId' => array(
 					'type'		=> 'dropdown',
 					'label'		=> $this->lang->line('Country'),
-					'value'		=> element('countryId', $data),
 					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
 				),
 				'groups[]' => array(
-					'type'		=> 'groupCheckBox',
-					'label'		=> $this->lang->line('Groups'),
-					'source'	=> array_to_select($this->Groups_Model->select(), 'groupId', 'groupName'),
-					'value'		=> $data['groups'],
-					'showId'	=> true,
+					'type'			=> 'groupCheckBox',
+					'label'			=> $this->lang->line('Groups'),
+					'source'		=> array_to_select($this->Groups_Model->select(), 'groupId', 'groupName'),
+					'showId'		=> true,
 				),
 			)
 		);
 		
-		if ((int)element('userId', $data) > 0) {
+		if ((int)$userId > 0) {
 			$form['urlDelete'] 		= base_url('users/delete/');
 			$form['fields']['link']	= array(
 				'type'	=> 'link',
@@ -131,7 +124,7 @@ class Users extends CI_Controller {
 			);
 		}
 		
-		$form['rules'] 	= array( 
+		$form['rules'] 	= array(
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
@@ -150,10 +143,17 @@ class Users extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
+
+		if (isSubmitCrForm() === true) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->Users_Model->save($this->input->post());
+			}
+		}
 		
-		if ($this->input->is_ajax_request()) { // save data
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Users_Model->save($this->input->post()), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
@@ -161,8 +161,7 @@ class Users extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit users'),
-			'form'		=> $form,
-				  
+			'form'		=> populateCrForm($form, $this->Users_Model->get($userId)),
 		));		
 	}
 
@@ -184,6 +183,6 @@ class Users extends CI_Controller {
 	}
 	
 	function _validate_exitsEmail() {
-		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId'));
+		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId')) != true);
 	}	
 }
