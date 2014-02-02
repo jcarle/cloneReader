@@ -12,6 +12,28 @@ function isSubmitCrForm() {
 	return false;
 }
 
+function appendMessagesToCrForm($form) {
+	$CI = &get_instance();
+	$CI->lang->load('form_validation');
+		
+	if (element('messages', $form) == null) {
+		$form['messages'] = array();
+	}
+	
+	if (element('rules', $form) == null) {
+		return $form;
+	}
+	
+	foreach ($form['rules'] as $rule) {
+		$aRules = explode('|', $rule['rules']);
+		foreach ($aRules as $key) {
+			$form['messages'][$key] = $CI->lang->line(str_replace('callback_', '', $key));
+		}
+	}
+	
+	return $form;
+}
+
 /**
  * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista
  * TODO: implementar que los sources de [dropdown, menuTree] se llenen con este metodo
@@ -385,6 +407,8 @@ function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
 		$CI->carabiner->css('blueimp-gallery.css');
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
+	
+	$form  = appendMessagesToCrForm($form);
 	
 	$aScripts[] = '
 		$(document).ready(function() {

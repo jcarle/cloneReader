@@ -46,6 +46,8 @@ foreach ($form['buttons'] as $button) {
 }
 
 echo form_close(); 
+
+$form  = appendMessagesToCrForm($form);
 ?>
 
 <script type="text/javascript">

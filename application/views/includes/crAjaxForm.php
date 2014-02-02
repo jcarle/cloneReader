@@ -40,6 +40,8 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
+$form  = appendMessagesToCrForm($form);
+
 ?>
 
 
