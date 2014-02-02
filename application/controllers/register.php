@@ -54,7 +54,7 @@ class Register extends CI_Controller {
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
-				'rules' => 'trim|required|valid_email'
+				'rules' => 'trim|required|valid_email|callback_validate_exitsEmail'
 			),
 			array(
 				'field' => 'userFirstName',
@@ -71,12 +71,6 @@ class Register extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		
 		if ($this->input->is_ajax_request()) { // save data
-			if ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$userId) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('The email entered already exists in the database')
-				));
-			}
 					
 			$code = $this->Users_Model->register($userId, $this->input->post());
 			if ($code != true) {
@@ -99,5 +93,9 @@ class Register extends CI_Controller {
 			'form'		=> $form,
 				  
 		));		
+	}
+
+	function _validate_exitsEmail() {
+		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
 	}
 }

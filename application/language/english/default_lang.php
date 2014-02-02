@@ -1,8 +1,16 @@
 <?php
+$lang['_validate_login'] = 'The email or password you entered are incorrect';
+$lang['_validate_password']	= 'The password you entered are incorrect';
+$lang['_validate_exitsEmail'] = 'The email entered already exists in the database';
+
+$lang['_validate_notExitsEmail'] = 'The email not exists in the database';
+
 $lang['Not authorized for the action to take'] = 'Not authorized for the action to take';
 $lang['The page you requested does not exist'] = 'The page you requested does not exist';
-$lang['The email or password you entered are incorrect'] = 'The email or password you entered are incorrect';
-$lang['The email entered already exists in the database'] = 'The email entered already exists in the database';
+
+
+
+
 $lang['The name entered already exists in the database'] = 'The name entered already exists in the database';
 $lang['The email not exists in the database'] = 'The email not exists in the database';
 

@@ -1,10 +1,13 @@
 <?php
+$lang['_validate_login'] = 'El email o la contraseña ingresados son incorrectos';
+$lang['_validate_password'] = 'La contraseña ingresada es incorrecta';
+$lang['_validate_exitsEmail'] = 'El mail ingresado ya existe en la base de datos';
+
+
 $lang['Not authorized for the action to take'] = 'No tiene permisos para la acción que desea realizar';
 $lang['The page you requested does not exist'] = 'La página solicitada no existe';
 
 
-$lang['_validate_login'] = 'El email o la contraseña ingresados son incorrectos';
-$lang['The email entered already exists in the database'] = 'El mail ingresado ya existe en la base de datos';
 $lang['The name entered already exists in the database'] = 'El nombre ingresado ya existe en la base de datos';
 
 $lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
@@ -107,4 +110,4 @@ $lang['Data updated successfully'] = 'Datos actualizados con éxito';
 $lang['Old password'] = 'Contraseña actual';
 $lang['New password'] = 'Nueva contraseña';
 $lang['Repeat new password'] = 'Repetir contraseña';
-$lang['The password you entered are incorrect'] = 'La contraseña ingresada es incorrecta';
+
