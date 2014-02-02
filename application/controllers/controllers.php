@@ -70,7 +70,7 @@ class Controllers extends CI_Controller {
 			array(
 				'field' => 'controllerName',
 				'label' => $form['fields']['controllerName']['label'],
-				'rules' => 'required'
+				'rules' => 'required|callback__validate_exitsName'
 			),
 			array(
 				'field' => 'controllerUrl',
@@ -82,17 +82,15 @@ class Controllers extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 
 		if ($this->input->is_ajax_request()) { // save data			
-		
-			if ($this->Controllers_Model->exitsController($this->input->post('controllerName'), (int)$this->input->post('controllerId')) == true) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> $this->lang->line('El nombre ingresado ya existe en la base de datos') 
-				));
-			}		
+			$code = $this->form_validation->run();
+			
+			if ($code === TRUE) {	
+				$this->Controllers_Model->save($this->input->post());
+			}
 				
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Controllers_Model->save($this->input->post()), 
-				'result' 	=> validation_errors() 
+				'code'		=> $code, 
+				'result' 	=> validation_errors()  
 			));
 		}
 				
@@ -112,5 +110,9 @@ class Controllers extends CI_Controller {
 			'code'		=> $this->Controllers_Model->delete($this->input->post('controllerId')), 
 			'result' 	=> validation_errors() 
 		));	
+	}
+	
+	function _validate_exitsName() {
+		return ($this->Controllers_Model->exitsController($this->input->post('controllerName'), (int)$this->input->post('controllerId')) != true);
 	}
 }

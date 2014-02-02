@@ -454,11 +454,11 @@ class Profile extends CI_Controller {
 	
 	
 	function _validate_notExitsEmail() {
-		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
+		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
 	}
 	
 	function _validate_exitsEmail() {
-		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
+		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
 	}
 	
 	function _getFrmForgotPassword() {

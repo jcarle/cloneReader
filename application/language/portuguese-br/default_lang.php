@@ -3,14 +3,10 @@ $lang['_validate_login'] = 'O e-mail ou senha que introduziu estão incorrectos'
 $lang['_validate_password']	= 'A senha digitada está incorreta';
 $lang['_validate_exitsEmail'] =  'O e-mail já existe no banco de dados';
 $lang['_validate_notExitsEmail'] = 'O e-mail não existe no banco de dados';
+$lang['_validate_exitsName'] = 'O nome já existe no banco de dados';
 
 $lang['Not authorized for the action to take'] = 'Não autorizado para a ação a ser tomada';
 $lang['The page you requested does not exist'] = 'A página solicitada não existe';
-
-
-
-
-$lang['The name entered already exists in the database'] = 'O nome já existe no banco de dados';
 
 $lang['Cancel'] = 'Cancelar';
 $lang['Close'] = 'Fechar';
