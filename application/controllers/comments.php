@@ -5,7 +5,7 @@ class Comments extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model('Comments_Model');
-	}  
+	}
 	
 	function index() {
 		$this->listing();
@@ -44,13 +44,18 @@ class Comments extends CI_Controller {
 		$form = $this->_getFormProperties($commentId, false);
 		$this->form_validation->set_rules($form['rules']);
 		
-		if ($this->input->is_ajax_request()) { // save data			
+		if ($this->input->is_ajax_request()) { // save data
+			$code = $this->form_validation->run();
+			if ($code === TRUE) {
+				$this->Comments_Model->save($this->input->post());
+			}
+					
 			return $this->load->view('ajax', array(
-				'code'		=> $this->Comments_Model->save($this->input->post()), 
+				'code'		=> $code, 
 				'result' 	=> validation_errors() 
 			));
 		}
-				
+
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit comments'),
@@ -62,19 +67,6 @@ class Comments extends CI_Controller {
 		$this->edit(0);
 	}
 
-/*
-	function _editPopup($commentId){
-		// TODO: implementar la seguridad!!
-		$form = $this->_getFormProperties($commentId, true);
-		$form['isSubForm'] 	= true;
-		$form['title']		= ((int)$commentId < 1 ? 'Nuevo comentario' : 'Editar comentario');
-		$form['action']		= base_url('comments/edit/'.$commentId);
-		
-		$this->load->view('includes/crForm', array(
-			'form'			=> $form,
-		));			
-	}*/
-	
 	function _getFormProperties($commentId) {
 		$data = $this->Comments_Model->get($commentId);
 		
@@ -85,27 +77,12 @@ class Comments extends CI_Controller {
 					'type'	=> 'hidden', 
 					'value'	=> element('commentId', $data, 0)
 				),
-				'userFullName' => array(
-					'type' 		=> 'autocomplete',
-					'label'		=> $this->lang->line('User'),
-					'value'		=> array( element('userId', $data) => element('userFullName', $data)), // el value es un array del tipo {key=>value}
-					'fieldId'	=> 'userId', // field donde va a ir a para el id del autocomplete!
-					'source' 	=> base_url('agencies/searchUsers/') 
-				),				
-				
 				'commentUserName' => array(
-					'type' 		=> 'text',
-					'label'		=> $this->lang->line('Name'), 
-					'value'		=> element('commentUserName', $data),
-					'subscribe'	=> array(
-						array(
-							'field'			=> 'userId',
-							'event'			=> 'change',   
-							'callback'		=> 'toogleField',
-							'arguments'		=> array( 'this.getFieldByName(\'userId\').val() == 0')
-						)
-					)
-				),						
+					'type' 			=> 'text',
+					'label'			=> $this->lang->line('Name'),
+					'value'			=> element('commentUserName', $data),
+					'disabled'		=> 'disabled', 
+				),
 				'commentUserEmail' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Email'), 
@@ -127,11 +104,6 @@ class Comments extends CI_Controller {
 		
 		$form['rules'] = array(
 			array(
-				'field' => 'userFullName',
-				'label' => $form['fields']['userFullName']['label'],
-				'rules' => 'required'
-			),
-			array(
 				'field' => 'commentDesc',
 				'label' => $form['fields']['commentDesc']['label'],
 				'rules' => 'required'
@@ -147,7 +119,7 @@ class Comments extends CI_Controller {
 			$form['urlDelete'] = base_url('comments/delete/');
 		}
 		
-		return $form;				
+		return $form;
 	}
 
 	function delete() {

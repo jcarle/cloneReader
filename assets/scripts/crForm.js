@@ -341,6 +341,7 @@
 		},
 		
 		validate: function() {
+// TODO:			
 return true;			
 			for (var i = 0; i<this.options.rules.length; i++){
 				var field 	= this.options.rules[i];

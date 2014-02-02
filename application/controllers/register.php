@@ -17,6 +17,9 @@ class Register extends CI_Controller {
 		$userId = $this->session->userdata('userId');
 		$data 	= array(); //$this->Users_Model->get($userId);
 		
+		
+// TODO: revisar este form, capaz no tenga sentido editar desde el backend los comments de feedback
+
 		$form = array(
 			'frmId'			=> 'frmRegister',
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-signin"></i> '.$this->lang->line('Register').'</button>'),
