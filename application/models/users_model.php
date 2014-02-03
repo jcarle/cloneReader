@@ -237,6 +237,10 @@ class Users_Model extends CI_Model {
 		$this->db->update('users', $values, array('userId' => $userId));
 	}
 
+	function updateChangeEmailKey($userId, $changeEmailValue, $changeEmailKey) {
+		$this->db->update('users', array('changeEmailKey' => $changeEmailKey, 'changeEmailValue' => $changeEmailValue, 'changeEmailDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
+	}
+
 	function updateUserFiltersByUserId($userFilters, $userId) {
 			$this->db->where('userId', $userId)->update('users', array('userFilters' => json_encode($userFilters)));
 	}
@@ -253,6 +257,16 @@ class Users_Model extends CI_Model {
 
 		return $query;
 	}
+	
+	function getUserByChangeEmailKey($changeEmailKey) {
+		$query = $this->db
+			->where('changeEmailKey', $changeEmailKey) 
+			->where('DATE_ADD(changeEmailDate, INTERVAL '.URL_SECRET_TIME.' MINUTE)  > NOW()')
+			->get('users')->row_array();	
+
+		return $query;
+	}	
+	
 
 	function getUserFiltersByUserId($userId) {
 		$query = $this->db
