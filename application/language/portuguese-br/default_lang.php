@@ -102,6 +102,7 @@ $lang['Comment'] = 'Comentário';
 $lang['Thanks for contacting us'] = 'Obrigado por entrar em contato conosco';
 $lang['Last access'] = 'Último acesso';
 $lang['Reset password'] = 'Redefinição de senha';
+$lang['Forgot password'] = 'Esqueceu a senha';
 $lang['Change email'] = 'Alterar e-mail';
 $lang['Change password'] = 'Alterar senha';
 $lang['Remove account'] = 'Remover conta';

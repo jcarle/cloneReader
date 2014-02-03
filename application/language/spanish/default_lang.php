@@ -104,6 +104,7 @@ $lang['Thanks for contacting us'] = 'Gracias por contactar con nosotros';
 $lang['Last access'] = 'Ultimo acceso';
 $lang['Fix language'] = 'Fijar idioma';
 $lang['Reset password'] = 'Resetear contraseña';
+$lang['Forgot password'] = 'Olvidé mi contraseña';
 $lang['Change email'] = 'Cambiar email';
 $lang['Change password'] = 'Cambiar contraseña';
 $lang['Remove account'] = 'Eliminar cuenta';
