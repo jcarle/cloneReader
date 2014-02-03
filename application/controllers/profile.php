@@ -201,11 +201,12 @@ class Profile extends CI_Controller {
 //			$code 		= true;
 //			$message 	= array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login'));
 
-		
-		return $this->load->view('ajax', array(
-			'code'		=> $code,
-			'result' 	=> $message 
-		));
+
+		$this->load->view('includes/template', array(
+			'view'		=> 'message', 
+			'title'		=> $this->lang->line('Change email'),
+			'message'	=> $this->lang->line('Your email has updated')
+		));	
 	}
 	
 	function _getFrmChangePassword() {
