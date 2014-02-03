@@ -233,7 +233,7 @@ class Users_Model extends CI_Model {
 			'resetPasswordKey'		=> null,
 			'resetPasswordDate'		=> null,
 		);
-		
+
 		$this->db->update('users', $values, array('userId' => $userId));
 	}
 
@@ -258,13 +258,25 @@ class Users_Model extends CI_Model {
 		return $query;
 	}
 	
-	function getUserByChangeEmailKey($changeEmailKey) {
+	function getUserByUserIdAndChangeEmailKey($userId, $changeEmailKey) {
 		$query = $this->db
+			->where('userId', $userId)
 			->where('changeEmailKey', $changeEmailKey) 
 			->where('DATE_ADD(changeEmailDate, INTERVAL '.URL_SECRET_TIME.' MINUTE)  > NOW()')
 			->get('users')->row_array();	
-
+		//pr($this->db->last_query()); die;
 		return $query;
+	}
+	
+	function confirmEmail($userId){
+		$this->db
+			->set('userEmail', 'changeEmailValue', false)
+			->set('changeEmailKey', null) 
+			->set('changeEmailDate', null)
+			->set('changeEmailValue', null)
+			->where('userId', $userId)
+			->update('users');
+		//pr($this->db->last_query()); die;		
 	}	
 	
 

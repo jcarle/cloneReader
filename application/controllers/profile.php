@@ -188,19 +188,16 @@ class Profile extends CI_Controller {
 		));	
 	}
 
-	function confirmEmail() {
+	function confirmEmail($changeEmailKey) {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
-		$changeEmailKey 	= $this->input->post('changeEmailKey');
-		$user 				= $this->Users_Model->getUserByChangeEmailKey($changeEmailKey);
+		$userId = $this->session->userdata('userId');
+		$user 	= $this->Users_Model->getUserByUserIdAndChangeEmailKey($userId, $changeEmailKey);
 		if (empty($user)) {
 			return error404();
 		}
 		
-//			$this->Users_Model->confirmEmail($user['userId'], $this->input->post('passwordNew'));		
-//			$code 		= true;
-//			$message 	= array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login'));
-
+		$this->Users_Model->confirmEmail($userId);
 
 		$this->load->view('includes/template', array(
 			'view'		=> 'message', 
