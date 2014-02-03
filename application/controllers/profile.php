@@ -157,6 +157,8 @@ class Profile extends CI_Controller {
 	}
 
 	function sendEmailToChangeEmail() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
 		$form = $this->_getFrmChangeEmail();
 
 		if ($this->form_validation->run() == FALSE) {
@@ -289,15 +291,12 @@ class Profile extends CI_Controller {
 	}
 	
 	function frmRemoveAccount() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-		
 		return $this->load->view('ajax', array(
 			'code'		=> false,
 			'result' 	=> 'coming soon'
 		));
 	}
 		
-
 	function importFeeds() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
@@ -509,6 +508,8 @@ class Profile extends CI_Controller {
 	}
 	
 	function sendEmailToResetPassword() {
+		if (! $this->safety->allowByControllerName('profile/forgotPassword') ) { return errorForbidden(); }
+		
 		$form = $this->_getFrmForgotPassword();
 
 		if ($this->form_validation->run() == FALSE) {
@@ -539,6 +540,8 @@ class Profile extends CI_Controller {
 	}
 	
 	function resetPassword($resetPasswordKey) {
+		if (! $this->safety->allowByControllerName('profile/forgotPassword') ) { return errorForbidden(); }
+		
 		$user = $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
 		if (empty($user)) {
 			return error404();
@@ -553,7 +556,34 @@ class Profile extends CI_Controller {
 			'code'			=> true
 		));		
 	}
-	
+
+	function saveResetPassword() {
+		if (! $this->safety->allowByControllerName('profile/forgotPassword') ) { return errorForbidden(); }
+		
+		$resetPasswordKey 	= $this->input->post('resetPasswordKey');
+		$user 				= $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
+		if (empty($user)) {
+			return error404();
+		}
+		
+		$form = $this->_getFrmResetPassword($resetPasswordKey);
+		
+		if ($this->form_validation->run() == FALSE) {
+			$code 		= false;
+			$message 	= validation_errors();
+		}
+		else {
+			$this->Users_Model->updatePassword($user['userId'], $this->input->post('passwordNew'));		
+			$code 		= true;
+			$message 	= array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login'));
+		}
+		
+		return $this->load->view('ajax', array(
+			'code'		=> $code,
+			'result' 	=> $message 
+		));
+	}
+
 	function _getFrmResetPassword($resetPasswordKey) {
 		$form = array(
 			'frmId'			=> 'frmResetPassword',
@@ -591,30 +621,5 @@ class Profile extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 
 		return $form;
-	}
-
-	function saveResetPassword() {
-		$resetPasswordKey 	= $this->input->post('resetPasswordKey');
-		$user 				= $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
-		if (empty($user)) {
-			return error404();
-		}
-		
-		$form = $this->_getFrmResetPassword($resetPasswordKey);
-		
-		if ($this->form_validation->run() == FALSE) {
-			$code 		= false;
-			$message 	= validation_errors();
-		}
-		else {
-			$this->Users_Model->updatePassword($user['userId'], $this->input->post('passwordNew'));		
-			$code 		= true;
-			$message 	= array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login'));
-		}
-		
-		return $this->load->view('ajax', array(
-			'code'		=> $code,
-			'result' 	=> $message 
-		));
 	}
 }
