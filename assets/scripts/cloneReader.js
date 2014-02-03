@@ -1148,10 +1148,10 @@ console.timeEnd("t1");
 	addFeed: function() {
 		var feedUrl = this.$popupForm.find('input').val();
 		if (feedUrl == '') {
-			return this.$popupForm.find('input').crAlert('enter a url');
+			return this.$popupForm.find('input').crAlert(_msg['Enter a url']);
 		}
 		if ($.validateUrl(feedUrl) == false) {
-			return this.$popupForm.find('input').crAlert('enter a valid url');
+			return this.$popupForm.find('input').crAlert(_msg['Enter a valid url']);
 		}
 
 		this.hidePopupWindow();

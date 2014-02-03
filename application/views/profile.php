@@ -23,10 +23,10 @@
 	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
 		
 		<div class="tab-content">
-			<div class="tab-pane" id="editProfile" 		data-controller="<?php echo base_url('profile/frmEditProfile'); ?>"> </div>
-			<div class="tab-pane" id="changeEmail" 		data-controller="<?php echo base_url('profile/frmChangeEmail'); ?>"> </div>
-			<div class="tab-pane" id="changePassword" 	data-controller="<?php echo base_url('profile/frmChangePassword'); ?>"> </div>
-			<div class="tab-pane" id="removeAccount"	data-controller="<?php echo base_url('profile/frmRemoveAccount'); ?>"> </div>
+			<div class="tab-pane" id="editProfile" 		data-controller="<?php echo base_url('profile/editProfile'); ?>"> </div>
+			<div class="tab-pane" id="changeEmail" 		data-controller="<?php echo base_url('profile/changeEmail'); ?>"> </div>
+			<div class="tab-pane" id="changePassword" 	data-controller="<?php echo base_url('profile/changePassword'); ?>"> </div>
+			<div class="tab-pane" id="removeAccount"	data-controller="<?php echo base_url('profile/removeAccount'); ?>"> </div>
 		</div>
 
 	</div>

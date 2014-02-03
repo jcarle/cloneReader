@@ -40,6 +40,8 @@ class Home extends CI_Controller {
 					'Subscribe',
 					'Sort',
 					'Star',
+					'Enter a url',
+					'Enter a valid url',
 				)
 			)
 		);

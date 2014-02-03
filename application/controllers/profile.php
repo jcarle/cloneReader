@@ -22,8 +22,9 @@ class Profile extends CI_Controller {
 		));		
 	}
 
+	function editProfile() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 
-	function _getFrmEditProfile() {
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);
 		
@@ -31,7 +32,6 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmEditProfile',
-			'action'		=> base_url('profile/saveEditProfile/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userFirstName' => array(
@@ -73,15 +73,10 @@ class Profile extends CI_Controller {
 		);		
 		
 		$this->form_validation->set_rules($form['rules']);
-
-		return $form;
-	}
 		
-
-	function frmEditProfile() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-
-		$form = $this->_getFrmEditProfile();
+		if ($this->input->post() != false) {
+			return $this->_saveEditProfile();
+		}
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -91,29 +86,25 @@ class Profile extends CI_Controller {
 		));
 	}
 
-	function saveEditProfile() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-		
-		$form = $this->_getFrmEditProfile();
-		
+	function _saveEditProfile() {
 		if ($this->form_validation->run() == FALSE) {
-			$code 		= false;
-			$message 	= validation_errors();
+			return $this->load->view('ajax', array(
+				'code'		=> false,
+				'result' 	=> validation_errors()
+			));			
 		}
-		else {		
-			$this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post());
-			$code 		= true;
-			$message 	= array('notification' => $this->lang->line('Data updated successfully'));
-		}
+
+		$this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post());
 		
 		return $this->load->view('ajax', array(
-			'code'		=> $code,
-			'result' 	=> $message
+			'code'		=> true,
+			'result' 	=> array('notification' => $this->lang->line('Data updated successfully'))
 		));
 	}
-
-
-	function _getFrmChangeEmail() {
+		
+	function changeEmail() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);
 		
@@ -121,7 +112,6 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmChangeEmail',
-			'action'		=> base_url('profile/sendEmailToChangeEmail/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(
@@ -141,26 +131,20 @@ class Profile extends CI_Controller {
 		);		
 
 		$this->form_validation->set_rules($form['rules']);
-		return $form;
-	}
 		
-		
-	function frmChangeEmail() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		if ($this->input->post() != false) {
+			return $this->_sendEmailToChangeEmail();
+		}
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
-			'form'			=> $this->_getFrmChangeEmail(),
+			'form'			=> $form,
 			'title'			=> $this->lang->line('Change email'),
 			'code'			=> true
 		));
 	}
 
-	function sendEmailToChangeEmail() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-		
-		$form = $this->_getFrmChangeEmail();
-
+	function _sendEmailToChangeEmail() {
 		if ($this->form_validation->run() == FALSE) {
 			return $this->load->view('ajax', array(
 				'code'		=> false,
@@ -180,7 +164,7 @@ class Profile extends CI_Controller {
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($userEmail); 
 		$this->email->subject('cReader - '.$this->lang->line('Change email'));
-		$this->email->message(sprintf($this->lang->line('Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'), $user['userFirstName'], base_url('profile/confirmEmail/'.$changeEmailKey)));
+		$this->email->message(sprintf($this->lang->line('Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'), $user['userFirstName'], base_url('confirmEmail?key='.$changeEmailKey)));
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 
@@ -190,28 +174,11 @@ class Profile extends CI_Controller {
 		));	
 	}
 
-	function confirmEmail($changeEmailKey) {
+	function changePassword() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
-		$userId = $this->session->userdata('userId');
-		$user 	= $this->Users_Model->getUserByUserIdAndChangeEmailKey($userId, $changeEmailKey);
-		if (empty($user)) {
-			return error404();
-		}
-		
-		$this->Users_Model->confirmEmail($userId);
-
-		$this->load->view('includes/template', array(
-			'view'		=> 'message', 
-			'title'		=> $this->lang->line('Change email'),
-			'message'	=> $this->lang->line('Your email has been updated')
-		));	
-	}
-	
-	function _getFrmChangePassword() {
 		$form = array(
 			'frmId'			=> 'frmChangePassword',
-			'action'		=> base_url('profile/saveChangePassword/'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),
 			'fields'		=> array(
 				'passwordOld' => array(
@@ -249,13 +216,9 @@ class Profile extends CI_Controller {
 		
 		$this->form_validation->set_rules($form['rules']);
 		
-		return $form;
-	}
-
-	function frmChangePassword() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-		
-		$form = $this->_getFrmChangePassword();
+		if ($this->input->post() != false) {
+			return $this->_saveChangePassword();
+		}
 
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crAjaxForm',
@@ -265,24 +228,19 @@ class Profile extends CI_Controller {
 		));
 	}
 	
-	function saveChangePassword() {
-		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-		
-		$form = $this->_getFrmChangePassword();
-		
+	function _saveChangePassword() {
 		if ($this->form_validation->run() == FALSE) {
-			$code 		= false;
-			$message 	= validation_errors();
+			return $this->load->view('ajax', array(
+				'code'		=> false,
+				'result' 	=> validation_errors()
+			));							
 		}
-		else {
-			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
-			$code 		= true;
-			$message 	= array('notification' => $this->lang->line('Data updated successfully'));
-		}
+
+		$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
 		
 		return $this->load->view('ajax', array(
-			'code'		=> $code,
-			'result' 	=> $message 
+			'code'		=> true,
+			'result' 	=> array('notification' => $this->lang->line('Data updated successfully'))
 		));				
 	}
 	
@@ -290,16 +248,15 @@ class Profile extends CI_Controller {
 		return $this->Users_Model->checkPassword($this->session->userdata('userId'), $this->input->post('passwordOld'));
 	}
 	
-	function frmRemoveAccount() {
+	function _validate_exitsEmail() {
+		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
+	}
+	
+	
+	function removeAccount() {
 		return $this->load->view('ajax', array(
 			'code'		=> false,
 			'result' 	=> 'coming soon'
 		));
-	}
-		
-
-	
-	function _validate_exitsEmail() {
-		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
-	}
+	}	
 }

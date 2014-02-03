@@ -117,3 +117,5 @@ $lang['We have sent you an email with instructions to reset your password'] = 'E
 $lang['Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'] = 'Olá %s, <p> Para alterar o seu e-mail no cReader, clique aqui %s </p> Saudações';
 $lang['We have sent you an email with instructions to change your email'] = 'Enviamos um e-mail com instruções para alterar seu e-mail';
 $lang['Your email has been updated'] = 'Seu e-mail foi atualizado';
+$lang['Enter a url'] = 'Digite uma url';
+$lang['Enter a valid url'] = 'Digite uma url válida';
