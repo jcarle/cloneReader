@@ -187,7 +187,7 @@ cloneReader = {
 					</button> \
 				</li> \
 				<li> \
-					<button title="' + _msg['Mark all as read'] + '" class="btnMarkAllAsFeed" > \
+					<button title="' + _msg['Mark all as read'] + '" class="btnMarkAllAsRead" > \
 						<i class="icon-archive" /> \
 						<span>' + _msg['Mark all as read'] + '</span> \
 					</button> \
@@ -257,7 +257,7 @@ cloneReader = {
 		
 		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false) } );
 		this.$toolbar.find('.btnInstall').click(function() { cloneReader.install() } );
-		this.$toolbar.find('.btnMarkAllAsFeed').click( function() { cloneReader.markAllAsFeed(); } );
+		this.$toolbar.find('.btnMarkAllAsRead').click( function() { cloneReader.markAllAsRead(); } );
  		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$mainToolbar.find('.prev').click(function() { cloneReader.goToEntry(false) });
 		this.$mainToolbar.find('.reload').click(function() { cloneReader.loadEntries(true, true, {}) });
@@ -707,10 +707,10 @@ TODO: pensar como mejorar esta parte
 		}
 		
 		this.$mainToolbar.find('.filterUnread').hide();
-		this.$mainToolbar.find('.btnMarkAllAsFeed').hide();
+		this.$mainToolbar.find('.btnMarkAllAsRead').hide();
 		
 		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [TAG_STAR, TAG_HOME]) != -1)) {
-			this.$mainToolbar.find('.btnMarkAllAsFeed').show();
+			this.$mainToolbar.find('.btnMarkAllAsRead').show();
 			this.$mainToolbar.find('.filterUnread').show();
 		}
 		
@@ -1254,7 +1254,7 @@ console.timeEnd("t1");
 		});
 	},
 	
-	markAllAsFeed: function(feedId) {
+	markAllAsRead: function(feedId) {
 		this.hidePopupWindow();
 		
 		var filter = this.getFilter(this.aFilters);
@@ -1267,7 +1267,7 @@ console.timeEnd("t1");
 				function() {
 					$.ajax({
 						'type':	 	'post',
-						'url': 		base_url + 'entries/markAllAsFeed',
+						'url': 		base_url + 'entries/markAllAsRead',
 						'data': 	{
 							'type': 	this.aFilters.type,
 							'id': 		this.aFilters.id

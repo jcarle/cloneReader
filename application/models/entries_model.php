@@ -450,7 +450,7 @@ class Entries_Model extends CI_Model {
 		return true;		
 	}
 	
-	function markAllAsFeed($userId, $type, $id) {
+	function markAllAsRead($userId, $type, $id) {
 		$aFeedId = array();
 
 		if ($type == 'tag') {
@@ -479,11 +479,16 @@ class Entries_Model extends CI_Model {
 		return true;		
 	}	
 	
-	function saveUserEntries($userId, $feedId) {
+	function saveUserEntries($userId, $feedId, $entryId = null) {
+		$aWhere = array('feedId = '.(int)$feedId);
+		if ($entryId != null) {
+			$aWhere[] = ' entryId = '.(int)$entryId;
+		}
+		
 		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 		
 						SELECT '.$userId.', entries.entryId, entries.feedId, '.TAG_ALL.', FALSE , entries.entryDate
 						FROM entries 
-						WHERE feedId = '.$feedId.'
+						WHERE '.implode(' AND ', $aWhere).'						
 						ORDER BY entryId DESC
 						LIMIT 100 '; // TODO: meter en una constante!
 		$this->db->query($query);

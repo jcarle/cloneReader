@@ -27,7 +27,7 @@ class Login extends CI_Controller {
 				'link'	=> array(
 					'type'	=> 'link',
 					'label'	=> $this->lang->line('Forgot password'), 
-					'value'	=> base_url('profile/forgotPassword'),
+					'value'	=> base_url('forgotPassword'),
 				)
 			)
 		);
