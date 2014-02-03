@@ -116,7 +116,6 @@ $lang['Icon'] = 'Icon';
 $lang['Data updated successfully'] = 'Data updated successfully';
 $lang['Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'] = 'Hello %s, <p>To reset your cReader password, click here %s  </p> Regards';
 $lang['We have sent you an email with instructions to reset your password'] = 'We have sent you an email with instructions to reset your password';
-
-$lang['Hello %s, <p>To change your cReader email, click here %s  </p> Regards'] = 'Hello %s, <p>To change your cReader email, click here %s  </p> Regards';
+$lang['Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'] = 'Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards';
 $lang['We have sent you an email with instructions to change your email'] = 'We have sent you an email with instructions to change your email';
-$lang['Your email has updated'] = 'Your email has updated';
+$lang['Your email has been updated'] = 'Your email has been updated';

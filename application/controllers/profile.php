@@ -178,7 +178,7 @@ class Profile extends CI_Controller {
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($userEmail); 
 		$this->email->subject('cReader - '.$this->lang->line('Change email'));
-		$this->email->message(sprintf($this->lang->line('Hello %s, <p>To change your cReader email, click here %s  </p> Regards'), $user['userFirstName'], base_url('profile/confirmEmail/'.$changeEmailKey)));
+		$this->email->message(sprintf($this->lang->line('Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'), $user['userFirstName'], base_url('profile/confirmEmail/'.$changeEmailKey)));
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 
@@ -205,7 +205,7 @@ class Profile extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'message', 
 			'title'		=> $this->lang->line('Change email'),
-			'message'	=> $this->lang->line('Your email has updated')
+			'message'	=> $this->lang->line('Your email has been updated')
 		));	
 	}
 	
