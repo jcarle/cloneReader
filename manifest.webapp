@@ -3,7 +3,6 @@
   "name": "cloneReader BETA",
   "description": "Lector de RSS",
   "launch_path": "/",
-  "fullscreen": "true",
   "default_locale": "en",
   "installs_allowed_from": ["*"],
   "icons": {
