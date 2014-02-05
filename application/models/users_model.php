@@ -281,6 +281,10 @@ class Users_Model extends CI_Model {
 	
 
 	function getUserFiltersByUserId($userId) {
+		if ($userId == USER_ANONYMOUS) {
+			return '{}';
+		}
+		
 		$query = $this->db
 				->select('userFilters')
 				->where('userId', $userId)

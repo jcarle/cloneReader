@@ -12,6 +12,6 @@ var ENTRIES_PAGE_SIZE	= <?php echo ENTRIES_PAGE_SIZE;?>;
 var FEED_MAX_COUNT		= <?php echo FEED_MAX_COUNT; ?>;
 
 $(document).ready(function() {
-	cloneReader.init(<?php echo ($this->session->userdata('userId') == USER_ANONYMOUS ? '{}' : $userFilters); ?>);
+	cloneReader.init(<?php echo $userFilters; ?>);
 });
 </script>

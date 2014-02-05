@@ -28,16 +28,18 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function select($userId, $aFilters){
+//$aFilters = array();		
 		// Default filters, por si viaja mal el js.
-		$userFilters = array(
-			'page'			=> element('page', 			$aFilters, 1),
-			'onlyUnread'	=> element('onlyUnread', 	$aFilters, true),
-			'sortDesc'	 	=> element('sortDesc', 		$aFilters, true),
-			'id' 			=> element('id', 			$aFilters, TAG_HOME), 
-			'type'	 		=> element('type', 			$aFilters, 'tag'),
-			'viewType'	 	=> element('viewType', 		$aFilters, 'detail'),
-			'isMaximized' 	=> element('isMaximized', 	$aFilters, false),
-		);
+		$userFilters = array_merge(
+			array(
+				'page'			=> 1,
+				'onlyUnread'	=> true,
+				'sortDesc'	 	=> true,
+				'id' 			=> TAG_HOME, 
+				'type'	 		=> 'tag',
+				'viewType'	 	=> 'detail',
+				'isMaximized' 	=> false,
+			), $aFilters);
 
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_STAR) {
 			$userFilters['onlyUnread'] = false;
@@ -72,7 +74,7 @@ class Entries_Model extends CI_Model {
 		}
 
 		$query = $this->db
-			->order_by('users_entries.entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
+			->order_by('users_entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
 			->get('users_entries FORCE INDEX ('.$indexName.')', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)
 			->result_array();
 		//pr($this->db->last_query()); die;
@@ -86,7 +88,7 @@ class Entries_Model extends CI_Model {
 			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor ', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->where('feeds.feedId', FEED_CLONEREADER)
-			->order_by('entries.entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
+			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
 			->get('entries ', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)			
 			->result_array();
 		//pr($this->db->last_query()); 
