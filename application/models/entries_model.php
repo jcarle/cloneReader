@@ -27,15 +27,23 @@ class Entries_Model extends CI_Model {
 		return $query;
 	}
 	
-	function select($userId, $userFilters){
-		$this->updateUserFilters($userFilters, $userId);
-		
-		if (!isset($userFilters['page'])) {
-			$userFilters['page'] = 1;
-		}
+	function select($userId, $aFilters){
+		// Default filters, por si viaja mal el js.
+		$userFilters = array(
+			'page'			=> element('page', 			$aFilters, 1),
+			'onlyUnread'	=> element('onlyUnread', 	$aFilters, true),
+			'sortDesc'	 	=> element('sortDesc', 		$aFilters, true),
+			'id' 			=> element('id', 			$aFilters, TAG_HOME), 
+			'type'	 		=> element('type', 			$aFilters, 'tag'),
+			'viewType'	 	=> element('viewType', 		$aFilters, 'detail'),
+			'isMaximized' 	=> element('isMaximized', 	$aFilters, false),
+		);
+
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_STAR) {
 			$userFilters['onlyUnread'] = false;
 		}
+		
+		$this->updateUserFilters($userFilters, $userId);
 		
 		// Tag home, lo tienen todos los usuarios
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_HOME) {
@@ -67,7 +75,7 @@ class Entries_Model extends CI_Model {
 			->order_by('users_entries.entryDate', ($userFilters['sortDesc'] == 'true' ? 'desc' : 'asc'))
 			->get('users_entries FORCE INDEX ('.$indexName.')', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)
 			->result_array();
-		//pr($this->db->last_query());
+		//pr($this->db->last_query()); die;
 		
 		return $query;
 	}
