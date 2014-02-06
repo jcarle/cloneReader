@@ -198,6 +198,7 @@ class Feeds_Model extends CI_Model {
 		set_time_limit(0);
 		
 		$this->load->model('Entries_Model');
+	
 //sleep(5);
 
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas

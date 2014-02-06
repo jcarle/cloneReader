@@ -1,17 +1,4 @@
 <?php
-function isSubmitCrForm() {
-	$CI = &get_instance();
-	
-	if ($CI->input->is_ajax_request()) {
-		return true;
-	}
-	if ($CI->input->post() != false) {
-		return true;
-	}
-	
-	return false;
-}
-
 function appendMessagesToCrForm($form) {
 	$CI = &get_instance();
 	$CI->lang->load('form_validation');

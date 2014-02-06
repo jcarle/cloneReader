@@ -50,7 +50,7 @@ class ResetPassword extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 		
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			return $this->_saveResetPassword();
 		}		
 		

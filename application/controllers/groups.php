@@ -72,7 +72,7 @@ class Groups extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Groups_Model->save($this->input->post());

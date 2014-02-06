@@ -37,7 +37,7 @@ class Tags extends CI_Controller {
 		
 		$form = $this->_getFormProperties($tagId);
 
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Tags_Model->save($this->input->post());

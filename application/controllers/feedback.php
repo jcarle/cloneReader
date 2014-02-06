@@ -5,14 +5,12 @@ class Feedback extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model(array('Comments_Model', 'Users_Model'));
-	}  
+	}
 	
 	function index() {
 		if (! $this->safety->allowByControllerName('feedback') ) { return errorForbidden(); }
 		
 		$this->load->helper('email');
-
-
 		
 		$userId = (int)$this->session->userdata('userId');
 		$data	= array();
@@ -71,18 +69,20 @@ class Feedback extends CI_Controller {
 		);	
 
 		$this->form_validation->set_rules($form['rules']);
-		$code = $this->form_validation->run();
 		
-		if ($this->input->is_ajax_request()) { // save data
-			if ($code === TRUE) {	
+		if ($this->input->post() != false) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
 				$this->Comments_Model->saveFeedback($this->input->post());
 			}
-
+		}
+		
+		if ($this->input->is_ajax_request()) {
 			return $this->load->view('ajax', array(
 				'code'		=> $code, 
-				'result' 	=> validation_errors() 
+				'result' 	=> validation_errors()  
 			));
-		}
+		}		
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 

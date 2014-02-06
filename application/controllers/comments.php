@@ -43,7 +43,7 @@ class Comments extends CI_Controller {
 		
 		$form = $this->_getFormProperties($commentId, false);
 		
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Comments_Model->save($this->input->post());

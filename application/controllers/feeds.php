@@ -116,7 +116,7 @@ class Feeds extends CI_Controller {
 		
 		$form = $this->_getFormProperties($feedId);
 
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Feeds_Model->save($this->input->post());

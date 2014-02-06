@@ -144,7 +144,7 @@ class Users extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Users_Model->save($this->input->post());

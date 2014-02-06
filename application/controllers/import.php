@@ -21,7 +21,7 @@ class Import extends CI_Controller {
 			'buttons'	=> array()
 		);
 		
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			return $this->_doImportFeeds();
 		}
 				
@@ -41,7 +41,7 @@ class Import extends CI_Controller {
 		
 		$config	= array(
 			'upload_path' 		=> './application/cache',
-			'allowed_types' 	=> 'xml',
+			'allowed_types' 	=> 'xml|opml',
 			'max_size'			=> 1024 * 8,
 			'encrypt_name'		=> false,
 			'is_image'			=> false,
@@ -52,7 +52,7 @@ class Import extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload()) {
-			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors('', '')));
+			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors()));
 		}
 		
 		
@@ -101,7 +101,7 @@ class Import extends CI_Controller {
 			'buttons'	=> array()
 		);
 		
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			return $this->_doImportStarred();
 		}
 				

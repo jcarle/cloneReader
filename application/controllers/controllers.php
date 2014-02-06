@@ -76,7 +76,7 @@ class Controllers extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 
-		if (isSubmitCrForm() === true) {
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Controllers_Model->save($this->input->post());
