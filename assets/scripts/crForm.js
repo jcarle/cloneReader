@@ -221,7 +221,6 @@
 										}
 									});
 								},
-								
 								'fail': 		function (jqXHR, textStatus) {
 									var result = $.parseJSON(textStatus.jqXHR.responseText);
 									if (result['code'] == false) {
