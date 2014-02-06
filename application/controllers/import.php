@@ -12,19 +12,16 @@ class Import extends CI_Controller {
 		
 		$form = array(
 			'rules'		=> array(),
+			'action'	=> base_url('import/doImportFeeds'), 
 			'fields'	=> array(
 				'tagName' => array(
 					'type'		=> 'upload',
-					'label'		=> sprintf($this->lang->line('Choose %s'), 'subscriptions.xml'), 
+					'label'		=> $this->lang->line('Choose the subscriptions.xml file from gReader or a standard OPML file'), 
 				),
 			),	
 			'buttons'	=> array()
 		);
-		
-		if ($this->input->post() != false) {
-			return $this->_doImportFeeds();
-		}
-				
+
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import feeds'),
@@ -32,7 +29,9 @@ class Import extends CI_Controller {
 		));		
 	}
 
-	function _doImportFeeds() {
+	function doImportFeeds() {
+		if (! $this->safety->allowByControllerName('import/feeds') ) { return errorForbidden(); }
+		
 		set_time_limit(0);
 		
 		$this->load->model('Entries_Model');
@@ -46,7 +45,7 @@ class Import extends CI_Controller {
 			'encrypt_name'		=> false,
 			'is_image'			=> false,
 			'overwrite'			=> true,
-			'file_name'			=> 'import_feeds_'.$userId.'.xml'
+			'file_name'			=> 'import_feeds_'.$userId
 		);
 
 		$this->load->library('upload', $config);
@@ -56,7 +55,7 @@ class Import extends CI_Controller {
 		}
 		
 		
-		$fileName 	= './application/cache/import_feeds_'.$userId.'.xml';
+		$fileName 	= $config['upload_path'].'/'.$config['file_name'].$this->upload->file_ext;
 		$xml 		= simplexml_load_file($fileName);
 
 		foreach ($xml->xpath('//body/outline') as $tag) {
@@ -92,6 +91,7 @@ class Import extends CI_Controller {
 		
 		$form = array(
 			'rules'		=> array(),
+			'action'	=> base_url('import/doImportStarred'),
 			'fields'	=> array(
 				'tagName' => array(
 					'type'		=> 'upload',
@@ -101,10 +101,6 @@ class Import extends CI_Controller {
 			'buttons'	=> array()
 		);
 		
-		if ($this->input->post() != false) {
-			return $this->_doImportStarred();
-		}
-				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import starred'),
@@ -112,7 +108,9 @@ class Import extends CI_Controller {
 		));		
 	}
 	
-	function _doImportStarred() {
+	function doImportStarred() {
+		if (! $this->safety->allowByControllerName('import/starred') ) { return errorForbidden(); }
+		
 		set_time_limit(0);
 		
 		$this->load->model('Entries_Model');
@@ -132,7 +130,7 @@ class Import extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload()) {
-			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors('', '')));					
+			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors()));
 		}
 
 

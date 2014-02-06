@@ -220,7 +220,14 @@
 											$.goToUrl(result['result']['goToUrl']);
 										}
 									});
-								}	 
+								},
+								
+								'fail': 		function (jqXHR, textStatus) {
+									var result = $.parseJSON(textStatus.jqXHR.responseText);
+									if (result['code'] == false) {
+										return $(document).crAlert(result['result']);
+									}
+								}
 							});
 						case 'numeric':
 							$maskNumeric = field.$input.clone();
