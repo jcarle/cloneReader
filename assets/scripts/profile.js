@@ -47,7 +47,6 @@ $.Profile = {
 				$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 			}
 		, this));
-
 	}
 };
 

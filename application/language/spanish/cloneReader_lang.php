@@ -55,4 +55,4 @@ $lang['View entries'] = 'Ver entries';
 $lang['Remove old entries'] = 'Eliminar entries antiguas';
 $lang['View feeds'] = 'Ver feeds';
 $lang['Choose the subscriptions.xml file from gReader or a standard OPML file'] = 'Elija el archivo subscriptions.xml de gReader o un archivo OPML estándar';
-$lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML es un formato que te permite migrar sus feeds a otro lector';
+$lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML es un formato que te permite migrar tus feeds a otro lector';
