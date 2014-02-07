@@ -407,4 +407,22 @@ class Feeds_Model extends CI_Model {
 		}
 		return $count;
 	}
+
+
+
+
+
+
+	function selectFeedsOPML($userId) {
+
+		$query = $this->db->select('feeds.feedId, feedName, feedUrl, tags.tagId, tagName, feeds.feedLink ', false)
+						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
+						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
+						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
+						->where('users_feeds.userId', $userId)
+						->order_by('tagName IS NULL, tagName asc, feedName asc')
+		 				->get('feeds')->result_array();
+		//pr($this->db->last_query());
+		return $query;
+	}
 }

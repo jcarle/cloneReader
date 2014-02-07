@@ -4,7 +4,7 @@ class Profile extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Users_Model', 'Countries_Model'));
+		$this->load->model('Users_Model');
 	}
 	
 	function index() {
@@ -25,6 +25,8 @@ class Profile extends CI_Controller {
 	function editProfile() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 
+		$this->load->model('Countries_Model');
+		
 		$userId = $this->session->userdata('userId');
 		$data 	= $this->Users_Model->get($userId);
 		
@@ -251,7 +253,76 @@ class Profile extends CI_Controller {
 	function _validate_exitsEmail() {
 		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), 0) != true);
 	}
+
+	function downloadOPML() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$form = array(
+			'frmId'			=> 'frmDownloadOPML',
+			'buttons'		=> array(),
+			'fields'		=> array(
+				'downloadHtml' => array(
+					'type'	=> 'html',
+					'value'	=> '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'">'.$this->lang->line('Download OPML').'</a>' 
+				),
+			)
+		);
+
+		$this->load->view('ajax', array(
+			'view'			=> 'includes/crAjaxForm',
+			'form'			=> $form,
+			'title'			=> $this->lang->line('Download OPML'),
+			'code'			=> true
+		));
+	}
 	
+	function doDownloadOPML() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+
+		$this->load->model('Feeds_Model');
+		$this->load->helper('download');
+		
+		$userId = $this->session->userdata('userId');
+		$data 	= $this->Users_Model->get($userId);
+		$query 	= $this->Feeds_Model->selectFeedsOPML($userId);
+
+		$xml  	= new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><opml version="1.0" />');
+		$xml->xmlEndoding='UTF-8';
+		$nHead  = $xml->addChild('head');
+		$nTitle = $nHead->addChild('title', 'cReader feeds of '.element('userFirstName', $data).' '.element('userLastName', $data));
+		$nBody 	= $xml->addChild('body');
+		$tagId	= null;
+		
+		foreach ($query as $row) {
+			if ($row['tagId'] != null) {
+				
+				if ($tagId != $row['tagId']) {
+					$nTag 	= $nBody->addChild('outline');
+					$nTag->addAttribute('text', $row['tagName']);
+					$nTag->addAttribute('title', $row['tagName']);
+				}
+				
+				$tagId = $row['tagId'];
+				$nParent = $nTag;
+			}
+			else {
+				$nParent = $nBody;
+			} 
+		
+			$nFeed 	= $nParent->addChild('outline');
+			$nFeed->addAttribute('type', 'rss');
+			$nFeed->addAttribute('text', $row['feedName']);
+			$nFeed->addAttribute('title', $row['feedName']);
+			$nFeed->addAttribute('xmlUrl', $row['feedUrl']);
+			$nFeed->addAttribute('htmlUrl', $row['feedLink']);
+		
+		
+		}
+
+		
+
+		force_download('cReader.opml', $xml->saveXML());
+	}
 	
 	function removeAccount() {
 		return $this->load->view('ajax', array(
