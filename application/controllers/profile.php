@@ -160,13 +160,15 @@ class Profile extends CI_Controller {
 		$userEmail 		= $this->input->post('userEmail');
 		$user 			= $this->Users_Model->get($userId);
 		$changeEmailKey = random_string('alnum', 20);
+		$url 			= base_url('confirmEmail?key='.$changeEmailKey);
+		$message 		= sprintf($this->lang->line('Hello %s, <p>To change your  email in cReader, click <a href="%s">here</a></p>'), $user['userFirstName'], $url);
 		
 		$this->Users_Model->updateChangeEmailKey($userId, $userEmail, $changeEmailKey);
 
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($userEmail); 
 		$this->email->subject('cReader - '.$this->lang->line('Change email'));
-		$this->email->message(sprintf($this->lang->line('Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'), $user['userFirstName'], base_url('confirmEmail?key='.$changeEmailKey)));
+		$this->email->message(getEmailTemplate($message, $url));
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 

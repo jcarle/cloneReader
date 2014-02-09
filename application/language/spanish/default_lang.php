@@ -114,12 +114,13 @@ $lang['Current password'] = 'Contraseña actual';
 $lang['New password'] = 'Nueva contraseña';
 $lang['Repeat new password'] = 'Repetir contraseña';
 $lang['Icon'] = 'Icono';
-$lang['Hello %s, <p>To reset your cReader password, click here %s  </p> Regards'] = 'Hola %s, <p>Para resetear tu contraseña de cReader, ingresa en %s  </p> Saludos';
 $lang['We have sent you an email with instructions to reset your password'] = 'Te hemos mandado un email con instrucciones para restablecer tu contraseña';
-$lang['Hello %s, <p>To change your  email in cReader, click here %s  </p> Regards'] = 'Hola %s, <p> Para cambiar su email en cReader, haga clic aquí %s </p> Saludos';
+$lang['Hello %s, <p>To change your  email in cReader, click <a href="%s">here</a></p>'] = 'Hola %s, <p> Para cambiar su email en cReader, haga clic <a href="%s">aquí</a></p>';
 $lang['We have sent you an email with instructions to change your email'] = 'Te hemos mandado un email con instrucciones para cambiar su dirección de email';
 $lang['Your email has been updated'] = 'Tu email ha sido actualizado';
-
 $lang['Enter a url'] = 'Introduzca una url';
 $lang['Enter a valid url'] = 'Ingrese una url válida';
-
+$lang['Trouble clicking? Copy and paste this URL into your browser: <br/> %s'] = 'Problemas para cliquear? Copia y pega esta URL en tu navegador: <br/>%s';
+$lang['Someone recently requested that the password be reset for %s'] = 'Alguien pidió recientemente resetear la contraseña de %s';
+$lang['To reset your password please click <a href="%s">here</a>'] = 'Para resetear su contraseña, por favor hace clic <a href="%s">aquí</a>';
+$lang['If this is a mistake just ignore this email - your password will not be changed'] = 'Si esto es un error simplemente ignorar este email - la contraseña no se cambiará';
