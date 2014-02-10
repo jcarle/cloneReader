@@ -111,4 +111,17 @@ class Login extends CI_Controller {
 			'result' 	=> '' 
 		));
 	}
+
+	
+
+
+	function loginGoogle() {
+		// TOOD: seguridad!
+
+		return $this->load->view('includes/template', array(
+			'view'		=> 'oauth', 
+			'title'		=> null,
+			 
+		));
+	}
 }
