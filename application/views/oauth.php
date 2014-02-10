@@ -2,7 +2,7 @@
 
 
 <script type="text/javascript">
-var clientID 	= '522657157003-rm53dmqk4hnjtrnphpara5odtet8qj0i.apps.googleusercontent.com';
+var clientID 	= SERVER_DATA.googleApi;
 var scopes 		= 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
 	
 $(window).bind('load', function() {
