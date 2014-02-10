@@ -73,6 +73,7 @@ class Users extends CI_Controller {
 				'sort' => array(
 					'userId'			=> '#',
 					'userEmail'			=> $this->lang->line('Email'),
+					'userDateAdd'		=> $this->lang->line('Record date'),
 					'userLastAccess'	=> $this->lang->line('Last access'),
 				)
 			)

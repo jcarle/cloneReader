@@ -93,7 +93,7 @@ class Users_Model extends CI_Model {
 			}
 		}
 		
-		if (!in_array($orderBy, array('userId', 'userEmail', 'userLastAccess' ))) {
+		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ))) {
 			$orderBy = 'userId';
 		}
 
