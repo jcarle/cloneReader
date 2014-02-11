@@ -1,4 +1,3 @@
-/*
 (function() {
 	var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
 	po.src = 'https://apis.google.com/js/client:plusone.js';
@@ -20,7 +19,6 @@ $(document).ready(
 		);
 	}
 );
-*/
 
 function googleLogin(response) {
 	if (!response['access_token']) {
@@ -44,8 +42,8 @@ function googleLogin(response) {
 				}
 			})
 			.done(function ( data ) {
-//				$.showWaiting(true);
-//				location.href = base_url;
+				$.showWaiting(true);
+				location.href = base_url;
 			})
 		}
 	});
