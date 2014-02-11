@@ -131,6 +131,7 @@ class Login extends CI_Controller {
 		$provider = $this->oauth2->provider($provider, array(
 			'id' => 	$config['id'],
 			'secret' => $config['secret'],
+			'scope'	=> 	'email',
 		));
 
 		if ( ! $this->input->get('code')) {
