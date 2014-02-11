@@ -17,6 +17,7 @@ $lang['Are you sure?'] = 'Are you sure?';
 $lang['User'] = 'User';
 $lang['DATE_FORMAT'] = 'mm/dd/yyyy';
 $lang['MOMENT_DATE_FORMAT'] = 'MM/DD/YYYY';
+$lang['PHP_DATE_FORMAT'] = 'm/d/Y';
 $lang['NUMBER_DEC_SEP'] = '.';
 $lang['NUMBER_THOUSANDS_SEP'] = ',';
 

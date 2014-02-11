@@ -210,7 +210,7 @@ class Entries_Model extends CI_Model {
 
 	function get($entryId, $isfForm = false){
 		$result = $this->db
-				->select('entries.*, feedName', true)
+				->select('entries.*, feedName, feedLink, feedUrl', true)
 				->where('entryId', $entryId)
 				->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 				->get('entries')->row_array();

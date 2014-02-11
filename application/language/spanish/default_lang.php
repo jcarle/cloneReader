@@ -13,6 +13,7 @@ $lang['The page you requested does not exist'] = 'La página solicitada no exist
 
 $lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
 $lang['MOMENT_DATE_FORMAT'] = 'DD/MM/YYYY';
+$lang['PHP_DATE_FORMAT'] = 'd/m/Y';
 $lang['NUMBER_DEC_SEP'] = ',';
 $lang['NUMBER_THOUSANDS_SEP'] = '.';
 

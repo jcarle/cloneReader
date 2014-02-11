@@ -40,8 +40,6 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
 
-//define('DATETIME_FORMAT_MYSQL', '%d/%m/%Y %H:%i:%s');
-//define('DATE_FORMAT_MYSQL', '%d/%m/%Y');
 define('DEFAULT_CURRENCY_NAME', 'AR$');
 define('DEFAULT_CURRENCY_ID', 1);
 
