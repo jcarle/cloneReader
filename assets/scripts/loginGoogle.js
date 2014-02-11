@@ -4,41 +4,6 @@
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 })();
 
-function googleLogin(response) {
-	if (!response['access_token']) {
-		return;
-	}
-	
-	$.ajax({
-		url: 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + response['access_token'],
-		data: null,
-		dataType: "jsonp",
-		success: function(response) {
-			$.ajax({
-				url: 	base_url + 'login/loginRemote',
-				type: 	'post',
-				data: 	{
-					'provider': 		'google',
-					'remoteUserId': 	response.id,
-					'userLastName': 	response.family_name,
-					'userFirstName': 	response.given_name,
-					'userEmail': 		response.email,
-				}
-			})
-			.done(function ( data ) {
-				$.showWaiting(true);
-				location.href = base_url;
-			})
-		}
-	});
-}
-
-
-
-
-
-
-
 function checkGoogleAuth(immediate) {
 	gapi.auth.authorize({
 		'client_id': 		SERVER_DATA.googleApi,
@@ -50,20 +15,18 @@ function checkGoogleAuth(immediate) {
 
 function handleGoogleAuth(authResult) {
 	if (authResult && !authResult.error) {
-		makeApiCall();
+		googleLogin();
 	}
 	else {
 		checkGoogleAuth(false);
 	}
 }
 
-
-function makeApiCall() {
+function googleLogin() {
 	gapi.client.load('oauth2', 'v2', function() {
 		var request = gapi.client.oauth2.userinfo.get();
 		request.execute(function (response) {
 			if (!response.code) { // Si code == undefined : datos ok
-cn(response);				
 				$.ajax({
 					url: 	base_url + 'login/loginRemote',
 					type: 	'post',
@@ -77,7 +40,7 @@ cn(response);
 				})
 				.done(function ( data ) {
 					$.showWaiting(true);
-					location.href = base_url;
+					window.setTimeout(function() { location.href = base_url; }, 1500);
 				})
 			}
 			else {

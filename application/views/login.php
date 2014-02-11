@@ -27,7 +27,7 @@ $this->load->view('includes/crForm');
 				</a>
 			</li>
 			<li class="list-group-item">
-				<a class="btn btn-google" href="javascript:checkGoogleAuth(true);" >
+				<a href="javascript:checkGoogleAuth(true);" class="btn btn-google">
 					<i class="icon-google-plus"></i>
 					<?php echo $this->lang->line('Google Login'); ?>
 				</a>

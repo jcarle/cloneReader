@@ -111,32 +111,4 @@ class Login extends CI_Controller {
 			'result' 	=> '' 
 		));
 	}
-
-	
-
-
-	function loginGoogle() {
-		// TOOD: seguridad!
-		$aServerData = array('fbApi' => null);
-		switch ($_SERVER['SERVER_NAME']) {
-			case 'jcarle.redirectme.net':
-				$aServerData['fbApi'] 		= '581547605212584';
-				$aServerData['googleApi'] 	= '522657157003-rm53dmqk4hnjtrnphpara5odtet8qj0i.apps.googleusercontent.com';
-				break;
-			case 'www.jcarle.com.ar':
-				$aServerData['fbApi'] 		= '470466523040981'; 
-				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
-				break;
-			case 'www.clonereader.com.ar':
-				$aServerData['fbApi'] 		= '605522602845255'; 
-				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
-				break;				
-		}	
-		
-		return $this->load->view('includes/template', array(
-			'view'		=> 'oauth', 
-			'title'		=> null,
-			'aServerData'	=> $aServerData,			 
-		));
-	}
 }
