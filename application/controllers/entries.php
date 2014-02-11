@@ -359,44 +359,6 @@ class Entries extends CI_Controller {
 		$this->Entries_Model->populateMillionsEntries();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	function shareByEmail($entryId) {
 // TODO: implementar seguridad		
 //		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
@@ -413,12 +375,14 @@ class Entries extends CI_Controller {
 			'title'			=> sprintf($this->lang->line('Send by mail %s'), ' "'.$data['entryTitle'].'" '),
 			'fields'		=> array(
 				'entryId' => array(
-					'type'	=> 'text',
+					'type'	=> 'hidden',
 					'value'	=> $entryId 
 				),
 				'userFriendEmail' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('For'), 
+					'type'		=> 'typeahead',
+					'label'		=> $this->lang->line('For'),
+					'source' 	=> base_url('users/searchFriends/'),
+					'value'		=> array( 'id' => null, 'text' => null ),
 				),
 				'shareByEmailComment' => array(
 					'type'	=> 'textarea',
