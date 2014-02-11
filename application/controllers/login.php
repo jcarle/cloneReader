@@ -8,7 +8,7 @@ class Login extends CI_Controller {
 	}
 	
 	function index() {
-		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
+		if (! $this->safety->allowByControllerName('login') ) { return errorForbidden(); }
 		
 		$form = array(
 			'frmId'				=> 'frmLogin',
@@ -77,7 +77,7 @@ class Login extends CI_Controller {
 				'title'			=> $this->lang->line('Login'),
 				'form'			=> $form,
 				'aServerData'	=> $aServerData,
-				'aJs'			=> array('loginFB.js', 'loginGoogle.js'),
+				'aJs'			=> array(/*'loginFB.js',*/ 'loginGoogle.js'),
 			));
 		}
 		
@@ -110,5 +110,39 @@ class Login extends CI_Controller {
 			'code'		=> true, 
 			'result' 	=> '' 
 		));
+	}
+	
+	
+	function facebook() {
+		if (! $this->safety->allowByControllerName('login') ) { return errorForbidden(); }
+		
+		$this->load->library('facebook');
+
+		$user = $this->facebook->getUser();
+
+		if ($user) {
+			try {
+				
+				$user_profile = $this->facebook->api('/me');
+
+				$user = $this->Users_Model->loginRemote($user_profile['email'], $user_profile['last_name'], $user_profile['first_name'], 'facebook', $user_profile['id'] );
+
+				if ($user == null) {
+					return errorForbidden();
+				}
+
+				$this->session->set_userdata(array(
+					'userId'  		=> $user->userId,
+					'langId'  		=> $user->langId,
+				));		
+				
+				$this->Users_Model->updateUserLastAccess();
+				
+				redirect('');
+
+			} catch (FacebookApiException $e) { } 
+		}
+
+		return errorForbidden();
 	}
 }

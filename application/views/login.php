@@ -1,3 +1,7 @@
+<?php
+$this->load->library('facebook');
+?>
+
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 	
@@ -21,7 +25,7 @@ $this->load->view('includes/crForm');
 				</a>
 			</li>	
 			<li class="list-group-item">
-				<a href='javascript:facebookLogin()' class="btn btn-facebook" >
+				<a href="<?php  echo $this->facebook->getLoginUrl(array( 'redirect_uri' => base_url('login/facebook'), 'scope' => array('email')));?>" class="btn btn-facebook" >
 					<i class="icon-facebook"></i>
 					<?php echo $this->lang->line('Facebook Login'); ?>
 				</a>
