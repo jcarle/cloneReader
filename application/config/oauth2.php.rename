@@ -1,0 +1,10 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+// Rename this file
+
+$config['oauth2']['facebook']['id'] = '';
+$config['oauth2']['facebook']['secret'] = '';
+
+
+$config['oauth2']['google']['id'] = '';
+$config['oauth2']['google']['secret'] = '-';

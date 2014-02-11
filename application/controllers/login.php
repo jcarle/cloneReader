@@ -74,7 +74,7 @@ class Login extends CI_Controller {
 				'title'			=> $this->lang->line('Login'),
 				'form'			=> $form,
 				'aServerData'	=> $aServerData,
-				'aJs'			=> array(/*'loginFB.js',*/ 'loginGoogle.js'),
+				//'aJs'			=> array('loginFB.js', 'loginGoogle.js'),
 			));
 		}
 		
@@ -86,7 +86,7 @@ class Login extends CI_Controller {
 		return $this->safety->login($this->input->post('email'), $this->input->post('password'));
 	}
 	
-	function loginRemote() {
+/*	function loginRemote() {
 		$user = $this->Users_Model->loginRemote($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstName'), $this->input->post('provider'), $this->input->post('remoteUserId') );
 
 		if ($user == null) {
@@ -107,7 +107,7 @@ class Login extends CI_Controller {
 			'code'		=> true, 
 			'result' 	=> '' 
 		));
-	}
+	}*/
 	
 
 	function facebook() {
