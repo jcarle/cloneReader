@@ -238,8 +238,9 @@
 						color: #1155CC;
 					}
 					#cloneReader .ulEntries > li .footer .btnSocial {
+						cursor: pointer;
 						display: inline;
-						margin: 0 0 0 10px;						
+						margin: 0 0 0 10px;
 					}
 					#cloneReader .ulEntries > li .footer .btnSocial:hover {
 						text-decoration: none;
@@ -306,8 +307,8 @@
 				#cloneReader .ulEntries.list > li .title .entryDate {
 					float: right;
 					margin: 5px 10px 0 0;
-   					color: gray;
-   					font-size:smaller;
+					color: gray;
+					font-size:smaller;
 				}				
 				#cloneReader .ulEntries.list > li .title .entryContent {
 					float: none;
@@ -318,7 +319,7 @@
 					margin:0 5px 0px 26px;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					white-space: nowrap;										
+					white-space: nowrap;
 				}
 					#cloneReader .ulEntries.list > li .title .entryContent h2 {
 						color: #333;
@@ -480,6 +481,9 @@
 	#header .mainToolbar li {
 		padding-left:15px;
 	}
+		#header .mainToolbar .directionNav {
+			display:none;
+		}
 	#cloneReader { }
 	#cloneReader nav .expand {
 	}

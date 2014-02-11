@@ -240,7 +240,7 @@ cloneReader = {
 						<span class="btnLabel">' + _msg['Reload'] + '</span> \
 					 </button> \
 				</li> \
-				<li> \
+				<li class="directionNav" > \
 					<div class="btn-group"  > \
 						<button title="' + _msg['Prev'] + '" class="prev" > <i class="icon-caret-up" /> </button> \
 						<button title="' + _msg['Next'] + '" class="next" > <i class="icon-caret-down" /> </button> \
@@ -481,6 +481,9 @@ cloneReader = {
 
 		$('<label class="star checkbox" title="' + _msg['Star'] + '" > <i/> </label>').appendTo($footer);
 		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
+		
+
+		$('<a class="btnSocial icon-large icon-envelope"  />').appendTo($footer);		
 		
 		var aSocial = [
 			{'icon': 'icon-facebook-sign', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
