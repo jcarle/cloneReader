@@ -19,7 +19,7 @@ echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), '
 					<i class="icon-remove"></i>
 				</button>
 				<h4> 
-					<i class="icon-edit"></i> <?php echo $form['title']; ?> 
+					<i class="<?php echo element('icon', $form, 'icon-edit'); ?>"></i> <?php echo $form['title']; ?> 
 				</h4>
 			</div>
 			<div class="modal-body">
@@ -33,13 +33,14 @@ echo implode(' ', $aFields);
 <?php
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
-}
-if (isset($form['urlDelete'])) {
-	$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
-}
-$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
 
-array_unshift($form['buttons'], '<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">'.$this->lang->line('Close').'</button>'); 
+	if (isset($form['urlDelete'])) {
+		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
+	}
+	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
+	
+	array_unshift($form['buttons'], '<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">'.$this->lang->line('Close').'</button>'); 
+}
 
 foreach ($form['buttons'] as $button) {
 	echo $button.' ';

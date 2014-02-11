@@ -67,6 +67,10 @@ cloneReader = {
 		
 		$(document).keyup($.proxy(
 			function(event) {
+				if ($('body').hasClass('modal-open') == true) {
+					return;
+				}
+				
 				event.stopPropagation();
 //cn(event['keyCode']);
 				switch (event['keyCode']) {
@@ -483,7 +487,14 @@ cloneReader = {
 		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
 		
 
-		$('<a class="btnSocial icon-large icon-envelope"  />').appendTo($footer);		
+		$('<a class="btnSocial icon-large icon-envelope"  />')
+			.click(function(event) {
+				event.stopPropagation();
+				var $entry = $($(event.target).parents('.entry'));
+				var entryId = $entry.data('entryId');
+				cloneReader.showFormSendByEmail(entryId);
+			})
+			.appendTo($footer);	
 		
 		var aSocial = [
 			{'icon': 'icon-facebook-sign', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
@@ -1632,6 +1643,32 @@ console.timeEnd("t1");
 	
 	install: function() {
 		navigator.mozApps.install(base_url + 'manifest.webapp');
+	},
+	
+	showFormSendByEmail: function(entryId) {
+		$.ajax({
+			'url': 		base_url + 'entries/sendByEmail/' + entryId,
+			'async':	true
+		})
+		.fail(
+			function (result) {
+				result = $.parseJSON(result.responseText);
+				if (result['code'] == false) {
+					return $(document).crAlert(result['result']);
+				}
+			}
+		)
+		.done( $.proxy( 
+			function (result) {
+				if (result['code'] != true) {
+					return $(document).crAlert(result['result']);
+				}
+				
+				$(result['result']).appendTo($('body'));
+				var $modal	= $('#frmSendByEmail').parents('.modal');
+				$.showModal($modal, false);
+			}
+		, this));
 	}
 };
 

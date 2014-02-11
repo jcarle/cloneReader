@@ -362,13 +362,20 @@ $.extend({
 		
 		$modal.modal( { 'backdrop': 'static', 'keyboard': keyboard });
 
+
+		$('.modal').css('z-index', 1029);;
+
 		
 		$(document).unbind('hidden.bs.modal');
-		$(document).bind('hidden.bs.modal', function () {
+		$(document).bind('hidden.bs.modal', function (event) {
+			$(event.target).remove();
+			$(this).removeData('bs.modal');
+			
 			$(document.body).removeClass('modal-open');
 			if ($('.modal-backdrop').length > 0) {
 				$('.modal-backdrop').last().show();
 				$('body').addClass('modal-open');
+				$('.modal:last').css('z-index', 1040);;
 			}
 		}); 
 		
@@ -378,7 +385,8 @@ $.extend({
 
 		$('.modal-backdrop:last')
 			.css( {'opacity': 0.3  } )
-			.show();		
+			.show();
+		$('.modal:last').css('z-index', 1040);;
 	}
 });
 

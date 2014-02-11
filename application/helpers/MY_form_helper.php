@@ -187,7 +187,7 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, form_password(array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control')));
 				break;			
 			case 'textarea':
-				$aFields[] = sprintf($sField, form_textarea($name, $field['value'], 'class="form-control"'));
+				$aFields[] = sprintf($sField, form_textarea($name, element('value', $field), 'class="form-control"'));
 				break;			
 			case 'typeahead':
 				$aFields[] = sprintf($sField, 

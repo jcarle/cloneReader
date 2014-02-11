@@ -96,6 +96,7 @@ $lang['Pictures'] = 'Pictures';
 $lang['Type'] = 'Type';
 $lang['From'] = 'From';
 $lang['To'] = 'To';
+$lang['For'] = 'For';
 $lang['Currency'] = 'Currency';
 $lang['Exchange rate'] =  'Exchange rate';
 $lang['Remote login'] = 'Remote login';
@@ -125,3 +126,4 @@ $lang['Trouble clicking? Copy and paste this URL into your browser: <br/> %s'] =
 $lang['Someone recently requested that the password be reset for %s'] = 'Someone recently requested that the password be reset for %s';
 $lang['To reset your password please click <a href="%s">here</a>'] = 'To reset your password please click <a href="%s">here</a>';
 $lang['If this is a mistake just ignore this email - your password will not be changed'] = 'If this is a mistake just ignore this email - your password will not be changed';
+$lang['Send by mail %s'] = 'Send by mail %s';

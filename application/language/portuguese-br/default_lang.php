@@ -94,6 +94,7 @@ $lang['Pictures'] = 'Fotos';
 $lang['Type'] = 'Tipo';
 $lang['From'] = 'De';
 $lang['To'] = 'a';
+$lang['For'] = 'Para';
 $lang['Currency'] = 'Moeda';
 $lang['Exchange rate'] =  'Taxa de câmbio';
 $lang['Remote login'] = 'Remote login';
@@ -122,3 +123,4 @@ $lang['Trouble clicking? Copy and paste this URL into your browser: <br/> %s'] =
 $lang['Someone recently requested that the password be reset for %s'] = 'Alguém pediu recentemente que a senha seja redefinido para %s';
 $lang['To reset your password please click <a href="%s">here</a>'] = 'Para redefinir sua senha, clique <a href="%s">aqui</a>';
 $lang['If this is a mistake just ignore this email - your password will not be changed'] = 'Se isso é um erro simplesmente ignorar este e-mail - sua senha não será alterada';
+$lang['Send by mail %s'] = 'Enviar por e-mail';
