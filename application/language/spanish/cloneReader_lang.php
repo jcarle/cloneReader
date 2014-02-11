@@ -57,3 +57,4 @@ $lang['View feeds'] = 'Ver feeds';
 $lang['Choose the subscriptions.xml file from gReader or a standard OPML file'] = 'Elija el archivo subscriptions.xml de gReader o un archivo OPML estándar';
 $lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML es un formato que te permite migrar tus feeds a otro lector';
 $lang['Thank you for using cReader'] = 'Gracias por usar cReader';
+$lang['Sent to you by %s via cReader'] = 'Enviado por %s a través de cReader';

@@ -294,5 +294,40 @@ class Users_Model extends CI_Model {
 	
 	function updateLangIdByUserId($langId, $userId) {
 			$this->db->where('userId', $userId)->update('users', array('langId' => $langId));
-	}	
+	}
+	
+	
+	function saveUserFriend($userId, $userFriendEmail, $userFriendName) {
+		if (trim($userFriendEmail) == '') {
+			return null;
+		}
+
+		$query = $this->db
+			->where(array( 'userId' => $userId, 'userFriendEmail' => $userFriendEmail))
+			->get('users_friends');
+		if ($query->num_rows() > 0) {
+			$query = $query->row_array();
+			return $query['userFrieldId'];
+		}
+		
+		$this->db->insert('users_friends', array(
+			'userId' 			=> $userId, 
+			'userFriendEmail' 	=> $userFriendEmail,
+			'userFriendName' 	=> $userFriendName,
+		));
+		return $this->db->insert_id();
+	}
+	
+	function saveSharedByEmail($data) {
+		$values = array(
+			'userId'				=> element('userId', $data),
+			'entryId'				=> element('entryId', $data),
+			'userFriendId'			=> element('userFriendId', $data),
+			'shareByEmailDate'		=> date("Y-m-d H:i:s"),
+			'shareByEmailComment'	=> element('shareByEmailComment', $data),
+		);
+
+		$this->db->insert('shared_by_email', $values);
+		return $this->db->insert_id();
+	}
 }

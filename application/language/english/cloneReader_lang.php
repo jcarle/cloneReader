@@ -53,3 +53,4 @@ $lang['Remove old entries'] = 'Remove old entries';
 $lang['Choose the subscriptions.xml file from gReader or a standard OPML file'] = 'Choose the subscriptions.xml file from gReader or a standard OPML file';
 $lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML is a format which allows migrate the feeds  to another reader';
 $lang['Thank you for using cReader'] = 'Thank you for using cReader';
+$lang['Sent to you by %s via cReader'] = 'Sent to you by %s via cReader';

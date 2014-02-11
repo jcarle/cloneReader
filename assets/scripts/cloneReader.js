@@ -492,7 +492,7 @@ cloneReader = {
 				event.stopPropagation();
 				var $entry = $($(event.target).parents('.entry'));
 				var entryId = $entry.data('entryId');
-				cloneReader.showFormSendByEmail(entryId);
+				cloneReader.showFormShareByEmail(entryId);
 			})
 			.appendTo($footer);	
 		
@@ -1645,9 +1645,9 @@ console.timeEnd("t1");
 		navigator.mozApps.install(base_url + 'manifest.webapp');
 	},
 	
-	showFormSendByEmail: function(entryId) {
+	showFormShareByEmail: function(entryId) {
 		$.ajax({
-			'url': 		base_url + 'entries/sendByEmail/' + entryId,
+			'url': 		base_url + 'entries/shareByEmail/' + entryId,
 			'async':	true
 		})
 		.fail(
@@ -1665,7 +1665,7 @@ console.timeEnd("t1");
 				}
 				
 				$(result['result']).appendTo($('body'));
-				var $modal	= $('#frmSendByEmail').parents('.modal');
+				var $modal	= $('#frmShareByEmail').parents('.modal');
 				$.showModal($modal, false);
 			}
 		, this));

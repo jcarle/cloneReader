@@ -5,7 +5,7 @@ class Entries extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model(array('Entries_Model', 'Feeds_Model'));
-	}  
+	}
 	
 	/*
 	function __destruct() {
@@ -358,4 +358,149 @@ class Entries extends CI_Controller {
 	function populateMillionsEntries() {
 		$this->Entries_Model->populateMillionsEntries();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	function shareByEmail($entryId) {
+// TODO: implementar seguridad		
+//		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+
+		$data = $this->Entries_Model->get($entryId, false);
+		if (empty($data)) {
+			return error404();
+		}
+		
+		$form = array(
+			'frmId'			=> 'frmShareByEmail',
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-envelope "></i> '.$this->lang->line('Send').' </button>'),
+			'icon'			=> 'icon-envelope icon-large text-primary',
+			'title'			=> sprintf($this->lang->line('Send by mail %s'), ' "'.$data['entryTitle'].'" '),
+			'fields'		=> array(
+				'entryId' => array(
+					'type'	=> 'text',
+					'value'	=> $entryId 
+				),
+				'userFriendEmail' => array(
+					'type'	=> 'text',
+					'label'	=> $this->lang->line('For'), 
+				),
+				'shareByEmailComment' => array(
+					'type'	=> 'textarea',
+					'label'	=> $this->lang->line('Comment'), 
+				),
+			)
+		);
+		
+		$form['rules'] = array(
+			array(
+				'field' => 'userFriendEmail',
+				'label' => $form['fields']['userFriendEmail']['label'],
+				'rules' => 'trim|required|valid_email'
+			),
+		);		
+		
+		$this->form_validation->set_rules($form['rules']);
+		
+		if ($this->input->post() != false) {
+			return $this->_saveShareByEmail();
+		}
+
+		$this->load->view('ajax', array(
+			'view'			=> 'includes/crPopupForm',
+			'form'			=> $form,
+			'title'			=> $this->lang->line('Change password'),
+			'code'			=> true
+		));
+	}
+	
+	function _saveShareByEmail() {
+		if ($this->form_validation->run() == FALSE) {
+			return $this->load->view('ajax', array(
+				'code'		=> false,
+				'result' 	=> validation_errors()
+			));							
+		}
+
+		$this->load->model('Users_Model');
+		
+		
+		$userId 			= $this->session->userdata('userId');
+		$entryId			= $this->input->post('entryId');
+		$userFriendEmail	= $this->input->post('userFriendEmail');
+		$userFriendId 		= $this->Users_Model->saveUserFriend($userId, $userFriendEmail, '');
+		$shareByEmailId		= $this->Users_Model->saveSharedByEmail(array(
+			'userId'				=> $userId,
+			'entryId'				=> $entryId,
+			'userFriendId'			=> $userFriendId,
+			'shareByEmailComment'	=> $this->input->post('shareByEmailComment'),
+		));
+		$entry 				= $this->Entries_Model->get($entryId, false);
+		$user 				= $this->Users_Model->get($userId);
+		
+		
+
+		
+$this->load->library('email');
+$this->load->helper('email');
+$url = null;				
+$message ='
+	<div style=" background: #F5F5F5; border:1px solid #E5E5E5; border-radius: 5px; padding: 10px;">
+		'.sprintf($this->lang->line('Sent to you by %s via cReader'), $user['userFirstName'].' '.$user['userLastName']).'
+	</div>
+	<div style="margin:10px 0;">
+		<a href="'.$entry['entryUrl'].'">'.$entry['entryTitle'].'</a>
+		<a href="'.$entry['feedLink'].'">'.$entry['feedName'].'</a>
+	</div>
+	<p>'.$entry['entryContent'].'</p>
+	';
+
+$this->email->from('clonereader@gmail.com', 'cReader BETA');
+$this->email->to($userFriendEmail); 
+$this->email->subject('cReader - '.$entry['entryTitle']);
+$this->email->message(getEmailTemplate($message, $url));
+$this->email->send();
+
+				
+
+		return $this->load->view('ajax', array(
+			'code'		=> true,
+			'result' 	=> array('notification' => $this->lang->line('Data updated successfully'))
+		));				
+	}	
 }
