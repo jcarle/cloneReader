@@ -55,20 +55,17 @@ class Login extends CI_Controller {
 			));
 		}			
 					
-		$aServerData = array('fbApi' => null);
+		$aServerData = array();
 		switch ($_SERVER['SERVER_NAME']) {
 			case 'jcarle.redirectme.net':
-				$aServerData['fbApi'] 		= '581547605212584';
 				$aServerData['googleApi'] 	= '522657157003-rm53dmqk4hnjtrnphpara5odtet8qj0i.apps.googleusercontent.com';
 				break;
 			case 'www.jcarle.com.ar':
-				$aServerData['fbApi'] 		= '470466523040981'; 
 				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
 				break;
 			case 'www.clonereader.com.ar':
-				$aServerData['fbApi'] 		= '605522602845255'; 
 				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
-				break;				
+				break;
 		}	
 						
 		if ($this->form_validation->run() == FALSE) {
@@ -112,37 +109,57 @@ class Login extends CI_Controller {
 		));
 	}
 	
-	
+
 	function facebook() {
+		$this->_oauth2('facebook');
+	}
+	
+	function google() {
+		$this->_oauth2('google');
+	}	
+	
+	function _oauth2($provider) {
 		if (! $this->safety->allowByControllerName('login') ) { return errorForbidden(); }
 		
-		$this->load->library('facebook');
+		$this->load->spark('oauth2/0.4.0/');
+		$this->config->load('oauth2');
+		
+		$config = $this->config->item('oauth2');
+		$config = $config[$provider];
 
-		$user = $this->facebook->getUser();
 
-		if ($user) {
-			try {
-				
-				$user_profile = $this->facebook->api('/me');
+		$provider = $this->oauth2->provider($provider, array(
+			'id' => 	$config['id'],
+			'secret' => $config['secret'],
+		));
 
-				$user = $this->Users_Model->loginRemote($user_profile['email'], $user_profile['last_name'], $user_profile['first_name'], 'facebook', $user_profile['id'] );
+		if ( ! $this->input->get('code')) {
+			$url = $provider->authorize();
+			redirect($url);
+		} 
 
-				if ($user == null) {
-					return errorForbidden();
-				}
+		try  {
+			$token 	= $provider->access($_GET['code']);
+			$user 	= $provider->get_user_info($token);
+			$user 	= $this->Users_Model->loginRemote($user['email'], $user['last_name'], $user['first_name'], $provider, $user['uid'] );
+			
+			if ($user == null) {
+				return errorForbidden();
+			}
 
-				$this->session->set_userdata(array(
-					'userId'  		=> $user->userId,
-					'langId'  		=> $user->langId,
-				));		
-				
-				$this->Users_Model->updateUserLastAccess();
-				
-				redirect('');
-
-			} catch (FacebookApiException $e) { } 
+			$this->session->set_userdata(array(
+				'userId'  		=> $user->userId,
+				'langId'  		=> $user->langId,
+			));
+			
+			$this->Users_Model->updateUserLastAccess();
+			
+			redirect('');
 		}
-
+		catch (OAuth2_Exception $e) {
+			redirect('login');
+		}
+		
 		return errorForbidden();
 	}
 }

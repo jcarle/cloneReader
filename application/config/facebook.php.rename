@@ -1,7 +1,0 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-// Rename this file to facebook.php and set fb app settings
-
-
-$config['appId'] = '';
-$config['secret'] = '';
