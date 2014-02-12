@@ -53,7 +53,17 @@ function initLang() {
 	
 	$langId = $CI->session->userdata('langId');
 	if ($langId === false) {
-		$langId = config_item('langId'); 
+		$CI->load->library('user_agent');
+		foreach ($languages as $key => $value) { // Trato de setear el idioma del browser
+			if ($CI->agent->accept_lang($key)) {
+				$langId = $key;
+				break;
+			}
+		}
+		
+		if ($langId === false) {
+			$langId = config_item('langId');
+		} 
 	}
 	
 	$langName = element($langId, $languages, config_item('langId'));
