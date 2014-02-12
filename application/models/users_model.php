@@ -120,7 +120,16 @@ class Users_Model extends CI_Model {
 		}
 		
 		return $this->db->get('users', AUTOCOMPLETE_SIZE)->result_array();
-	}	
+	}
+
+	function searchFriends($filter, $userId){
+		return $this->db
+			->select('DISTINCT userFriendEmail AS id, userFriendEmail AS text  ', false)
+			->where('userId', $userId)
+			->like('userFriendEmail', $filter)
+			->order_by('text')
+			->get('users_friends', AUTOCOMPLETE_SIZE)->result_array();
+	}
 		
 	function select(){
 		return $this->db->get('users');

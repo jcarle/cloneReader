@@ -360,8 +360,9 @@ class Entries extends CI_Controller {
 	}
 	
 	function shareByEmail($entryId) {
-// TODO: implementar seguridad		
-//		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
+			return errorForbidden();
+		}		
 
 		$data = $this->Entries_Model->get($entryId, false);
 		if (empty($data)) {
@@ -372,6 +373,7 @@ class Entries extends CI_Controller {
 			'frmId'			=> 'frmShareByEmail',
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-envelope "></i> '.$this->lang->line('Send').' </button>'),
 			'icon'			=> 'icon-envelope icon-large text-primary',
+			'isModal'		=> true,
 			'title'			=> sprintf($this->lang->line('Send by mail %s'), ' "'.$data['entryTitle'].'" '),
 			'fields'		=> array(
 				'entryId' => array(

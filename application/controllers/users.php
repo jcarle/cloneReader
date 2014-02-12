@@ -183,6 +183,15 @@ class Users extends CI_Controller {
 		));
 	}
 	
+	function searchFriends() {
+		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
+			return errorForbidden();
+		}
+		return $this->load->view('ajax', array(
+			'result' 	=> $this->Users_Model->searchFriends($this->input->get('query'), $this->session->userdata('userId'))
+		));
+	}	
+	
 	function _validate_exitsEmail() {
 		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId')) != true);
 	}	

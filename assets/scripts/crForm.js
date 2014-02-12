@@ -301,6 +301,10 @@
 		},
 		
 		sendForm: function() {
+			if (this.options.isModal == true) {
+				this.$form.parents('.modal').first().modal('hide');
+			}
+			
 			$.ajax({
 				type: 	'post',
 				url: 	this.$form.attr('action'),
@@ -341,7 +345,7 @@
 					if (response['result']['notification'] != null) {
 						$.showNotification(response['result']['notification']); 
 					}
-					if (this.options.isSubForm == true) {
+					if (this.options.isSubForm == true || this.options.isModal == true) {
 						this.$form.parents('.modal').first().modal('hide');
 						return;
 					}							
