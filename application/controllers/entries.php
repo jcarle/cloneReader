@@ -370,12 +370,12 @@ class Entries extends CI_Controller {
 		}
 		
 		$form = array(
-			'frmId'			=> 'frmShareByEmail',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-envelope "></i> '.$this->lang->line('Send').' </button>'),
-			'icon'			=> 'icon-envelope icon-large text-primary',
-			'isModal'		=> true,
-			'title'			=> sprintf($this->lang->line('Send by mail %s'), ' "'.$data['entryTitle'].'" '),
-			'fields'		=> array(
+			'frmId'					=> 'frmShareByEmail',
+			'buttons'				=> array('<button type="submit" class="btn btn-primary"><i class="icon-envelope "></i> '.$this->lang->line('Send').' </button>'),
+			'icon'					=> 'icon-envelope icon-large text-primary',
+			'modalHideOnSubmit'		=> true,
+			'title'					=> sprintf($this->lang->line('Send by mail %s'), ' "'.$data['entryTitle'].'" '),
+			'fields'				=> array(
 				'entryId' => array(
 					'type'	=> 'hidden',
 					'value'	=> $entryId 

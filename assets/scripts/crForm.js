@@ -301,7 +301,7 @@
 		},
 		
 		sendForm: function() {
-			if (this.options.isModal == true) {
+			if (this.options.modalHideOnSubmit == true) {
 				this.$form.parents('.modal').first().modal('hide');
 			}
 			
@@ -345,7 +345,7 @@
 					if (response['result']['notification'] != null) {
 						$.showNotification(response['result']['notification']); 
 					}
-					if (this.options.isSubForm == true || this.options.isModal == true) {
+					if (this.options.isSubForm == true) {
 						this.$form.parents('.modal').first().modal('hide');
 						return;
 					}							
