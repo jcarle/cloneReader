@@ -187,8 +187,21 @@ class Users extends CI_Controller {
 		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
 			return errorForbidden();
 		}
+		
+		// FIXME: chapuza; hacer que los fields typeahead permitan agregar datos y validarlos
+		// Si el item que ingreso el usuario es un mail valido, lo apendeo a los resultados del autocomplete para que pueda seleccionarlo!
+		$this->load->helper('email');
+		
+		$query 	= $this->input->get('query');
+		$result = $this->Users_Model->searchFriends($query, $this->session->userdata('userId'));
+		
+		
+		if (valid_email($query) == true) {
+			$result[] = array('id' => $query, 'text' => $query);
+		}
+		
 		return $this->load->view('ajax', array(
-			'result' 	=> $this->Users_Model->searchFriends($this->input->get('query'), $this->session->userdata('userId'))
+			'result' 	=> $result
 		));
 	}	
 	
