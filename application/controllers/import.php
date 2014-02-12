@@ -65,9 +65,10 @@ class Import extends CI_Controller {
 				foreach ($tag->children() as $feed) {
 					
 					$feed = array(
-						'feedName'	=> (string)$feed->attributes()->title,
-						'feedUrl' 	=> (string)$feed->attributes()->xmlUrl,
-						'feedLink'	=> (string)$feed->attributes()->htmlUrl
+						'feedName'		=> (string)$feed->attributes()->title,
+						'feedUrl' 		=> (string)$feed->attributes()->xmlUrl,
+						'feedLink'		=> (string)$feed->attributes()->htmlUrl,
+						'feedSuggest' 	=> true,
 					);
 					$feedId	=  $this->Entries_Model->addFeed($userId, $feed);
 					$this->Entries_Model->addTag($tagName, $userId, $feedId);
@@ -75,9 +76,10 @@ class Import extends CI_Controller {
 			}
 			else {
 				$feed = array(
-					'feedName' 	=> (string)$tag->attributes()->title,
-					'feedUrl' 	=> (string)$tag->attributes()->xmlUrl,
-					'feedLink'	=> (string)$tag->attributes()->htmlUrl
+					'feedName' 		=> (string)$tag->attributes()->title,
+					'feedUrl' 		=> (string)$tag->attributes()->xmlUrl,
+					'feedLink'		=> (string)$tag->attributes()->htmlUrl,
+					'feedSuggest' 	=> true,
 				);
 				$this->Entries_Model->addFeed($userId, $feed);
 			}
@@ -155,10 +157,11 @@ class Import extends CI_Controller {
 			);
 
 			$feed = array(
-				'feedName'	=> element('title', $data['origin']),
-				'feedUrl' 	=> substr($data['origin']['streamId'], 5),
-				'feedLink'	=> $data['origin']['htmlUrl'],
-				'feedName'	=> element('title', $data['origin'])
+				'feedName'		=> element('title', $data['origin']),
+				'feedUrl' 		=> substr($data['origin']['streamId'], 5),
+				'feedLink'		=> $data['origin']['htmlUrl'],
+				'feedName'		=> element('title', $data['origin']),
+				'feedSuggest' 	=> true,
 			);
 			
 			$entry['feedId']	= $this->Entries_Model->addFeed($userId, $feed);

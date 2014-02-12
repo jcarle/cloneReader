@@ -86,8 +86,8 @@ class Feeds_Model extends CI_Model {
 			'statusId' 			=> FEED_STATUS_PENDING,
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
-			'feedSuggest' 		=> element('feedSuggest', $data) == 'on',
-			'fixLocale' 		=> element('fixLocale', $data) == 'on',
+			'feedSuggest' 		=> element('feedSuggest', $data),
+			'fixLocale' 		=> element('fixLocale', $data),
 		);
 		
 		if (isset($data['feedName'])) {

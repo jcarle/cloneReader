@@ -119,6 +119,8 @@ class Feeds extends CI_Controller {
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
+				$_POST['feedSuggest']		= $this->input->post('feedSuggest') == 'on';
+				$_POST['fixLocale'] 		= $this->input->post('fixLocale') == 'on';
 				$this->Feeds_Model->save($this->input->post());
 			}
 		}		 
