@@ -28,12 +28,14 @@ cloneReader = {
 		}, aFilters);	
 		this.isMaximized		= (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
 		this.aSystemTags		= [TAG_ALL, TAG_STAR, TAG_HOME, TAG_BROWSE];
+		this.isLoaded			= false;
 		
 		this.buildCache();
 		this.renderToolbar();
 		this.loadFilters(false);
 		this.initEvents();
 		this.resizeWindow();
+		this.isLoaded = true;
 	},
 
 	initEvents: function() {
@@ -128,7 +130,7 @@ cloneReader = {
 		$('#header .logo').click(function(event) { 
 			if (cloneReader.isMobile != true) {  return;  }
 			cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false);
-		} );		
+		} );
 	},
 	
 	checkScroll: function() {
@@ -1138,7 +1140,9 @@ console.timeEnd("t1");
 					cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 			});
 			
-		this.updateUserFilters();
+		if (this.isLoaded == true) {
+			this.updateUserFilters();
+		}
 	},
 	
 	subscribeFeed: function(feedId) {
@@ -1198,17 +1202,15 @@ console.timeEnd("t1");
 			return;
 		}
 		
-		if (async == true) {
-			$.countProcess--; // para evitar que muestre el loading a guardar datos en brackground
-		}
 		$.ajax({
 			'url': 		base_url + 'entries/saveData',
 			'data': 	{ 
 					'entries': 	$.toJSON(this.aUserEntries),
 					'tags': 	$.toJSON(this.aUserTags) 
 			},
-			'type':	 	'post',
-			'async':	async
+			'type':	 		'post',
+			'skipwWaiting':	(async == true),
+			'async':		async,
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
@@ -1328,12 +1330,12 @@ console.timeEnd("t1");
 	},
 	
 	updateUserFilters: function() {
-// TODO: hacer que no guarde tanto asi no mata al servidor		
-		$.countProcess--; // para evitar que muestre el loading a guardar datos en brackground
+// TODO: hacer que no guarde tanto asi no mata al servidor
 		$.ajax({		
-			'url': 		base_url + 'entries/updateUserFilters',
-			'data': 	{ 'post': $.toJSON(this.aFilters) },
-			'type':		'post'
+			'url': 			base_url + 'entries/updateUserFilters',
+			'data': 		{ 'post': $.toJSON(this.aFilters) },
+			'type':			'post',
+			'skipwWaiting': true,
 		})
 		.done(function(response) {
 			if (response['code'] != true) {

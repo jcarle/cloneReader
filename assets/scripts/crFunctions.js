@@ -415,6 +415,9 @@ $(document).ready(function() {
 	
 	$(document).ajaxSend(
 		function(event, jqXHR, ajaxOptions) {
+			if (ajaxOptions.skipwWaiting === true) {
+				return;
+			}
 			$.countProcess ++;
 			$.showWaiting();	
 		}
@@ -422,6 +425,9 @@ $(document).ready(function() {
 	 
 	$(document).ajaxComplete(
 		function(event, jqXHR, ajaxOptions) {
+			if (ajaxOptions.skipwWaiting === true) {
+				return;
+			}			
 			$.countProcess --;
 			$.showWaiting();	
 		}
