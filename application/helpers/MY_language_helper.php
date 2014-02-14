@@ -66,7 +66,7 @@ function initLang() {
 		} 
 	}
 	
-	if (!in_array($langId, $languages)) {
+	if (!in_array($langId, array_keys($languages))) {
 		$langId = config_item('langId');
 	}
 	

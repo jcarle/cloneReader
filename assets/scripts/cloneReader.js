@@ -365,7 +365,8 @@ cloneReader = {
 				'post': 				$.toJSON(this.aFilters), 
 				'pushTmpUserEntries': 	clear 
 			},
-			'type':		'post'
+			'type':			'post',
+			'skipwWaiting':	true,
 		})
 		.done(function(response) {
 			if (response['code'] != true) {
@@ -1331,7 +1332,7 @@ console.timeEnd("t1");
 	
 	updateUserFilters: function() {
 // TODO: hacer que no guarde tanto asi no mata al servidor
-		$.ajax({		
+		this.ajaxUpdateUserFilters = $.ajax({
 			'url': 			base_url + 'entries/updateUserFilters',
 			'data': 		{ 'post': $.toJSON(this.aFilters) },
 			'type':			'post',
