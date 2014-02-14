@@ -302,7 +302,7 @@ class Users_Model extends CI_Model {
 	}
 	
 	function updateLangIdByUserId($langId, $userId) {
-			$this->db->where('userId', $userId)->update('users', array('langId' => $langId));
+		$this->db->where('userId', $userId)->update('users', array('langId' => $langId));
 	}
 	
 	

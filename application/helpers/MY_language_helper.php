@@ -66,6 +66,10 @@ function initLang() {
 		} 
 	}
 	
+	if (!in_array($langId, $languages)) {
+		$langId = config_item('langId');
+	}
+	
 	$langName = element($langId, $languages, config_item('langId'));
 	$CI->config->set_item('language', $langName);
 
