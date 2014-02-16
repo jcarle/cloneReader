@@ -7,8 +7,8 @@ class Files extends CI_Controller {
 		$this->load->model(array('Files_Model'));
 	}
 	
-	function hotels($entityId) {
-		$this->_listing('hotels', $entityId);
+	function testing($entityId) {
+		$this->_listing('testing', $entityId);
 	}
 	
 	function _listing($entityName, $entityId, $fileId = null) {

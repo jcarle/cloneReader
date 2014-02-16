@@ -463,6 +463,13 @@
 						}
 		
 						$('img', $gallery).imgCenter( { show: false, createFrame: true } );
+					},
+				'error': 
+					function (result) {
+						result = $.parseJSON(result.responseText);
+						if (result['code'] == false) {
+							return $(document).crAlert(result['result']);
+						}
 					}
 			});
 		},

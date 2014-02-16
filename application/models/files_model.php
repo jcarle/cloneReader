@@ -30,18 +30,11 @@ class Files_Model extends CI_Model {
 	function getPropertyByEntityName($entityName) {
 		// TODO: optimizar para que devuelva al toque si ya lo tiene
 		switch ($entityName) {
-			case 'hotels':
+			case 'testing':
 				return array(
-					'tableName'		=> 'hotels_files',
-					'fieldName' 	=> 'hotelId',
-					'folder'		=> '/assets/images/hotels/'
-				);
-				break;
-			case 'excursions':
-				return array(	
-					'tableName'		=> 'files_excursions',
-					'fieldName' 	=> 'excursionId',
-					'folder'		=> '/img/excursions/'
+					'tableName'		=> 'testing_files',
+					'fieldName' 	=> 'testId',
+					'folder'		=> '/assets/images/testing/'
 				);
 				break;
 		}
