@@ -83,6 +83,10 @@ class Testing extends CI_Controller {
 					'type'	=> 'textarea',
 					'label'	=> 'Description', 
 				),
+				'testDate' => array(
+					'type'	=> 'datetime',
+					'label'	=> 'Fecha', 
+				),				
 			)
 		);
 		
@@ -97,6 +101,13 @@ class Testing extends CI_Controller {
 				'entityName'	=> 'testing',
 				'entityId'		=> $testId
 			);
+			
+			$form['fields']['test_childs'] = array(
+				'type'			=> 'subform',
+				'label'			=> 'childs', 
+				'controller'	=> base_url('testing/selectChildsByTestId/'.$testId),
+				'frmParent'		=> 'frmTestingEdit',
+			);						
 		}
 		
 		$form['rules'] 	= array( 
@@ -152,9 +163,75 @@ class Testing extends CI_Controller {
 		));
 	}
 
-	function search() { // TODO: implementar la seguridad!
-		return $this->load->view('ajax', array(
-			'result' 	=> $this->Testing_Model->search($this->input->get('query'))
-		));
+	function selectChildsByTestId($testId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+			
+		$this->load->view('ajax', array(
+			'view'		=> 'includes/subform',
+			'code'		=> true,
+			'list'		=> array(
+				'controller'	=> strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
+				'columns'		=> array( 
+					'testChildName' 	=> 'Name', 
+					'countryName' 		=> 'Country', 
+					'testChildDate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
+				'data'			=> $this->Testing_Model->selectChildsByTestId($testId),
+				'frmParent'		=> $this->input->get('frmParent'),
+			),
+		));		
 	}
+	
+	
+	
+	function popupTestingChilds($testId, $testChildId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		
+		$form = array(
+			'frmId'		=> 'frmTestChildEdit',
+			'isSubForm' => true,
+			'title'		=> 'Edit test child',
+			'fields'	=> array(
+				'testChildId' => array(
+					'type' 	=> 'hidden',
+					'value'	=> (int)$testChildId
+				),
+				'travelId' => array(
+					'type' 	=> 'hidden',
+					'value'	=> (int)$testId
+				),
+				'countryId' => array(
+					'type'		=> 'dropdown',
+					'label'		=> 'Country',
+					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
+				),
+				'toPlaceId' => array(
+					'type'		=> 'dropdown',
+					'label'		=> $this->lang->line('To'),
+				),
+				'testChildDate' => array(
+					'type'	=> 'datetime',
+					'label'	=> $this->lang->line('Date'), 
+				),
+			)
+		);
+		
+		if ((int)$testChildId > 0) {
+			$form['urlDelete'] = base_url('travels/deleteTestChild/');
+		}
+		
+		$form['rules'] 	= array(
+			array(
+				'field' => 'testChildDate',
+				'label' => $form['fields']['testChildDate']['label'],
+				'rules' => 'required'
+			),		
+		);
+
+		
+		$this->load->view('ajax', array(
+			'view'			=> 'includes/crPopupForm',
+			'form'			=> populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)),
+			'code'			=> true
+		));
+	}	
 }

@@ -73,5 +73,22 @@ class testing_Model extends CI_Model {
 		
 		$this->db->delete('testing', array('testId' => $testId));
 		return true;
+	}
+	
+	function selectChildsByTestId($testId) {
+		$query = $this->db
+			->select('DISTINCT testing_childs.testChildId, currencyName, testChildPrice, testChildExchange, testChildName, countryName ', false)
+			->join('countries', 'testing_childs.countryId = countries.countryId', 'inner')
+			->join('coins', 'testing_childs.currencyId = coins.currencyId', 'inner')
+			->where('testing_childs.testId', $testId)
+			->order_by('testChildDate')
+			->get('testing_childs')->result_array();
+
+		//pr($this->db->last_query()); die;
+		return $query;		
+	}
+	
+	function getTestChild($testChildId) {
+		
 	}	
 }
