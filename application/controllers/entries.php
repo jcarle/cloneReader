@@ -390,6 +390,11 @@ class Entries extends CI_Controller {
 					'type'	=> 'textarea',
 					'label'	=> $this->lang->line('Comment'), 
 				),
+				'sendMeCopy' => array(
+					'type'		=> 'checkbox',
+					'label'		=> $this->lang->line('Send me a copy'),
+					'checked'	=> true, 
+				),				
 			)
 		);
 		
@@ -429,6 +434,7 @@ class Entries extends CI_Controller {
 		$userId 				= $this->session->userdata('userId');
 		$entryId				= $this->input->post('entryId');
 		$userFriendEmail		= $this->input->post('userFriendEmail');
+		$sendMeCopy 			= $this->input->post('sendMeCopy')  == 'on';
 		$shareByEmailComment	= trim($this->input->post('shareByEmailComment'));
 		$userFriendId	 		= $this->Users_Model->saveUserFriend($userId, $userFriendEmail, '');
 		$shareByEmailId			= $this->Users_Model->saveSharedByEmail(array(
@@ -474,6 +480,9 @@ class Entries extends CI_Controller {
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($userFriendEmail); 
 		$this->email->reply_To($user['userEmail'], $userFullName);
+		if ($sendMeCopy == true) {
+			$this->email->cc($user['userEmail']); 
+		}
 		$this->email->subject('cReader - '.$entry['entryTitle']);
 		$this->email->message(getEmailTemplate($message));
 		$this->email->send();

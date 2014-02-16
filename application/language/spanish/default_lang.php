@@ -128,3 +128,4 @@ $lang['To reset your password please click <a href="%s">here</a>'] = 'Para reset
 $lang['If this is a mistake just ignore this email - your password will not be changed'] = 'Si esto es un error simplemente ignorá este email - la contraseña no se cambiará';
 $lang['Send by mail %s'] = 'Enviar por mail %s';
 $lang['The email has been sent'] = 'El email ha sido enviado con éxito';
+$lang['Send me a copy'] = 'Enviame una copia';

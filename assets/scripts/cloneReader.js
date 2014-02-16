@@ -419,6 +419,11 @@ cloneReader = {
 
 		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
+		
+		if (entry.entryTitle == '') {
+			var datetime = moment(entry['entryDate'], 'YYYY-MM-DDTHH:mm:ss');
+			entry.entryTitle = datetime.format('LL');
+		}		
 
 		if (this.aFilters.viewType == 'detail') {
 			this.renderDetailEntry($entry, entry);
@@ -450,7 +455,7 @@ cloneReader = {
 	
 	renderDetailEntry: function($entry, entry) {
 		var $header = $('<div/>').addClass('header').appendTo($entry);
-
+		
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
