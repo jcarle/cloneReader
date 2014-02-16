@@ -209,24 +209,29 @@
 							this.$form.attr('enctype', 'multipart/form-data');
 							this.$form.fileupload( { 
 								'autoUpload': 	true,
-								'done': 		function (e, data) {
-									var result = data.result;
-									if (result['code'] == false) {
-										return $(document).crAlert(result['result']);
-									}
-									$(document).crAlert({
-										'msg': 		result['result']['msg'],
-										'callback': function() {
-											$.goToUrl(result['result']['goToUrl']);
+								'done': 		
+									function (event, data) {
+										var result = data.result;
+										if (result['code'] == false) {
+											return $(document).crAlert(result['result']);
 										}
-									});
-								},
-								'fail': 		function (jqXHR, textStatus) {
-									var result = $.parseJSON(textStatus.jqXHR.responseText);
-									if (result['code'] == false) {
-										return $(document).crAlert(result['result']);
+										$(document).crAlert({
+											'msg': 		result['result']['msg'],
+											'callback': function() {
+												$.goToUrl(result['result']['goToUrl']);
+											}
+										});
+									},
+								'fail': 		
+									function (event, data) {
+										if (data.jqXHR.status === 0) {
+											return $(document).crAlert( _msg['Not connected. Please verify your network connection'] );
+										}
+										var result = $.parseJSON(data.jqXHR.responseText);
+										if (result['code'] == false) {
+											return $(document).crAlert(result['result']);
+										}
 									}
-								}
 							});
 						case 'numeric':
 							$maskNumeric = field.$input.clone();
