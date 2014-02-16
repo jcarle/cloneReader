@@ -196,16 +196,20 @@ function renderMenu($aMenu, $className = null){
 	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
-		$icon = '';
+		$icon 	= '';
+		$label 	= $CI->lang->line($aMenu[$i]['label']);
+		if ($label == '') {
+			$label = $aMenu[$i]['label'];
+		}
 		if ($aMenu[$i]['icon'] != null) {
 			$icon = ' <i class="'.$aMenu[$i]['icon'].'" ></i> ';
 		}
 		
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li> <a title="'.$CI->lang->line($aMenu[$i]['label']).'" href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
+			$sTmp .= '	<li> <a title="'.$label.'" href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$label.'</a>';
 		}
 		else {
-			$sTmp .= '	<li> <a title="'.$CI->lang->line($aMenu[$i]['label']).'">'.$icon.$CI->lang->line($aMenu[$i]['label']).'</a>';
+			$sTmp .= '	<li> <a title="'.$label.'">'.$icon.$label.'</a>';
 		} 	
 		
 		if (count($aMenu[$i]['childs']) > 0) {			
