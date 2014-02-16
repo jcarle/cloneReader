@@ -393,9 +393,9 @@ function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
 		$CI->carabiner->js('jquery.fileupload-ui.js');
 		$CI->carabiner->js('jquery.fileupload-process.js');
 		$CI->carabiner->js('jquery.imgCenter.js');
-//		$CI->carabiner->js('blueimp-gallery.js');
+		$CI->carabiner->js('blueimp-gallery.js');
 
-//		$CI->carabiner->css('blueimp-gallery.css');
+		$CI->carabiner->css('blueimp-gallery.css');
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
 	
