@@ -11,7 +11,9 @@ $lang['The page you requested does not exist'] = 'The page you requested does no
 $lang['Cancel'] = 'Cancel';
 $lang['Close'] = 'Close';
 $lang['Save'] = 'Save';
+$lang['Ok'] = 'Ok';
 $lang['Send'] = 'Send';
+$lang['Retry'] = 'Retry';
 $lang['loading ...'] = 'loading ...';
 $lang['Are you sure?'] = 'Are you sure?';
 $lang['User'] = 'User';
@@ -130,3 +132,4 @@ $lang['If this is a mistake just ignore this email - your password will not be c
 $lang['Send by mail %s'] = 'Send by mail %s';
 $lang['The email has been sent'] = 'The email has been sent';
 $lang['Send me a copy'] = 'Send me a copy';
+$lang['Not connected. Please verify your network connection'] = 'Not connected. Please verify your network connection.';

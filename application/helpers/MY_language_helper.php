@@ -36,9 +36,12 @@ function getLangToJs($langs) {
 	$langs[] = 'MOMENT_DATE_FORMAT';
 	$langs[] = 'NUMBER_DEC_SEP';
 	$langs[] = 'NUMBER_THOUSANDS_SEP';
+	$langs[] = 'Ok';
 	$langs[] = 'Cancel';
 	$langs[] = 'Close';
+	$langs[] = 'Retry';
 	$langs[] = 'Are you sure?';
+	$langs[] = 'Not connected. Please verify your network connection';
 	return $langs;	
 }
 

@@ -46,7 +46,8 @@
 				{
 					msg:			'',
 					callback:		null,
-					isConfirm:		false
+					isConfirm:		false,
+					confirmText:	_msg['Ok']
 				},
 				(typeof options === 'string' ? { msg: options } :
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
@@ -61,7 +62,7 @@
 			
 			if (this.options.isConfirm == true) {
 				$('<button data-dismiss="modal" class="btn btn-primary" />')
-					.text('Ok')
+					.text(this.options.confirmText)
 					.on('click', $.proxy(
 						function(event) {
 							this.options.callback();

@@ -28,19 +28,19 @@ function googleLogin() {
 		request.execute(function (response) {
 			if (!response.code) { // Si code == undefined : datos ok
 				$.ajax({
-					url: 	base_url + 'login/loginRemote',
-					type: 	'post',
-					data: 	{
+					'url': 		base_url + 'login/loginRemote',
+					'type': 	'post',
+					'data': 	{
 						'provider': 		'google',
 						'remoteUserId': 	response.id,
 						'userLastName': 	response.family_name,
 						'userFirstName': 	response.given_name,
 						'userEmail': 		response.email,
+					},
+					'success': 	function ( data ) {
+						$.showWaiting(true);
+						window.setTimeout(function() { location.href = base_url; }, 1500);
 					}
-				})
-				.done(function ( data ) {
-					$.showWaiting(true);
-					window.setTimeout(function() { location.href = base_url; }, 1500);
 				})
 			}
 			else {

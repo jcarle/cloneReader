@@ -17,10 +17,12 @@ $lang['PHP_DATE_FORMAT'] = 'd/m/Y';
 $lang['NUMBER_DEC_SEP'] = ',';
 $lang['NUMBER_THOUSANDS_SEP'] = '.';
 
+$lang['Ok'] = 'Ok';
 $lang['Save'] = 'Guardar';
 $lang['Cancel'] = 'Cancelar';
 $lang['Close'] = 'Cerrar';
 $lang['Send'] = 'Enviar';
+$lang['Retry'] = 'Reintentar';
 $lang['loading ...'] = 'procesando ...';
 $lang['search'] = 'buscar';
 $lang['Search'] = 'Buscar';
@@ -129,3 +131,4 @@ $lang['If this is a mistake just ignore this email - your password will not be c
 $lang['Send by mail %s'] = 'Enviar por mail %s';
 $lang['The email has been sent'] = 'El email ha sido enviado con éxito';
 $lang['Send me a copy'] = 'Enviame una copia';
+$lang['Not connected. Please verify your network connection'] = 'No está conectado. Por favor, compruebe la conexión de red';
