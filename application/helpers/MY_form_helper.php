@@ -36,7 +36,10 @@ function populateCrForm($form, $data) {
 			case 'typeahead':
 			case 'textarea':
 			case 'raty':
-				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
+				// TODO: revisar este IF. Esta puesto para que no sobreescriba fields hiddens con el parentId que se usa para agregar un child
+				if ( element('value', $form['fields'][$fieldName]) === false ) { 
+					$form['fields'][$fieldName]['value'] = element($fieldName, $data);
+				}
 				break;
 			case 'checkbox':
 				$form['fields'][$fieldName]['checked'] = element($fieldName, $data);
@@ -85,7 +88,7 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			'type'			=> 'dropdown',
 			'name' 			=> $currency['name'],
 			'label'			=> $currency['label'], 
-			'value'			=> $currency['value'],
+			'value'			=> element('value', $currency),
 			'source'		=> array_to_select($CI->Coins_Model->select(true), 'currencyId', 'currencyName'),
 		),
 		$exchange['name']	=> array(
@@ -179,7 +182,7 @@ function renderCrFormFields($form) {
 			case 'datetime':
 				$aFields[] = sprintf($sField, 
 					'<div class="input-group" style="width:1px">
-						'.form_input(array('name' => $name, 'value' => $field['value'], 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => $CI->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
+						'.form_input(array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => $CI->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
 						<span class="input-group-addon add-on"><i class="icon-remove"></i></span>
 						<span class="input-group-addon add-on"><i class="icon-th"></i></span>
 					</div>');

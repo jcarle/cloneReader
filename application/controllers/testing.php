@@ -192,11 +192,11 @@ class Testing extends CI_Controller {
 			'title'		=> 'Edit test child',
 			'fields'	=> array(
 				'testChildId' => array(
-					'type' 	=> 'text',
+					'type' 	=> 'hidden',
 					'value'	=> (int)$testChildId
 				),
 				'testId' => array(
-					'type' 	=> 'text',
+					'type' 	=> 'hidden',
 					'value'	=> (int)$testId
 				),
 				'testChildName' => array(

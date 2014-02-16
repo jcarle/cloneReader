@@ -78,6 +78,7 @@ $lang['Last update'] = 'Última atualização';
 $lang['Feed'] = 'Feed';
 $lang['Title'] = 'Título';
 $lang['Date'] = 'Data';
+$lang['Price'] = 'Preço';
 $lang['Content'] = 'Conteúdo';
 $lang['Author'] = 'Autor';
 $lang['Sef'] = 'Sef';

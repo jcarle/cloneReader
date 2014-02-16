@@ -80,6 +80,7 @@ $lang['Status'] = 'Estado';
 $lang['Last update'] = 'Ultima actualización';
 $lang['Title'] = 'Titulo';
 $lang['Date'] = 'Fecha';
+$lang['Price'] = 'Precio';
 $lang['Content'] = 'Contenido';
 $lang['Author'] = 'Autor';
 $lang['Sef'] = 'Sef';

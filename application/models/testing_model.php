@@ -77,7 +77,7 @@ class testing_Model extends CI_Model {
 	
 	function selectChildsByTestId($testId) {
 		$query = $this->db
-			->select('DISTINCT testing_childs.testChildId, currencyName, testChildPrice, testChildExchange, testChildName, countryName ', false)
+			->select('DISTINCT testing_childs.testChildId, currencyName, testChildPrice, testChildExchange, testChildDate, testChildName, countryName ', false)
 			->join('countries', 'testing_childs.countryId = countries.countryId', 'inner')
 			->join('coins', 'testing_childs.currencyId = coins.currencyId', 'inner')
 			->where('testing_childs.testId', $testId)
@@ -103,7 +103,7 @@ class testing_Model extends CI_Model {
 		$values = array(
 			'testId'				=> $data['testId'],
 			'testChildDate'			=> $data['testChildDate'],
-			'testChildNights'		=> $data['testChildNights'],
+			'testChildName'			=> $data['testChildName'],
 			'countryId'				=> $data['countryId'],
 			'currencyId'			=> $data['currencyId'],
 			'testChildPrice'		=> $data['testChildPrice'],
