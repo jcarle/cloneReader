@@ -418,7 +418,7 @@
 						);
 					}
 					
-					$.showModal(this.$fileupload, false);
+					$.showModal(this.$fileupload, false, false);
 				}
 			, this));
 
@@ -441,17 +441,18 @@
 			}
 
 			$gallery.find('a').remove();
-			$('tbody', '#fileupload').children().remove();
+			$('#fileupload tbody').children().remove();
+			
 			
 			$.ajax({
 				'url': 		this.fileupload.urlGet,
 				'data': 	{ },
 				'success': 	
-					function (result) {	
+					function (result) {
 						$('#fileupload')
 							.fileupload('option', 'done')
-							.call($('#fileupload'), null, {result: result});
-		
+							.call($('#fileupload'), $.Event('done'), {'result': result});
+							
 						for (var i=0; i<result.files.length; i++) {
 							var photo = result.files[i];
 							

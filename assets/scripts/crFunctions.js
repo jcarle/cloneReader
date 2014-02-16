@@ -357,8 +357,10 @@ $.extend({
 		);
 	},
 	
-	showModal: function($modal, keyboard) {
+	showModal: function($modal, keyboard, onCloseRemove) {
 		$('body').addClass('modal-open');
+		
+		$modal.data('onCloseRemove', onCloseRemove == null ? true : onCloseRemove);
 		
 		$modal.modal( { 'backdrop': 'static', 'keyboard': keyboard });
 
@@ -368,8 +370,10 @@ $.extend({
 		
 		$(document).unbind('hidden.bs.modal');
 		$(document).bind('hidden.bs.modal', function (event) {
-			$(event.target).remove();
-			$(this).removeData('bs.modal');
+			if ($(event.target).data('onCloseRemove') == true) {
+				$(event.target).remove();
+				$(this).removeData('bs.modal');
+			}
 			
 			$(document.body).removeClass('modal-open');
 			if ($('.modal-backdrop').length > 0) {
