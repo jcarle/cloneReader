@@ -35,6 +35,7 @@ function populateCrForm($form, $data) {
 			case 'logo':
 			case 'typeahead':
 			case 'textarea':
+			case 'raty':
 				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
 				break;
 			case 'checkbox':
@@ -205,7 +206,7 @@ function renderCrFormFields($form) {
 					$properties[] = 'disabled="disabled"';
 				}
 			
-				$aFields[] = sprintf($sField, form_dropdown($name, $source, $field['value'], implode(' ', $properties)));
+				$aFields[] = sprintf($sField, form_dropdown($name, $source, element('value', $field), implode(' ', $properties)));
 				break;						
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);
@@ -392,9 +393,9 @@ function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
 		$CI->carabiner->js('jquery.fileupload-ui.js');
 		$CI->carabiner->js('jquery.fileupload-process.js');
 		$CI->carabiner->js('jquery.imgCenter.js');
-		$CI->carabiner->js('blueimp-gallery.js');
+//		$CI->carabiner->js('blueimp-gallery.js');
 
-		$CI->carabiner->css('blueimp-gallery.css');
+//		$CI->carabiner->css('blueimp-gallery.css');
 		$CI->carabiner->css('jquery.fileupload-ui.css');
 	}
 	
