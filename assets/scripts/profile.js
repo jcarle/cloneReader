@@ -23,8 +23,21 @@ $.Profile = {
 		}
 		
 		$.ajax( {
-			type: 		'get', 
-			url:		controller,
+			'type': 		'get', 
+			'url':			controller,
+			'success':		$.proxy(
+				function (result) {
+					if (result['code'] != true) {
+						return $(document).crAlert(result['result']);
+					}
+					
+					result = $(result['result']);
+					$content.children().remove();
+					$content.html(result);
+					
+					$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
+				}
+			, this)
 		})
 		.fail(
 			function (result) {
@@ -33,20 +46,8 @@ $.Profile = {
 					return $(document).crAlert(result['result']);
 				}
 			}
-		)
-		.done( $.proxy( 
-			function (result) {
-				if (result['code'] != true) {
-					return $(document).crAlert(result['result']);
-				}
-				
-				result = $(result['result']);
-				$content.children().remove();
-				$content.html(result);
-				
-				$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
-			}
-		, this));
+		);
+		
 	}
 };
 

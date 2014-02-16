@@ -432,6 +432,26 @@ $(document).ready(function() {
 			$.showWaiting();	
 		}
 	);
+	
+	
+	$(document).ajaxError(
+		function(event, jqXHR, ajaxOptions) {
+			if (jqXHR.status === 0) {
+cn(event);
+cn(jqXHR);
+cn(ajaxOptions);				
+cn(this);
+				$(document).crAlert( {
+					'msg': 			_msg['Not connected. Please verify your network connection'],
+					'isConfirm': 	true,
+					'confirmText': 	_msg['Retry'],
+					'callback': 	$.proxy(
+						function() { $.ajax(ajaxOptions); }
+					, this)
+				});
+			}
+		}
+	);
 });
 	
 $(window).resize(function() {
