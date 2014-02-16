@@ -37,10 +37,11 @@ function googleLogin() {
 						'userFirstName': 	response.given_name,
 						'userEmail': 		response.email,
 					},
-					'success': 	function ( data ) {
-						$.showWaiting(true);
-						window.setTimeout(function() { location.href = base_url; }, 1500);
-					}
+					'success': 	
+						function ( data ) {
+							$.showWaiting(true);
+							window.setTimeout(function() { location.href = base_url; }, 1500);
+						}
 				})
 			}
 			else {

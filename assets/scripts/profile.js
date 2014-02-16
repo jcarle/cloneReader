@@ -25,29 +25,28 @@ $.Profile = {
 		$.ajax( {
 			'type': 		'get', 
 			'url':			controller,
-			'success':		$.proxy(
+			'success':		
+				$.proxy(
+					function (result) {
+						if (result['code'] != true) {
+							return $(document).crAlert(result['result']);
+						}
+						
+						result = $(result['result']);
+						$content.children().remove();
+						$content.html(result);
+						
+						$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
+					}
+				, this),
+			'error':
 				function (result) {
-					if (result['code'] != true) {
+					result = $.parseJSON(result.responseText);
+					if (result['code'] == false) {
 						return $(document).crAlert(result['result']);
 					}
-					
-					result = $(result['result']);
-					$content.children().remove();
-					$content.html(result);
-					
-					$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 				}
-			, this)
-		})
-		.fail(
-			function (result) {
-				result = $.parseJSON(result.responseText);
-				if (result['code'] == false) {
-					return $(document).crAlert(result['result']);
-				}
-			}
-		);
-		
+		});
 	}
 };
 

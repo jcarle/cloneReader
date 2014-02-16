@@ -25,10 +25,11 @@ function facebookLogin() {
 							'userFirstName': 	response.first_name,
 							'userEmail': 		response.email,
 						},
-						'success': 	function ( data ) {
-							$.showWaiting(true);
-							location.href = base_url;
-						}
+						'success': 	
+							function ( data ) {
+								$.showWaiting(true);
+								location.href = base_url;
+							}
 					})
 				});
 			}

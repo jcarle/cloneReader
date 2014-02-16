@@ -367,14 +367,15 @@ cloneReader = {
 			},
 			'type':			'post',
 			'skipwWaiting':	true,
-			'success':  	function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success':  	
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
+					cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
+					cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
+					cloneReader.renderEntries(response.result);
 				}
-				cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
-				cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
-				cloneReader.renderEntries(response.result);
-			}
 		});	
 	},
 	
@@ -851,33 +852,34 @@ TODO: pensar como mejorar esta parte
 	loadFilters: function(reload) {
 		$.ajax({ 
 			'url': 		base_url + 'entries/selectFilters',
-			'success': 	$.proxy(
-				function(reload, response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
+			'success': 	
+				$.proxy(
+					function(reload, response) {
+						if (response['code'] != true) {
+							return $(document).crAlert(response['result']);
+						}
+console.time("t1");	
+						if (reload == true) {
+							var scrollTop = this.$ulFilters.scrollTop();
+						}
+						this.filters 	= response.result.filters;
+						this.tags 		= response.result.tags;
+						this.runIndexFilters(this.filters, null, true);
+						this.renderFilters(this.filters, this.$ulFilters, true);
+						this.resizeWindow();
+						
+						if (reload == true) {
+							this.$ulFilters.scrollTop(scrollTop);
+							this.$ulFilters.find('.selected').hide().fadeIn('slow');
+							this.updateMenuCount();
+						}
+						else {
+							this.loadEntries(true, false, {});
+						}
+						
+console.timeEnd("t1");
 					}
-	console.time("t1");	
-					if (reload == true) {
-						var scrollTop = this.$ulFilters.scrollTop();
-					}
-					this.filters 	= response.result.filters;
-					this.tags 		= response.result.tags;
-					this.runIndexFilters(this.filters, null, true);
-					this.renderFilters(this.filters, this.$ulFilters, true);
-					this.resizeWindow();
-					
-					if (reload == true) {
-						this.$ulFilters.scrollTop(scrollTop);
-						this.$ulFilters.find('.selected').hide().fadeIn('slow');
-						this.updateMenuCount();
-					}
-					else {
-						this.loadEntries(true, false, {});
-					}
-					
-	console.timeEnd("t1");
-				}
-			, this, reload)
+				, this, reload)
 		});	
 	},
 	
@@ -1158,16 +1160,17 @@ TODO: pensar como mejorar esta parte
 			'url': 		base_url + 'entries/subscribeFeed',
 			'data': 	{  'feedId': feedId },
 			'type':	 	'post',
-			'success': 	$.proxy(
-				function(feedId, response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
+			'success': 	
+				$.proxy(
+					function(feedId, response) {
+						if (response['code'] != true) {
+							return $(document).crAlert(response['result']);
+						}
+						
+						cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': feedId }); 
+						cloneReader.loadFilters(true);
 					}
-					
-					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': feedId }); 
-					cloneReader.loadFilters(true);
-				}
-			, this, feedId)
+				, this, feedId)
 		});
 	},
 
@@ -1186,14 +1189,15 @@ TODO: pensar como mejorar esta parte
 			'url': 		base_url + 'entries/addFeed',
 			'data': 	{  'feedUrl': feedUrl },
 			'type':	 	'post',
-			'success': 	function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success': 	
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
+					
+					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
+					cloneReader.loadFilters(true);
 				}
-				
-				cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
-				cloneReader.loadFilters(true);
-			}
 		});
 	},
 	
@@ -1219,12 +1223,13 @@ TODO: pensar como mejorar esta parte
 			'type':	 		'post',
 			'skipwWaiting':	(async == true),
 			'async':		async,
-			'success': 		function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success': 		
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
 				}
-			}
-		});			
+		});
 		
 		this.aUserEntries 	= {};
 		this.aUserTags		= {};
@@ -1245,14 +1250,15 @@ TODO: pensar como mejorar esta parte
 				'feedId':	this.aFilters.id
 			},
 			'type':	 	'post',
-			'success': 	function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success': 	
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
+					
+					cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
+					cloneReader.loadFilters(true);
 				}
-				
-				cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
-				cloneReader.loadFilters(true);
-			}
 		});
 	},
 
@@ -1268,13 +1274,14 @@ TODO: pensar como mejorar esta parte
 				'append':	append
 			},
 			'type':	 	'post',
-			'success': 	function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success': 	
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
+					cloneReader.saveData(false);
+					cloneReader.loadFilters(true);
 				}
-				cloneReader.saveData(false);
-				cloneReader.loadFilters(true);
-			}
 		});
 	},
 	
@@ -1296,14 +1303,15 @@ TODO: pensar como mejorar esta parte
 							'type': 	this.aFilters.type,
 							'id': 		this.aFilters.id
 						},
-						'success': 	function(response) {
-							if (response['code'] != true) {
-								return $(document).crAlert(response['result']);
+						'success': 	
+							function(response) {
+								if (response['code'] != true) {
+									return $(document).crAlert(response['result']);
+								}
+								cloneReader.aEntries = {}
+								cloneReader.loadEntries(true, true, {});
+								cloneReader.loadFilters(true);
 							}
-							cloneReader.aEntries = {}
-							cloneReader.loadEntries(true, true, {});
-							cloneReader.loadFilters(true);
-						}
 					});
 				}
 			, this)
@@ -1324,13 +1332,14 @@ TODO: pensar como mejorar esta parte
 						'type':	 	'post',
 						'url': 		base_url + 'entries/unsubscribeFeed',
 						'data': 	{ 'feedId':	feedId 	},
-						'success': 	function(response) {
-							if (response['code'] != true) {
-								return $(document).crAlert(response['result']);
+						'success': 	
+							function(response) {
+								if (response['code'] != true) {
+									return $(document).crAlert(response['result']);
+								}
+								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
+								cloneReader.loadFilters(true);
 							}
-							cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
-							cloneReader.loadFilters(true);
-						}
 					});
 				}
 			, this)
@@ -1344,13 +1353,14 @@ TODO: pensar como mejorar esta parte
 			'data': 		{ 'post': $.toJSON(this.aFilters) },
 			'type':			'post',
 			'skipwWaiting': true,
-			'success': 		function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success': 		
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
 				}
-			}
 		});
-	},		
+	},
 	
 	updateEntriesDateTime: function() {
 		this.$ulEntries.find('.entryDate').each(
@@ -1548,12 +1558,13 @@ TODO: pensar como mejorar esta parte
 		this.ajax = $.ajax({		
 			'url': 		base_url + 'entries/browseTags',
 			'type':		'post',
-			'success': 	function(response) {
-				if (response['code'] != true) {
-					return $(document).crAlert(response['result']);
+			'success': 	
+				function(response) {
+					if (response['code'] != true) {
+						return $(document).crAlert(response['result']);
+					}
+					cloneReader.renderBrowseTags(response.result);
 				}
-				cloneReader.renderBrowseTags(response.result);
-			}
 		});
 	},
 	
@@ -1595,41 +1606,44 @@ TODO: pensar como mejorar esta parte
 						this.ajax = $.ajax({		
 							'url': 		base_url + 'entries/browseFeedsByTagId',
 							'data': 	{ 'tagId': $tag.data('tag').tagId },
-							'success': 	$.proxy( function($tag, response) {
-								if (response['code'] != true) {
-									return $(document).crAlert(response['result']);
-								}
-								
-								for (var i=0; i<response.result.length; i++) {
-									var feed 	= response.result[i];
-									var feedId 	= feed.feedId;
-									
-// TODO: refactorizar, para que no metan tags html.  ej "Sinergia sin control"
-									var $feed = $(
-									'<div class="list-group-item">\
-										<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
-										<p class="list-group-item-text">' + (feed.feedDescription == null ? '' : feed.feedDescription) + '</p>  \
-										<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
-										<button title="' + _msg['Subscribe'] + '" class="btn btn-success" type="button"> \
-											<i class="icon-plus"  /> \
-											<span class="btnLabel">' +  _msg['Subscribe'] + '</span> \
-										</button> \
-									</div>');
-									
-									$feed.find('button').click($.proxy(
-										function(feedId) {
-											this.subscribeFeed(feedId);
+							'success': 	
+								$.proxy( 
+									function($tag, response) {
+										if (response['code'] != true) {
+											return $(document).crAlert(response['result']);
 										}
-									, this, feedId));
-									
-									
-									$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')')
-									$tag.after($feed);
-								}
-								
-								//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
-								this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!! 
-							}, this, $tag)
+										
+										for (var i=0; i<response.result.length; i++) {
+											var feed 	= response.result[i];
+											var feedId 	= feed.feedId;
+											
+// TODO: refactorizar, para que no metan tags html.  ej "Sinergia sin control"
+											var $feed = $(
+											'<div class="list-group-item">\
+												<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
+												<p class="list-group-item-text">' + (feed.feedDescription == null ? '' : feed.feedDescription) + '</p>  \
+												<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
+												<button title="' + _msg['Subscribe'] + '" class="btn btn-success" type="button"> \
+													<i class="icon-plus"  /> \
+													<span class="btnLabel">' +  _msg['Subscribe'] + '</span> \
+												</button> \
+											</div>');
+											
+											$feed.find('button').click($.proxy(
+												function(feedId) {
+													this.subscribeFeed(feedId);
+												}
+											, this, feedId));
+											
+											
+											$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')')
+											$tag.after($feed);
+										}
+										
+										//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
+										this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!! 
+									}
+								, this, $tag)
 						})
 					}
 				,this));
@@ -1656,27 +1670,26 @@ TODO: pensar como mejorar esta parte
 		$.ajax({
 			'url': 		base_url + 'entries/shareByEmail/' + entryId,
 			'async':	true,
-			'success': 	$.proxy( 
+			'success': 	
+				$.proxy( 
+					function (result) {
+						if (result['code'] != true) {
+							return $(document).crAlert(result['result']);
+						}
+						
+						$(result['result']).appendTo($('body'));
+						var $modal	= $('#frmShareByEmail').parents('.modal');
+						$.showModal($modal, false);
+					}
+				, this),
+			'error':
 				function (result) {
-					if (result['code'] != true) {
+					result = $.parseJSON(result.responseText);
+					if (result['code'] == false) {
 						return $(document).crAlert(result['result']);
 					}
-					
-					$(result['result']).appendTo($('body'));
-					var $modal	= $('#frmShareByEmail').parents('.modal');
-					$.showModal($modal, false);
 				}
-			, this)
-		})
-		.fail(
-			function (result) {
-				result = $.parseJSON(result.responseText);
-				if (result['code'] == false) {
-					return $(document).crAlert(result['result']);
-				}
-			}
-		)
-
+		});
 	}
 };
 
