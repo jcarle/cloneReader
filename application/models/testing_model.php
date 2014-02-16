@@ -89,6 +89,37 @@ class testing_Model extends CI_Model {
 	}
 	
 	function getTestChild($testChildId) {
+		$query = $this->db
+			->select('testing_childs.* ', false)
+			->where('testChildId', $testChildId)
+			->get('testing_childs')->row_array();
 		
+		return $query;		
+	}
+	
+	function saveTestingChilds($data) {
+		$testChildId = $data['testChildId'];
+		
+		$values = array(
+			'testId'				=> $data['testId'],
+			'testChildDate'			=> $data['testChildDate'],
+			'testChildNights'		=> $data['testChildNights'],
+			'countryId'				=> $data['countryId'],
+			'currencyId'			=> $data['currencyId'],
+			'testChildPrice'		=> $data['testChildPrice'],
+			'testChildExchange'		=> $data['testChildExchange'],
+		);
+		
+
+		if ((int)$testChildId != 0) {		
+			$this->db->where('testChildId', $testChildId);
+			$this->db->update('testing_childs', $values);
+		}
+		else {
+			$this->db->insert('testing_childs', $values);
+			$testChildId = $this->db->insert_id();
+		}
+		//pr($this->db->last_query());
+		return true;		
 	}	
 }

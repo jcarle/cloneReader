@@ -192,41 +192,71 @@ class Testing extends CI_Controller {
 			'title'		=> 'Edit test child',
 			'fields'	=> array(
 				'testChildId' => array(
-					'type' 	=> 'hidden',
+					'type' 	=> 'text',
 					'value'	=> (int)$testChildId
 				),
-				'travelId' => array(
-					'type' 	=> 'hidden',
+				'testId' => array(
+					'type' 	=> 'text',
 					'value'	=> (int)$testId
 				),
+				'testChildName' => array(
+					'type'		=> 'text',
+					'label'		=> $this->lang->line('Name'),
+				),				
 				'countryId' => array(
 					'type'		=> 'dropdown',
 					'label'		=> 'Country',
 					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
 				),
-				'toPlaceId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('To'),
-				),
 				'testChildDate' => array(
 					'type'	=> 'datetime',
 					'label'	=> $this->lang->line('Date'), 
 				),
+			),
+			'rules' 	=> array(
+				array(
+					'field' => 'testChildName',
+					'label' => $this->lang->line('Name'),
+					'rules' => 'required'				
+				),			
+				array(
+					'field' => 'testChildDate',
+					'label' => $this->lang->line('Date'),
+					'rules' => 'required'
+				),
 			)
 		);
 		
+		$price 		= array('name' => 'testChildPrice', 		'label' => $this->lang->line('Price'), 	);
+		$exchange 	= array('name' => 'testChildExchange',	'label' => $this->lang->line('Exchange rate'), 	);
+		
+		$form['fields'] += getCrFormFieldMoney(
+			$price,
+			array('name' => 'currencyId', 				'label' => $this->lang->line('Currency'), ),
+			$exchange,
+			array('name' => 'testChildTotalPrice', 	'label' => 'Total')
+		);
+		
+		$form['rules'] 		= array_merge($form['rules'], getCrFormValidationFieldMoney($price, $exchange));		
+		
 		if ((int)$testChildId > 0) {
-			$form['urlDelete'] = base_url('travels/deleteTestChild/');
+			$form['urlDelete'] = base_url('testing/deleteTestChild/');
 		}
 		
-		$form['rules'] 	= array(
-			array(
-				'field' => 'testChildDate',
-				'label' => $form['fields']['testChildDate']['label'],
-				'rules' => 'required'
-			),		
-		);
 
+		$this->form_validation->set_rules($form['rules']);
+
+		if ($this->input->post() != false) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+				$this->Testing_Model->saveTestingChilds($this->input->post());
+			}
+			
+			return $this->load->view('ajax', array(
+				'code'		=> $code, 
+				'result' 	=> validation_errors()  
+			));
+		}
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crPopupForm',
