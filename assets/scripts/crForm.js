@@ -306,9 +306,49 @@
 			}
 			
 			$.ajax({
-				type: 	'post',
-				url: 	this.$form.attr('action'),
-				data: 	this.$form.serialize()
+				'type': 	'post',
+				'url': 		this.$form.attr('action'),
+				'data': 	this.$form.serialize(),
+				'success': 	$.proxy(
+					function(response) {
+						if (this.options.callback != null) {
+							if (typeof this.options.callback == 'string') {
+								eval('this.options.callback = ' + this.options.callback);
+							}
+							this.options.callback(response);
+							return;
+						}
+						
+						if (response['code'] != true) {
+							return $(document).crAlert(response['result']);
+						}
+						
+						if (response['result']['msg'] != null && response['result']['goToUrl'] != null) {
+							$(document).crAlert({
+								'msg': 		response['result']['msg'],
+								'callback': function() {
+									$.goToUrl(response['result']['goToUrl']);
+								}
+							});
+							return;
+						}
+	
+						if (response['result']['notification'] != null) {
+							$.showNotification(response['result']['notification']); 
+						}
+						if (this.options.isSubForm == true) {
+							this.$form.parents('.modal').first().modal('hide');
+							return;
+						}							
+						if ($.url().param('urlList') != null) {
+							$.goToUrl($.base64Decode($.url().param('urlList')));
+						}
+						if (response['result']['goToUrl'] != null) {
+							$.goToUrl(response['result']['goToUrl']);
+						}
+	
+					}
+				, this)
 			})
 			.fail(
 				function (result) {
@@ -317,47 +357,8 @@
 						return $(document).crAlert(result['result']);
 					}
 				}
-			)					
-			.done($.proxy(
-				function(response) {
-					if (this.options.callback != null) {
-						if (typeof this.options.callback == 'string') {
-							eval('this.options.callback = ' + this.options.callback);
-						}
-						this.options.callback(response);
-						return;
-					}
-					
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
-					
-					if (response['result']['msg'] != null && response['result']['goToUrl'] != null) {
-						$(document).crAlert({
-							'msg': 		response['result']['msg'],
-							'callback': function() {
-								$.goToUrl(response['result']['goToUrl']);
-							}
-						});
-						return;
-					}
-
-					if (response['result']['notification'] != null) {
-						$.showNotification(response['result']['notification']); 
-					}
-					if (this.options.isSubForm == true) {
-						this.$form.parents('.modal').first().modal('hide');
-						return;
-					}							
-					if ($.url().param('urlList') != null) {
-						$.goToUrl($.base64Decode($.url().param('urlList')));
-					}
-					if (response['result']['goToUrl'] != null) {
-						$.goToUrl(response['result']['goToUrl']);
-					}
-
-				}
-			, this));
+			);
+			
 		},
 		
 		validate: function() {
@@ -440,32 +441,77 @@
 			$('tbody', '#fileupload').children().remove();
 			
 			$.ajax({
-				url: this.fileupload.urlGet,
-				data: { }
-			 }).done(function (result) {	
-				$('#fileupload')
-					.fileupload('option', 'done')
-					.call($('#fileupload'), null, {result: result});
-
-				for (var i=0; i<result.files.length; i++) {
-					var photo = result.files[i];
-					
-					$('<a class="thumbnail " />')
-						.append($('<img />').prop('src', photo.thumbnailUrl))
-						.prop('href', photo.url)
-						.prop('title', ''  /*photo.title*/)
-						.appendTo($gallery.find('.thumbnails'));
+				'url': 		this.fileupload.urlGet,
+				'data': 	{ },
+				'success': 	function (result) {	
+					$('#fileupload')
+						.fileupload('option', 'done')
+						.call($('#fileupload'), null, {result: result});
+	
+					for (var i=0; i<result.files.length; i++) {
+						var photo = result.files[i];
+						
+						$('<a class="thumbnail " />')
+							.append($('<img />').prop('src', photo.thumbnailUrl))
+							.prop('href', photo.url)
+							.prop('title', ''  /*photo.title*/)
+							.appendTo($gallery.find('.thumbnails'));
+					}
+	
+					$('img', $gallery).imgCenter( { show: false, createFrame: true } );
 				}
-
-				$('img', $gallery).imgCenter( { show: false, createFrame: true } );
 			});
 		},
 		
 		loadSubForm: function(field) {
 			$.ajax( {
-				type: 		'get', 
-				url:		field.controller,
-				data:		{ 'frmParent': field.frmParent }
+				'type': 		'get', 
+				'url':			field.controller,
+				'data':			{ 'frmParent': field.frmParent },
+				'success': 		$.proxy( 
+					function (result) {
+						if (result['code'] != true) {
+							return $(document).crAlert(result['result']);
+						}
+						
+						result = $(result['result']);
+						field.$input.children().remove();
+						field.$input.html(result);
+						
+						$('a', field.$input)
+							.data( { crForm: this })
+							.click(
+								function() {
+									$(this).data('crForm').showSubForm($(this).attr('href'), field); 
+									return false;
+								}
+							);
+						
+						$('table tbody tr', field.$input)
+							.data( { crForm: this })
+							.each(
+								function (i, tr) {
+									$(tr).click(
+										function() {
+											if ($(this).attr('href') == null) {
+												return;
+											}
+											$(this).data('crForm').showSubForm($(this).attr('href'), field); 
+										}
+									);
+								}
+							);
+						
+						field.$input.find('tbody .date, tbody .datetime').each(
+							function() {
+								$.formatDate($(this));
+							}
+						);
+	
+						field.$input.change();
+						this.resizeWindow();
+					}
+				, this)
 			})
 			.fail(
 				function (result) {
@@ -474,57 +520,34 @@
 						return $(document).crAlert(result['result']);
 					}
 				}
-			)
-			.done( $.proxy( 
-				function (result) {
-					if (result['code'] != true) {
-						return $(document).crAlert(result['result']);
-					}
-					
-					result = $(result['result']);
-					field.$input.children().remove();
-					field.$input.html(result);
-					
-					$('a', field.$input)
-						.data( { crForm: this })
-						.click(
-							function() {
-								$(this).data('crForm').showSubForm($(this).attr('href'), field); 
-								return false;
-							}
-						);
-					
-					$('table tbody tr', field.$input)
-						.data( { crForm: this })
-						.each(
-							function (i, tr) {
-								$(tr).click(
-									function() {
-										if ($(this).attr('href') == null) {
-											return;
-										}
-										$(this).data('crForm').showSubForm($(this).attr('href'), field); 
-									}
-								);
-							}
-						);
-					
-					field.$input.find('tbody .date, tbody .datetime').each(
-						function() {
-							$.formatDate($(this));
-						}
-					);
-
-					field.$input.change();
-					this.resizeWindow();
-				}
-			, this));
+			);
 		},
 		
 		showSubForm: function(controller, field) {
 			$.ajax( {
-				type: 		'get', 
-				url:		controller
+				'type': 		'get', 
+				'url':			controller,
+				'success': 		$.proxy( 
+					function (result) {
+						$(result['result']).appendTo($('body'));
+						
+						var frmId 			= $(result['result']).find('form').attr('id');
+						var $subform 		= $('#' + frmId);
+						var options	 		= $subform.crForm('options');
+						var $modal			= $subform.parents('.modal');
+						options.frmParentId = this;
+	
+						$.showModal($modal, false);
+						$modal.on('hidden.bs.modal', function() {
+							var crForm = $(this).find('form').data('crForm');
+							crForm.options.frmParentId.loadSubForm(field);
+													
+							$(this).remove();
+						});
+	
+						$subform.find('select, input[type=text]').first().focus();
+					}
+				, this)
 			})
 			.fail(
 				function (result) {
@@ -533,28 +556,7 @@
 						return $(document).crAlert(result['result']);
 					}
 				}
-			)			
-			.done( $.proxy( 
-				function (result) {
-					$(result['result']).appendTo($('body'));
-					
-					var frmId 			= $(result['result']).find('form').attr('id');
-					var $subform 		= $('#' + frmId);
-					var options	 		= $subform.crForm('options');
-					var $modal			= $subform.parents('.modal');
-					options.frmParentId = this;
-
-					$.showModal($modal, false);
-					$modal.on('hidden.bs.modal', function() {
-						var crForm = $(this).find('form').data('crForm');
-						crForm.options.frmParentId.loadSubForm(field);
-												
-						$(this).remove();
-					});
-
-					$subform.find('select, input[type=text]').first().focus();
-				}
-			, this));
+			);
 		},
 		
 		getFieldByName: function(fieldName){
@@ -638,19 +640,19 @@
 			}
 			
 			$.ajax( {
-				type: 	'get', 
-				url:	controller
-			})
-			.done( $.proxy( 
-				function (result) {
-					$field.children().remove();
-					for (var i=0; i<result.length; i++) {
-						$('<option />').attr('value', result[i]['id']).text(result[i]['value']).appendTo($field);
+				'type': 	'get', 
+				'url':		controller,
+				'success': 	$.proxy( 
+					function (result) {
+						$field.children().remove();
+						for (var i=0; i<result.length; i++) {
+							$('<option />').attr('value', result[i]['id']).text(result[i]['value']).appendTo($field);
+						}
+						$field.val(this.options.fields[$field.attr('name')].value);
+						$field.select2();
 					}
-					$field.val(this.options.fields[$field.attr('name')].value);
-					$field.select2();
-				}
-			, this));			
+				, this)
+			});
 		},
 		
 		checkGroupCheckBox: function($input) { 
