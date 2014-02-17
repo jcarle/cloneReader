@@ -241,7 +241,7 @@ function renderCrFormFields($form) {
 							</div>
 						</div>
 					</fieldset>';
-  				
+				
 				break;
 			case 'gallery':
 				$fileupload = array ( 
@@ -276,8 +276,8 @@ function renderCrFormFields($form) {
 				break;
 			case 'link':
 				$sField = '
-					<fieldset class="form-group">
-						'.form_label('', null, array('class' => 'col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label')).'
+					<fieldset class="form-group" >
+						'.form_label('', null, array('class' => 'hidden-xs col-sm-3 col-md-3 col-lg-3 control-label')).'
 						<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> %s </div>
 					</fieldset>';
 				$aFields[] = sprintf($sField, anchor($field['value'], $field['label']));
