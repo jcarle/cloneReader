@@ -208,8 +208,8 @@ function renderCrFormFields($form) {
 				if (element('disabled', $field) == true) {
 					$properties[] = 'disabled="disabled"';
 				}
-			
-				$aFields[] = sprintf($sField, form_dropdown($name, $source, element('value', $field), implode(' ', $properties)));
+
+				$aFields[] = sprintf($sField, form_dropdown($name, $source, element('value', $field, null), implode(' ', $properties)));
 				break;						
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);

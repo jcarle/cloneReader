@@ -194,7 +194,7 @@ class Users_Model extends CI_Model {
 		$values = array(
 			'userFirstName' => element('userFirstName', $data),
 			'userLastName' 	=> element('userLastName', $data),
-			'countryId' 	=> element('countryId', $data),
+			'countryId' 	=> element('countryId', $data, null),
 		);		
 		
 		$this->db->where('userId', $userId)->update('users', $values);
@@ -208,7 +208,7 @@ class Users_Model extends CI_Model {
 			'userPassword' 	=> md5(element('userPassword', $data)),
 			'userFirstName' => element('userFirstName', $data),
 			'userLastName' 	=> element('userLastName', $data),
-			'countryId' 	=> element('countryId', $data),
+			'countryId' 	=> element('countryId', $data, null),
 			'userDateAdd' 	=> date("Y-m-d H:i:s"),
 		);
 		

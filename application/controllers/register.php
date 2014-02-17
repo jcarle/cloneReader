@@ -45,10 +45,11 @@ class Register extends CI_Controller {
 					'value'	=> element('userLastName', $data)
 				),
 				'countryId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('Country'),
-					'value'		=> element('countryId', $data),
-					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
+					'type'				=> 'dropdown',
+					'label'				=> $this->lang->line('Country'),
+					'value'				=> element('countryId', $data),
+					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'appendNullOption' 	=> true,
 				),
 			)
 		);
