@@ -121,5 +121,45 @@ class testing_Model extends CI_Model {
 		}
 		//pr($this->db->last_query());
 		return true;		
-	}	
+	}
+	
+	function selectUsersByTestChildId($testChildId) {
+		$query = $this->db
+			->select('users.* ', false)
+			->join('users', 'testing_childs_users.userId = users.userId', 'inner')
+			->where('testChildId', $testChildId)
+			->order_by('userFirstName')
+			->get('testing_childs_users')->result_array();
+
+		//pr($this->db->last_query()); die;
+		return $query;		
+	}
+	
+	function saveTestChildUser($testChildId, $userId) {
+		$this->db->ignore()->insert('testing_childs_users', array(
+			'userId' 			=> $userId, 
+			'testChildId' 		=> $testChildId
+		));
+
+		return true;		
+	}
+	
+	function exitsTestChildUser($testChildId, $userId) {
+		$query = $this->db
+			->where(array(
+				'testChildId' 	=> $testChildId, 
+				'userId' 		=> $userId
+			))
+			->get('testing_childs_users');
+		return ($query->num_rows() > 0);
+	}
+	
+	function deleteTestChildUser($testChildId, $userId) {
+		$this->db->delete('testing_childs_users', array(
+			'testChildId' 	=> $testChildId, 
+			'userId' 		=> $userId
+		));
+
+		return true;		
+	} 
 }

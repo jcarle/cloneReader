@@ -4,7 +4,7 @@ class Testing extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Testing_Model', 'Countries_Model'));
+		$this->load->model(array('Testing_Model', 'Countries_Model', 'Users_Model'));
 	}  
 	
 	function index() {
@@ -102,12 +102,12 @@ class Testing extends CI_Controller {
 				'entityId'		=> $testId
 			);
 			
-			$form['fields']['test_childs'] = array(
+			$form['fields']['testChilds'] = array(
 				'type'			=> 'subform',
 				'label'			=> 'childs', 
 				'controller'	=> base_url('testing/selectChildsByTestId/'.$testId),
 				'frmParent'		=> 'frmTestingEdit',
-			);						
+			);
 		}
 		
 		$form['rules'] 	= array( 
@@ -241,6 +241,13 @@ class Testing extends CI_Controller {
 		
 		if ((int)$testChildId > 0) {
 			$form['urlDelete'] = base_url('testing/deleteTestChild/');
+			
+			$form['fields']['testChildsUsers'] = array(
+				'type'			=> 'subform',
+				'label'			=> 'Users', 
+				'controller'	=> base_url('testing/selectUsersByTestChildId/'.$testChildId),
+				'frmParent'		=> 'frmTestChildEdit',
+			);
 		}
 		
 
@@ -263,5 +270,104 @@ class Testing extends CI_Controller {
 			'form'			=> populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)),
 			'code'			=> true
 		));
+	}
+
+
+	function selectUsersByTestChildId($testChildId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+			
+		$this->load->view('ajax', array(
+			'view'		=> 'includes/subform',
+			'code'		=> true,
+			'list'		=> array(
+				'controller'	=> strtolower(__CLASS__).'/popupTestChildUser/'.$testChildId.'/',
+				'columns'		=> array( 
+					'userFirstName' 	=> 'Nombre', 
+					'userLastName' 		=> 'Apellido', 
+					'userEmail'			=> 'Email',
+				),
+				'data'			=> $this->Testing_Model->selectUsersByTestChildId($testChildId),
+				'frmParent'		=> $this->input->get('frmParent'),
+			),
+		));
+	}
+	
+	function popupTestChildUser($testChildId, $userId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		
+		$user 	= null;
+		if ((int)$userId != 0) {
+			$user = $this->Users_Model->get($userId);
+		}		
+		
+		$form = array(
+			'frmId'		=> 'frmTestChildUserEdit',
+			'isSubForm' => true,
+			'title'		=> 'Edit user',
+			'fields'	=> array(
+				'testChildId' => array(
+					'type' 	=> 'hidden',
+					'value'	=> (int)$testChildId
+				),
+				'currentUserId' => array(
+					'type' 	=> 'hidden',
+					'value'	=> (int)$userId
+				),
+				'userId' => array(
+					'type' 			=> 'typeahead',
+					'label'			=> $this->lang->line('User'),
+					'source' 		=> base_url('users/search/'),
+					'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
+					'multiple'		=> false,
+					'placeholder' 	=> $this->lang->line('User')
+				)
+			),
+			'rules' 	=> array(
+				array(
+					'field' => 'userId',
+					'label' => $this->lang->line('User'),
+					'rules' => 'required'				
+				),			
+			)
+		);
+		
+		
+		if ((int)$testChildId > 0) {
+			$form['urlDelete'] = base_url('testing/deleteTestChild/');
+		}
+		
+
+		$this->form_validation->set_rules($form['rules']);
+
+		if ($this->input->post() != false) {
+			$code = $this->form_validation->run();
+			if ($code == true) {
+			
+				$testChildId 		= $this->input->post('testChildId');
+				$userId 			= $this->input->post('userId');
+			
+				if ($this->Testing_Model->exitsTestChildUser($testChildId, $userId) == true) {
+					return $this->load->view('ajax', array(
+						'code'		=> false, 
+						'result' 	=> 'El usuario ya exite che' 
+					));
+				}
+
+				$this->Testing_Model->deleteTestChildUser($testChildId, $this->input->post('currentUserId'));
+				$this->Testing_Model->saveTestChildUser($testChildId, $userId);
+			}
+			
+			return $this->load->view('ajax', array(
+				'code'		=> $code, 
+				'result' 	=> validation_errors()  
+			));
+		}
+		
+		$this->load->view('ajax', array(
+			'view'			=> 'includes/crPopupForm',
+			'form'			=> $form,
+//populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)),
+			'code'			=> true
+		));		
 	}	
 }
