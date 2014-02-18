@@ -129,7 +129,8 @@ $lang['Trouble clicking? Copy and paste this URL into your browser: <br/> %s'] =
 $lang['Someone recently requested that the password be reset for %s'] = 'Alguien pidió recientemente resetear la contraseña de %s';
 $lang['To reset your password please click <a href="%s">here</a>'] = 'Para resetear la contraseña, por favor hace click <a href="%s">aquí</a>';
 $lang['If this is a mistake just ignore this email - your password will not be changed'] = 'Si esto es un error simplemente ignorá este email - la contraseña no se cambiará';
-$lang['Send by mail %s'] = 'Enviar por mail %s';
+$lang['Send by email %s'] = 'Enviar por email %s';
 $lang['The email has been sent'] = 'El email ha sido enviado con éxito';
 $lang['Send me a copy'] = 'Enviame una copia';
 $lang['Not connected. Please verify your network connection'] = 'No está conectado. Por favor, compruebe la conexión de red';
+$lang['Keyboard shortcut'] = 'Atajos de teclado';

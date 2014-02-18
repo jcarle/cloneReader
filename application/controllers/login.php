@@ -72,9 +72,12 @@ class Login extends CI_Controller {
 			return $this->load->view('includes/template', array(
 				'view'			=> 'login', 
 				'title'			=> $this->lang->line('Login'),
+				'meta'			=> array(
+					'description' 	=> 'Login in clone Reader. Reader of feeds, rss, news',
+					'keywords'		=> 'cReader cloneReader login '
+				),				
 				'form'			=> $form,
 				'aServerData'	=> $aServerData,
-				//'aJs'			=> array('loginFB.js', 'loginGoogle.js'),
 			));
 		}
 		

@@ -93,6 +93,10 @@ class Register extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Signup'),
+			'meta'			=> array(
+				'description' 	=> 'Clone Reader. Create account.',
+				'keywords'		=> 'cReader cloneReader new account'
+			),
 			'form'		=> $form,
 				  
 		));		

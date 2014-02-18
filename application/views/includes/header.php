@@ -58,6 +58,10 @@ $aScripts = appendCrFormJsAndCss($view, (isset($form) ? $form : null), (isset($h
 $aScripts = appendCrListJsAndCss($view, (isset($list) ? $list : null), $aScripts);
 
 
+if (!isset($meta)) {
+	$meta = array();
+}
+
 $CI->carabiner->css('default.css');
 $CI->carabiner->css( config_item('siteId').'.css');
 
@@ -69,7 +73,11 @@ header('Content-Type: text/html; charset=utf-8');
 	<link rel="alternate" type="application/rss+xml" title="cloneReader Feed" href="<?php echo base_url('rss'); ?>/" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />	
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	
+	<meta name="description" content="<?php echo element('description', $meta); ?>" />
+	<meta name="keywords" content="<?php echo element('keywords', $meta); ?>" />
+		
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
 //$CI->carabiner->empty_cache('both', 'yesterday');

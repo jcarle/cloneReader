@@ -481,7 +481,8 @@
 	#header .mainToolbar li {
 		padding-left:15px;
 	}
-		#header .mainToolbar .directionNav {
+		#header .mainToolbar .directionNav,
+		#header .menuProfile .divider {
 			display:none;
 		}
 	#cloneReader { }

@@ -34,10 +34,17 @@ cloneReader = {
 		this.renderToolbar();
 		this.loadFilters(false);
 		this.initEvents();
+		this.initMainMenu();
 		this.resizeWindow();
 		this.isLoaded = true;
 	},
 
+	initMainMenu: function() {
+		var $dropdownMenu 	= $('ul.menuProfile').find('.icon-gear').parent().parent().find('ul.dropdown-menu:first');
+		$dropdownMenu.append('<li role="presentation" class="divider"></li>');
+		$dropdownMenu.append('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>');		
+	},
+	
 	initEvents: function() {
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
@@ -287,10 +294,10 @@ cloneReader = {
 			}
 		);
 		
-		if ($.browser.mozilla == true) {
+//		if ($.browser.mozilla == true) {
 // TODO: revisar el instalador, que muestre el boton SOLO si no esta instalado en firefox			
 //			cloneReader.$toolbar.find('.btnInstall').show();					
-		}
+//		}
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -1692,6 +1699,39 @@ console.timeEnd("t1");
 					if (result.statusText == 'abort') {
 						return;
 					}
+					result = $.parseJSON(result.responseText);
+					if (result['code'] == false) {
+						return $(document).crAlert(result['result']);
+					}
+				}
+		});
+	},
+	
+	helpKeyboardShortcut: function() {
+		this.hideMobileNavbar();
+		
+		if (this.$keyboardShortcut != null) {
+			$.showModal(this.$keyboardShortcut, false);
+			return;
+		}
+		
+		$.ajax({
+			'type': 	'get',
+			'url': 		base_url + 'help/keyboardShortcut/',
+			'success': 	
+				$.proxy( 
+					function (result) {
+						if (result['code'] != true) {
+							return $(document).crAlert(result['result']);
+						}
+						
+						$(result['result']).appendTo($('body'));
+						this.$keyboardShortcut	= $('#frmKeyboardShortcut').parents('.modal');
+						$.showModal(this.$keyboardShortcut, false);
+					}
+				, this),
+			'error':
+				function (result) {
 					result = $.parseJSON(result.responseText);
 					if (result['code'] == false) {
 						return $(document).crAlert(result['result']);

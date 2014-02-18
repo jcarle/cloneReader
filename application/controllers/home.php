@@ -7,6 +7,10 @@ class Home extends CI_Controller {
 			array(
 				'view'			=> 'home', 
 				'title'			=> 'News reader and feeds',
+				'meta'			=> array(
+					'description' 	=> 'Clone Reader. Clone of google reader. Reader of feeds, rss news. Open source',
+					'keywords'		=> 'cReader cloneReader news feeds rss reader open source'
+				), 
 				'aJs'			=> array('cloneReader.js', 'jquery.visible.min.js' ),
 				'hasForm'		=> true,
 				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
@@ -43,6 +47,7 @@ class Home extends CI_Controller {
 					'Star',
 					'Enter a url',
 					'Enter a valid url',
+					'Keyboard shortcut'
 				)
 			)
 		);

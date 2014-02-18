@@ -58,3 +58,13 @@ $lang['Choose the subscriptions.xml file from gReader or a standard OPML file'] 
 $lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML es un formato que te permite migrar tus feeds a otro lector';
 $lang['Thank you for using cReader'] = 'Gracias por usar cReader';
 $lang['Sent to you by %s via cReader'] = 'Enviado por %s a través de cReader';
+
+
+$lang['Next item'] = 'Siguiente entrada'; 
+$lang['Previous item'] = 'Entrada anterior'; 
+$lang['Maximize entries'] = 'Maximizar entradas';
+$lang['Mark item as star'] = 'Marcar item como favorito'; 
+$lang['Mark item as unread'] = 'Marcar como no leído';
+$lang['View original'] = 'Ver original';
+$lang['Send entry by email'] = 'Enviar entrada por email';
+

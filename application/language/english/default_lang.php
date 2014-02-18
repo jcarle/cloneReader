@@ -130,7 +130,8 @@ $lang['Trouble clicking? Copy and paste this URL into your browser: <br/> %s'] =
 $lang['Someone recently requested that the password be reset for %s'] = 'Someone recently requested that the password be reset for %s';
 $lang['To reset your password please click <a href="%s">here</a>'] = 'To reset your password please click <a href="%s">here</a>';
 $lang['If this is a mistake just ignore this email - your password will not be changed'] = 'If this is a mistake just ignore this email - your password will not be changed';
-$lang['Send by mail %s'] = 'Send by mail %s';
+$lang['Send by email %s'] = 'Send by email %s';
 $lang['The email has been sent'] = 'The email has been sent';
 $lang['Send me a copy'] = 'Send me a copy';
 $lang['Not connected. Please verify your network connection'] = 'Not connected. Please verify your network connection.';
+$lang['Keyboard shortcut'] = 'Keyboard shortcut';

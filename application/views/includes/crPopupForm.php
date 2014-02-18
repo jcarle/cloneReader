@@ -29,7 +29,6 @@ $aFields = renderCrFormFields($form);
 echo implode(' ', $aFields);
 ?>
 			</div>
-			<div class="modal-footer" >
 <?php
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
@@ -42,8 +41,12 @@ if (!isset($form['buttons'])) {
 	array_unshift($form['buttons'], '<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">'.$this->lang->line('Close').'</button>'); 
 }
 
-foreach ($form['buttons'] as $button) {
-	echo $button.' ';
+if (!empty($form['buttons'])) {
+	echo '<div class="modal-footer" >';
+	foreach ($form['buttons'] as $button) {
+		echo $button.' ';
+	}
+	echo '</div>';
 }
 
 echo form_close(); 
