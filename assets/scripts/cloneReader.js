@@ -107,9 +107,24 @@ cloneReader = {
 						break;
 					case 77: // M read entry
 						var $entry = this.$ulEntries.find('.entry.selected');
-						if ($entry.length != 0) {					
+						if ($entry.length != 0) {
 							this.readEntry($entry, $entry.find('.read').hasClass('selected'));
 						}
+						break;
+					case 65: // A Add feed
+						this.$mainToolbar.find('.add').click();
+						break;
+					case 69: // E
+						var $entry = this.$ulEntries.find('.entry.selected');
+						if ($entry.length != 0) {
+							this.showFormShareByEmail($entry.data('entryId'));
+						}
+						break;
+					case 49: // 1 Detail view
+						this.$mainToolbar.find('.viewDetail').click();
+						break;
+					case 50: // 2 List view
+						this.$mainToolbar.find('.viewList').click();
 						break;
 				}
 			}
