@@ -1667,7 +1667,12 @@ console.timeEnd("t1");
 	},
 	
 	showFormShareByEmail: function(entryId) {
-		$.ajax({
+		if (this.ajaxShareByEmail) {
+			this.ajaxShareByEmail.abort();
+			this.ajaxShareByEmail = null;
+		}
+				
+		this.ajaxShareByEmail = $.ajax({
 			'url': 		base_url + 'entries/shareByEmail/' + entryId,
 			'async':	true,
 			'success': 	
@@ -1684,6 +1689,9 @@ console.timeEnd("t1");
 				, this),
 			'error':
 				function (result) {
+					if (result.statusText == 'abort') {
+						return;
+					}
 					result = $.parseJSON(result.responseText);
 					if (result['code'] == false) {
 						return $(document).crAlert(result['result']);
