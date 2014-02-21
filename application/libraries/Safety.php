@@ -12,7 +12,7 @@ class Safety {
 
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
-			if ($this->isCommandLine() != true && uri_string() != 'rss') {
+			if ($this->isCommandLine() != true && uri_string() != 'rss' && $CI->input->is_ajax_request() != true) {
 				redirect('login');
 			}
 		}
