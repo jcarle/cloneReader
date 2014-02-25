@@ -17,27 +17,19 @@ $.extend({
 		return o;
 	},
 	
-	linkToObject: function(sTmp){
-		var oParams = {};
-		var aParamName = sTmp.split('&');
-	
-		for(var i=0;i<aParamName.length;i++){
-			var aParamsValues = aParamName[i].split('=');
-			if(aParamsValues[0].trim() != '' && aParamsValues[0].trim() != 'undefined') {
-				oParams[aParamsValues[0]] = aParamsValues[1];
-			}
+	getUrlVars: function(){
+		var vars = {}, hash;
+		if (window.location.href.indexOf('?') == -1) {
+			return vars;
 		}
-		return oParams;
-	},
-	
-	objectToLink: function(oParams) {
-		var sHref = '';
-		for(var paramName in oParams) {
-			sHref+= paramName + '=' + oParams[paramName] + '&';
+		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for(var i = 0; i < hashes.length; i++) {
+			hash = hashes[i].split('=');
+			vars[hash[0]] = hash[1];
 		}
-		return sHref;
+		return vars;
 	},
-	
+
 	isMobile: function() {
 		return $(window).width() < 768;		
 	},	
@@ -337,9 +329,10 @@ $.extend({
 		$menuProfile.find('.icon-flag-alt').parent()
 			.append('<span class="badge pull-right">' + langId + '</span>')
 			.addClass('lang').css('cursor', 'pointer');
-		
-		$menuProfile.find('li ul').addClass('dropdown-menu');
-		$menuProfile.find('li a').addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
+	
+// TODO: agregar esta logica al render; anda mal en modo [app]		
+//		$menuProfile.find('li ul').addClass('dropdown-menu');
+//		$menuProfile.find('li a').addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
 
 		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
 			function(event) {
