@@ -2,7 +2,7 @@
 $CI = &get_instance();
 
 
-sleep(5);
+//sleep(5);
 
 if ($CI->input->is_ajax_request()) {
 	if ($view == 'includes/crList') {

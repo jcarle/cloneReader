@@ -60,12 +60,16 @@ this.loadUrl('users');
 	},
 	
 	loadUrl: function(controller) {
-		if (this.aPages[controller] == null) {
-			this.aPages[controller] = $('<div class="page ' + controller + '"/>').appendTo($('.container'));
+		var pageName = location.hash.slice(1);		
+		if (pageName.indexOf('?') != -1){
+			pageName = pageName.substr(0, pageName.indexOf('?'));
+		}
+
+		if (this.aPages[pageName] == null) {
+			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.container'));
 		}
 		$('.container .page').hide();
-
-crMain.aPages[controller].children().remove();
+		this.aPages[pageName].stop().show();
 
 		if (this.ajax) {
 			this.ajax.abort();
@@ -84,9 +88,8 @@ crMain.aPages[controller].children().remove();
 					var result = response['result'];
 					switch (result['js']) {
 						case 'crList':
-							crMain.renderCrList(result, crMain.aPages[controller]);
-							crMain.aPages[controller].show();
-							$(crMain.aPages[controller]).find('.crList').crList();
+							crMain.renderCrList(result, crMain.aPages[pageName]);
+							$(crMain.aPages[pageName]).find('.crList').crList();
 							break;
 					}
 				}
@@ -94,6 +97,8 @@ crMain.aPages[controller].children().remove();
 	},
 	
 	renderCrList: function(data, $parent) {
+		$parent.children().remove();
+		
 		var params 		= $.getUrlVars();
 		var $crList		= $('<div class="crList"></div>').appendTo($parent);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
@@ -122,247 +127,177 @@ if ($filters != null) {
 	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));			
 }
 */
-	if (data['sort'] != null) {
-		var defaultOrderBy 	= Object.keys(data['sort'])[0];
-		var orderBy 		= params['orderBy'];
-		if ($.inArray(orderBy, Object.keys(data['sort'])) == -1) {
-			orderBy 	= defaultOrderBy;
-		}
-		var orderDir 	= params['orderDir'] == 'desc' ? 'desc' : 'asc';
-		
-		delete params['orderBy']; 
-		delete params['orderDir'];
-		delete params['page'];
-
-		var $sort = $('\
-			<div class="btn-group">\
-				<input type="hidden" name="orderBy"  value="' + orderBy + '" />\
-				<input type="hidden" name="orderDir" value="' + orderDir + '" />\
-				<div class="dropdown">\
-					<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder ' + (orderBy != defaultOrderBy || orderDir != 'asc' ? ' btn-info ' : '') + '" type="button" data-toggle="dropdown">\
-						<i class="icon-sort-by-attributes" ></i>\
-					</button>\
-					<ul class="dropdown-menu pull-right" role="menu" />\
-				</div>\
-			</div>\
-		').appendTo($form);
-		
-		var $ul = $sort.find('ul');	
-
-		for (key in data['sort']) {
-			params['orderBy'] 	= key;
-			params['orderDir'] 	= (orderDir == 'desc' ? 'asc' : 'desc');
+		if (data['sort'] != null) {
+			var defaultOrderBy 	= Object.keys(data['sort'])[0];
+			var orderBy 		= params['orderBy'];
+			if ($.inArray(orderBy, Object.keys(data['sort'])) == -1) {
+				orderBy 	= defaultOrderBy;
+			}
+			var orderDir 	= params['orderDir'] == 'desc' ? 'desc' : 'asc';
 			
-			var $li 	= $('<li/>').appendTo($ul);
-			var $link 	= $('<a/>')
-				.appendTo($li)
-				.attr('href', '#' + data['controller'] + '?' + $.param(params))
-				.text(data['sort'][key]);
+			delete params['orderBy']; 
+			delete params['orderDir'];
+			delete params['page'];
 	
-			if (orderBy == key) {
-				$link.prepend(' <i class="' + (orderDir == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down') + ' icon-fixed-width " ></i> ');
+			var $sort = $('\
+				<div class="btn-group">\
+					<input type="hidden" name="orderBy"  value="' + orderBy + '" />\
+					<input type="hidden" name="orderDir" value="' + orderDir + '" />\
+					<div class="dropdown">\
+						<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder ' + (orderBy != defaultOrderBy || orderDir != 'asc' ? ' btn-info ' : '') + '" type="button" data-toggle="dropdown">\
+							<i class="icon-sort-by-attributes" ></i>\
+						</button>\
+						<ul class="dropdown-menu pull-right" role="menu" />\
+					</div>\
+				</div>\
+			').appendTo($form);
+			
+			var $ul = $sort.find('ul');	
+	
+			for (key in data['sort']) {
+				params['orderBy'] 	= key;
+				params['orderDir'] 	= (orderDir == 'desc' ? 'asc' : 'desc');
+				
+				var $li 	= $('<li/>').appendTo($ul);
+				var $link 	= $('<a/>')
+					.appendTo($li)
+					.attr('href', '#' + data['controller'] + '?' + $.param(params))
+					.text(data['sort'][key]);
+		
+				if (orderBy == key) {
+					$link.prepend(' <i class="' + (orderDir == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down') + ' icon-fixed-width " ></i> ');
+				}
 			}
 		}
-	}
 
-
-	var $div 		= $('<div class="table-responsive" />').appendTo($crList);
-	var $table 		= $('<table class="table table-hover" />').appendTo($div);
-	var $thead		= $('<thead />').appendTo($table);
-	var $tr			= $('<tr class="label-primary" />').appendTo($thead);
-	var urlDelete 	= data['urlDelete'] == true;
-	var showId 		= data['showId'] == true;
-	if (urlDelete == true) {
-		$('<th class="checkbox">	<input type="checkbox"> </th>').appendTo($tr);	
-	}
-	if (showId == true) {
-		$('<th class="numeric"> # </th>').appendTo($tr);	
-	}
-
-	for (var columnName in data['columns']) {
-		var $th = $(' <th />')
-			.text(data['columns'][columnName])
-			.appendTo($tr);		
-
-		if ($.isPlainObject(data['columns'][columnName])) {
-			$th
-				.text(data['columns'][columnName]['value'])
-				.addClass(data['columns'][columnName]['class']);
-		}
-	}
-
-	var $tbody = $(' <tbody />').appendTo($table);
- 				
-	if (data['data'].length == 0) {
-		$( '<tr class="warning"><td colspan="' + (data['columns'].length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
-	}
-
-	for (var i=0; i<data['data'].length; i++) {
-		var row = data['data'][i];
-		var id 	= row[Object.keys(row)[0]];
-		var $tr	= $( '<tr data-controller="#' + data['controller'] + '/edit/' + id +'">').appendTo($tbody);
-		
-		if (urlDelete == true) {	
-			$('	<td class="checkbox"> <input name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
+		var $div 		= $('<div class="table-responsive" />').appendTo($crList);
+		var $table 		= $('<table class="table table-hover" />').appendTo($div);
+		var $thead		= $('<thead />').appendTo($table);
+		var $tr			= $('<tr class="label-primary" />').appendTo($thead);
+		var urlDelete 	= data['urlDelete'] == true;
+		var showId 		= data['showId'] == true;
+		if (urlDelete == true) {
+			$('<th class="checkbox">	<input type="checkbox"> </th>').appendTo($tr);	
 		}
 		if (showId == true) {
-			$('<td class="numeric" />').appendTo($tr).text(id);
+			$('<th class="numeric"> # </th>').appendTo($tr);	
 		}
-
-		for (columnName in data['columns']) {
-			var $td = $(' <td />')
-				.text(row[columnName] || '')
-				.appendTo($tr);
-			
+	
+		for (var columnName in data['columns']) {
+			var $th = $(' <th />')
+				.text(data['columns'][columnName])
+				.appendTo($tr);		
+	
 			if ($.isPlainObject(data['columns'][columnName])) {
-				$td.addClass(data['columns'][columnName]['class']);
+				$th
+					.text(data['columns'][columnName]['value'])
+					.addClass(data['columns'][columnName]['class']);
 			}
 		}
-	}
 
+		var $tbody = $(' <tbody />').appendTo($table);
+		if (data['data'].length == 0) {
+			$( '<tr class="warning"><td colspan="' + (data['columns'].length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
+		}
 
-	var $footer = $('<div class="panel panel-default footer" />').appendTo($crList);
-	var $row	= $('<div class="panel-footer row" />').appendTo($footer);
-	var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
-		
-
-	if (urlDelete == true) {
-		$('<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
-	}
-
-	// TODO: mejorar esta parte
-	var foundRows = $('<span />')
-		.text(data['foundRows'])
-		.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: 0 } )
-		.text();
-
-	$('\
-		<a href="#' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
-			<i class="icon-file-alt icon-large"></i>\
-			' + _msg['Add'] + '\
-			</a>\
-			<span>' + $.sprintf(_msg['%s rows'], foundRows)+ ' </span>\
-	').appendTo($div);;
-
-	var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
-	var $ul	= $('<ul class="pagination">').appendTo($div);
-
-	var params 		= $.getUrlVars();
-	var currentPage = params['page'];
-	delete params['page'];
-	
-	 $ul.bootstrapPaginator({
-	 	'bootstrapMajorVersion': 	3,
- 		'currentPage': 				currentPage,
- 		'numberOfPages': 			5, 
-		'totalPages': 				Math.ceil(data['foundRows'] / PAGE_SIZE),
-		'showFirst': 				true,
-
-		'itemTexts': function (type, page, current) {
-			switch (type) {
-				case "first":
-					return "1";
-				case "prev":
-					return "<";
-				case "next":
-					return ">";
-				case "last":
-					return Math.ceil(data['foundRows'] / PAGE_SIZE);
-				case "page":
-					return page;
-			}
-		},	
-		
-		'shouldShowPage': 	function(type, page, current){
-			switch(type) {
-				case "first":
-				case "last":
-					return false;
-				case "prev":
-					return (page != 1);
-				default:
-					return true;
-			}
-		},
-		
-		'pageUrl': 				function(type, page, current){
-
-                return '#' + data['controller'] + '?' + $.param(params) + '&page=' + page;
-
-            }
-			,
-		
-		'totalRows':		data['foundRows'],
-		
-		
-	'first_link':			'1',
-/*	'last_link':			ceil($list['foundRows'] /PAGE_SIZE),
-	'uri_segment'			=> 3,
-	'base_url'		 		=> current_url().'?'.http_build_query($params),
-	'total_rows'			=> $list['foundRows'],
-	'per_page'				=> PAGE_SIZE, 
-	'num_links' 			=> 2,
-	'page_query_string'		=> true,
-	'use_page_numbers'		=> true,
-	'query_string_segment' 	=> 'page',
-	'first_tag_open'		=> '<li>',
-	'first_tag_close'		=> '</li>',
-	'last_tag_open'			=> '<li>',
-	'last_tag_close'		=> '</li>',
-	'first_url'				=> '', // Alternative URL for the First Page.
-	'cur_tag_open'			=> '<li class="active"><a>',
-	'cur_tag_close'			=> '</a></li>',
-	'next_tag_open'			=> '<li>',
-	'next_tag_close'		=> '</li>',
-	'prev_tag_open'			=> '<li>',
-	'prev_tag_close'		=> '</li>',
-	'num_tag_open'			=> '<li>',
-	'num_tag_close'			=> '</li>',*/		
-	 });
-	/*
-				</ul>\
-			</div>\
-<?php
-$url = parse_url($_SERVER['REQUEST_URI']);
-parse_str(element('query', $url), $params);
-unset($params['page']);
-
-$this->pagination->initialize(array(
-	'first_link'			=> '1',
-	'last_link'				=> ceil($list['foundRows'] /PAGE_SIZE),
-	'uri_segment'			=> 3,
-	'base_url'		 		=> current_url().'?'.http_build_query($params),
-	'total_rows'			=> $list['foundRows'],
-	'per_page'				=> PAGE_SIZE, 
-	'num_links' 			=> 2,
-	'page_query_string'		=> true,
-	'use_page_numbers'		=> true,
-	'query_string_segment' 	=> 'page',
-	'first_tag_open'		=> '<li>',
-	'first_tag_close'		=> '</li>',
-	'last_tag_open'			=> '<li>',
-	'last_tag_close'		=> '</li>',
-	'first_url'				=> '', // Alternative URL for the First Page.
-	'cur_tag_open'			=> '<li class="active"><a>',
-	'cur_tag_close'			=> '</a></li>',
-	'next_tag_open'			=> '<li>',
-	'next_tag_close'		=> '</li>',
-	'prev_tag_open'			=> '<li>',
-	'prev_tag_close'		=> '</li>',
-	'num_tag_open'			=> '<li>',
-	'num_tag_close'			=> '</li>',
-)); 
+		for (var i=0; i<data['data'].length; i++) {
+			var row = data['data'][i];
+			var id 	= row[Object.keys(row)[0]];
+			var $tr	= $( '<tr data-controller="#' + data['controller'] + '/edit/' + id +'">').appendTo($tbody);
 			
-echo $this->pagination->create_links();
-?>
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
-	*/
+			if (urlDelete == true) {	
+				$('	<td class="checkbox"> <input name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
+			}
+			if (showId == true) {
+				$('<td class="numeric" />').appendTo($tr).text(id);
+			}
 	
-			
+			for (columnName in data['columns']) {
+				var $td = $(' <td />')
+					.text(row[columnName] || '')
+					.appendTo($tr);
+				
+				if ($.isPlainObject(data['columns'][columnName])) {
+					$td.addClass(data['columns'][columnName]['class']);
+				}
+			}
+		}
+
+		var $footer = $('<div class="panel panel-default footer" />').appendTo($crList);
+		var $row	= $('<div class="panel-footer row" />').appendTo($footer);
+		var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
+
+		if (urlDelete == true) {
+			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
+		}
+
+		// TODO: mejorar esta parte; hacer un metodo que formatee numeros en crFuncitons
+		var foundRows = $('<span />')
+			.text(data['foundRows'])
+			.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: 0 } )
+			.text();
+	
+		$('\
+			<a href="#' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
+				<i class="icon-file-alt icon-large"></i>\
+				' + _msg['Add'] + '\
+				</a>\
+				<span>' + $.sprintf(_msg['%s rows'], foundRows)+ ' </span>\
+		').appendTo($div);;
+	
+		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
+		var $ul	= $('<ul class="pagination">').appendTo($div);
+	
+		var params 		= $.getUrlVars();
+		var currentPage = params['page'];
+		var totalPages	= Math.ceil(data['foundRows'] / PAGE_SIZE);
+		delete params['page'];
+	
+		$ul.bootstrapPaginator({
+			'bootstrapMajorVersion': 	3,
+			'currentPage': 				currentPage,
+			'numberOfPages': 			5, 
+			'totalPages': 				totalPages,
+			'totalRows':				data['foundRows'],
+			'itemTexts': 				function (type, page, current) {
+				switch (type) {
+					case "first":
+						return "1";
+					case "prev":
+						return "<";
+					case "next":
+						return ">";
+					case "last":
+						return totalPages;
+					case "page":
+						return page;
+				}
+			},	
+			'tooltipTitles': 			function (type, page, current) {
+				return null;
+			},
+			'shouldShowPage': 			function(type, page, current){
+				switch(type) {
+					case "first":
+						return (current > 5);
+					case "prev":
+						return (current != 1);
+					case "next":
+					case "last":
+						if (current == page || current == totalPages) {
+							return false;
+						}
+						return true;
+					default:
+						return true;
+				}
+			},
+			'pageUrl': 				function(type, page, current){
+				var params 		= $.getUrlVars();
+				params['page'] 	= page;			
+				return '#' + data['controller'] + '?' + $.param(params);
+			},
+		});
 	}
 };
 
