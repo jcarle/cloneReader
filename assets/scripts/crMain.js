@@ -89,7 +89,16 @@ this.loadUrl('users');
 					switch (result['js']) {
 						case 'crList':
 							crMain.renderCrList(result, crMain.aPages[pageName]);
-							$(crMain.aPages[pageName]).find('.crList').crList();
+							var $crList = $(crMain.aPages[pageName]).find('.crList');
+							$crList.crList();
+							$crList.find('form')
+								.unbind('submit')
+								.bind('submit', function(event) {
+								event.stopPropagation();
+								var $form = $(this);
+								crMain.goToUrl($form.attr('action') + '?' + $form.serialize());
+								return false;
+							});
 							break;
 					}
 				}
@@ -103,7 +112,7 @@ this.loadUrl('users');
 		var $crList		= $('<div class="crList"></div>').appendTo($parent);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
 		var $form 		= $('\
-			<form method="get" class="panel-heading form-inline" id="frmCrList" role="search">\
+			<form method="get" class="panel-heading form-inline" id="frmCrList" role="search" action="' + data['controller'] + '" >\
 				<div class="btn-group">\
 					<div class="input-group">\
 						<span class="input-group-addon">\
@@ -119,6 +128,10 @@ this.loadUrl('users');
 		');
 		$form.appendTo($panel);
 		$form.find('input[name=filter]').val(params['filter']);
+		
+		if ($.trim(params['filter']) != '' && $.isMobile() == false) {
+			$form.find('input[name=filter]').focus();
+		}
 
 // TODO: implementar los filtros
 				/*
@@ -197,7 +210,7 @@ if ($filters != null) {
 
 		var $tbody = $(' <tbody />').appendTo($table);
 		if (data['data'].length == 0) {
-			$( '<tr class="warning"><td colspan="' + (data['columns'].length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
+			$( '<tr class="warning"><td colspan="' + (Object.keys(data['columns']).length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
 		}
 
 		for (var i=0; i<data['data'].length; i++) {

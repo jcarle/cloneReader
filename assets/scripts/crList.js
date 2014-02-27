@@ -72,7 +72,7 @@
 			}
 		, this));
 		
-		this.$form.on('submit', function() {
+		this.$form.bind('submit', function() {
 			$.showWaiting(true);
 		});
 		this.$filter = this.$form.find('input[name=filter]');
