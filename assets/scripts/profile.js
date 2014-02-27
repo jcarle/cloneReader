@@ -28,9 +28,7 @@ $.Profile = {
 			'success':		
 				$.proxy(
 					function (result) {
-						if (result['code'] != true) {
-							return $(document).crAlert(result['result']);
-						}
+						if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
 						
 						result = $(result['result']);
 						$content.children().remove();
@@ -39,13 +37,6 @@ $.Profile = {
 						$('.content > .pageTitle h2').text( $content.find('.panel-heading').text() );
 					}
 				, this),
-			'error':
-				function (result) {
-					result = $.parseJSON(result.responseText);
-					if (result['code'] == false) {
-						return $(document).crAlert(result['result']);
-					}
-				}
 		});
 	}
 };

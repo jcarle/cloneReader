@@ -150,13 +150,13 @@ class Users extends CI_Controller {
 			if ($code == true) {
 				$this->Users_Model->save($this->input->post());
 			}
-		}
 		
-		if ($this->input->is_ajax_request()) {
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> validation_errors() 
-			));
+			if ($this->input->is_ajax_request()) {
+				return $this->load->view('ajax', array(
+					'code'		=> $code, 
+					'result' 	=> validation_errors() 
+				));
+			}
 		}
 				
 		$this->load->view('includes/template', array(

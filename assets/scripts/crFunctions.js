@@ -25,7 +25,7 @@ $.extend({
 		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
 		for(var i = 0; i < hashes.length; i++) {
 			var hash = hashes[i].split('=');
-			if (hash.length == 2) {
+			if (hash.length >= 2) {
 				vars[hash[0]] = hash[1];
 			}
 		}
@@ -286,6 +286,10 @@ $.extend({
 		location.href = url;
 	},
 	
+	goToHashUrl: function(url) {
+		location.hash = url;
+	},	
+	
 	ISODateString: function(d){
 		function pad(n) {return n<10 ? '0'+n : n}
 		return d.getUTCFullYear()+'-'
@@ -386,6 +390,14 @@ $.extend({
 			.css( {'opacity': 0.3  } )
 			.show();
 		$('.modal:last').css('z-index', 1040);;
+	},
+	
+	hasAjaxErrorAndShowAlert: function(result) {
+		if (result['code'] != true) {
+			$(document).crAlert(result['result']);
+			return true;
+		}
+		return false;
 	}
 });
 
@@ -444,6 +456,9 @@ $(document).ready(function() {
 					, this)
 				});
 			}
+			
+			var result = $.parseJSON(jqXHR.responseText);
+			$.hasAjaxErrorAndShowAlert(result);
 		}
 	);
 });

@@ -2,9 +2,7 @@ $.Feedback = {
 	init: function() { 	},
 	
 	onSaveFeedback: function(result) {
-		if (result['code'] != true) {
-			return $(document).crAlert(result['result']);
-		}
+		if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
 
 		var $alert = $('<div class="alert alert-success"> <strong>' + _msg['Thanks for contacting us'] + ' </strong> </div>');
 		$('#frmCommentEdit')

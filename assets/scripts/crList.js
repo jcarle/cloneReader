@@ -46,7 +46,7 @@
 			}
 		);
 		
-		this.$crList.find('.btnAdd').click(
+		this.$crList.find('.btnAdd').bind('click',
 			function (event) {
 				$.goToUrl($(this).attr('href') + '?urlList=' + $.base64Encode(location.href));
 				event.preventDefault;
@@ -89,10 +89,10 @@
 				}
 			, this));
 
-		this.$table.find('tbody tr').click(
-				function (event) {
-					$.goToUrl($(this).data('controller') + '?urlList=' + $.base64Encode(location.href));
-				}
+		this.$table.find('tbody tr').bind('click',
+			function (event) {
+				$.goToUrl($(this).data('controller') + '?urlList=' + $.base64Encode(location.href));
+			}
 		);
 		
 		this.$table.find('tbody tr td.checkbox').click(

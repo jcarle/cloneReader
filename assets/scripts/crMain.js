@@ -12,11 +12,10 @@ crMain = {
 		
 		$(window).on('hashchange',function(){
 cn(location.hash.slice(1));
-			
 			crMain.loadUrl(location.hash.slice(1));
 		});
 		
-this.loadUrl('users');
+		$.goToHashUrl(PAGE_HOME);
 	},
 	
 	renderMenu: function(aMenu, className, $parent){
@@ -55,15 +54,8 @@ this.loadUrl('users');
 		}
 	},
 	
-	goToUrl: function(controller) {
-		location.hash = controller;
-	},
-	
 	loadUrl: function(controller) {
-		var pageName = location.hash.slice(1);		
-		if (pageName.indexOf('?') != -1){
-			pageName = pageName.substr(0, pageName.indexOf('?'));
-		}
+		var pageName = this.getPageName();		
 
 		if (this.aPages[pageName] == null) {
 			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.container'));
@@ -85,31 +77,93 @@ this.loadUrl('users');
 						return $(document).crAlert(response['result']);
 					}
 					
-					var result = response['result'];
-					switch (result['js']) {
+					var data 	= response['result'];
+					var $page 	= crMain.aPages[pageName];
+					
+					$page.children().remove();
+					
+					crMain.renderPageTitle(data, $page);
+					
+					switch (data['js']) {
 						case 'crList':
-							crMain.renderCrList(result, crMain.aPages[pageName]);
+							crMain.renderCrList(data, $page);
 							var $crList = $(crMain.aPages[pageName]).find('.crList');
+							var hash 	= location.hash.slice(1);
 							$crList.crList();
 							$crList.find('form')
 								.unbind('submit')
 								.bind('submit', function(event) {
 								event.stopPropagation();
 								var $form = $(this);
-								crMain.goToUrl($form.attr('action') + '?' + $form.serialize());
+								$.goToHashUrl($form.attr('action') + '?' + $form.serialize());
 								return false;
 							});
+							
+							
+							
+							// TODO: revisar esta logica, quizas convenga meterla en crList
+							$crList.find('table tbody tr')
+								.unbind('click')
+								.bind('click',
+									function (event) {
+										$.goToHashUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode(hash)));
+									}
+								);
+								
+							$crList.find('.btnAdd')
+								.unbind('click')
+								.bind('click',
+									function (event) {
+										$.goToHashUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(hash)));
+										event.preventDefault;
+										return false;
+									}
+								);
+									
+							break;
+						case 'crForm':
+							crMain.renderCrForm(data, $page);
 							break;
 					}
 				}
 		})		
 	},
 	
-	renderCrList: function(data, $parent) {
-		$parent.children().remove();
-		
+	
+	renderPageTitle: function(data, $page) {
+		if (data['breadcrumb'] != null) {
+			$('<ol class="breadcrumb">').appendTo($page);
+// TODO: implementar!			
+			/*
+			for ($breadcrumb as $link) {
+				if (element('active', $link) == true) {
+					echo '<li class="active"> '.$link['text'].'</li>';
+				}
+				else {
+					echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
+				} 
+			}*/
+		}
+
+		if (data['showTitle'] == null) {
+			data['showTitle'] = true;
+		}
+		if (data['showTitle'] == true) {
+			$pageTitle = $('\
+				<div class="pageTitle">\
+					<h2> <small> </small></h2>\
+				</div>\
+			').appendTo($page);
+			
+			$pageTitle.find('h2').text(data['title']);
+		}
+
+	},
+	
+	
+	renderCrList: function(data, $page) {
 		var params 		= $.getUrlVars();
-		var $crList		= $('<div class="crList"></div>').appendTo($parent);
+		var $crList		= $('<div class="crList"></div>').appendTo($page);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
 		var $form 		= $('\
 			<form method="get" class="panel-heading form-inline" id="frmCrList" role="search" action="' + data['controller'] + '" >\
@@ -311,6 +365,75 @@ if ($filters != null) {
 				return '#' + data['controller'] + '?' + $.param(params);
 			},
 		});
+	},
+	
+	renderCrForm: function(data, $page) {
+// TODO: revisar si en modo webPage hace falta pasar el param urlList por decodeURIComponent		
+		var pageName 	= this.getPageName();
+		var params 		= $.getUrlVars();
+		var urlList 	= $.base64Decode(decodeURIComponent(params['urlList']));
+		var buttons 	= [
+			'<button type="button" class="btn btn-default" onclick="$.goToHashUrl(\'' + urlList + '\');"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+		];
+		if (data['urlDelete'] == null) {
+			delete buttons[1];
+		}
+		
+		data = $.extend({
+			'action': 	pageName, 
+			'frmId': 	'frmId',
+			'buttons': 	buttons
+		}, data);
+					
+
+		var $form = $('<form action="' + data['action'] + '" />')
+			.attr('id', data['frmId'])
+			.addClass('panel panel-default crForm form-horizontal')
+			.attr('role', 'form')
+			.appendTo($page);
+
+		var $div = $('<div class="panel-body" />').appendTo($form); 
+
+// TODO: render fields
+//$aFields = renderCrFormFields($form);
+//echo implode(' ', $aFields);
+
+		if (data['buttons'].length != 0) {
+			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);
+			for (var i=0; i<data['buttons'].length; i++) {
+				$div
+					.append($(data['buttons'][i]))
+					.append(' ');
+			}
+		}
+
+/* 
+// TODO: revisar la galeria
+$fieldGallery = getCrFieldGallery($form);
+if ($fieldGallery != null) {
+	$this->load->view('includes/uploadfile', array(
+		'fileupload' => array ( 
+			'entityName' 	=> $fieldGallery['entityName'],
+			'entityId'		=> $fieldGallery['entityId']
+		) 
+	));
+}*/
+
+		
+	},
+
+	getPageName: function() {
+		var pageName = location.hash.slice(1);		
+		if (pageName.indexOf('?') != -1){
+			pageName = pageName.substr(0, pageName.indexOf('?'));
+		}
+		var position = pageName.indexOf('/edit/');
+		if (position != -1){
+			pageName = pageName.substr(0, position + 5);
+		}
+		return pageName;
 	}
 };
 

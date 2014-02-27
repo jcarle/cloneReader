@@ -123,6 +123,7 @@ $aMenu = array(
 ); 
 
 $aScripts[] = ' var APP_MENU = '.json_encode($aMenu).'; ';
+$aScripts[] = ' var PAGE_HOME = \'users\'; ';
 
 if (isset($aServerData)) {
 	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
@@ -169,28 +170,4 @@ echo implode(' ', $aScripts);
 		<div></div>
 	</nav>
 	<div class="container content">
-<?php
-if (isset($breadcrumb)) {
-	echo '<ol class="breadcrumb">';
-	foreach ($breadcrumb as $link) {
-		if (element('active', $link) == true) {
-			echo '<li class="active"> '.$link['text'].'</li>';
-		}
-		else {
-			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
-		} 
-	}
-	echo '</ol>';  
-}
-
-if (!isset($showTitle)) {
-	$showTitle = true;
-}
-if ($showTitle == true) {
-	echo '  <div class="pageTitle">
-				<h2>'. $title .' <small> </small></h2>
-			</div>';
-}
-
-
 

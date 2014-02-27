@@ -1700,10 +1700,8 @@ console.timeEnd("t1");
 			'success': 	
 				$.proxy( 
 					function (result) {
-						if (result['code'] != true) {
-							return $(document).crAlert(result['result']);
-						}
-						
+						if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
+
 						$(result['result']).appendTo($('body'));
 						var $modal	= $('#frmShareByEmail').parents('.modal');
 						$.showModal($modal, false);
@@ -1715,9 +1713,7 @@ console.timeEnd("t1");
 						return;
 					}
 					result = $.parseJSON(result.responseText);
-					if (result['code'] == false) {
-						return $(document).crAlert(result['result']);
-					}
+					$.hasAjaxErrorAndShowAlert(result);
 				}
 		});
 	},
@@ -1736,22 +1732,13 @@ console.timeEnd("t1");
 			'success': 	
 				$.proxy( 
 					function (result) {
-						if (result['code'] != true) {
-							return $(document).crAlert(result['result']);
-						}
+						if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
 						
 						$(result['result']).appendTo($('body'));
 						this.$keyboardShortcut	= $('#frmKeyboardShortcut').parents('.modal');
 						$.showModal(this.$keyboardShortcut, false);
 					}
 				, this),
-			'error':
-				function (result) {
-					result = $.parseJSON(result.responseText);
-					if (result['code'] == false) {
-						return $(document).crAlert(result['result']);
-					}
-				}
 		});
 	}
 };

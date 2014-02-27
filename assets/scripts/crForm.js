@@ -212,9 +212,7 @@
 								'done': 		
 									function (event, data) {
 										var result = data.result;
-										if (result['code'] == false) {
-											return $(document).crAlert(result['result']);
-										}
+										if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
 										$(document).crAlert({
 											'msg': 		result['result']['msg'],
 											'callback': function() {
@@ -228,9 +226,7 @@
 											return $(document).crAlert( _msg['Not connected. Please verify your network connection'] );
 										}
 										var result = $.parseJSON(data.jqXHR.responseText);
-										if (result['code'] == false) {
-											return $(document).crAlert(result['result']);
-										}
+										$.hasAjaxErrorAndShowAlert(result);
 									}
 							});
 						case 'numeric':
@@ -354,13 +350,6 @@
 							}
 						}
 					, this),
-				'error': 	
-					function (result) {
-						result = $.parseJSON(result.responseText);
-						if (result['code'] == false) {
-							return $(document).crAlert(result['result']);
-						}
-					}
 			});
 		},
 		
@@ -465,13 +454,6 @@
 		
 						$('img', $gallery).imgCenter( { show: false, createFrame: true } );
 					},
-				'error': 
-					function (result) {
-						result = $.parseJSON(result.responseText);
-						if (result['code'] == false) {
-							return $(document).crAlert(result['result']);
-						}
-					}
 			});
 		},
 		
@@ -483,9 +465,7 @@
 				'success': 		
 					$.proxy( 
 						function (result) {
-							if (result['code'] != true) {
-								return $(document).crAlert(result['result']);
-							}
+							if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
 							
 							result = $(result['result']);
 							field.$input.children().remove();
@@ -524,14 +504,7 @@
 							field.$input.change();
 							this.resizeWindow();
 						}
-					, this),
-				'error':
-					function (result) {
-						result = $.parseJSON(result.responseText);
-						if (result['code'] == false) {
-							return $(document).crAlert(result['result']);
-						}
-					}
+					, this)
 			});
 		},
 		
@@ -560,14 +533,7 @@
 		
 							$subform.find('select, input[type=text]').first().focus();
 						}
-					, this),
-				'error': 
-					function (result) {
-						result = $.parseJSON(result.responseText);
-						if (result['code'] == false) {
-							return $(document).crAlert(result['result']);
-						}
-					}
+					, this)
 			});
 		},
 		
