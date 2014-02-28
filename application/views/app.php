@@ -1,19 +1,7 @@
 <?php
 $CI = &get_instance();
 
-$CI->load->driver('cache', array('adapter' => 'file'));
-
 $userId = $this->session->userdata('userId');
-
-if (!is_array($CI->cache->file->get('MENU_PROFILE_'.$userId))) {
-	$CI->cache->file->save('MENU_PROFILE_'.$userId, $CI->Menu_Model->getMenu(MENU_PROFILE));
-}
-if (!is_array($CI->cache->file->get('MENU_PUBLIC_'.$userId))) {
-	$CI->cache->file->save('MENU_PUBLIC_'.$userId, $CI->Menu_Model->getMenu(MENU_PUBLIC));  
-}
-if (!is_array($CI->cache->file->get('MENU_ADMIN_'.$userId))) {
-	$CI->cache->file->save('MENU_ADMIN_'.$userId, $CI->Menu_Model->getMenu(MENU_ADMIN));
-}
 
 $this->load->spark('carabiner/1.5.4');
 
@@ -94,40 +82,13 @@ $CI->carabiner->display('js');
 		var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 		var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;
+		
+		var PAGE_HOME 	= 'users';
+		var siteName	= '<?php echo config_item('siteName'); ?>';
+		var _msg 		= {};
 <?php
 
-// TODO: pedir las traducciones y el menu por ajax
 // TODO: sacar todo el codigo php de aca!
-
-
-if (!isset($langs)) {
-	$langs = array();
-}
-
-$langs = array_merge($langs, array_keys($CI->lang->language));
-
-$langs  = getLangToJs($langs);
-$aScripts[] = langJs($langs);
-
-
-$aMenu = array(
-	'MENU_PROFILE' => array(
-		'items' 	=> $CI->cache->file->get('MENU_PROFILE_'.$userId), 
-		'className'	=> 'menuProfile nav navbar-nav pull-right',
-		'parent'	=> '.navbar-ex1-collapse'
-	),
-	'MENU_PUBLIC' 	=> array(
-		'items' 	=> $CI->cache->file->get('MENU_PUBLIC_'.$userId), 
-		'className' =>'menuPublic',
-		'parent'	=> '.menu.label-primary div',
-	)
-); 
-
-$aScripts[] = ' 
-	var APP_MENU 	= '.json_encode($aMenu).'; 
-	var PAGE_HOME 	= \'users\';
-	var siteName	= \''.config_item('siteName').'\'; 
-';
 
 if (isset($aServerData)) {
 	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';

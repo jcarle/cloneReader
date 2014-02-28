@@ -1,12 +1,25 @@
 crMain = {
 	aPages: [],
 	
-	init: function(aMenu) {
-cn('crMain.init');		
-		for (var menuName in aMenu) {
-			var $menu = $(aMenu[menuName]['parent']);
-			crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
-		}
+	init: function() {
+		$.ajax({
+			'url': 		base_url + 'app/selectMenuAndTranslations',
+			'async':	false,
+			'success': 
+				function(result) {
+					_msg = result['result']['aLangs']; // TODO: meter _msg en algun lado, que no sea global
+		
+					var aMenu = result['result']['aMenu'];
+					for (var menuName in aMenu) {
+						var $menu = $(aMenu[menuName]['parent']);
+						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
+					}
+				}
+		});
+
+
+
+
 		
 		
 		$(window).on('hashchange',function(){
@@ -405,5 +418,5 @@ if ($fieldGallery != null) {
 
 
 $(document).ready( function() { 
-	crMain.init(APP_MENU); } 
-);
+	crMain.init(); 
+});

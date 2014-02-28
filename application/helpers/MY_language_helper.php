@@ -31,6 +31,7 @@ function langJs($lines)
 /**
  * lags que se utilizan en js
  */
+ // TODO: renombrar!
 function getLangToJs($langs) {
 	$langs[] = 'DATE_FORMAT';
 	$langs[] = 'MOMENT_DATE_FORMAT';
