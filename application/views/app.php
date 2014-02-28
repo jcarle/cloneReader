@@ -58,8 +58,8 @@ if (isset($aCss)) {
 	}
 }
 
-$aScripts = appendCrFormJsAndCss($view, (isset($form) ? $form : null), (isset($hasForm) ? $hasForm : null), (isset($hasGallery) ? $hasGallery : null), $aScripts); 
-$aScripts = appendCrListJsAndCss($view, (isset($list) ? $list : null), $aScripts);
+$aScripts = appendCrFormJsAndCss(null, null, true, true, $aScripts); 
+$aScripts = appendCrListJsAndCss(null, true, $aScripts);
 
 
 if (!isset($meta)) {
@@ -162,7 +162,7 @@ echo implode(' ', $aScripts);
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand logo" href="<?php echo base_url()?>"> <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
+			<a class="navbar-brand logo" href="<?php echo base_url('app')?>"> <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
 		</div>
 		<div class="navbar-collapse collapse navbar-ex1-collapse "></div>
 	</nav>

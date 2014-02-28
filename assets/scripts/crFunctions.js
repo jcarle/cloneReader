@@ -25,7 +25,7 @@ $.extend({
 		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
 		for(var i = 0; i < hashes.length; i++) {
 			var hash = hashes[i].split('=');
-			if (hash.length >= 2) {
+			if (hash.length == 2) {
 				vars[hash[0]] = hash[1];
 			}
 		}
@@ -393,6 +393,10 @@ $.extend({
 	},
 	
 	hasAjaxErrorAndShowAlert: function(result) {
+		if (result == null) {
+			$(document).crAlert('error');
+			return true;
+		}
 		if (result['code'] != true) {
 			$(document).crAlert(result['result']);
 			return true;

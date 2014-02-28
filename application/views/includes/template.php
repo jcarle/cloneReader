@@ -6,7 +6,7 @@ $CI = &get_instance();
 
 
 //sleep(5);
-/*
+
 if ($CI->input->is_ajax_request()) {
 	switch ($view) {
 		case 'includes/crList':
@@ -34,9 +34,9 @@ if ($CI->input->is_ajax_request()) {
 	}
 }
 
-$this->load->view('app');
-*/
 
+/*
 $this->load->view('includes/header');
 $this->load->view($view);
 $this->load->view('includes/footer');
+*/
