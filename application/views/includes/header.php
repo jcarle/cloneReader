@@ -38,6 +38,7 @@ $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('crFunctions.js');
 $CI->carabiner->js('crAlert.js');
+$CI->carabiner->js('crMenu.js');
 
 $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-theme.css');
@@ -204,23 +205,28 @@ function renderMenu($aMenu, $className = null){
 	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
-		$icon 	= '';
-		$label 	= $CI->lang->line($aMenu[$i]['label']);
+		$icon 		= '';
+		$hasChilds 	= count($aMenu[$i]['childs']) > 0;
+		$attr		= '';
+		$label 		= $CI->lang->line($aMenu[$i]['label']);
 		if ($label == '') {
 			$label = $aMenu[$i]['label'];
 		}
 		if ($aMenu[$i]['icon'] != null) {
 			$icon = ' <i class="'.$aMenu[$i]['icon'].'" ></i> ';
 		}
+		if ($hasChilds == true) {
+			$attr = ' class="dropdown-toggle" data-toggle="dropdown" ';
+		}		
 		
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li> <a title="'.$label.'" href="'.base_url().$aMenu[$i]['url'].'">'.$icon.$label.'</a>';
+			$sTmp .= '	<li> <a title="'.$label.'" href="'.base_url().$aMenu[$i]['url'].'" '.$attr.'>'.$icon.$label.'</a>';
 		}
 		else {
-			$sTmp .= '	<li> <a title="'.$label.'">'.$icon.$label.'</a>';
+			$sTmp .= '	<li> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';
 		} 	
 		
-		if (count($aMenu[$i]['childs']) > 0) {			
+		if ($hasChilds == true) {			
 			$sTmp .= renderMenu($aMenu[$i]['childs']);
 		}
 		

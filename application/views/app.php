@@ -40,6 +40,7 @@ $CI->carabiner->js('crMain.js');
 $CI->carabiner->js('crFunctions.js');
 $CI->carabiner->js('crAlert.js');
 
+$CI->carabiner->js('crMenu.js');
 $CI->carabiner->js('crList.js');
 $CI->carabiner->js('bootstrap-paginator.js');
 
@@ -122,8 +123,11 @@ $aMenu = array(
 	)
 ); 
 
-$aScripts[] = ' var APP_MENU = '.json_encode($aMenu).'; ';
-$aScripts[] = ' var PAGE_HOME = \'users\'; ';
+$aScripts[] = ' 
+	var APP_MENU 	= '.json_encode($aMenu).'; 
+	var PAGE_HOME 	= \'users\';
+	var siteName	= \''.config_item('siteName').'\'; 
+';
 
 if (isset($aServerData)) {
 	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
@@ -147,7 +151,7 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 echo implode(' ', $aScripts);
 ?>
 	</script>
-	<title><?php echo $title.' | '.config_item('siteName'); ?> </title>
+	<title><?php echo config_item('siteName'); ?> </title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">

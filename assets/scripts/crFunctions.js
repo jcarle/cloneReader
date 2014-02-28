@@ -316,46 +316,6 @@ $.extend({
 		$element.text( moment($element.text(), 'YYYY-MM-DDTHH:mm:ss' ).format( format) );		
 	},
 	
-	initMenu: function() { // TODO: mover esto de aca!
-		var $menuProfile = $('ul.menuProfile');
-		
-		var $iconGear 	= $menuProfile.find('.icon-gear');
-		var $settings 	= $iconGear.parent();
-		var label		= $settings.text();
-		$settings
-			.addClass('settings').css('cursor', 'pointer')
-			.html('')
-			.append($iconGear)
-			.append('<span>' + label + '</span>');
-		$settings.parent().find('> ul > li').addClass('dropdown-submenu dropdown-submenu-left');	
-
-		
-		
-		$menuProfile.find('.lang-' + langId ).before('<i class="icon-ok icon-fixed-width"></i>');
-		$menuProfile.find('.icon-flag-alt').parent()
-			.append('<span class="badge pull-right">' + langId + '</span>')
-			.addClass('lang').css('cursor', 'pointer');
-	
-// TODO: agregar esta logica al render; anda mal en modo [app]		
-//		$menuProfile.find('li ul').addClass('dropdown-menu');
-//		$menuProfile.find('li a').addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
-
-		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
-			function(event) {
-				event.preventDefault(); 
-				event.stopPropagation(); 
-				
-				var expand = $(this).parent().hasClass('open');
-				
-				$('ul.dropdown-menu [data-toggle=dropdown]').parent().removeClass('open');
-				
-				if (expand == false) {
-					$(this).parent().addClass('open');
-				}
-			}
-		);
-	},
-	
 	showModal: function($modal, keyboard, onCloseRemove) {
 		$('body').addClass('modal-open');
 		
@@ -407,7 +367,7 @@ $.extend({
 
 
 $(document).ready(function() {
-	$.initMenu();
+	crMenu.initMenu();
 	resizeWindow();
 	
 	$.showWaiting(true);
