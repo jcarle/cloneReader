@@ -81,10 +81,10 @@ $CI->carabiner->display('js');
 		var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 		var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;
-		
-		var PAGE_HOME 	= 'users';
+		var PAGE_HOME 	= 'users'; // TODO: harckodeta! 
 		var siteName	= '<?php echo config_item('siteName'); ?>';
 		var _msg 		= {};
+		var appType		= 'appAjax';
 <?php
 
 // TODO: sacar todo el codigo php de aca!

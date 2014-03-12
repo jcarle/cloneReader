@@ -287,9 +287,12 @@ $.extend({
 	},
 	
 	goToHashUrl: function(url) {
-cn('goToHashUrl ' + url);
 		location.hash = url;
 	},	
+	
+	getHashUrl: function() {
+		return location.hash.slice(1);
+	},
 	
 	ISODateString: function(d){
 		function pad(n) {return n<10 ? '0'+n : n}
