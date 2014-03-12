@@ -27,7 +27,6 @@ $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('crMain.js');
 $CI->carabiner->js('crFunctions.js');
 $CI->carabiner->js('crAlert.js');
-
 $CI->carabiner->js('crMenu.js');
 $CI->carabiner->js('crList.js');
 $CI->carabiner->js('bootstrap-paginator.js');
@@ -90,10 +89,6 @@ $CI->carabiner->display('js');
 
 // TODO: sacar todo el codigo php de aca!
 
-if (isset($aServerData)) {
-	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
-}
-
 if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
 	$aScripts[] = "
 
@@ -127,7 +122,7 @@ echo implode(' ', $aScripts);
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand logo" href="<?php echo base_url('app')?>"> <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
+			<a class="navbar-brand logo" > <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
 		</div>
 		<div class="navbar-collapse collapse navbar-ex1-collapse "></div>
 	</nav>

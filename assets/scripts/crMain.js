@@ -2,6 +2,8 @@ crMain = {
 	aPages: [],
 	
 	init: function() {
+		$('.navbar-brand.logo').attr('href', base_url + 'app#' + PAGE_HOME);
+		
 		$.ajax({
 			'url': 		base_url + 'app/selectMenuAndTranslations',
 			'async':	false,
@@ -17,22 +19,29 @@ crMain = {
 				}
 		});
 
-
-
-
-		
-		
 		$(window).on('hashchange',function(){
-cn(location.hash.slice(1));
-			crMain.loadUrl(location.hash.slice(1));
-		});
+			var controller = location.hash.slice(1);
+			if (controller.trim() == '') {
+				controller = PAGE_HOME;
+			}
+			crMain.loadUrl(controller);
+		});		
 		
-		$.goToHashUrl(PAGE_HOME);
+
+		var hash = PAGE_HOME;
+		if (location.hash.slice(1) != '') {
+			hash = location.hash.slice(1);
+		}		
+		if (hash != location.hash.slice(1)) {
+			$.goToHashUrl(hash);
+		}
+		else {
+			crMain.loadUrl(hash);
+		}
 	},
 	
 	loadUrl: function(controller) {
 		var pageName = this.getPageName();		
-
 		if (this.aPages[pageName] == null) {
 			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.container'));
 		}
@@ -46,6 +55,7 @@ cn(location.hash.slice(1));
 				
 		this.ajax = $.ajax({
 			'url': 		base_url + controller,
+			'data': 	{ 'appType': 'ajax' },
 			'async':	true,
 			'success': 
 				function(response) {
@@ -98,7 +108,8 @@ cn(location.hash.slice(1));
 									
 							break;
 						case 'crForm':
-							crMain.renderCrForm(data, $page);
+							var $form = crMain.renderCrForm(data, $page);
+							$form.crForm(data);
 							break;
 					}
 				}
@@ -347,7 +358,6 @@ if ($filters != null) {
 	
 	renderCrForm: function(data, $page) {
 // TODO: revisar si en modo webPage hace falta pasar el param urlList por decodeURIComponent		
-		var pageName 	= this.getPageName();
 		var params 		= $.getUrlVars();
 		var urlList 	= $.base64Decode(decodeURIComponent(params['urlList']));
 		var buttons 	= [
@@ -358,9 +368,9 @@ if ($filters != null) {
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
 		}
-		
+
 		data = $.extend({
-			'action': 	pageName, 
+			'action': 	this.getFormAction(), 
 			'frmId': 	'frmId',
 			'buttons': 	buttons
 		}, data);
@@ -374,9 +384,10 @@ if ($filters != null) {
 
 		var $div = $('<div class="panel-body" />').appendTo($form); 
 
-// TODO: render fields
-//$aFields = renderCrFormFields($form);
-//echo implode(' ', $aFields);
+// TODO: renderear los fields con js, para transmitir menos datos
+		for(var i=0; i<data['aFields'].length; i++)  {
+			$(data['aFields'][i]).appendTo($div);
+		}
 
 		if (data['buttons'].length != 0) {
 			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);
@@ -399,9 +410,17 @@ if ($fieldGallery != null) {
 	));
 }*/
 
-		
+		return $form;
 	},
 
+	getFormAction: function() {
+		var pageName = location.hash.slice(1);		
+		if (pageName.indexOf('?') != -1){
+			pageName = pageName.substr(0, pageName.indexOf('?'));
+		}
+		return pageName;
+	},
+	
 	getPageName: function() {
 		var pageName = location.hash.slice(1);		
 		if (pageName.indexOf('?') != -1){

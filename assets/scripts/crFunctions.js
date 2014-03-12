@@ -287,6 +287,7 @@ $.extend({
 	},
 	
 	goToHashUrl: function(url) {
+cn('goToHashUrl ' + url);
 		location.hash = url;
 	},	
 	
@@ -410,6 +411,9 @@ $(document).ready(function() {
 	
 	$(document).ajaxError(
 		function(event, jqXHR, ajaxOptions) {
+			if (jqXHR.status === 0 && jqXHR.statusText === 'abort') {
+				return;
+			}
 			if (jqXHR.status === 0 && jqXHR.statusText === 'error') {
 				$(document).crAlert( {
 					'msg': 			_msg['Not connected. Please verify your network connection'],

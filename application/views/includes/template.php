@@ -4,10 +4,9 @@
 
 $CI = &get_instance();
 
-
 //sleep(5);
 
-if ($CI->input->is_ajax_request()) {
+if ($CI->input->get('appType') == 'ajax') { 
 	switch ($view) {
 		case 'includes/crList':
 			return $this->load->view('ajax', array(
@@ -21,6 +20,7 @@ if ($CI->input->is_ajax_request()) {
 				)
 			));
 		case 'includes/crForm':
+			$form['aFields'] = renderCrFormFields($form);
 			return $this->load->view('ajax', array(
 				'view' 		=> null,
 				'code'		=> true, 
@@ -35,8 +35,7 @@ if ($CI->input->is_ajax_request()) {
 }
 
 
-/*
+
 $this->load->view('includes/header');
 $this->load->view($view);
 $this->load->view('includes/footer');
-*/
