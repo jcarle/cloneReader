@@ -72,12 +72,16 @@ crMain = {
 					
 					switch (data['js']) {
 						case 'crList':
-							data['$parentNode'] = $(crMain.aPages[pageName]);
-							$(null).crList(data);
+							$(null).crList($.extend({
+								'autoRender': 	true,
+								'$parentNode': 	$(crMain.aPages[pageName])
+							} , data));
 							break;
 						case 'crForm':
-							data['$parentNode'] = $(crMain.aPages[pageName]);
-							$(null).crForm(data);
+							$(null).crForm( $.extend({
+								'autoRender': 	true,
+								'$parentNode': 	$(crMain.aPages[pageName])
+							} , data));
 							break;
 					}
 				}

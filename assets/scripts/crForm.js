@@ -6,9 +6,16 @@
 	methods = {
 		init : function( options ) {
 			var $element = $(this);
-			if ($element.length == 0) { // Si es llamado desde null; se auto reenderea. ej: $(null).crForm(data); Se utiliza en appAjax
-				$element = renderCrForm(options, options['$parentNode']);
-			}			
+			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
+			// Se utiliza en appAjax
+			if ($element.length == 0) { 
+				if (options.autoRender == true && options.$parentNode != null) {
+					$element = renderCrForm(options, options.$parentNode);
+				}
+				else { 
+					return null;
+				}
+			}
 			
 			if ($element.data('crForm') == null) {
 				$element.data('crForm', new crForm($element, options));
@@ -692,10 +699,11 @@
 		var $div = $('<div class="panel-body" />').appendTo($form); 
 
 // TODO: renderear los fields con js, para transmitir menos datos
-cn(data);
-		for(var i=0; i<data['aFields'].length; i++)  {
-			$(data['aFields'][i]).appendTo($div);
-		}
+this.renderCrFormFields(data.fields, $div);
+/*
+for(var i=0; i<data['aFields'].length; i++)  {
+	$(data['aFields'][i]).appendTo($div);
+}*/
 
 		if (data['buttons'].length != 0) {
 			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);
@@ -719,5 +727,200 @@ if ($fieldGallery != null) {
 }*/
 
 		return $form;
+	},
+	
+	
+	renderCrFormFields = function(fields, $parentNode) {
+		for (var name in fields) {
+			var field = fields[name];
+
+			var $fieldset = $('\
+				<fieldset class="form-group">\
+					<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">' + field['label'] + '</label>\
+					<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> </div>\
+				</fieldset>');
+			$div = $fieldset.find('div');
+		
+		
+			switch (field['type']) {
+				case 'hidden':
+					$fieldset = $('<input type="hidden" name="' + name + '" value="' + field['value'] + '" />');
+					break;
+				case 'text':
+				case 'numeric':
+					var $input = $('<input type="text" />')
+						.attr('name', name)
+						.val( field['value'])
+						.addClass('form-control')
+						.attr('placeholder',  field['placeholder'])
+						.appendTo($div);
+					
+					if (field['disabled'] == true) {
+						$input.attr('disabled', 'disabled');
+					}					
+					break;
+				case 'date':
+				case 'datetime':
+					var $input = $('<input type="text" />')
+						.attr('name', name)
+						.val(field['value'])
+						.addClass('form-control')
+						.attr('size', field['type'] == 'datetime' ? 18 : 9)
+						.attr('placeholder', _msg['DATE_FORMAT'] + (field['type'] == 'datetime' ? ' hh:mm:ss' : '') );
+
+					$datetime = $('<div class="input-group" style="width:1px" />').appendTo($div);
+					$datetime.append($input);
+					$datetime.append($('<span class="input-group-addon add-on"><i class="icon-remove"></i></span>'));
+					$datetime.append($('<span class="input-group-addon add-on"><i class="icon-th"></i></span>'));
+					break;
+				case 'password':
+					$div.append('<input type="password" name="' + name + '" class="form-control" />');
+					break;
+				case 'textarea':
+					var $input = $('<textarea/>')
+						.attr('name', field['value'])
+						.addClass('form-control')
+						.appendTo($div);
+					break;
+					
+					/*			
+				case 'typeahead':
+					$fieldset[] = $.sprintf($fieldset, 
+						'<input name="'.name.'"  type="text" class="form-control" />'
+					);
+					break;		
+					*/	
+				case 'dropdown':
+					var source = field['source'];
+					if (field['appendNullOption'] == true) {
+						source = $.extend({'': '-- ' + _msg['Choose'] + ' --'}, source);
+					}
+					
+					var $input = $('<select />')
+						.addClass('form-control')
+						.attr('name', name)
+						.appendTo($div);
+					
+					for (var key in source) {
+						var $option = $('<option />')
+							.val(key)
+							.text(source[key])
+							.appendTo($input);
+					}
+					
+					$input.val(field['value']);
+					if (field['disabled'] == true) {
+						$input.attr('disabled', 'disabled');
+					}
+					
+					break;
+				case 'groupCheckBox':
+					var showId 	= field['showId'] == true;
+					var $input 	= $('<ul class="groupCheckBox " />').appendTo($div);
+					for (var key in field['source']) {
+						$input.append('\
+							<li>\
+								<div class="checkbox">\
+									 <label>\
+										<input type="checkbox" name="' + name + '" value="' + key + '" ' + (field['value'][key] != null ? ' checked="checked" ' : '' ) + ' />\
+										' + field['source'][key] + (showId == true ? ' - ' + key : '')  +'\
+									</label>\
+								</div>\
+							</li>');
+					}
+					break;
+					
+					/*		
+				case 'checkbox':
+					$fieldset[] = '
+						<fieldset class="form-group">
+							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 ">
+							</div>
+							<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 ">
+								<div class="checkbox" >
+									<label>
+										'.form_checkbox(name, 'on', field['checked']).' '. element('label', field) .' 
+									</label>
+								</div>
+							</div>
+						</fieldset>';
+					
+					break;
+*/					
+				case 'gallery':
+					/*$fileupload = array ( 
+						'entityName' 	=> field['entityName'],
+						'entityId'		=> field['entityId']
+					);*/
+						
+					$div.append($('\
+						<div id="' + name + '" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >\
+							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">\
+								<i class="icon-picture" ></i>\
+								' + _msg['Edit pictures'] + '\
+							</button>\
+							<div class="thumbnails" ></div>\
+						</div>\
+					'));
+					break;
+					
+/*					
+				case 'subform':
+					$fieldset[] = $.sprintf($fieldset, '
+						<div name="'.name.'" class="subform "> 
+							<div class="alert alert-info">
+								<i class="icon-spinner icon-spin icon-large"></i>
+								<small>'.$CI->lang->line('loading ...').'</small>
+							</div>
+						</div>
+					');
+					break;
+				case 'tree':
+					$fieldset[] = '<fieldset class="form-group tree">'
+							.renderCrFormTree(field['source'], field['value'])	
+						.'</fieldset>';			
+					break;
+					*/
+				case 'link':
+					$fieldset = $('\
+						<fieldset class="form-group" >\
+							<label class="hidden-xs col-sm-3 col-md-3 col-lg-3 control-label" />\
+							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">\
+								<a href="' + field['value'] + '">' + field['label'] + '</a>\
+						</fieldset>');
+					break;
+					/*
+				case 'raty':
+					$fieldset[] = $.sprintf($fieldset, '<div class="raty" name="'.name.'" />');
+					break;
+				case 'upload':
+					$fieldset[] = $.sprintf($fieldset, '
+						<div class="col-md-5">
+							<span class="btn btn-success fileinput-button">
+								<i class="icon-plus icon-white"></i>
+								<span>'.$CI->lang->line('Add File').'</span>
+								<input type="file" name="userfile" >
+							</span>
+						</div>
+						<div class="col-md-5 fileupload-progress fade">
+							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+								<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
+							</div>
+							<div class="progress-extended">&nbsp;</div>
+						</div>
+					');
+					break;
+				case 'logo':
+					// TODO: mejorar este field, agregar el btn upload, etc
+					$fieldset[] = $.sprintf($fieldset, '<img src="'.field['value'].'" />');				
+					break;
+				case 'html':
+					$fieldset[] = field['value'];
+					break;
+					*/
+			}
+			
+			$($fieldset).appendTo($parentNode);
+		}
 	}
 })($);

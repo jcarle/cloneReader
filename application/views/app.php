@@ -134,4 +134,6 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 		<div></div>
 	</nav>
 	<div class="container content">
+		
+<?php $this->load->view('includes/uploadfile'); ?>		
 

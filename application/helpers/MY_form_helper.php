@@ -244,10 +244,10 @@ function renderCrFormFields($form) {
 				
 				break;
 			case 'gallery':
-				$fileupload = array ( 
+/*				$fileupload = array ( 
 					'entityName' 	=> $field['entityName'],
 					'entityId'		=> $field['entityId']
-				);
+				);*/
 					
 				$aFields[] = sprintf($sField, '
 						<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >

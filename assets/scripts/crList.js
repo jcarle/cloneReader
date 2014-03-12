@@ -6,10 +6,17 @@
 	methods = {
 		init : function( options ) {
 			var $element = $(this); 
-			if ($element.length == 0) { // Si es llamado desde null; se auto reenderea. ej: $(null).crList(data); Se utiliza en appAjax
-				$element = renderCrList(options, options['$parentNode']);
+			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
+			// Se utiliza en appAjax
+			if ($element.length == 0) { 
+				if (options.autoRender == true && options.$parentNode != null) {
+					$element = renderCrList(options, options.$parentNode);
+				}
+				else { 
+					return null;
+				}
 			}
-				
+
 			if ($element.data('crList') == null) {
 				$element.data('crList', new crList($element, options));
 			}
