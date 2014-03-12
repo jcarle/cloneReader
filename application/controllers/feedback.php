@@ -75,15 +75,15 @@ class Feedback extends CI_Controller {
 			if ($code == true) {
 				$this->Comments_Model->saveFeedback($this->input->post());
 			}
+			
+			if ($this->input->is_ajax_request()) {
+				return $this->load->view('ajax', array(
+					'code'		=> $code, 
+					'result' 	=> validation_errors()  
+				));
+			}
 		}
 		
-		if ($this->input->is_ajax_request()) {
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> validation_errors()  
-			));
-		}		
-				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Feedback'),

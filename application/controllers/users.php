@@ -103,9 +103,10 @@ class Users extends CI_Controller {
 					'label'	=> $this->lang->line('Last Name'), 
 				),
 				'countryId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('Country'),
-					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
+					'type'				=> 'dropdown',
+					'label'				=> $this->lang->line('Country'),
+					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'appendNullOption'	=> true,
 				),
 				'groups[]' => array(
 					'type'		=> 'groupCheckBox',

@@ -5,11 +5,16 @@
 		
 	methods = {
 		init : function( options ) {
-			if ($(this).data('crForm') == null) {
-				$(this).data('crForm', new crForm($(this), options));
+			var $element = $(this);
+			if ($element.length == 0) { // Si es llamado desde null; se auto reenderea. ej: $(null).crForm(data); Se utiliza en appAjax
+				$element = renderCrForm(options, options['$parentNode']);
+			}			
+			
+			if ($element.data('crForm') == null) {
+				$element.data('crForm', new crForm($element, options));
 			}
 			
-			return $(this);
+			return $element;
 		},
 		
 		showSubForm: function(controller) {
@@ -650,5 +655,69 @@
 			var width = this.$form.width();
 			this.$form.find('.table-responsive').css('max-width', width - 30 );
 		}
+	};
+	
+	
+	renderCrForm = function(data, $parentNode) {
+// TODO: revisar si en modo webPage hace falta pasar el param urlList por decodeURIComponent		
+		var params 		= $.getUrlVars();
+		var urlList 	= $.base64Decode(decodeURIComponent(params['urlList']));
+		var buttons 	= [
+			'<button type="button" class="btn btn-default" onclick="$.goToHashUrl(\'' + urlList + '\');"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+		];
+		if (data['urlDelete'] == null) {
+			delete buttons[1];
+		}
+		
+		var pageName = location.hash.slice(1);		
+		if (pageName.indexOf('?') != -1){
+			pageName = pageName.substr(0, pageName.indexOf('?'));
+		}
+
+		data = $.extend({
+			'action': 	pageName, 
+			'frmId': 	'frmId',
+			'buttons': 	buttons
+		}, data);
+					
+
+		var $form = $('<form action="' + data['action'] + '" />')
+			.attr('id', data['frmId'])
+			.addClass('panel panel-default crForm form-horizontal')
+			.attr('role', 'form')
+			.appendTo($parentNode);
+
+		var $div = $('<div class="panel-body" />').appendTo($form); 
+
+// TODO: renderear los fields con js, para transmitir menos datos
+cn(data);
+		for(var i=0; i<data['aFields'].length; i++)  {
+			$(data['aFields'][i]).appendTo($div);
+		}
+
+		if (data['buttons'].length != 0) {
+			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);
+			for (var i=0; i<data['buttons'].length; i++) {
+				$div
+					.append($(data['buttons'][i]))
+					.append(' ');
+			}
+		}
+
+/* 
+// TODO: revisar la galeria
+$fieldGallery = getCrFieldGallery($form);
+if ($fieldGallery != null) {
+	$this->load->view('includes/uploadfile', array(
+		'fileupload' => array ( 
+			'entityName' 	=> $fieldGallery['entityName'],
+			'entityId'		=> $fieldGallery['entityId']
+		) 
+	));
+}*/
+
+		return $form;
 	}
 })($);

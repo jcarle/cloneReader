@@ -31,6 +31,15 @@ $.extend({
 		}
 		return vars;
 	},
+	
+	getAppType: function() {
+		// TODO: mejorar esta parte, hacer constantes o algo asi
+		if ($.inArray(this.appType, ['appAjax', 'appMobile', 'webSite']) != -1) {
+			return this.appType;
+		}
+
+		return 'webSite';
+	},
 
 	isMobile: function() {
 		return $(window).width() < 768;		
@@ -426,6 +435,7 @@ $(document).ready(function() {
 						function() { $.ajax(ajaxOptions); }
 					, this)
 				});
+				return;
 			}
 			
 			var result = $.parseJSON(jqXHR.responseText);

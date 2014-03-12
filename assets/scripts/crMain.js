@@ -76,8 +76,8 @@ crMain = {
 							$(null).crList(data);
 							break;
 						case 'crForm':
-							var $form = crMain.renderCrForm(data, $page);
-							$form.crForm(data);
+							data['$parentNode'] = $(crMain.aPages[pageName]);
+							$(null).crForm(data);
 							break;
 					}
 				}
@@ -115,71 +115,6 @@ crMain = {
 			$pageTitle.find('h2').text(data['title']);
 		}
 
-	},
-	
-	renderCrForm: function(data, $page) {
-// TODO: revisar si en modo webPage hace falta pasar el param urlList por decodeURIComponent		
-		var params 		= $.getUrlVars();
-		var urlList 	= $.base64Decode(decodeURIComponent(params['urlList']));
-		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToHashUrl(\'' + urlList + '\');"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
-			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
-		];
-		if (data['urlDelete'] == null) {
-			delete buttons[1];
-		}
-
-		data = $.extend({
-			'action': 	this.getFormAction(), 
-			'frmId': 	'frmId',
-			'buttons': 	buttons
-		}, data);
-					
-
-		var $form = $('<form action="' + data['action'] + '" />')
-			.attr('id', data['frmId'])
-			.addClass('panel panel-default crForm form-horizontal')
-			.attr('role', 'form')
-			.appendTo($page);
-
-		var $div = $('<div class="panel-body" />').appendTo($form); 
-
-// TODO: renderear los fields con js, para transmitir menos datos
-		for(var i=0; i<data['aFields'].length; i++)  {
-			$(data['aFields'][i]).appendTo($div);
-		}
-
-		if (data['buttons'].length != 0) {
-			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);
-			for (var i=0; i<data['buttons'].length; i++) {
-				$div
-					.append($(data['buttons'][i]))
-					.append(' ');
-			}
-		}
-
-/* 
-// TODO: revisar la galeria
-$fieldGallery = getCrFieldGallery($form);
-if ($fieldGallery != null) {
-	$this->load->view('includes/uploadfile', array(
-		'fileupload' => array ( 
-			'entityName' 	=> $fieldGallery['entityName'],
-			'entityId'		=> $fieldGallery['entityId']
-		) 
-	));
-}*/
-
-		return $form;
-	},
-
-	getFormAction: function() {
-		var pageName = location.hash.slice(1);		
-		if (pageName.indexOf('?') != -1){
-			pageName = pageName.substr(0, pageName.indexOf('?'));
-		}
-		return pageName;
 	},
 	
 	getPageName: function() {

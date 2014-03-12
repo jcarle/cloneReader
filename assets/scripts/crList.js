@@ -6,7 +6,7 @@
 	methods = {
 		init : function( options ) {
 			var $element = $(this); 
-			if ($element.length == 0) { // Si es llamado desde null; se auto reenderea. ej: $(null).crList(data);
+			if ($element.length == 0) { // Si es llamado desde null; se auto reenderea. ej: $(null).crList(data); Se utiliza en appAjax
 				$element = renderCrList(options, options['$parentNode']);
 			}
 				
@@ -136,7 +136,7 @@
 			, this));			
 			
 						
-			switch (appType) {
+			switch ($.getAppType()) {
 				case 'appAjax':
 					this.$form.on('submit', 
 						function(event) {
@@ -424,7 +424,5 @@ if ($filters != null) {
 		});
 		
 		return $crList;
-	}	
+	}
 })($);
-
-

@@ -123,14 +123,14 @@ class Feeds extends CI_Controller {
 				$_POST['fixLocale'] 		= $this->input->post('fixLocale') == 'on';
 				$this->Feeds_Model->save($this->input->post());
 			}
+			
+			if ($this->input->is_ajax_request()) {
+				return $this->load->view('ajax', array(
+					'code'		=> $code, 
+					'result' 	=> validation_errors() 
+				));
+			}			
 		}		 
-		
-		if ($this->input->is_ajax_request()) {
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> validation_errors() 
-			));
-		}
 				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 

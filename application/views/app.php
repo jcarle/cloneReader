@@ -84,7 +84,10 @@ $CI->carabiner->display('js');
 		var PAGE_HOME 	= 'users'; // TODO: harckodeta! 
 		var siteName	= '<?php echo config_item('siteName'); ?>';
 		var _msg 		= {};
-		var appType		= 'appAjax';
+		
+		$(document).ready(function() {
+			$.appType = 'appAjax';
+		});
 <?php
 
 // TODO: sacar todo el codigo php de aca!
@@ -104,7 +107,8 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 	";
 }
 
-echo implode(' ', $aScripts);
+// TODO: 
+//echo implode(' ', $aScripts);
 ?>
 	</script>
 	<title><?php echo config_item('siteName'); ?> </title>
