@@ -77,7 +77,7 @@ class Feedback extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}
 		

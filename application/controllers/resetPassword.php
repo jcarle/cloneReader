@@ -71,14 +71,11 @@ class ResetPassword extends CI_Controller {
 		}
 		
 		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjaxSaveCrForm(false);
+			return loadViewAjax(false);
 		}
 		
 		$this->Users_Model->updatePassword($user['userId'], $this->input->post('passwordNew'));
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login')) 
-		));
-	}		
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully'), 'goToUrl' => base_url('login')));
+	}
 }

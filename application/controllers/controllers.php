@@ -83,7 +83,7 @@ class Controllers extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}
 
@@ -99,7 +99,7 @@ class Controllers extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjaxSaveCrForm($this->Controllers_Model->delete($this->input->post('controllerId'))); 
+		return loadViewAjax($this->Controllers_Model->delete($this->input->post('controllerId'))); 
 	}
 	
 	function _validate_exitsName() {

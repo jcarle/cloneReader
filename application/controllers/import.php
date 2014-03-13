@@ -51,9 +51,8 @@ class Import extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload()) {
-			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors()));
+			return loadViewAjax(false, $this->upload->display_errors());
 		}
-		
 		
 		$fileName 	= $config['upload_path'].'/'.$config['file_name'].$this->upload->file_ext;
 		$xml 		= simplexml_load_file($fileName);
@@ -85,7 +84,7 @@ class Import extends CI_Controller {
 			}
 		}
 		
-		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''))));		
+		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url('')));
 	}
 
 	function starred() {
@@ -132,7 +131,7 @@ class Import extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload()) {
-			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors()));
+			return loadViewAjax(false, $this->upload->display_errors());
 		}
 
 
@@ -176,6 +175,6 @@ class Import extends CI_Controller {
 
 		$this->Entries_Model->pushTmpUserEntries($userId);
 
-		return $this->load->view('ajax', array('code' => true, 'result' => array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''))));
+		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url('')));
 	}
 }

@@ -80,7 +80,7 @@ class Menu extends CI_Controller {
 			
 			if ($this->input->is_ajax_request()) { // save data
 				$code = $this->form_validation->run(); 
-				return loadViewAjaxSaveCrForm($code,  $code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId)));
+				return loadViewAjax($code,  $code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId)));
 			}
 		}
 		
@@ -96,6 +96,6 @@ class Menu extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjaxSaveCrForm($this->Menu_Model->delete($this->input->post('menuId')));	
+		return loadViewAjax($this->Menu_Model->delete($this->input->post('menuId')));	
 	}
 }

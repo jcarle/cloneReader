@@ -127,7 +127,7 @@ class Testing extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}
 				
@@ -146,7 +146,7 @@ class Testing extends CI_Controller {
 	function delete() {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 		
-		return loadViewAjaxSaveCrForm($this->Testing_Model->delete($this->input->post('testId')));
+		return loadViewAjax($this->Testing_Model->delete($this->input->post('testId')));
 	}	
 	
 	function selectStatesByCountryId($countryId) { // TODO: centralizar en otro lado!
@@ -253,7 +253,7 @@ class Testing extends CI_Controller {
 				$this->Testing_Model->saveTestingChilds($this->input->post());
 			}
 			
-			return loadViewAjaxSaveCrForm($code);
+			return loadViewAjax($code);
 		}
 		
 		$this->load->view('ajax', array(
@@ -338,23 +338,19 @@ class Testing extends CI_Controller {
 				$userId 			= $this->input->post('userId');
 			
 				if ($this->Testing_Model->exitsTestChildUser($testChildId, $userId) == true) {
-					return $this->load->view('ajax', array(
-						'code'		=> false, 
-						'result' 	=> 'El usuario ya exite che' 
-					));
+					return loadViewAjax(false, 'El usuario ya exite che');
 				}
 
 				$this->Testing_Model->deleteTestChildUser($testChildId, $this->input->post('currentUserId'));
 				$this->Testing_Model->saveTestChildUser($testChildId, $userId);
 			}
 
-			return loadViewAjaxSaveCrForm($code);
+			return loadViewAjax($code);
 		}
 		
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crPopupForm',
 			'form'			=> $form,
-//populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)),
 			'code'			=> true
 		));		
 	}	

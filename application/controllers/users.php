@@ -153,7 +153,7 @@ class Users extends CI_Controller {
 			}
 		
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}
 				
@@ -169,7 +169,7 @@ class Users extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjaxSaveCrForm($this->Users_Model->delete($this->input->post('userId')));
+		return loadViewAjax($this->Users_Model->delete($this->input->post('userId')));
 	}
 	
 	function search() { // TODO: implementar la seguridad!

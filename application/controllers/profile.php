@@ -91,15 +91,12 @@ class Profile extends CI_Controller {
 
 	function _saveEditProfile() {
 		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjaxSaveCrForm(false);
+			return loadViewAjax(false);
 		}
 
 		$this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post());
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array('notification' => $this->lang->line('Data updated successfully'))
-		));
+		return loadViewAjax(true, array('notification' => $this->lang->line('Data updated successfully')));
 	}
 		
 	function changeEmail() {
@@ -146,7 +143,7 @@ class Profile extends CI_Controller {
 
 	function _sendEmailToChangeEmail() {
 		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjaxSaveCrForm(false);	
+			return loadViewAjax(false);	
 		}
 
 		$this->load->library('email');
@@ -167,10 +164,7 @@ class Profile extends CI_Controller {
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array( 'notification' => $this->lang->line('We have sent you an email with instructions to change your email')),
-		));	
+		return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to change your email')));	
 	}
 
 	function changePassword() {
@@ -229,15 +223,12 @@ class Profile extends CI_Controller {
 	
 	function _saveChangePassword() {
 		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjaxSaveCrForm(false);
+			return loadViewAjax(false);
 		}
 
 		$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array('notification' => $this->lang->line('Data updated successfully'))
-		));				
+		return loadViewAjax(true, array('notification' => $this->lang->line('Data updated successfully')));
 	}
 	
 	function _validate_password() {
@@ -319,9 +310,6 @@ class Profile extends CI_Controller {
 	}
 	
 	function removeAccount() {
-		return $this->load->view('ajax', array(
-			'code'		=> false,
-			'result' 	=> 'coming soon'
-		));
+		return loadViewAjax(false, 'coming soon');
 	}	
 }

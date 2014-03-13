@@ -49,7 +49,7 @@ class Login extends CI_Controller {
 
 		if ($this->input->is_ajax_request()) {
 			$code = $this->form_validation->run(); 
-			return loadViewAjaxSaveCrForm($code, $code == false ? validation_errors() : array('goToUrl' => base_url('home')));
+			return loadViewAjax($code, $code == false ? validation_errors() : array('goToUrl' => base_url('home')));
 		}			
 					
 		$aServerData = array();
@@ -85,30 +85,6 @@ class Login extends CI_Controller {
 	function _validate_login() {
 		return $this->safety->login($this->input->post('email'), $this->input->post('password'));
 	}
-	
-/*	function loginRemote() {
-		$user = $this->Users_Model->loginRemote($this->input->post('userEmail'), $this->input->post('userLastName'), $this->input->post('userFirstName'), $this->input->post('provider'), $this->input->post('remoteUserId') );
-
-		if ($user == null) {
-			return $this->load->view('ajax', array(
-				'code'		=> false, 
-				'result' 	=> 'error!' 
-			));
-		}
-
-		$this->session->set_userdata(array(
-			'userId'  		=> $user->userId,
-			'langId'  		=> $user->langId,
-		));		
-		
-		$this->Users_Model->updateUserLastAccess();
-		
-		return $this->load->view('ajax', array(
-			'code'		=> true, 
-			'result' 	=> '' 
-		));
-	}*/
-	
 
 	function facebook() {
 		$this->_oauth2('facebook');

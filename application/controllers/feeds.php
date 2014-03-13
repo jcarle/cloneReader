@@ -125,7 +125,7 @@ class Feeds extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}		 
 				
@@ -144,7 +144,7 @@ class Feeds extends CI_Controller {
 	function delete() {
 		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
 				
-		return loadViewAjaxSaveCrForm($this->Feeds_Model->delete($this->input->post('feedId')));
+		return loadViewAjax($this->Feeds_Model->delete($this->input->post('feedId')));
 	}
 	
 	function _getFormProperties($feedId) {

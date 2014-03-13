@@ -90,7 +90,7 @@ class Entries extends CI_Controller {
 			}
 
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		} 
 
@@ -106,7 +106,7 @@ class Entries extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjaxSaveCrForm($this->Entries_Model->delete($this->input->post('entryId')));	
+		return loadViewAjax($this->Entries_Model->delete($this->input->post('entryId')));	
 	}
 
 	function _getFormProperties($entryId) {
@@ -416,7 +416,7 @@ class Entries extends CI_Controller {
 	
 	function _saveShareByEmail() {
 		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjaxSaveCrForm(false);
+			return loadViewAjax(false);
 		}
 
 		$this->load->model('Users_Model');

@@ -44,7 +44,7 @@ class News extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}
 
@@ -60,7 +60,7 @@ class News extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjaxSaveCrForm($this->News_Model->delete($this->input->post('newId')));	
+		return loadViewAjax($this->News_Model->delete($this->input->post('newId')));	
 	}
 
 	function _getFormProperties($newId) {

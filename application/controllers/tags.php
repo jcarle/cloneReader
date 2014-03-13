@@ -44,7 +44,7 @@ class Tags extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjaxSaveCrForm($code);
+				return loadViewAjax($code);
 			}
 		}
 				
@@ -60,7 +60,7 @@ class Tags extends CI_Controller {
 	}
 
 	function delete() {
-		return loadViewAjaxSaveCrForm($this->Tags_Model->delete($this->input->post('tagId')));	
+		return loadViewAjax($this->Tags_Model->delete($this->input->post('tagId')));	
 	}
 
 	function _getFormProperties($tagId) {
