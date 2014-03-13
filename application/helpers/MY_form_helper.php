@@ -437,12 +437,3 @@ function appendCrListJsAndCss($view, $list, $aScripts) {
 		
 	return $aScripts; 	
 }
-
-function loadViewAjax($code, $result = null) {
-	$CI = &get_instance();
-	
-	return $CI->load->view('ajax', array(
-		'code'		=> $code, 
-		'result' 	=> $result != null ? $result : validation_errors() 
-	));	
-}

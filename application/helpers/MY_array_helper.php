@@ -58,6 +58,15 @@ function error404() {
 	$CI->error->error404();	
 }
 
+function loadViewAjax($code, $result = null) {
+	$CI = &get_instance();
+	
+	return $CI->load->view('ajax', array(
+		'code'		=> $code, 
+		'result' 	=> $result != null ? $result : validation_errors() 
+	));	
+}
+
 function formatCurrency($value, $currencyName = DEFAULT_CURRENCY_NAME) { 
 	return $currencyName.' '.number_format($value, 2, ',', '.'); // TODO: desharckodaear!
 }
