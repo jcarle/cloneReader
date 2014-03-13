@@ -775,19 +775,15 @@ if ($fieldGallery != null) {
 					$div.append('<input type="password" name="' + name + '" class="form-control" />');
 					break;
 				case 'textarea':
-					var $input = $('<textarea/>')
-						.attr('name', field['value'])
+					var $input = $('<textarea cols="40" rows="10" />')
+						.attr('name', name)
+						.text(field['value'])
 						.addClass('form-control')
 						.appendTo($div);
 					break;
-					
-					/*			
 				case 'typeahead':
-					$fieldset[] = $.sprintf($fieldset, 
-						'<input name="'.name.'"  type="text" class="form-control" />'
-					);
+					$div.append('<input name="' + name + '"  type="text" class="form-control" />');
 					break;		
-					*/	
 				case 'dropdown':
 					var source = field['source'];
 					if (field['appendNullOption'] == true) {
@@ -881,33 +877,29 @@ if ($fieldGallery != null) {
 				case 'raty':
 					$div.append('<div class="raty" name="' + name + '" />');
 					break;
-					
-					/*
 				case 'upload':
-					$fieldset[] = $.sprintf($fieldset, '
-						<div class="col-md-5">
-							<span class="btn btn-success fileinput-button">
-								<i class="icon-plus icon-white"></i>
-								<span>'.$CI->lang->line('Add File').'</span>
-								<input type="file" name="userfile" >
-							</span>
-						</div>
-						<div class="col-md-5 fileupload-progress fade">
-							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-								<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
-							</div>
-							<div class="progress-extended">&nbsp;</div>
-						</div>
-					');
+					$div.append('\
+						<div class="col-md-5">\
+							<span class="btn btn-success fileinput-button">\
+								<i class="icon-plus icon-white"></i>\
+								<span>' + _msg['Add File'] + '</span> \
+								<input type="file" name="userfile" > \
+							</span> \
+						</div> \
+						<div class="col-md-5 fileupload-progress fade"> \
+							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"> \
+								<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div> \
+							</div> \
+							<div class="progress-extended">&nbsp;</div> \
+						</div> ');
 					break;
 				case 'logo':
 					// TODO: mejorar este field, agregar el btn upload, etc
-					$fieldset[] = $.sprintf($fieldset, '<img src="'.field['value'].'" />');				
+					$div.append('<img src="' + field['value'] + '" />');
 					break;
 				case 'html':
-					$fieldset[] = field['value'];
+					$fieldset = $(field['value']);
 					break;
-					*/
 			}
 			
 			$($fieldset).appendTo($parentNode);
