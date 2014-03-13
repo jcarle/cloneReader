@@ -48,12 +48,9 @@ class App extends CI_Controller {
 			$aLangs[$line] = $this->lang->line($line);
 		}
 
-		return $this->load->view('ajax', array(
-			'code'		=> true, 
-			'result' 	=> array(
-				'aMenu' 	=> $aMenu,
-				'aLangs' 	=> $aLangs,
-			)  
+		return loadViewAjax(true, array(
+			'aMenu' 	=> $aMenu,
+			'aLangs' 	=> $aLangs,
 		));
 	}
 }

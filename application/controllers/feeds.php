@@ -292,20 +292,14 @@ class Feeds extends CI_Controller {
 		
 		$this->Feeds_Model->resetFeed($feedId);
 		$this->Feeds_Model->scanFeed($feedId);
-				
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> true
-		));				
+		
+		return loadViewAjax(true, true);
 	}
 	
 	function saveFeedIcon($feedId) {
 		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
 				
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> $this->Feeds_Model->saveFeedIcon($feedId, null, true)
-		));				
+		return loadViewAjax(true, $this->Feeds_Model->saveFeedIcon($feedId, null, true));
 	}	
 	
 
@@ -323,10 +317,7 @@ class Feeds extends CI_Controller {
 	
 	function deleteOldEntriesByFeedId($feedId) {
 		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
-			
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'affected rows: '.$this->Feeds_Model->deleteOldEntriesByFeedId($feedId)
-		));	
-	}	
+		
+		return loadViewAjax(true, 'affected rows: '.$this->Feeds_Model->deleteOldEntriesByFeedId($feedId));	
+	}
 }

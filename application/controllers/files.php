@@ -41,7 +41,7 @@ class Files extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload()) {
-			return $this->load->view('ajax', array('code' => false, 'result' => $this->upload->display_errors('', '')));					
+			return loadViewAjax(false, $this->upload->display_errors('', ''));
 		}
 		
 		$data = $this->upload->data();
@@ -70,7 +70,7 @@ class Files extends CI_Controller {
 		$fileId = $this->Files_Model->insert($data['file_name'], '' /*$_POST['title']*/); // TODO:
 		if(!$fileId) {
 			unlink($data['full_path']);
-			return $this->load->view('ajax', array('code' => false, 'result' => 'Something went wrong when saving the file, please try again'));
+			return loadViewAjax(false, 'Something went wrong when saving the file, please try again');
 		}
 					
 		$this->Files_Model->saveFileRelation($entityName, $fileId, $entityId);
@@ -83,9 +83,6 @@ class Files extends CI_Controller {
 		// TODO: implementar la seguridad!
 		$this->Files_Model->deleteByFileId($entityName, $entityId, $fileId);
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array()
-		));		
+		return loadViewAjax(true, array());
 	}
 }

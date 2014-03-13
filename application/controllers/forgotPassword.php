@@ -67,10 +67,7 @@ class ForgotPassword extends CI_Controller {
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array( 'notification' => $this->lang->line('We have sent you an email with instructions to reset your password')),
-		));	
+		return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to reset your password')));
 	}
 	
 	function _validate_notExitsEmail() {

@@ -65,17 +65,11 @@ class Entries extends CI_Controller {
 			$this->Entries_Model->pushTmpUserEntries($userId);
 		}
 	
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> $this->Entries_Model->select($userId, (array)json_decode($this->input->post('post'))),
-		));
+		return loadViewAjax(true, $this->Entries_Model->select($userId, (array)json_decode($this->input->post('post'))));
 	}
 
 	function selectFilters() {
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> $this->Entries_Model->selectFilters($this->session->userdata('userId')),
-		));
+		return loadViewAjax(true, $this->Entries_Model->selectFilters($this->session->userdata('userId')));
 	}
 	
 	function edit($entryId) {
@@ -187,10 +181,7 @@ class Entries extends CI_Controller {
 		// scanea todos los feeds!
 		$this->Entries_Model->getNewsEntries($userId);
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));				
+		return loadViewAjax(true, 'ok');
 	}
 	
 	function saveData() {
@@ -201,10 +192,7 @@ class Entries extends CI_Controller {
 		$this->Entries_Model->saveTmpUsersEntries((int)$userId, $entries);		
 		$this->Entries_Model->saveUserTags((int)$userId, $tags);
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));		
+		return loadViewAjax(true, 'ok');
 	}
 
 	function addFeed() {
@@ -224,10 +212,7 @@ class Entries extends CI_Controller {
 			$this->cisimplepie->init();
 			$this->cisimplepie->handle_content_type();
 			if ($this->cisimplepie->error() != '' ) {
-				return $this->load->view('ajax', array(
-					'code'		=> false,
-					'result' 	=> $this->cisimplepie->error(),
-				));			
+				return loadViewAjax(false, $this->cisimplepie->error());
 			}
 			$feedUrl = $this->cisimplepie->subscribe_url();
 		}
@@ -243,28 +228,19 @@ class Entries extends CI_Controller {
 		// guardo las entries en el user
 		$this->Entries_Model->saveUserEntries($userId, $feedId);		
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array('feedId' => $feedId),
-		));
+		return loadViewAjax(true, array('feedId' => $feedId));
 	}
 
 	function addTag() {
 		$tagId = $this->Entries_Model->addTag($this->input->post('tagName'), $this->session->userdata('userId'), $this->input->post('feedId'));
 
-		return $this->load->view('ajax', array(
-			'code'		=> ($tagId > 0),
-			'result' 	=> array('tagId' => $tagId),
-		));
+		return loadViewAjax(($tagId > 0), array('tagId' => $tagId));
 	}
 
 	function saveUserFeedTag() {
 		$result = $this->Entries_Model->saveUserFeedTag((int)$this->session->userdata('userId'), $this->input->post('feedId'), $this->input->post('tagId'), ($this->input->post('append') == 'true'));
 
-		return $this->load->view('ajax', array(
-			'code'		=> ($result === true),
-			'result' 	=> ($result === true ? 'ok': $result),
-		));
+		return loadViewAjax(($result === true), ($result === true ? 'ok': $result));
 	}
 	
 	function subscribeFeed() {
@@ -277,37 +253,25 @@ class Entries extends CI_Controller {
 		// guardo las entries en el user
 		$this->Entries_Model->saveUserEntries($userId, $feedId);
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));
-	}	
+		return loadViewAjax(true, 'ok');
+	}
 	
 	function unsubscribeFeed() {
 		$result = $this->Entries_Model->unsubscribeFeed($this->input->post('feedId'), (int)$this->session->userdata('userId'));
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));
+		return loadViewAjax(true, 'ok');
 	}
 	
 	function markAllAsRead() {
 		$result = $this->Entries_Model->markAllAsRead((int)$this->session->userdata('userId'), $this->input->post('type'), $this->input->post('id') );
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));
+		return loadViewAjax(true, 'ok');
 	}	
 	
 	function updateUserFilters() {
 		$this->Entries_Model->updateUserFilters((array)json_decode($this->input->post('post')), (int)$this->session->userdata('userId'));
 
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> 'ok',
-		));
+		return loadViewAjax(true, 'ok');
 	}	
 
 	function buildCache($userId = null) {
@@ -322,19 +286,13 @@ class Entries extends CI_Controller {
 	function browseTags() {
 		$query = $this->Entries_Model->browseTags($this->session->userdata('userId'));
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> $query,
-		));		
+		return loadViewAjax(true, $query);
 	}
 	
 	function browseFeedsByTagId() {
 		$query = $this->Entries_Model->browseFeedsByTagId($this->session->userdata('userId'), $this->input->get('tagId'));
 		
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> $query,
-		));		
+		return loadViewAjax(true, $query);
 	}	
 	
 	function processTagBrowse() {
@@ -478,11 +436,6 @@ class Entries extends CI_Controller {
 		$this->email->message(getEmailTemplate($message));
 		$this->email->send();
 
-				
-
-		return $this->load->view('ajax', array(
-			'code'		=> true,
-			'result' 	=> array('notification' => $this->lang->line('The email has been sent'))
-		));				
+		return loadViewAjax(true, array('notification' => $this->lang->line('The email has been sent')));
 	}	
 }
