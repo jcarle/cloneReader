@@ -77,15 +77,17 @@ class Menu extends CI_Controller {
 			if ($code == true) {
 				$this->Menu_Model->save($this->input->post());
 			}
+			
+			if ($this->input->is_ajax_request()) { // save data
+				$code = $this->form_validation->run(); 
+				return $this->load->view('ajax', array(
+					'code'		=> $code, 
+					'result' 	=> ($code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId))) 
+				));
+			}			
 		}		
 		
-		if ($this->input->is_ajax_request()) { // save data
-			$code = $this->form_validation->run(); 
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> ($code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId))) 
-			));
-		}
+
 		
 		$this->load->view('includes/template', array(
 			'view'			=> 'includes/crForm', 

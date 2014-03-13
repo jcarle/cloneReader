@@ -130,7 +130,7 @@ crMain = {
 		if (position != -1){
 			pageName = pageName.substr(0, position + 5);
 		}
-		return pageName;
+		return 'cr-page-' + pageName;
 	}
 };
 

@@ -31,7 +31,7 @@ $.extend({
 		}
 		return vars;
 	},
-	
+
 	getAppType: function() {
 		// TODO: mejorar esta parte, hacer constantes o algo asi
 		if ($.inArray(this.appType, ['appAjax', 'appMobile', 'webSite']) != -1) {
@@ -289,6 +289,10 @@ $.extend({
 			$('body').addClass('isLoading');
 		}
 	},	
+	
+	urlToHashUrl: function(url) {
+		return '#' + url.replace(base_url, '');
+	},
 	
 	goToUrl: function(url) {
 		$.showWaiting(true);

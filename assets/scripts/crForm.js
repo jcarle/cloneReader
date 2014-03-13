@@ -732,16 +732,14 @@ if ($fieldGallery != null) {
 	
 	renderCrFormFields = function(fields, $parentNode) {
 		for (var name in fields) {
-			var field = fields[name];
-
-			var $fieldset = $('\
+			var field 		= fields[name];
+			var $fieldset 	= $('\
 				<fieldset class="form-group">\
 					<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">' + field['label'] + '</label>\
 					<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> </div>\
 				</fieldset>');
 			$div = $fieldset.find('div');
-		
-		
+
 			switch (field['type']) {
 				case 'hidden':
 					$fieldset = $('<input type="hidden" name="' + name + '" value="' + field['value'] + '" />');
@@ -829,24 +827,20 @@ if ($fieldGallery != null) {
 							</li>');
 					}
 					break;
-					
-					/*		
 				case 'checkbox':
-					$fieldset[] = '
-						<fieldset class="form-group">
-							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 ">
-							</div>
-							<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 ">
-								<div class="checkbox" >
-									<label>
-										'.form_checkbox(name, 'on', field['checked']).' '. element('label', field) .' 
-									</label>
-								</div>
-							</div>
-						</fieldset>';
-					
+					$fieldset = $('\
+						<fieldset class="form-group">\
+							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 "> </div>\
+							<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 "> \
+								<div class="checkbox" > \
+									<label> \
+										<input type="checkbox" name="' + name + '" value="on"  ' + (field['checked'] == true ? ' checked="checked" ' : '' ) + ' />  \
+										' + field['label'] + '\
+									</label> \
+								</div> \
+							</div> \
+						</fieldset>');
 					break;
-*/					
 				case 'gallery':
 					/*$fileupload = array ( 
 						'entityName' 	=> field['entityName'],
@@ -863,36 +857,32 @@ if ($fieldGallery != null) {
 						</div>\
 					'));
 					break;
-					
-/*					
 				case 'subform':
-					$fieldset[] = $.sprintf($fieldset, '
-						<div name="'.name.'" class="subform "> 
-							<div class="alert alert-info">
-								<i class="icon-spinner icon-spin icon-large"></i>
-								<small>'.$CI->lang->line('loading ...').'</small>
-							</div>
-						</div>
-					');
+					$div.append('\
+						<div name="' + name + '" class="subform ">\
+							<div class="alert alert-info">\
+								<i class="icon-spinner icon-spin icon-large"></i>\
+								<small>' + _msg['loading ...'] + '</small>\
+							</div>\
+						</div>');
 					break;
 				case 'tree':
-					$fieldset[] = '<fieldset class="form-group tree">'
-							.renderCrFormTree(field['source'], field['value'])	
-						.'</fieldset>';			
+					$fieldset = $('<fieldset class="form-group tree" />');
+					this.renderCrFormTree(field['source'], field['value'], $fieldset);
 					break;
-					*/
 				case 'link':
 					$fieldset = $('\
 						<fieldset class="form-group" >\
 							<label class="hidden-xs col-sm-3 col-md-3 col-lg-3 control-label" />\
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">\
-								<a href="' + field['value'] + '">' + field['label'] + '</a>\
+								<a href="' + $.urlToHashUrl(field['value']) + '">' + field['label'] + '</a>\
 						</fieldset>');
 					break;
-					/*
 				case 'raty':
-					$fieldset[] = $.sprintf($fieldset, '<div class="raty" name="'.name.'" />');
+					$div.append('<div class="raty" name="' + name + '" />');
 					break;
+					
+					/*
 				case 'upload':
 					$fieldset[] = $.sprintf($fieldset, '
 						<div class="col-md-5">
@@ -922,5 +912,27 @@ if ($fieldGallery != null) {
 			
 			$($fieldset).appendTo($parentNode);
 		}
-	}
+	},
+	
+	
+	renderCrFormTree = function(aTree, value, $parent){
+		var $ul = $('<ul />').appendTo($parent);
+		for (var i=0; i<aTree.length; i++) {
+			var $li 	= $('<li/>').appendTo($ul);
+			var $link 	= $('<a />')
+				.attr('href', $.urlToHashUrl(aTree[i]['url']))
+				.text(aTree[i]['label'])
+				.appendTo($li);
+				
+			if (value == aTree[i]['id']) {
+				$link.addClass('selected');
+			}
+				
+			if (aTree[i]['childs'].length > 0) {			
+				this.renderCrFormTree(aTree[i]['childs'], value, $li);
+			}
+		}
+
+		return $ul;
+	}	
 })($);
