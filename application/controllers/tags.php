@@ -44,11 +44,8 @@ class Tags extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors() 
-				));
-			}			
+				return loadViewAjaxSaveCrForm($code);
+			}
 		}
 				
 		$this->load->view('includes/template', array(
@@ -63,10 +60,7 @@ class Tags extends CI_Controller {
 	}
 
 	function delete() {
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Tags_Model->delete($this->input->post('tagId')), 
-			'result' 	=> validation_errors() 
-		));	
+		return loadViewAjaxSaveCrForm($this->Tags_Model->delete($this->input->post('tagId')));	
 	}
 
 	function _getFormProperties($tagId) {

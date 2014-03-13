@@ -153,10 +153,7 @@ class Users extends CI_Controller {
 			}
 		
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors() 
-				));
+				return loadViewAjaxSaveCrForm($code);
 			}
 		}
 				
@@ -172,10 +169,7 @@ class Users extends CI_Controller {
 	}
 	
 	function delete() {
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Users_Model->delete($this->input->post('userId')), 
-			'result' 	=> validation_errors() 
-		));	
+		return loadViewAjaxSaveCrForm($this->Users_Model->delete($this->input->post('userId')));
 	}
 	
 	function search() { // TODO: implementar la seguridad!

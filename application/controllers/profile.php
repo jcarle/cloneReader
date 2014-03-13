@@ -91,10 +91,7 @@ class Profile extends CI_Controller {
 
 	function _saveEditProfile() {
 		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> validation_errors()
-			));			
+			return loadViewAjaxSaveCrForm(false);
 		}
 
 		$this->Users_Model->editProfile($this->session->userdata('userId'), $this->input->post());
@@ -149,10 +146,7 @@ class Profile extends CI_Controller {
 
 	function _sendEmailToChangeEmail() {
 		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> validation_errors()
-			));	
+			return loadViewAjaxSaveCrForm(false);	
 		}
 
 		$this->load->library('email');
@@ -235,10 +229,7 @@ class Profile extends CI_Controller {
 	
 	function _saveChangePassword() {
 		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> validation_errors()
-			));							
+			return loadViewAjaxSaveCrForm(false);
 		}
 
 		$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		

@@ -127,11 +127,8 @@ class Testing extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors() 
-				));
-			}			
+				return loadViewAjaxSaveCrForm($code);
+			}
 		}
 				
 		$this->load->view('includes/template', array(
@@ -149,10 +146,7 @@ class Testing extends CI_Controller {
 	function delete() {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 		
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Testing_Model->delete($this->input->post('testId')), 
-			'result' 	=> validation_errors() 
-		));		
+		return loadViewAjaxSaveCrForm($this->Testing_Model->delete($this->input->post('testId')));
 	}	
 	
 	function selectStatesByCountryId($countryId) { // TODO: centralizar en otro lado!
@@ -259,10 +253,7 @@ class Testing extends CI_Controller {
 				$this->Testing_Model->saveTestingChilds($this->input->post());
 			}
 			
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> validation_errors()  
-			));
+			return loadViewAjaxSaveCrForm($code);
 		}
 		
 		$this->load->view('ajax', array(
@@ -356,11 +347,8 @@ class Testing extends CI_Controller {
 				$this->Testing_Model->deleteTestChildUser($testChildId, $this->input->post('currentUserId'));
 				$this->Testing_Model->saveTestChildUser($testChildId, $userId);
 			}
-			
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> validation_errors()  
-			));
+
+			return loadViewAjaxSaveCrForm($code);
 		}
 		
 		$this->load->view('ajax', array(

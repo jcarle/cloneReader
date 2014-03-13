@@ -79,7 +79,7 @@ class Groups extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return loadViewCrFormSaveAjax($code);
+				return loadViewAjaxSaveCrForm($code);
 			}
 		}
 				
@@ -95,9 +95,6 @@ class Groups extends CI_Controller {
 	}
 	
 	function delete() {
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Groups_Model->delete($this->input->post('groupId')), 
-			'result' 	=> validation_errors() 
-		));	
+		return loadViewAjaxSaveCrForm($this->Groups_Model->delete($this->input->post('groupId')));	
 	}
 }

@@ -49,10 +49,7 @@ class Login extends CI_Controller {
 
 		if ($this->input->is_ajax_request()) {
 			$code = $this->form_validation->run(); 
-			return $this->load->view('ajax', array(
-				'code'		=> $code, 
-				'result' 	=> ($code == false ? validation_errors() : array('goToUrl' => base_url('home'))) 
-			));
+			return loadViewAjaxSaveCrForm($code, $code == false ? validation_errors() : array('goToUrl' => base_url('home')));
 		}			
 					
 		$aServerData = array();

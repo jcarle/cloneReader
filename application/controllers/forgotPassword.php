@@ -44,10 +44,7 @@ class ForgotPassword extends CI_Controller {
 	
 	function _sendEmailToResetPassword() {
 		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> validation_errors()
-			));	
+			return loadViewAjaxSaveCrForm(false);
 		}
 
 		$this->load->library('email');

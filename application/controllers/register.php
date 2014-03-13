@@ -76,10 +76,7 @@ class Register extends CI_Controller {
 		
 		if ($this->input->is_ajax_request()) { // save data
 			if ($this->form_validation->run() == FALSE) {
-				return $this->load->view('ajax', array(
-					'code'		=> false, 
-					'result' 	=> validation_errors() 
-				));
+				return loadViewAjaxSaveCrForm(false);
 			}
 			
 			$this->Users_Model->register($userId, $this->input->post());

@@ -71,10 +71,7 @@ class ResetPassword extends CI_Controller {
 		}
 		
 		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> validation_errors() 
-			));			
+			return loadViewAjaxSaveCrForm(false);
 		}
 		
 		$this->Users_Model->updatePassword($user['userId'], $this->input->post('passwordNew'));

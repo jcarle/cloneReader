@@ -90,15 +90,10 @@ class Entries extends CI_Controller {
 			}
 
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors() 
-				));
-			}			
+				return loadViewAjaxSaveCrForm($code);
+			}
 		} 
 
-
-				
 		$this->load->view('includes/template', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit entries'),
@@ -111,7 +106,7 @@ class Entries extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewCrFormSaveAjax($this->Entries_Model->delete($this->input->post('entryId')));	
+		return loadViewAjaxSaveCrForm($this->Entries_Model->delete($this->input->post('entryId')));	
 	}
 
 	function _getFormProperties($entryId) {
@@ -421,10 +416,7 @@ class Entries extends CI_Controller {
 	
 	function _saveShareByEmail() {
 		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('ajax', array(
-				'code'		=> false,
-				'result' 	=> validation_errors()
-			));							
+			return loadViewAjaxSaveCrForm(false);
 		}
 
 		$this->load->model('Users_Model');
