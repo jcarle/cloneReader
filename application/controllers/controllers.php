@@ -83,11 +83,8 @@ class Controllers extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors()  
-				));
-			}			
+				return loadViewCrFormSaveAjax($code);
+			}
 		}
 
 		$this->load->view('includes/template', array(
@@ -102,10 +99,7 @@ class Controllers extends CI_Controller {
 	}
 	
 	function delete() {
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Controllers_Model->delete($this->input->post('controllerId')), 
-			'result' 	=> validation_errors() 
-		));	
+		return loadViewCrFormSaveAjax($this->Controllers_Model->delete($this->input->post('controllerId'))); 
 	}
 	
 	function _validate_exitsName() {

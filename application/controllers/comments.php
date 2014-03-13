@@ -50,10 +50,7 @@ class Comments extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors() 
-				));
+				return loadViewCrFormSaveAjax($code);
 			}
 		}
 
@@ -122,9 +119,6 @@ class Comments extends CI_Controller {
 	}
 
 	function delete() {
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Comments_Model->delete($this->input->post('commentId')), 
-			'result' 	=> validation_errors() 
-		));	
+		return loadViewCrFormSaveAjax($this->Comments_Model->delete($this->input->post('commentId')));	
 	}	
 }

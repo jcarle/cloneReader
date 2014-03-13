@@ -79,11 +79,8 @@ class Groups extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) {
-				return $this->load->view('ajax', array(
-					'code'		=> $code, 
-					'result' 	=> validation_errors() 
-				));
-			}			
+				return loadViewCrFormSaveAjax($code);
+			}
 		}
 				
 		$this->load->view('includes/template', array(

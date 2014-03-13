@@ -355,7 +355,7 @@
 								return;
 							}							
 							if ($.url().param('urlList') != null) {
-								$.goToUrl($.base64Decode($.url().param('urlList')));
+								$.goToUrl($.base64Decode(decodeURIComponent($.url().param('urlList'))));
 							}
 							if (response['result']['goToUrl'] != null) {
 								$.goToUrl(response['result']['goToUrl']);
@@ -697,13 +697,7 @@
 			.appendTo($parentNode);
 
 		var $div = $('<div class="panel-body" />').appendTo($form); 
-
-// TODO: renderear los fields con js, para transmitir menos datos
-this.renderCrFormFields(data.fields, $div);
-/*
-for(var i=0; i<data['aFields'].length; i++)  {
-	$(data['aFields'][i]).appendTo($div);
-}*/
+		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
 			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);

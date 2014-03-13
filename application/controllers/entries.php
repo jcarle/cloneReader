@@ -111,10 +111,7 @@ class Entries extends CI_Controller {
 	}
 	
 	function delete() {
-		return $this->load->view('ajax', array(
-			'code'		=> $this->Entries_Model->delete($this->input->post('entryId')), 
-			'result' 	=> validation_errors() 
-		));	
+		return loadViewCrFormSaveAjax($this->Entries_Model->delete($this->input->post('entryId')));	
 	}
 
 	function _getFormProperties($entryId) {
