@@ -200,7 +200,7 @@ class Feeds extends CI_Controller {
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Status'),
 					'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
-					'disabled'			=> 'disabled'
+					'disabled'			=> true
 				),
 				'aTagId' => array(
 					'type' 			=> 'typeahead',
@@ -229,21 +229,21 @@ class Feeds extends CI_Controller {
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count users'), 
 				'value'		=> $this->Feeds_Model->countUsersByFeedId($feedId),
-				'disabled'	=> 'disabled',
+				'disabled'	=> true,
 				'mDec'		=> 0,
 			);			
 			$form['fields']['entriesCount'] = array(
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count entries'), 
 				'value'		=> $this->Feeds_Model->countEntriesByFeedId($feedId),
-				'disabled'	=> 'disabled',
+				'disabled'	=> true,
 				'mDec'		=> 0,
 			);
 			$form['fields']['starredCount'] = array(
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count starred'), 
 				'value'		=> $this->Feeds_Model->countEntriesStarredByFeedId($feedId),
-				'disabled'	=> 'disabled',
+				'disabled'	=> true,
 				'mDec'		=> 0,
 			);
 			$form['fields']['linkViewEntries'] = array(

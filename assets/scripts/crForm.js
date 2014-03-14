@@ -6,6 +6,7 @@
 	methods = {
 		init : function( options ) {
 			var $element = $(this);
+cn($element);			
 			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
 			// Se utiliza en appAjax
 			if ($element.length == 0) { 
@@ -22,6 +23,12 @@
 			}
 			
 			return $element;
+		},
+		
+		renderCrFormFields: function(fields, $parentNode) {
+			renderCrFormFields(fields, $parentNode);
+cn(fields);
+cn($parentNode);			
 		},
 		
 		showSubForm: function(controller) {
@@ -354,11 +361,14 @@
 								this.$form.parents('.modal').first().modal('hide');
 								return;
 							}							
-							if ($.url().param('urlList') != null) {
-								$.goToUrl($.base64Decode(decodeURIComponent($.url().param('urlList'))));
+							var urlList = $.getParamUrl('urlList');
+							if (urlList != null) {
+								$.goToUrl($.base64Decode(decodeURIComponent(urlList)));
+								return;
 							}
 							if (response['result']['goToUrl'] != null) {
 								$.goToUrl(response['result']['goToUrl']);
+								return;
 							}
 						}
 					, this),
@@ -666,11 +676,9 @@
 	
 	
 	renderCrForm = function(data, $parentNode) {
-// TODO: revisar si en modo webPage hace falta pasar el param urlList por decodeURIComponent		
-		var params 		= $.getUrlVars();
-		var urlList 	= $.base64Decode(decodeURIComponent(params['urlList']));
+		var urlList 	= $.base64Decode(decodeURIComponent($.getParamUrl('urlList')));
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToHashUrl(\'' + urlList + '\');"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-default" onclick="$.goToUrl(\'' + urlList + '\');"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
 			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
 		];
@@ -746,7 +754,7 @@ if ($fieldGallery != null) {
 						.addClass('form-control')
 						.attr('placeholder',  field['placeholder'])
 						.appendTo($div);
-					
+
 					if (field['disabled'] == true) {
 						$input.attr('disabled', 'disabled');
 					}					
@@ -899,7 +907,6 @@ if ($fieldGallery != null) {
 			$($fieldset).appendTo($parentNode);
 		}
 	},
-	
 	
 	renderCrFormTree = function(aTree, value, $parent){
 		var $ul = $('<ul />').appendTo($parent);

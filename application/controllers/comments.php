@@ -77,7 +77,7 @@ class Comments extends CI_Controller {
 				'commentUserName' => array(
 					'type' 			=> 'text',
 					'label'			=> $this->lang->line('Name'),
-					'disabled'		=> 'disabled', 
+					'disabled'		=> true, 
 				),
 				'commentUserEmail' => array(
 					'type' 		=> 'text',
