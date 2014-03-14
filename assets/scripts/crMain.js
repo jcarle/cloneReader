@@ -85,6 +85,8 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 								'$parentNode': 	$(crMain.aPages[pageName])
 							} , data));
 							break;
+						default:
+							$page.html(data);
 					}
 				}
 		})		

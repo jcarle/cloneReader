@@ -6,6 +6,8 @@ $CI = &get_instance();
 
 //sleep(5);
 
+//aJs
+
 if ($CI->input->get('appType') == 'ajax') { 
 	switch ($view) {
 		case 'includes/crList':
@@ -29,6 +31,12 @@ if ($CI->input->get('appType') == 'ajax') {
 						'js'		=> 'crForm',
 					)
 				)
+			));
+		default: 
+			return $this->load->view('ajax', array(
+				'view' 		=> null,
+				'code'		=> true, 
+				'result' 	=> $this->load->view($view, '', true) 
 			));
 	}
 }
