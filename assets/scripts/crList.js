@@ -142,6 +142,19 @@
 				}
 			, this));			
 			
+			this.$table.find('tbody tr').on('click', 
+				function (event) {
+					$.goToUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+				}
+			);
+			
+			this.$crList.find('.btnAdd').on('click',
+				function (event) {
+					$.goToUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+					event.preventDefault;
+					return false;
+				}
+			);
 						
 			switch ($.getAppType()) {
 				case 'appAjax':
@@ -153,41 +166,12 @@
 							return false;
 						}
 					);
-					
-					
-					this.$table.find('tbody tr').on('click', 
-						function (event) {
-							$.goToHashUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode($.getHashUrl())));
-						}
-					);
 
-					this.$crList.find('.btnAdd').on('click',
-						function (event) {
-							$.goToHashUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode($.getHashUrl())));
-							event.preventDefault;
-							return false;
-						}
-					);
-					
 					break;
 				default:
 					this.$form.on('submit', 
 						function() {
 							$.showWaiting(true);
-						}
-					);
-					
-					this.$table.find('tbody tr').on('click', 
-						function (event) {
-							$.goToUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
-						}
-					);
-					
-					this.$crList.find('.btnAdd').on('click',
-						function (event) {
-							$.goToUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
-							event.preventDefault;
-							return false;
 						}
 					);
 			}
@@ -251,6 +235,7 @@
 			$form.find('input[name=filter]').focus();
 		}
 
+this.renderFilterFist(data['filters'], $form);
 // TODO: implementar los filtros
 				/*
 <?php
@@ -334,7 +319,7 @@ if ($filters != null) {
 		for (var i=0; i<data['data'].length; i++) {
 			var row = data['data'][i];
 			var id 	= row[Object.keys(row)[0]];
-			var $tr	= $( '<tr data-controller="#' + data['controller'] + '/edit/' + id +'">').appendTo($tbody);
+			var $tr	= $( '<tr data-controller="' + base_url + data['controller'] + '/edit/' + id +'">').appendTo($tbody);
 			
 			if (urlDelete == true) {	
 				$('	<td class="checkbox"> <input name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
@@ -431,5 +416,29 @@ if ($filters != null) {
 		});
 		
 		return $crList;
+	},
+
+	renderFilterFist = function(fields, $parentNode) {
+		$parentNode.append('\
+			<div class="btn-group"> \
+				<div class="dropdown"> \
+					<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle" type="button" data-toggle="dropdown"> \
+						<i class="icon-filter" ></i> \
+					</button> \
+					<div class="crFilterList  panel panel-default fade in crForm form-horizontal dropdown-menu"> \
+						<div class="panel-heading"> ' + _msg['Filter'] + ' </div> \
+						<div class="panel-body"> </div> \
+						<div class="modal-footer form-actions"> \
+							<button type="submit" class="btn btn-default"> <i class="icon-search" ></i> ' + _msg['Search'] + ' </button> \
+						</div> \
+					</div> \
+				</div> \
+			</div> ');
+			
+		$(document).crForm('renderCrFormFields', fields, $parentNode.find('.panel-body'));
+		
+		$parentNode.crForm( { 'fields': fields });
+//		array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') )
+		
 	}
 })($);

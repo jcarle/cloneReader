@@ -159,7 +159,7 @@ class Users_Model extends CI_Model {
 			'userEmail' 		=> $data['userEmail'],
 			'userFirstName'		=> $data['userFirstName'],
 			'userLastName'		=> $data['userLastName'],
-			'countryId'			=> $data['countryId']
+			'countryId'			=> element('countryId', $data, null),
 		);
 		
 

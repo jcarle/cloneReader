@@ -16,7 +16,7 @@ $aFields = renderCrFormFields($form);
 			</div>
 			<div class="modal-footer form-actions">
 				<button type="submit" class="btn btn-default"> <i class="icon-search" ></i> <?php echo $CI->lang->line('Search'); ?></button>
-			</div>				
-		</div>			
+			</div>
+		</div>
 	</div>
 </div>

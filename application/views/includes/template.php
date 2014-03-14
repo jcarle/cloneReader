@@ -20,8 +20,6 @@ if ($CI->input->get('appType') == 'ajax') {
 				)
 			));
 		case 'includes/crForm':
-// TODO: renderear los fields con js			
-			$form['aFields'] = renderCrFormFields($form);
 			return $this->load->view('ajax', array(
 				'view' 		=> null,
 				'code'		=> true, 

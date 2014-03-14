@@ -291,12 +291,22 @@ $.extend({
 	},	
 	
 	urlToHashUrl: function(url) {
+		if (url.indexOf('#') != -1) {
+			return url.substr(url.indexOf('#'));
+		}
+
 		return '#' + url.replace(base_url, '');
 	},
 	
 	goToUrl: function(url) {
-		$.showWaiting(true);
-		location.href = url;
+		if ($.getAppType()  == 'webSite') {
+			$.showWaiting(true);
+			location.href = url;
+			return;
+		}
+		
+		url = $.urlToHashUrl(url);
+		$.goToHashUrl(url);
 	},
 	
 	goToHashUrl: function(url) {
@@ -305,6 +315,15 @@ $.extend({
 	
 	getHashUrl: function() {
 		return location.hash.slice(1);
+	},
+	
+	getParamUrl: function(paramName) {
+		if ($.getAppType()  == 'webSite') {
+			return $.url().param(paramName);
+		}
+		
+		var params = $.getUrlVars();
+		return params[paramName];		
 	},
 	
 	ISODateString: function(d){
