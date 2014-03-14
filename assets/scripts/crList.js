@@ -237,14 +237,10 @@
 			$form.find('input[name=filter]').focus();
 		}
 
-this.renderFilterFist(data['filters'], $form);
-// TODO: implementar los filtros
-				/*
-<?php
-if ($filters != null) {
-	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));			
-}
-*/
+		if (data['filters'] != null) {
+			this.renderFilterFist(data['filters'], $form);
+		}
+
 		if (data['sort'] != null) {
 			var defaultOrderBy 	= Object.keys(data['sort'])[0];
 			var orderBy 		= params['orderBy'];

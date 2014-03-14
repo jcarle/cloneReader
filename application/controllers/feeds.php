@@ -222,7 +222,7 @@ class Feeds extends CI_Controller {
 		);
 
 		$form['buttons'] = array();
-		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
+		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
 			
 			$form['fields']['usersCount'] = array(

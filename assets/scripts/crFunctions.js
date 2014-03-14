@@ -313,6 +313,13 @@ $.extend({
 		location.hash = url;
 	},	
 	
+	goToUrlList: function() {
+		var urlList = $.getParamUrl('urlList');
+		if (urlList != null) {
+			$.goToUrl($.base64Decode(decodeURIComponent(urlList)));
+		}
+	},
+	
 	getHashUrl: function() {
 		return location.hash.slice(1);
 	},

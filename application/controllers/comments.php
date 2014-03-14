@@ -68,7 +68,7 @@ class Comments extends CI_Controller {
 	function _getFormProperties($commentId) {
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
-			'buttons' 	=> array('<button type="button" class="btn btn-default" onclick="$.goToUrl($.base64Decode($.url().param(\'urlList\')));"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
+			'buttons' 	=> array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 

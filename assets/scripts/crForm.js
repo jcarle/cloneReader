@@ -360,10 +360,9 @@ cn($parentNode);
 							if (this.options.isSubForm == true) {
 								this.$form.parents('.modal').first().modal('hide');
 								return;
-							}							
-							var urlList = $.getParamUrl('urlList');
-							if (urlList != null) {
-								$.goToUrl($.base64Decode(decodeURIComponent(urlList)));
+							}
+							if ($.getParamUrl('urlList') != null) {
+								$.goToUrlList();
 								return;
 							}
 							if (response['result']['goToUrl'] != null) {
@@ -676,9 +675,8 @@ cn($parentNode);
 	
 	
 	renderCrForm = function(data, $parentNode) {
-		var urlList 	= $.base64Decode(decodeURIComponent($.getParamUrl('urlList')));
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToUrl(\'' + urlList + '\');"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
 			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
 		];
