@@ -155,7 +155,9 @@
 					return false;
 				}
 			);
-						
+			
+			this.$form.unbind();
+			
 			switch ($.getAppType()) {
 				case 'appAjax':
 					this.$form.on('submit', 

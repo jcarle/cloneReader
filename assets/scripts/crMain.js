@@ -62,6 +62,8 @@ crMain = {
 					if (response['code'] != true) {
 						return $(document).crAlert(response['result']);
 					}
+// Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery: calendar, drodown, etc					
+$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 					
 					var data 	= response['result'];
 					var $page 	= crMain.aPages[pageName];
