@@ -55,7 +55,7 @@ if (!isset($meta)) {
 }
 
 $CI->carabiner->css('default.css');
-$CI->carabiner->css( config_item('siteId').'.css');
+$CI->carabiner->css( SITE_ID.'.css');
 
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -82,7 +82,7 @@ $CI->carabiner->display('js');
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 		var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;
 		var PAGE_HOME 	= 'users'; // TODO: harckodeta! 
-		var siteName	= '<?php echo config_item('siteName'); ?>';
+		var SITE_NAME	= '<?php echo SITE_NAME; ?>';
 		var _msg 		= {};
 		
 		$(document).ready(function() {
@@ -111,7 +111,7 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 //echo implode(' ', $aScripts);
 ?>
 	</script>
-	<title><?php echo config_item('siteName'); ?> </title>
+	<title><?php echo SITE_NAME; ?> </title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
@@ -126,7 +126,7 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand logo" > <img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
+			<a class="navbar-brand logo" > <img alt="<?php echo SITE_NAME; ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
 		</div>
 		<div class="navbar-collapse collapse navbar-ex1-collapse "></div>
 	</nav>

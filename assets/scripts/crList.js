@@ -436,7 +436,5 @@
 		$(document).crForm('renderCrFormFields', fields, $parentNode.find('.panel-body'));
 		
 		$parentNode.crForm( { 'fields': fields });
-//		array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') )
-		
 	}
 })($);

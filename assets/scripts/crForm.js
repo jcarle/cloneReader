@@ -6,7 +6,6 @@
 	methods = {
 		init : function( options ) {
 			var $element = $(this);
-cn($element);			
 			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
 			// Se utiliza en appAjax
 			if ($element.length == 0) { 
@@ -25,10 +24,8 @@ cn($element);
 			return $element;
 		},
 		
-		renderCrFormFields: function(fields, $parentNode) {
+		renderCrFormFields: function(fields, $parentNode) { // Para renderear los elementos, en caso de que tengan un container distinto, como crFilterList
 			renderCrFormFields(fields, $parentNode);
-cn(fields);
-cn($parentNode);			
 		},
 		
 		showSubForm: function(controller) {
@@ -138,7 +135,7 @@ cn($parentNode);
 							field.$input
 								.select2({
 									multiple: field.multiple,
-	//								openOnEnter: false,
+//									openOnEnter: false,
 									minimumInputLength: 1,
 									ajax: {
 										url: 		field['source'],
@@ -838,6 +835,7 @@ if ($fieldGallery != null) {
 						</fieldset>');
 					break;
 				case 'gallery':
+// TODO: revisar: 				
 					/*$fileupload = array ( 
 						'entityName' 	=> field['entityName'],
 						'entityId'		=> field['entityId']
@@ -919,7 +917,7 @@ if ($fieldGallery != null) {
 				$link.addClass('selected');
 			}
 				
-			if (aTree[i]['childs'].length > 0) {			
+			if (aTree[i]['childs'].length > 0) {
 				this.renderCrFormTree(aTree[i]['childs'], value, $li);
 			}
 		}

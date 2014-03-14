@@ -92,7 +92,7 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 	
 	
 	renderPageTitle: function(data, $page) {
-		$('title').text(data['title'] + ' | ' + siteName);
+		$('title').text(data['title'] + ' | ' + SITE_NAME);
 		
 		if (data['breadcrumb'] != null) {
 			$('<ol class="breadcrumb">').appendTo($page);

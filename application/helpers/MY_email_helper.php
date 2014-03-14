@@ -21,7 +21,7 @@ function getEmailTemplate($message, $url = null){
 		<div>
 			<div style="">
 				<div style="border-bottom: 1px solid #E5E5E5;  padding: 10px;">
-					<img alt="'.config_item('siteName').'" src="'.base_url('assets/images/logo.png').'" width="151" height="39">
+					<img alt="'.SITE_NAME.'" src="'.base_url('assets/images/logo.png').'" width="151" height="39">
 				</div>
 				<div  style="padding: 10px;">
 					'.$message.'

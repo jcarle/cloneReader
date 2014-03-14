@@ -37,8 +37,10 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
-/* End of file constants.php */
-/* Location: ./application/config/constants.php */
+
+
+define('SITE_NAME', 'cloneReader BETA');
+define('SITE_ID', 'cloneReader');
 
 define('DEFAULT_CURRENCY_NAME', 'AR$');
 define('DEFAULT_CURRENCY_ID', 1);
@@ -72,3 +74,7 @@ define('FEED_TIME_SAVE', 10); 	// 	Cada cuanto SEGUNDOS guardan los datos
 define('FEED_TIME_RELOAD', 999);  //  Cada cuanto MINUTOS recarga el menu con feeds
 define('ENTRIES_PAGE_SIZE', 30);
 define('URL_SECRET_TIME', 180);// Cuanto tiempo esta vivo el link para resetear password y cambiar email 
+
+
+/* End of file constants.php */
+/* Location: ./application/config/constants.php */
