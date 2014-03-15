@@ -86,7 +86,13 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 							} , data));
 							break;
 						default:
-							$page.html(data);
+							$page.append(data['html']);
+					}
+					
+					if (data['aJs'] != null) {
+						for (var i=0; i<data['aJs'].length; i++) {
+							$.getScript(base_url + 'assets/scripts/' + data['aJs'][0]);
+						}
 					}
 				}
 		})		

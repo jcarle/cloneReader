@@ -6,39 +6,33 @@ $CI = &get_instance();
 
 //sleep(5);
 
-//aJs
-
-if ($CI->input->get('appType') == 'ajax') { 
+if ($CI->input->get('appType') == 'ajax') {
+	$result = array();
+	
+	if (isset($aJs)) {
+		$result['aJs'] = $aJs;
+	}
+	 
 	switch ($view) {
 		case 'includes/crList':
-			return $this->load->view('ajax', array(
-				'view' 		=> null,
-				'code'		=> true, 
-				'result' 	=> array_merge($list, 
-					array(
-						'title'		=> $title,
-						'js'		=> 'crList',
-					)
-				)
-			));
+			$result['title'] 	= $title;
+			$result['js']		= 'crList';
+			$result 			= array_merge($list, $result);
+			break;
 		case 'includes/crForm':
-			return $this->load->view('ajax', array(
-				'view' 		=> null,
-				'code'		=> true, 
-				'result' 	=> array_merge($form, 
-					array(
-						'title'		=> $title,
-						'js'		=> 'crForm',
-					)
-				)
-			));
+			$result['title']	= $title;
+			$result['js']		= 'crForm';
+			$result 			= array_merge($form, $result);
+			break;
 		default: 
-			return $this->load->view('ajax', array(
-				'view' 		=> null,
-				'code'		=> true, 
-				'result' 	=> $this->load->view($view, '', true) 
-			));
+			$result['title']	= $title;
+			$result['html'] 	= $this->load->view($view, '', true); 
 	}
+	return 	$this->load->view('ajax', array(
+		'view' 		=> null,
+		'code'		=> true,
+		'result'	=> $result
+	)); 
 }
 
 
