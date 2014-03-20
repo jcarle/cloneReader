@@ -7,8 +7,7 @@ $.Feeds = {
 			'data': 	{ },
 			'success': 	
 				function (result) {	
-					$.showWaiting(true);
-					location.reload();
+					$.reloadUrl();
 				}
 		});
 	},
@@ -19,8 +18,7 @@ $.Feeds = {
 			'data': 	{ },
 			'success': 	
 				function (result) {	
-					$.showWaiting(true);
-					location.reload();
+					$.reloadUrl();
 				}
 		});
 	},
@@ -38,8 +36,7 @@ $.Feeds = {
 							$(document).crAlert( {
 								'msg': 			result.result,
 								'callback': 	function() {
-									$.showWaiting(true);
-									location.reload();
+									$.reloadUrl();
 								}
 							});
 						}

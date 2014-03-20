@@ -5,7 +5,10 @@
 		
 	methods = {
 		init : function( options ) {
-			var $element = $(this); 
+			var $element = $(this);
+			if (options == null) {
+				options = {};
+			} 
 			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
 			// Se utiliza en appAjax
 			if ($element.length == 0) { 
@@ -157,26 +160,15 @@
 			);
 			
 			this.$form.unbind();
-			
-			switch ($.getAppType()) {
-				case 'appAjax':
-					this.$form.on('submit', 
-						function(event) {
-							event.stopPropagation();
-							var $form = $(this);
-							$.goToHashUrl($form.attr('action') + '?' + $form.serialize());
-							return false;
-						}
-					);
 
-					break;
-				default:
-					this.$form.on('submit', 
-						function() {
-							$.showWaiting(true);
-						}
-					);
-			}
+			this.$form.on('submit', 
+				function(event) {
+					event.stopPropagation();
+					var $form = $(this);
+					$.goToUrl($form.attr('action') + '?' + $form.serialize());
+					return false;
+				}
+			);
 		},
 		
 		checkedRow: function(row) {
@@ -275,7 +267,7 @@
 				var $li 	= $('<li/>').appendTo($ul);
 				var $link 	= $('<a/>')
 					.appendTo($li)
-					.attr('href', '#' + data['controller'] + '?' + $.param(params))
+					.attr('href', base_url + data['controller'] + '?' + $.param(params))
 					.text(data['sort'][key]);
 		
 				if (orderBy == key) {
@@ -409,7 +401,7 @@
 			'pageUrl': 				function(type, page, current){
 				var params 		= $.getUrlVars();
 				params['page'] 	= page;			
-				return '#' + data['controller'] + '?' + $.param(params);
+				return base_url + data['controller'] + '?' + $.param(params);
 			},
 		});
 		

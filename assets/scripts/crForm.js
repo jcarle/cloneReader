@@ -6,6 +6,9 @@
 	methods = {
 		init : function( options ) {
 			var $element = $(this);
+			if (options == null) {
+				options = {};
+			}
 			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
 			// Se utiliza en appAjax
 			if ($element.length == 0) { 
@@ -80,8 +83,7 @@
 			}
 		, this));
 		
-		this.$form
-			.submit($.proxy(
+		this.$form.on('submit', $.proxy(
 				function() {
 					if ( !this.validate() ) {
 						return false;
@@ -681,8 +683,8 @@
 			delete buttons[1];
 		}
 		
-		var pageName = location.hash.slice(1);		
-		if (pageName.indexOf('?') != -1){
+		var pageName = location.href;
+		if (pageName.indexOf('?') != -1) {
 			pageName = pageName.substr(0, pageName.indexOf('?'));
 		}
 
@@ -869,7 +871,7 @@ if ($fieldGallery != null) {
 						<fieldset class="form-group" >\
 							<label class="hidden-xs col-sm-3 col-md-3 col-lg-3 control-label" />\
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">\
-								<a href="' + $.urlToHashUrl(field['value']) + '">' + field['label'] + '</a>\
+								<a href="' + field['value'] + '">' + field['label'] + '</a>\
 						</fieldset>');
 					break;
 				case 'raty':
@@ -909,7 +911,7 @@ if ($fieldGallery != null) {
 		for (var i=0; i<aTree.length; i++) {
 			var $li 	= $('<li/>').appendTo($ul);
 			var $link 	= $('<a />')
-				.attr('href', $.urlToHashUrl(aTree[i]['url']))
+				.attr('href', base_url + aTree[i]['url'])
 				.text(aTree[i]['label'])
 				.appendTo($li);
 				

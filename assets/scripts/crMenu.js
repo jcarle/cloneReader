@@ -22,7 +22,7 @@ crMenu = {
 				.text(label);
 			
 			if (aMenu[i]['url'] != null) {
-				$link.attr('href', '#' + aMenu[i]['url']);
+				$link.attr('href', base_url + aMenu[i]['url']);
 			}
 			if (aMenu[i]['icon'] != null) {
 				$link.prepend(' <i class="' + aMenu[i]['icon'] + '" ></i> ')

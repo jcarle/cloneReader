@@ -17,7 +17,6 @@ class Profile extends CI_Controller {
 		$this->load->view('includes/template', array(
 			'view'		=> 'profile', 
 			'title'		=> $this->lang->line('Edit profile'),
-			'hasForm'	=> true,
 			'aJs'		=> array('profile.js'),
 		));		
 	}

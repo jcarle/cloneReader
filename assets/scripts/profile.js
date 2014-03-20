@@ -1,6 +1,6 @@
 $.Profile = {
 	init: function() {
-		this.$page	= $('.userProfile').parent().parent().parent();
+		this.$page	= $('.userProfile').parents('.cr-page-profile');
 		this.aTabs 	= this.$page.find('.userProfile li');
 		for (var i=0; i<this.aTabs.length; i++) {
 			var tab = this.aTabs[i];

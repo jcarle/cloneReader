@@ -17,6 +17,7 @@ $.extend({
 		return o;
 	},
 	
+
 	getUrlVars: function(){
 		var vars = {}, hash;
 		if (window.location.href.indexOf('?') == -1) {
@@ -290,28 +291,30 @@ $.extend({
 		}
 	},	
 	
-	urlToHashUrl: function(url) {
+/*	urlToHashUrl: function(url) {
 		if (url.indexOf('#') != -1) {
 			return url.substr(url.indexOf('#'));
 		}
 
 		return '#' + url.replace(base_url, '');
-	},
+	},*/
 	
 	goToUrl: function(url) {
-		if ($.getAppType()  == 'webSite') {
+		if ($.support.pushState == false) {
+		//if ($.getAppType()  == 'webSite') {
 			$.showWaiting(true);
 			location.href = url;
 			return;
 		}
 		
-		url = $.urlToHashUrl(url);
-		$.goToHashUrl(url);
+//		url = $.urlToHashUrl(url);
+		
+//cn(url);		
+		history.pushState(null, null, url);
+		
+		crMain.loadUrl(url);
+
 	},
-	
-	goToHashUrl: function(url) {
-		location.hash = url;
-	},	
 	
 	goToUrlList: function() {
 		var urlList = $.getParamUrl('urlList');
@@ -320,17 +323,23 @@ $.extend({
 		}
 	},
 	
-	getHashUrl: function() {
-		return location.hash.slice(1);
+	getParamUrl: function(paramName) {
+//		if ($.getAppType()  == 'webSite') {
+			return $.url().param(paramName);
+//		}
+		
+//		var params = $.getUrlVars();
+//		return params[paramName];		
 	},
 	
-	getParamUrl: function(paramName) {
-		if ($.getAppType()  == 'webSite') {
-			return $.url().param(paramName);
+	reloadUrl: function() {
+		if ($.support.pushState == false) {
+			$.showWaiting(true);	
+			location.reload();
+			return;
 		}
 		
-		var params = $.getUrlVars();
-		return params[paramName];		
+		crMain.loadUrl(location.href);
 	},
 	
 	ISODateString: function(d){
@@ -408,72 +417,6 @@ $.extend({
 	}
 });
 
-
-$(document).ready(function() {
-	crMenu.initMenu();
-	resizeWindow();
-	
-	$.showWaiting(true);
-	$('a').click(function(event) {
-		if (event.button != 0) {
-			return;
-		}
-		
-		var url = $(event.target).attr('href');
-		if (url == null || url.substr(0, 1) == '#') {
-			return;
-		}
-		event.preventDefault();
-		return $.goToUrl(url);
-	});	
-	
-	$.countProcess = 0;
-	
-	$.ajaxSetup({dataType: "json"});
-	
-	$(document).ajaxSend(
-		function(event, jqXHR, ajaxOptions) {
-			if (ajaxOptions.skipwWaiting === true) {
-				return;
-			}
-			$.countProcess ++;
-			$.showWaiting();	
-		}
-	);
-	 
-	$(document).ajaxComplete(
-		function(event, jqXHR, ajaxOptions) {
-			if (ajaxOptions.skipwWaiting === true) {
-				return;
-			}			
-			$.countProcess --;
-			$.showWaiting();	
-		}
-	);
-	
-	$(document).ajaxError(
-		function(event, jqXHR, ajaxOptions) {
-			if (jqXHR.status === 0 && jqXHR.statusText === 'abort') {
-				return;
-			}
-			if (jqXHR.status === 0 && jqXHR.statusText === 'error') {
-				$(document).crAlert( {
-					'msg': 			_msg['Not connected. Please verify your network connection'],
-					'isConfirm': 	true,
-					'confirmText': 	_msg['Retry'],
-					'callback': 	$.proxy(
-						function() { $.ajax(ajaxOptions); }
-					, this)
-				});
-				return;
-			}
-			
-			var result = $.parseJSON(jqXHR.responseText);
-			$.hasAjaxErrorAndShowAlert(result);
-		}
-	);
-});
-	
 $(window).resize(function() {
 	resizeWindow();
 });

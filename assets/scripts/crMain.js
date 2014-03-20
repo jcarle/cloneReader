@@ -1,8 +1,87 @@
-crMain = {
+crMain = { // TODO: renombrar a crPage ?
 	aPages: [],
+	aJs: {},
 	
 	init: function() {
-		$('.navbar-brand.logo').attr('href', base_url + 'app#' + PAGE_HOME);
+		this.initEvents();
+		this.iniAppAjax();
+		crMenu.initMenu();
+		resizeWindow();
+		
+		// TODO: seteamos el evento global o de a uno a cada link ?
+		$.showWaiting(false);
+	},
+	
+	initEvents: function() {
+		// TODO: revisar, a ver si se puede sacar esta exception
+		$('a:not(.btn-facebook):not(.btn-google)').live('click', function(event) {
+			if (event.button != 0) {
+				return;
+			}
+			if ($.support.pushState == false) {
+				return;
+			}
+			
+			var url = $(event.currentTarget).attr('href');
+			if (url == null || url.substr(0, 1) == '#') {
+				return;
+			}
+			event.preventDefault();
+			return $.goToUrl(url);
+		});	
+		
+		$.countProcess = 0;
+		
+		$.ajaxSetup({dataType: "json"});
+		
+		$(document).ajaxSend(
+			function(event, jqXHR, ajaxOptions) {
+				if (ajaxOptions.skipwWaiting === true) {
+					return;
+				}
+				$.countProcess ++;
+				$.showWaiting();	
+			}
+		);
+		 
+		$(document).ajaxComplete(
+			function(event, jqXHR, ajaxOptions) {
+				if (ajaxOptions.skipwWaiting === true) {
+					return;
+				}			
+				$.countProcess --;
+				$.showWaiting();	
+			}
+		);
+		
+		$(document).ajaxError(
+			function(event, jqXHR, ajaxOptions) {
+				if (jqXHR.status === 0 && jqXHR.statusText === 'abort') {
+					return;
+				}
+				if (jqXHR.status === 0 && jqXHR.statusText === 'error') {
+					$(document).crAlert( {
+						'msg': 			_msg['Not connected. Please verify your network connection'],
+						'isConfirm': 	true,
+						'confirmText': 	_msg['Retry'],
+						'callback': 	$.proxy(
+							function() { $.ajax(ajaxOptions); }
+						, this)
+					});
+					return;
+				}
+				
+				var result = $.parseJSON(jqXHR.responseText);
+				$.hasAjaxErrorAndShowAlert(result);
+			}
+		);	
+	},
+	
+	iniAppAjax: function() {
+		if ($.support.pushState == false) {
+			return;
+		}		
+cn('iniAppAjax!');		
 		
 		$.ajax({
 			'url': 		base_url + 'app/selectMenuAndTranslations',
@@ -14,47 +93,37 @@ crMain = {
 					var aMenu = result['result']['aMenu'];
 					for (var menuName in aMenu) {
 						var $menu = $(aMenu[menuName]['parent']);
+						$menu.children().remove();
 						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
 					}
 				}
 		});
 
-		$(window).on('hashchange',function(){
-			var controller = location.hash.slice(1);
-			if (controller.trim() == '') {
-				controller = PAGE_HOME;
-			}
-			crMain.loadUrl(controller);
-		});		
-		
+		$(window).bind("popstate", function () {  
+			crMain.loadUrl(location.href);
+		});  
 
-		var hash = PAGE_HOME;
-		if (location.hash.slice(1) != '') {
-			hash = location.hash.slice(1);
-		}		
-		if (hash != location.hash.slice(1)) {
-			$.goToHashUrl(hash);
-		}
-		else {
-			crMain.loadUrl(hash);
-		}
+//		if ($('.container > .page').length == 0) {
+			crMain.loadUrl(location.href);
+//		}
 	},
 	
 	loadUrl: function(controller) {
-		var pageName = this.getPageName();		
-		if (this.aPages[pageName] == null) {
+		var pageName = this.getPageName();
+		this.aPages[pageName] = $('.container > .' + pageName);
+		if (this.aPages[pageName].length == 0) {
 			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.container'));
 		}
-		$('.container .page').hide();
-		this.aPages[pageName].stop().show();
 
 		if (this.ajax) {
 			this.ajax.abort();
 			this.ajax = null;
 		}
-				
+		
+		var url = base_url + controller.replace(base_url, '');
+		
 		this.ajax = $.ajax({
-			'url': 		base_url + controller,
+			'url': 		url,
 			'data': 	{ 'appType': 'ajax' },
 			'async':	true,
 			'success': 
@@ -62,8 +131,12 @@ crMain = {
 					if (response['code'] != true) {
 						return $(document).crAlert(response['result']);
 					}
-// Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery: calendar, drodown, etc					
-$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
+					
+					// FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
+					$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
+
+					$('.container > .page').hide();
+					crMain.aPages[pageName].stop().show();
 					
 					var data 	= response['result'];
 					var $page 	= crMain.aPages[pageName];
@@ -77,13 +150,13 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 							$(null).crList($.extend({
 								'autoRender': 	true,
 								'$parentNode': 	$(crMain.aPages[pageName])
-							} , data));
+							} , data['list']));
 							break;
 						case 'crForm':
 							$(null).crForm( $.extend({
 								'autoRender': 	true,
 								'$parentNode': 	$(crMain.aPages[pageName])
-							} , data));
+							} , data['form']));
 							break;
 						default:
 							$page.append(data['html']);
@@ -91,13 +164,16 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 					
 					if (data['aJs'] != null) {
 						for (var i=0; i<data['aJs'].length; i++) {
-							$.getScript(base_url + 'assets/scripts/' + data['aJs'][0]);
+							var fileName = data['aJs'][i];
+							if (crMain.aJs[fileName] == null) {
+								crMain.aJs[fileName] = fileName;
+								$.getScript(base_url + 'assets/scripts/' + fileName);
+							}
 						}
 					}
 				}
 		})		
 	},
-	
 	
 	renderPageTitle: function(data, $page) {
 		$('title').text(data['title'] + ' | ' + SITE_NAME);
@@ -132,7 +208,7 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 	},
 	
 	getPageName: function() {
-		var pageName = location.hash.slice(1);		
+		var pageName = location.href.replace(base_url, '');
 		if (pageName.indexOf('?') != -1){
 			pageName = pageName.substr(0, pageName.indexOf('?'));
 		}
@@ -140,12 +216,14 @@ $('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 		if (position != -1){
 			pageName = pageName.substr(0, position + 5);
 		}
+		
+		pageName = pageName.split('/').join(' ').trim().split(' ').join('-')
 		return 'cr-page-' + pageName;
 	}
 };
 
-
-
-$(document).ready( function() { 
+$(document).ready( function() {
+	$.support.pushState = (history.pushState == false ? false : true);
+	 
 	crMain.init(); 
 });
