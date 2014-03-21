@@ -37,26 +37,29 @@ $CI->carabiner->js('jquery.url.js');
 $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('crFunctions.js');
+$CI->carabiner->js('crMain.js');
 $CI->carabiner->js('crAlert.js');
 $CI->carabiner->js('crMenu.js');
+$CI->carabiner->js('feedback.js');
+$CI->carabiner->js('profile.js');
+
 
 $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-theme.css');
 $CI->carabiner->css('font-awesome.css');
 
-if (isset($aJs)) {
-	foreach ($aJs as $js) {
-		$CI->carabiner->js($js);
-	}
+$aScripts = appendCrFormJsAndCss((isset($form) ? $form : null), $aScripts); 
+$aScripts = appendCrListJsAndCss((isset($list) ? $list : null), $aScripts);
+
+
+$siteAssets = config_item('siteAssets');
+foreach ($siteAssets['js'] as $js) {
+	$CI->carabiner->js($js);
 }
-if (isset($aCss)) {
-	foreach ($aCss as $css) {
-		$CI->carabiner->css($css);
-	}
+foreach ($siteAssets['css'] as $css) {
+	$CI->carabiner->css($css);
 }
 
-$aScripts = appendCrFormJsAndCss($view, (isset($form) ? $form : null), (isset($hasForm) ? $hasForm : null), (isset($hasGallery) ? $hasGallery : null), $aScripts); 
-$aScripts = appendCrListJsAndCss($view, (isset($list) ? $list : null), $aScripts);
 
 
 if (!isset($meta)) {
@@ -90,6 +93,16 @@ $CI->carabiner->display('js');
 		var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
 	
+
+var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;	
+
+		var PAGE_HOME 	= 'users'; // TODO: harckodeta! 
+		var SITE_NAME	= '<?php echo SITE_NAME; ?>';
+		var _msg 		= {};
+		
+		$(document).ready(function() {
+			$.appType = 'appAjax';
+		});	
 <?php
 
 
@@ -169,6 +182,10 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>	
 	<div class="container content">
+		
+<?php $this->load->view('includes/uploadfile', array( 'fileupload' => array ())); ?>
+		
+		<div class="page <?php echo getPageName(); ?>"/>
 <?php
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';
@@ -191,9 +208,6 @@ if ($showTitle == true) {
 				<h2>'. $title .' <small> </small></h2>
 			</div>';
 }
-	
-
-
 
 
 function renderMenu($aMenu, $className = null){

@@ -358,5 +358,19 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+
+/**
+ * Js y Css adicionales para que sea compilado con carabiner
+ */
+$config['siteAssets'] = array(
+	'js' => array(
+		'feeds.js',
+		'cloneReader.js', 
+		'jquery.visible.min.js',
+	),
+	'css' => array()
+);
+
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */

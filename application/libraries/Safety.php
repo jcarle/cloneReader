@@ -7,16 +7,17 @@ class Safety {
 		
 
 //$CI->output->enable_profiler(TRUE);
-
 		initLang();
 
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
-			if ($this->isCommandLine() != true && uri_string() != 'rss' && $CI->input->is_ajax_request() != true) {
+			$CI->load->library('user_agent');
+			if ($this->isCommandLine() != true && uri_string() != 'rss' && $CI->input->is_ajax_request() != true && $CI->agent->is_robot() != true) {
 				redirect('login');
 			}
 		}
 		
+
 		if ($this->session->userdata('userId') != USER_ANONYMOUS) {
 			if ($this->session->userdata('last_activity') == $this->session->now) {
 				$CI = &get_instance();

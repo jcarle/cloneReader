@@ -4,8 +4,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form action="<?php echo base_url() . 'files/save'; ?>"  method="POST" enctype="multipart/form-data">
-				<?php echo form_hidden('entityName', $fileupload['entityName']); ?>
-				<?php echo form_hidden('entityId', $fileupload['entityId']); ?>		
+				<?php echo form_hidden('entityName', element('entityName', $fileupload)); ?>
+				<?php echo form_hidden('entityId', element('entityId', $fileupload)); ?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
 					<h4> <i class="icon-edit"></i> <?php echo $this->lang->line('Edit pictures'); ?> </h4>
