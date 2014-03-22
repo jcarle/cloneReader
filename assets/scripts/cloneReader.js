@@ -1,6 +1,6 @@
 cloneReader = {
 	init: function(aFilters) {
-		this.$container = $('#cloneReader');
+		this.$container = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
 		this.$toolbar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$container);
 		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$container);
 		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$container);		 		
@@ -391,9 +391,8 @@ cloneReader = {
 			'skipwWaiting':	true,
 			'success':  	
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
+
 					cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
 					cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
 					cloneReader.renderEntries(response.result);
@@ -877,9 +876,8 @@ TODO: pensar como mejorar esta parte
 			'success': 	
 				$.proxy(
 					function(reload, response) {
-						if (response['code'] != true) {
-							return $(document).crAlert(response['result']);
-						}
+						if ($.hasAjaxDefaultAction(response) == true) { return; }
+
 console.time("t1");	
 						if (reload == true) {
 							var scrollTop = this.$ulFilters.scrollTop();
@@ -1185,9 +1183,7 @@ console.timeEnd("t1");
 			'success': 	
 				$.proxy(
 					function(feedId, response) {
-						if (response['code'] != true) {
-							return $(document).crAlert(response['result']);
-						}
+						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						
 						cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': feedId }); 
 						cloneReader.loadFilters(true);
@@ -1213,9 +1209,7 @@ console.timeEnd("t1");
 			'type':	 	'post',
 			'success': 	
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					
 					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
 					cloneReader.loadFilters(true);
@@ -1247,9 +1241,7 @@ console.timeEnd("t1");
 			'async':		async,
 			'success': 		
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
 				}
 		});
 		
@@ -1274,10 +1266,8 @@ console.timeEnd("t1");
 			'type':	 	'post',
 			'success': 	
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
-					
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
+
 					cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
 					cloneReader.loadFilters(true);
 				}
@@ -1298,9 +1288,7 @@ console.timeEnd("t1");
 			'type':	 	'post',
 			'success': 	
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					cloneReader.saveData(false);
 					cloneReader.loadFilters(true);
 				}
@@ -1327,9 +1315,7 @@ console.timeEnd("t1");
 						},
 						'success': 	
 							function(response) {
-								if (response['code'] != true) {
-									return $(document).crAlert(response['result']);
-								}
+								if ($.hasAjaxDefaultAction(response) == true) { return; }
 								cloneReader.aEntries = {}
 								cloneReader.loadEntries(true, true, {});
 								cloneReader.loadFilters(true);
@@ -1356,9 +1342,7 @@ console.timeEnd("t1");
 						'data': 	{ 'feedId':	feedId 	},
 						'success': 	
 							function(response) {
-								if (response['code'] != true) {
-									return $(document).crAlert(response['result']);
-								}
+								if ($.hasAjaxDefaultAction(response) == true) { return; }
 								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
 								cloneReader.loadFilters(true);
 							}
@@ -1377,9 +1361,7 @@ console.timeEnd("t1");
 			'skipwWaiting': true,
 			'success': 		
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
 				}
 		});
 	},
@@ -1530,7 +1512,7 @@ console.timeEnd("t1");
 			$('#header').css( {'box-shadow': 'none' });
 		}
 
-		$('.content > .pageTitle').remove();
+		this.$container.find('.pageTitle').remove();
 		$('.content').css( { 'max-width': '100%' });
 		$('#header').addClass('nulllllnavbar-fixed-top').css( { 'max-width': '100%' } );
 
@@ -1582,9 +1564,7 @@ console.timeEnd("t1");
 			'type':		'post',
 			'success': 	
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					cloneReader.renderBrowseTags(response.result);
 				}
 		});
@@ -1631,9 +1611,7 @@ console.timeEnd("t1");
 							'success': 	
 								$.proxy( 
 									function($tag, response) {
-										if (response['code'] != true) {
-											return $(document).crAlert(response['result']);
-										}
+										if ($.hasAjaxDefaultAction(response) == true) { return; }
 										
 										for (var i=0; i<response.result.length; i++) {
 											var feed 	= response.result[i];
@@ -1699,21 +1677,21 @@ console.timeEnd("t1");
 			'async':	true,
 			'success': 	
 				$.proxy( 
-					function (result) {
-						if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
+					function (response) {
+						if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-						$(result['result']).appendTo($('body'));
+						$(response['result']).appendTo($('body'));
 						var $modal	= $('#frmShareByEmail').parents('.modal');
 						$.showModal($modal, false);
 					}
 				, this),
 			'error':
-				function (result) {
-					if (result.statusText == 'abort') {
+				function (response) {
+					if (response.statusText == 'abort') {
 						return;
 					}
-					result = $.parseJSON(result.responseText);
-					$.hasAjaxErrorAndShowAlert(result);
+					response = $.parseJSON(response.responseText);
+					$.hasAjaxDefaultAction(response);
 				}
 		});
 	},
@@ -1731,10 +1709,10 @@ console.timeEnd("t1");
 			'url': 		base_url + 'help/keyboardShortcut/',
 			'success': 	
 				$.proxy( 
-					function (result) {
-						if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
+					function (response) {
+						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						
-						$(result['result']).appendTo($('body'));
+						$(response['result']).appendTo($('body'));
 						this.$keyboardShortcut	= $('#frmKeyboardShortcut').parents('.modal');
 						$.showModal(this.$keyboardShortcut, false);
 					}

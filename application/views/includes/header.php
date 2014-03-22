@@ -25,11 +25,11 @@ $aScripts = array();
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
-	$CI->carabiner->empty_cache('both');
+//	$CI->carabiner->empty_cache('both');
 }
 
 
-//$CI->carabiner->js('jquery-2.0.3.min.js');
+//$CI->carabiner->js('jquery-2.1.0.min.js');
 $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
@@ -92,11 +92,8 @@ $CI->carabiner->display('js');
 		var base_url	= '<?php echo base_url(); ?>';
 		var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
 		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
-	
-
-var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;	
-
-		var PAGE_HOME 	= 'users'; // TODO: harckodeta! 
+		var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;	
+		var PAGE_HOME 	= '<?php echo $this->router->default_controller; ?>'; 
 		var SITE_NAME	= '<?php echo SITE_NAME; ?>';
 		var _msg 		= {};
 		

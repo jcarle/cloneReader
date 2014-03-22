@@ -85,7 +85,6 @@ class Feedback extends CI_Controller {
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Feedback'),
 			'form'		=> $form,
-			'aJs'		=> array('feedback.js'),
 			'langs'		=> array( 'Thanks for contacting us' )
 		));		
 	}

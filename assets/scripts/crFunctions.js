@@ -404,15 +404,36 @@ $.extend({
 		$('.modal:last').css('z-index', 1040);;
 	},
 	
-	hasAjaxErrorAndShowAlert: function(result) {
-		if (result == null) {
+	/**
+	 * 	Ejecutar las acciones por defecto de una peticion ajax (alerts, redirects, notifications, etc)
+	 */
+	hasAjaxDefaultAction: function(response) {
+		if (response == null) {
 			$(document).crAlert('error');
 			return true;
 		}
-		if (result['code'] != true) {
-			$(document).crAlert(result['result']);
+		if (response['code'] != true) {
+			$(document).crAlert(response['result']);
 			return true;
 		}
+		if (response['result']['msg'] != null && response['result']['goToUrl'] != null) {
+			$(document).crAlert({
+				'msg': 		response['result']['msg'],
+				'callback': function() {
+					$.goToUrl(response['result']['goToUrl']);
+				}
+			});
+			return true;
+		}
+		if (response['result']['notification'] != null) {
+			$.showNotification(response['result']['notification']);
+			return true;
+		}
+		if (response['result']['goToUrl'] != null) {
+			$.goToUrl(response['result']['goToUrl']);
+			return true;
+		}
+					
 		return false;
 	}
 });

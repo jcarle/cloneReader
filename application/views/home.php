@@ -1,6 +1,3 @@
-<div id="cloneReader" >
-</div>
-
 <script>
 var TAG_HOME			= <?php echo TAG_HOME; ?>;
 var TAG_ALL			 	= <?php echo TAG_ALL; ?>;

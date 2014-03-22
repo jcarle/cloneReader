@@ -229,12 +229,12 @@
 								'autoUpload': 	true,
 								'done': 		
 									function (event, data) {
-										var result = data.result;
-										if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
+										var response = data.result;
+										if ($.hasAjaxDefaultAction(response) == true) { return; }
 										$(document).crAlert({
-											'msg': 		result['result']['msg'],
+											'msg': 		response['result']['msg'],
 											'callback': function() {
-												$.goToUrl(result['result']['goToUrl']);
+												$.goToUrl(response['result']['goToUrl']);
 											}
 										});
 									},
@@ -243,8 +243,8 @@
 										if (data.jqXHR.status === 0) {
 											return $(document).crAlert( _msg['Not connected. Please verify your network connection'] );
 										}
-										var result = $.parseJSON(data.jqXHR.responseText);
-										$.hasAjaxErrorAndShowAlert(result);
+										var response = $.parseJSON(data.jqXHR.responseText);
+										$.hasAjaxDefaultAction(response);
 									}
 							});
 						case 'numeric':
@@ -339,33 +339,14 @@
 								return;
 							}
 							
-							if (response['code'] != true) {
-								return $(document).crAlert(response['result']);
-							}
-							
-							if (response['result']['msg'] != null && response['result']['goToUrl'] != null) {
-								$(document).crAlert({
-									'msg': 		response['result']['msg'],
-									'callback': function() {
-										$.goToUrl(response['result']['goToUrl']);
-									}
-								});
-								return;
-							}
-		
-							if (response['result']['notification'] != null) {
-								$.showNotification(response['result']['notification']); 
-							}
+							if ($.hasAjaxDefaultAction(response) == true) { return; }
+
 							if (this.options.isSubForm == true) {
 								this.$form.parents('.modal').first().modal('hide');
 								return;
 							}
 							if ($.getParamUrl('urlList') != null) {
 								$.goToUrlList();
-								return;
-							}
-							if (response['result']['goToUrl'] != null) {
-								$.goToUrl(response['result']['goToUrl']);
 								return;
 							}
 						}
@@ -452,7 +433,7 @@
 			$gallery.find('a').remove();
 			$('#fileupload tbody').children().remove();
 			
-			
+// TODO: revisar y cambiar result por response 			
 			$.ajax({
 				'url': 		this.fileupload.urlGet,
 				'data': 	{ },
@@ -484,10 +465,10 @@
 				'data':			{ 'frmParent': field.frmParent },
 				'success': 		
 					$.proxy( 
-						function (result) {
-							if ($.hasAjaxErrorAndShowAlert(result) == true) { return; }
+						function (response) {
+							if ($.hasAjaxDefaultAction(response) == true) { return; }
 							
-							result = $(result['result']);
+							var result = $(response['result']);
 							field.$input.children().remove();
 							field.$input.html(result);
 							
@@ -534,8 +515,8 @@
 				'url':			controller,
 				'success': 		
 					$.proxy( 
-						function (result) {
-							$(result['result']).appendTo($('body'));
+						function (response) {
+							$(response['result']).appendTo($('body'));
 							
 							var frmId 			= $(result['result']).find('form').attr('id');
 							var $subform 		= $('#' + frmId);

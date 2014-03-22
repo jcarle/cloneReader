@@ -281,6 +281,8 @@ class Entries extends CI_Controller {
 		
 		$this->Entries_Model->saveEntriesTagByUser($userId);
 		$this->getAsyncNewsEntries($userId);
+		
+		return loadViewAjax(true);
 	}	
 	
 	function browseTags() {

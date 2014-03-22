@@ -133,7 +133,6 @@ class Feeds extends CI_Controller {
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit feeds'),
 			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true)),
-			'aJs'		=> array('feeds.js')
 		));		
 	}
 

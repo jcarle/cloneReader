@@ -1,8 +1,9 @@
 crMain = { // TODO: renombrar a crPage ?
 	aPages: [],
-	aJs: {},
 	
 	init: function() {
+		$.support.pushState = (history.pushState == false ? false : true);
+		
 		this.initEvents();
 		this.iniAppAjax();
 		crMenu.initMenu();
@@ -14,7 +15,9 @@ crMain = { // TODO: renombrar a crPage ?
 	
 	initEvents: function() {
 		// TODO: revisar, a ver si se puede sacar esta exception
-		$('a:not(.btn-facebook):not(.btn-google)').live('click', function(event) {
+		$(document).on('click', 'a',
+		//$('a:not(.btn-facebook):not(.btn-google)').on('click', 
+		function(event) {
 			if (event.button != 0) {
 				return;
 			}
@@ -34,6 +37,11 @@ crMain = { // TODO: renombrar a crPage ?
 		
 		$.ajaxSetup({dataType: "json"});
 		
+		
+		/**
+		 * Propiedades por default para los ajax:
+		 * 		skipwWaiting: omite postrar el divWaiting en cada peticion
+		 * */
 		$(document).ajaxSend(
 			function(event, jqXHR, ajaxOptions) {
 				if (ajaxOptions.skipwWaiting === true) {
@@ -43,12 +51,13 @@ crMain = { // TODO: renombrar a crPage ?
 				$.showWaiting();	
 			}
 		);
-		 
+		
+
 		$(document).ajaxComplete(
 			function(event, jqXHR, ajaxOptions) {
 				if (ajaxOptions.skipwWaiting === true) {
 					return;
-				}			
+				}
 				$.countProcess --;
 				$.showWaiting();	
 			}
@@ -71,8 +80,8 @@ crMain = { // TODO: renombrar a crPage ?
 					return;
 				}
 				
-				var result = $.parseJSON(jqXHR.responseText);
-				$.hasAjaxErrorAndShowAlert(result);
+				var response = $.parseJSON(jqXHR.responseText);
+				$.hasAjaxDefaultAction(response);
 			}
 		);	
 	},
@@ -87,10 +96,10 @@ cn('iniAppAjax!');
 			'url': 		base_url + 'app/selectMenuAndTranslations',
 			'async':	false,
 			'success': 
-				function(result) {
-					_msg = result['result']['aLangs']; // TODO: meter _msg en algun lado, que no sea global
+				function(response) {
+					_msg = response['result']['aLangs']; // TODO: meter _msg en algun lado, que no sea global
 		
-					var aMenu = result['result']['aMenu'];
+					var aMenu = response['result']['aMenu'];
 					for (var menuName in aMenu) {
 						var $menu = $(aMenu[menuName]['parent']);
 						$menu.children().remove();
@@ -103,11 +112,21 @@ cn('iniAppAjax!');
 			crMain.loadUrl(location.href);
 		});  
 
-//		if ($('.container > .page').length == 0) {
+		/*if ($('.container > .page').length == 0) {
 			crMain.loadUrl(location.href);
-//		}
+		}*/
 	},
 	
+	
+	/**
+	 * Propiedades que se setean desde el js de cada page; se guardan dentro $page.data(); se pueden setear desde la view ajax, o desde un js
+	 * 		notProcessLinks: no 
+	 * 		notRefresh: no vuelve a pedir la page, solo muestra lo que ya hay en memoria
+	 * Eventos que dispara cada page; hay que setearlo en el js de cada page
+	 * 		onHide: se lanza al ocultar la page
+	 * 		onVisible: se lanza al mostrar la page
+	 * 
+	 * */
 	loadUrl: function(controller) {
 		var pageName = this.getPageName();
 		this.aPages[pageName] = $('.container > .' + pageName);
@@ -120,7 +139,13 @@ cn('iniAppAjax!');
 			this.ajax = null;
 		}
 		
-		var url = base_url + controller.replace(base_url, '');
+		var url 	= base_url + controller.replace(base_url, '');
+		var $page 	= this.aPages[pageName];
+		if ($page.data('notRefresh') == true) {
+cn($page);
+			this.showPage(pageName);
+			return;
+		}
 		
 		this.ajax = $.ajax({
 			'url': 		url,
@@ -128,21 +153,15 @@ cn('iniAppAjax!');
 			'async':	true,
 			'success': 
 				function(response) {
-					if (response['code'] != true) {
-						return $(document).crAlert(response['result']);
-					}
-					
 					// FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
 					$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
-
-					$('.container > .page').hide();
-					crMain.aPages[pageName].stop().show();
 					
 					var data 	= response['result'];
-					var $page 	= crMain.aPages[pageName];
+					var $page 	= crMain.aPages[data['pageName']];
+					$page.data(data);
 					
+					crMain.showPage(pageName);
 					$page.children().remove();
-					
 					crMain.renderPageTitle(data, $page);
 					
 					switch (data['js']) {
@@ -161,18 +180,8 @@ cn('iniAppAjax!');
 						default:
 							$page.append(data['html']);
 					}
-					
-					if (data['aJs'] != null) {
-						for (var i=0; i<data['aJs'].length; i++) {
-							var fileName = data['aJs'][i];
-							if (crMain.aJs[fileName] == null) {
-								crMain.aJs[fileName] = fileName;
-								$.getScript(base_url + 'assets/scripts/' + fileName);
-							}
-						}
-					}
 				}
-		})		
+		})
 	},
 	
 	renderPageTitle: function(data, $page) {
@@ -207,23 +216,54 @@ cn('iniAppAjax!');
 
 	},
 	
+	showPage: function(pageName) {
+// TODO: revisar si queda bien algun efecto, comentando la duration hace cosas copadas		
+		$.showWaiting(true);
+		var $page 	= this.aPages[pageName];
+		$('.container > .page:visible:not(.' + pageName + ')').hide( { 
+			'duration': 0,
+			'complete': function(){ 
+cn(this);				
+				$(this).trigger('onHide'); } 
+		});
+		$page.stop().show( { 
+			'duration': 0,
+			'complete': function(){ $(this).trigger('onVisible'); } 
+		});		
+		$.showWaiting(false);
+	},
+	
 	getPageName: function() {
 		var pageName = location.href.replace(base_url, '');
 		if (pageName.indexOf('?') != -1){
 			pageName = pageName.substr(0, pageName.indexOf('?'));
-		}
-		var position = pageName.indexOf('/edit/');
-		if (position != -1){
-			pageName = pageName.substr(0, position + 5);
+		}		
+		var aTmp = pageName.split('/');
+		var controller = aTmp[0];
+		if (controller.trim() == '') {
+			controller = PAGE_HOME;
 		}
 		
-		pageName = pageName.split('/').join(' ').trim().split(' ').join('-')
-		return 'cr-page-' + pageName;
+		return 'cr-page-' + controller + (aTmp.length > 1 ? '-' + aTmp[1] : '');
+	},
+	
+	processLink: function(event) {
+		if (event.button != 0) {
+			return;
+		}
+		if ($.support.pushState == false) {
+			return;
+		}
+		
+		var url = $(event.currentTarget).attr('href');
+		if (url == null || url.substr(0, 1) == '#') {
+			return;
+		}
+		event.preventDefault();
+		return $.goToUrl(url);
 	}
 };
 
 $(document).ready( function() {
-	$.support.pushState = (history.pushState == false ? false : true);
-	 
 	crMain.init(); 
 });

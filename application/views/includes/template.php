@@ -6,23 +6,51 @@ $CI = &get_instance();
 
 //sleep(5);
 
-if ($CI->input->get('appType') == 'ajax') {
-	$result = array();
+
+/*
+$CI->load->library('user_agent');
+
+if ($CI->agent->is_robot()) {
 	
-	if (isset($aJs)) {
-		$result['aJs'] = $aJs;
+	if ($this->session->userdata('appType') == 'webSite')
+}
+
+/*
+if ($CI->agent->is_browser()) {
+    $agent = $CI->agent->browser().' '.$CI->agent->version();
+}
+elseif ($CI->agent->is_robot())
+{
+    $agent = $CI->agent->robot();
+}
+elseif ($CI->agent->is_mobile())
+{
+    $agent = $CI->agent->mobile();
+}
+else
+{
+    $agent = 'Unidentified User Agent';
+}*/
+
+
+if ($CI->input->get('appType') == 'ajax') {
+	$result = array('pageName' => getPageName());
+	
+	if (isset($notRefresh)) {
+		$result['notRefresh'] = $notRefresh;
 	}
-	 
+	
 	switch ($view) {
 		case 'includes/crList':
 			$result['title'] 	= $title;
 			$result['js']		= 'crList';
-			$result 			= array_merge($list, $result);
+			$result['list']		= $list;
 			break;
 		case 'includes/crForm':
+			$form  = appendMessagesToCrForm($form);
 			$result['title']	= $title;
 			$result['js']		= 'crForm';
-			$result 			= array_merge($form, $result);
+			$result['form'] 	= $form;
 			break;
 		default: 
 			$result['title']	= $title;
@@ -35,8 +63,8 @@ if ($CI->input->get('appType') == 'ajax') {
 	)); 
 }
 
-
+//$this->load->view('app');
 
 $this->load->view('includes/header');
-$this->load->view($view);
+//$this->load->view($view);
 $this->load->view('includes/footer');
