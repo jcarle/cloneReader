@@ -46,41 +46,24 @@ class Login extends CI_Controller {
 		);		
 		
 		$this->form_validation->set_rules($form['rules']);
-
-		if ($this->input->is_ajax_request()) {
-			$code = $this->form_validation->run(); 
-			return loadViewAjax($code, $code == false ? validation_errors() : array('goToUrl' => base_url('home')));
-		}			
 					
-		$aServerData = array();
-		switch ($_SERVER['SERVER_NAME']) {
-			case 'jcarle.redirectme.net':
-				$aServerData['googleApi'] 	= '522657157003-rm53dmqk4hnjtrnphpara5odtet8qj0i.apps.googleusercontent.com';
-				break;
-			case 'www.jcarle.com.ar':
-				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
-				break;
-			case 'www.clonereader.com.ar':
-				$aServerData['googleApi'] 	= '522657157003.apps.googleusercontent.com';
-				break;
-		}	
-						
-		if ($this->form_validation->run() == FALSE) {
-			return $this->load->view('includes/template', array(
-				'view'			=> 'login', 
-				'title'			=> $this->lang->line('Login'),
-				'meta'			=> array(
-					'description' 	=> 'Login in clone Reader. Reader of feeds, rss, news',
-					'keywords'		=> 'cReader cloneReader login '
-				),				
-				'form'			=> $form,
-				'aServerData'	=> $aServerData,
-			));
+		if ($this->input->post() != false) {
+			$code = $this->form_validation->run();
+			if ($this->input->is_ajax_request()) {
+				return loadViewAjax($code, $code == false ? validation_errors() : array('goToUrl' => base_url('home'), 'skipAppLink' => true));
+			}
 		}
-		
-		redirect('home');
+			
+		return $this->load->view('includes/template', array(
+			'view'			=> 'login', 
+			'title'			=> $this->lang->line('Login'),
+			'meta'			=> array(
+				'description' 	=> 'Login in clone Reader. Reader of feeds, rss, news',
+				'keywords'		=> 'cReader cloneReader login '
+			),				
+			'form'			=> $form,
+		));
 	}
-	
 
 	function _validate_login() {
 		return $this->safety->login($this->input->post('email'), $this->input->post('password'));

@@ -301,19 +301,13 @@ $.extend({
 	
 	goToUrl: function(url) {
 		if ($.support.pushState == false) {
-		//if ($.getAppType()  == 'webSite') {
 			$.showWaiting(true);
 			location.href = url;
 			return;
 		}
-		
-//		url = $.urlToHashUrl(url);
-		
-//cn(url);		
-		history.pushState(null, null, url);
-		
-		crMain.loadUrl(url);
 
+		history.pushState(null, null, url);
+		crMain.loadUrl(url);
 	},
 	
 	goToUrlList: function() {
@@ -406,31 +400,42 @@ $.extend({
 	
 	/**
 	 * 	Ejecutar las acciones por defecto de una peticion ajax (alerts, redirects, notifications, etc)
+	 * 	Params:
+	 * 		skipAppLink			fuerza la variable $.support.pushState=false; se utiliza para un hard redirect
+	 * 		goToUrl				carga una url
+	 * 		notification		muestra una notificación
+	 * 		msg					muestra un alert, y al cerrarlo carga una url
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
 			$(document).crAlert('error');
 			return true;
 		}
+		var result = response['result'];
+		
+		if (result['skipAppLink'] == true) {
+			$.support.pushState = false;
+		}		
 		if (response['code'] != true) {
-			$(document).crAlert(response['result']);
+			$(document).crAlert(result);
 			return true;
 		}
-		if (response['result']['msg'] != null && response['result']['goToUrl'] != null) {
+		
+		if (result['msg'] != null && result['goToUrl'] != null) {
 			$(document).crAlert({
-				'msg': 		response['result']['msg'],
+				'msg': 		result['msg'],
 				'callback': function() {
-					$.goToUrl(response['result']['goToUrl']);
+					$.goToUrl(result['goToUrl']);
 				}
 			});
 			return true;
 		}
-		if (response['result']['notification'] != null) {
-			$.showNotification(response['result']['notification']);
+		if (result['notification'] != null) {
+			$.showNotification(result['notification']);
 			return true;
 		}
-		if (response['result']['goToUrl'] != null) {
-			$.goToUrl(response['result']['goToUrl']);
+		if (result['goToUrl'] != null) {
+			$.goToUrl(result['goToUrl']);
 			return true;
 		}
 					

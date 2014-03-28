@@ -1,9 +1,9 @@
 cloneReader = {
 	init: function(aFilters) {
-		this.$container = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
-		this.$toolbar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$container);
-		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$container);
-		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$container);		 		
+		this.$page 		= $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
+		this.$toolbar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
+		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$page);
+		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$page);		 		
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang(langId);
@@ -35,22 +35,54 @@ cloneReader = {
 		this.loadFilters(false);
 		this.initEvents();
 		this.initMainMenu();
-		this.resizeWindow();
+//		this.resizeWindow();
+		this.$page.trigger('onVisible');
 		this.isLoaded = true;
 	},
 
 	initMainMenu: function() {
 		var $dropdownMenu 	= $('ul.menuProfile').find('.icon-gear').parent().parent().find('ul.dropdown-menu:first');
-		$dropdownMenu.append('<li role="presentation" class="divider"></li>');
-		$dropdownMenu.append('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>');		
+		$('<li role="presentation" class="divider"></li>').appendTo($dropdownMenu);
+		this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>').appendTo($dropdownMenu);
 	},
 	
 	initEvents: function() {
+		this.$page.data('notRefresh', true);
+		
+		this.$page.bind('onVisible', $.proxy(
+			function() {
+				$('.menu').hide();
+				$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
+				
+				this.$helpKeyboardShortcut.prev().show();
+				this.$helpKeyboardShortcut.show();
+								
+				this.resizeWindow();
+			}
+		, this));
+		
+		this.$page.bind('onHide', $.proxy(
+			function() {
+				this.$mainToolbar.hide();
+				this.$toolbar.hide();
+				$('#header .logo').attr('href', base_url);
+				$('#header').css( {'box-shadow': 'none' });
+				$('.menu').show();
+				$('body').css({ 'background': 'white', 'overflow': 'auto' });
+				
+				this.$helpKeyboardShortcut.prev().hide();
+				this.$helpKeyboardShortcut.hide();
+				
+				this.resizeWindow();
+			}
+		, this));
+					
+		
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 		
-		$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
+//		$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
 
 		this.$ulEntries
 			.on({ 'tap' : 
@@ -139,7 +171,7 @@ cloneReader = {
 					return;
 				}
 				
-				var $popupForm = cloneReader.$container.find('.popupForm:visible');
+				var $popupForm = cloneReader.$page.find('.popupForm:visible');
 				if ($popupForm.length != 0) {
 					if ($.contains($popupForm[0], event.target)) {
 						return;
@@ -206,12 +238,6 @@ cloneReader = {
 					<button title="' + _msg['Add feed'] + '" class="add" > \
 						<i class="icon-plus" /> \
 						<span class="btnLabel">' + _msg['Add feed'] + '</span> \
-					</button> \
-				</li> \
-				<li> \
-					<button title="Install" class="btnInstall" style="display:none" > \
-						<i class="icon-download" /> \
-						<span>' + _msg['Install'] + '</span> \
 					</button> \
 				</li> \
 				<li> \
@@ -284,7 +310,6 @@ cloneReader = {
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
 		
 		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false) } );
-		this.$toolbar.find('.btnInstall').click(function() { cloneReader.install() } );
 		this.$toolbar.find('.btnMarkAllAsRead').click( function() { cloneReader.markAllAsRead(); } );
  		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true) });
 		this.$mainToolbar.find('.prev').click(function() { cloneReader.goToEntry(false) });
@@ -308,11 +333,6 @@ cloneReader = {
 				cloneReader.hidePopupWindow();
 			}
 		);
-		
-//		if ($.browser.mozilla == true) {
-// TODO: revisar el instalador, que muestre el boton SOLO si no esta instalado en firefox			
-//			cloneReader.$toolbar.find('.btnInstall').show();					
-//		}
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
@@ -767,7 +787,7 @@ TODO: pensar como mejorar esta parte
 			count = FEED_MAX_COUNT + '+';
 		}
 		this.$mainToolbar.find('.filterUnread .count').text(count);
-		this.$container.find('.filterOnlyUnread .count').text(count);
+		this.$page.find('.filterOnlyUnread .count').text(count);
 	},
 	
 	selectEntry: function($entry, scrollTo, animate) {
@@ -1482,11 +1502,11 @@ console.timeEnd("t1");
 
 		//var top		= $element.offset().top + $element.height() - this.$toolbar.offset().top;
 		var top		= 92; //FIXME: harckodeta! //this.$toolbar.height() + this.$toolbar.offset().top; 
-		var left 	= $element.offset().left - this.$container.offset().left;
+		var left 	= $element.offset().left - this.$page.offset().left;
 		
 		this.$popupForm
 			.css({ 'top': top,  'left': left, 'position': 'fixed' })
-			.appendTo(this.$container)
+			.appendTo(this.$page)
 			.stop()
 			.fadeIn();
 			
@@ -1496,6 +1516,10 @@ console.timeEnd("t1");
 	},
 	
 	resizeWindow: function() {
+		if (this.$page.is(':visible') != true) {
+			return;
+		}
+		
 		this.isMobile = $.isMobile();
 
 		if (this.isMobile == true) {
@@ -1512,11 +1536,11 @@ console.timeEnd("t1");
 			$('#header').css( {'box-shadow': 'none' });
 		}
 
-		this.$container.find('.pageTitle').remove();
-		$('.content').css( { 'max-width': '100%' });
-		$('#header').addClass('nulllllnavbar-fixed-top').css( { 'max-width': '100%' } );
+		this.$page.find('.pageTitle').remove();
+//		$('.content').css( { 'max-width': '100%' });
+//		$('#header').addClass('nulllllnavbar-fixed-top').css( { 'max-width': '100%' } );
 
-		$('.menu').remove();
+//		$('.menu').hide();
 
 		this.resizeNoResult();
 	},
@@ -1539,7 +1563,7 @@ console.timeEnd("t1");
 	},
 	
 	hidePopupWindow: function() {
-		this.$container.find('.popupForm').hide();
+		this.$page.find('.popupForm').hide();
 		this.$mainToolbar.find('.open').removeClass('open');
 	},
 	
@@ -1582,8 +1606,8 @@ console.timeEnd("t1");
 		
 		this.$noResult.hide();
 		
-		var $li = $('<li class="browseTags"></li>').appendTo(this.$ulEntries);
-		var $ul = $('<div class="list-group"></div>').appendTo($li);
+		var $li 	= $('<li class="browseTags"></li>').appendTo(this.$ulEntries);
+		var $ul		= $('<div class="list-group"></div>').appendTo($li);
 		
 		for (var i=0; i<result.length; i++) {
 			var tag = result[i];
@@ -1662,10 +1686,6 @@ console.timeEnd("t1");
 		return datetime.format(format);
 	},
 	
-	install: function() {
-		navigator.mozApps.install(base_url + 'manifest.webapp');
-	},
-	
 	showFormShareByEmail: function(entryId) {
 		if (this.ajaxShareByEmail) {
 			this.ajaxShareByEmail.abort();
@@ -1731,15 +1751,4 @@ $.fn.scrollStopped = function(callback) {
 		$this.data('scrollTimeout', setTimeout(callback, 250, self));
 	});
 };
-
-/*
-$(document).ready(
-	function() {
-		if ($.browser.mozilla == true) {
-			navigator.mozApps.install(base_url + 'manifest.webapp');
-		}
-	}
-);
-
-*/
 
