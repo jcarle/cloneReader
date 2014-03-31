@@ -421,7 +421,9 @@ cn($(this));
 				function(data) {
 					if ($.isArray(data.result.result.files)) { 
 						return data.result.result.files;
-					} 
+					}
+					
+					$.hasAjaxDefaultAction(data.result);
 					return [];
 				} 
 			});
@@ -531,9 +533,13 @@ cn($(this));
 				'success': 		
 					$.proxy( 
 						function (response) {
-							$(response['result']).appendTo($('body'));
+							if ($.hasAjaxDefaultAction(response) == true) { return; }
 							
-							var frmId 			= $(result['result']).find('form').attr('id');
+							var result = response['result']
+							
+							$(result).appendTo($('body'));
+							
+							var frmId 			= $(result).find('form').attr('id');
 							var $subform 		= $('#' + frmId);
 							var options	 		= $subform.crForm('options');
 							var $modal			= $subform.parents('.modal');
@@ -547,7 +553,9 @@ cn($(this));
 								$(this).remove();
 							});
 		
-							$subform.find('select, input[type=text]').first().focus();
+							if ($.isMobile() == false) {
+								$subform.find('select, input[type=text]').first().focus();
+							}
 						}
 					, this)
 			});
