@@ -5,6 +5,7 @@
 		
 	methods = {
 		init : function( options ) {
+cn($(this));			
 			var $element = $(this);
 			if (options == null) {
 				options = {};
@@ -267,7 +268,6 @@
 				.click($.proxy(
 					function(event) {
 						this.checkGroupCheckBox($(event.target));
-						//$(event.target).parent().css('background-color', ($(event.target).is(':checked') ? '#D9EDF7' : 'white'));
 					}
 				, this))
 				.each($.proxy(
@@ -400,19 +400,31 @@
 					if (this.$fileupload == null) {
 						this.$fileupload = $('#fileupload');
 
-						this.$fileupload.on('hidden.bs.modal', 
+						this.$fileupload
+							.unbind('hidden.bs.modal')
+							.on('hidden.bs.modal', 
 							function() {
 								var crForm = $(this).data('crForm');
 								crForm.reloadGallery();
 							}
 						);
 					}
-					
+
+					this.$fileupload.find('input[name=entityName]').val(this.fileupload.entityName);
+					this.$fileupload.find('input[name=entityId]').val(this.fileupload.entityId);
+
 					$.showModal(this.$fileupload, false, false);
 				}
 			, this));
 
-			$('#fileupload').fileupload( { autoUpload: true });
+			$('#fileupload').fileupload( { autoUpload: true, getFilesFromResponse: 
+				function(data) {
+					if ($.isArray(data.result.result.files)) { 
+						return data.result.result.files;
+					} 
+					return [];
+				} 
+			});
 		},
 		
 		reloadGallery: function() {
@@ -432,21 +444,24 @@
 
 			$gallery.find('a').remove();
 			$('#fileupload tbody').children().remove();
-			
-// TODO: revisar y cambiar result por response 			
+
 			$.ajax({
 				'url': 		this.fileupload.urlGet,
 				'data': 	{ },
 				'success': 	
-					function (result) {
-						$('#fileupload')
-							.fileupload('option', 'done')
-							.call($('#fileupload'), $.Event('done'), {'result': result});
-							
+					function (response) {
+						if ($.hasAjaxDefaultAction(response) == true) { return; }
+						
+						var result = response['result'];
+						
+						var files = result.files;
+						var fu = $('#fileupload').data('blueimpFileupload');
+						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in')
+
 						for (var i=0; i<result.files.length; i++) {
 							var photo = result.files[i];
 							
-							$('<a class="thumbnail " />')
+							$('<a class="thumbnail " data-skip-app-link="true" />')
 								.append($('<img />').prop('src', photo.thumbnailUrl))
 								.prop('href', photo.url)
 								.prop('title', ''  /*photo.title*/)

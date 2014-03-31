@@ -1,4 +1,6 @@
 crMenu = {
+	aSkipAppLink: ['logout', 'langs/change'], // Para forzar una carga completa de la page. Se usa en appAjax
+	
 	renderMenu: function(aMenu, className, $parent){
 		if (aMenu.length == 0) {
 			return;
@@ -23,6 +25,15 @@ crMenu = {
 			
 			if (aMenu[i]['url'] != null) {
 				$link.attr('href', base_url + aMenu[i]['url']);
+				
+				var aTmp = aMenu[i]['url'].split('/'); // Para quitar los parametros adicionales de un controller
+				var controller = aTmp[0];
+				if (aTmp.length > 1) {
+					controller += '/' + aTmp[1];
+				}
+				if ($.inArray(controller, this.aSkipAppLink) != -1) {
+					$link.attr('data-skip-app-link', true);
+				}
 			}
 			if (aMenu[i]['icon'] != null) {
 				$link.prepend(' <i class="' + aMenu[i]['icon'] + '" ></i> ')

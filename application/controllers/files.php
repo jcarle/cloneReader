@@ -14,12 +14,9 @@ class Files extends CI_Controller {
 	function _listing($entityName, $entityId, $fileId = null) {
 		// TODO: implementar seguridad!!
 		
-		$result 			= array('files' => array());
-		$result['files'] 	= $this->Files_Model->getFilesByEntity($entityName, $entityId, $fileId);
+		$files 	= $this->Files_Model->getFilesByEntity($entityName, $entityId, $fileId);
 		
-		return $this->load->view('ajax', array(
-			'result' 	=> $result
-		));		
+		return loadViewAjax(true,  array('files' => $files));
 	}
 	
 	function save() {

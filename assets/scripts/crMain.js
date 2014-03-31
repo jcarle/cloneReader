@@ -1,4 +1,4 @@
-crMain = { // TODO: renombrar a crPage ?
+crMain = { // TODO: renombrar a crPage o crApp ?
 	aPages: [],
 	
 	init: function() {
@@ -10,29 +10,10 @@ crMain = { // TODO: renombrar a crPage ?
 		resizeWindow();
 		
 		// TODO: seteamos el evento global o de a uno a cada link ?
-		$.showWaiting(false);
+//		$.showWaiting(false);
 	},
 	
 	initEvents: function() {
-		// TODO: revisar, a ver si se puede sacar esta exception
-		$(document).on('click', 'a',
-		//$('a:not(.btn-facebook):not(.btn-google)').on('click', 
-		function(event) {
-			if (event.button != 0) {
-				return;
-			}
-			if ($.support.pushState == false) {
-				return;
-			}
-			
-			var url = $(event.currentTarget).attr('href');
-			if (url == null || url.substr(0, 1) == '#') {
-				return;
-			}
-			event.preventDefault();
-			return $.goToUrl(url);
-		});	
-		
 		$.countProcess = 0;
 		
 		$.ajaxSetup({dataType: "json"});
@@ -51,7 +32,6 @@ crMain = { // TODO: renombrar a crPage ?
 				$.showWaiting();	
 			}
 		);
-		
 
 		$(document).ajaxComplete(
 			function(event, jqXHR, ajaxOptions) {
@@ -91,7 +71,7 @@ crMain = { // TODO: renombrar a crPage ?
 			return;
 		}		
 cn('iniAppAjax!');		
-		
+
 		$.ajax({
 			'url': 		base_url + 'app/selectMenuAndTranslations',
 			'async':	false,
@@ -105,6 +85,12 @@ cn('iniAppAjax!');
 						$menu.children().remove();
 						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
 					}
+					
+					$('#header').on('click', 'a',
+						function(event) {
+							crMain.clickAppLink(event);
+						}
+					);					
 				}
 		});
 
@@ -112,15 +98,15 @@ cn('iniAppAjax!');
 			crMain.loadUrl(location.href);
 		});  
 
-		/*if ($('.container > .page').length == 0) {
-			crMain.loadUrl(location.href);
-		}*/
+//if ($('.container > .page').length == 0) {
+	crMain.loadUrl(location.href);
+//}
 	},
 	
 	
 	/**
 	 * Propiedades que se setean desde el js de cada page; se guardan dentro $page.data(); se pueden setear desde la view ajax, o desde un js
-	 * 		notProcessLinks: no 
+	 * 		skipAppLink: omite inicializar todos los links con 'linkInApp'  
 	 * 		notRefresh: no vuelve a pedir la page, solo muestra lo que ya hay en memoria
 	 * Eventos que dispara cada page; hay que setearlo en el js de cada page
 	 * 		onHide: se lanza al ocultar la page
@@ -153,6 +139,8 @@ cn($page);
 			'async':	true,
 			'success': 
 				function(response) {
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
+					
 					// FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
 					$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
 					
@@ -179,6 +167,14 @@ cn($page);
 							break;
 						default:
 							$page.append(data['html']);
+					}
+					
+					if ($page.data('skipAppLink') != true) {
+						$page.on('click', 'a',
+							function(event) {
+								crMain.clickAppLink(event);
+							}
+						);
 					}
 				}
 		})
@@ -246,8 +242,14 @@ cn(this);
 		
 		return 'cr-page-' + controller + (aTmp.length > 1 ? '-' + aTmp[1] : '');
 	},
-	
-	processLink: function(event) {
+
+	/**
+	 * Modifica un link para que la page se carge por ajax. 
+	 * Para omitir este comportamiento se puede setear
+	 * 		skipAppLink = true 			a nivel de la page. Desde el json o desde el js personalizado
+	 * 		skip-app-link = true 		como property de un <a/>
+ 	 */		
+	clickAppLink: function(event) {
 		if (event.button != 0) {
 			return;
 		}
@@ -255,8 +257,12 @@ cn(this);
 			return;
 		}
 		
-		var url = $(event.currentTarget).attr('href');
-		if (url == null || url.substr(0, 1) == '#') {
+		var $link 	= $(event.currentTarget);
+		if ($link.data('skip-app-link') == true) {
+			return;
+		}	
+		var url = $link.attr('href');
+		if (url == null || url.substr(0, 1) == '#' || url.substr(0, 10) == 'javascript') {
 			return;
 		}
 		event.preventDefault();

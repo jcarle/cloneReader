@@ -1,18 +1,7 @@
 $.Profile = {
 	init: function() {
 		this.$page	= $('.userProfile').parents('.cr-page-profile');
-		
 		this.$page.data('notRefresh', true);
-		
-		this.$page.bind('onVisible', function() {
-cn('show!');			
-			}
-		);
-		
-		this.$page.on('onHide', function() {
-cn('hiden!');			
-			}
-		);		
 		
 		this.aTabs 	= this.$page.find('.userProfile li');
 		for (var i=0; i<this.aTabs.length; i++) {

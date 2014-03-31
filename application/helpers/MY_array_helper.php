@@ -67,6 +67,12 @@ function loadViewAjax($code, $result = null) {
 	));	
 }
 
+function getPageName() {
+	$CI = &get_instance();
+	
+	return 'cr-page-'.$CI->router->class.($CI->router->method != 'index' ? '-'.$CI->router->method : '');
+}
+
 function formatCurrency($value, $currencyName = DEFAULT_CURRENCY_NAME) { 
 	return $currencyName.' '.number_format($value, 2, ',', '.'); // TODO: desharckodaear!
 }
