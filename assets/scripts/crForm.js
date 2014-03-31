@@ -796,7 +796,6 @@ if ($fieldGallery != null) {
 	renderAjaxForm = function(data, $parentNode) {
 		var buttons 	= [
 			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button>',
-//			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>',
 			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
 		];

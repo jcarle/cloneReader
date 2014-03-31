@@ -28,8 +28,6 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 //	$CI->carabiner->empty_cache('both');
 }
 
-
-//$CI->carabiner->js('jquery-2.1.0.min.js');
 $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');

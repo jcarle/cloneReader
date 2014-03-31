@@ -81,8 +81,6 @@ cloneReader = {
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
 		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
-		
-//		$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
 
 		this.$ulEntries
 			.on({ 'tap' : 
@@ -1537,10 +1535,6 @@ console.timeEnd("t1");
 		}
 
 		this.$page.find('.pageTitle').remove();
-//		$('.content').css( { 'max-width': '100%' });
-//		$('#header').addClass('nulllllnavbar-fixed-top').css( { 'max-width': '100%' } );
-
-//		$('.menu').hide();
 
 		this.resizeNoResult();
 	},
