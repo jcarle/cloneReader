@@ -50,12 +50,7 @@ class Help extends CI_Controller {
 
 
 		if ($this->input->is_ajax_request()) {
-			return $this->load->view('ajax', array(
-				'view'			=> 'includes/crPopupForm',
-				'form'			=> $form,
-				'title'			=> $this->lang->line('Keyboard shortcut'),
-				'code'			=> true
-			));
+			return $this->load->view('includes/crJsonForm', array( 'form' => $form));
 		}
 				
 

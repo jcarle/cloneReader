@@ -440,6 +440,16 @@ $.extend({
 		}
 					
 		return false;
+	},
+	
+	showPopupForm: function(form) {
+		var $subform 		= $(document).crForm('renderPopupForm', form);
+		var $modal			= $subform.parents('.modal');
+//		$subform.data('frmParent', this);
+		
+		$.showModal($modal, false);
+		
+		return $modal;
 	}
 });
 

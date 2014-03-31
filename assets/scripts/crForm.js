@@ -483,7 +483,6 @@ cn($(this));
 			$.ajax( {
 				'type': 		'get', 
 				'url':			field.controller,
-//				'data':			{ 'frmParent': field.frmParent },
 				'success': 		
 					$.proxy( 
 						function (response) {
@@ -539,27 +538,13 @@ cn($(this));
 						function (response) {
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
 							
-$subform = $(document).crForm('renderPopupForm', response['result']['form']);
-							
-//var $modal			= $subform.parents('.modal');
-//return;							
-//							var result = response['result']
-//							
-//							$(result).appendTo($('body'));
-							
-//							var frmId 			= $(result).find('form').attr('id');
-//							var $subform 		= $('#' + frmId);
-//							var options	 		= $subform.crForm('options');
+							var $subform 		= $(document).crForm('renderPopupForm', response['result']['form']);
 							var $modal			= $subform.parents('.modal');
 							$subform.data('frmParent', this);
-//							options.frmParentId = this;
 		
 							$.showModal($modal, false);
 							$modal.on('hidden.bs.modal', function() {
 								$(this).find('form').data('frmParent').loadSubForm(field);
-//								var crForm = $(this).find('form').data('crForm');
-//								crForm.options.frmParent.loadSubForm(field);
-														
 								$(this).remove();
 							});
 		
@@ -746,7 +731,6 @@ if ($fieldGallery != null) {
 	
 	renderPopupForm = function(data) {
 		var buttons 	= [
-//			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
 			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>',
 			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
@@ -755,13 +739,7 @@ if ($fieldGallery != null) {
 			delete buttons[1];
 		}
 		
-		/*var pageName = location.href;
-		if (pageName.indexOf('?') != -1) {
-			pageName = pageName.substr(0, pageName.indexOf('?'));
-		}*/
-
 		data = $.extend({
-	//		'action': 	pageName, 
 			'frmId': 	'frmId',
 			'buttons': 	buttons
 		}, data);
@@ -797,17 +775,6 @@ if ($fieldGallery != null) {
 		var $modalBody = $('<div class="modal-body" />').appendTo($form);
 		this.renderCrFormFields(data.fields, $modalBody);
 
-/*
-		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
-			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
-		];
-		if (data['urlDelete'] == null) {
-			delete buttons[1];
-		}*/
-
-
 		if (data['buttons'].length != 0) {
 			$modalFooter = $('<div class="modal-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
@@ -816,48 +783,6 @@ if ($fieldGallery != null) {
 					.append(' ');
 			}
 		}
-
-/*
-if (!isset($form['buttons'])) {
-	$form['buttons'] = array();
-
-	if (isset($form['urlDelete'])) {
-		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
-	}
-	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
-	
-	array_unshift($form['buttons'], '<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">'.$this->lang->line('Close').'</button>'); 
-}*/
-/*
-if (!empty($form['buttons'])) {
-	echo '<div class="modal-footer" >';
-	foreach ($form['buttons'] as $button) {
-		echo $button.' ';
-	}
-	echo '</div>';
-}
-
-echo form_close(); 
-
-$form  = appendMessagesToCrForm($form);
-?>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#<?php echo element('frmId', $form, 'frmId'); ?>').crForm(<?php echo json_encode($form); ?>);
-});
-</script>
-<?php
-
-/*$fieldGallery = getCrFieldGallery($form);
-if ($fieldGallery != null) {
-	$this->load->view('includes/uploadfile', array(
-		'fileupload' => array ( 
-			'entityName' 	=> $fieldGallery['entityName'],
-			'entityId'		=> $fieldGallery['entityId']
-		) 
-	));
-}*/
 
 		$form.crForm(data);
 
@@ -974,12 +899,6 @@ if ($fieldGallery != null) {
 						</fieldset>');
 					break;
 				case 'gallery':
-// TODO: revisar: 				
-					/*$fileupload = array ( 
-						'entityName' 	=> field['entityName'],
-						'entityId'		=> field['entityId']
-					);*/
-						
 					$div.append($('\
 						<div id="' + name + '" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >\
 							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">\

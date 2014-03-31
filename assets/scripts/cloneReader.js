@@ -1699,10 +1699,7 @@ console.timeEnd("t1");
 				$.proxy( 
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
-
-						$(response['result']).appendTo($('body'));
-						var $modal	= $('#frmShareByEmail').parents('.modal');
-						$.showModal($modal, false);
+						$.showPopupForm(response['result']['form']);
 					}
 				, this),
 			'error':
@@ -1732,9 +1729,7 @@ console.timeEnd("t1");
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						
-						$(response['result']).appendTo($('body'));
-						this.$keyboardShortcut	= $('#frmKeyboardShortcut').parents('.modal');
-						$.showModal(this.$keyboardShortcut, false);
+						this.$keyboardShortcut = $.showPopupForm(response['result']['form']);
 					}
 				, this),
 		});

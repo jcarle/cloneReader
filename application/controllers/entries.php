@@ -366,12 +366,7 @@ class Entries extends CI_Controller {
 			return $this->_saveShareByEmail();
 		}
 
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crPopupForm',
-			'form'			=> $form,
-			'title'			=> '',
-			'code'			=> true
-		));
+		$this->load->view('includes/crJsonForm', array( 'form' => $form ));
 	}
 	
 	function _saveShareByEmail() {
