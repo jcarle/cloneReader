@@ -32,6 +32,10 @@ cn($(this));
 			renderCrFormFields(fields, $parentNode);
 		},
 		
+		renderPopupForm: function(data) {
+			return renderPopupForm(data);
+		},
+		
 		showSubForm: function(controller) {
 			$(this).data('crForm').showSubForm(controller);
 			return $(this);			
@@ -479,7 +483,7 @@ cn($(this));
 			$.ajax( {
 				'type': 		'get', 
 				'url':			field.controller,
-				'data':			{ 'frmParent': field.frmParent },
+//				'data':			{ 'frmParent': field.frmParent },
 				'success': 		
 					$.proxy( 
 						function (response) {
@@ -535,20 +539,26 @@ cn($(this));
 						function (response) {
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
 							
-							var result = response['result']
+$subform = $(document).crForm('renderPopupForm', response['result']['form']);
 							
-							$(result).appendTo($('body'));
+//var $modal			= $subform.parents('.modal');
+//return;							
+//							var result = response['result']
+//							
+//							$(result).appendTo($('body'));
 							
-							var frmId 			= $(result).find('form').attr('id');
-							var $subform 		= $('#' + frmId);
-							var options	 		= $subform.crForm('options');
+//							var frmId 			= $(result).find('form').attr('id');
+//							var $subform 		= $('#' + frmId);
+//							var options	 		= $subform.crForm('options');
 							var $modal			= $subform.parents('.modal');
-							options.frmParentId = this;
+							$subform.data('frmParent', this);
+//							options.frmParentId = this;
 		
 							$.showModal($modal, false);
 							$modal.on('hidden.bs.modal', function() {
-								var crForm = $(this).find('form').data('crForm');
-								crForm.options.frmParentId.loadSubForm(field);
+								$(this).find('form').data('frmParent').loadSubForm(field);
+//								var crForm = $(this).find('form').data('crForm');
+//								crForm.options.frmParent.loadSubForm(field);
 														
 								$(this).remove();
 							});
@@ -731,6 +741,129 @@ if ($fieldGallery != null) {
 
 		return $form;
 	},
+	
+	
+	
+	renderPopupForm = function(data) {
+		var buttons 	= [
+//			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>',
+			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+		];
+		if (data['urlDelete'] == null) {
+			delete buttons[1];
+		}
+		
+		/*var pageName = location.href;
+		if (pageName.indexOf('?') != -1) {
+			pageName = pageName.substr(0, pageName.indexOf('?'));
+		}*/
+
+		data = $.extend({
+	//		'action': 	pageName, 
+			'frmId': 	'frmId',
+			'buttons': 	buttons
+		}, data);
+				
+		var $modal = $('\
+			<div class="modal" role="dialog" >\
+				<div class="modal-dialog" >\
+					<div class="modal-content" >\
+					</div>\
+				</div>\
+			</div>\
+		');
+		
+		var $form = $('<form action="' + data['action'] + '" />')
+			.attr('id', data['frmId'])
+			.addClass('crForm form-horizontal')
+			.attr('role', 'form')
+			.appendTo($modal.find('.modal-content'));		
+
+		var $modalHeader = $('\
+			<div class="modal-header">\
+				<button aria-hidden="true" data-dismiss="modal" class="close" type="button">\
+					<i class="icon-remove"></i>\
+				</button>\
+				<h4 />\
+			</div>\
+		').appendTo($form);
+
+		$modalHeader.find('h4')
+			.append('<i class="' + (data['icon'] != null ? data['icon'] : 'icon-edit') + '"></i>')
+			.append(' ' + data['title']);
+		
+		var $modalBody = $('<div class="modal-body" />').appendTo($form);
+		this.renderCrFormFields(data.fields, $modalBody);
+
+/*
+		var buttons 	= [
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+		];
+		if (data['urlDelete'] == null) {
+			delete buttons[1];
+		}*/
+
+
+		if (data['buttons'].length != 0) {
+			$modalFooter = $('<div class="modal-footer" > ').appendTo($form);
+			for (var i=0; i<data['buttons'].length; i++) {
+				$modalFooter
+					.append($(data['buttons'][i]))
+					.append(' ');
+			}
+		}
+
+/*
+if (!isset($form['buttons'])) {
+	$form['buttons'] = array();
+
+	if (isset($form['urlDelete'])) {
+		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
+	}
+	$form['buttons'][] = '<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
+	
+	array_unshift($form['buttons'], '<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">'.$this->lang->line('Close').'</button>'); 
+}*/
+/*
+if (!empty($form['buttons'])) {
+	echo '<div class="modal-footer" >';
+	foreach ($form['buttons'] as $button) {
+		echo $button.' ';
+	}
+	echo '</div>';
+}
+
+echo form_close(); 
+
+$form  = appendMessagesToCrForm($form);
+?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#<?php echo element('frmId', $form, 'frmId'); ?>').crForm(<?php echo json_encode($form); ?>);
+});
+</script>
+<?php
+
+/*$fieldGallery = getCrFieldGallery($form);
+if ($fieldGallery != null) {
+	$this->load->view('includes/uploadfile', array(
+		'fileupload' => array ( 
+			'entityName' 	=> $fieldGallery['entityName'],
+			'entityId'		=> $fieldGallery['entityId']
+		) 
+	));
+}*/
+
+		$form.crForm(data);
+
+		return $form;
+	},
+	
 	
 	
 	renderCrFormFields = function(fields, $parentNode) {

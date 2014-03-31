@@ -369,7 +369,7 @@ class Entries extends CI_Controller {
 		$this->load->view('ajax', array(
 			'view'			=> 'includes/crPopupForm',
 			'form'			=> $form,
-			'title'			=> $this->lang->line('Change password'),
+			'title'			=> '',
 			'code'			=> true
 		));
 	}

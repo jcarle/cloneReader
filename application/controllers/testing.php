@@ -106,7 +106,7 @@ class Testing extends CI_Controller {
 				'type'			=> 'subform',
 				'label'			=> 'childs', 
 				'controller'	=> base_url('testing/selectChildsByTestId/'.$testId),
-				'frmParent'		=> 'frmTestingEdit',
+//				'frmParent'		=> 'frmTestingEdit',
 			);
 		}
 		
@@ -135,8 +135,7 @@ class Testing extends CI_Controller {
 			'view'		=> 'includes/crForm', 
 			'title'		=> 'Edit testing',
 			'form'		=> populateCrForm($form, $this->Testing_Model->get($testId)),
-				  
-		));		
+		));
 	}
 
 	function add(){
@@ -170,7 +169,7 @@ class Testing extends CI_Controller {
 					'countryName' 		=> 'Country', 
 					'testChildDate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
 				'data'			=> $this->Testing_Model->selectChildsByTestId($testId),
-				'frmParent'		=> $this->input->get('frmParent'),
+//				'frmParent'		=> $this->input->get('frmParent'),
 			),
 		));		
 	}
@@ -240,7 +239,7 @@ class Testing extends CI_Controller {
 				'type'			=> 'subform',
 				'label'			=> 'Users', 
 				'controller'	=> base_url('testing/selectUsersByTestChildId/'.$testChildId),
-				'frmParent'		=> 'frmTestChildEdit',
+//				'frmParent'		=> 'frmTestChildEdit',
 			);
 		}
 		
@@ -252,15 +251,11 @@ class Testing extends CI_Controller {
 			if ($code == true) {
 				$this->Testing_Model->saveTestingChilds($this->input->post());
 			}
-			
+
 			return loadViewAjax($code);
 		}
-		
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crPopupForm',
-			'form'			=> populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)),
-			'code'			=> true
-		));
+
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)) ));
 	}
 
 
@@ -278,7 +273,7 @@ class Testing extends CI_Controller {
 					'userEmail'			=> 'Email',
 				),
 				'data'			=> $this->Testing_Model->selectUsersByTestChildId($testChildId),
-				'frmParent'		=> $this->input->get('frmParent'),
+//				'frmParent'		=> $this->input->get('frmParent'),
 			),
 		));
 	}
@@ -348,10 +343,6 @@ class Testing extends CI_Controller {
 			return loadViewAjax($code);
 		}
 		
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crPopupForm',
-			'form'			=> $form,
-			'code'			=> true
-		));		
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)) ));
 	}	
 }
