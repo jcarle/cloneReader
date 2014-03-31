@@ -40,7 +40,7 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
-$fieldGallery = getCrFieldGallery($form);
+/*$fieldGallery = getCrFieldGallery($form);
 if ($fieldGallery != null) {
 	$this->load->view('includes/uploadfile', array(
 		'fileupload' => array ( 
@@ -48,5 +48,5 @@ if ($fieldGallery != null) {
 			'entityId'		=> $fieldGallery['entityId']
 		) 
 	));
-}
+}*/
 

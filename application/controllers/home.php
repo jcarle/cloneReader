@@ -11,8 +11,8 @@ class Home extends CI_Controller {
 					'description' 	=> 'Clone Reader. Clone of google reader. Reader of feeds, rss news. Open source',
 					'keywords'		=> 'cReader cloneReader news feeds rss reader open source'
 				), 
-				'aJs'			=> array('cloneReader.js', 'jquery.visible.min.js' ),
 				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
+				'notRefresh'	=> true,
 				'langs'			=> array(
 					'loading ...',
 					'Expand',

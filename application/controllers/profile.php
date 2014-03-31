@@ -235,7 +235,7 @@ class Profile extends CI_Controller {
 			'fields'		=> array(
 				'downloadHtml' => array(
 					'type'	=> 'html',
-					'value'	=> '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'">'.$this->lang->line('Download OPML').'</a>' 
+					'value'	=> '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'" data-skip-app-link="true">'.$this->lang->line('Download OPML').'</a>' 
 				),
 			)
 		);
