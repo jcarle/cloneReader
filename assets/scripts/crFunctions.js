@@ -291,14 +291,6 @@ $.extend({
 		}
 	},	
 	
-/*	urlToHashUrl: function(url) {
-		if (url.indexOf('#') != -1) {
-			return url.substr(url.indexOf('#'));
-		}
-
-		return '#' + url.replace(base_url, '');
-	},*/
-	
 	goToUrl: function(url) {
 		if ($.support.pushState == false) {
 			$.showWaiting(true);
@@ -311,19 +303,10 @@ $.extend({
 	},
 	
 	goToUrlList: function() {
-		var urlList = $.getParamUrl('urlList');
+		var urlList = $.url().param('urlList');
 		if (urlList != null) {
 			$.goToUrl($.base64Decode(decodeURIComponent(urlList)));
 		}
-	},
-	
-	getParamUrl: function(paramName) {
-//		if ($.getAppType()  == 'webSite') {
-			return $.url().param(paramName);
-//		}
-		
-//		var params = $.getUrlVars();
-//		return params[paramName];		
 	},
 	
 	reloadUrl: function() {
@@ -445,11 +428,17 @@ $.extend({
 	showPopupForm: function(form) {
 		var $subform 		= $(document).crForm('renderPopupForm', form);
 		var $modal			= $subform.parents('.modal');
-//		$subform.data('frmParent', this);
 		
 		$.showModal($modal, false);
 		
 		return $modal;
+	},
+	
+	formatNumber: function(value) { // TODO: ver si hay alguna manera de que autoNumeric devuelva el numero formateado sin tener que crear un $elemento
+		return $('<span />')
+			.text(value)
+			.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: 0 } )
+			.text();	
 	}
 });
 

@@ -48,7 +48,7 @@
 		this.$btnFilter		= this.$crFilterList.prev();
 		this.options	 	= $.extend({}, options );
 		this.hasFilter		= (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
-		
+
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
 				$.formatDate($(this));
@@ -337,18 +337,12 @@
 			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
 		}
 
-		// TODO: mejorar esta parte; hacer un metodo que formatee numeros en crFuncitons
-		var foundRows = $('<span />')
-			.text(data['foundRows'])
-			.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: 0 } )
-			.text();
-	
 		$('\
 			<a href="#' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
 				<i class="icon-file-alt icon-large"></i>\
 				' + _msg['Add'] + '\
 				</a>\
-				<span>' + $.sprintf(_msg['%s rows'], foundRows)+ ' </span>\
+				<span>' + $.sprintf(_msg['%s rows'], $.formatNumber(data['foundRows']))+ ' </span>\
 		').appendTo($div);;
 	
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);

@@ -353,7 +353,7 @@ cn($(this));
 								this.$form.parents('.modal').first().modal('hide');
 								return;
 							}
-							if ($.getParamUrl('urlList') != null) {
+							if ($.url().param('urlList') != null) {
 								$.goToUrlList();
 								return;
 							}

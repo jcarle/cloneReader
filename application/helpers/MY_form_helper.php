@@ -136,23 +136,24 @@ function subscribeForCrFormSumValues($fieldName, array $aFieldName) {
 	return $subscribe;
 }
 
-function getCrFieldGallery($form) {
+// TODO: sacar estos metodos!
+/*function getCrFieldGallery($form) {
 	foreach ($form['fields'] as $name => $field) {
 		if ($field['type'] == 'gallery') {
 			return $field;
 		}
 	}
 	return null;
-}
+}*/
 
-function getCrFieldUpload($form) {
+/*function getCrFieldUpload($form) {
 	foreach ($form['fields'] as $name => $field) {
 		if ($field['type'] == 'upload') {
 			return $field;
 		}
 	}
 	return null;
-}
+}*/
 
 
 function renderCrFormFields($form) {
@@ -334,40 +335,15 @@ function renderCrFormTree($aTree, $value){
 /**
  * Apendeo js y css y agrego items al script que va a inicializar los objetos en el header
  */
-function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
+function appendCrFormJsAndCss($form, $aScripts) {
 	$CI = &get_instance();
-	
-	if ($hasForm == true) {
-		if (!isset($form)) {
-			$form = array('fields' => array());	
-		}
-	}
-
-	if (is_array(element('fields', $form))) {
-		$hasForm = true;
-	}
-	if ($view == 'includes/crForm') {
-		$hasForm = true;
-	}	
-	
-	if ($hasForm != true) {
-		return $aScripts;
-	}
-
-	if ($hasGallery != true) {
-		$hasGallery = (getCrFieldGallery($form) != null);
-	}
 	
 	$CI->carabiner->js('crForm.js');
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('select2.js');
 	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
-	
-	$CI->carabiner->css('select2.css');
-	$CI->carabiner->css('select2-bootstrap.css');
-	$CI->carabiner->css('bootstrap-datetimepicker.css');
-	
+
 	switch ($CI->session->userdata('langId')) {
 		case 'es':
 			$CI->carabiner->js('select2_locale_es.js');	
@@ -379,36 +355,29 @@ function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
 			break;			
 	}
 	
+	$CI->carabiner->js('tmpl.min.js');	
+	$CI->carabiner->js('jquery.ui.widget.js');
+	$CI->carabiner->js('jquery.fileupload.js');
+	$CI->carabiner->js('jquery.fileupload-ui.js');
+	$CI->carabiner->js('jquery.fileupload-process.js');
+	$CI->carabiner->js('jquery.ui.widget.js');
+	$CI->carabiner->js('jquery.imgCenter.js');
+	$CI->carabiner->js('blueimp-gallery.js');
+
+	$CI->carabiner->css('select2.css');
+	$CI->carabiner->css('select2-bootstrap.css');
+	$CI->carabiner->css('bootstrap-datetimepicker.css');
+	$CI->carabiner->css('blueimp-gallery.css');
+	$CI->carabiner->css('jquery.fileupload-ui.css');
 	
-	if (getCrFieldUpload($form) != null) {
-		$CI->carabiner->js('jquery.ui.widget.js');
-		$CI->carabiner->js('jquery.fileupload.js');
-		$CI->carabiner->js('jquery.fileupload-ui.js');
-		$CI->carabiner->js('jquery.fileupload-process.js');
-				
-		$CI->carabiner->css('jquery.fileupload-ui.css');
-	}	
-
-	if ($hasGallery == true) {
-		$CI->carabiner->js('tmpl.min.js');
-		$CI->carabiner->js('jquery.ui.widget.js');
-		$CI->carabiner->js('jquery.fileupload.js');
-		$CI->carabiner->js('jquery.fileupload-ui.js');
-		$CI->carabiner->js('jquery.fileupload-process.js');
-		$CI->carabiner->js('jquery.imgCenter.js');
-		$CI->carabiner->js('blueimp-gallery.js');
-
-		$CI->carabiner->css('blueimp-gallery.css');
-		$CI->carabiner->css('jquery.fileupload-ui.css');
+	if ($form != null) {
+		$form  = appendMessagesToCrForm($form);
+		/*
+		$aScripts[] = '
+			$(document).ready(function() {
+				$(\'#'. element('frmId', $form, 'frmId').'\').crForm('.json_encode($form).');
+			});';*/
 	}
-	
-	$form  = appendMessagesToCrForm($form);
-	
-	$aScripts[] = '
-		$(document).ready(function() {
-			$(\'#'. element('frmId', $form, 'frmId').'\').crForm('.json_encode($form).');
-		});';	
-		
 	
 	return $aScripts;
 }
@@ -416,24 +385,23 @@ function appendCrFormJsAndCss($view, $form, $hasForm, $hasGallery, $aScripts) {
 /**
  * Apendeo js y css y agrego items al script que va a inicializar los objetos en el header
  */
-function appendCrListJsAndCss($view, $list, $aScripts) {
+function appendCrListJsAndCss($list, $aScripts) {
 	$CI = &get_instance();
 	
-	if ($view != 'includes/crList') {
-		return $aScripts; 
-	}
-	
 	$CI->carabiner->js('crList.js');
-	
+	$CI->carabiner->js('bootstrap-paginator.js');
+
 	$filters = element('filters', $list);
 	if ($filters != null) {
-		$aScripts = appendCrFormJsAndCss($view, array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), null, null, $aScripts);
+		$aScripts = appendCrFormJsAndCss(array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), $aScripts);
 	}
 	
-	$aScripts[] = '
-		$(document).ready(function() {
-			$(\'.crList\').crList();
-		});	';
+	if ($list != null) {
+		$aScripts[] = '
+			$(document).ready(function() {
+				$(\'.crList\').crList();
+			});	';
+	}
 		
 	return $aScripts; 	
 }
