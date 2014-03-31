@@ -36,6 +36,10 @@ cn($(this));
 			return renderPopupForm(data);
 		},
 		
+		renderAjaxForm: function(data, $parentNode) {
+			return renderAjaxForm(data, $parentNode);
+		},
+		
 		showSubForm: function(controller) {
 			$(this).data('crForm').showSubForm(controller);
 			return $(this);			
@@ -789,7 +793,48 @@ if ($fieldGallery != null) {
 		return $form;
 	},
 	
-	
+	renderAjaxForm = function(data, $parentNode) {
+		var buttons 	= [
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button>',
+//			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>',
+			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+		];
+		if (data['urlDelete'] == null) {
+			delete buttons[1];
+		}
+		
+		data = $.extend({
+			'frmId': 	'frmId',
+			'buttons': 	buttons
+		}, data);
+		
+		var $form = $('<form action="' + data['action'] + '" />')
+			.attr('id', data['frmId'])
+			.addClass('panel panel-default crForm form-horizontal')
+			.attr('role', 'form')
+			.appendTo($parentNode);		
+
+		if (data['title'] != null) {
+			$('<div class="panel-heading" />').text(data['title']).appendTo($form);;
+		}
+
+		var $div = $('<div class="panel-body" />').appendTo($form); 
+		this.renderCrFormFields(data.fields, $div);
+
+		if (data['buttons'].length != 0) {
+			$modalFooter = $('<div class="form-actions panel-footer" > ').appendTo($form);
+			for (var i=0; i<data['buttons'].length; i++) {
+				$modalFooter
+					.append($(data['buttons'][i]))
+					.append(' ');
+			}
+		}
+
+		$form.crForm(data);
+
+		return $form;
+	},
 	
 	renderCrFormFields = function(fields, $parentNode) {
 		for (var name in fields) {

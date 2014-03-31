@@ -33,10 +33,8 @@ $.Profile = {
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-						var result = $(response['result']);
 						$content.children().remove();
-						$content.html(result);
-						
+						var $form  = $(document).crForm('renderAjaxForm', response['result']['form'], $content);
 						this.$page.find('.pageTitle h2').text( $content.find('.panel-heading').text() );
 					}
 				, this),

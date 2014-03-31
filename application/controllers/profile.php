@@ -33,6 +33,7 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmEditProfile',
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
+			'title'			=> $this->lang->line('Edit profile'),
 			'fields'		=> array(
 				'userFirstName' => array(
 					'type'	=> 'text',
@@ -79,12 +80,7 @@ class Profile extends CI_Controller {
 			return $this->_saveEditProfile();
 		}
 		
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crAjaxForm',
-			'form'			=> $form,
-			'title'			=> $this->lang->line('Edit profile'),
-			'code'			=> true
-		));
+		return $this->load->view('includes/crJsonForm', array( 'form' => $form	));
 	}
 
 	function _saveEditProfile() {
@@ -107,6 +103,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmChangeEmail',
+			'title'			=> $this->lang->line('Change email'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(
@@ -131,12 +128,7 @@ class Profile extends CI_Controller {
 			return $this->_sendEmailToChangeEmail();
 		}
 		
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crAjaxForm',
-			'form'			=> $form,
-			'title'			=> $this->lang->line('Change email'),
-			'code'			=> true
-		));
+		return $this->load->view('includes/crJsonForm', array( 'form' => $form ));
 	}
 
 	function _sendEmailToChangeEmail() {
@@ -170,6 +162,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmChangePassword',
+			'title'			=> $this->lang->line('Change password'),
 			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),
 			'fields'		=> array(
 				'passwordOld' => array(
@@ -211,12 +204,7 @@ class Profile extends CI_Controller {
 			return $this->_saveChangePassword();
 		}
 
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crAjaxForm',
-			'form'			=> $form,
-			'title'			=> $this->lang->line('Change password'),
-			'code'			=> true
-		));
+		$this->load->view('includes/crJsonForm', array( 'form' => $form ));
 	}
 	
 	function _saveChangePassword() {
@@ -243,6 +231,7 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmDownloadOPML',
 			'buttons'		=> array(),
+			'title'			=> $this->lang->line('Download OPML'),
 			'fields'		=> array(
 				'downloadHtml' => array(
 					'type'	=> 'html',
@@ -251,12 +240,7 @@ class Profile extends CI_Controller {
 			)
 		);
 
-		$this->load->view('ajax', array(
-			'view'			=> 'includes/crAjaxForm',
-			'form'			=> $form,
-			'title'			=> $this->lang->line('Download OPML'),
-			'code'			=> true
-		));
+		return $this->load->view('includes/crJsonForm', array( 'form' => $form ));
 	}
 	
 	function doDownloadOPML() {
