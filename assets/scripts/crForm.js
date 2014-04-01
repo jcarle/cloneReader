@@ -492,37 +492,82 @@ cn($(this));
 						function (response) {
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
 							
-							var result = $(response['result']);
-							field.$input.children().remove();
-							field.$input.html(result);
 							
-							$('a', field.$input)
-								.data( { crForm: this })
+							var result 	= response['result'];
+							var list	= result['list'];
+							field.$input.children().remove();
+							
+							
+							var $div 	= $('<div class="table-responsive"/>').appendTo(field.$input);
+							var $table 	= $('<table class="table table-hover" />').appendTo($div);
+							var $thead 	= $('<thead/>').appendTo($table);
+							var $tr 	= $('<tr class="label-primary"/>').appendTo($thead);
+
+							
+							for (var columnName in list['columns']) {
+								var $th = $(' <th />')
+									.text(list['columns'][columnName])
+									.appendTo($tr);		
+						
+								if ($.isPlainObject(list['columns'][columnName])) {
+									$th
+										.text(list['columns'][columnName]['value'])
+										.addClass(list['columns'][columnName]['class']);
+								}
+							}
+
+							var $tbody = $(' <tbody />').appendTo($table);
+							if (list['data'].length == 0) {
+								$( '<tr class="warning"><td colspan="' + (Object.keys(list['columns']).length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
+							}
+							for (var i=0; i<list['data'].length; i++) {
+								var row = list['data'][i];
+								
+								if ($.isPlainObject(row) == false) {
+									$(row).appendTo($tbody);
+								}
+								else {
+									var id 	= row[Object.keys(row)[0]];
+									var $tr	= $( '<tr data-controller="' + base_url + list['controller'] + id +'">').appendTo($tbody);
+							
+									for (columnName in list['columns']) {
+										var $td = $(' <td />')
+											.text(row[columnName] || '')
+											.appendTo($tr);
+										
+										if ($.isPlainObject(list['columns'][columnName])) {
+											$td.addClass(list['columns'][columnName]['class']);
+										}
+									}
+								}
+							}
+
+							$('<a class="btn btn-default btn-sm btnAdd" href="' + base_url + list['controller'] + '0" />') 
+								.appendTo(field.$input)
+								.append(' <i class="icon-plus"> </i> ')
+								.append(' ' + _msg['Add'])
+								.data( { 'crForm': this })
 								.click(
 									function() {
 										$(this).data('crForm').showSubForm($(this).attr('href'), field); 
 										return false;
 									}
 								);
-							
-							$('table tbody tr', field.$input)
-								.data( { crForm: this })
-								.each(
-									function (i, tr) {
-										$(tr).click(
-											function() {
-												if ($(this).attr('href') == null) {
-													return;
-												}
-												$(this).data('crForm').showSubForm($(this).attr('href'), field); 
-											}
-										);
-									}
-								);
-							
-							field.$input.find('tbody .date, tbody .datetime').each(
+
+
+							$tbody.find('tbody .date, tbody .datetime').each(
 								function() {
 									$.formatDate($(this));
+								}
+							);
+							
+							$tbody.find('tr').data( { 'crForm': this });
+							$tbody.on('click', 'tr',
+								function (event) {
+									if ($(this).data('controller') == null) {
+										return;
+									}
+									$(this).data('crForm').showSubForm($(this).data('controller'), field); 
 								}
 							);
 		

@@ -106,7 +106,6 @@ class Testing extends CI_Controller {
 				'type'			=> 'subform',
 				'label'			=> 'childs', 
 				'controller'	=> base_url('testing/selectChildsByTestId/'.$testId),
-//				'frmParent'		=> 'frmTestingEdit',
 			);
 		}
 		
@@ -158,20 +157,20 @@ class Testing extends CI_Controller {
 
 	function selectChildsByTestId($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
-			
-		$this->load->view('ajax', array(
-			'view'		=> 'includes/subform',
-			'code'		=> true,
-			'list'		=> array(
-				'controller'	=> strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
-				'columns'		=> array( 
-					'testChildName' 	=> 'Name', 
-					'countryName' 		=> 'Country', 
-					'testChildDate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
-				'data'			=> $this->Testing_Model->selectChildsByTestId($testId),
-//				'frmParent'		=> $this->input->get('frmParent'),
-			),
-		));		
+		
+		$data = $this->Testing_Model->selectChildsByTestId($testId);
+		$data[] = '<tr><td>asdf asdf asdf</td></tr>';
+		
+		$list = array(
+			'controller'	=> strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
+			'columns'		=> array( 
+				'testChildName' 	=> 'Name', 
+				'countryName' 		=> 'Country', 
+				'testChildDate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
+			'data'			=> $data,
+		);
+
+		return loadViewAjax(true, array('list' => $list));
 	}
 	
 	
@@ -239,7 +238,6 @@ class Testing extends CI_Controller {
 				'type'			=> 'subform',
 				'label'			=> 'Users', 
 				'controller'	=> base_url('testing/selectUsersByTestChildId/'.$testChildId),
-//				'frmParent'		=> 'frmTestChildEdit',
 			);
 		}
 		
@@ -261,6 +259,19 @@ class Testing extends CI_Controller {
 
 	function selectUsersByTestChildId($testChildId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+
+
+		$list = array(
+			'controller'	=> strtolower(__CLASS__).'/popupTestChildUser/'.$testChildId.'/',
+			'columns'		=> array( 
+				'userFirstName' 	=> 'Nombre', 
+				'userLastName' 		=> 'Apellido', 
+				'userEmail'			=> 'Email',
+			),
+			'data'			=> $this->Testing_Model->selectUsersByTestChildId($testChildId),
+		);
+
+		return loadViewAjax(true, array('list' => $list));
 			
 		$this->load->view('ajax', array(
 			'view'		=> 'includes/subform',
@@ -273,7 +284,6 @@ class Testing extends CI_Controller {
 					'userEmail'			=> 'Email',
 				),
 				'data'			=> $this->Testing_Model->selectUsersByTestChildId($testChildId),
-//				'frmParent'		=> $this->input->get('frmParent'),
 			),
 		));
 	}

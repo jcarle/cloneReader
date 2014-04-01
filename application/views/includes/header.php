@@ -82,7 +82,6 @@ header('Content-Type: text/html; charset=utf-8');
 		
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
-//$CI->carabiner->empty_cache('both', 'yesterday');
 $CI->carabiner->display('css');
 $CI->carabiner->display('js');
 ?>	
