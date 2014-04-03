@@ -15,7 +15,7 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	initEvents: function() {
 		$.countProcess = 0;
 		
-		$.ajaxSetup({dataType: "json"});
+		$.ajaxSetup({'dataType': 'json'});
 		
 		
 		/**
@@ -60,7 +60,9 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 				}
 				
 				var response = $.parseJSON(jqXHR.responseText);
-				$.hasAjaxDefaultAction(response);
+				if ($.hasAjaxDefaultAction(response) == true) { return; }
+				
+				crMain.renderPage(response, ajaxOptions.pageName);
 			}
 		);	
 	},
@@ -109,7 +111,6 @@ cn('iniAppAjax!');
 								}
 							);
 					}
-					
 					crMenu.initMenu();
 				}
 		});		
@@ -148,48 +149,74 @@ cn($page);
 			'url': 		url,
 			'data': 	{ 'appType': 'ajax' },
 			'async':	true,
+			'pageName': pageName,
+			'success': 	$.proxy(
+				function(pageName, response) {
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
+					this.renderPage(response, pageName);
+				}
+			, this, pageName)
+		})
+	},
+	
+	loadUploadFile: function() {
+		if (this.loadedUploadFile == true) {
+			return;
+		}
+		
+		$.ajax({
+			'url': 		base_url + 'app/uploadFile',
+			'async':	false,
+			'dataType': 'text',
 			'success': 
 				function(response) {
-					if ($.hasAjaxDefaultAction(response) == true) { return; }
-					
-					// FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
-					$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
-					
-					var data 	= response['result'];
-					var $page 	= crMain.aPages[data['pageName']];
-					$page.data(data);
-					
-					crMain.showPage(pageName);
-					$page.children().remove();
-					crMain.renderPageTitle(data, $page);
-					
-					switch (data['js']) {
-						case 'crList':
-							$(null).crList($.extend({
-								'autoRender': 	true,
-								'$parentNode': 	$(crMain.aPages[pageName])
-							} , data['list']));
-							break;
-						case 'crForm':
-							$(null).crForm( $.extend({
-								'autoRender': 	true,
-								'$parentNode': 	$(crMain.aPages[pageName])
-							} , data['form']));
-							break;
-						default:
-							$page.append(data['html']);
-					}
-					
-					if ($page.data('skipAppLink') != true) {
-						$page.off('click', 'a');
-						$page.on('click', 'a',
-							function(event) {
-								crMain.clickAppLink(event);
-							}
-						);
-					}
+					$('body').append(response);
+					crMain.loadedUploadFile = true;
 				}
-		})
+		});
+	},
+	
+	renderPage: function(response, pageName) {
+		// FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
+		$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
+		
+		var data 	= response['result'];
+		var $page 	= crMain.aPages[pageName];
+		$page.data(data);
+		
+		crMain.showPage(pageName);
+		$page.children().remove();
+		crMain.renderPageTitle(data, $page);
+		
+		if (data['hasGallery'] == true) {
+			this.loadUploadFile();		
+		}
+		
+		switch (data['js']) {
+			case 'crList':
+				$(null).crList($.extend({
+					'autoRender': 	true,
+					'$parentNode': 	$(crMain.aPages[pageName])
+				} , data['list']));
+				break;
+			case 'crForm':
+				$(null).crForm( $.extend({
+					'autoRender': 	true,
+					'$parentNode': 	$(crMain.aPages[pageName])
+				} , data['form']));
+				break;
+			default:
+				$page.append(data['html']);
+		}
+		
+		if ($page.data('skipAppLink') != true) {
+			$page.off('click', 'a');
+			$page.on('click', 'a',
+				function(event) {
+					crMain.clickAppLink(event);
+				}
+			);
+		}
 	},
 	
 	renderPageTitle: function(data, $page) {

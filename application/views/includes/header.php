@@ -176,9 +176,6 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>	
 	<div class="container content">
-		
-<?php $this->load->view('includes/uploadfile', array( 'fileupload' => array ())); ?>
-		
 		<div class="page <?php echo getPageName(); ?>"/>
 <?php
 if (isset($breadcrumb)) {

@@ -9,7 +9,7 @@ class Error extends CI_Controller {
 	}
 	
 	function forbidden() {
-		if ($this->input->is_ajax_request()) { 
+		if ($this->input->is_ajax_request() && $this->input->get('appType') != 'ajax') {
 			return $this->load->view('ajax', array(
 				'code'			=> false, 
 				'result' 		=> $this->lang->line('Not authorized for the action to take'),
@@ -26,7 +26,7 @@ class Error extends CI_Controller {
 	}	
 	
 	function error404() {
-		if ($this->input->is_ajax_request()) { 
+		if ($this->input->is_ajax_request() && $this->input->get('appType') != 'ajax') {
 			return $this->load->view('ajax', array(
 				'code'			=> false, 
 				'result'	 	=> $this->lang->line('The page you requested does not exist'),

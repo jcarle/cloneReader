@@ -53,5 +53,9 @@ class App extends CI_Controller {
 			'aLangs' 	=> $aLangs,
 		));
 	}
+	
+	function uploadFile() {
+		$this->load->view('includes/uploadfile', array( 'fileupload' => array ()));
+	}
 }
 

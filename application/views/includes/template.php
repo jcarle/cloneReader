@@ -36,6 +36,10 @@ else
 if ($CI->input->get('appType') == 'ajax') {
 	$result = array('pageName' => getPageName());
 	
+	if (isset($hasGallery)) {
+		$result['hasGallery'] = $hasGallery;
+	}
+	
 	if (isset($notRefresh)) {
 		$result['notRefresh'] = $notRefresh;
 	}
@@ -51,6 +55,9 @@ if ($CI->input->get('appType') == 'ajax') {
 			$result['title']	= $title;
 			$result['js']		= 'crForm';
 			$result['form'] 	= $form;
+			if (getCrFieldGallery($form) != null) { 
+				$result['hasGallery'] = true;
+			}
 			break;
 		default: 
 			$result['title']	= $title;

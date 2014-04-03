@@ -136,16 +136,17 @@ function subscribeForCrFormSumValues($fieldName, array $aFieldName) {
 	return $subscribe;
 }
 
-// TODO: sacar estos metodos!
-/*function getCrFieldGallery($form) {
+
+function getCrFieldGallery($form) {
 	foreach ($form['fields'] as $name => $field) {
 		if ($field['type'] == 'gallery') {
 			return $field;
 		}
 	}
 	return null;
-}*/
+}
 
+// TODO: sacar estos metodos!
 /*function getCrFieldUpload($form) {
 	foreach ($form['fields'] as $name => $field) {
 		if ($field['type'] == 'upload') {
