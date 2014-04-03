@@ -67,6 +67,9 @@ class Menu_Model extends CI_Model {
 	
 	function delete($menuId) {
 		$this->db->delete('menu', array('menuId' => $menuId));
+		
+		$this->destroyMenuCache();
+		
 		return true;
 	}	
 	

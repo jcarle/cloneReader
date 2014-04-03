@@ -338,7 +338,7 @@
 		}
 
 		$('\
-			<a href="#' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
+			<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
 				<i class="icon-file-alt icon-large"></i>\
 				' + _msg['Add'] + '\
 				</a>\

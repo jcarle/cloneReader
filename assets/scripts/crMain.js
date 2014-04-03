@@ -6,7 +6,6 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 		
 		this.initEvents();
 		this.iniAppAjax();
-		crMenu.initMenu();
 		resizeWindow();
 		
 		// TODO: seteamos el evento global o de a uno a cada link ?
@@ -72,27 +71,13 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 		}		
 cn('iniAppAjax!');		
 
-		$.ajax({
-			'url': 		base_url + 'app/selectMenuAndTranslations',
-			'async':	false,
-			'success': 
-				function(response) {
-					_msg = response['result']['aLangs']; // TODO: meter _msg en algun lado, que no sea global
+		this.loadMenuAndTranslations(false);
 		
-					var aMenu = response['result']['aMenu'];
-					for (var menuName in aMenu) {
-						var $menu = $(aMenu[menuName]['parent']);
-						$menu.children().remove();
-						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
-					}
-					
-					$('#header').on('click', 'a',
-						function(event) {
-							crMain.clickAppLink(event);
-						}
-					);					
-				}
-		});
+		$('#header .navbar-header').on('click', 'a',
+			function(event) {
+				crMain.clickAppLink(event);
+			}
+		);
 
 		$(window).bind("popstate", function () {  
 			crMain.loadUrl(location.href);
@@ -103,7 +88,33 @@ cn('iniAppAjax!');
 //}
 	},
 	
-	
+	loadMenuAndTranslations: function(async) {
+		$.ajax({
+			'url': 		base_url + 'app/selectMenuAndTranslations',
+			'async':	(async == true),
+			'success': 
+				function(response) {
+					_msg = response['result']['aLangs']; // TODO: meter _msg en algun lado, que no sea global
+		
+					var aMenu = response['result']['aMenu'];
+					for (var menuName in aMenu) {
+						var $menu = $(aMenu[menuName]['parent']);
+						$menu.children().remove();
+						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
+						$menu
+							.off('click', 'a')
+							.on('click', 'a',
+								function(event) {
+									crMain.clickAppLink(event);
+								}
+							);
+					}
+					
+					crMenu.initMenu();
+				}
+		});		
+	},
+
 	/**
 	 * Propiedades que se setean desde el js de cada page; se guardan dentro $page.data(); se pueden setear desde la view ajax, o desde un js
 	 * 		skipAppLink: omite inicializar todos los links con 'linkInApp'  
@@ -170,6 +181,7 @@ cn($page);
 					}
 					
 					if ($page.data('skipAppLink') != true) {
+						$page.off('click', 'a');
 						$page.on('click', 'a',
 							function(event) {
 								crMain.clickAppLink(event);

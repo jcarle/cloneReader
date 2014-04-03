@@ -384,10 +384,11 @@ $.extend({
 	/**
 	 * 	Ejecutar las acciones por defecto de una peticion ajax (alerts, redirects, notifications, etc)
 	 * 	Params:
-	 * 		skipAppLink			fuerza la variable $.support.pushState=false; se utiliza para un hard redirect
-	 * 		goToUrl				carga una url
-	 * 		notification		muestra una notificación
-	 * 		msg					muestra un alert, y al cerrarlo carga una url
+	 * 		skipAppLink					fuerza la variable $.support.pushState=false; se utiliza para un hard redirect
+	 * 		goToUrl						carga una url
+	 * 		notification				muestra una notificación
+	 * 		msg							muestra un alert, y al cerrarlo carga una url
+	 * 		loadMenuAndTranslations		vuelve a pedir el menu y las traducciones
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
@@ -395,6 +396,10 @@ $.extend({
 			return true;
 		}
 		var result = response['result'];
+		
+		if (result['loadMenuAndTranslations'] == true) {
+			crMain.loadMenuAndTranslations(true);
+		}
 		
 		if (result['skipAppLink'] == true) {
 			$.support.pushState = false;

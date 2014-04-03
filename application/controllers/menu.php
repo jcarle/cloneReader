@@ -79,8 +79,7 @@ class Menu extends CI_Controller {
 			}
 			
 			if ($this->input->is_ajax_request()) { // save data
-				$code = $this->form_validation->run(); 
-				return loadViewAjax($code,  $code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId)));
+				return loadViewAjax($code,  $code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId), 'loadMenuAndTranslations' => true));
 			}
 		}
 		
