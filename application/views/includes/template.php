@@ -4,9 +4,15 @@
 
 $CI = &get_instance();
 
+// TODO: hacer dos templates que es llamen a jsonPage y htmlPage
+
 //sleep(5);
 
 if ($CI->input->get('appType') == 'ajax') {
+	
+	return 	$this->load->view('includes/pageJson');
+	
+	/*
 	$result = array('pageName' => getPageName());
 	
 	if (isset($hasGallery)) {
@@ -40,9 +46,26 @@ if ($CI->input->get('appType') == 'ajax') {
 		'view' 		=> null,
 		'code'		=> true,
 		'result'	=> $result
-	)); 
+	));
+	 * 
+	 */ 
 }
+
+
+if (!isset($hasGallery)) {
+	$hasGallery = false;
+}
+if ($hasGallery == false && isset($form)) {	
+	$hasGallery = (getCrFieldGallery($form) != null);
+}
+		
+
 
 $this->load->view('includes/header');
 $this->load->view($view);
+
+if ($hasGallery == true) {
+	$this->load->view('includes/uploadfile');
+}
+
 $this->load->view('includes/footer');

@@ -178,3 +178,9 @@ echo $this->pagination->create_links();
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.crList').crList();
+});
+</script>

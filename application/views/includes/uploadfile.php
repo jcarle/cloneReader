@@ -1,4 +1,9 @@
-<?php $this->load->view('includes/gallery'); ?>
+<?php 
+$this->load->view('includes/gallery'); 
+if (!isset($fileupload)) {
+	$fileupload = array();
+}
+?>
 
 <div class="modal" style="display:none" id="fileupload">
 	<div class="modal-dialog">

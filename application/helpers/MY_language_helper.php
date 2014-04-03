@@ -40,6 +40,9 @@ function getLangToJs($langs) {
 	$langs[] = 'Ok';
 	$langs[] = 'Cancel';
 	$langs[] = 'Close';
+	$langs[] = 'Add';
+	$langs[] = 'Delete';
+	$langs[] = 'Save';
 	$langs[] = 'Retry';
 	$langs[] = 'Are you sure?';
 	$langs[] = 'Not connected. Please verify your network connection';

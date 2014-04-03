@@ -355,15 +355,6 @@ function appendCrFormJsAndCss($form, $aScripts) {
 	$CI->carabiner->css('blueimp-gallery.css');
 	$CI->carabiner->css('jquery.fileupload-ui.css');
 	
-	if ($form != null) {
-		$form  = appendMessagesToCrForm($form);
-		/*
-		$aScripts[] = '
-			$(document).ready(function() {
-				$(\'#'. element('frmId', $form, 'frmId').'\').crForm('.json_encode($form).');
-			});';*/
-	}
-	
 	return $aScripts;
 }
 
@@ -381,12 +372,5 @@ function appendCrListJsAndCss($list, $aScripts) {
 		$aScripts = appendCrFormJsAndCss(array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), $aScripts);
 	}
 	
-	if ($list != null) {
-		$aScripts[] = '
-			$(document).ready(function() {
-				$(\'.crList\').crList();
-			});	';
-	}
-		
 	return $aScripts; 	
 }
