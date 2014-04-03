@@ -38,8 +38,8 @@ $CI->carabiner->css('bootstrap.css');
 $CI->carabiner->css('bootstrap-theme.css');
 $CI->carabiner->css('font-awesome.css');
 
-$aScripts = appendCrFormJsAndCss((isset($form) ? $form : null), $aScripts); 
-$aScripts = appendCrListJsAndCss((isset($list) ? $list : null), $aScripts);
+$aScripts = appendCrFormJsAndCss($aScripts); 
+$aScripts = appendCrListJsAndCss($aScripts);
 
 
 $siteAssets = config_item('siteAssets');

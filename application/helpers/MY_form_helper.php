@@ -318,9 +318,9 @@ function renderCrFormTree($aTree, $value){
 
 
 /**
- * Apendeo js y css y agrego items al script que va a inicializar los objetos en el header
+ * Apendeo js y css necesarios para los formularios
  */
-function appendCrFormJsAndCss($form, $aScripts) {
+function appendCrFormJsAndCss($aScripts) {
 	$CI = &get_instance();
 	
 	$CI->carabiner->js('crForm.js');
@@ -359,18 +359,13 @@ function appendCrFormJsAndCss($form, $aScripts) {
 }
 
 /**
- * Apendeo js y css y agrego items al script que va a inicializar los objetos en el header
+ * Apendeo js y css necesarios para los listados 
  */
-function appendCrListJsAndCss($list, $aScripts) {
+function appendCrListJsAndCss($aScripts) {
 	$CI = &get_instance();
 	
 	$CI->carabiner->js('crList.js');
 	$CI->carabiner->js('bootstrap-paginator.js');
-
-	$filters = element('filters', $list);
-	if ($filters != null) {
-		$aScripts = appendCrFormJsAndCss(array('fields' => $filters, 'sendWithAjax' => false, 'frmId' => 'frmCrList'), $aScripts);
-	}
 	
 	return $aScripts; 	
 }
