@@ -86,6 +86,6 @@ class Feedback extends CI_Controller {
 			'title'		=> $this->lang->line('Feedback'),
 			'form'		=> $form,
 			'langs'		=> array( 'Thanks for contacting us' )
-		));		
+		));
 	}
 }

@@ -57,11 +57,11 @@ class Login extends CI_Controller {
 		return $this->load->view('pageHtml', array(
 			'view'			=> 'login', 
 			'title'			=> $this->lang->line('Login'),
+			'form'			=> $form,
 			'meta'			=> array(
 				'description' 	=> 'Login in clone Reader. Reader of feeds, rss, news',
 				'keywords'		=> 'cReader cloneReader login '
-			),				
-			'form'			=> $form,
+			),
 		));
 	}
 

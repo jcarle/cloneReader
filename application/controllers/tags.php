@@ -5,7 +5,7 @@ class Tags extends CI_Controller {
 		parent::__construct();	
 		
 		$this->load->model('Tags_Model');
-	}  
+	}
 	
 	function index() {
 		$this->listing();
