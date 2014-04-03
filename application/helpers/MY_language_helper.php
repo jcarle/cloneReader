@@ -29,7 +29,7 @@ function langJs($lines)
 }
 
 /**
- * lags que se utilizan en js
+ * langs que se utilizan en js
  */
  // TODO: renombrar!
 function getLangToJs($langs) {

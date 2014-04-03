@@ -2,8 +2,6 @@
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 	
 <?php
-$form  = appendMessagesToCrForm($form); // TODO: centralizar !
-
 $this->load->view('includes/crForm');
 ?>
 	</div>
@@ -36,10 +34,3 @@ $this->load->view('includes/crForm');
 		</ul>
 	</div>
 </div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#<?php echo element('frmId', $form, 'frmId'); ?>').crForm(<?php echo json_encode($form); ?>);
-});
-</script>
-

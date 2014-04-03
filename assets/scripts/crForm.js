@@ -635,7 +635,7 @@ cn($(this));
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();;
 					});
 				
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: 'AR$ ' } ) // TODO: desharckodear!
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
 
 				this.$form.bind('submit', $.proxy(
 					function($maskPrice, $maskExchange, event) {
@@ -648,7 +648,7 @@ cn($(this));
 				$total.data('init-price', true);
 			}
 			
-			if ($currency.val() == 1) { // TODO: desharckodear!
+			if ($currency.val() == DEFAULT_CURRENCY_ID) {
 				$exchange.val(1);
 				$exchange.prev().autoNumeric('set', 1);
 			}
@@ -659,7 +659,7 @@ cn($(this));
 		
 		sumValues: function($total, aFieldName) {
 			if ($total.data('init-price') == null) {
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: 'AR$ ' } ) // TODO: desharckodear!
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
 			}
 			
 			var total = 0;
@@ -760,18 +760,6 @@ cn($(this));
 					.append(' ');
 			}
 		}
-
-/* 
-// TODO: revisar la galeria
-$fieldGallery = getCrFieldGallery($form);
-if ($fieldGallery != null) {
-	$this->load->view('includes/uploadfile', array(
-		'fileupload' => array ( 
-			'entityName' 	=> $fieldGallery['entityName'],
-			'entityId'		=> $fieldGallery['entityId']
-		) 
-	));
-}*/
 
 		return $form;
 	},

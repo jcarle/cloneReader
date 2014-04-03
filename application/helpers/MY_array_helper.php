@@ -73,6 +73,8 @@ function getPageName() {
 	return 'cr-page-'.$CI->router->class.($CI->router->method != 'index' ? '-'.$CI->router->method : '');
 }
 
-function formatCurrency($value, $currencyName = DEFAULT_CURRENCY_NAME) { 
-	return $currencyName.' '.number_format($value, 2, ',', '.'); // TODO: desharckodaear!
+function formatCurrency($value, $currencyName = DEFAULT_CURRENCY_NAME) {
+	$CI = &get_instance();
+	 
+	return $currencyName.' '.number_format($value, 2, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'));
 }

@@ -16,7 +16,6 @@ $.extend({
 		
 		return o;
 	},
-	
 
 	getUrlVars: function(){
 		var vars = {}, hash;
@@ -31,15 +30,6 @@ $.extend({
 			}
 		}
 		return vars;
-	},
-
-	getAppType: function() {
-		// TODO: mejorar esta parte, hacer constantes o algo asi
-		if ($.inArray(this.appType, ['appAjax', 'appMobile', 'webSite']) != -1) {
-			return this.appType;
-		}
-
-		return 'webSite';
 	},
 
 	isMobile: function() {

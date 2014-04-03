@@ -78,13 +78,15 @@ $CI->carabiner->display('css');
 $CI->carabiner->display('js');
 ?>	
 	<script type="text/javascript">
-		var base_url	= '<?php echo base_url(); ?>';
-		var datetime	= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
-		var langId		= '<?php echo $this->session->userdata('langId'); ?>';
-		var PAGE_SIZE	= <?php echo PAGE_SIZE; ?>;	
-		var PAGE_HOME 	= '<?php echo $this->router->default_controller; ?>'; 
-		var SITE_NAME	= '<?php echo SITE_NAME; ?>';
-		var _msg 		= {};
+		var base_url				= '<?php echo base_url(); ?>';
+		var datetime				= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
+		var langId					= '<?php echo $this->session->userdata('langId'); ?>';
+		var PAGE_SIZE				= <?php echo PAGE_SIZE; ?>;	
+		var PAGE_HOME			 	= '<?php echo $this->router->default_controller; ?>'; 
+		var SITE_NAME				= '<?php echo SITE_NAME; ?>';
+		var DEFAULT_CURRENCY_ID  	= <?php echo DEFAULT_CURRENCY_ID; ?>;
+		var DEFAULT_CURRENCY_NAME	= '<?php echo DEFAULT_CURRENCY_NAME; ?>';
+		var _msg			 		= {};
 		
 		$(document).ready(function() {
 			$.appType = 'appAjax';
