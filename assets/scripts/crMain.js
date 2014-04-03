@@ -2,14 +2,16 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	aPages: [],
 	
 	init: function() {
-		$.support.pushState = (history.pushState == false ? false : true);
+		$.support.pushState = false; //(history.pushState == false ? false : true);
 		
 		this.initEvents();
 		this.iniAppAjax();
 		resizeWindow();
 		
-		// TODO: seteamos el evento global o de a uno a cada link ?
-//		$.showWaiting(false);
+		if ($.support.pushState == false) {
+			crMenu.initMenu();
+			$.showWaiting(false);
+		}
 	},
 	
 	initEvents: function() {
@@ -177,8 +179,8 @@ cn($page);
 	},
 	
 	renderPage: function(response, pageName) {
-		// FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
-		$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove();
+		$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
+		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 		
 		var data 	= response['result'];
 		var $page 	= crMain.aPages[pageName];

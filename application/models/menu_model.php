@@ -83,4 +83,18 @@ class Menu_Model extends CI_Model {
 			}
 		}
 	}
+	
+	function createMenuCache($userId) {
+		$this->load->driver('cache', array('adapter' => 'file'));
+
+		if (!is_array($this->cache->file->get('MENU_PROFILE_'.$userId))) {
+			$this->cache->file->save('MENU_PROFILE_'.$userId, $this->Menu_Model->getMenu(MENU_PROFILE));	
+		}
+		if (!is_array($this->cache->file->get('MENU_PUBLIC_'.$userId))) {
+			$this->cache->file->save('MENU_PUBLIC_'.$userId, $this->Menu_Model->getMenu(MENU_PUBLIC));	
+		}
+		if (!is_array($this->cache->file->get('MENU_ADMIN_'.$userId))) {
+			$this->cache->file->save('MENU_ADMIN_'.$userId, $this->Menu_Model->getMenu(MENU_ADMIN));	
+		}	
+	}
 }

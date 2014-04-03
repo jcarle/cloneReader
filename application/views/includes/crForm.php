@@ -1,6 +1,8 @@
 <?php 
 $CI	= &get_instance();
 
+$form  = appendMessagesToCrForm($form);
+
 if (!isset($form['action'])) {
 	$form['action'] = base_url().$this->uri->uri_string(); 
 }
@@ -40,13 +42,9 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
-/*$fieldGallery = getCrFieldGallery($form);
-if ($fieldGallery != null) {
-	$this->load->view('includes/uploadfile', array(
-		'fileupload' => array ( 
-			'entityName' 	=> $fieldGallery['entityName'],
-			'entityId'		=> $fieldGallery['entityId']
-		) 
-	));
-}*/
-
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#<?php echo element('frmId', $form, 'frmId'); ?>').crForm(<?php echo json_encode($form); ?>);
+});
+</script>

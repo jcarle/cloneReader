@@ -22,7 +22,7 @@ function appendMessagesToCrForm($form) {
 }
 
 /**
- * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista
+ * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista, no al validar
  * TODO: implementar que los sources de [dropdown, menuTree] se llenen con este metodo
  */
 function populateCrForm($form, $data) {
@@ -146,17 +146,6 @@ function getCrFieldGallery($form) {
 	return null;
 }
 
-// TODO: sacar estos metodos!
-/*function getCrFieldUpload($form) {
-	foreach ($form['fields'] as $name => $field) {
-		if ($field['type'] == 'upload') {
-			return $field;
-		}
-	}
-	return null;
-}*/
-
-
 function renderCrFormFields($form) {
 	$CI			= &get_instance();
 	$aFields 	= array();
@@ -246,11 +235,6 @@ function renderCrFormFields($form) {
 				
 				break;
 			case 'gallery':
-/*				$fileupload = array ( 
-					'entityName' 	=> $field['entityName'],
-					'entityId'		=> $field['entityId']
-				);*/
-					
 				$aFields[] = sprintf($sField, '
 						<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >
 							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">
