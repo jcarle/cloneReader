@@ -19,7 +19,7 @@ class Comments extends CI_Controller {
 		
 		$query = $this->Comments_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'controller'	=> strtolower(__CLASS__),
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit comments'),
@@ -54,7 +54,7 @@ class Comments extends CI_Controller {
 			}
 		}
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit comments'),
 			'form'		=> populateCrForm($form, $this->Comments_Model->get($commentId)),

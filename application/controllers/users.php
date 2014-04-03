@@ -26,7 +26,7 @@ class Users extends CI_Controller {
 
 		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin, $this->input->get('orderBy'), $this->input->get('orderDir') );
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit users'),
 			'list'			=> array(
@@ -157,7 +157,7 @@ class Users extends CI_Controller {
 			}
 		}
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit users'),
 			'form'		=> populateCrForm($form, $this->Users_Model->get($userId)),

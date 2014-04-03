@@ -17,7 +17,7 @@ class Error extends CI_Controller {
 			));
 		}		
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'error', 
 			'title'			=> 'Error 403',
 			'message'		=> $this->lang->line('Not authorized for the action to take'),
@@ -34,7 +34,7 @@ class Error extends CI_Controller {
 			));
 		}		
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'error', 
 			'title'			=> 'Error 404',
 			'message'		=> $this->lang->line('The page you requested does not exist'),

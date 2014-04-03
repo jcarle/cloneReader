@@ -54,7 +54,7 @@ class Login extends CI_Controller {
 			}
 		}
 			
-		return $this->load->view('includes/template', array(
+		return $this->load->view('pageHtml', array(
 			'view'			=> 'login', 
 			'title'			=> $this->lang->line('Login'),
 			'meta'			=> array(

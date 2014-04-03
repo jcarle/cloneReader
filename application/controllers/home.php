@@ -3,7 +3,7 @@ class Home extends CI_Controller {
 	public function index() {
 		$this->load->model('Users_Model');
 
-		$this->load->view('includes/template', 
+		$this->load->view('pageHtml', 
 			array(
 				'view'			=> 'home', 
 				'title'			=> 'News reader and feeds',

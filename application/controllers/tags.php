@@ -19,7 +19,7 @@ class Tags extends CI_Controller {
 		
 		$query = $this->Tags_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit tags'),
 			'list'			=> array(
@@ -48,7 +48,7 @@ class Tags extends CI_Controller {
 			}
 		}
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit tags'),
 			'form'		=> populateCrForm($form, $this->Tags_Model->get($tagId)),

@@ -19,7 +19,7 @@ class Controllers extends CI_Controller {
 
 		$query = $this->Controllers_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit controllers'),
 			'list'			=> array(
@@ -87,7 +87,7 @@ class Controllers extends CI_Controller {
 			}
 		}
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit controllers'),
 			'form'		=> populateCrForm($form, $this->Controllers_Model->get($controllerId)),

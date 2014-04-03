@@ -83,7 +83,7 @@ class Menu extends CI_Controller {
 			}
 		}
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm', 
 			'title'			=> $this->lang->line('Edit menu'),
 			'form'			=> populateCrForm($form, $this->Menu_Model->get($menuId)),

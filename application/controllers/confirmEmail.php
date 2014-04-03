@@ -19,7 +19,7 @@ class ConfirmEmail extends CI_Controller {
 		
 		$this->Users_Model->confirmEmail($userId);
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'message', 
 			'title'		=> $this->lang->line('Change email'),
 			'message'	=> $this->lang->line('Your email has been updated')

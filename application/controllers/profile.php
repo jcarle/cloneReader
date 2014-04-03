@@ -14,7 +14,7 @@ class Profile extends CI_Controller {
 	function edit() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'profile', 
 			'title'		=> $this->lang->line('Edit profile'),
 		));		

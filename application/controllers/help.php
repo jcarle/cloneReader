@@ -54,7 +54,7 @@ class Help extends CI_Controller {
 		}
 				
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm',
 			'form'			=> $form,
 			'title'			=> $this->lang->line('Keyboard shortcut'),

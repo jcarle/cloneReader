@@ -22,7 +22,7 @@ class Import extends CI_Controller {
 			'buttons'	=> array()
 		);
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import feeds'),
 			'form'		=> $form
@@ -102,7 +102,7 @@ class Import extends CI_Controller {
 			'buttons'	=> array()
 		);
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Import starred'),
 			'form'		=> $form

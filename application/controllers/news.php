@@ -19,7 +19,7 @@ class News extends CI_Controller {
 		
 		$query = $this->News_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit news'),
 			'list'			=> array(
@@ -48,7 +48,7 @@ class News extends CI_Controller {
 			}
 		}
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit news'),
 			'form'		=> populateCrForm($form, $this->News_Model->get($newId, true)),
@@ -126,7 +126,7 @@ class News extends CI_Controller {
 				
 		$new 	= $this->News_Model->getByNewSef($newSef);
 		
-		$this->load->view('includes/template', 
+		$this->load->view('pageHtml', 
 			array(
 				'view'			=> 'newView', 
 				'title'			=> $new['newTitle'],

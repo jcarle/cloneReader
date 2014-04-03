@@ -76,7 +76,7 @@ class Register extends CI_Controller {
 			return loadViewAjax($code);
 		}
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Signup'),
 			'meta'			=> array(

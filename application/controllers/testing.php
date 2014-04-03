@@ -19,7 +19,7 @@ class Testing extends CI_Controller {
 		
 		$query = $this->Testing_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'));
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> 'Edit testing',
 			'list'			=> array(
@@ -130,7 +130,7 @@ class Testing extends CI_Controller {
 			}
 		}
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> 'Edit testing',
 			'form'		=> populateCrForm($form, $this->Testing_Model->get($testId)),

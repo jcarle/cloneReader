@@ -18,7 +18,7 @@ class Groups extends CI_Controller {
 		if ($page == 0) { $page = 1; }
 		$query = $this->Groups_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit groups'),
 			'list'			=> array(
@@ -83,7 +83,7 @@ class Groups extends CI_Controller {
 			}
 		}
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm', 
 			'title'			=> $this->lang->line('Edit groups'),
 			'form'			=> populateCrForm($form, $this->Groups_Model->get($groupId)),

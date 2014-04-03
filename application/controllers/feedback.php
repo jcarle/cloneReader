@@ -81,7 +81,7 @@ class Feedback extends CI_Controller {
 			}
 		}
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Feedback'),
 			'form'		=> $form,

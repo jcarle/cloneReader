@@ -38,7 +38,7 @@ class Feeds extends CI_Controller {
 		
 		$query	= $this->Feeds_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest, $this->input->get('orderBy'), $this->input->get('orderDir') );
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit feeds'),
 			'list'			=> array(
@@ -129,7 +129,7 @@ class Feeds extends CI_Controller {
 			}
 		}		 
 				
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit feeds'),
 			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true)),

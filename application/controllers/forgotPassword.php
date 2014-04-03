@@ -35,7 +35,7 @@ class ForgotPassword extends CI_Controller {
 			return $this->_sendEmailToResetPassword();
 		}
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Reset password'),
 			'form'		=> $form,

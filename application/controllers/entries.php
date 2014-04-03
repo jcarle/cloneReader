@@ -33,7 +33,7 @@ class Entries extends CI_Controller {
 		
 		$query = $this->Entries_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $feedId, $this->input->get('orderBy'), $this->input->get('orderDir'));
 		
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit entries'),
 			'list'			=> array(
@@ -88,7 +88,7 @@ class Entries extends CI_Controller {
 			}
 		} 
 
-		$this->load->view('includes/template', array(
+		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit entries'),
 			'form'		=> populateCrForm($form, $this->Entries_Model->get($entryId, true)),

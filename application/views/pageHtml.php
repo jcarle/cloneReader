@@ -10,7 +10,7 @@ $CI = &get_instance();
 
 if ($CI->input->get('appType') == 'ajax') {
 	
-	return 	$this->load->view('includes/pageJson');
+	return 	$this->load->view('pageJson');
 	
 	/*
 	$result = array('pageName' => getPageName());
