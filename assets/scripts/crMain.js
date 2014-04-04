@@ -306,6 +306,9 @@ cn(this);
 		if (url == null || url.substr(0, 1) == '#' || url.substr(0, 10) == 'javascript') {
 			return;
 		}
+		
+		$.hideMobileNavbar();
+		
 		event.preventDefault();
 		return $.goToUrl(url);
 	}

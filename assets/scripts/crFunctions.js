@@ -335,6 +335,14 @@ $.extend({
 		$element.text( moment($element.text(), 'YYYY-MM-DDTHH:mm:ss' ).format( format) );		
 	},
 	
+	hideMobileNavbar: function() {
+		if ($.isMobile() == true) {
+			if ($('.navbar-ex1-collapse').is(':visible') == true) {
+				$('.navbar-ex1-collapse').collapse('hide');
+			}
+		}
+	},	
+	
 	showModal: function($modal, keyboard, onCloseRemove) {
 		$('body').addClass('modal-open');
 		

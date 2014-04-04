@@ -109,6 +109,9 @@ cloneReader = {
 				if ($('body').hasClass('modal-open') == true) {
 					return;
 				}
+				if (this.$page.is(':visible') != true) {
+					return;
+				}
 				
 				event.stopPropagation();
 //cn(event['keyCode']);
@@ -847,7 +850,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	goToEntry: function(next) {
-		this.hideMobileNavbar();
+		$.hideMobileNavbar();
 		
 		var $entry = this.$ulEntries.find('.entry.selected');
 		if ($entry.length == 0 && next != true) {
@@ -1158,7 +1161,7 @@ console.timeEnd("t1");
 	
 	maximiseUlEntries: function(value, isResize) {
 		if (isResize == false) {
-			this.hideMobileNavbar();
+			$.hideMobileNavbar();
 		}
 
 		this.isMaximized = value;
@@ -1294,7 +1297,7 @@ console.timeEnd("t1");
 
 	saveUserFeedTag: function(feedId, tagId, append) {
 		this.hidePopupWindow();
-		this.hideMobileNavbar();
+		$.hideMobileNavbar();
 
 		$.ajax({
 			'url': 		base_url + 'entries/saveUserFeedTag',
@@ -1487,7 +1490,7 @@ console.timeEnd("t1");
 		}
 		
 		this.hidePopupWindow();
-		this.hideMobileNavbar();
+		$.hideMobileNavbar();
 		
 		this.$popupForm
 			.unbind()
@@ -1527,7 +1530,7 @@ console.timeEnd("t1");
 			$('#header').css( { 'box-shadow': '0 0px 7px #666' });
 		}
 		else {
-			this.$mainToolbar.appendTo( this.$toolbar );
+			this.$mainToolbar.appendTo( this.$toolbar ).show();
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
 			this.hidePopupWindow();
@@ -1559,14 +1562,6 @@ console.timeEnd("t1");
 	hidePopupWindow: function() {
 		this.$page.find('.popupForm').hide();
 		this.$mainToolbar.find('.open').removeClass('open');
-	},
-	
-	hideMobileNavbar: function() {
-		if (this.isMobile == true) {
-			if ($('.navbar-ex1-collapse').is(':visible') == true) {
-				$('.navbar-ex1-collapse').collapse('hide');
-			}
-		}
 	},
 	
 	isBrowseTags: function() {
@@ -1708,7 +1703,7 @@ console.timeEnd("t1");
 	},
 	
 	helpKeyboardShortcut: function() {
-		this.hideMobileNavbar();
+		$.hideMobileNavbar();
 		
 		if (this.$keyboardShortcut != null) {
 			$.showModal(this.$keyboardShortcut, false);

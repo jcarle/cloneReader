@@ -317,6 +317,8 @@ class Entries_Model extends CI_Model {
 
 	// guarda los cambios en la tabla users_entries
 	function pushTmpUserEntries($userId) {
+		$this->db->trans_start();
+		
 //		$aQueries 	= array();
 		$entries 	= $this->db->where('userId', $userId)->get('tmp_users_entries')->result_array();
 		//pr($this->db->last_query()); 
@@ -362,6 +364,8 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query());				
 		$this->db->delete('tmp_users_entries', array('userId' => $userId));
 		// TODO: enviar todos estos queries juntos al servidor
+		
+		$this->db->trans_complete();
 	}
 	
 	function saveUserTags($userId, $tags) {
