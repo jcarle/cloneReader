@@ -34,16 +34,31 @@ cloneReader = {
 		this.renderToolbar();
 		this.loadFilters(false);
 		this.initEvents();
-		this.initMainMenu();
+		this.updateMainMenu();
 //		this.resizeWindow();
 		this.$page.trigger('onVisible');
 		this.isLoaded = true;
 	},
 
-	initMainMenu: function() {
-		var $dropdownMenu 	= $('ul.menuProfile').find('.icon-gear').parent().parent().find('ul.dropdown-menu:first');
-		$('<li role="presentation" class="divider"></li>').appendTo($dropdownMenu);
-		this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>').appendTo($dropdownMenu);
+	updateMainMenu: function() {
+		if (this.$dropdownMenu == null) {
+			this.$dropdownMenu 	= $('ul.menuProfile').find('.icon-gear').parent().parent().find('ul.dropdown-menu:first');
+			
+			$('<li role="presentation" class="divider"></li>').appendTo(this.$dropdownMenu);
+			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>').appendTo(this.$dropdownMenu);			
+		}
+		
+		if (this.$page.is(':visible') == true) {
+			this.$helpKeyboardShortcut.prev().show();
+			this.$helpKeyboardShortcut.show();
+			if (this.isMobile == true) {
+				this.$helpKeyboardShortcut.prev().hide();
+			}
+		}
+		else {
+			this.$helpKeyboardShortcut.prev().hide();
+			this.$helpKeyboardShortcut.hide();		
+		}
 	},
 	
 	initEvents: function() {
@@ -54,10 +69,8 @@ cloneReader = {
 				$('.menu').hide();
 				$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
 				
-				this.$helpKeyboardShortcut.prev().show();
-				this.$helpKeyboardShortcut.show();
-								
 				this.resizeWindow();
+				this.updateMainMenu();
 			}
 		, this));
 		
@@ -70,10 +83,8 @@ cloneReader = {
 				$('.menu').show();
 				$('body').css({ 'background': 'white', 'overflow': 'auto' });
 				
-				this.$helpKeyboardShortcut.prev().hide();
-				this.$helpKeyboardShortcut.hide();
-				
 				this.resizeWindow();
+				this.updateMainMenu();
 			}
 		, this));
 					

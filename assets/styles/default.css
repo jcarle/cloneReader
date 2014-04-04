@@ -680,3 +680,7 @@ table .numeric, table .date, table .datetime, table .text-right {
 .select2-drop.select2-drop-above {
 	margin-top: 3px;
 }
+
+.userProfile {
+	margin-bottom: 10px;
+}
