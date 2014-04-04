@@ -181,6 +181,12 @@ echo $this->pagination->create_links();
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('.crList').crList();
+	$('.crList')
+		.crList()
+		.on('click', '.pagination a',
+			function(event) {
+				crMain.clickAppLink(event);
+			}
+		);	
 });
 </script>

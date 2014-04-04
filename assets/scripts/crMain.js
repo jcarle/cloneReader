@@ -2,7 +2,7 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	aPages: [],
 	
 	init: function() {
-		$.support.pushState = false; //(history.pushState == false ? false : true);
+		$.support.pushState = (history.pushState == false ? false : true);
 		
 		this.initEvents();
 		this.iniAppAjax();
@@ -294,9 +294,9 @@ cn(this);
 		if (event.button != 0) {
 			return;
 		}
-		if ($.support.pushState == false) {
-			return;
-		}
+//		if ($.support.pushState == false) {
+	//		return;
+//		}
 		
 		var $link 	= $(event.currentTarget);
 		if ($link.data('skip-app-link') == true) {
