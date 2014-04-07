@@ -146,6 +146,18 @@ function getCrFieldGallery($form) {
 	return null;
 }
 
+function hasCrUploadFile($form) {
+	foreach ($form['fields'] as $name => $field) {
+		if ($field['type'] == 'gallery') {
+			return true;
+		}
+		if ($field['type'] == 'upload') {
+			return true;
+		}		
+	}
+	return false;
+}
+
 function renderCrFormFields($form) {
 	$CI			= &get_instance();
 	$aFields 	= array();

@@ -4,8 +4,8 @@ $CI = &get_instance();
 
 $result = array('pageName' => getPageName());
 
-if (isset($hasGallery)) {
-	$result['hasGallery'] = $hasGallery;
+if (isset($hasUploadFile)) {
+	$result['hasUploadFile'] = $hasUploadFile;
 }
 
 if (isset($notRefresh)) {
@@ -23,8 +23,8 @@ switch ($view) {
 		$result['title']	= $title;
 		$result['js']		= 'crForm';
 		$result['form'] 	= $form;
-		if (getCrFieldGallery($form) != null) { 
-			$result['hasGallery'] = true;
+		if (hasCrUploadFile($form) == true) { 
+			$result['hasUploadFile'] = true;
 		}
 		break;
 	default: 

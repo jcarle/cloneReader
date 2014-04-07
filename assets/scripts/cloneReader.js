@@ -34,7 +34,7 @@ cloneReader = {
 		this.renderToolbar();
 		this.loadFilters(false);
 		this.initEvents();
-		this.updateMainMenu();
+//		this.updateMainMenu();
 //		this.resizeWindow();
 		this.$page.trigger('onVisible');
 		this.isLoaded = true;
@@ -539,9 +539,12 @@ cloneReader = {
 		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
 		$entryContent.find('script').remove();
 		$entryContent.find('iframe').remove();
+		$entryContent.find('link').remove();
 		$entryContent.find('br').remove();
 
 		var $p = $('<p/>').html($entryContent.text()).appendTo($entry);
+
+$p.find('link').remove(); // TODO: revisar, esta metiendo css !
 
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 

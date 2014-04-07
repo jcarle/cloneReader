@@ -5,7 +5,6 @@
 		
 	methods = {
 		init : function( options ) {
-cn($(this));			
 			var $element = $(this);
 			if (options == null) {
 				options = {};

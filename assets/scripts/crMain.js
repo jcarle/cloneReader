@@ -17,6 +17,12 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	initEvents: function() {
 		$.countProcess = 0;
 		
+		$('body').on('click', 'a',
+			function(event) {
+				crMain.clickOnLink(event);
+			}
+		);
+		
 		$.ajaxSetup({'dataType': 'json'});
 		
 		
@@ -72,24 +78,17 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	iniAppAjax: function() {
 		if ($.support.pushState == false) {
 			return;
-		}		
-cn('iniAppAjax!');		
+		}
 
 		this.loadMenuAndTranslations(false);
-		
-		$('#header .navbar-header').on('click', 'a',
-			function(event) {
-				crMain.clickAppLink(event);
-			}
-		);
 
 		$(window).bind("popstate", function () {  
 			crMain.loadUrl(location.href);
 		});  
 
-//if ($('.container > .page').length == 0) {
-	crMain.loadUrl(location.href);
-//}
+		if ($('.container > .page').length == 0) {
+			crMain.loadUrl(location.href);
+		}
 	},
 	
 	loadMenuAndTranslations: function(async) {
@@ -105,13 +104,6 @@ cn('iniAppAjax!');
 						var $menu = $(aMenu[menuName]['parent']);
 						$menu.children().remove();
 						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
-						$menu
-							.off('click', 'a')
-							.on('click', 'a',
-								function(event) {
-									crMain.clickAppLink(event);
-								}
-							);
 					}
 					crMenu.initMenu();
 				}
@@ -120,7 +112,6 @@ cn('iniAppAjax!');
 
 	/**
 	 * Propiedades que se setean desde el js de cada page; se guardan dentro $page.data(); se pueden setear desde la view ajax, o desde un js
-	 * 		skipAppLink: omite inicializar todos los links con 'linkInApp'  
 	 * 		notRefresh: no vuelve a pedir la page, solo muestra lo que ya hay en memoria
 	 * Eventos que dispara cada page; hay que setearlo en el js de cada page
 	 * 		onHide: se lanza al ocultar la page
@@ -142,14 +133,13 @@ cn('iniAppAjax!');
 		var url 	= base_url + controller.replace(base_url, '');
 		var $page 	= this.aPages[pageName];
 		if ($page.data('notRefresh') == true) {
-cn($page);
 			this.showPage(pageName);
 			return;
 		}
 		
 		this.ajax = $.ajax({
 			'url': 		url,
-			'data': 	{ 'appType': 'ajax' },
+			'data': 	{ 'pageJson': true },
 			'async':	true,
 			'pageName': pageName,
 			'success': 	$.proxy(
@@ -162,7 +152,7 @@ cn($page);
 	},
 	
 	loadUploadFile: function() {
-		if (this.loadedUploadFile == true) {
+		if (this.loadedUploadFile == true || $('#blueimp-gallery').length > 0 ) {
 			return;
 		}
 		
@@ -190,7 +180,7 @@ cn($page);
 		$page.children().remove();
 		crMain.renderPageTitle(data, $page);
 		
-		if (data['hasGallery'] == true) {
+		if (data['hasUploadFile'] == true) {
 			this.loadUploadFile();		
 		}
 		
@@ -209,15 +199,6 @@ cn($page);
 				break;
 			default:
 				$page.append(data['html']);
-		}
-		
-		if ($page.data('skipAppLink') != true) {
-			$page.off('click', 'a');
-			$page.on('click', 'a',
-				function(event) {
-					crMain.clickAppLink(event);
-				}
-			);
 		}
 	},
 	
@@ -260,7 +241,6 @@ cn($page);
 		$('.container > .page:visible:not(.' + pageName + ')').hide( { 
 			'duration': 0,
 			'complete': function(){ 
-cn(this);				
 				$(this).trigger('onHide'); } 
 		});
 		$page.stop().show( { 
@@ -285,18 +265,14 @@ cn(this);
 	},
 
 	/**
-	 * Modifica un link para que la page se carge por ajax. 
+	 * Modifica un link para que la page se carge por ajax (si $.support.pushState=true) o para mostrar el $.showWaiting antes de redireccionar  
 	 * Para omitir este comportamiento se puede setear
-	 * 		skipAppLink = true 			a nivel de la page. Desde el json o desde el js personalizado
 	 * 		skip-app-link = true 		como property de un <a/>
  	 */		
-	clickAppLink: function(event) {
+	clickOnLink: function(event) {
 		if (event.button != 0) {
 			return;
 		}
-//		if ($.support.pushState == false) {
-	//		return;
-//		}
 		
 		var $link 	= $(event.currentTarget);
 		if ($link.data('skip-app-link') == true) {

@@ -303,7 +303,7 @@ class Entries_Model extends CI_Model {
 	function saveTmpUsersEntries($userId, $entries) { // utilizo una tabla temporal para guardar los leidos y no romper la paginación infinita
 		$aQueries = array();
 		foreach ($entries as $entry) {
-			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.($entry['entryRead'] == true ? 'true' : 'false').', '.(element('starred', $entry) == true ? 'true' : 'false').') ';
+			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.(element('entryRead', $entry) == true ? 'true' : 'false').', '.(element('starred', $entry) == true ? 'true' : 'false').') ';
 
 		}
 		if (count($aQueries) == 0) {
@@ -312,7 +312,7 @@ class Entries_Model extends CI_Model {
 
 		$query = 'REPLACE INTO tmp_users_entries (userId, entryId, entryRead, starred) VALUES '.implode(', ', $aQueries).';';
 		$this->db->query($query);
-		//pr($this->db->last_query());
+		//pr($this->db->last_query()); 
 	}
 
 	// guarda los cambios en la tabla users_entries

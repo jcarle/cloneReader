@@ -87,13 +87,7 @@ $CI->carabiner->display('js');
 		var DEFAULT_CURRENCY_ID  	= <?php echo DEFAULT_CURRENCY_ID; ?>;
 		var DEFAULT_CURRENCY_NAME	= '<?php echo DEFAULT_CURRENCY_NAME; ?>';
 		var _msg			 		= {};
-		
-		$(document).ready(function() {
-			$.appType = 'appAjax';
-		});	
 <?php
-
-
 if (!isset($langs)) {
 	$langs = array();
 }
