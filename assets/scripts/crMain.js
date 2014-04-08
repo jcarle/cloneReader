@@ -245,7 +245,9 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 		});
 		$page.stop().show( { 
 			'duration': 0,
-			'complete': function(){ $(this).trigger('onVisible'); } 
+			'complete': function(){ 
+				$(this).css('overflow','visible');  // FIXME: jquery esta metiendo un overflow hidden!
+				$(this).trigger('onVisible'); } 
 		});		
 		$.showWaiting(false);
 	},

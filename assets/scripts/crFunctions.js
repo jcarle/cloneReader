@@ -17,21 +17,6 @@ $.extend({
 		return o;
 	},
 
-	getUrlVars: function(){
-		var vars = {}, hash;
-		if (window.location.href.indexOf('?') == -1) {
-			return vars;
-		}
-		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-		for(var i = 0; i < hashes.length; i++) {
-			var hash = hashes[i].split('=');
-			if (hash.length == 2) {
-				vars[hash[0]] = hash[1];
-			}
-		}
-		return vars;
-	},
-
 	isMobile: function() {
 		return $(window).width() < 768;		
 	},	
@@ -63,6 +48,11 @@ $.extend({
 		}
 		return o;
 	},	
+	
+	urldecode: function(str) {
+		if (str == null) { return ''; }
+		return decodeURIComponent((str + '').replace(/\+/g, ' '));
+	},
 	
 	base64Decode: function( data ) {
 		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
