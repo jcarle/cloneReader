@@ -181,6 +181,6 @@ echo $this->pagination->create_links();
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('.crList').crList();	
+	$('.crList').crList(<?php echo json_encode($list); ?>);	
 });
 </script>

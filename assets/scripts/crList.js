@@ -47,7 +47,6 @@
 		this.$btnOrder		= this.$crList.find('.btnOrder');
 		this.$btnFilter		= this.$crFilterList.prev();
 		this.options	 	= $.extend({}, options );
-		this.hasFilter		= (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
 
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
@@ -68,9 +67,6 @@
 					this.$form.submit();
 				}
 			, this));
-
-	
-
 		
 		this.$table.find('tbody tr').each($.proxy(
 			function (event, tr){
@@ -85,16 +81,20 @@
 		this.$crFilterList.click(function(event) {
 			event.stopPropagation();
 		});	
-
-		if (this.hasFilter == true) {
-			this.$btnFilter.addClass('btn-info');
-		}
 		
 		if (this.$btnFilter.length != 0) {
 			this.$form.addClass('hasBtnFilter'); 
 		}
 		if (this.$btnOrder.length != 0) {
 			this.$form.addClass('hasBtnOrder');
+		}
+		
+		if (options['filters'] != null) {
+			this.$form.crForm( { 'fields': options['filters'] });
+			var hasFilter = (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
+			if (hasFilter == true) {
+				this.$btnFilter.addClass('btn-info');
+			}
 		}
 		
 		this.initEvents();
@@ -420,7 +420,5 @@
 			</div> ');
 			
 		$(document).crForm('renderCrFormFields', fields, $parentNode.find('.panel-body'));
-		
-		$parentNode.crForm( { 'fields': fields });
 	}
 })($);
