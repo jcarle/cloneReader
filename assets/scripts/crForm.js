@@ -923,17 +923,21 @@
 					break;		
 				case 'dropdown':
 					var source = field['source'];
-					if (field['appendNullOption'] == true) {
-						source = $.extend({'': '-- ' + _msg['Choose'] + ' --'}, source);
-					}
-					
+
 					var $input = $('<select />')
 						.addClass('form-control')
 						.attr('name', name)
 						.appendTo($div);
+
+					if (field['appendNullOption'] == true) { // Apendeo aparte porque si lo hago en el objecto chrome lo desordena
+						$('<option />')
+							.val('')
+							.text('-- ' + _msg['Choose'] + ' --')
+							.appendTo($input);
+					}
 					
 					for (var key in source) {
-						var $option = $('<option />')
+						$('<option />')
 							.val(key)
 							.text(source[key])
 							.appendTo($input);
@@ -943,7 +947,6 @@
 					if (field['disabled'] == true) {
 						$input.attr('disabled', 'disabled');
 					}
-					
 					break;
 				case 'groupCheckBox':
 					var showId 	= field['showId'] == true;
