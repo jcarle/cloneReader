@@ -204,7 +204,7 @@
 	},
 		
 	renderCrList = function(data, $parentNode) {
-		var params 		= $.getUrlVars();
+		var params 		= $.url().param();
 		var $crList		= $('<div class="crList"></div>').appendTo($parentNode);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
 		var $form 		= $('\
@@ -223,7 +223,7 @@
 			</form>\
 		');
 		$form.appendTo($panel);
-		$form.find('input[name=filter]').val(params['filter']);
+		$form.find('input[name=filter]').val($.urldecode(params['filter']));
 		
 		if ($.trim(params['filter']) != '' && $.isMobile() == false) {
 			$form.find('input[name=filter]').focus();
@@ -267,7 +267,7 @@
 				var $li 	= $('<li/>').appendTo($ul);
 				var $link 	= $('<a/>')
 					.appendTo($li)
-					.attr('href', base_url + data['controller'] + '?' + $.param(params))
+					.attr('href', base_url + data['controller'] + '?' + decodeURIComponent($.param(params)))
 					.text(data['sort'][key]);
 		
 				if (orderBy == key) {
@@ -348,7 +348,7 @@
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 		var $ul	= $('<ul class="pagination">').appendTo($div);
 	
-		var params 		= $.getUrlVars();
+		var params 		= $.url().param();
 		var currentPage = params['page'];
 		var totalPages	= Math.ceil(data['foundRows'] / PAGE_SIZE);
 		delete params['page'];
@@ -393,9 +393,9 @@
 				}
 			},
 			'pageUrl': 				function(type, page, current){
-				var params 		= $.getUrlVars();
+				var params 		= $.url().param();
 				params['page'] 	= page;			
-				return base_url + data['controller'] + '?' + $.param(params);
+				return base_url + data['controller'] + '?' + decodeURIComponent($.param(params));
 			},
 		});
 		
