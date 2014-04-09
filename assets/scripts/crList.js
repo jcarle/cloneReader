@@ -223,7 +223,7 @@
 			</form>\
 		');
 		$form.appendTo($panel);
-		$form.find('input[name=filter]').val($.urldecode(params['filter']));
+		$form.find('input[name=filter]').val(params['filter']);
 		
 		if ($.trim(params['filter']) != '' && $.isMobile() == false) {
 			$form.find('input[name=filter]').focus();
@@ -267,7 +267,7 @@
 				var $li 	= $('<li/>').appendTo($ul);
 				var $link 	= $('<a/>')
 					.appendTo($li)
-					.attr('href', base_url + data['controller'] + '?' + decodeURIComponent($.param(params)))
+					.attr('href', base_url + data['controller'] + '?' + $.param(params))
 					.text(data['sort'][key]);
 		
 				if (orderBy == key) {
@@ -395,7 +395,7 @@
 			'pageUrl': 				function(type, page, current){
 				var params 		= $.url().param();
 				params['page'] 	= page;			
-				return base_url + data['controller'] + '?' + decodeURIComponent($.param(params));
+				return base_url + data['controller'] + '?' + $.param(params);
 			},
 		});
 		

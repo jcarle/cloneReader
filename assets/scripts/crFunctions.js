@@ -49,11 +49,6 @@ $.extend({
 		return o;
 	},	
 	
-	urldecode: function(str) {
-		if (str == null) { return ''; }
-		return decodeURIComponent((str + '').replace(/\+/g, ' '));
-	},
-	
 	base64Decode: function( data ) {
 		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, dec = "", tmp_arr = [];
