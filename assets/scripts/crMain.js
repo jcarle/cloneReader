@@ -235,20 +235,16 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	},
 	
 	showPage: function(pageName) {
-// TODO: revisar si queda bien algun efecto, comentando la duration hace cosas copadas		
 		$.showWaiting(true);
-		var $page 	= this.aPages[pageName];
-		$('.container > .page:visible:not(.' + pageName + ')').hide( { 
-			'duration': 0,
-			'complete': function(){ 
-				$(this).trigger('onHide'); } 
-		});
-		$page.stop().show( { 
-			'duration': 0,
-			'complete': function(){ 
-				$(this).css('overflow','visible');  // FIXME: jquery esta metiendo un overflow hidden!
-				$(this).trigger('onVisible'); } 
-		});		
+
+		var $page 		= this.aPages[pageName];
+		var $otherPages = $('.container > .page:visible:not(.' + pageName + ')');
+		
+		$otherPages.hide().trigger('onHide');
+
+		$page.stop().show();
+		$page.trigger('onVisible');
+
 		$.showWaiting(false);
 	},
 	

@@ -21,6 +21,7 @@ if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 }
 
 $CI->carabiner->js('jquery-1.7.2.js');
+//$CI->carabiner->js('jquery-1.11.0.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.url.js');

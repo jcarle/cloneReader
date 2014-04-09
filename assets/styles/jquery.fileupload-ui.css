@@ -39,7 +39,7 @@
   float: right;
   width: 32px;
   height: 32px;
-  background: url(../img/loading.gif) center no-repeat;
+  background: url(../images/loading.gif) center no-repeat;
   background-size: contain;
   display: none;
 }
