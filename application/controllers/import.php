@@ -54,6 +54,8 @@ class Import extends CI_Controller {
 			return loadViewAjax(false, $this->upload->display_errors());
 		}
 		
+		$this->db->trans_start();
+		
 		$fileName 	= $config['upload_path'].'/'.$config['file_name'].$this->upload->file_ext;
 		$xml 		= simplexml_load_file($fileName);
 
@@ -83,6 +85,8 @@ class Import extends CI_Controller {
 				$this->Entries_Model->addFeed($userId, $feed);
 			}
 		}
+		
+		$this->db->trans_complete();
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''), 'skipAppLink' => true));
 	}
@@ -134,6 +138,7 @@ class Import extends CI_Controller {
 			return loadViewAjax(false, $this->upload->display_errors());
 		}
 
+		$this->db->trans_start();
 
 		$fileName 	= './application/cache/import_starred_'.$userId.'.json';
 		$json 		= (array)json_decode(file_get_contents($fileName), true);
@@ -172,6 +177,8 @@ class Import extends CI_Controller {
 			$this->Entries_Model->saveUserEntries($userId, $entry['feedId'], $entry['entryId']);
 			$this->Entries_Model->saveTmpUsersEntries($userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
 		}
+		
+		$this->db->trans_complete();
 
 		$this->Entries_Model->pushTmpUserEntries($userId);
 
