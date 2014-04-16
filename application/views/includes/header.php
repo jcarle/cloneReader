@@ -17,7 +17,6 @@ $aScripts = array();
 if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
-//	$CI->carabiner->empty_cache('both');
 }
 
 $CI->carabiner->js('jquery-1.7.2.js');
@@ -165,7 +164,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>	
 	<div class="container content">
-		<div class="page <?php echo getPageName(); ?>" >
+		<div class="page <?php echo getPageName(); ?>"  data-title="<?php echo $title; ?>">
 <?php
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';

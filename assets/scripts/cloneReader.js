@@ -71,7 +71,13 @@ cloneReader = {
 				
 				this.resizeWindow();
 				this.updateMainMenu();
+
+				if (this.indexFilters != null) {
+					var filter = this.getFilter(this.aFilters);
+					$('title').text(filter.name + ' | ' + SITE_NAME);
+				}
 			}
+
 		, this));
 		
 		this.$page.bind('onHide', $.proxy(

@@ -1,6 +1,6 @@
 $.Profile = {
 	init: function() {
-		this.$page	= $('.userProfile').parents('.cr-page-profile');
+		this.$page	= $('.cr-page-profile');
 		this.$page.data('notRefresh', true);
 		
 		this.aTabs 	= this.$page.find('.userProfile li');

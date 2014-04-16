@@ -243,6 +243,7 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 		
 		$otherPages.hide().trigger('onHide');
 
+		$('title').text( $page.data('title') + ' | ' + SITE_NAME);
 		$page.stop().show();
 		$page.trigger('onVisible');
 
