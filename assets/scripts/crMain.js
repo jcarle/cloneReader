@@ -4,12 +4,12 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	init: function() {
 		$.support.pushState = (history.pushState == false ? false : true);
 		
+		crMenu.initMenu();
 		this.initEvents();
 		this.iniAppAjax();
 		resizeWindow();
 		
 		if ($.support.pushState == false) {
-			crMenu.initMenu();
 			$.showWaiting(false);
 		}
 	},
