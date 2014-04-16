@@ -3,7 +3,7 @@ cloneReader = {
 		this.$page 		= $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
 		this.$toolbar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$page);
-		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$page);		 		
+		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$page);
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang(langId);
@@ -534,17 +534,9 @@ cloneReader = {
 				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
 			}
 		);
-	
-		var $entryContent = $('<div/>'); // TODO: revisar esta parte, chequear que elimine bien los <scripts>
-		$entryContent.text(entry.entryContent); //$entryContent[0].innerHTML = entry.entryContent;
-		$entryContent.find('script').remove();
-		$entryContent.find('iframe').remove();
-		$entryContent.find('link').remove();
-		$entryContent.find('br').remove();
 
-		var $p = $('<p/>').html($entryContent.text()).appendTo($entry);
-
-$p.find('link').remove(); // TODO: revisar, esta metiendo css !
+		var entryContent 	= $('<div>' + entry.entryContent + '</div>').clone().find('script, noscript, style, iframe, link, meta, br').remove().end().html();
+		var $p 				= $('<p/>').html(entryContent).appendTo($entry);
 
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 
@@ -642,7 +634,7 @@ TODO: pensar como mejorar esta parte
 		this.$entriesHead.text(filter.name);
 		this.$ulEntries.prepend(this.$entriesHead);				
 		
-		$('title').text(filter.name + ' | cloneReader' );
+		$('title').text(filter.name + ' | ' + SITE_NAME);
 	},	
 	
 	selectFilters: function() {
