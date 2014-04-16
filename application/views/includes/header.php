@@ -165,7 +165,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>	
 	<div class="container content">
-		<div class="page <?php echo getPageName(); ?>"/>
+		<div class="page <?php echo getPageName(); ?>" >
 <?php
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';

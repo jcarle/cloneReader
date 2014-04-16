@@ -84,7 +84,7 @@ class Import extends CI_Controller {
 			}
 		}
 		
-		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url('')));
+		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''), 'skipAppLink' => true));
 	}
 
 	function starred() {
@@ -175,6 +175,6 @@ class Import extends CI_Controller {
 
 		$this->Entries_Model->pushTmpUserEntries($userId);
 
-		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url('')));
+		return loadViewAjax(true, array('msg' => $this->lang->line('The import was successful'), 'goToUrl' => base_url(''), 'skipAppLink' => true));
 	}
 }

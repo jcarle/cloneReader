@@ -13,6 +13,9 @@
 	border-bottom-color: #333333;
 	border-top-color: #333333;
 }	
+	.mainToolbar .navbar-btn {
+		margin-bottom: 1px;
+	}
 			
 #cloneReader {
 	position:relative;

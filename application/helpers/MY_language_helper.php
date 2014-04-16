@@ -46,6 +46,7 @@ function getLangToJs($langs) {
 	$langs[] = 'Retry';
 	$langs[] = 'Are you sure?';
 	$langs[] = 'Not connected. Please verify your network connection';
+	$langs[] = 'No results';
 	return $langs;	
 }
 

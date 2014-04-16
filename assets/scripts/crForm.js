@@ -72,6 +72,8 @@
 		this.initCallbacks();
 		this.resizeWindow();
 		
+		this.options.urlSave = this.$form.attr('action');
+		
 		this.$form.find('.btn-danger').click($.proxy(
 			function(event) {
 				event.stopPropagation();
@@ -97,6 +99,7 @@
 						return false;
 					}
 					
+					this.$form.attr('action', this.options.urlSave);
 					if (this.options.sendWithAjax == true) {
 						this.sendForm();
 						return false;
@@ -491,17 +494,14 @@
 						function (response) {
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
 							
-							
 							var result 	= response['result'];
 							var list	= result['list'];
 							field.$input.children().remove();
-							
 							
 							var $div 	= $('<div class="table-responsive"/>').appendTo(field.$input);
 							var $table 	= $('<table class="table table-hover" />').appendTo($div);
 							var $thead 	= $('<thead/>').appendTo($table);
 							var $tr 	= $('<tr class="label-primary"/>').appendTo($thead);
-
 							
 							for (var columnName in list['columns']) {
 								var $th = $(' <th />')

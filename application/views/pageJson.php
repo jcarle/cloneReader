@@ -7,9 +7,11 @@ $result = array('pageName' => getPageName());
 if (isset($hasUploadFile)) {
 	$result['hasUploadFile'] = $hasUploadFile;
 }
-
 if (isset($notRefresh)) {
 	$result['notRefresh'] = $notRefresh;
+}
+if (isset($breadcrumb)) {
+	$result['breadcrumb'] = $breadcrumb;
 }
 
 switch ($view) {

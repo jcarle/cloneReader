@@ -169,9 +169,6 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	},
 	
 	renderPage: function(response, pageName) {
-		$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
-		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
-		
 		var data 	= response['result'];
 		var $page 	= crMain.aPages[pageName];
 		$page.data(data);
@@ -206,17 +203,18 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 		$('title').text(data['title'] + ' | ' + SITE_NAME);
 		
 		if (data['breadcrumb'] != null) {
-			$('<ol class="breadcrumb">').appendTo($page);
-// TODO: implementar!			
-			/*
-			for ($breadcrumb as $link) {
-				if (element('active', $link) == true) {
-					echo '<li class="active"> '.$link['text'].'</li>';
+			var $ol = $('<ol class="breadcrumb">').appendTo($page);
+
+			for (var i=0; i<data['breadcrumb'].length; i++) {
+				var link = data['breadcrumb'][i];
+				if (link['active'] == true) {
+					$('<li class="active" />').text(' ' + link['text']).appendTo($ol);
 				}
 				else {
-					echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
+					var $li = $('<li/>').appendTo($ol);
+					$('<a />').attr('href', link['href']).text(link['text']).appendTo($li);
 				} 
-			}*/
+			}
 		}
 
 		if (data['showTitle'] == null) {
@@ -236,6 +234,9 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 	
 	showPage: function(pageName) {
 		$.showWaiting(true);
+		
+		$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
+		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 
 		var $page 		= this.aPages[pageName];
 		var $otherPages = $('.container > .page:visible:not(.' + pageName + ')');
@@ -273,6 +274,9 @@ crMain = { // TODO: renombrar a crPage o crApp ?
 		}
 		
 		var $link 	= $(event.currentTarget);
+		if ($link.attr('target') != null) {
+			return;
+		}
 		if ($link.data('skip-app-link') == true) {
 			return;
 		}	

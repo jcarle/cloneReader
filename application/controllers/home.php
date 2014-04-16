@@ -12,6 +12,7 @@ class Home extends CI_Controller {
 					'keywords'		=> 'cReader cloneReader news feeds rss reader open source'
 				), 
 				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
+				'showTitle'		=> false,
 				'notRefresh'	=> true,
 				'langs'			=> array(
 					'loading ...',
