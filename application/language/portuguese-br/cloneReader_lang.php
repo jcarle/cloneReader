@@ -50,6 +50,7 @@ $lang['Count users'] = 'Contagem usuários';
 $lang['Count entries'] = 'Contagem entradas';
 $lang['Count starred'] = 'Contagem favoritos';
 $lang['View entries'] = 'Ver entries';
+$lang['View users'] = 'Exibir usuários';
 $lang['Remove old entries'] = 'Retirar las entradas antiguas';
 $lang['Choose the subscriptions.xml file from gReader or a standard OPML file'] = 'Escolha o arquivo de subscriptions.xml gReader ou um arquivo OPML padrão';
 $lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML é um formato que permite migrar os feeds para outro leitor';

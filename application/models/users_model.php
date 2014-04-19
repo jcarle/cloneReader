@@ -62,7 +62,7 @@ class Users_Model extends CI_Model {
 			->update('users', array('userLastAccess' => date("Y-m-d H:i:s")));		
 	}
 	
-	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null, $orderBy = 'userId', $orderDir = 'asc' ){
+	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null, $feedId = null, $orderBy = 'userId', $orderDir = 'asc' ){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
 			->join('countries', 'users.countryId = countries.countryId', 'left')
@@ -91,6 +91,11 @@ class Users_Model extends CI_Model {
 			if (!empty($aTmp)) {
 				$this->db->where('('.implode(' OR ', $aTmp). ' )');
 			}
+		}
+		if ($feedId != null) {
+			$this->db
+				->join('users_feeds', 'users.userId = users_feeds.userId', 'left')
+				->where('users_feeds.feedId', $feedId);
 		}
 		
 		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ))) {

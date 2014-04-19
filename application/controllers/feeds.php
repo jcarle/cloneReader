@@ -251,6 +251,12 @@ class Feeds extends CI_Controller {
 				'value'		=> site_url('entries/listing?feedId='.$feedId),
 			);
 			
+			$form['fields']['linkViewUsers'] = array(
+				'type' 		=> 'link',
+				'label'		=> $this->lang->line('View users'), 
+				'value'		=> site_url('users/listing?feedId='.$feedId),
+			);			
+			
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
 			

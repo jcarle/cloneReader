@@ -4,7 +4,7 @@ class Users extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Users_Model', 'Countries_Model', 'Languages_Model', 'Groups_Model'));
+		$this->load->model(array('Users_Model', 'Countries_Model', 'Languages_Model', 'Groups_Model', 'Feeds_Model'));
 	}  
 	
 	function index() {
@@ -22,9 +22,15 @@ class Users extends CI_Controller {
 			foreach ($this->input->get('remoteLogin') as $provider) {
 				$aRemoteLogin[$provider] = $provider;
 			}
+		}
+		
+		$feed 	= null;
+		$feedId = $this->input->get('feedId');
+		if ($feedId != null) {
+			$feed = $this->Feeds_Model->get($feedId);
 		}		
 
-		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin, $this->input->get('orderBy'), $this->input->get('orderDir') );
+		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin, $feedId, $this->input->get('orderBy'), $this->input->get('orderDir') );
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
@@ -60,6 +66,12 @@ class Users extends CI_Controller {
 						'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
 						'appendNullOption'	=> true,
 					),
+					'feedId' => array(
+						'type' 		=> 'typeahead',
+						'label'		=> $this->lang->line('Feed'),
+						'source' 	=> base_url('feeds/search/'),
+						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
+					),					
 					'remoteLogin[]' => array(
 						'type'		=> 'groupCheckBox',
 						'label'		=> $this->lang->line('Remote login'),

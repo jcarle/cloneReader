@@ -48,7 +48,7 @@ class Entries extends CI_Controller {
 						'label'		=> $this->lang->line('Feed'),
 						'source' 	=> base_url('feeds/search/'),
 						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
-					),				
+					),
 				),
 				'sort' => array(
 					'entryId'			=> '#',
