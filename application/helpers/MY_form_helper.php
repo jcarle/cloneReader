@@ -36,6 +36,7 @@ function populateCrForm($form, $data) {
 			case 'typeahead':
 			case 'textarea':
 			case 'raty':
+			case 'numeric':
 				// TODO: revisar este IF. Esta puesto para que no sobreescriba fields hiddens con el parentId que se usa para agregar un child
 				if ( element('value', $form['fields'][$fieldName]) === false ) { 
 					$form['fields'][$fieldName]['value'] = element($fieldName, $data, '');

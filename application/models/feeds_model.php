@@ -9,7 +9,7 @@ class Feeds_Model extends CI_Model {
 		}
 				
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate', false)
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate, feedCountUsers, feedCountEntries', false)
 			->join('status', 'status.statusId = feeds.statusId', 'left')
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
@@ -38,7 +38,7 @@ class Feeds_Model extends CI_Model {
 			$this->db->where('feeds.feedSuggest', true);
 		}
 		
-		if (!in_array($orderBy, array( 'feedId', 'feedName', 'feedLastEntryDate', 'feedLastScan' ))) {
+		if (!in_array($orderBy, array( 'feedId', 'feedName', 'feedLastEntryDate', 'feedLastScan', 'feedCountUsers', 'feedCountEntries' ))) {
 			$orderBy = 'feedId';
 		}
 		$this->db->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc');
@@ -320,12 +320,23 @@ class Feeds_Model extends CI_Model {
 		if ($countryId != null) {
 			$values['countryId'] = $countryId;
 		}
-
+		
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
 
 		$this->saveFeedIcon($feedId, (element('feedLink', $feed) != '' ? $feed : null));
 		
+		$this->updateFeedCounts($feedId);
+		
 		$this->db->trans_complete();
+	}
+	
+	function updateFeedCounts($feedId) {
+		$values = array(
+			'feedCountUsers' 		=> $this->countUsersByFeedId($feedId),
+			'feedCountEntries' 		=> $this->countEntriesByFeedId($feedId)
+		);
+
+		$this->db->update('feeds', $values, array('feedId' => $feedId));	
 	}
 
 	function countUsersByFeedId($feedId) {
@@ -406,16 +417,13 @@ class Feeds_Model extends CI_Model {
 		$affectedrRows = $this->db->affected_rows();
 		$count += $affectedrRows;;
 		if ($affectedrRows != 0) {
-			sleep(1);
+			sleep(2);
 			return $this->deleteOldEntriesByFeedId($feedId, $count);
 		}
+		
+		$this->updateFeedCounts($feedId);
 		return $count;
 	}
-
-
-
-
-
 
 	function selectFeedsOPML($userId) {
 

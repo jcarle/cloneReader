@@ -53,7 +53,9 @@ class Feeds extends CI_Controller {
 					'feedUrl' 			=> $this->lang->line('Url'), 
 					'feedLink' 			=> $this->lang->line('Link'),
 					'feedLastEntryDate'	=> array('class' => 'datetime', 'value' => $this->lang->line('Last entry')),
-					'feedLastScan' 		=> array('class' => 'datetime', 'value' => $this->lang->line('Last update'))
+					'feedLastScan' 		=> array('class' => 'datetime', 'value' => $this->lang->line('Last update')),
+					'feedCountUsers' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Count users')),
+					'feedCountEntries' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Count entries')),
 				),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
@@ -106,6 +108,8 @@ class Feeds extends CI_Controller {
 					'feedName'			=> $this->lang->line('Name'),
 					'feedLastEntryDate'	=> $this->lang->line('Last entry'),
 					'feedLastScan' 		=> $this->lang->line('Last update'),
+					'feedCountUsers' 	=> $this->lang->line('Count users'),
+					'feedCountEntries' 	=> $this->lang->line('Count entries'),					
 				)				
 			)
 		));
@@ -224,21 +228,19 @@ class Feeds extends CI_Controller {
 		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
 		if ((int)$feedId > 0) {
 			
-			$form['fields']['usersCount'] = array(
+			$form['fields']['feedCountUsers'] = array(
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count users'), 
-				'value'		=> $this->Feeds_Model->countUsersByFeedId($feedId),
 				'disabled'	=> true,
 				'mDec'		=> 0,
 			);			
-			$form['fields']['entriesCount'] = array(
+			$form['fields']['feedCountEntries'] = array(
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count entries'), 
-				'value'		=> $this->Feeds_Model->countEntriesByFeedId($feedId),
 				'disabled'	=> true,
 				'mDec'		=> 0,
 			);
-			$form['fields']['starredCount'] = array(
+			$form['fields']['feedCountStarred'] = array(
 				'type' 		=> 'numeric',
 				'label'		=> $this->lang->line('Count starred'), 
 				'value'		=> $this->Feeds_Model->countEntriesStarredByFeedId($feedId),
