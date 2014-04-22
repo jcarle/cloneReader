@@ -309,9 +309,9 @@ class Entries extends CI_Controller {
 		$this->Feeds_Model->deleteOldEntries();
 	}
 	
-	function populateMillionsEntries() {
+/*	function populateMillionsEntries() {
 		$this->Entries_Model->populateMillionsEntries();
-	}
+	}*/
 	
 	function shareByEmail($entryId) {
 		if ($this->session->userdata('userId') == USER_ANONYMOUS) {

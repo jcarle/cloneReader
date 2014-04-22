@@ -688,6 +688,8 @@ class Entries_Model extends CI_Model {
 	
 	function processTagBrowse() {
 		set_time_limit(0);
+		
+		$this->db->trans_start();
 
 		
 		// Completo datos en la tabla tags y feeds_tags, basado en los tags de cada entry, y en como tageo cada user un feed.
@@ -749,5 +751,7 @@ class Entries_Model extends CI_Model {
 		
 		$update = ' UPDATE tags SET countTotal = (countFeeds * 1) + (countUsers + 10)  WHERE tagId NOT IN ('.implode(', ', $aSystenTags).')   ';
 		$this->db->query($update);
+		
+		$this->db->trans_complete();
 	}
 }

@@ -371,9 +371,8 @@ class Feeds_Model extends CI_Model {
 	function deleteOldEntries() {
 		$query = $this->db
 			->select('feedId, feedName  ')
-			->get('feeds')
 			->order_by('feedId')
-			->result_array();
+			->get('feeds')->result_array();
 		foreach ($query as $row) {
 			$affectedRows = $this->deleteOldEntriesByFeedId($row['feedId']);
 			echo $row['feedName'].' ('.$row['feedId'].') - <span style="'.($affectedRows > 0 ? ' color: #FF0000; font-weight: bold;' : '').'"> affected rows: '.$affectedRows.'</span><br/>';
