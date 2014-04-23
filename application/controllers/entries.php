@@ -405,24 +405,17 @@ class Entries extends CI_Controller {
 			$entryOrigin = sprintf($this->lang->line('From %s by %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>', $entry['entryAuthor']);
 		}
 
-
-		$message ='
-			'.($shareByEmailComment != '' ? '<p>'.$shareByEmailComment.'</p>' : '').'
-			<div style=" background: #F5F5F5; border:1px solid #E5E5E5; border-radius: 5px; padding: 10px;">
-				'.sprintf($this->lang->line('Sent to you by %s via cReader'), $userFullName).'
-			</div>
-			<div style="margin:10px 0;">
-				<h2>
-					<a style="font-weight: bold; margin: 10px 0;"  href="'.$entry['entryUrl'].'">'.$entry['entryTitle'].'</a>
-				</h2>
-				<div style="display: block; font-size: small;" >
-					'.$entryOrigin.' - '. date( $this->lang->line('PHP_DATE_FORMAT').' H:i:s', strtotime($entry['entryDate'])) .'
-				</div>
-			</div>
-			<p>'.$entry['entryContent'].'</p>
-			';
+		$message = $this->load->view('pageEmail',
+			array(
+				'emailView' 			=> 'email/shareEntry.php',
+				'shareByEmailComment' 	=> $shareByEmailComment,
+				'userFullName'			=> $userFullName,
+				'entry'					=> $entry,
+				'entryOrigin'			=> $entryOrigin,
+			),
+			true);
 		//echo $message; die;	
-		
+
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($userFriendEmail); 
 		$this->email->reply_To($user['userEmail'], $userFullName);
@@ -430,7 +423,7 @@ class Entries extends CI_Controller {
 			$this->email->cc($user['userEmail']); 
 		}
 		$this->email->subject('cReader - '.$entry['entryTitle']);
-		$this->email->message(getEmailTemplate($message));
+		$this->email->message($message);
 		$this->email->send();
 
 		return loadViewAjax(true, array('notification' => $this->lang->line('The email has been sent')));

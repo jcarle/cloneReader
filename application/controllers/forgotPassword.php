@@ -53,17 +53,20 @@ class ForgotPassword extends CI_Controller {
 		$user 				= $this->Users_Model->getByUserEmail($this->input->post('userEmail'));
 		$resetPasswordKey 	= random_string('alnum', 20);
 		$url 				= base_url('resetPassword?key='.$resetPasswordKey);
-		$message 			= 
-			'<p>'.sprintf($this->lang->line('Someone recently requested that the password be reset for %s'), $user['userFirstName'].' '.$user['userLastName']).'</p>'.
-			'<p>'.sprintf($this->lang->line('To reset your password please click <a href="%s">here</a>'), $url).'</p>'.
-			'<p>'.$this->lang->line('If this is a mistake just ignore this email - your password will not be changed').'</p>';
+		$message 			= $this->load->view('pageEmail',
+			array(
+				'emailView' 	=> 'email/resetPassword.php',
+				'user'			=> $user,
+				'url'			=> $url,
+			),
+			true);
 		
 		$this->Users_Model->updateResetPasswordKey($user['userId'], $resetPasswordKey);
 
 		$this->email->from('clonereader@gmail.com', 'cReader BETA');
 		$this->email->to($user['userEmail']); 
 		$this->email->subject('cReader - '.$this->lang->line('Reset password'));
-		$this->email->message(getEmailTemplate($message, $url));
+		$this->email->message($message);
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	
 
