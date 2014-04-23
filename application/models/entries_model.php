@@ -461,6 +461,9 @@ class Entries_Model extends CI_Model {
 		
 		$this->db->delete('users_entries', array('feedId' => $feedId, 'userId' => $userId, 'tagId <>' => TAG_STAR));
 		//pr($this->db->last_query());
+		
+		$this->db->delete('users_feeds_tags', array('feedId' => $feedId, 'userId' => $userId));
+		//pr($this->db->last_query());
 		return true;		
 	}
 	

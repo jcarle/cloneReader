@@ -1,4 +1,4 @@
-crMain = { // TODO: renombrar a crPage o crApp ?
+crMain = {
 	aPages: [],
 	
 	init: function() {
