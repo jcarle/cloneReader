@@ -310,6 +310,7 @@ $.extend({
 			return;
 		}
 		if (moment($element.text(), 'YYYY-MM-DDTHH:mm:ss').isValid() == false) {
+			$element.text('');
 			return;
 		}
 		

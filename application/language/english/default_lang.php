@@ -135,3 +135,4 @@ $lang['The email has been sent'] = 'The email has been sent';
 $lang['Send me a copy'] = 'Send me a copy';
 $lang['Not connected. Please verify your network connection'] = 'Not connected. Please verify your network connection.';
 $lang['Keyboard shortcut'] = 'Keyboard shortcut';
+$lang['Users'] = 'Users';

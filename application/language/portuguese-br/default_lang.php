@@ -132,3 +132,4 @@ $lang['The email has been sent'] = 'O e-mail foi enviado';
 $lang['Send me a copy'] = 'Envie-me uma cópia';
 $lang['Not connected. Please verify your network connection'] = 'Não conectado. Por favor, verifique sua conexão de rede';
 $lang['Keyboard shortcut'] = 'Atalho de teclado';
+$lang['Users'] = 'Usuários';

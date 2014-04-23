@@ -48,6 +48,7 @@ $lang['Only feed suggest'] = 'Solo feeds sugeridos';
 $lang['Scan'] = 'Scanear';
 $lang['Star'] = 'Favorito';
 $lang['Download icon'] = 'Download icono';
+$lang['Entries'] = 'Entries';
 $lang['Count users'] = 'Cantidad de usuarios';
 $lang['Count entries'] = 'Cantidad de entries'; 
 $lang['Count starred'] = 'Cantidad de favoritos';

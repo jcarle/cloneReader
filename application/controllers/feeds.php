@@ -54,8 +54,8 @@ class Feeds extends CI_Controller {
 					'feedLink' 			=> $this->lang->line('Link'),
 					'feedLastEntryDate'	=> array('class' => 'datetime', 'value' => $this->lang->line('Last entry')),
 					'feedLastScan' 		=> array('class' => 'datetime', 'value' => $this->lang->line('Last update')),
-					'feedCountUsers' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Count users')),
-					'feedCountEntries' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Count entries')),
+					'feedCountUsers' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Users')),
+					'feedCountEntries' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Entries')),
 				),
 				'foundRows'		=> $query->foundRows,
 				'data'			=> $query->result_array(),
@@ -289,9 +289,15 @@ class Feeds extends CI_Controller {
 
 	function scanFeed($feedId) {
 		// TODO: implementar seguridad! 
-		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }		
+		//if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
+		
+		$this->db->trans_start();		
 				
 		$this->Feeds_Model->scanFeed($feedId);
+		
+		$this->Feeds_Model->updateFeedCounts($feedId);
+		
+		$this->db->trans_complete();
 	}
 	
 	function resetAndScanFeed($feedId) {

@@ -197,8 +197,6 @@ class Feeds_Model extends CI_Model {
 	function scanFeed($feedId) {
 		set_time_limit(0);
 		
-		$this->db->trans_start();
-		
 		$this->load->model('Entries_Model');
 	
 //sleep(5);
@@ -324,10 +322,6 @@ class Feeds_Model extends CI_Model {
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
 
 		$this->saveFeedIcon($feedId, (element('feedLink', $feed) != '' ? $feed : null));
-		
-		$this->updateFeedCounts($feedId);
-		
-		$this->db->trans_complete();
 	}
 	
 	function updateFeedCounts($feedId) {
