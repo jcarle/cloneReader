@@ -392,7 +392,6 @@ class Entries extends CI_Controller {
 		$entry 				= $this->Entries_Model->get($entryId, false);
 		$user 				= $this->Users_Model->get($userId);
 		$userFullName		= $user['userFirstName'].' '.$user['userLastName'];		
-		
 
 		
 		$this->load->library('email');
