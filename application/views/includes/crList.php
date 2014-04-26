@@ -46,7 +46,7 @@ if ($sort != null) {
 				<i class="icon-sort-by-attributes" ></i>
 			</button>	
 			<ul class="dropdown-menu pull-right" role="menu">
-<?
+<?php
 foreach ($sort as $key => $value) {
 	$params['orderBy'] 	= $key;
 	$params['orderDir'] = ($orderDir == 'desc' ? 'asc' : 'desc');
@@ -62,7 +62,7 @@ foreach ($sort as $key => $value) {
 			</ul>
 		</div>
 	</div>
-<?	
+<?php	
 }
 ?>			
 		</form>
