@@ -283,11 +283,12 @@
 		var $thead		= $('<thead />').appendTo($table);
 		var $tr			= $('<tr class="label-primary" />').appendTo($thead);
 		var urlDelete 	= data['urlDelete'] == true;
+		var readOnly	= data['readOnly'] == true;
 		var showId 		= data['showId'] == true;
 		if (urlDelete == true) {
 			$('<th class="checkbox">	<input type="checkbox"> </th>').appendTo($tr);	
 		}
-		if (data['readOnly'] != true) {
+		if (readOnly != true) {
 			$table.addClass('table-hover');
 		}
 		if (showId == true) {
@@ -341,14 +342,16 @@
 		if (urlDelete == true) {
 			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
 		}
-
-		$('\
-			<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
-				<i class="icon-file-alt icon-large"></i>\
-				' + _msg['Add'] + '\
-			</a>\
-			<span>' + $.sprintf(_msg['%s rows'], $.formatNumber(data['foundRows']))+ ' </span>\
-		').appendTo($div);;
+		if (readOnly != true) {
+			$('\
+				<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
+					<i class="icon-file-alt icon-large"></i>\
+					' + _msg['Add'] + '\
+				</a>\
+			').appendTo($div);
+		}
+		
+		$(' <span> ' + $.sprintf(_msg['%s rows'], $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);		
 	
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 		var $ul	= $('<ul class="pagination">').appendTo($div);

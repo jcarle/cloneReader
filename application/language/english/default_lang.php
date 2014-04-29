@@ -136,3 +136,4 @@ $lang['Send me a copy'] = 'Send me a copy';
 $lang['Not connected. Please verify your network connection'] = 'Not connected. Please verify your network connection.';
 $lang['Keyboard shortcut'] = 'Keyboard shortcut';
 $lang['Users'] = 'Users';
+$lang['User logs'] = 'User logs';
