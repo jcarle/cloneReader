@@ -57,9 +57,14 @@ class Users_Model extends CI_Model {
 	}
 
 	function updateUserLastAccess() {
+		$userId = $this->session->userdata('userId');
+		$date	= date("Y-m-d H:i:s");
+		
 		$this->db
-			->where('userId', $this->session->userdata('userId'))
-			->update('users', array('userLastAccess' => date("Y-m-d H:i:s")));		
+			->where('userId', $userId)
+			->update('users', array('userLastAccess' => $date));
+			
+//$this->db->insert('users_logs', array( 'userId' => $userId, 'userLogDate' => $date ));
 	}
 	
 	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null, $feedId = null, $orderBy = 'userId', $orderDir = 'asc' ){
@@ -107,6 +112,32 @@ class Users_Model extends CI_Model {
 			->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc')
 			->get('users', $num, $offset);
 						
+//pr($this->db->last_query()); die;
+						
+		$query->foundRows = $this->Commond_Model->getFoundRows();
+		return $query;
+	}
+
+	function selectUsersLogsToList($num, $offset, $filter = null, $userId = null, $orderBy = 'userId', $orderDir = 'asc' ){
+		$this->db
+			->select(' DISTINCT  users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
+			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
+		
+						
+		if ($filter != null) {	
+			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
+		}
+		if ($userId != null) {
+			$this->db->where('users.userId', $userId);
+		} 
+		
+		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ))) {
+			$orderBy = 'userLogDate';
+		}
+
+		$query = $this->db
+			->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc')
+			->get('usertracking', $num, $offset);
 //pr($this->db->last_query()); die;
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
@@ -344,4 +375,9 @@ class Users_Model extends CI_Model {
 		$this->db->insert('shared_by_email', $values);
 		return $this->db->insert_id();
 	}
+	
+	
+	function getUserId() {
+		return $this->session->userdata('userId');
+	}	
 }

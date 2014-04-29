@@ -131,11 +131,16 @@ class Users extends CI_Controller {
 		
 		if ((int)$userId > 0) {
 			$form['urlDelete'] 		= base_url('users/delete/');
-			$form['fields']['link']	= array(
+			$form['fields']['userFeeds']	= array(
 				'type'	=> 'link',
 				'label'	=> $this->lang->line('View feeds'), 
 				'value'	=> base_url('feeds/listing/?userId='.$userId),
 			);
+			$form['fields']['userLogs']	= array(
+				'type'	=> 'link',
+				'label'	=> 'View logs', // $this->lang->line('View logs'), 
+				'value'	=> base_url('users/logs/?userId='.$userId),
+			);			
 		}
 		
 		$form['rules'] 	= array(
@@ -212,7 +217,56 @@ class Users extends CI_Controller {
 		));
 	}	
 	
+	function logs() {
+		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
+		
+		$page = (int)$this->input->get('page');
+		if ($page == 0) { $page = 1; }
+		
+		$user 	= null;
+		$userId = $this->input->get('userId');
+		if ($userId != null) {
+			$user = $this->Users_Model->get($userId);
+		}
+		
+		//$this->input->get('orderBy')
+		//, $this->input->get('orderDir')		
+
+		$query = $this->Users_Model->selectUsersLogsToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $userId, $this->input->get('orderBy'), $this->input->get('orderDir') );
+
+		$this->load->view('pageHtml', array(
+			'view'			=> 'includes/crList', 
+			'title'			=> $this->lang->line('User logs'),
+			'list'			=> array(
+				'controller'	=> base_url('users/logs'),
+				'readOnly'		=> true,
+				'columns'		=> array(
+					'userEmail' 		=> $this->lang->line('Email'),
+					'userFullName' 		=> $this->lang->line('Name'), 
+					'userLogDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date')),
+				),
+				'data'			=> $query->result_array(),
+				'foundRows'		=> $query->foundRows,
+				'showId'		=> true,
+				'filters'		=> array(
+					'userId' => array(
+						'type' 			=> 'typeahead',
+						'label'			=> $this->lang->line('User'),
+						'source' 		=> base_url('users/search/'),
+						'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
+						'multiple'		=> false,
+						'placeholder' 	=> $this->lang->line('User')
+					),					
+				),
+				'sort' => array(
+					'userLogDate'		=> $this->lang->line('Date'),
+//					'userId'			=> '#',
+				)
+			)
+		));
+	}	
+	
 	function _validate_exitsEmail() {
 		return ($this->Users_Model->exitsEmail($this->input->post('userEmail'), (int)$this->input->post('userId')) != true);
-	}	
+	}
 }

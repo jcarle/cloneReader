@@ -2,6 +2,7 @@
 $CI			= &get_instance();
 $filters 	= element('filters', $list);
 $sort  		= element('sort', $list);
+$readOnly 	= element('readOnly', $list, false);
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
@@ -69,7 +70,7 @@ foreach ($sort as $key => $value) {
 	</div>
 				
 	<div class="table-responsive">
-		<table class="table table-hover">
+		<table class="table <?php echo ($readOnly == false ? ' table-hover ' : ''); ?>">
 			<thead>
 				<tr class="label-primary">
 <?php
@@ -131,11 +132,10 @@ foreach ($list['data'] as $row) {
 if ($urlDelete == true) {
 	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> '.$CI->lang->line('Delete').' </a>';
 }
-?>
-				<a href="<?php echo base_url($list['controller'].'/add'); ?>" class="btnAdd btn btn-sm btn-success">
-					<i class="icon-file-alt icon-large"></i>
-					<?php echo $CI->lang->line('Add'); ?>
-				</a>
+if ($readOnly !== true) {
+	echo '<a href="'.base_url($list['controller'].'/add').'" class="btnAdd btn btn-sm btn-success"> <i class="icon-file-alt icon-large"></i> '.$CI->lang->line('Add').' </a> ';
+}
+?>				
 				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
 			</div>						
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">

@@ -145,20 +145,22 @@
 				}
 			, this));			
 			
-			this.$table.find('tbody tr').on('click', 
-				function (event) {
-					$.goToUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
-				}
-			);
 			
-			this.$crList.find('.btnAdd').on('click',
-				function (event) {
-					$.goToUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
-					event.preventDefault;
-					return false;
-				}
-			);
-			
+			if (this.options['readOnly'] != true) {
+				this.$table.find('tbody tr').on('click', 
+					function (event) {
+						$.goToUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+					}
+				);
+				
+				this.$crList.find('.btnAdd').on('click',
+					function (event) {
+						$.goToUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+						event.preventDefault;
+						return false;
+					}
+				);
+			}			
 			this.$form.unbind();
 
 			this.$form.on('submit', 
@@ -277,13 +279,16 @@
 		}
 
 		var $div 		= $('<div class="table-responsive" />').appendTo($crList);
-		var $table 		= $('<table class="table table-hover" />').appendTo($div);
+		var $table 		= $('<table class="table" />').appendTo($div);
 		var $thead		= $('<thead />').appendTo($table);
 		var $tr			= $('<tr class="label-primary" />').appendTo($thead);
 		var urlDelete 	= data['urlDelete'] == true;
 		var showId 		= data['showId'] == true;
 		if (urlDelete == true) {
 			$('<th class="checkbox">	<input type="checkbox"> </th>').appendTo($tr);	
+		}
+		if (data['readOnly'] != true) {
+			$table.addClass('table-hover');
 		}
 		if (showId == true) {
 			$('<th class="numeric"> # </th>').appendTo($tr);	
@@ -341,8 +346,8 @@
 			<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
 				<i class="icon-file-alt icon-large"></i>\
 				' + _msg['Add'] + '\
-				</a>\
-				<span>' + $.sprintf(_msg['%s rows'], $.formatNumber(data['foundRows']))+ ' </span>\
+			</a>\
+			<span>' + $.sprintf(_msg['%s rows'], $.formatNumber(data['foundRows']))+ ' </span>\
 		').appendTo($div);;
 	
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);

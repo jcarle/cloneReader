@@ -316,7 +316,7 @@ body.isLoading, body.isLoading * {
 					min-width: 20px;
 					width:20px;
 				}
-			.crList table tbody tr {
+			.crList table.table-hover tbody tr {
 				cursor: pointer;
 			}
 				.crList table tbody tr td.checkbox,

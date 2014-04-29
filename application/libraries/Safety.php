@@ -4,10 +4,11 @@ class Safety {
 		$CI 			= &get_instance();
 		$this->db 		= $CI->db;
 		$this->session 	= $CI->session;
-		
-
-//$CI->output->enable_profiler(TRUE);
-		initLang();
+//$CI->output->enable_profiler(TRUE);		
+	}
+	
+	function initSession() {
+		$CI 			= &get_instance();
 
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
@@ -16,7 +17,6 @@ class Safety {
 				redirect('login');
 			}
 		}
-		
 
 		if ($this->session->userdata('userId') != USER_ANONYMOUS) {
 			if ($this->session->userdata('last_activity') == $this->session->now) {
@@ -24,7 +24,7 @@ class Safety {
 				$CI->load->model('Users_Model');			
 				$CI->Users_Model->updateUserLastAccess();
 			}
-		} 
+		}
 	}
 	
 	function login($email, $password) {
@@ -47,14 +47,6 @@ class Safety {
 		$CI->Users_Model->updateUserLastAccess();
 		
 		return true;
-	}
-	
-
-	function isRoot() {
-		$query = $this->db
-			->where(array( 'userId'	=> $this->session->userdata('userId'), 'groupId' => GROUP_ROOT))
-			->get('users_groups');
-		return ($query->num_rows() > 0);
 	}
 
 	function allowByControllerName($controllerName) {
