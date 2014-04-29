@@ -119,6 +119,8 @@ class Users_Model extends CI_Model {
 	}
 
 	function selectUsersLogsToList($num, $offset, $filter = null, $userId = null, $orderBy = 'userId', $orderDir = 'asc' ){
+		// TODO: mejorar esta query, si hay muchos datos puede explotar
+		// quizás haya que agrupar en otra tabla
 		$this->db
 			->select(' DISTINCT  users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
 			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
@@ -131,7 +133,7 @@ class Users_Model extends CI_Model {
 			$this->db->where('users.userId', $userId);
 		} 
 		
-		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ))) {
+		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd' ))) {
 			$orderBy = 'userLogDate';
 		}
 
