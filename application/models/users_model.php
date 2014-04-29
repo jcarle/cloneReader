@@ -382,4 +382,11 @@ class Users_Model extends CI_Model {
 	function getUserId() {
 		return $this->session->userdata('userId');
 	}	
+	
+	function allowTracking() {
+		if ($this->safety->isCommandLine() == true) {
+			return false;
+		}
+		return true;
+	}
 }

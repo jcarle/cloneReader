@@ -64,7 +64,7 @@ $config['usertracking']['auto_track'] = TRUE;
 |
 | default: [] = null
 */
-$config['usertracking']['tracking_filter'][] = NULL;
+$config['usertracking']['tracking_filter'][] = array('model', 'Users_Model', 'allowTracking', true);
 
 
 /*
@@ -93,7 +93,7 @@ $config['usertracking']['tracking_filter_logic'] = "OR";
 |
 | default: true
 */
-$config['usertracking']['auto_build_db'] = TRUE;
+$config['usertracking']['auto_build_db'] = FALSE;
 
 
 /*
@@ -109,7 +109,5 @@ $config['usertracking']['auto_build_db'] = TRUE;
 |
 | default: true
 */
-$config['usertracking']['auto_fix_db'] = TRUE;
+$config['usertracking']['auto_fix_db'] = FALSE;
 
-
-?>
