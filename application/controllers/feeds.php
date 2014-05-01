@@ -294,7 +294,6 @@ class Feeds extends CI_Controller {
 		$this->db->trans_start();		
 				
 		$this->Feeds_Model->scanFeed($feedId);
-		
 		$this->Feeds_Model->updateFeedCounts($feedId);
 		
 		$this->db->trans_complete();
@@ -303,8 +302,13 @@ class Feeds extends CI_Controller {
 	function resetAndScanFeed($feedId) {
 		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
 		
+		$this->db->trans_start();
+		
 		$this->Feeds_Model->resetFeed($feedId);
 		$this->Feeds_Model->scanFeed($feedId);
+		$this->Feeds_Model->updateFeedCounts($feedId);
+		
+		$this->db->trans_complete();
 		
 		return loadViewAjax(true, true);
 	}
