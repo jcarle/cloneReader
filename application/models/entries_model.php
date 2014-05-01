@@ -634,7 +634,7 @@ class Entries_Model extends CI_Model {
 		// TODO: paginar este proceso para que guarde TODAS las entradas nuevas sin tener que relodear
 		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
 		$entryId 	= null;
-		$limit 		= 1000;
+		$limit 		= 500;
 		
 		$query = ' SELECT
 						MAX(entryId) AS entryId
