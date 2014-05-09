@@ -134,7 +134,7 @@ class Users_Model extends CI_Model {
 		} 
 		
 		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd' ))) {
-			$orderBy = 'userLogDate';
+			$orderBy = 'userId';
 		}
 
 		$query = $this->db

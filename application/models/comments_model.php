@@ -44,7 +44,7 @@ class Comments_Model extends CI_Model {
 		
 		$this->db->insert('comments', $values);
 		
-		$this->sendEmail($data);
+		$this->sendEmail($values);
 		
 		return true;
 	}

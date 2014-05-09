@@ -139,7 +139,7 @@ class Users extends CI_Controller {
 			$form['fields']['userLogs']	= array(
 				'type'	=> 'link',
 				'label'	=> 'View logs', // $this->lang->line('View logs'), 
-				'value'	=> base_url('users/logs/?userId='.$userId.'&orderDir=desc'),
+				'value'	=> base_url('users/logs/?userId='.$userId.'&orderBy=userLogDate&orderDir=desc'),
 			);			
 		}
 		
@@ -256,8 +256,8 @@ class Users extends CI_Controller {
 					),					
 				),
 				'sort' => array(
-					'userLogDate'		=> $this->lang->line('Date'),
-					'userId'			=> '#',
+					'userId'		=> '#',
+					'userLogDate'	=> $this->lang->line('Date'),
 				)
 			)
 		));
