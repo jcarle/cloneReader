@@ -122,7 +122,7 @@ class Users_Model extends CI_Model {
 		// TODO: mejorar esta query, si hay muchos datos puede explotar
 		// quizás haya que agrupar en otra tabla
 		$this->db
-			->select(' DISTINCT  users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
+			->select(' SQL_CALC_FOUND_ROWS DISTINCT users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
 			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
 		
 						
