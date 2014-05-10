@@ -44,11 +44,11 @@
 				if (org_image.parent().hasClass('imgCenterFrame') == true) {
 					var $div = org_image.parent();
 					if ($div.find('i').length == 0) {
-						$div.append('<i class="icon-spinner icon-spin icon-large" />');
+						$div.append('<i class="fa fa-spinner fa-spin fa-lg" />');
 					}
 				}
 				else {
-					var $div = $('<div />').addClass('imgCenterFrame').append('<i class="icon-spinner icon-spin icon-large" />');
+					var $div = $('<div />').addClass('imgCenterFrame').append('<i class="fa fa-spinner fa-spin fa-lg" />');
 					$div.insertBefore(org_image).append(org_image).show().css('visibility', 'visible');
 				}
 			}

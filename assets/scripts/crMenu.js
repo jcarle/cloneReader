@@ -49,7 +49,7 @@ crMenu = {
 	initMenu: function() {
 		var $menuProfile = $('ul.menuProfile');
 		
-		var $iconGear 	= $menuProfile.find('.icon-gear');
+		var $iconGear 	= $menuProfile.find('.fa-gear');
 		var $settings 	= $iconGear.parent();
 		var label		= $settings.text();
 		$settings

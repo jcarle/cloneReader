@@ -273,7 +273,7 @@
 					.text(data['sort'][key]);
 		
 				if (orderBy == key) {
-					$link.prepend(' <i class="' + (orderDir == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down') + ' icon-fixed-width " ></i> ');
+					$link.prepend(' <i class="fa fa-fw ' + (orderDir == 'asc' ? 'fa-arrow-up' : 'fa-arrow-down') + ' " ></i> ');
 				}
 			}
 		}
@@ -345,7 +345,7 @@
 		if (readOnly != true) {
 			$('\
 				<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
-					<i class="fa fa-file-o icon-fw"></i>\
+					<i class="fa fa-file-o fa-fw"></i>\
 					' + _msg['Add'] + '\
 				</a>\
 			').appendTo($div);

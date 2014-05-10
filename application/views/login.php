@@ -9,25 +9,25 @@ $this->load->view('includes/crForm');
 		<ul class="list-group">
 			<li class="list-group-item"> 
 				<a href="<?php echo base_url(''); ?>" class="btn btn-success" >
-					<i class="icon-rss"></i>
+					<i class="fa fa-rss"></i>
 					<?php echo $this->lang->line('Demo'); ?>
 				</a>		
 			</li>	
 			<li class="list-group-item">
 				<a href="<?php echo base_url('register'); ?>" class="btn btn-info" >
-					<i class="icon-user"></i>
+					<i class="fa fa-user"></i>
 					<?php echo $this->lang->line('Create account'); ?>
 				</a>
 			</li>	
 			<li class="list-group-item">
 				<a href="<?php  echo base_url('login/facebook');?>" class="btn btn-facebook" data-skip-app-link="true" >
-					<i class="icon-facebook"></i>
+					<i class="fa fa-facebook"></i>
 					<?php echo $this->lang->line('Facebook Login'); ?>
 				</a>
 			</li>
 			<li class="list-group-item">
 				<a href="<?php  echo base_url('login/google');?>" class="btn btn-google" data-skip-app-link="true">
-					<i class="icon-google-plus"></i>
+					<i class="fa fa-google-plus"></i>
 					<?php echo $this->lang->line('Google Login'); ?>
 				</a>
 			</li>

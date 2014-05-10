@@ -54,7 +54,7 @@ foreach ($sort as $key => $value) {
 	$icon				= '';
 	
 	if ($orderBy == $key) {
-		$icon = '<i class="'.($orderDir == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down').' icon-fixed-width" ></i>';
+		$icon = '<i class="fa fa-fw '.($orderDir == 'asc' ? 'fa-arrow-up' : 'fa-arrow-down').'" ></i>';
 	}
 	
 	echo '<li><a href="'.current_url().'?'.http_build_query($params).'">'.$icon.' '.$value.'</a></li>';
@@ -133,7 +133,7 @@ if ($urlDelete == true) {
 	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
 }
 if ($readOnly !== true) {
-	echo '<a href="'.base_url($list['controller'].'/add').'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o icon-fw"></i> '.$CI->lang->line('Add').' </a> ';
+	echo '<a href="'.base_url($list['controller'].'/add').'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
 }
 ?>				
 				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>

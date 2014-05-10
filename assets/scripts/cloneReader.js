@@ -246,7 +246,7 @@ cloneReader = {
 			<ul class="nav navbar-nav navbar-left"> \
 				<li> \
 					<button title="' + _msg['Expand'] + '" class="expand"> \
-						<i class="icon-exchange"  /> \
+						<i class="fa fa-exchange"  /> \
 						<span class="btnLabel">' +  _msg['Expand'] + '</span> \
 					</button> \
 				</li> \
@@ -550,7 +550,7 @@ cloneReader = {
 		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
 		
 
-		$('<a class="btnSocial icon-large icon-envelope"  />')
+		$('<a class="btnSocial fa fa-lg icon-envelope"  />')
 			.click(function(event) {
 				event.stopPropagation();
 				var $entry = $($(event.target).parents('.entry'));
@@ -567,7 +567,7 @@ cloneReader = {
 		for (var i=0; i<aSocial.length; i++) {
 			var url = aSocial[i].url + entry.entryUrl;
 			//var linkToApp = aSocial[i].app + aSocial[i].url + entry.entryUrl;
-			$('<a data-rel="external" class="btnSocial icon-large ' + aSocial[i].icon + '" href="' + url + '"  />').appendTo($footer);
+			$('<a data-rel="external" class="btnSocial fa-lg ' + aSocial[i].icon + '" href="' + url + '"  />').appendTo($footer);
 		}
 
 /*
@@ -575,7 +575,7 @@ TODO: pensar como mejorar esta parte
 		
 		if (this.isMobile == true) {		
 //			if ( $p.get(0).scrollHeight > $p.height()) {
-				$('<button class="btn btn-default  btnViewAll"> <i class="icon-large icon-reorder" /> </button>')
+				$('<button class="btn btn-default  btnViewAll"> <i class="fa fa-lg icon-reorder" /> </button>')
 					.click(function(event) {
 						var $entry = $(event.target).parents('.entry');
 						$entry.find('> p').css( {'max-height': 'none' });
@@ -660,7 +660,7 @@ TODO: pensar como mejorar esta parte
 		this.$noResult.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
-			this.$noResult.html('<div class="alert alert-info"> <i class="icon-spinner icon-spin icon-large"></i> ' + _msg['loading ...'] + '</div>').addClass('loading');
+			this.$noResult.html('<div class="alert alert-info"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + _msg['loading ...'] + '</div>').addClass('loading');
 		}
 		else {
 			this.$noResult.html('<div class="well well-lg"> ' + _msg['no more entries'] + ' </div>').removeClass('loading');
@@ -679,7 +679,7 @@ TODO: pensar como mejorar esta parte
 		else {
 			$entry.find('.star i').addClass('icon-star-empty');
 		}
-		$entry.find('.star i').addClass('icon-large');
+		$entry.find('.star i').addClass('fa-lg');
 		
 		var entryId = $entry.data('entryId');
 		var starred = (this.aEntries[entryId].starred == 1);
@@ -700,7 +700,7 @@ TODO: pensar como mejorar esta parte
 		else {
 			$entry.find('.read i').addClass('icon-check-empty');
 		}
-		$entry.find('.read i').addClass('icon-large');
+		$entry.find('.read i').addClass('fa-lg');
 		
 		var entryId		= $entry.data('entryId');
 		var entryRead	= (this.aEntries[entryId].entryRead == 1);

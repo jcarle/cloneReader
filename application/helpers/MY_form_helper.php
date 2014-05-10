@@ -262,7 +262,7 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, '
 					<div name="'.$name.'" class="subform "> 
 						<div class="alert alert-info">
-							<i class="icon-spinner icon-spin icon-large"></i>
+							<i class="fa fa-spinner fa-spin fa-lg"></i>
 							<small>'.$CI->lang->line('loading ...').'</small>
 						</div>
 					</div>

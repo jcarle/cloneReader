@@ -121,7 +121,7 @@ echo implode(' ', $aScripts);
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
-		<i class="icon-spinner icon-spin icon-large"></i>
+		<i class="fa fa-spinner fa-spin fa-lg"></i>
 		<small> <?php echo $this->lang->line('loading ...'); ?></small>
 	</div>
 	

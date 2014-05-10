@@ -262,12 +262,12 @@ class Feeds extends CI_Controller {
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>';
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
 			
-			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="icon-picture"></i> '.$this->lang->line('Download icon').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="fa fa-picture-o"></i> '.$this->lang->line('Download icon').' </button>';
 			$form['buttons'][] = '<button type="button" class="btn btn-warning btnDownloadIcon" onclick="$.Feeds.deleteOldEntriesByFeedId('.$feedId.');"><i class="fa fa-times"></i> '.$this->lang->line('Remove old entries').' </button>';			
 			
 			$form['urlDelete'] = base_url('feeds/delete/');
 		}
-		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> '.$this->lang->line('Save').' </button> ';	
+		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button> ';	
 		
 		$form['rules'] += array( 
 			array(
