@@ -243,7 +243,7 @@ cloneReader = {
 	
 	renderToolbar: function() {
 		this.$toolbar.html(' \
-			<ul class="nav navbar-nav navbar-left"> \
+			<ul class="nav navbar-nav"> \
 				<li> \
 					<button title="' + _msg['Expand'] + '" class="expand"> \
 						<i class="fa fa-exchange"  /> \
@@ -251,7 +251,7 @@ cloneReader = {
 					</button> \
 				</li> \
 			</ul> \
-			<ul class="nav navbar-nav navbar-right mainToolbar"> \
+			<ul class="nav mainToolbar"> \
 				<li> \
 					<button title="' + _msg['Add feed'] + '" class="add" > \
 						<i class="fa fa-plus" /> \
@@ -920,7 +920,7 @@ console.time("t1");
 						this.runIndexFilters(this.filters, null, true);
 						this.renderFilters(this.filters, this.$ulFilters, true);
 						this.resizeWindow();
-						
+
 						if (reload == true) {
 							this.$ulFilters.scrollTop(scrollTop);
 							this.$ulFilters.find('.selected').hide().fadeIn('slow');
@@ -1534,15 +1534,17 @@ console.timeEnd("t1");
 		}
 		
 		this.isMobile = $.isMobile();
+		
+		this.$mainToolbar.removeClass('navbar-nav pull-right').show();
 
 		if (this.isMobile == true) {
-			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
 			this.$toolbar.hide();
+			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
 			$('#header .logo').removeAttr('href');
 			$('#header').css( { 'box-shadow': '0 0px 7px #666' });
 		}
 		else {
-			this.$mainToolbar.appendTo( this.$toolbar ).show();
+			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right').show();
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
 			this.hidePopupWindow();
