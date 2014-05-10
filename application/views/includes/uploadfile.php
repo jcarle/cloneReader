@@ -12,7 +12,7 @@ if (!isset($fileupload)) {
 				<?php echo form_hidden('entityName', element('entityName', $fileupload)); ?>
 				<?php echo form_hidden('entityId', element('entityId', $fileupload)); ?>
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
 					<h4> <i class="icon-edit"></i> <?php echo $this->lang->line('Edit pictures'); ?> </h4>
 				</div>
 				

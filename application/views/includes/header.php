@@ -143,7 +143,7 @@ echo implode(' ', $aScripts);
 				<div class="form-group" >
 					<div class="input-group">
 						<span class="input-group-addon">
-							<i class="icon-search" ></i>
+							<i class="fa fa-search" ></i>
 						</span>
 						<input type="text" class="form-control" placeholder="search ..." />
 						<span class="input-group-btn">

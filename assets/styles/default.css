@@ -387,7 +387,7 @@ body.isLoading, body.isLoading * {
 		.crForm fieldset .form_datetime span {
 			cursor:pointer;
 		}	
-		.crForm fieldset .icon-remove {
+		.crForm fieldset .fa-times {
 			color: #555555;
 		}
 		.crForm fieldset .icon-th {

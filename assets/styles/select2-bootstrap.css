@@ -9,7 +9,7 @@
 
 .form-control.select2-container {
     height: auto !important;
-    padding: 0px;
+    padding: 0;
 }
 
 .form-control.select2-container.select2-dropdown-open {
@@ -18,12 +18,12 @@
 }
 
 .form-control .select2-container.select2-dropdown-open .select2-choices {
-    border-radius: 4px 4px 0 0;
+    border-radius: 3px 3px 0 0;
 }
 
 .form-control.select2-container .select2-choices {
     border: 0 !important;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 .control-group.warning .select2-container .select2-choice,
