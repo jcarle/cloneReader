@@ -187,8 +187,8 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, 
 					'<div class="input-group" style="width:1px">
 						'.form_input(array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => $CI->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
-						<span class="input-group-addon add-on"><i class="icon-remove"></i></span>
-						<span class="input-group-addon add-on"><i class="icon-th"></i></span>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-remove fa fa-times"></i></span>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-th icon-th fa fa-th"></i></span>
 					</div>');
 				break;
 			case 'password':
@@ -340,17 +340,21 @@ function appendCrFormJsAndCss($aScripts) {
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('select2.js');
 	$CI->carabiner->js('autoNumeric.js');
-	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
+	$CI->carabiner->js('bootstrap-datetimepicker.js');
 
 	switch ($CI->session->userdata('langId')) {
 		case 'es':
-			$CI->carabiner->js('select2_locale_es.js');	
-			$CI->carabiner->js('bootstrap-datetimepicker.es.js');
+			$CI->carabiner->js('select2/select2_locale_es.js');	
+			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.es.js');
 			break;
 		case 'pt':
-			$CI->carabiner->js('select2_locale_pt-BR.js');	
-			$CI->carabiner->js('bootstrap-datetimepicker.pt-BR.js');
-			break;			
+			$CI->carabiner->js('select2/select2_locale_pt-BR.js');	
+			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.pt-BR.js');
+			break;
+		case 'zh_TW':
+			$CI->carabiner->js('select2/select2_locale_zh-TW.js');
+			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.zh-TW.js');
+			break;
 	}
 	
 	$CI->carabiner->js('tmpl.min.js');	

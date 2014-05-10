@@ -7,7 +7,7 @@ $aFields = renderCrFormFields($form);
 <div class="btn-group">
 	<div class="dropdown">
 		<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle" type="button" data-toggle="dropdown">
-			<i class="icon-filter" ></i>
+			<i class="fa fa-filter" ></i>
 		</button>	
 		<div class="crFilterList  panel panel-default fade in crForm form-horizontal dropdown-menu">
 			<div class="panel-heading"> <?php echo $CI->lang->line('Filter'); ?> </div>
@@ -15,7 +15,7 @@ $aFields = renderCrFormFields($form);
 				<?php echo implode(' ', $aFields); ?>
 			</div>
 			<div class="modal-footer form-actions">
-				<button type="submit" class="btn btn-default"> <i class="icon-search" ></i> <?php echo $CI->lang->line('Search'); ?></button>
+				<button type="submit" class="btn btn-default"> <i class="fa fa-search" ></i> <?php echo $CI->lang->line('Search'); ?></button>
 			</div>
 		</div>
 	</div>

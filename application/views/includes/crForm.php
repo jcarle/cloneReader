@@ -22,9 +22,9 @@ echo implode(' ', $aFields);
 
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
-	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> '.$CI->lang->line('Back').' </button> ';
+	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$CI->lang->line('Back').' </button> ';
 	if (isset($form['urlDelete'])) {
-		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="icon-trash"></i> '.$CI->lang->line('Delete').' </button>';
+		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> '.$CI->lang->line('Delete').' </button>';
 	}
 	$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> '.$CI->lang->line('Save').' </button> ';	
 }

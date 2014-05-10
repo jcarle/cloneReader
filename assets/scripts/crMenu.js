@@ -57,9 +57,7 @@ crMenu = {
 			.html('')
 			.append($iconGear)
 			.append('<span>' + label + '</span>');
-		$settings.parent().find('> ul > li').addClass('dropdown-submenu dropdown-submenu-left');	
-
-		
+		$settings.parent().find('> ul > li > ul').parent().addClass('dropdown-submenu dropdown-submenu-left');	
 		
 		$menuProfile.find('.lang-' + langId ).before('<i class="icon-ok icon-fixed-width"></i>');
 		$menuProfile.find('.icon-flag-alt').parent()

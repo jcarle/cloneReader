@@ -68,7 +68,7 @@ class Comments extends CI_Controller {
 	function _getFormProperties($commentId) {
 		$form = array(
 			'frmId'		=> 'frmCommentEdit',
-			'buttons' 	=> array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
+			'buttons' 	=> array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
 			'fields' => array( 
 				'commentId' => array(
 					'type'	=> 'hidden', 
@@ -110,7 +110,7 @@ class Comments extends CI_Controller {
 		if ((int)$commentId > 0) {
 			$form['urlDelete'] = base_url('comments/delete/');
 			
-			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="icon-trash"></i> '.$this->lang->line('Delete').' </button>';			
+			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>';			
 		}
 
 		$this->form_validation->set_rules($form['rules']);

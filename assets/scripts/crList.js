@@ -56,7 +56,7 @@
 
 		this.$filter = this.$form.find('input[name=filter]');
 		
-		this.$form.find('.icon-remove').parent()
+		this.$form.find('.fa-times').parent()
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
 				function (event){
@@ -214,7 +214,7 @@
 				<div class="btn-group">\
 					<div class="input-group">\
 						<span class="input-group-addon">\
-							<i class="icon-remove" ></i>\
+							<i class="fa fa-times" ></i>\
 						</span>\
 						<input type="text" name="filter" value="" class="form-control" placeholder="' + _msg['search'] + '" />\
 						<span class="input-group-btn">\
@@ -253,7 +253,7 @@
 					<input type="hidden" name="orderDir" value="' + orderDir + '" />\
 					<div class="dropdown">\
 						<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder ' + (orderBy != defaultOrderBy || orderDir != 'asc' ? ' btn-info ' : '') + '" type="button" data-toggle="dropdown">\
-							<i class="icon-sort-by-attributes" ></i>\
+							<i class="fa fa-sort-amount-asc" ></i>\
 						</button>\
 						<ul class="dropdown-menu pull-right" role="menu" />\
 					</div>\
@@ -340,12 +340,12 @@
 		var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 
 		if (urlDelete == true) {
-			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
+			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
 		}
 		if (readOnly != true) {
 			$('\
 				<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
-					<i class="icon-file-alt icon-large"></i>\
+					<i class="fa fa-file-o icon-fw"></i>\
 					' + _msg['Add'] + '\
 				</a>\
 			').appendTo($div);
@@ -415,13 +415,13 @@
 			<div class="btn-group"> \
 				<div class="dropdown"> \
 					<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle" type="button" data-toggle="dropdown"> \
-						<i class="icon-filter" ></i> \
+						<i class="fa fa-filter" ></i> \
 					</button> \
 					<div class="crFilterList  panel panel-default fade in crForm form-horizontal dropdown-menu"> \
 						<div class="panel-heading"> ' + _msg['Filter'] + ' </div> \
 						<div class="panel-body"> </div> \
 						<div class="modal-footer form-actions"> \
-							<button type="submit" class="btn btn-default"> <i class="icon-search" ></i> ' + _msg['Search'] + ' </button> \
+							<button type="submit" class="btn btn-default"> <i class="fa fa-search" ></i> ' + _msg['Search'] + ' </button> \
 						</div> \
 					</div> \
 				</div> \
