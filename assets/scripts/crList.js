@@ -210,7 +210,7 @@
 		var $crList		= $('<div class="crList"></div>').appendTo($parentNode);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
 		var $form 		= $('\
-			<form method="get" class="panel-heading form-inline" id="frmCrList" role="search" action="' + data['controller'] + '" >\
+			<form method="get" class="panel-heading" id="frmCrList" role="search" action="' + data['controller'] + '" >\
 				<div class="btn-group">\
 					<div class="input-group">\
 						<span class="input-group-addon">\

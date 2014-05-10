@@ -57,10 +57,12 @@ crMenu = {
 			.html('')
 			.append($iconGear)
 			.append('<span>' + label + '</span>');
-		$settings.parent().find('> ul > li > ul').parent().addClass('dropdown-submenu dropdown-submenu-left');	
+		$settings.parent().find('> ul > li > ul').parent().addClass('dropdown-submenu dropdown-submenu-left');
 		
-		$menuProfile.find('.lang-' + langId ).before('<i class="icon-ok fa-fw"></i>');
-		$menuProfile.find('.icon-flag-alt').parent()
+		$menuProfile.find('> li > ul').addClass('pull-right');	
+		
+		$menuProfile.find('.lang-' + langId ).before('<i class="fa fa-check fa-fw"></i>');
+		$menuProfile.find('.fa-flag-o').parent()
 			.append('<span class="badge pull-right">' + langId + '</span>')
 			.addClass('lang').css('cursor', 'pointer');
 	

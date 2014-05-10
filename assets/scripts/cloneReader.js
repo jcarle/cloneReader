@@ -42,7 +42,7 @@ cloneReader = {
 
 	updateMainMenu: function() {
 		if (this.$dropdownMenu == null) {
-			this.$dropdownMenu 	= $('ul.menuProfile').find('.icon-gear').parent().parent().find('ul.dropdown-menu:first');
+			this.$dropdownMenu 	= $('ul.menuProfile').find('.fa-gear').parent().parent().find('ul.dropdown-menu:first');
 			
 			$('<li role="presentation" class="divider"></li>').appendTo(this.$dropdownMenu);
 			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>').appendTo(this.$dropdownMenu);			
@@ -260,7 +260,7 @@ cloneReader = {
 				</li> \
 				<li> \
 					<button title="' + _msg['Mark all as read'] + '" class="btnMarkAllAsRead" > \
-						<i class="icon-archive" /> \
+						<i class="fa fa-archive" /> \
 						<span>' + _msg['Mark all as read'] + '</span> \
 					</button> \
 				</li> \
@@ -523,7 +523,7 @@ cloneReader = {
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 
-		$('<label title="' + _msg['Star'] + '"><i /></label>').addClass('star').appendTo($header);
+		$('<label title="' + _msg['Star'] + '"><i /></label>').addClass('star fa').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
 					
 		
@@ -550,7 +550,7 @@ cloneReader = {
 		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
 		
 
-		$('<a class="btnSocial fa fa-lg icon-envelope"  />')
+		$('<a class="btnSocial fa fa-lg fa-envelope"  />')
 			.click(function(event) {
 				event.stopPropagation();
 				var $entry = $($(event.target).parents('.entry'));
@@ -560,9 +560,9 @@ cloneReader = {
 			.appendTo($footer);	
 		
 		var aSocial = [
-			{'icon': 'icon-facebook-sign', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
-			{'icon': 'icon-twitter-sign', 		'app': '',		'url': 'http://www.twitter.com/home?status='},
-			{'icon': 'icon-google-plus-sign', 	'app': 'tw:',	'url': 'http://plus.google.com/share?url='},
+			{'icon': 'fa fa-facebook-square', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
+			{'icon': 'fa fa-twitter-square', 		'app': '',		'url': 'http://www.twitter.com/home?status='},
+			{'icon': 'fa fa-google-plus-square', 	'app': 'tw:',	'url': 'http://plus.google.com/share?url='},
 		];
 		for (var i=0; i<aSocial.length; i++) {
 			var url = aSocial[i].url + entry.entryUrl;
@@ -607,7 +607,7 @@ TODO: pensar como mejorar esta parte
 	renderListEntry: function($entry, entry) {
 		var $div 			= $('<div/>').addClass('title').appendTo($entry);
 
-		$('<label><i /></label>').addClass('star').appendTo($div);
+		$('<label><i /></label>').addClass('fa star').appendTo($div);
 		$('<span />').addClass('feedName').html($.stripTags(entry.feedName, '')).appendTo($div);
 		$('<span />').addClass('entryDate').appendTo($div);
 		
@@ -674,12 +674,12 @@ TODO: pensar como mejorar esta parte
 		$entry.find('.star i').removeAttr('class');
 		if (value == true) {
 			$entry.find('.star').addClass('selected');
-			$entry.find('.star i').addClass('icon-star');
+			$entry.find('.star i').addClass('fa-star');
 		}
 		else {
-			$entry.find('.star i').addClass('icon-star-empty');
+			$entry.find('.star i').addClass('fa-star-o');
 		}
-		$entry.find('.star i').addClass('fa-lg');
+		$entry.find('.star i').addClass('fa fa-lg');
 		
 		var entryId = $entry.data('entryId');
 		var starred = (this.aEntries[entryId].starred == 1);
@@ -1446,9 +1446,9 @@ console.timeEnd("t1");
 				if (hasTag == true) {
 					check = '&#10004';
 				}
-				aItems.push( { 'html': (hasTag == true ? '<i class="icon-ok fa-fw" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  
+				aItems.push( { 'html': (hasTag == true ? '<i class="fa fa-check fa-fw" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  
 					var $filter = $(this); 
-					cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), $filter.find('i.icon-ok').length == 0 ); 
+					cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), $filter.find('i.fa-check').length == 0 ); 
 				} } );
 			}
 		}
@@ -1490,7 +1490,7 @@ console.timeEnd("t1");
 					<div class="input-group"> \
 						<input type="text" class="form-control"  /> \
 						<span class="input-group-btn" > \
-							<button class="btn btn-primary"> <i class="icon-ok" /> </button> \
+							<button class="btn btn-primary"> <i class="fa fa-check" /> </button> \
 						</span> \
 					</div> \
 				</form>\

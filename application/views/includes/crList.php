@@ -6,7 +6,7 @@ $readOnly 	= element('readOnly', $list, false);
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
-		<form method="get" class="panel-heading form-inline" action="<?php echo base_url($list['controller']); ?>" id="frmCrList" role="search">
+		<form method="get" class="panel-heading" action="<?php echo base_url($list['controller']); ?>" id="frmCrList" role="search">
 			<div class="btn-group">
 				<div class="input-group">
 					<span class="input-group-addon">
