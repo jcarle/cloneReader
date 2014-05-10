@@ -575,7 +575,7 @@ TODO: pensar como mejorar esta parte
 		
 		if (this.isMobile == true) {		
 //			if ( $p.get(0).scrollHeight > $p.height()) {
-				$('<button class="btn btn-default  btnViewAll"> <i class="fa fa-lg icon-reorder" /> </button>')
+				$('<button class="btn btn-default  btnViewAll"> <i class="fa fa-lg fa-reorder" /> </button>')
 					.click(function(event) {
 						var $entry = $(event.target).parents('.entry');
 						$entry.find('> p').css( {'max-height': 'none' });
@@ -695,12 +695,12 @@ TODO: pensar como mejorar esta parte
 		
 		if (value == false) {
 			$entry.find('.read').addClass('selected');
-			$entry.find('.read i').addClass('icon-check-sign');
+			$entry.find('.read i').addClass('fa-check-square');
 		}
 		else {
-			$entry.find('.read i').addClass('icon-check-empty');
+			$entry.find('.read i').addClass('fa-square-o');
 		}
-		$entry.find('.read i').addClass('fa-lg');
+		$entry.find('.read i').addClass('fa fa-lg');
 		
 		var entryId		= $entry.data('entryId');
 		var entryRead	= (this.aEntries[entryId].entryRead == 1);
@@ -1613,7 +1613,7 @@ console.timeEnd("t1");
 		for (var i=0; i<result.length; i++) {
 			var tag = result[i];
 			
-			var $tag = $('<a class="list-group-item" href="javascript:void(0);"><i class="icon icon-tag"></i> ' + tag.tagName + ' </a>').appendTo($ul);
+			var $tag = $('<a class="list-group-item" href="javascript:void(0);"><i class="icon fa fa-tag"></i> ' + tag.tagName + ' </a>').appendTo($ul);
 			$tag
 				.data('tag', tag)
 				.click($.proxy(

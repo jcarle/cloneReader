@@ -209,13 +209,12 @@
 										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
 									}
 								);			
-								
+							
  							field.$input.parent()
 								.addClass('date form_datetime')
 								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': langId, 'pickerPosition': 'bottom-left' });
 
 							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
-							field.$input.parent().datetimepicker('show').datetimepicker('hide');
 							field.$input.change();
 							break;
 						case 'gallery':
@@ -543,7 +542,7 @@
 
 							$('<a class="btn btn-default btn-sm btnAdd" href="' + base_url + list['controller'] + '0" />') 
 								.appendTo(field.$input)
-								.append(' <i class="icon-plus"> </i> ')
+								.append(' <i class="fa fa-plus"> </i> ')
 								.append(' ' + _msg['Add'])
 								.data( { 'crForm': this })
 								.click(
@@ -722,9 +721,9 @@
 	
 	renderCrForm = function(data, $parentNode) {
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
-			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
+			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + _msg['Save'] + ' </button> '	
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
@@ -768,8 +767,8 @@
 	renderPopupForm = function(data) {
 		var buttons 	= [
 			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>',
-			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + _msg['Save'] + ' </button> '	
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
@@ -798,14 +797,14 @@
 		var $modalHeader = $('\
 			<div class="modal-header">\
 				<button aria-hidden="true" data-dismiss="modal" class="close" type="button">\
-					<i class="icon-remove"></i>\
+					<i class="fa fa-times"></i>\
 				</button>\
 				<h4 />\
 			</div>\
 		').appendTo($form);
 
 		$modalHeader.find('h4')
-			.append('<i class="' + (data['icon'] != null ? data['icon'] : 'icon-edit') + '"></i>')
+			.append('<i class="' + (data['icon'] != null ? data['icon'] : 'fa fa-edit') + '"></i>')
 			.append(' ' + data['title']);
 		
 		var $modalBody = $('<div class="modal-body" />').appendTo($form);
@@ -827,9 +826,9 @@
 	
 	renderAjaxForm = function(data, $parentNode) {
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="icon-arrow-left"></i> ' + _msg['Back'] + ' </button>',
-			'<button type="button" class="btn btn-danger"><i class="icon-trash"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="icon-save"></i> ' + _msg['Save'] + ' </button> '	
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + _msg['Back'] + ' </button>',
+			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + _msg['Delete'] + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + _msg['Save'] + ' </button> '	
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
@@ -905,8 +904,8 @@
 
 					$datetime = $('<div class="input-group" style="width:1px" />').appendTo($div);
 					$datetime.append($input);
-					$datetime.append($('<span class="input-group-addon add-on"><i class="icon-remove"></i></span>'));
-					$datetime.append($('<span class="input-group-addon add-on"><i class="icon-th"></i></span>'));
+					$datetime.append($('<span class="input-group-addon"><i class="glyphicon glyphicon-remove fa fa-times"></i></span>'));
+					$datetime.append($('<span class="input-group-addon"><i class="glyphicon glyphicon-th icon-th fa fa-th"></i></span>'));
 					break;
 				case 'password':
 					$div.append('<input type="password" name="' + name + '" class="form-control" />');
@@ -981,7 +980,7 @@
 					$div.append($('\
 						<div id="' + name + '" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >\
 							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">\
-								<i class="icon-picture" ></i>\
+								<i class="fa fa-picture-o" ></i>\
 								' + _msg['Edit pictures'] + '\
 							</button>\
 							<div class="thumbnails" ></div>\
@@ -992,7 +991,7 @@
 					$div.append('\
 						<div name="' + name + '" class="subform ">\
 							<div class="alert alert-info">\
-								<i class="icon-spinner icon-spin icon-large"></i>\
+								<i class="fa fa-spinner fa-spin fa-lg"></i>\
 								<small>' + _msg['loading ...'] + '</small>\
 							</div>\
 						</div>');
@@ -1016,7 +1015,7 @@
 					$div.append('\
 						<div class="col-md-5">\
 							<span class="btn btn-success fileinput-button">\
-								<i class="icon-plus icon-white"></i>\
+								<i class="fa fa-plus"></i>\
 								<span>' + _msg['Add File'] + '</span> \
 								<input type="file" name="userfile" > \
 							</span> \

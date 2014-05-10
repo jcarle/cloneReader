@@ -1,4 +1,4 @@
 <div class="alert alert-success">
-	<i class="icon-envelope icon-4x"></i>
+	<i class="fa fa-envelope fa-4x"></i>
 	<span><?php echo $message; ?></span>
 </div>

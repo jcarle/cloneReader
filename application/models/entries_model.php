@@ -118,10 +118,8 @@ class Entries_Model extends CI_Model {
 					'type'			=> 'tag',
 					'id'			=> TAG_BROWSE,
 					'name'			=> $this->lang->line('@tag-browse'), 
-					'classIcon'		=> 'icon-tags', 
-				)				
-				
-				
+					'classIcon'		=> 'fa fa-tags', 
+				)
 			)
 		);
 

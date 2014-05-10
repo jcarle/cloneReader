@@ -288,7 +288,7 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, '
 					<div class="col-md-5">
 						<span class="btn btn-success fileinput-button">
-							<i class="fa fa-plus icon-white"></i>
+							<i class="fa fa-plus"></i>
 							<span>'.$CI->lang->line('Add File').'</span>
 							<input type="file" name="userfile" >
 						</span>
