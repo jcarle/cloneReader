@@ -254,7 +254,7 @@ cloneReader = {
 			<ul class="nav navbar-nav navbar-right mainToolbar"> \
 				<li> \
 					<button title="' + _msg['Add feed'] + '" class="add" > \
-						<i class="icon-plus" /> \
+						<i class="fa fa-plus" /> \
 						<span class="btnLabel">' + _msg['Add feed'] + '</span> \
 					</button> \
 				</li> \
@@ -300,22 +300,22 @@ cloneReader = {
 				<li> \
 					<div class="btn-group" data-toggle="buttons-radio" > \
 						<button class="viewList" title="' + _msg['List view'] + '" > \
-							<i class="icon-align-justify" /> \
+							<i class="fa fa-align-justify" /> \
 						</button> \
 						<button class="viewDetail" title="' + _msg['Detail view'] + '" > \
-							<i class="icon-th-list" /> \
+							<i class="fa fa-th-list" /> \
 						</button> \
 					</div> \
 				</li> \
 				<li> \
-					<button title="' + _msg['Reload'] + '" class="reload" > <i class="icon-refresh" /> \
+					<button title="' + _msg['Reload'] + '" class="reload" > <i class="fa fa-refresh" /> \
 						<span class="btnLabel">' + _msg['Reload'] + '</span> \
 					 </button> \
 				</li> \
 				<li class="directionNav" > \
 					<div class="btn-group"  > \
-						<button title="' + _msg['Prev'] + '" class="prev" > <i class="icon-caret-up" /> </button> \
-						<button title="' + _msg['Next'] + '" class="next" > <i class="icon-caret-down" /> </button> \
+						<button title="' + _msg['Prev'] + '" class="prev" > <i class="fa fa-caret-up" /> </button> \
+						<button title="' + _msg['Next'] + '" class="next" > <i class="fa fa-caret-down" /> </button> \
 					</div> \
 				</li> \
 			</ul> \
@@ -996,7 +996,7 @@ console.timeEnd("t1");
 
 		var $filter = $('<li/>')
 					.data('filter', filter)
-					.html('<div><span class="icon" /><a>' + filter.name + '</a><span class="count" /></div>')
+					.html('<div><span class="icon fa" /><a>' + filter.name + '</a><span class="count" /></div>')
 					.appendTo($parent);
 
 		if (index != null && index != $filter.index()) { // para ordenar los items que se crearon en tiempo de ejecución
@@ -1025,7 +1025,7 @@ console.timeEnd("t1");
 		if (filter.childs != null) {
 			$filter.append('<ul />').find('.icon').addClass('arrow');
 			$filter.find('.icon')
-				.addClass('icon-expand')
+				.addClass('fa-caret-square-o-right')
 				.click(
 					function(event) {
 						var $filter	= $($(event.target).parents('li:first'));
@@ -1159,15 +1159,15 @@ console.timeEnd("t1");
 		var $ul 	= $filter.find('ul:first');
 		var $arrow 	= $filter.find('.arrow:first');
 		
-		$arrow.removeClass('icon-collapse').removeClass('icon-expand');
+		$arrow.removeClass('fa-caret-square-o-down').removeClass('fa-caret-square-o-right');
 		
 		if (value != true) {
-			$arrow.addClass('icon-expand');
+			$arrow.addClass('fa-caret-square-o-right');
 			$ul.removeClass('filterVisible');
 			return;
 		}
 
-		$arrow.addClass('icon-collapse');
+		$arrow.addClass('fa-caret-square-o-down');
 		$ul.addClass('filterVisible');
 	},
 	
@@ -1649,7 +1649,7 @@ console.timeEnd("t1");
 												<p class="list-group-item-text">' + (feed.feedDescription == null ? '' : feed.feedDescription) + '</p>  \
 												<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
 												<button title="' + _msg['Subscribe'] + '" class="btn btn-success" type="button"> \
-													<i class="icon-plus"  /> \
+													<i class="fa fa-plus"  /> \
 													<span class="btnLabel">' +  _msg['Subscribe'] + '</span> \
 												</button> \
 											</div>');

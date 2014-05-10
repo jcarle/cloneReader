@@ -21,7 +21,7 @@ if (!isset($fileupload)) {
 						<div class="span6">
 							<!-- The fileinput-button span is used to style the file input field as button -->
 							<span class="btn btn-success fileinput-button">
-								<i class="icon-plus icon-white"></i>
+								<i class="fa fa-plus icon-white"></i>
 								<span> <?php echo $this->lang->line('Add photos'); ?> </span>
 								<input type="file" name="userfile" multiple>
 							</span>
@@ -34,7 +34,7 @@ if (!isset($fileupload)) {
 								<span>Cancel upload</span>
 							</button>
 							<button type="button" class="btn btn-danger delete">
-								<i class="icon-trash icon-white"></i>
+								<i class="fa fa-trash-o icon-white"></i>
 								<span> <?php echo $this->lang->line('Delete'); ?> </span>
 							</button>
 							<input type="checkbox" class="toggle">
@@ -122,7 +122,7 @@ if (!isset($fileupload)) {
 		</td>
 		<td class="text-right">
 			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-				<i class="icon-trash icon-white"></i>
+				<i class="fa fa-trash-o icon-white"></i>
 				<span> <?php echo $this->lang->line('Delete'); ?> </span>
 			</button>
 			<input type="checkbox" name="delete" value="1" class="toggle">

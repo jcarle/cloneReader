@@ -251,7 +251,7 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, '
 						<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >
 							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">
-								<i class="icon-picture" ></i>
+								<i class="fa fa-picture-o" ></i>
 								'.$CI->lang->line('Edit pictures').'
 							</button>
 							<div class="thumbnails" ></div>
@@ -288,7 +288,7 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, '
 					<div class="col-md-5">
 						<span class="btn btn-success fileinput-button">
-							<i class="icon-plus icon-white"></i>
+							<i class="fa fa-plus icon-white"></i>
 							<span>'.$CI->lang->line('Add File').'</span>
 							<input type="file" name="userfile" >
 						</span>

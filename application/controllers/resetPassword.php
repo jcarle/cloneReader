@@ -18,7 +18,7 @@ class ResetPassword extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmResetPassword',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Reset password').' </button>'),			
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Reset password').' </button>'),			
 			'fields'		=> array(
 				'resetPasswordKey' => array(
 					'type'	=> 'hidden',

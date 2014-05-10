@@ -12,7 +12,7 @@ class ForgotPassword extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmForgotPassword',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Send').' </button>'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Send').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(
 					'type'	=> 'text',

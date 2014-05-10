@@ -47,7 +47,7 @@ class Feedback extends CI_Controller {
 					'value'		=> ''
 				),
 			),
-			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="icon-comment"></i> '.$this->lang->line('Send').'</button> '),
+			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="fa fa-comment"></i> '.$this->lang->line('Send').'</button> '),
 		);
 		
 		$form['rules'] = array(

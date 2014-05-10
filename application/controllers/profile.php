@@ -32,7 +32,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmEditProfile',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
 			'title'			=> $this->lang->line('Edit profile'),
 			'fields'		=> array(
 				'userFirstName' => array(
@@ -104,7 +104,7 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmChangeEmail',
 			'title'			=> $this->lang->line('Change email'),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Save').' </button>'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
 			'fields'		=> array(
 				'userEmail' => array(
 					'type'	=> 'text',
@@ -168,7 +168,7 @@ class Profile extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmChangePassword',
 			'title'			=> $this->lang->line('Change password'),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="icon-save"></i> '.$this->lang->line('Change password').' </button>'),
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Change password').' </button>'),
 			'fields'		=> array(
 				'passwordOld' => array(
 					'type'	=> 'password',

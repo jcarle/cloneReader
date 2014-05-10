@@ -10,7 +10,7 @@ $readOnly 	= element('readOnly', $list, false);
 			<div class="btn-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<i class="icon-remove" ></i>
+						<i class="fa fa-times" ></i>
 					</span>
 					<?php echo form_input(array('name' => 'filter',  'value' => $this->input->get('filter'), 'class' => 'form-control', 'placeholder' => $CI->lang->line('search'))); ?>
 					<span class="input-group-btn">
@@ -44,7 +44,7 @@ if ($sort != null) {
 		<input type="hidden" name="orderDir" value="<?php echo $orderDir; ?>" />
 		<div class="dropdown">
 			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder <?php if ($orderBy != $defaultOrderBy || $orderDir != 'asc') { echo ' btn-info '; } ?>" type="button" data-toggle="dropdown">
-				<i class="icon-sort-by-attributes" ></i>
+				<i class="fa fa-sort-amount-asc" ></i>
 			</button>	
 			<ul class="dropdown-menu pull-right" role="menu">
 <?php
@@ -130,10 +130,10 @@ foreach ($list['data'] as $row) {
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 <?php
 if ($urlDelete == true) {
-	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="icon-trash icon-large"></i> '.$CI->lang->line('Delete').' </a>';
+	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
 }
 if ($readOnly !== true) {
-	echo '<a href="'.base_url($list['controller'].'/add').'" class="btnAdd btn btn-sm btn-success"> <i class="icon-file-alt icon-large"></i> '.$CI->lang->line('Add').' </a> ';
+	echo '<a href="'.base_url($list['controller'].'/add').'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o icon-fw"></i> '.$CI->lang->line('Add').' </a> ';
 }
 ?>				
 				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
