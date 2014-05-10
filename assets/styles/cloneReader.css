@@ -488,6 +488,14 @@
 		}
 		#header .mainToolbar .dropdown-menu {
 			position: relative;
+			max-height: none !important;
+		}
+			#header .mainToolbar .dropdown-menu > li > a {
+				padding-left: 0px;
+				font-size: medium;
+			}
+		#header .mainToolbar li {
+			padding-left: 15px;
 		}
 	#cloneReader { }
 	#cloneReader nav .expand {

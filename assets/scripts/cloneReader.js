@@ -1539,12 +1539,12 @@ console.timeEnd("t1");
 
 		if (this.isMobile == true) {
 			this.$toolbar.hide();
-			this.$mainToolbar.appendTo($('#header .navbar-collapse'));
+			this.$mainToolbar.appendTo($('#header .navbar-collapse')).addClass('navbar-nav');
 			$('#header .logo').removeAttr('href');
 			$('#header').css( { 'box-shadow': '0 0px 7px #666' });
 		}
 		else {
-			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right').show();
+			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
 			this.hidePopupWindow();
