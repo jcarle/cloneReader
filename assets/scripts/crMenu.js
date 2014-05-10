@@ -59,8 +59,6 @@ crMenu = {
 			.append('<span>' + label + '</span>');
 		$settings.parent().find('> ul > li > ul').parent().addClass('dropdown-submenu dropdown-submenu-left');
 		
-		$menuProfile.find('> li > ul').addClass('pull-right');	
-		
 		$menuProfile.find('.lang-' + langId ).before('<i class="fa fa-check fa-fw"></i>');
 		$menuProfile.find('.fa-flag-o').parent()
 			.append('<span class="badge pull-right">' + langId + '</span>')

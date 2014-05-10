@@ -215,6 +215,7 @@
 								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': langId, 'pickerPosition': 'bottom-left' });
 
 							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
+							field.$input.parent().datetimepicker('show').datetimepicker('hide');
 							field.$input.change();
 							break;
 						case 'gallery':
@@ -630,7 +631,7 @@
 					.insertBefore($exchange)
 					.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '' } )
 					.change( function(event) {
-						$(event.target).next().val($(event.target).autoNumeric('get') ).change();;
+						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
 				
 				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
@@ -846,7 +847,7 @@
 			.appendTo($parentNode);		
 
 		if (data['title'] != null) {
-			$('<div class="panel-heading" />').text(data['title']).appendTo($form);;
+			$('<div class="panel-heading" />').text(data['title']).appendTo($form);
 		}
 
 		var $div = $('<div class="panel-body" />').appendTo($form); 

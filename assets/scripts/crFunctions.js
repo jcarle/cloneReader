@@ -336,9 +336,7 @@ $.extend({
 		
 		$modal.modal( { 'backdrop': 'static', 'keyboard': keyboard });
 
-
-		$('.modal').css('z-index', 1029);;
-
+		$('.modal').css('z-index', 1039);
 		
 		$(document).unbind('hidden.bs.modal');
 		$(document).bind('hidden.bs.modal', function (event) {
@@ -351,7 +349,7 @@ $.extend({
 			if ($('.modal-backdrop').length > 0) {
 				$('.modal-backdrop').last().show();
 				$('body').addClass('modal-open');
-				$('.modal:last').css('z-index', 1040);;
+				$('.modal:last').css('z-index', 1050);
 			}
 		}); 
 		
@@ -362,7 +360,7 @@ $.extend({
 		$('.modal-backdrop:last')
 			.css( {'opacity': 0.3  } )
 			.show();
-		$('.modal:last').css('z-index', 1040);;
+		$('.modal:last').css('z-index', 1050);
 	},
 	
 	/**

@@ -16,7 +16,7 @@ class App extends CI_Controller {
 		$aMenu = array(
 			'MENU_PROFILE' => array(
 				'items' 	=> $this->cache->file->get('MENU_PROFILE_'.$userId), 
-				'className'	=> 'menuProfile nav navbar-nav pull-right',
+				'className'	=> 'menuProfile nav navbar-nav navbar-right',
 				'parent'	=> '.navbar-ex1-collapse'
 			),
 			'MENU_PUBLIC' 	=> array(

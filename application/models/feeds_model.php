@@ -408,7 +408,7 @@ class Feeds_Model extends CI_Model {
 		$this->db->query($query);
 
 		$affectedrRows = $this->db->affected_rows();
-		$count += $affectedrRows;;
+		$count += $affectedrRows;
 		if ($affectedrRows != 0) {
 			sleep(2);
 			return $this->deleteOldEntriesByFeedId($feedId, $count);

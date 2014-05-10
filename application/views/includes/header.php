@@ -153,7 +153,7 @@ echo implode(' ', $aScripts);
 				</div>
 			</form>
 <?php
-echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav pull-right');
+echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav navbar-right');
 ?>
 		</div>
 	</nav>

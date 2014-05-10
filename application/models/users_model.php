@@ -124,7 +124,6 @@ class Users_Model extends CI_Model {
 		$this->db
 			->select(' SQL_CALC_FOUND_ROWS DISTINCT users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
 			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
-		
 						
 		if ($filter != null) {	
 			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
@@ -133,7 +132,7 @@ class Users_Model extends CI_Model {
 			$this->db->where('users.userId', $userId);
 		} 
 		
-		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd' ))) {
+		if (!in_array($orderBy, array('userId', 'userEmail', 'userLogDate' ))) {
 			$orderBy = 'userId';
 		}
 
