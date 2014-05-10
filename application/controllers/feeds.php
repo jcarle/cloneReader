@@ -260,7 +260,7 @@ class Feeds extends CI_Controller {
 			);			
 			
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>';
-			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="icon-refresh"></i> '.$this->lang->line('Scan').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="fa fa-refresh"></i> '.$this->lang->line('Scan').' </button>';
 			
 			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="fa fa-picture-o"></i> '.$this->lang->line('Download icon').' </button>';
 			$form['buttons'][] = '<button type="button" class="btn btn-warning btnDownloadIcon" onclick="$.Feeds.deleteOldEntriesByFeedId('.$feedId.');"><i class="fa fa-times"></i> '.$this->lang->line('Remove old entries').' </button>';			

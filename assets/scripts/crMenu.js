@@ -59,7 +59,7 @@ crMenu = {
 			.append('<span>' + label + '</span>');
 		$settings.parent().find('> ul > li > ul').parent().addClass('dropdown-submenu dropdown-submenu-left');	
 		
-		$menuProfile.find('.lang-' + langId ).before('<i class="icon-ok icon-fixed-width"></i>');
+		$menuProfile.find('.lang-' + langId ).before('<i class="icon-ok fa-fw"></i>');
 		$menuProfile.find('.icon-flag-alt').parent()
 			.append('<span class="badge pull-right">' + langId + '</span>')
 			.addClass('lang').css('cursor', 'pointer');

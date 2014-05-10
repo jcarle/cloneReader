@@ -1446,7 +1446,7 @@ console.timeEnd("t1");
 				if (hasTag == true) {
 					check = '&#10004';
 				}
-				aItems.push( { 'html': (hasTag == true ? '<i class="icon-ok icon-fixed-width" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  
+				aItems.push( { 'html': (hasTag == true ? '<i class="icon-ok fa-fw" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  
 					var $filter = $(this); 
 					cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), $filter.find('i.icon-ok').length == 0 ); 
 				} } );

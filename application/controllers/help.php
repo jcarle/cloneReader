@@ -38,7 +38,7 @@ class Help extends CI_Controller {
 		$form = array(
 			'frmId'			=> 'frmKeyboardShortcut',
 			'title'			=> $this->lang->line('Keyboard shortcut'),
-			'icon' 			=> 'icon-keyboard',
+			'icon' 			=> 'fa fa-keyboard',
 			'buttons'		=> array(),
 			'fields'		=> array(
 				'keyboardShortcut' => array(

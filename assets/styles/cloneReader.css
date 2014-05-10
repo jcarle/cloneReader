@@ -4,6 +4,7 @@
 	box-shadow: 1px 1px 5px #C1C1C1;
 	border-radius: 5px;
 	overflow: hidden;
+	height:auto;
 }
 	#header .logo  {
 		cursor: pointer;
