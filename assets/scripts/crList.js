@@ -120,7 +120,7 @@
 					if (aDelete.length == 0) { return;  }
 					
 					$(document).crAlert( {
-						'msg': 			_msg['Are you sure?'],
+						'msg': 			crLang.line('Are you sure?'),
 						'isConfirm': 	true,
 						'callback': 	function() {}
 					});
@@ -216,9 +216,9 @@
 						<span class="input-group-addon">\
 							<i class="fa fa-times" ></i>\
 						</span>\
-						<input type="text" name="filter" value="" class="form-control" placeholder="' + _msg['search'] + '" />\
+						<input type="text" name="filter" value="" class="form-control" placeholder="' + crLang.line('search') + '" />\
 						<span class="input-group-btn">\
-							<button type="submit" class="btn btn-default">' + _msg['Search'] + '</button>\
+							<button type="submit" class="btn btn-default">' + crLang.line('Search') + '</button>\
 						</span>\
 					</div>\
 				</div>\
@@ -309,7 +309,7 @@
 
 		var $tbody = $(' <tbody />').appendTo($table);
 		if (data['data'].length == 0) {
-			$( '<tr class="warning"><td colspan="' + (Object.keys(data['columns']).length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
+			$( '<tr class="warning"><td colspan="' + (Object.keys(data['columns']).length + 1) + '"> ' + crLang.line('No results') + ' </td></tr>').appendTo($tbody);
 		}
 
 		for (var i=0; i<data['data'].length; i++) {
@@ -340,18 +340,18 @@
 		var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 
 		if (urlDelete == true) {
-			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + _msg['Delete'] + ' </a>').appendTo($div);
+			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + crLang.line('Delete') + ' </a>').appendTo($div);
 		}
 		if (readOnly != true) {
 			$('\
 				<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
 					<i class="fa fa-file-o fa-fw"></i>\
-					' + _msg['Add'] + '\
+					' + crLang.line('Add') + '\
 				</a>\
 			').appendTo($div);
 		}
 		
-		$(' <span> ' + $.sprintf(_msg['%s rows'], $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);		
+		$(' <span> ' + $.sprintf(crLang.line('%s rows'), $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);		
 	
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 		var $ul	= $('<ul class="pagination">').appendTo($div);
@@ -418,10 +418,10 @@
 						<i class="fa fa-filter" ></i> \
 					</button> \
 					<div class="crFilterList  panel panel-default fade in crForm form-horizontal dropdown-menu"> \
-						<div class="panel-heading"> ' + _msg['Filter'] + ' </div> \
+						<div class="panel-heading"> ' + crLang.line('Filter') + ' </div> \
 						<div class="panel-body"> </div> \
 						<div class="modal-footer form-actions"> \
-							<button type="submit" class="btn btn-default"> <i class="fa fa-search" ></i> ' + _msg['Search'] + ' </button> \
+							<button type="submit" class="btn btn-default"> <i class="fa fa-search" ></i> ' + crLang.line('Search') + ' </button> \
 						</div> \
 					</div> \
 				</div> \

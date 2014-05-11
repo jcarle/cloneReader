@@ -21,8 +21,7 @@ function langJs($lines)
 		$json[$line] = $CI->lang->line($line);
 	}
 
-	$json = json_encode($json);
-	$script = 'var _msg = ' . $json . ';' . "\n";
+	$script = 'crLang.aLangs = ' . json_encode($json) . ';' . "\n";
 
 	return $script;
 

@@ -4,7 +4,7 @@ $.Feedback = {
 	onSaveFeedback: function(response) {
 		if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-		var $alert = $('<div class="alert alert-success"> <strong>' + _msg['Thanks for contacting us'] + ' </strong> </div>');
+		var $alert = $('<div class="alert alert-success"> <strong>' + crLang.line('Thanks for contacting us') + ' </strong> </div>');
 		$('#frmCommentEdit')
 			.hide()
 			.parent().append($alert);

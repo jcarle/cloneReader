@@ -314,7 +314,7 @@ $.extend({
 			return;
 		}
 		
-		var format = _msg['MOMENT_DATE_FORMAT'];
+		var format = crLang.line('MOMENT_DATE_FORMAT');
 		if ($element.hasClass('datetime')) {
 			format += ' HH:mm:ss';
 		}
@@ -424,7 +424,7 @@ $.extend({
 	formatNumber: function(value) { // TODO: ver si hay alguna manera de que autoNumeric devuelva el numero formateado sin tener que crear un $elemento
 		return $('<span />')
 			.text(value)
-			.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: 0 } )
+			.autoNumeric('init', { aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: '', mDec: 0 } )
 			.text();	
 	},
 	

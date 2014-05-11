@@ -13,10 +13,7 @@ crMenu = {
 	
 		
 		for (var i=0; i<aMenu.length; i++) {
-			var label 	= _msg[aMenu[i]['label']];
-			if (label == null) {
-				label = aMenu[i]['label'];
-			}
+			var label 	= crLang.line(aMenu[i]['label']);
 			var $li 	= $('<li></li>').appendTo($ul);
 			var $link 	= $('<a></a>')
 				.appendTo($li)

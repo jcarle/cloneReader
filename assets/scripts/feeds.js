@@ -25,7 +25,7 @@ $.Feeds = {
 	
 	deleteOldEntriesByFeedId: function(feedId) {
 		$(document).crAlert( {
-			'msg': 			_msg['Are you sure?'],
+			'msg': 			crLang.line('Are you sure?'),
 			'isConfirm': 	true,
 			'callback': 	function() {
 				$.ajax({

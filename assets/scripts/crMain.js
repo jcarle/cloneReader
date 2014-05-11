@@ -57,9 +57,9 @@ crMain = {
 				}
 				if (jqXHR.status === 0 && jqXHR.statusText === 'error') {
 					$(document).crAlert( {
-						'msg': 			_msg['Not connected. Please verify your network connection'],
+						'msg': 			crLang.line('Not connected. Please verify your network connection'),
 						'isConfirm': 	true,
-						'confirmText': 	_msg['Retry'],
+						'confirmText': 	crLang.line('Retry'),
 						'callback': 	$.proxy(
 							function() { $.ajax(ajaxOptions); }
 						, this)
@@ -97,7 +97,7 @@ crMain = {
 			'async':	(async == true),
 			'success': 
 				function(response) {
-					_msg = response['result']['aLangs']; // TODO: meter _msg en algun lado, que no sea global
+					crLang.aLangs = response['result']['aLangs'];
 		
 					var aMenu = response['result']['aMenu'];
 					for (var menuName in aMenu) {

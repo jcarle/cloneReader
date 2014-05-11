@@ -28,6 +28,7 @@ $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('crFunctions.js');
 $CI->carabiner->js('crMain.js');
+$CI->carabiner->js('crLang.js');
 $CI->carabiner->js('crAlert.js');
 $CI->carabiner->js('crMenu.js');
 $CI->carabiner->js('feedback.js');
@@ -86,7 +87,6 @@ $CI->carabiner->display('js');
 		var SITE_NAME				= '<?php echo SITE_NAME; ?>';
 		var DEFAULT_CURRENCY_ID  	= <?php echo DEFAULT_CURRENCY_ID; ?>;
 		var DEFAULT_CURRENCY_NAME	= '<?php echo DEFAULT_CURRENCY_NAME; ?>';
-		var _msg			 		= {};
 <?php
 if (!isset($langs)) {
 	$langs = array();

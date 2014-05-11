@@ -79,7 +79,7 @@
 				event.stopPropagation();
 				
 				$(document).crAlert( {
-					'msg': 			_msg['Are you sure?'],
+					'msg': 			crLang.line('Are you sure?'),
 					'isConfirm': 	true,
 					'callback': 	$.proxy(
 						function() {
@@ -185,10 +185,10 @@
 							}
 
 							var inputName 	= field.$input.attr('name');
-							var format 		= _msg['DATE_FORMAT'];
+							var format 		= crLang.line('DATE_FORMAT');
 							var minView		= 'month';
 							if (field['type'] == 'datetime') {
-							 	format 	= _msg['DATE_FORMAT'] + ' hh:ii:ss';
+							 	format 	= crLang.line('DATE_FORMAT') + ' hh:ii:ss';
 								minView	= 'hour';
 							}
 
@@ -252,7 +252,7 @@
 								'fail': 		
 									function (event, data) {
 										if (data.jqXHR.status === 0) {
-											return $(document).crAlert( _msg['Not connected. Please verify your network connection'] );
+											return $(document).crAlert( crLang.line('Not connected. Please verify your network connection') );
 										}
 										var response = $.parseJSON(data.jqXHR.responseText);
 										$.hasAjaxDefaultAction(response);
@@ -264,7 +264,7 @@
 							$maskNumeric
 								.removeAttr('name')
 								.insertBefore(field.$input)
-								.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: field.mDec } )
+								.autoNumeric('init', { aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: '', mDec: field.mDec } )
 								.change( function(event) {
 									$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 								});
@@ -517,7 +517,7 @@
 
 							var $tbody = $(' <tbody />').appendTo($table);
 							if (list['data'].length == 0) {
-								$( '<tr class="warning"><td colspan="' + (Object.keys(list['columns']).length + 1) + '"> ' + _msg['No results'] + ' </td></tr>').appendTo($tbody);
+								$( '<tr class="warning"><td colspan="' + (Object.keys(list['columns']).length + 1) + '"> ' + crLang.line('No results') + ' </td></tr>').appendTo($tbody);
 							}
 							for (var i=0; i<list['data'].length; i++) {
 								var row = list['data'][i];
@@ -544,7 +544,7 @@
 							$('<a class="btn btn-default btn-sm btnAdd" href="' + base_url + list['controller'] + '0" />') 
 								.appendTo(field.$input)
 								.append(' <i class="fa fa-plus"> </i> ')
-								.append(' ' + _msg['Add'])
+								.append(' ' + crLang.line('Add'))
 								.data( { 'crForm': this })
 								.click(
 									function() {
@@ -620,7 +620,7 @@
 				$maskPrice
 					.removeAttr('name')
 					.insertBefore($price)
-					.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: $currency.find('option:selected').text() +' ' } )
+					.autoNumeric('init', { aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: $currency.find('option:selected').text() +' ' } )
 					.change( function(event) {
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
@@ -630,12 +630,12 @@
 				$maskExchange
 					.removeAttr('name')
 					.insertBefore($exchange)
-					.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '' } )
+					.autoNumeric('init', { aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: '' } )
 					.change( function(event) {
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
 				
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
 
 				this.$form.bind('submit', $.proxy(
 					function($maskPrice, $maskExchange, event) {
@@ -659,7 +659,7 @@
 		
 		sumValues: function($total, aFieldName) {
 			if ($total.data('init-price') == null) {
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
 			}
 			
 			var total = 0;
@@ -723,9 +723,9 @@
 	
 	renderCrForm = function(data, $parentNode) {
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + _msg['Back'] + ' </button> ',
-			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + _msg['Save'] + ' </button> '	
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + crLang.line('Back') + ' </button> ',
+			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
@@ -768,9 +768,9 @@
 	
 	renderPopupForm = function(data) {
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + _msg['Close'] + '</button>',
-			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + _msg['Save'] + ' </button> '	
+			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + crLang.line('Close') + '</button>',
+			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
@@ -828,9 +828,9 @@
 	
 	renderAjaxForm = function(data, $parentNode) {
 		var buttons 	= [
-			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + _msg['Back'] + ' </button>',
-			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + _msg['Delete'] + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + _msg['Save'] + ' </button> '	
+			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + crLang.line('Back') + ' </button>',
+			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
@@ -902,7 +902,7 @@
 						.val(field['value'])
 						.addClass('form-control')
 						.attr('size', field['type'] == 'datetime' ? 18 : 9)
-						.attr('placeholder', _msg['DATE_FORMAT'] + (field['type'] == 'datetime' ? ' hh:mm:ss' : '') );
+						.attr('placeholder', crLang.line('DATE_FORMAT') + (field['type'] == 'datetime' ? ' hh:mm:ss' : '') );
 
 					$datetime = $('<div class="input-group" style="width:1px" />').appendTo($div);
 					$datetime.append($input);
@@ -933,7 +933,7 @@
 					if (field['appendNullOption'] == true) { // Apendeo aparte porque si lo hago en el objecto chrome lo desordena
 						$('<option />')
 							.val('')
-							.text('-- ' + _msg['Choose'] + ' --')
+							.text('-- ' + crLang.line('Choose') + ' --')
 							.appendTo($input);
 					}
 					
@@ -987,7 +987,7 @@
 						<div id="' + name + '" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >\
 							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">\
 								<i class="fa fa-picture-o" ></i>\
-								' + _msg['Edit pictures'] + '\
+								' + crLang.line('Edit pictures') + '\
 							</button>\
 							<div class="thumbnails" ></div>\
 						</div>\
@@ -998,7 +998,7 @@
 						<div name="' + name + '" class="subform ">\
 							<div class="alert alert-info">\
 								<i class="fa fa-spinner fa-spin fa-lg"></i>\
-								<small>' + _msg['loading ...'] + '</small>\
+								<small>' + crLang.line('loading ...') + '</small>\
 							</div>\
 						</div>');
 					break;
@@ -1022,7 +1022,7 @@
 						<div class="col-md-5">\
 							<span class="btn btn-success fileinput-button">\
 								<i class="fa fa-plus"></i>\
-								<span>' + _msg['Add File'] + '</span> \
+								<span>' + crLang.line('Add File') + '</span> \
 								<input type="file" name="userfile" > \
 							</span> \
 						</div> \

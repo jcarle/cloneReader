@@ -45,7 +45,7 @@ cloneReader = {
 			this.$dropdownMenu 	= $('ul.menuProfile').find('.fa-gear').parent().parent().find('ul.dropdown-menu:first');
 			
 			$('<li role="presentation" class="divider"></li>').appendTo(this.$dropdownMenu);
-			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + _msg['Keyboard shortcut'] + '">' + _msg['Keyboard shortcut'] + '</a></li>').appendTo(this.$dropdownMenu);			
+			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + crLang.line('Keyboard shortcut') + '">' + crLang.line('Keyboard shortcut') + '</a></li>').appendTo(this.$dropdownMenu);			
 		}
 		
 		if (this.$page.is(':visible') == true) {
@@ -245,29 +245,29 @@ cloneReader = {
 		this.$toolbar.html(' \
 			<ul class="nav navbar-nav"> \
 				<li> \
-					<button title="' + _msg['Expand'] + '" class="expand"> \
+					<button title="' + crLang.line('Expand') + '" class="expand"> \
 						<i class="fa fa-exchange"  /> \
-						<span class="btnLabel">' +  _msg['Expand'] + '</span> \
+						<span class="btnLabel">' +  crLang.line('Expand') + '</span> \
 					</button> \
 				</li> \
 			</ul> \
 			<ul class="nav mainToolbar"> \
 				<li> \
-					<button title="' + _msg['Add feed'] + '" class="add" > \
+					<button title="' + crLang.line('Add feed') + '" class="add" > \
 						<i class="fa fa-plus" /> \
-						<span class="btnLabel">' + _msg['Add feed'] + '</span> \
+						<span class="btnLabel">' + crLang.line('Add feed') + '</span> \
 					</button> \
 				</li> \
 				<li> \
-					<button title="' + _msg['Mark all as read'] + '" class="btnMarkAllAsRead" > \
+					<button title="' + crLang.line('Mark all as read') + '" class="btnMarkAllAsRead" > \
 						<i class="fa fa-archive" /> \
-						<span>' + _msg['Mark all as read'] + '</span> \
+						<span>' + crLang.line('Mark all as read') + '</span> \
 					</button> \
 				</li> \
 				<li> \
 					<div class="btn-group feedSettings" > \
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="' + _msg['Feed settings'] + '"> \
-							<span> ' + _msg['Feed settings'] +' </span> \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="' + crLang.line('Feed settings') + '"> \
+							<span> ' + crLang.line('Feed settings') +' </span> \
 							<span class="caret" /> \
 						</button> \
 						<ul class="dropdown-menu popupFeedSettings" /> \
@@ -275,13 +275,13 @@ cloneReader = {
 				</li> \
 				<li> \
 					<div class="btn-group filterSort" > \
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="' + _msg['Sort'] + '" > \
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="' + crLang.line('Sort') + '" > \
 							<span/> \
 							<span class="caret" /> \
 						</button> \
 						<ul class="dropdown-menu" > \
-							<li class="filterNewestSort"> <a> ' + _msg['Sort by newest'] + ' </a> </li> \
-							<li class="filterOldestSort"> <a> ' + _msg['Sort by oldest'] + ' </a> </li> \
+							<li class="filterNewestSort"> <a> ' + crLang.line('Sort by newest') + ' </a> </li> \
+							<li class="filterOldestSort"> <a> ' + crLang.line('Sort by oldest') + ' </a> </li> \
 						</ul> \
 					</div> \
 				</li> \
@@ -292,30 +292,30 @@ cloneReader = {
 							<span class="caret" /> \
 						</button> \
 						<ul class="dropdown-menu" > \
-							<li class="filterAllItems"> <a> '+ _msg['All items'] + ' </a> </li> \
-							<li class="filterOnlyUnread" > <a> ' + $.sprintf(_msg['%s unread items'], '  <span class="count" /> ')   + ' </a> </li> \
+							<li class="filterAllItems"> <a> '+ crLang.line('All items') + ' </a> </li> \
+							<li class="filterOnlyUnread" > <a> ' + $.sprintf(crLang.line('%s unread items'), '  <span class="count" /> ')   + ' </a> </li> \
 						</ul> \
 					</div> \
 				</li> \
 				<li> \
 					<div class="btn-group" data-toggle="buttons-radio" > \
-						<button class="viewList" title="' + _msg['List view'] + '" > \
+						<button class="viewList" title="' + crLang.line('List view') + '" > \
 							<i class="fa fa-align-justify" /> \
 						</button> \
-						<button class="viewDetail" title="' + _msg['Detail view'] + '" > \
+						<button class="viewDetail" title="' + crLang.line('Detail view') + '" > \
 							<i class="fa fa-th-list" /> \
 						</button> \
 					</div> \
 				</li> \
 				<li> \
-					<button title="' + _msg['Reload'] + '" class="reload" > <i class="fa fa-refresh" /> \
-						<span class="btnLabel">' + _msg['Reload'] + '</span> \
+					<button title="' + crLang.line('Reload') + '" class="reload" > <i class="fa fa-refresh" /> \
+						<span class="btnLabel">' + crLang.line('Reload') + '</span> \
 					 </button> \
 				</li> \
 				<li class="directionNav" > \
 					<div class="btn-group"  > \
-						<button title="' + _msg['Prev'] + '" class="prev" > <i class="fa fa-caret-up" /> </button> \
-						<button title="' + _msg['Next'] + '" class="next" > <i class="fa fa-caret-down" /> </button> \
+						<button title="' + crLang.line('Prev') + '" class="prev" > <i class="fa fa-caret-up" /> </button> \
+						<button title="' + crLang.line('Next') + '" class="next" > <i class="fa fa-caret-down" /> </button> \
 					</div> \
 				</li> \
 			</ul> \
@@ -340,7 +340,7 @@ cloneReader = {
 		this.$mainToolbar.find('.filterOldestSort').click(function(event) { cloneReader.loadEntries(true, false, {'sortDesc': false}); });
 		this.$mainToolbar.find('.add').click(  function(event) {  
 				event.stopPropagation(); 
-				cloneReader.showPopupForm(_msg['Add new feed'], _msg['Add feed url'], function() { cloneReader.addFeed(); }, $(event.target)); 
+				cloneReader.showPopupForm(crLang.line('Add new feed'), crLang.line('Add feed url'), function() { cloneReader.addFeed(); }, $(event.target)); 
 			}
 		);
 		this.$mainToolbar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
@@ -523,15 +523,15 @@ cloneReader = {
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 
-		$('<label title="' + _msg['Star'] + '"><i /></label>').addClass('star fa').appendTo($header);
+		$('<label title="' + crLang.line('Star') + '"><i /></label>').addClass('star fa').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
 					
 		
 		if (entry.entryAuthor == '') {
-			var entryOrigin = $.sprintf(_msg['From %s'], '<a >' + entry.feedName + '</a>');
+			var entryOrigin = $.sprintf(crLang.line('From %s'), '<a >' + entry.feedName + '</a>');
 		}
 		else {
-			var entryOrigin = $.sprintf(_msg['From %s by %s'], '<a >' + entry.feedName + '</a>', entry.entryAuthor);
+			var entryOrigin = $.sprintf(crLang.line('From %s by %s'), '<a >' + entry.feedName + '</a>', entry.entryAuthor);
 		}
 		var $div = $('<div class="entryOrigin" />').html( entryOrigin).appendTo($header);
 	
@@ -546,8 +546,8 @@ cloneReader = {
 
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 
-		$('<label class="star checkbox" title="' + _msg['Star'] + '" > <i/> </label>').appendTo($footer);
-		$('<label class="read checkbox" > <i/> <span> ' + _msg['Keep unread'] + ' </span> </label>').appendTo($footer);
+		$('<label class="star checkbox" title="' + crLang.line('Star') + '" > <i/> </label>').appendTo($footer);
+		$('<label class="read checkbox" > <i/> <span> ' + crLang.line('Keep unread') + ' </span> </label>').appendTo($footer);
 		
 
 		$('<a class="btnSocial fa fa-lg fa-envelope"  />')
@@ -660,10 +660,10 @@ TODO: pensar como mejorar esta parte
 		this.$noResult.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
-			this.$noResult.html('<div class="alert alert-info"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + _msg['loading ...'] + '</div>').addClass('loading');
+			this.$noResult.html('<div class="alert alert-info"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + crLang.line('loading ...') + '</div>').addClass('loading');
 		}
 		else {
-			this.$noResult.html('<div class="well well-lg"> ' + _msg['no more entries'] + ' </div>').removeClass('loading');
+			this.$noResult.html('<div class="well well-lg"> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');
 		}
 		
 		this.resizeNoResult();
@@ -1228,10 +1228,10 @@ console.timeEnd("t1");
 	addFeed: function() {
 		var feedUrl = this.$popupForm.find('input').val();
 		if (feedUrl == '') {
-			return this.$popupForm.find('input').crAlert(_msg['Enter a url']);
+			return this.$popupForm.find('input').crAlert(crLang.line('Enter a url'));
 		}
 		if ($.validateUrl(feedUrl) == false) {
-			return this.$popupForm.find('input').crAlert(_msg['Enter a valid url']);
+			return this.$popupForm.find('input').crAlert(crLang.line('Enter a valid url'));
 		}
 
 		this.hidePopupWindow();
@@ -1335,7 +1335,7 @@ console.timeEnd("t1");
 
 
 		$(document).crAlert( {
-			'msg': 			$.sprintf( _msg['Mark "%s" as read?'], filter.name),
+			'msg': 			$.sprintf( crLang.line('Mark "%s" as read?'), filter.name),
 			'isConfirm': 	true,
 			'callback': 	$.proxy(
 				function() {
@@ -1365,7 +1365,7 @@ console.timeEnd("t1");
 		var filter = this.getFilter(this.aFilters);
 		
 		$(document).crAlert( {
-			'msg': 			$.sprintf( _msg['Unsubscribe "%s"?'], filter.name),
+			'msg': 			$.sprintf( crLang.line('Unsubscribe "%s"?'), filter.name),
 			'isConfirm': 	true,
 			'callback': 	$.proxy(		
 				function () {
@@ -1427,11 +1427,11 @@ console.timeEnd("t1");
 		var feedId = this.aFilters.id;
 
 		var aItems = [
-			{ 'html': _msg['Unsubscribe'], 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
-			{ 'html': _msg['New tag'], 			'class': 'newTag', 'callback': 
+			{ 'html': crLang.line('Unsubscribe'), 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
+			{ 'html': crLang.line('New tag'), 			'class': 'newTag', 'callback': 
 				function(event) {
 					event.stopPropagation(); 
-					cloneReader.showPopupForm(_msg['Add new tag'], _msg['enter tag name'], function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
+					cloneReader.showPopupForm(crLang.line('Add new tag'), crLang.line('enter tag name'), function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
 				}
 			},
 			{ 'class': 'divider' }
@@ -1650,9 +1650,9 @@ console.timeEnd("t1");
 												<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
 												<p class="list-group-item-text">' + (feed.feedDescription == null ? '' : feed.feedDescription) + '</p>  \
 												<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
-												<button title="' + _msg['Subscribe'] + '" class="btn btn-success" type="button"> \
+												<button title="' + crLang.line('Subscribe') + '" class="btn btn-success" type="button"> \
 													<i class="fa fa-plus"  /> \
-													<span class="btnLabel">' +  _msg['Subscribe'] + '</span> \
+													<span class="btnLabel">' +  crLang.line('Subscribe') + '</span> \
 												</button> \
 											</div>');
 											

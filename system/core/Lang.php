@@ -148,6 +148,7 @@ class CI_Lang {
 		if ($value === FALSE)
 		{
 			log_message('error', 'Could not find the language line "'.$line.'"');
+			return $line;
 		}
 
 		return $value;

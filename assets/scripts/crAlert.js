@@ -47,7 +47,7 @@
 					msg:			'',
 					callback:		null,
 					isConfirm:		false,
-					confirmText:	_msg['Ok']
+					confirmText:	crLang.line('Ok')
 				},
 				(typeof options === 'string' ? { msg: options } :
 					($(options).get(0).tagName != null ? { msg: options } : options ) )
@@ -58,7 +58,7 @@
 			this.$modalContent 	= $('<div class="modal-content" />').appendTo(this.$modalDialog);
 			this.$body	 		= $('<div />').html(this.options.msg).addClass('modal-body').appendTo(this.$modalContent);
 			this.$footer	 	= $('<div />').addClass('modal-footer').appendTo(this.$modalContent);
-			this.$btn 			= $('<button data-dismiss="modal" class="btn btn-default" />').text(this.options.isConfirm == true ? _msg['Cancel'] : _msg['Close']).appendTo(this.$footer);
+			this.$btn 			= $('<button data-dismiss="modal" class="btn btn-default" />').text(this.options.isConfirm == true ? crLang.line('Cancel') : crLang.line('Close')).appendTo(this.$footer);
 			
 			if (this.options.isConfirm == true) {
 				$('<button data-dismiss="modal" class="btn btn-primary" />')
