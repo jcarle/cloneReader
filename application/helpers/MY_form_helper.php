@@ -344,7 +344,6 @@ function appendCrFormJsAndCss($aScripts) {
 
 	if ($CI->session->userdata('langId') != 'en') {
 		$aTmp = explode('-', $CI->session->userdata('langId'));
-			
 		if (count($aTmp) == 2) {
 			$CI->carabiner->js('select2/select2_locale_'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');	
 			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');
