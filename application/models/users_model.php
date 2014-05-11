@@ -87,10 +87,10 @@ class Users_Model extends CI_Model {
 		
 		if ($aRemoteLogin != null) {
 			$aTmp = array();
-			if (element('facebook', $aRemoteLogin)) {
+			if (in_array('facebook', $aRemoteLogin)) {
 				$aTmp[] = 'facebookUserId IS NOT NULL';
 			}
-			if (element('google', $aRemoteLogin)) {
+			if (in_array('google', $aRemoteLogin)) {
 				$aTmp[] = 'googleUserId IS NOT NULL';
 			}
 			if (!empty($aTmp)) {
