@@ -426,6 +426,16 @@ $.extend({
 			.text(value)
 			.autoNumeric('init', { aSep: _msg['NUMBER_THOUSANDS_SEP'], aDec: _msg['NUMBER_DEC_SEP'],  aSign: '', mDec: 0 } )
 			.text();	
+	},
+	
+	normalizeLang: function(langId) {
+		// FIXME: mejorar esto, pone una parte del langId en mayusculas. Se usa en datetimepicker
+		var aTmp = langId.split('-');
+		if (aTmp.length == 2) {
+			return aTmp[0] + '-' + aTmp[1].toUpperCase();
+		}
+		
+		return langId;
 	}
 });
 

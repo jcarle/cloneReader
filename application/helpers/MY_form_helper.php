@@ -354,22 +354,6 @@ function appendCrFormJsAndCss($aScripts) {
 		}
 	}
 	
-	/*
-	switch ($CI->session->userdata('langId')) {
-		case 'es':
-			$CI->carabiner->js('select2/select2_locale_es.js');	
-			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.es.js');
-			break;
-		case 'pt':
-			$CI->carabiner->js('select2/select2_locale_pt-BR.js');	
-			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.pt-BR.js');
-			break;
-		case 'zh_TW':
-			$CI->carabiner->js('select2/select2_locale_zh-TW.js');
-			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.zh-TW.js');
-			break;
-	}*/
-	
 	$CI->carabiner->js('tmpl.min.js');	
 	$CI->carabiner->js('jquery.ui.widget.js');
 	$CI->carabiner->js('jquery.fileupload.js');

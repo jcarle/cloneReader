@@ -208,11 +208,11 @@
 										datetimepicker.date.setSeconds(0);
 										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
 									}
-								);			
+								);
 							
  							field.$input.parent()
 								.addClass('date form_datetime')
-								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': langId, 'pickerPosition': 'bottom-left' });
+								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': $.normalizeLang(langId), 'pickerPosition': 'bottom-left' });
 
 							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
 							field.$input.parent().datetimepicker('show').datetimepicker('hide');
