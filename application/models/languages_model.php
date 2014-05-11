@@ -4,6 +4,13 @@ class Languages_Model extends CI_Model {
 		return $this->db->order_by('langName')->get('languages')->result_array();
 	}
 	
+	function selectToDropdown(){
+		return $this->db
+			->select('langId AS id, langName AS text', true)
+			->order_by('langName')
+			->get('languages')->result_array();
+	}
+	
 	function getRelatedLangs($langId) {
 		$result = array();
 		$query = $this->db

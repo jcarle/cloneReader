@@ -32,7 +32,7 @@ class Testing extends CI_Controller {
 						'type'				=> 'dropdown',
 						'label'				=> 'Country', 
 						'value'				=> $this->input->get('countryId'),
-						'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+						'source'			=> $this->Countries_Model->selectToDropdown(),
 						'appendNullOption' 	=> true
 					)
 				)
@@ -57,7 +57,7 @@ class Testing extends CI_Controller {
 				'countryId' => array(
 					'type'		=> 'dropdown',
 					'label'		=> 'Country', 
-					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'source'	=> $this->Countries_Model->selectToDropdown(),
 				),
 				'stateId' => array(
 					'type'			=> 'dropdown',
@@ -198,7 +198,7 @@ class Testing extends CI_Controller {
 				'countryId' => array(
 					'type'		=> 'dropdown',
 					'label'		=> 'Country',
-					'source'	=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName')
+					'source'	=> $this->Countries_Model->selectToDropdown()
 				),
 				'testChildDate' => array(
 					'type'	=> 'datetime',

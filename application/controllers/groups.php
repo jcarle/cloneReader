@@ -49,10 +49,10 @@ class Groups extends CI_Controller {
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Home page'),
 				),
-				'controllers[]' => array(
+				'controllers' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Controllers'),
-					'source'	=> array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
+					'source'	=> array_to_object($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
 					'showId'	=> true
 				)
 			)

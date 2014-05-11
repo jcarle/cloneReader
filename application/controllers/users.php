@@ -17,9 +17,10 @@ class Users extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$aRemoteLogin = array();
-		if (is_array($this->input->get('remoteLogin'))) {
-			foreach ($this->input->get('remoteLogin') as $provider) {
+		$aRemoteLogin 	= array();
+		$remoteLogin	= json_decode($this->input->get('remoteLogin'));
+		if (is_array($remoteLogin)) {
+			foreach ($remoteLogin as $provider) {
 				$aRemoteLogin[] = $provider;
 			}
 		}
@@ -56,14 +57,14 @@ class Users extends CI_Controller {
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Country'),
 						'value'				=> $this->input->get('countryId'),
-						'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+						'source'			=> $this->Countries_Model->selectToDropdown(),
 						'appendNullOption'	=> true,
 					),				
 					'langId' => array(
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Language'), 
 						'value'				=> $this->input->get('langId'),
-						'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
+						'source'			=> $this->Languages_Model->selectToDropdown(),
 						'appendNullOption'	=> true,
 					),
 					'feedId' => array(
@@ -72,7 +73,7 @@ class Users extends CI_Controller {
 						'source' 	=> base_url('feeds/search/'),
 						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
 					),					
-					'remoteLogin[]' => array(
+					'remoteLogin' => array(
 						'type'		=> 'groupCheckBox',
 						'label'		=> $this->lang->line('Remote login'),
 						'source'	=> array(
@@ -117,13 +118,13 @@ class Users extends CI_Controller {
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption'	=> true,
 				),
 				'groups[]' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Groups'),
-					'source'	=> array_to_select($this->Groups_Model->select(), 'groupId', 'groupName'),
+					'source'	=> $this->Groups_Model->selectToDropdown(),
 					'showId'	=> true,
 				),
 			)

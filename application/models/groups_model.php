@@ -10,13 +10,20 @@ class Groups_Model extends CI_Model {
 	}
 	
 	function select(){
-		return $this->db->order_by('groupName')->order_by('groupName')->get('groups')->result_array();
-	}	
+		return $this->db->order_by('groupName')->get('groups')->result_array();
+	}
+	
+	function selectToDropdown(){
+		return $this->db
+			->select('groupId AS id, groupName AS text', true)
+			->order_by('groupName')
+			->get('groups')->result_array();
+	}
 			
 	function get($groupId){
 		$this->db->where('groupId', $groupId);
 		$result 				= $this->db->get('groups')->row_array();
-		$result['controllers'] 	= array_to_select($this->getControllers($groupId), 'controllerId');
+		$result['controllers'] 	= array_to_object($this->getControllers($groupId), 'controllerId');
 		return $result;
 	}	
 	
@@ -47,8 +54,9 @@ class Groups_Model extends CI_Model {
 		
 		$this->db->where('groupId', $groupId);
 		$result = $this->db->delete('groups_controllers');
-		if (is_array(element('controllers', $data))) {
-			foreach ($data['controllers'] as $controllerId) {
+		$controllers = json_decode(element('controllers', $data));
+		if (is_array($controllers)) {
+			foreach ($controllers as $controllerId) {
 				$this->db->insert('groups_controllers', array('groupId' => $groupId, 'controllerId' => $controllerId));			
 			}		
 		}

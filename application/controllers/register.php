@@ -39,7 +39,7 @@ class Register extends CI_Controller {
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption' 	=> true,
 				),
 			)

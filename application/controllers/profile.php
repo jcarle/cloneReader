@@ -55,7 +55,7 @@ class Profile extends CI_Controller {
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
 					'value'				=> element('countryId', $data),
-					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption' 	=> true,
 				),
 			)

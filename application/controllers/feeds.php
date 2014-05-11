@@ -64,21 +64,21 @@ class Feeds extends CI_Controller {
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Status'),
 						'value'				=> $statusId,
-						'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
+						'source'			=> $this->Status_Model->selectToDropdown(),
 						'appendNullOption' 	=> true
 					),
 					'countryId' => array(
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Country'),
 						'value'				=> $this->input->get('countryId'),
-						'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+						'source'			=> $this->Countries_Model->selectToDropdown(),
 						'appendNullOption' 	=> true
 					),
 					'langId' => array(
 						'type'				=> 'dropdown',
 						'label'				=> $this->lang->line('Language'),
 						'value'				=> $this->input->get('langId'),
-						'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
+						'source'			=> $this->Languages_Model->selectToDropdown(),
 						'appendNullOption' 	=> true
 					),
 					'tagId' => array(
@@ -109,7 +109,7 @@ class Feeds extends CI_Controller {
 					'feedLastEntryDate'	=> $this->lang->line('Last entry'),
 					'feedLastScan' 		=> $this->lang->line('Last update'),
 					'feedCountUsers' 	=> $this->lang->line('Count users'),
-					'feedCountEntries' 	=> $this->lang->line('Count entries'),					
+					'feedCountEntries' 	=> $this->lang->line('Count entries'),
 				)				
 			)
 		));
@@ -182,13 +182,13 @@ class Feeds extends CI_Controller {
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'source'			=> array_to_select($this->Countries_Model->select(), 'countryId', 'countryName'),
+					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption' 	=> true
 				),
 				'langId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Language'),
-					'source'			=> array_to_select($this->Languages_Model->select(), 'langId', 'langName'),
+					'source'			=> $this->Languages_Model->selectToDropdown(),
 					'appendNullOption' 	=> true
 				),
 				'feedLastEntryDate' => array(
@@ -202,7 +202,7 @@ class Feeds extends CI_Controller {
 				'statusId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Status'),
-					'source'			=> array_to_select($this->Status_Model->select(), 'statusId', 'statusName'),
+					'source'			=> $this->Status_Model->selectToDropdown(),
 					'disabled'			=> true
 				),
 				'aTagId' => array(

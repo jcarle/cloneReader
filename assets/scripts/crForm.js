@@ -127,7 +127,7 @@
 
 				var field 		= this.options.fields[fieldName];
 				field.name 		= fieldName;
-				field.$input	= $('*[name="' + field['name'] + '"]', this.$form);
+				field.$input	= this.$form.find('*[name="' + field['name'] + '"]');
 				
 				if (field['type'] != null) {
 					field.$input.data( 'field', field);
@@ -268,23 +268,30 @@
 								.change( function(event) {
 									$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 								});
-											
+							break;
+						case 'groupCheckBox':	
+							field.$input.removeAttr('name');
+							var $field = field.$input.find('input:first').attr('name', field['name']);
+							field.$input.data('$field', $field);
+						
+							field.$input.find('input[type=checkbox]')
+								.click($.proxy(
+									function(event) {
+										this.checkGroupCheckBox($(event.target));
+										this.updateGroupCheckBox($(event.target).parents('ul'));
+									}
+								, this))
+								.each($.proxy(
+									function (i, checkbox) {
+										this.checkGroupCheckBox($(checkbox));
+									}
+								, this))
+								
+							this.updateGroupCheckBox(field.$input);
 							break;
 					}
 				}
 			}
-			
-			this.$form.find('.groupCheckBox input[type=checkbox]')
-				.click($.proxy(
-					function(event) {
-						this.checkGroupCheckBox($(event.target));
-					}
-				, this))
-				.each($.proxy(
-					function (i, input) {
-						this.checkGroupCheckBox($(input));
-					}
-				, this));				
 		},
 
 		initCallbacks: function(){
@@ -702,11 +709,27 @@
 			});
 		},
 		
-		checkGroupCheckBox: function($input) { 
-			var $li = $input.parents('li');
+		checkGroupCheckBox: function($checkbox) { 
+			var $li = $checkbox.parents('li');
 			$li.removeClass('active');
-			if ($input.is(':checked') == true) {
+			if ($checkbox.is(':checked') == true) {
 				$li.addClass('active');
+			}
+		},
+		
+		updateGroupCheckBox: function($input) {
+			var value 		= [];
+			var aCheckbox 	= $input.find('input[type=checkbox]');
+			$input.data('$field').val('');
+			
+			for (var i=0; i<aCheckbox.length; i++) {
+				var $checkbox = $(aCheckbox[i]);
+				if ($checkbox.is(':checked') == true) {
+					value.push($checkbox.val());
+				}
+			}
+			if (value.length > 0) {
+				$input.data('$field').val($.toJSON(value));
 			}
 		},
 		
@@ -715,6 +738,9 @@
 		},
 		
 		resizeWindow: function() {
+			if (this.$form.is(':visible') != true) {
+				return;
+			}
 			var width = this.$form.width();
 			this.$form.find('.table-responsive').css('max-width', width - 30 );
 		}
@@ -940,8 +966,8 @@
 					for (var item in source) {
 						var item 	= field['source'][item];
 						$('<option />')
-							.val(item['key'])
-							.text(item['value'])
+							.val(item['id'])
+							.text(item['text'])
 							.appendTo($input);
 					}
 					
@@ -952,17 +978,18 @@
 					break;
 				case 'groupCheckBox':
 					var showId 	= field['showId'] == true;
-					var $input 	= $('<ul class="groupCheckBox " />').appendTo($div);
+					var $input 	= $('<ul class="groupCheckBox" name="' + name + '" />').appendTo($div);
+					
+					$('<li><input type="text" /> </li>').appendTo($input);
 
 					for (var item in field['source']) {
 						var item 	= field['source'][item];
-						var key 	= item['key'];
 						$input.append('\
 							<li>\
 								<div class="checkbox">\
 									 <label>\
-										<input type="checkbox" name="' + name + '" value="' + key + '" ' + ($.inArray(key, field['value']) != -1 ? ' checked="checked" ' : '' ) + ' />\
-										' + item['value'] + (showId == true ? ' - ' + key : '')  +'\
+										<input type="checkbox" value="' + item['id'] + '" ' + ($.inArray(item['id'], field['value']) != -1 ? ' checked="checked" ' : '' ) + ' />\
+										' + item['text'] + (showId == true ? ' - ' + item['id'] : '')  +'\
 									</label>\
 								</div>\
 							</li>');
@@ -1067,5 +1094,3 @@
 		return $ul;
 	}	
 })($);
-
-var culo;
