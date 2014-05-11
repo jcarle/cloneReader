@@ -218,13 +218,13 @@ function renderCrFormFields($form) {
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);
 				$sTmp = '<ul class="groupCheckBox ">';
-				foreach ($field['source'] as $key => $value) {
+				foreach ($field['source'] as $item) {
 					$sTmp .= 
 						'<li>
 							<div class="checkbox">
 								 <label>' 
-									.form_checkbox($name, $key, in_array($key, $field['value']))
-									.$value.($showId == true ? ' - '.$key : '').'
+									.form_checkbox($name, $item['key'], in_array($item['key'], $field['value']))
+									.$item['value'].($showId == true ? ' - '.$item['key'] : '').'
 								</label>
 							</div>
 						</li>';

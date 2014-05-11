@@ -20,7 +20,7 @@ class Users extends CI_Controller {
 		$aRemoteLogin = array();
 		if (is_array($this->input->get('remoteLogin'))) {
 			foreach ($this->input->get('remoteLogin') as $provider) {
-				$aRemoteLogin[$provider] = $provider;
+				$aRemoteLogin[] = $provider;
 			}
 		}
 		
@@ -76,8 +76,8 @@ class Users extends CI_Controller {
 						'type'		=> 'groupCheckBox',
 						'label'		=> $this->lang->line('Remote login'),
 						'source'	=> array(
-							'facebook' 	=> 'Facebook',
-							'google' 	=> 'Google',
+							array('key' => 'facebook', 	'value' => 'Facebook'),
+							array('key' => 'google' ,	'value'	=> 'Google'),
 						), 
 						'value'		=> $aRemoteLogin
 					)
