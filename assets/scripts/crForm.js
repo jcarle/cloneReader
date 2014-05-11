@@ -581,6 +581,7 @@
 			$.ajax( {
 				'type': 		'get', 
 				'url':			controller,
+				'data': 		{ 'pageJson': true },
 				'success': 		
 					$.proxy( 
 						function (response) {
@@ -936,10 +937,11 @@
 							.appendTo($input);
 					}
 					
-					for (var key in source) {
+					for (var item in source) {
+						var item 	= field['source'][item];
 						$('<option />')
-							.val(key)
-							.text(source[key])
+							.val(item['key'])
+							.text(item['value'])
 							.appendTo($input);
 					}
 					
@@ -951,13 +953,16 @@
 				case 'groupCheckBox':
 					var showId 	= field['showId'] == true;
 					var $input 	= $('<ul class="groupCheckBox " />').appendTo($div);
-					for (var key in field['source']) {
+
+					for (var item in field['source']) {
+						var item 	= field['source'][item];
+						var key 	= item['key'];
 						$input.append('\
 							<li>\
 								<div class="checkbox">\
 									 <label>\
-										<input type="checkbox" name="' + name + '" value="' + key + '" ' + (field['value'][key] != null ? ' checked="checked" ' : '' ) + ' />\
-										' + field['source'][key] + (showId == true ? ' - ' + key : '')  +'\
+										<input type="checkbox" name="' + name + '" value="' + key + '" ' + ($.inArray(key, field['value']) != -1 ? ' checked="checked" ' : '' ) + ' />\
+										' + item['value'] + (showId == true ? ' - ' + key : '')  +'\
 									</label>\
 								</div>\
 							</li>');
@@ -1062,3 +1067,5 @@
 		return $ul;
 	}	
 })($);
+
+var culo;

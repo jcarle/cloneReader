@@ -223,7 +223,7 @@ function renderCrFormFields($form) {
 						'<li>
 							<div class="checkbox">
 								 <label>' 
-									.form_checkbox($name, $key, element($key, $field['value']))
+									.form_checkbox($name, $key, in_array($key, $field['value']))
 									.$value.($showId == true ? ' - '.$key : '').'
 								</label>
 							</div>
@@ -342,6 +342,20 @@ function appendCrFormJsAndCss($aScripts) {
 	$CI->carabiner->js('autoNumeric.js');
 	$CI->carabiner->js('bootstrap-datetimepicker.js');
 
+	if ($CI->session->userdata('langId') != 'en') {
+		$aTmp = explode('-', $CI->session->userdata('langId'));
+			
+		if (count($aTmp) == 2) {
+			$CI->carabiner->js('select2/select2_locale_'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');	
+			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');
+		}
+		else {
+			$CI->carabiner->js('select2/select2_locale_es.js');	
+			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.es.js');
+		}
+	}
+	
+	/*
 	switch ($CI->session->userdata('langId')) {
 		case 'es':
 			$CI->carabiner->js('select2/select2_locale_es.js');	
@@ -355,7 +369,7 @@ function appendCrFormJsAndCss($aScripts) {
 			$CI->carabiner->js('select2/select2_locale_zh-TW.js');
 			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.zh-TW.js');
 			break;
-	}
+	}*/
 	
 	$CI->carabiner->js('tmpl.min.js');	
 	$CI->carabiner->js('jquery.ui.widget.js');

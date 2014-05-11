@@ -3,18 +3,18 @@ class Controllers_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
 		$query = $this->db->select("SQL_CALC_FOUND_ROWS controllerId, controllerName, controllerUrl, IF(controllerActive, 'X', '') AS controllerActive", false)
 						->like('controllerName', $filter)
-		 				->get("controllers", $num, $offset);
+						->get("controllers", $num, $offset);
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}
 	
 	function select($onlyActive = false){
-		 $query = $this->db->order_by('controllerName');
-		 
-		 if ($onlyActive == true) {
-		 	$query->where('controllerActive', true);
-		 }
+		$query = $this->db->order_by('controllerName');
+		
+		if ($onlyActive == true) {
+			$query->where('controllerActive', true);
+		}
 
 		return $query->get('controllers')->result_array();
 	}	

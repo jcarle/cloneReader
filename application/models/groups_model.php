@@ -16,7 +16,7 @@ class Groups_Model extends CI_Model {
 	function get($groupId){
 		$this->db->where('groupId', $groupId);
 		$result 				= $this->db->get('groups')->row_array();
-		$result['controllers'] 	= array_to_select($this->getControllers($groupId), 'controllerId', 'controllerId');
+		$result['controllers'] 	= array_to_select($this->getControllers($groupId), 'controllerId');
 		return $result;
 	}	
 	

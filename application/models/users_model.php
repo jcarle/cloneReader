@@ -175,7 +175,7 @@ class Users_Model extends CI_Model {
 	function get($userId){
 		$this->db->where('userId', $userId);
 		$result				= $this->db->get('users')->row_array();
-		$result['groups'] 	= array_to_select($this->getGroups($userId), 'groupId', 'groupId');
+		$result['groups'] 	= array_to_select($this->getGroups($userId), 'groupId');
 		return $result;
 	}	
 	

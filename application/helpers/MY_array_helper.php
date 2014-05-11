@@ -1,10 +1,26 @@
 <?php
 function array_to_select() {
+	$CI = &get_instance();
 
 	$args = func_get_args();
 
 	$return = array();
 
+	if ($CI->input->get('pageJson') == true) {
+		switch(count($args)) {
+			case 3 :
+				foreach ($args[0] as $itteration) {
+					$return[] = array('key' => $itteration[$args[1]], 'value' => $itteration[$args[2]]);
+				}
+				return $return;
+			case 2 :
+				foreach ($args[0] as $itteration) {
+					$return[] = $itteration[$args[1]];
+				}
+				return $return;
+		}
+	}	
+	
 	switch(count($args)) :
 
 		case 3 :
