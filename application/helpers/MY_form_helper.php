@@ -340,7 +340,7 @@ function appendCrFormJsAndCss($aScripts) {
 	$CI->carabiner->js('jquery.raty.js');
 	$CI->carabiner->js('select2.js');
 	$CI->carabiner->js('autoNumeric.js');
-	$CI->carabiner->js('bootstrap-datetimepicker.js');
+	$CI->carabiner->js('bootstrap-datetimepicker.min.js');
 
 	if ($CI->session->userdata('langId') != 'en') {
 		$aTmp = explode('-', $CI->session->userdata('langId'));
@@ -349,8 +349,8 @@ function appendCrFormJsAndCss($aScripts) {
 			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');
 		}
 		else {
-			$CI->carabiner->js('select2/select2_locale_es.js');	
-			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.es.js');
+			$CI->carabiner->js('select2/select2_locale_'.$CI->session->userdata('langId').'.js');	
+			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.'.$CI->session->userdata('langId').'.js');
 		}
 	}
 	

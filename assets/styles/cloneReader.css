@@ -406,8 +406,8 @@
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
-					font-weight: bold;
-					font-size:small;
+/*					font-weight: bold;
+					font-size:small;*/
 				}
 				#cloneReader ul.ulFilters li.empty > div > a {
 					color:gray;
