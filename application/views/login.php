@@ -26,7 +26,7 @@ $this->load->view('includes/crForm');
 				</a>
 			</li>
 			<li class="list-group-item">
-				<a href="<?php  echo base_url('login/google');?>" class="btn btn-google" data-skip-app-link="true">
+				<a href="<?php  echo base_url('login/google');?>" class="btn btn-google-plus" data-skip-app-link="true">
 					<i class="fa fa-google-plus"></i>
 					<?php echo $this->lang->line('Google Login'); ?>
 				</a>

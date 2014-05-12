@@ -37,6 +37,7 @@ $CI->carabiner->js('profile.js');
 
 $CI->carabiner->css('bootstrap.css');
 //$CI->carabiner->css('bootstrap-theme.css');
+$CI->carabiner->css('bootstrap-social.css');
 $CI->carabiner->css('font-awesome.css');
 
 $aScripts = appendCrFormJsAndCss($aScripts); 

@@ -224,42 +224,6 @@ body.isLoading, body.isLoading * {
 			padding: 5px 0 5px 10px;
 		}
 
-.btn-facebook{
-	color:#ffffff;
-	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
-	background-color:#3B5998;
-/*	background-image:-moz-linear-gradient(top, #5f7ec1, #3b5998);
-	background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#5f7ec1), to(#3b5998));
-	background-image:-webkit-linear-gradient(top, #5f7ec1, #3b5998);
-	background-image:-o-linear-gradient(top, #5f7ec1, #3b5998);
-	background-image:linear-gradient(to bottom, #5f7ec1, #3b5998);
-	background-repeat:repeat-x;*/
-	border-color:#3b5998 #3b5998 #263961;
-	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
-.btn-facebook:hover,.btn-facebook:focus,.btn-facebook:active,.btn-facebook.active,.btn-facebook.disabled,.btn-facebook[disabled]{
-	color:#ffffff;
-	background-color:#3b5998;
-}
-.btn-google{
-	color:#ffffff;
-	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
-	background-color:#DD4B39;
-/*	background-image:-moz-linear-gradient(top, #dc726f, #cc3732);
-	background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#dc726f), to(#cc3732));
-	background-image:-webkit-linear-gradient(top, #dc726f, #cc3732);
-	background-image:-o-linear-gradient(top, #dc726f, #cc3732);
-	background-image:linear-gradient(to bottom, #dc726f, #cc3732);
-	background-repeat:repeat-x;*/
-	border-color:#cc3732 #cc3732 #8f2623;
-	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
-.btn-google:hover,.btn-google:focus,.btn-google:active,.btn-google.active,.btn-google.disabled,.btn-google[disabled]{
-	color:#ffffff;
-	background-color:#cc3732;
-}
-
-
 .crList {
 	margin: 0 5px;
 }
