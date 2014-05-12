@@ -56,7 +56,7 @@ function initLang() {
 		'es'	 	=> 'spanish',
 		'pt-br' 	=> 'portuguese-br',
 		'en' 		=> 'english',		
-		'zh-tw'		=> 'zh_tw',
+		'zh-cn'		=> 'zh_CN',
 	);
 	
 	$langId = $CI->session->userdata('langId');
