@@ -1,9 +1,13 @@
 crMenu = {
 	aSkipAppLink: ['logout', 'langs/change'], // Para forzar una carga completa de la page. Se usa en appAjax
 	
-	renderMenu: function(aMenu, className, $parent){
+	renderMenu: function(aMenu, className, $parent, depth){
 		if (aMenu.length == 0) {
 			return;
+		}
+		
+		if (depth == null) {
+			depth = 0;
 		}
 		
 		var $ul = $('<ul></ul>').appendTo($parent);
@@ -38,7 +42,11 @@ crMenu = {
 			
 			if (aMenu[i]['childs'].length > 0) {
 				$link.addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
-				this.renderMenu(aMenu[i]['childs'], null, $li);
+				if (depth >= 1) {
+					$li.addClass(' dropdown-submenu dropdown-submenu-left ');
+				}
+				
+				this.renderMenu(aMenu[i]['childs'], 'dropdown-menu' , $li, (depth + 1));
 			}
 		}
 	},
@@ -50,19 +58,18 @@ crMenu = {
 		var $settings 	= $iconGear.parent();
 		var label		= $settings.text();
 		$settings
-			.addClass('settings').css('cursor', 'pointer')
+			.addClass('menuItemSettings')
 			.html('')
 			.append($iconGear)
 			.append('<span>' + label + '</span>');
-		$settings.parent().find('> ul > li > ul').parent().addClass('dropdown-submenu dropdown-submenu-left');
+			
+		$menuProfile.find('.menuItemAbout').parents('li').before($('<li role="presentation" class="divider"></li>'));
+
 		
 		$menuProfile.find('.lang-' + langId ).before('<i class="fa fa-check fa-fw"></i>');
 		$menuProfile.find('.fa-flag-o').parent()
-			.append('<span class="badge pull-right">' + langId + '</span>')
-			.addClass('lang').css('cursor', 'pointer');
+			.append('<span class="badge pull-right">' + langId + '</span>');
 	
-		$menuProfile.find('li ul').addClass('dropdown-menu');
-
 		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
 			function(event) {
 				event.preventDefault(); 

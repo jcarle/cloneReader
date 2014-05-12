@@ -39,7 +39,9 @@ body.isLoading, body.isLoading * {
 	#header .navbar-collapse {
 		max-height:none;
 	}
-	#header ul.menuProfile  li a { }
+	#header ul.menuProfile  li a {
+		cursor: pointer; 
+	}
 		#header ul.menuProfile .open .dropdown-menu {
 			background-clip: inherit;
 		}	
@@ -59,16 +61,16 @@ body.isLoading, body.isLoading * {
 		max-width:350px;
 	}	
 	#header ul.menuProfile { }
-		#header ul.menuProfile .settings span {
-			display:none; 
-		}
 		#header ul.menuProfile > li { }
 		#header ul.menuProfile > li:last-child { }
 			#header ul.menuProfile > li > a { }
 			#header ul.menuProfile > li > a:first-child {
 				text-transform: lowercase;
-			}								
-			#header ul.menuProfile .settings { }
+			}
+			#header ul.menuProfile .menuItemSettings { }
+				#header ul.menuProfile .menuItemSettings span {
+					display:none; 
+				}
 			#header ul.menuProfile .dropdown-submenu-left {
 				position: relative;
 			}

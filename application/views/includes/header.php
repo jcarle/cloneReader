@@ -189,7 +189,7 @@ if ($showTitle == true) {
 }
 
 
-function renderMenu($aMenu, $className = null){
+function renderMenu($aMenu, $className = null, $depth = 0){
 	if (empty($aMenu)) {
 		return;
 	}
@@ -212,15 +212,20 @@ function renderMenu($aMenu, $className = null){
 			$attr = ' class="dropdown-toggle" data-toggle="dropdown" ';
 		}		
 		
+		$submenuClass = '';
+		if ($depth >= 1 && $hasChilds == true) {
+			$submenuClass = ' class="dropdown-submenu dropdown-submenu-left" ';
+		}
+						
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li> <a title="'.$label.'" href="'.base_url().$aMenu[$i]['url'].'" '.$attr.'>'.$icon.$label.'</a>';
+			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" href="'.base_url().$aMenu[$i]['url'].'" '.$attr.'>'.$icon.$label.'</a>';
 		}
 		else {
-			$sTmp .= '	<li> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';
+			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';
 		} 	
 		
-		if ($hasChilds == true) {			
-			$sTmp .= renderMenu($aMenu[$i]['childs']);
+		if ($hasChilds == true) {
+			$sTmp .= renderMenu($aMenu[$i]['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
 		}
 		
 		$sTmp .= '</li>';		
