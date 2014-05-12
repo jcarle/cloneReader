@@ -67,7 +67,7 @@ class Users_Model extends CI_Model {
 //$this->db->insert('users_logs', array( 'userId' => $userId, 'userLogDate' => $date ));
 	}
 	
-	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $aRemoteLogin = null, $feedId = null, $orderBy = 'userId', $orderDir = 'asc' ){
+	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $groupId = null, $aRemoteLogin = null, $feedId = null, $orderBy = 'userId', $orderDir = 'asc' ){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
 			->join('countries', 'users.countryId = countries.countryId', 'left')
@@ -83,6 +83,9 @@ class Users_Model extends CI_Model {
 		} 
 		if ($langId != null) {
 			$this->db->where('users.langId', $langId);
+		}
+		if ($groupId != null) {
+			$this->db->where('users_groups.groupId', $groupId);
 		}
 		
 		if ($aRemoteLogin != null) {
@@ -175,7 +178,7 @@ class Users_Model extends CI_Model {
 	function get($userId){
 		$this->db->where('userId', $userId);
 		$result				= $this->db->get('users')->row_array();
-		$result['groups'] 	= array_to_select($this->getGroups($userId), 'groupId');
+		$result['groups'] 	= sourceToArray($this->getGroups($userId), 'groupId');
 		return $result;
 	}	
 	
@@ -185,8 +188,9 @@ class Users_Model extends CI_Model {
 	
 	function getGroups($userId){
 		return $this->db
-					->where('userId', $userId)
-					->get('users_groups')->result_array();
+			->select('groupId')
+			->where('userId', $userId)
+			->get('users_groups')->result_array();
 	}	
 	
 	function save($data){
@@ -211,9 +215,10 @@ class Users_Model extends CI_Model {
 		}
 
 		$this->db->where('userId', $userId)->delete('users_groups');
-		if (is_array(element('groups', $data))) {
-			foreach ($data['groups'] as $groupId) {
-				$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => $groupId));			
+		$groups = json_decode(element('groups', $data));
+		if (is_array($groups)) {
+			foreach ($groups as $groupId) {
+				$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => $groupId));
 			}		
 		}
 		

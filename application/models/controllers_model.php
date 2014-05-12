@@ -18,6 +18,19 @@ class Controllers_Model extends CI_Model {
 
 		return $query->get('controllers')->result_array();
 	}	
+	
+	
+	function selectToDropdown($onlyActive = false){
+		$query = $this->db
+			->select('controllerId AS id, controllerName AS text', true)
+			->order_by('controllerName');
+		
+		if ($onlyActive == true) {
+			$query->where('controllerActive', true);
+		}
+
+		return $query->get('controllers')->result_array();
+	}
 
 	function get($controllerId){
 		$this->db->where('controllerId', $controllerId);

@@ -31,7 +31,7 @@ class Users extends CI_Controller {
 			$feed = $this->Feeds_Model->get($feedId);
 		}		
 
-		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $aRemoteLogin, $feedId, $this->input->get('orderBy'), $this->input->get('orderDir') );
+		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $this->input->get('groupId'), $aRemoteLogin, $feedId, $this->input->get('orderBy'), $this->input->get('orderDir') );
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
@@ -67,18 +67,25 @@ class Users extends CI_Controller {
 						'source'			=> $this->Languages_Model->selectToDropdown(),
 						'appendNullOption'	=> true,
 					),
+					'groupId' => array(
+						'type'				=> 'dropdown',
+						'label'				=> $this->lang->line('Group'),
+						'source'			=> $this->Groups_Model->selectToDropdown(),
+						'value'				=> $this->input->get('groupId'),
+						'appendNullOption'	=> true,
+					),
 					'feedId' => array(
 						'type' 		=> 'typeahead',
 						'label'		=> $this->lang->line('Feed'),
 						'source' 	=> base_url('feeds/search/'),
 						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
-					),					
+					),
 					'remoteLogin' => array(
 						'type'		=> 'groupCheckBox',
 						'label'		=> $this->lang->line('Remote login'),
 						'source'	=> array(
-							array('key' => 'facebook', 	'value' => 'Facebook'),
-							array('key' => 'google' ,	'value'	=> 'Google'),
+							array('id' => 'facebook', 	'text' => 'Facebook'),
+							array('id' => 'google' ,	'text'	=> 'Google'),
 						), 
 						'value'		=> $aRemoteLogin
 					)
@@ -121,7 +128,7 @@ class Users extends CI_Controller {
 					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption'	=> true,
 				),
-				'groups[]' => array(
+				'groups' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Groups'),
 					'source'	=> $this->Groups_Model->selectToDropdown(),

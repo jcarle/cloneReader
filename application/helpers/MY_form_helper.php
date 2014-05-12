@@ -25,7 +25,7 @@ function appendMessagesToCrForm($form) {
  * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista, no al validar
  * TODO: implementar que los sources de [dropdown, menuTree] se llenen con este metodo
  */
-function populateCrForm($form, $data) {
+function populateCrForm($form, $data, $sources = null) {
 	foreach ($form['fields'] as $fieldName => $fieldValue) {
 		switch ($form['fields'][$fieldName]['type']) {
 			case 'hidden':
@@ -46,7 +46,7 @@ function populateCrForm($form, $data) {
 				$form['fields'][$fieldName]['checked'] = element($fieldName, $data);
 				break;
 			case 'groupCheckBox':
-				$form['fields'][$fieldName]['value'] = element(str_replace('[]', '', $fieldName), $data);
+				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
 				break;
 		}
 	}
@@ -90,7 +90,7 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			'name' 			=> $currency['name'],
 			'label'			=> $currency['label'], 
 			'value'			=> element('value', $currency),
-			'source'		=> array_to_select($CI->Coins_Model->select(true), 'currencyId', 'currencyName'),
+			'source'		=> $CI->Coins_Model->selectToDropdown(),
 		),
 		$exchange['name']	=> array(
 			'type'	 		=> 'text',
@@ -204,9 +204,11 @@ function renderCrFormFields($form) {
 				break;			
 			case 'dropdown':
 				$source = element('source', $field, array());
-				if (element('appendNullOption', $field) == true) {
+				
+				$source = sourceToDropdown($source, element('appendNullOption', $field));
+				/*if (element('appendNullOption', $field) == true) {
 					$source = array('' => '-- '.$CI->lang->line('Choose').' --') + $source;
-				}
+				}*/
 
 				$properties = array('class="form-control"');
 				if (element('disabled', $field) == true) {
@@ -217,14 +219,15 @@ function renderCrFormFields($form) {
 				break;						
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);
-				$sTmp = '<ul class="groupCheckBox ">';
+				$sTmp = '<ul class="groupCheckBox" name="'.$name.'"> <li><input type="text" /> </li>';
+				
 				foreach ($field['source'] as $item) {
 					$sTmp .= 
 						'<li>
 							<div class="checkbox">
 								 <label>' 
-									.form_checkbox($name, $item['key'], in_array($item['key'], $field['value']))
-									.$item['value'].($showId == true ? ' - '.$item['key'] : '').'
+									.form_checkbox(null, $item['id'], in_array($item['id'], $field['value']))
+									.$item['text'].($showId == true ? ' - '.$item['id'] : '').'
 								</label>
 							</div>
 						</li>';
@@ -383,3 +386,5 @@ function appendCrListJsAndCss($aScripts) {
 	
 	return $aScripts; 	
 }
+
+

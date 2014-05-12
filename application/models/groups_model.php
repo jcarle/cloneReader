@@ -23,7 +23,7 @@ class Groups_Model extends CI_Model {
 	function get($groupId){
 		$this->db->where('groupId', $groupId);
 		$result 				= $this->db->get('groups')->row_array();
-		$result['controllers'] 	= array_to_object($this->getControllers($groupId), 'controllerId');
+		$result['controllers'] 	= sourceToArray($this->getControllers($groupId), 'controllerId');
 		return $result;
 	}	
 	

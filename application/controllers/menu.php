@@ -38,7 +38,7 @@ class Menu extends CI_Controller {
 				'controllerId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Controller'), 
-					'source'			=> array_to_select($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
+					'source'			=> $this->Controllers_Model->selectToDropdown(true), 
 					'appendNullOption' 	=> true,
 				),
 				'menuParentId' => array(

@@ -52,7 +52,7 @@ class Groups extends CI_Controller {
 				'controllers' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Controllers'),
-					'source'	=> array_to_object($this->Controllers_Model->select(true), 'controllerId', 'controllerName'), 
+					'source'	=> $this->Controllers_Model->selectToDropdown(true), 
 					'showId'	=> true
 				)
 			)
