@@ -180,10 +180,8 @@ class Users extends CI_Controller {
 			}
 		}
 		
-		$form['sources'] = array(
-				'countryId' => $this->Countries_Model->selectToDropdown(),
-				'groups' 	=> $this->Groups_Model->selectToDropdown(),
-		);
+		$form['fields']['countryId']['source'] 	= $this->Countries_Model->selectToDropdown();
+		$form['fields']['groups']['source']		= $this->Groups_Model->selectToDropdown();
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 

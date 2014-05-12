@@ -82,9 +82,7 @@ class Menu extends CI_Controller {
 			}
 		}
 		
-		$form['sources'] = array(
-				'controllerId' => $this->Controllers_Model->selectToDropdown(true)
-		); 		
+		$form['fields']['controllerId']['source'] = $this->Controllers_Model->selectToDropdown(true);
 		
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm', 

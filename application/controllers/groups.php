@@ -82,10 +82,8 @@ class Groups extends CI_Controller {
 			}
 		}
 		
-		$form['sources'] = array(
-			'controllers' => $this->Controllers_Model->selectToDropdown(true)
-		);
-				
+		$form['fields']['controllers']['source'] = $this->Controllers_Model->selectToDropdown(true);
+
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm', 
 			'title'			=> $this->lang->line('Edit groups'),

@@ -134,11 +134,9 @@ class Feeds extends CI_Controller {
 		}		 
 				
 				
-		$form['sources'] = array(
-				'countryId' => $this->Countries_Model->selectToDropdown(),
-				'langId' 	=> $this->Languages_Model->selectToDropdown(),
-				'statusId' 	=> $this->Status_Model->selectToDropdown(),
-		);
+		$form['fields']['countryId']['source'] 	= $this->Countries_Model->selectToDropdown();
+		$form['fields']['langId']['source']		= $this->Languages_Model->selectToDropdown();
+		$form['fields']['statusId']['source']	= $this->Status_Model->selectToDropdown();
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 

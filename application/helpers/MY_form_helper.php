@@ -23,7 +23,6 @@ function appendMessagesToCrForm($form) {
 
 /**
  * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista, no al validar
- * TODO: implementar que los otros sources de [menuTree] se llenen con este metodo
  */
 function populateCrForm($form, $data) {
 	foreach ($form['fields'] as $fieldName => $fieldValue) {
@@ -47,15 +46,6 @@ function populateCrForm($form, $data) {
 				break;
 			case 'groupCheckBox':
 				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
-				break;
-		}
-		
-		switch ($form['fields'][$fieldName]['type']) {
-			case 'dropdown':
-			case 'groupCheckBox':
-				if (isset($form['sources'][$fieldName])) {
-					$form['fields'][$fieldName]['source'] = $form['sources'][$fieldName];
-				}
 				break;
 		}
 	}

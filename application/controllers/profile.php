@@ -70,9 +70,7 @@ class Profile extends CI_Controller {
 		
 		$this->load->model('Countries_Model');
 		$userId = $this->session->userdata('userId');
-		$form['sources'] = array(		
-			'countryId' => $this->Countries_Model->selectToDropdown()
-		);		
+		$form['fields']['countryId']['source'] = $this->Countries_Model->selectToDropdown();
 		
 		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Users_Model->get($userId)) ));
 	}

@@ -75,10 +75,8 @@ class Register extends CI_Controller {
 			return loadViewAjax($code);
 		}
 				
-		$form['sources'] = array(
-			'countryId' => $this->Countries_Model->selectToDropdown(),
-		);
-				
+		$form['fields']['countryId']['source'] = $this->Countries_Model->selectToDropdown();
+
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Signup'),
