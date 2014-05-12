@@ -18,5 +18,8 @@
 </ul>
 
 <p>
-	Source: <a href="https://github.com/jcarle/cloneReader"> <i class="fa fa-github" ></i> https://github.com/jcarle/cloneReader</a>
+	Source: 
+	<a href="https://github.com/jcarle/cloneReader" class="btn btn-github" data-skip-app-link="true" >
+		<i class="fa fa-github" ></i> https://github.com/jcarle/cloneReader
+	</a>
 </p>
