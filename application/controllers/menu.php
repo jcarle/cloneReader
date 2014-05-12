@@ -38,7 +38,6 @@ class Menu extends CI_Controller {
 				'controllerId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Controller'), 
-					'source'			=> $this->Controllers_Model->selectToDropdown(true), 
 					'appendNullOption' 	=> true,
 				),
 				'menuParentId' => array(
@@ -82,6 +81,10 @@ class Menu extends CI_Controller {
 				return loadViewAjax($code,  $code == false ? validation_errors() : array('goToUrl' => base_url('menu/edit/'.$menuId), 'loadMenuAndTranslations' => true));
 			}
 		}
+		
+		$form['sources'] = array(
+				'controllerId' => $this->Controllers_Model->selectToDropdown(true)
+		); 		
 		
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm', 

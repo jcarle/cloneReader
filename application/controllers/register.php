@@ -39,7 +39,6 @@ class Register extends CI_Controller {
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption' 	=> true,
 				),
 			)
@@ -70,11 +69,15 @@ class Register extends CI_Controller {
 			if ($code == true) {
 				$this->Users_Model->register($userId, $this->input->post());
 				$this->safety->login($this->input->post('userEmail'), $this->input->post('userPassword'));
-				return loadViewAjax($code, array('goToUrl' => base_url('home'), ' skipAppLink' => true));
+				return loadViewAjax($code, array('goToUrl' => base_url('home'), 'skipAppLink' => true));
 			}
 
 			return loadViewAjax($code);
 		}
+				
+		$form['sources'] = array(
+			'countryId' => $this->Countries_Model->selectToDropdown(),
+		);
 				
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
@@ -83,7 +86,7 @@ class Register extends CI_Controller {
 				'description' 	=> 'Clone Reader. Create account.',
 				'keywords'		=> 'cReader cloneReader new account'
 			),
-			'form'		=> $form,
+			'form'		=> populateCrForm($form, array()),
 		));		
 	}
 

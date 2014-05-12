@@ -980,7 +980,7 @@
 					var showId 	= field['showId'] == true;
 					var $input 	= $('<ul class="groupCheckBox" name="' + name + '" />').appendTo($div);
 					
-					$('<li><input type="text" /> </li>').appendTo($input);
+					$('<li><input type="text" style="display:none" /> </li>').appendTo($input);
 
 					for (var item in field['source']) {
 						var item 	= field['source'][item];

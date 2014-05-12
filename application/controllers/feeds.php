@@ -133,11 +133,18 @@ class Feeds extends CI_Controller {
 			}
 		}		 
 				
+				
+		$form['sources'] = array(
+				'countryId' => $this->Countries_Model->selectToDropdown(),
+				'langId' 	=> $this->Languages_Model->selectToDropdown(),
+				'statusId' 	=> $this->Status_Model->selectToDropdown(),
+		);
+
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit feeds'),
-			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true)),
-		));		
+			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true))
+		));
 	}
 
 	function add(){
@@ -182,13 +189,11 @@ class Feeds extends CI_Controller {
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption' 	=> true
 				),
 				'langId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Language'),
-					'source'			=> $this->Languages_Model->selectToDropdown(),
 					'appendNullOption' 	=> true
 				),
 				'feedLastEntryDate' => array(
@@ -202,7 +207,6 @@ class Feeds extends CI_Controller {
 				'statusId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Status'),
-					'source'			=> $this->Status_Model->selectToDropdown(),
 					'disabled'			=> true
 				),
 				'aTagId' => array(

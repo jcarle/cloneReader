@@ -23,9 +23,9 @@ function appendMessagesToCrForm($form) {
 
 /**
  * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista, no al validar
- * TODO: implementar que los sources de [dropdown, menuTree] se llenen con este metodo
+ * TODO: implementar que los otros sources de [menuTree] se llenen con este metodo
  */
-function populateCrForm($form, $data, $sources = null) {
+function populateCrForm($form, $data) {
 	foreach ($form['fields'] as $fieldName => $fieldValue) {
 		switch ($form['fields'][$fieldName]['type']) {
 			case 'hidden':
@@ -47,6 +47,15 @@ function populateCrForm($form, $data, $sources = null) {
 				break;
 			case 'groupCheckBox':
 				$form['fields'][$fieldName]['value'] = element($fieldName, $data);
+				break;
+		}
+		
+		switch ($form['fields'][$fieldName]['type']) {
+			case 'dropdown':
+			case 'groupCheckBox':
+				if (isset($form['sources'][$fieldName])) {
+					$form['fields'][$fieldName]['source'] = $form['sources'][$fieldName];
+				}
 				break;
 		}
 	}
@@ -219,7 +228,7 @@ function renderCrFormFields($form) {
 				break;						
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);
-				$sTmp = '<ul class="groupCheckBox" name="'.$name.'"> <li><input type="text" /> </li>';
+				$sTmp = '<ul class="groupCheckBox" name="'.$name.'"> <li><input type="text" style="display:none" /> </li>';
 				
 				foreach ($field['source'] as $item) {
 					$sTmp .= 

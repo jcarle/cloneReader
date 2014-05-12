@@ -52,7 +52,6 @@ class Groups extends CI_Controller {
 				'controllers' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Controllers'),
-					'source'	=> $this->Controllers_Model->selectToDropdown(true), 
 					'showId'	=> true
 				)
 			)
@@ -82,6 +81,10 @@ class Groups extends CI_Controller {
 				return loadViewAjax($code, array('loadMenuAndTranslations' => true));
 			}
 		}
+		
+		$form['sources'] = array(
+			'controllers' => $this->Controllers_Model->selectToDropdown(true)
+		);
 				
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm', 

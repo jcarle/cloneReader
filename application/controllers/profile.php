@@ -22,13 +22,6 @@ class Profile extends CI_Controller {
 
 	function editProfile() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
-
-		$this->load->model('Countries_Model');
-		
-		$userId = $this->session->userdata('userId');
-		$data 	= $this->Users_Model->get($userId);
-		
-		$this->load->helper('email');
 		
 		$form = array(
 			'frmId'			=> 'frmEditProfile',
@@ -38,24 +31,19 @@ class Profile extends CI_Controller {
 				'userFirstName' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('First Name'), 
-					'value'	=> element('userFirstName', $data)
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
 					'label'	=> $this->lang->line('Last Name'), 
-					'value'	=> element('userLastName', $data)
 				),
 				'userEmail' => array(
 					'type'		=> 'text',
 					'label'		=> $this->lang->line('Email'),
-					'value'		=> valid_email(element('userEmail', $data)) == true ? element('userEmail', $data) : '',
 					'disabled' 	=> true
 				),
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'value'				=> element('countryId', $data),
-					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption' 	=> true,
 				),
 			)
@@ -80,7 +68,13 @@ class Profile extends CI_Controller {
 			return $this->_saveEditProfile();
 		}
 		
-		return $this->load->view('includes/crJsonForm', array( 'form' => $form	));
+		$this->load->model('Countries_Model');
+		$userId = $this->session->userdata('userId');
+		$form['sources'] = array(		
+			'countryId' => $this->Countries_Model->selectToDropdown()
+		);		
+		
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Users_Model->get($userId)) ));
 	}
 
 	function _saveEditProfile() {

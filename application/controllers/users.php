@@ -125,13 +125,11 @@ class Users extends CI_Controller {
 				'countryId' => array(
 					'type'				=> 'dropdown',
 					'label'				=> $this->lang->line('Country'),
-					'source'			=> $this->Countries_Model->selectToDropdown(),
 					'appendNullOption'	=> true,
 				),
 				'groups' => array(
 					'type'		=> 'groupCheckBox',
 					'label'		=> $this->lang->line('Groups'),
-					'source'	=> $this->Groups_Model->selectToDropdown(),
 					'showId'	=> true,
 				),
 			)
@@ -146,7 +144,7 @@ class Users extends CI_Controller {
 			);
 			$form['fields']['userLogs']	= array(
 				'type'	=> 'link',
-				'label'	=> 'View logs', // $this->lang->line('View logs'), 
+				'label'	=> $this->lang->line('View logs'), 
 				'value'	=> base_url('users/logs/?userId='.$userId.'&orderBy=userLogDate&orderDir=desc'),
 			);			
 		}
@@ -181,7 +179,12 @@ class Users extends CI_Controller {
 				return loadViewAjax($code);
 			}
 		}
-				
+		
+		$form['sources'] = array(
+				'countryId' => $this->Countries_Model->selectToDropdown(),
+				'groups' 	=> $this->Groups_Model->selectToDropdown(),
+		);
+
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'title'		=> $this->lang->line('Edit users'),
