@@ -8,12 +8,13 @@ body.isLoading, body.isLoading * {
 #divWaiting {
 	display: block;
 	margin: -7px auto 0;
-	opacity: 0.85;
+	opacity: 0.95;
 	text-align: center;
 	padding: 10px;
 	width: 200px;
 	border-radius:5px;
 	border: 1px #8A6D3B solid;	
+	z-index: 1051;
 }
 	#divWaiting small  {
 		font-size: small;

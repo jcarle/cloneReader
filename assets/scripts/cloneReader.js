@@ -977,7 +977,7 @@ console.timeEnd("t1");
 				index++;
 			}
 				
-			if (filter.$filter != null && filter.childs != null) {
+			if (filter.$filter != null && filter.childs != null && filter.expanded == true ) {
 				this.expandFilter(filter, filter.expanded);
 				this.renderFilters(filter.childs, filter.$filter.find('ul:first'), false);
 			}
@@ -1164,11 +1164,13 @@ console.timeEnd("t1");
 		if (value != true) {
 			$arrow.addClass('fa-caret-square-o-right');
 			$ul.removeClass('filterVisible');
+			$ul.slideUp();
 			return;
 		}
 
 		$arrow.addClass('fa-caret-square-o-down');
 		$ul.addClass('filterVisible');
+		$ul.slideDown();
 	},
 	
 	maximiseUlEntries: function(value, isResize) {
