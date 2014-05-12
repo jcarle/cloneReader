@@ -10,7 +10,7 @@ Responsive.
 
 Remote Storage.
 
-Multi language. ['en', 'es', 'pt']
+Multi language. ['en', 'es', 'pt', 'zh']
 
 Share entries in social networks.
 
@@ -37,7 +37,7 @@ Responsive.
 
 Remote Storage.
 
-Multi idioma. ['en', 'es', 'pt']
+Multi idioma. ['en', 'es', 'pt', 'zh']
 
 Links para compartir en redes sociales.
 
