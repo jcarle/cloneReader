@@ -660,7 +660,7 @@ TODO: pensar como mejorar esta parte
 		this.$noResult.appendTo(this.$ulEntries).show();
 		
 		if (loading == true) {
-			this.$noResult.html('<div class="alert alert-info"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + crLang.line('loading ...') + '</div>').addClass('loading');
+			this.$noResult.html('<div class="alert alert-warning"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + crLang.line('loading ...') + '</div>').addClass('loading');
 		}
 		else {
 			this.$noResult.html('<div class="well well-lg"> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');

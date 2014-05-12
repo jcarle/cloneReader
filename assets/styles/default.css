@@ -12,7 +12,8 @@ body.isLoading, body.isLoading * {
 	text-align: center;
 	padding: 10px;
 	width: 200px;
-	border-radius:5px;	
+	border-radius:5px;
+	border: 1px #8A6D3B solid;	
 }
 	#divWaiting small  {
 		font-size: small;

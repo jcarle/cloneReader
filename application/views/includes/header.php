@@ -36,7 +36,7 @@ $CI->carabiner->js('profile.js');
 
 
 $CI->carabiner->css('bootstrap.css');
-$CI->carabiner->css('bootstrap-theme.css');
+//$CI->carabiner->css('bootstrap-theme.css');
 $CI->carabiner->css('font-awesome.css');
 
 $aScripts = appendCrFormJsAndCss($aScripts); 
@@ -120,7 +120,7 @@ echo implode(' ', $aScripts);
 	<title><?php echo $title.' | '.SITE_NAME; ?> </title>
 </head>
 <body>
-	<div id="divWaiting" class="alert alert-info navbar-fixed-top">
+	<div id="divWaiting" class="alert alert-warning navbar-fixed-top">
 		<i class="fa fa-spinner fa-spin fa-lg"></i>
 		<small> <?php echo $this->lang->line('loading ...'); ?></small>
 	</div>

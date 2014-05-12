@@ -1023,7 +1023,7 @@
 				case 'subform':
 					$div.append('\
 						<div name="' + name + '" class="subform ">\
-							<div class="alert alert-info">\
+							<div class="alert alert-warning">\
 								<i class="fa fa-spinner fa-spin fa-lg"></i>\
 								<small>' + crLang.line('loading ...') + '</small>\
 							</div>\
