@@ -1164,13 +1164,13 @@ console.timeEnd("t1");
 		if (value != true) {
 			$arrow.addClass('fa-caret-square-o-right');
 			$ul.removeClass('filterVisible');
-			$ul.slideUp();
+			$ul.slideUp('fast');
 			return;
 		}
 
 		$arrow.addClass('fa-caret-square-o-down');
 		$ul.addClass('filterVisible');
-		$ul.slideDown();
+		$ul.slideDown('fast');
 	},
 	
 	maximiseUlEntries: function(value, isResize) {
