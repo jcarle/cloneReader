@@ -63,8 +63,10 @@ crMenu = {
 			.append($iconGear)
 			.append('<span>' + label + '</span>');
 			
-		$menuProfile.find('.menuItemAbout').parents('li').before($('<li role="presentation" class="divider"></li>'));
-
+			
+		if ($menuProfile.find('.menuItemAbout').parents('ul:first').find('li').length > 1) {
+			$menuProfile.find('.menuItemAbout').parents('li').before($('<li role="presentation" class="divider"></li>'));
+		}
 		
 		$menuProfile.find('.lang-' + langId ).before('<i class="fa fa-check fa-fw"></i>');
 		$menuProfile.find('.fa-flag-o').parent()
