@@ -2,9 +2,9 @@
 
 
 <p>
-	cloneReader is a clon of the old google reader.
+	cloneReader is a clon of the old Google Reader.
 	<br/>	
-	Its Open source and it is developed with codeigniter, simplepie, jquery, bootstrap.
+	Its open source and it is developed with codeigniter, simplepie, jquery, bootstrap.
 </p> 
 
 <h4>Features</h4>
