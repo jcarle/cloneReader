@@ -237,8 +237,15 @@ cloneReader = {
 	buildCache: function() {
 		$.ajax({
 			'url': 		base_url + 'entries/buildCache',
-			'async':	true //false
-		})		
+			'async':	true, //false
+			'success':  	
+				function(response) {
+					//if ($.hasAjaxDefaultAction(response) == true) { return; }		
+					if (response.result.hasNewEntries == true) {
+						cloneReader.loadFilters(true);
+					}
+				}
+		});
 	},
 	
 	renderToolbar: function() {

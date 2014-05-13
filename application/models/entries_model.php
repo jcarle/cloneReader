@@ -549,7 +549,7 @@ class Entries_Model extends CI_Model {
 		unset($userFilters['page']);
 		$this->load->model('Users_Model');
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
-	}	
+	}
 
 	function getNewsEntries($userId = null, $feedId = null) {
 		set_time_limit(0);
@@ -629,10 +629,12 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function saveEntriesTagByUser($userId) {
+		$this->db->trans_start();
+		
 		// TODO: paginar este proceso para que guarde TODAS las entradas nuevas sin tener que relodear
 		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
-		$entryId 	= null;
-		$limit 		= 500;
+		$entryId	 	= null;
+		$limit	 		= 500;
 		
 		$query = ' SELECT
 						MAX(entryId) AS entryId
@@ -646,7 +648,7 @@ class Entries_Model extends CI_Model {
 		}		
 
 		// save TAG_ALL
-		$query = ' INSERT INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
+		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
 					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.TAG_ALL.', false, entries.entryDate 
 					FROM entries 
 					INNER JOIN users_feeds 
@@ -659,12 +661,13 @@ class Entries_Model extends CI_Model {
 						AND 	users_entries.tagId 	= '.TAG_ALL.'
 					WHERE users_entries.userId IS NULL
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
-				LIMIT '.$limit;
+				ORDER BY entries.entryId LIMIT '.$limit;
 		$this->db->query($query);
-		//pr($this->db->last_query());
+		//vd($this->db->last_query());
+		$rowsAffected = $this->db->affected_rows();
 		
 		// save Custom Tags
-		$query = ' INSERT INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
+		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
 					SELECT users_feeds_tags.userId, entries.entryId, entries.feedId, users_feeds_tags.tagId, false, entries.entryDate
 					FROM entries 
 					INNER JOIN users_feeds_tags FORCE INDEX (indexUserIdFeedId) 
@@ -677,14 +680,19 @@ class Entries_Model extends CI_Model {
 						AND   users_entries.tagId		= users_feeds_tags.tagId 
 					WHERE users_entries.userId IS NULL 
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
-					LIMIT '.$limit;
+					ORDER BY entries.entryId LIMIT '.$limit;
 		$this->db->query($query);
-		//pr($this->db->last_query());
+		//vd($this->db->last_query());
+		
+		$this->db->trans_complete();
 
-		if ($this->db->affected_rows() == $limit) {
+		//vd($rowsAffected);
+		if ($rowsAffected == $limit) {
 			sleep(2);
 			$this->saveEntriesTagByUser($userId);
 		}
+		
+		return ($rowsAffected > 0);
 	}
 	
 	function processTagBrowse() {
