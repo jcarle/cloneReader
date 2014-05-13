@@ -236,11 +236,12 @@ cloneReader = {
 	
 	buildCache: function() {
 		$.ajax({
-			'url': 		base_url + 'entries/buildCache',
-			'async':	true, //false
+			'url': 			base_url + 'entries/buildCache',
+			'async':		true, //false
+			'skipwWaiting':	true,
 			'success':  	
 				function(response) {
-					//if ($.hasAjaxDefaultAction(response) == true) { return; }		
+					if ($.hasAjaxDefaultAction(response) == true) { return; }		
 					if (response.result.hasNewEntries == true) {
 						cloneReader.loadFilters(true);
 					}
