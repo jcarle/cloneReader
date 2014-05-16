@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`commentId`),
   KEY `commentEmail` (`commentUserEmail`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `controllers` (
   `controllerActive` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`controllerId`) USING BTREE,
   UNIQUE KEY `functionName` (`controllerName`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `controllers`
@@ -425,7 +425,7 @@ CREATE TABLE IF NOT EXISTS `entries` (
   KEY `entryDate` (`entryDate`),
   KEY `indexFeedIdEntryDate` (`feedId`,`entryDate`),
   KEY `entryUrl` (`entryUrl`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1709831 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -475,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   KEY `feedMaxRetries` (`feedMaxRetries`),
   KEY `feedCountUsers` (`feedCountUsers`),
   KEY `feedCountEntries` (`feedCountEntries`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2458 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   `fileName` varchar(255) NOT NULL,
   `fileTitle` varchar(100) NOT NULL,
   PRIMARY KEY (`fileId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -516,7 +516,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `groupHomePage` char(255) NOT NULL,
   `systemGroup` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`groupId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `groups`
@@ -761,7 +761,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   PRIMARY KEY (`menuId`) USING BTREE,
   KEY `functionId` (`controllerId`),
   KEY `menuParentId` (`menuParentId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `menu`
@@ -815,7 +815,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`newId`),
   KEY `userId` (`userId`),
   KEY `newSef` (`newSef`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -834,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `shared_by_email` (
   KEY `userId` (`userId`),
   KEY `entryId` (`entryId`),
   KEY `userFriendId` (`userFriendId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -848,7 +848,7 @@ CREATE TABLE IF NOT EXISTS `states` (
   `countryId` char(2) NOT NULL,
   PRIMARY KEY (`stateId`),
   KEY `countryId` (`countryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1413 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `states`
@@ -2310,7 +2310,7 @@ CREATE TABLE IF NOT EXISTS `tags` (
   KEY `countEntries` (`countEntries`),
   KEY `countUsers` (`countUsers`),
   KEY `countTotal` (`countTotal`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=155101 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `tags`
@@ -2339,7 +2339,7 @@ CREATE TABLE IF NOT EXISTS `testing` (
   PRIMARY KEY (`testId`),
   KEY `countryId` (`countryId`),
   KEY `stateId` (`stateId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2440,7 +2440,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `userDateAdd` (`userDateAdd`),
   KEY `resetPasswordDate` (`resetPasswordDate`),
   KEY `changeEmailDate` (`changeEmailDate`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=168 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users`
@@ -2517,7 +2517,7 @@ CREATE TABLE IF NOT EXISTS `users_friends` (
   UNIQUE KEY `indexUserIdUserFriendEmail` (`userId`,`userFriendEmail`),
   KEY `userId` (`userId`),
   KEY `userFriendEmail` (`userFriendEmail`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2571,14 +2571,8 @@ CREATE TABLE IF NOT EXISTS `usertracking` (
   `client_user_agent` text NOT NULL,
   `referer_page` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7256 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `usertracking`
---
-
-INSERT INTO `usertracking` (`id`, `session_id`, `user_identifier`, `request_uri`, `timestamp`, `client_ip`, `client_user_agent`, `referer_page`) VALUES
-(7255, '80e7173dcd82696f58b9f4c03c9328a4', '2', '/dev/jcarle/cloneReader/entries/selectFilters', '1400192834', '192.168.1.1', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:29.0) Gecko/20100101 Firefox/29.0', 'http://jcarle.redirectme.net/dev/jcarle/cloneReader/users/edit/1?urlList=aHR0cDovL2pjYXJsZS5yZWRpcmVjdG1lLm5ldC9kZXYvamNhcmxlL2Nsb25lUmVhZGVyL3VzZXJz');
 
 --
 -- Constraints for dumped tables
