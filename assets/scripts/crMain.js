@@ -17,6 +17,12 @@ crMain = {
 	initEvents: function() {
 		$.countProcess = 0;
 		
+		$(window).bind('beforeunload', function(){
+			if ($.active != 0) {
+				return crLang.line('Wait while data sync');
+			}
+		});		
+		
 		$('body').on('click', 'a',
 			function(event) {
 				crMain.clickOnLink(event);
@@ -35,7 +41,7 @@ crMain = {
 				if (ajaxOptions.skipwWaiting === true) {
 					return;
 				}
-				$.countProcess ++;
+				$.countProcess++;
 				$.showWaiting();	
 			}
 		);
@@ -45,7 +51,7 @@ crMain = {
 				if (ajaxOptions.skipwWaiting === true) {
 					return;
 				}
-				$.countProcess --;
+				$.countProcess--;
 				$.showWaiting();	
 			}
 		);
@@ -284,6 +290,11 @@ crMain = {
 		var url = $link.attr('href');
 		if (url == null || url.substr(0, 1) == '#' || url.substr(0, 10) == 'javascript') {
 			return;
+		}
+		if (url.substr(0, 7) == 'http://' || url.substr(0, 8) == 'https://') {
+			if (url.indexOf(base_url) == -1) {
+				return;
+			}
 		}
 		
 		$.hideMobileNavbar();

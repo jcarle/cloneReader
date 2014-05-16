@@ -136,3 +136,4 @@ $lang['Not connected. Please verify your network connection'] = 'No está conect
 $lang['Keyboard shortcut'] = 'Atajos de teclado';
 $lang['Users'] = 'Usuarios';
 $lang['User logs'] = 'User logs';
+$lang['Wait while data sync'] = 'Espere mientras se sincronizan los datos';
