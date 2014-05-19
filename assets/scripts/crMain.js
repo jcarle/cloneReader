@@ -17,11 +17,14 @@ crMain = {
 	initEvents: function() {
 		$.countProcess = 0;
 		
+		/*
+// TODO: hacer una variable que se utilize en el ajax error, para evitar mostrar el popup de que perdio la coneccion al relodear la page
 		$(window).bind('beforeunload', function(){
 			if ($.active != 0) {
 				return crLang.line('Wait while data sync');
 			}
 		});		
+*/
 		
 		$('body').on('click', 'a',
 			function(event) {
