@@ -96,7 +96,7 @@ cloneReader = {
 					
 		
 		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
-		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
+//		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
 
 		this.$ulEntries
@@ -912,6 +912,8 @@ TODO: pensar como mejorar esta parte
 	},
 
 	loadFilters: function(reload) {
+		this.saveData(false);
+		
 		$.ajax({ 
 			'url': 		base_url + 'entries/selectFilters',
 			'success': 	
