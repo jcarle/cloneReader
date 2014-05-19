@@ -272,20 +272,6 @@ class Testing extends CI_Controller {
 		);
 
 		return loadViewAjax(true, array('list' => $list));
-			
-		$this->load->view('ajax', array(
-			'view'		=> 'includes/subform',
-			'code'		=> true,
-			'list'		=> array(
-				'controller'	=> strtolower(__CLASS__).'/popupTestChildUser/'.$testChildId.'/',
-				'columns'		=> array( 
-					'userFirstName' 	=> 'Nombre', 
-					'userLastName' 		=> 'Apellido', 
-					'userEmail'			=> 'Email',
-				),
-				'data'			=> $this->Testing_Model->selectUsersByTestChildId($testChildId),
-			),
-		));
 	}
 	
 	function popupTestChildUser($testChildId, $userId) {

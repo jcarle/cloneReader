@@ -30,6 +30,7 @@ function populateCrForm($form, $data) {
 			case 'hidden':
 			case 'text':
 			case 'dropdown':
+			case 'date':
 			case 'datetime':
 			case 'logo':
 			case 'typeahead':

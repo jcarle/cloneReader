@@ -71,7 +71,7 @@ define('FEED_MAX_RETRIES', 10); // maxima cantidad de reintentos si un feed tien
 
 define('FEED_TIME_SCAN', 180); 	// 	Cada cuanto MINUTOS busca nuevos feeds
 define('FEED_TIME_SAVE', 10); 	// 	Cada cuanto SEGUNDOS guardan los datos
-define('FEED_TIME_RELOAD', 10);  //  Cada cuanto MINUTOS recarga el menu con feeds
+define('FEED_TIME_RELOAD', 9999999);  //  Cada cuanto MINUTOS recarga el menu con feeds
 define('ENTRIES_PAGE_SIZE', 30);
 define('URL_SECRET_TIME', 180);// Cuantos MINUTOS esta vivo el link para resetear password y cambiar email 
 
