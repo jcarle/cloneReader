@@ -180,7 +180,6 @@ class Testing extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmTestChildEdit',
-			'isSubForm' => true,
 			'title'		=> 'Edit test child',
 			'fields'	=> array(
 				'testChildId' => array(
@@ -284,7 +283,6 @@ class Testing extends CI_Controller {
 		
 		$form = array(
 			'frmId'		=> 'frmTestChildUserEdit',
-			'isSubForm' => true,
 			'title'		=> 'Edit user',
 			'fields'	=> array(
 				'testChildId' => array(

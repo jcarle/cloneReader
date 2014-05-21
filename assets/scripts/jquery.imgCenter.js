@@ -38,115 +38,114 @@
 			var current = i;
 			
 			// Declare the current Image as a variable.
-			var org_image = $(this);
+			var $img = $(this);
 			
 			if (opts.createFrame == true) {
-				if (org_image.parent().hasClass('imgCenterFrame') == true) {
-					var $div = org_image.parent();
+				if ($img.parent().hasClass('imgCenterFrame') == true) {
+					var $div = $img.parent();
 					if ($div.find('i').length == 0) {
 						$div.append('<i class="fa fa-spinner fa-spin fa-lg" />');
 					}
 				}
 				else {
-					var $div = $('<div />').addClass('imgCenterFrame').append('<i class="fa fa-spinner fa-spin fa-lg" />');
-					$div.insertBefore(org_image).append(org_image).show().css('visibility', 'visible');
+					var $div = $('<div />').addClass('imgCenterFrame');
+					$div.insertBefore($img).append($img).show().css('visibility', 'visible');
+					$div.append('<i class="fa fa-spinner fa-spin fa-lg" />')
 				}
 			}
-			
-			org_image.hide();
+
+			$img.hide();
 			
 			// Move up Parents until the spcified limit has been met.
-			var theParent = org_image;
+			var $theParent = $img;
 			for (var i=0; i <= opts.parentSteps; i++){
-				theParent = theParent.parent();
-			}	
-			var parWidth 	= parseInt(theParent.width());
-			var parHeight 	= parseInt(theParent.height());
+				$theParent = $theParent.parent();
+			}
+			var parWidth 	= parseInt($theParent.width());
+			var parHeight 	= parseInt($theParent.height());
 			var parAspect 	= parWidth / parHeight;
 
-			$(org_image).load($.proxy(
+			$img.load($.proxy(
 				function(event) {
 					imgMath($(event.target));
 				}
 			, this));
 
-			if(org_image[0].complete){
-				imgMath(org_image);
-			} 
+			if($img[0].complete){
+				imgMath($img);
+			}
 
-			function imgMath(org_image) {
+			function imgMath($img) {
 				// reset properties
-				org_image.css({'margin': 0, 'width': 'auto', 'height': 'auto' });
-
-
-					//var tmp = new Image()
-//					var $imgTmp = $('<img />');
-//					$imgTmp.attr('src', $(org_image).attr('src'));
+				$img.css({'margin': 0, 'width': 'auto', 'height': 'auto' });
 
 				// Get image properties.		
-				var imgWidth 	= parseInt(org_image.get(0).width);
-				var imgHeight 	= parseInt(org_image.get(0).height);
+				var imgWidth 	= parseInt($img.get(0).width);
+				var imgHeight 	= parseInt($img.get(0).height);
 				var imgAspect 	= imgWidth / imgHeight;
-	
+
 				// Center the image.
 				if(parWidth != imgWidth || parHeight != imgHeight){
-					theParent.css('overflow', 'hidden');
+					$theParent.css('overflow', 'hidden');
 					
 					if(opts.scaleToFit){
 						if(parAspect >= 1){
-							org_image.css({'width': parWidth +'px'});
+							$img.css({'width': parWidth +'px'});
 							imgWidth = parWidth;
 							imgHeight = Math.round(imgWidth / imgAspect);
 							
 							if((parWidth / imgAspect) < parHeight){
-								org_image.css({'height': parHeight +'px', 'width': 'auto'});
+								$img.css({'height': parHeight +'px', 'width': 'auto'});
 								imgHeight = parHeight;
 								imgWidth = Math.round(imgHeight * imgAspect);
 							}				
 						} else {
-							org_image.css({'height': parHeight +'px'});
+							$img.css({'height': parHeight +'px'});
 							imgHeight = parHeight;
 							imgWidth = Math.round(imgHeight * imgAspect);
 							if((parHeight * imgAspect) < parWidth){
-								org_image.css({'width': parWidth +'px', 'height': 'auto'});
+								$img.css({'width': parWidth +'px', 'height': 'auto'});
 								imgWidth = parWidth;
 								imgHeight = Math.round(imgWidth / imgAspect);
 							}
 						}
 						if(imgWidth > parWidth){
-							org_image.css({'margin-left': '-'+ Math.round((imgWidth - parWidth) / 2) + 'px'});
+							$img.css({'margin-left': '-'+ Math.round((imgWidth - parWidth) / 2) + 'px'});
 						}
 						if(imgHeight > parHeight && opts.centerVertical){
-							org_image.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
+							$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
 						}		
 					} else {
 						if(imgWidth > parWidth){
-							org_image.css({'margin-left': '-' + Math.round((imgWidth - parWidth) / 2) + 'px'});
+							$img.css({'margin-left': '-' + Math.round((imgWidth - parWidth) / 2) + 'px'});
 						} else if(imgWidth < parWidth){
-							org_image.css({'margin-left': Math.round((parWidth -imgWidth) / 2) + 'px'});
+							$img.css({'margin-left': Math.round((parWidth -imgWidth) / 2) + 'px'});
 						}
 						if(imgHeight > parHeight && opts.centerVertical){
-							org_image.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
+							$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
 						} else if(imgHeight < parHeight && opts.centerVertical){
-							org_image.css({'margin-top': Math.round((parHeight - imgHeight) / 2) + 'px'});
+							$img.css({'margin-top': Math.round((parHeight - imgHeight) / 2) + 'px'});
 						}
 					}
 				}
+
 				
-
-				$(org_image).fadeIn('slow', function() {
-					$(org_image).parent().find('i').remove();
-				});
-
-				opts.complete.call(this, org_image);
+				opts.complete.call(this, $img);
 				if(current == len){
 					opts.end.call(this);
 				}
+				
 				if (opts.show == true) {
-					org_image.show();
+					$img.show();
+					$img.parent().find('i').remove();
+				}
+				else {
+					$img.fadeIn('slow', function() {
+						var $icon = $(this).parent().find('i');
+						$icon.remove();
+					});
 				}
 			}
-			
-		});		
+		});
 	}
 })(jQuery);

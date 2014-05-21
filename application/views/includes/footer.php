@@ -1,6 +1,6 @@
 		</div>
 	</div>
-	<!-- <div id="footer"></div> -->
+	<!-- <footer class="footer"></footer> -->
 <?php	
 if (!isset($hasUploadFile)) {
 	$hasUploadFile = false;

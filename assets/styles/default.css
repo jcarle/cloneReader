@@ -514,33 +514,29 @@ footer {
 	height: 100%;
 	position:relative;
 }
+	.imgCenterFrame img {
+		box-shadow: #000 0 0 0; 
+	}
+	.imgCenterFrame i {
+		color: #333333;
+		left: 50%;
+		line-height: 20px;
+		margin-left: -10px;
+		margin-top: -10px;
+		position: absolute;
+		text-align: center;
+		top: 50%;
+		width: 20px;
+	}
+	
 
 .gallery a.thumbnail {
 	background: white;
 	width:75px;
 	height:75px;
 	display:inline-block;
+	margin: 0  0 5px 0;
 }
-	.gallery a  > img,
-	.gallery a  > .imgCenterFrame {
-		display:none;
-	}
-		
-		
-.thumbnail i {
-	color: #333333;
-	left: 50%;
-	line-height: 20px;
-	margin-left: -10px;
-	margin-top: -10px;
-	position: absolute;
-	text-align: center;
-	top: 50%;
-	width: 20px;
-}		
-		
-
-		
 
 .ui-datepicker select {
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
