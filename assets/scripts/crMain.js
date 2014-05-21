@@ -16,15 +16,10 @@ crMain = {
 	
 	initEvents: function() {
 		$.countProcess = 0;
-		
-		/*
-// TODO: hacer una variable que se utilize en el ajax error, para evitar mostrar el popup de que perdio la coneccion al relodear la page
+
 		$(window).bind('beforeunload', function(){
-			if ($.active != 0) {
-				return crLang.line('Wait while data sync');
-			}
+			$.isUnloadPage = true; // Para evitar tirar el error de conección perdida si unlodean la page
 		});		
-*/
 		
 		$('body').on('click', 'a',
 			function(event) {
@@ -61,6 +56,9 @@ crMain = {
 		
 		$(document).ajaxError(
 			function(event, jqXHR, ajaxOptions) {
+				if ($.isUnloadPage == true) {
+					return;
+				}
 				if (jqXHR.status === 0 && jqXHR.statusText === 'abort') {
 					return;
 				}
