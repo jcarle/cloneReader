@@ -652,3 +652,9 @@ table .numeric, table .date, table .datetime, table .text-right {
 .userProfile {
 	margin-bottom: 10px;
 }
+
+
+.progress-animated .progress-bar,
+.progress-animated .bar {
+	background: url(../images/progressbar.gif) !important;
+}
