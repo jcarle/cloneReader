@@ -554,7 +554,7 @@ $form = array(
 							
 									for (columnName in list['columns']) {
 										var $td = $(' <td />')
-											.text(row[columnName] || '')
+											.html(row[columnName] || '')
 											.appendTo($tr);
 										
 										if ($.isPlainObject(list['columns'][columnName])) {
@@ -576,8 +576,7 @@ $form = array(
 									}
 								);
 
-
-							$tbody.find('tbody .date, tbody .datetime').each(
+							$tbody.find('.date, .datetime').each(
 								function() {
 									$.formatDate($(this));
 								}

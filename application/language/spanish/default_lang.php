@@ -4,6 +4,7 @@ $lang['_validate_password'] = 'La contraseña ingresada es incorrecta';
 $lang['_validate_exitsEmail'] = 'El mail ingresado ya existe en la base de datos';
 $lang['_validate_notExitsEmail'] = 'El mail ingresado no existe en la base de datos';
 $lang['_validate_exitsName'] = 'El nombre ingresado ya existe en la base de datos';
+$lang['_validate_exitsDNI'] = 'El DNI ingresado ya existe en la base de datos';
 
 $lang['Not authorized for the action to take'] = 'No tiene permisos para la acción que desea realizar';
 $lang['The page you requested does not exist'] = 'La página solicitada no existe';
