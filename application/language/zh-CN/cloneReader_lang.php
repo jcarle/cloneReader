@@ -54,7 +54,7 @@ $lang['View users'] = '查看用户';
 $lang['Remove old entries'] = '移除旧的条目';
 $lang['Choose the subscriptions.xml file from gReader or a standard OPML file'] = '选择 gReader 的 subscriptions.xml 文件或标准 OPML 文件';
 $lang['OPML is a format which allows migrate the feeds to another reader'] = 'OPML是一种能够使订阅源迁移到另一个阅读器的文件格式';
-$lang['Thank you for using cReader'] = '感谢您使用 cReader';
+$lang['Thank you for using %s'] = '感谢您使用 %s';
 $lang['Sent to you by %s via cReader'] = '由 ％s 通过 cReader 发送给您';
 
 $lang['Next item'] = '下一个项目'; 

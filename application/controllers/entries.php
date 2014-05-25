@@ -416,13 +416,13 @@ class Entries extends CI_Controller {
 			true);
 		//echo $message; die;	
 
-		$this->email->from('clonereader@gmail.com', 'cReader BETA');
+		$this->email->from('clonereader@gmail.com', config_item('siteName'));
 		$this->email->to($userFriendEmail); 
 		$this->email->reply_To($user['userEmail'], $userFullName);
 		if ($sendMeCopy == true) {
 			$this->email->cc($user['userEmail']); 
 		}
-		$this->email->subject('cReader - '.$entry['entryTitle']);
+		$this->email->subject(config_item('siteName').' - '.$entry['entryTitle']);
 		$this->email->message($message);
 		$this->email->send();
 

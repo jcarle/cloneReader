@@ -144,9 +144,9 @@ class Profile extends CI_Controller {
 		
 		$this->Users_Model->updateChangeEmailKey($userId, $userEmail, $changeEmailKey);
 
-		$this->email->from('clonereader@gmail.com', 'cReader BETA');
+		$this->email->from('clonereader@gmail.com', config_item('siteName'));
 		$this->email->to($userEmail); 
-		$this->email->subject('cReader - '.$this->lang->line('Change email'));
+		$this->email->subject(config_item('siteName').' - '.$this->lang->line('Change email'));
 		$this->email->message($message);
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	

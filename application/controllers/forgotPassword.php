@@ -63,9 +63,9 @@ class ForgotPassword extends CI_Controller {
 		
 		$this->Users_Model->updateResetPasswordKey($user['userId'], $resetPasswordKey);
 
-		$this->email->from('clonereader@gmail.com', 'cReader BETA');
+		$this->email->from('clonereader@gmail.com', config_item('siteName'));
 		$this->email->to($user['userEmail']); 
-		$this->email->subject('cReader - '.$this->lang->line('Reset password'));
+		$this->email->subject(config_item('siteName').' - '.$this->lang->line('Reset password'));
 		$this->email->message($message);
 		$this->email->send();
 		//echo $this->email->print_debugger();	die;	

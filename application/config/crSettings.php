@@ -7,7 +7,6 @@ $config['defaultCurrencyId'] = 1;
 $config['defaultCurrencyName'] = 'AR$';
 $config['autocompleteSize'] =	50;
 $config['siteLogo'] = array('w' => 151, 'h' => 39);
-
 $config['hasRss'] = true;
 
 $config['siteName'] = 'cloneReader BETA';

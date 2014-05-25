@@ -121,7 +121,7 @@ $lang['Repeat new password'] = '重复新密码';
 $lang['Icon'] = '图标';
 $lang['Data updated successfully'] = '数据更新成功';
 $lang['We have sent you an email with instructions to reset your password'] = '我们已经向您发出与指示的电子邮件重设密码';
-$lang['Hello %s, <p>To change your  email in cReader, click <a href="%s">here</a></p>'] = '您好 %s，<p>要更改您的电子邮件中 cReader，请点击<a href="%s">这里</a></p>';
+$lang['Hello %s, <p>To change your  email in %s, click <a href="%s">here</a></p>'] = '您好 %s，<p>要更改您的电子邮件中 %s，请点击<a href="%s">这里</a></p>';
 $lang['We have sent you an email with instructions to change your email'] = '我们已经向您发出，并指示邮件到更改您的电子邮件';
 $lang['Your email has been updated'] = '您的电子邮件已更新';
 $lang['Enter a url'] = '输入一个 URL';

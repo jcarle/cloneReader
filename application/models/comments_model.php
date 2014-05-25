@@ -78,7 +78,7 @@ class Comments_Model extends CI_Model {
 		
 		$this->email->from(element('commentUserEmail', $data), element('commentUserName', $data));
 		$this->email->to('jcarle@gmail.com');  // TODO: desharckodear!
-		$this->email->subject('cReader - Comentario de '.element('commentUserName', $data));
+		$this->email->subject(config_item('siteName').' - Comentario de '.element('commentUserName', $data));
 		$this->email->message($message);
 		$this->email->send();
 		

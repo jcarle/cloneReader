@@ -122,7 +122,7 @@ $lang['Repeat new password'] = 'Repeat new password';
 $lang['Icon'] = 'Icon';
 $lang['Data updated successfully'] = 'Data updated successfully';
 $lang['We have sent you an email with instructions to reset your password'] = 'We have sent you an email with instructions to reset your password';
-$lang['Hello %s, <p>To change your  email in cReader, click <a href="%s">here</a></p>'] = 'Hello %s, <p>To change your  email in cReader, click <a href="%s">here</a></p>';
+$lang['Hello %s, <p>To change your  email in %s, click <a href="%s">here</a></p>'] = 'Hello %s, <p>To change your  email in %s, click <a href="%s">here</a></p>';
 $lang['We have sent you an email with instructions to change your email'] = 'We have sent you an email with instructions to change your email';
 $lang['Your email has been updated'] = 'Your email has been updated';
 $lang['Enter a url'] = 'Enter a url';
