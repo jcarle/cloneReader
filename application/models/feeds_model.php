@@ -203,12 +203,12 @@ class Feeds_Model extends CI_Model {
 
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
-			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)) AS minutes ', false)
+			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)) AS minutes ', false)
 			->where('feeds.feedId', $feedId)
 			->get('feeds')->result_array();
 		//pr($this->db->last_query());  die;
 		$feed = $query[0];
-		if ($feed['minutes'] != null && (int)$feed['minutes'] < FEED_TIME_SCAN ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
+		if ($feed['minutes'] != null && (int)$feed['minutes'] < config_item('feedTimeScan') ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
 			return;
 		}
 		
@@ -232,8 +232,8 @@ class Feeds_Model extends CI_Model {
 				),
 				array('feedId' => $feedId)
 			);
-			if (($feedMaxRetries + 1) >= FEED_MAX_RETRIES) {
-				$this->updateFeedStatus($feedId, FEED_STATUS_NOT_FOUND);
+			if (($feedMaxRetries + 1) >= config_item('feedMaxRetries')) {
+				$this->updateFeedStatus($feedId, config_item('feedStatusNotFound'));
 			}
 			return;
 		}
@@ -285,7 +285,7 @@ class Feeds_Model extends CI_Model {
 				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF y va a hacer queries al pedo
 				$this->db->update('feeds', 
 					array(
-						'statusId' 			=> FEED_STATUS_APPROVED,
+						'statusId' 			=> config_item('feedStatusApproved'),
 						'feedLastScan' 		=> date("Y-m-d H:i:s"),
 						'feedMaxRetries'	=> 0,
 					), 
@@ -298,7 +298,7 @@ class Feeds_Model extends CI_Model {
 		}
 
 		$values = array(
-			'statusId'			=> FEED_STATUS_APPROVED,
+			'statusId'			=> config_item('feedStatusApproved'),
 			'feedLastScan' 		=> date("Y-m-d H:i:s"),
 			'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
 			'feedMaxRetries'	=> 0,

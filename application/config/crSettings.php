@@ -36,13 +36,13 @@ $config['feedMaxCount'] = 1000;
 
 $config['feedCloneReader'] = 1633; 	// 	id del feed propio, se muestra en el filtro 'home'
 $config['feedStatusPending'] = 0; 	
-$config['FEED_STATUS_APPROVED'] = 1;
-$config['FEED_STATUS_INVALID_FORMAT'] = 3;
-$config['FEED_STATUS_NOT_FOUND'] = 404;
+$config['feedStatusApproved'] = 1;
+$config['feedStatusInvalidFormat"'] = 3;
+$config['feedStatusNotFound'] = 404;
 
-$config['FEED_MAX_RETRIES'] = 10; // maxima cantidad de reintentos si un feed tiene algun error 
+$config['feedMaxRetries'] = 10; // maxima cantidad de reintentos si un feed tiene algun error 
 
-$config['FEED_TIME_SCAN'] = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
+$config['feedTimeScan'] = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
 $config['feedTimeSave'] = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
 $config['feedTimeReload'] = 9999;  //  Cada cuanto MINUTOS recarga el menu con feeds
 $config['entriesPageSize'] = 30;

@@ -142,7 +142,7 @@ class Entries_Model extends CI_Model {
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
 						->join('users_tags', 'users_tags.userId = users_feeds.userId AND users_tags.tagId = tags.tagId', 'left')
 						->where('users_feeds.userId', $userId)
-//						->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.')')
+//						->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').')')
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds');
 		//pr($this->db->last_query());				
@@ -557,9 +557,9 @@ class Entries_Model extends CI_Model {
 		$this->db
 			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
-			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.')')
-			->where('feedMaxRetries < '.FEED_MAX_RETRIES)
+			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)')
+			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').')')
+			->where('feedMaxRetries < '.config_item('feedMaxRetries'))
 //->where('feeds.feedId IN (340, 512, 555, 989)')
 			->order_by('feedLastScan ASC');
 
@@ -593,7 +593,7 @@ class Entries_Model extends CI_Model {
 		$query = $this->db
 			->select('feeds.feedId')
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-//			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.')')
+//			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').')')
 			->get('feeds');
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {		
@@ -717,7 +717,7 @@ class Entries_Model extends CI_Model {
 			INNER JOIN entries USING (entryId)
 			INNER JOIN feeds USING (feedId)
 			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
-			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.') 
+			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').') 
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
 			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, tagId 
@@ -741,7 +741,7 @@ class Entries_Model extends CI_Model {
 			INNER JOIN tags USING (tagId)
 			INNER JOIN feeds USING (feedId)
 			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
-			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.') 
+			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').') 
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
 			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, userId  ';
