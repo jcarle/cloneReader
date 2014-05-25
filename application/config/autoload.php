@@ -80,7 +80,7 @@ $autoload['helper'] = array('url', 'form', 'array', 'language');
 |
 */
 
-$autoload['config'] = array();
+$autoload['config'] = array('crSettings');
 
 
 /*

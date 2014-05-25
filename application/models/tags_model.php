@@ -55,7 +55,7 @@ class Tags_Model extends CI_Model {
 			->select('DISTINCT tags.tagId AS id, tagName AS text  ', false)
 			->like('tagName', $filter)
 			->order_by('text')
-			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
+			->get('tags', config_item('autocompleteSize'))->result_array();
 	}
 	
 	function selectByFeedId($feedId) {

@@ -17,7 +17,7 @@ class Comments extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query = $this->Comments_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'));
+		$query = $this->Comments_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'));
 		
 		$this->load->view('pageHtml', array(
 			'controller'	=> strtolower(__CLASS__),

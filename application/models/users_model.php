@@ -159,7 +159,7 @@ class Users_Model extends CI_Model {
 			$this->db->where('groupId', $groupId);	
 		}
 		
-		return $this->db->get('users', AUTOCOMPLETE_SIZE)->result_array();
+		return $this->db->get('users', config_item('autocompleteSize'))->result_array();
 	}
 
 	function searchFriends($filter, $userId){
@@ -168,7 +168,7 @@ class Users_Model extends CI_Model {
 			->where('userId', $userId)
 			->like('userFriendEmail', $filter)
 			->order_by('text')
-			->get('users_friends', AUTOCOMPLETE_SIZE)->result_array();
+			->get('users_friends', config_item('autocompleteSize'))->result_array();
 	}
 		
 	function select(){
@@ -303,7 +303,7 @@ class Users_Model extends CI_Model {
 	function getUserByResetPasswordKey($resetPasswordKey) {
 		$query = $this->db
 			->where('resetPasswordKey', $resetPasswordKey) 
-			->where('DATE_ADD(resetPasswordDate, INTERVAL '.URL_SECRET_TIME.' MINUTE)  > NOW()')
+			->where('DATE_ADD(resetPasswordDate, INTERVAL '.config_item('urlSecretTime').' MINUTE)  > NOW()')
 			->get('users')->row_array();	
 
 		return $query;
@@ -313,7 +313,7 @@ class Users_Model extends CI_Model {
 		$query = $this->db
 			->where('userId', $userId)
 			->where('changeEmailKey', $changeEmailKey) 
-			->where('DATE_ADD(changeEmailDate, INTERVAL '.URL_SECRET_TIME.' MINUTE)  > NOW()')
+			->where('DATE_ADD(changeEmailDate, INTERVAL '.config_item('urlSecretTime').' MINUTE)  > NOW()')
 			->get('users')->row_array();	
 		//pr($this->db->last_query()); die;
 		return $query;

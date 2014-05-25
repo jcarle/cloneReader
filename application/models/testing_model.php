@@ -29,7 +29,7 @@ class testing_Model extends CI_Model {
 			->join('states', 'states.countryId = testing.countryId AND states.stateId = testing.stateId', 'inner')		
 			->like('CONCAT(countryName, \' \', stateName, \' \', testName)', $filter) // TODO: mejorar para no matar el servidor!
 			->order_by('text')
-			->get('testing', AUTOCOMPLETE_SIZE)->result_array();
+			->get('testing', config_item('autocompleteSize'))->result_array();
 		//pr($this->db->last_query());
 		
 		 return $query;

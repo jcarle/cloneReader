@@ -135,7 +135,7 @@ class Feeds_Model extends CI_Model {
 //			->where('statusId', STATUS_ACTIVE)
 			->like('feedName', $filter)
 			->order_by('text')
-			->get('feeds', AUTOCOMPLETE_SIZE)->result_array();
+			->get('feeds', config_item('autocompleteSize'))->result_array();
 	}	
 	
 	
@@ -150,7 +150,7 @@ class Feeds_Model extends CI_Model {
 			->join('feeds_tags', 'feeds_tags.tagId = tags.tagId ', 'inner')
 			->like('tagName', $filter)
 			->order_by('text')
-			->get('tags', AUTOCOMPLETE_SIZE)->result_array();
+			->get('tags', config_item('autocompleteSize'))->result_array();
 	}	
 	
 	function saveFeedIcon($feedId, $feed = null, $force = false) {

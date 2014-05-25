@@ -31,7 +31,7 @@ class Users extends CI_Controller {
 			$feed = $this->Feeds_Model->get($feedId);
 		}		
 
-		$query = $this->Users_Model->selectToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $this->input->get('groupId'), $aRemoteLogin, $feedId, $this->input->get('orderBy'), $this->input->get('orderDir') );
+		$query = $this->Users_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $this->input->get('groupId'), $aRemoteLogin, $feedId, $this->input->get('orderBy'), $this->input->get('orderDir') );
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
@@ -238,7 +238,7 @@ class Users extends CI_Controller {
 			$user = $this->Users_Model->get($userId);
 		}
 
-		$query = $this->Users_Model->selectUsersLogsToList(PAGE_SIZE, ($page * PAGE_SIZE) - PAGE_SIZE, $this->input->get('filter'), $userId, $this->input->get('orderBy'), $this->input->get('orderDir') );
+		$query = $this->Users_Model->selectUsersLogsToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $userId, $this->input->get('orderBy'), $this->input->get('orderDir') );
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 

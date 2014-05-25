@@ -207,7 +207,7 @@ crMain = {
 	},
 	
 	renderPageTitle: function(data, $page) {
-		$('title').text(data['title'] + ' | ' + SITE_NAME);
+		$('title').text(data['title'] + ' | ' + $.crSettings.siteName);
 		
 		if (data['breadcrumb'] != null) {
 			var $ol = $('<ol class="breadcrumb">').appendTo($page);
@@ -250,7 +250,7 @@ crMain = {
 		
 		$otherPages.hide().trigger('onHide');
 
-		$('title').text( $page.data('title') + ' | ' + SITE_NAME);
+		$('title').text( $page.data('title') + ' | ' + $.crSettings.siteName);
 		$page.stop().show();
 		$page.trigger('onVisible');
 
@@ -265,7 +265,7 @@ crMain = {
 		var aTmp = pageName.split('/');
 		var controller = aTmp[0];
 		if (controller.trim() == '') {
-			controller = PAGE_HOME;
+			controller = $.crSettings.pageHome;
 		}
 		
 		return 'cr-page-' + controller + (aTmp.length > 1 ? '-' + aTmp[1] : '');

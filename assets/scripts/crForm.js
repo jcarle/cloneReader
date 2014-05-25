@@ -228,7 +228,7 @@ $form = array(
 							
  							field.$input.parent()
 								.addClass('date form_datetime')
-								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': $.normalizeLang(langId), 'pickerPosition': 'bottom-left' });
+								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': $.normalizeLang($.crSettings.langId), 'pickerPosition': 'bottom-left' });
 
 							$('<input type="hidden" name="' + inputName + '" />').appendTo(field.$input.parent().parent());
 							field.$input.parent().datetimepicker('show').datetimepicker('hide');
@@ -657,7 +657,7 @@ $form = array(
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
 				
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: $.crSettings.defaultCurrencyName + ' ' } );
 
 				this.$form.bind('submit', $.proxy(
 					function($maskPrice, $maskExchange, event) {
@@ -670,7 +670,7 @@ $form = array(
 				$total.data('init-price', true);
 			}
 			
-			if ($currency.val() == DEFAULT_CURRENCY_ID) {
+			if ($currency.val() == $.crSettings.defaultCurrencyId) {
 				$exchange.val(1);
 				$exchange.prev().autoNumeric('set', 1);
 			}
@@ -681,7 +681,7 @@ $form = array(
 		
 		sumValues: function($total, aFieldName) {
 			if ($total.data('init-price') == null) {
-				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: DEFAULT_CURRENCY_NAME + ' ' } );
+				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: $.crSettings.defaultCurrencyName + ' ' } );
 			}
 			
 			var total = 0;

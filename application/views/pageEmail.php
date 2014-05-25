@@ -1,7 +1,7 @@
 <div>
 	<div style="">
 		<div style="border-bottom: 1px solid #E5E5E5;  padding: 10px;">
-			<img alt="<?php echo SITE_NAME; ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">
+			<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">
 		</div>
 		<div  style="padding: 10px;">
 <?php 

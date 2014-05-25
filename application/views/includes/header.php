@@ -59,7 +59,7 @@ if (!isset($meta)) {
 }
 
 $CI->carabiner->css('default.css');
-$CI->carabiner->css( SITE_ID.'.css');
+$CI->carabiner->css( config_item('siteId').'.css');
 
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -78,16 +78,20 @@ header('Content-Type: text/html; charset=utf-8');
 <?php
 $CI->carabiner->display('css');
 $CI->carabiner->display('js');
+
+$crSettings = array(
+	'siteName'            => config_item('siteName'),
+	'pageSize'            => config_item('pageSize'),
+	'pageHome'            => $this->router->default_controller,
+	'langId'              => $this->session->userdata('langId'),
+	'defaultCurrencyId'   => config_item('defaultCurrencyId'),
+	'defaultCurrencyName' => config_item('defaultCurrencyName'),
+);
 ?>	
 	<script type="text/javascript">
+		$.crSettings = <?php echo json_encode($crSettings); ?>;		
 		var base_url				= '<?php echo base_url(); ?>';
 		var datetime				= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
-		var langId					= '<?php echo $this->session->userdata('langId'); ?>';
-		var PAGE_SIZE				= <?php echo PAGE_SIZE; ?>;	
-		var PAGE_HOME			 	= '<?php echo $this->router->default_controller; ?>'; 
-		var SITE_NAME				= '<?php echo SITE_NAME; ?>';
-		var DEFAULT_CURRENCY_ID  	= <?php echo DEFAULT_CURRENCY_ID; ?>;
-		var DEFAULT_CURRENCY_NAME	= '<?php echo DEFAULT_CURRENCY_NAME; ?>';
 <?php
 if (!isset($langs)) {
 	$langs = array();
@@ -116,9 +120,11 @@ if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereade
 }
 
 echo implode(' ', $aScripts);
+
+$siteLogo = config_item('siteLogo');
 ?>
 	</script>	
-	<title><?php echo $title.' | '.SITE_NAME; ?> </title>
+	<title><?php echo $title.' | '.config_item('siteName'); ?> </title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-warning navbar-fixed-top">
@@ -135,7 +141,9 @@ echo implode(' ', $aScripts);
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand logo" href="<?php echo base_url()?>"> <img alt="<?php echo SITE_NAME; ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">  </a>
+			<a class="navbar-brand logo" href="<?php echo base_url()?>"> 
+				<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">  
+			</a>
 		</div>
 
 		<div class="navbar-collapse collapse navbar-ex1-collapse ">

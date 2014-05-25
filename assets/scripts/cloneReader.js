@@ -6,7 +6,7 @@ cloneReader = {
 		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$page);
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
-		moment.lang(langId);
+		moment.lang($.crSettings.langId);
 		this.isMobile = $.isMobile();
 
 		this.minUnreadEntries 	= 2;
@@ -74,7 +74,7 @@ cloneReader = {
 
 				if (this.indexFilters != null) {
 					var filter = this.getFilter(this.aFilters);
-					$('title').text(filter.name + ' | ' + SITE_NAME);
+					$('title').text(filter.name + ' | ' + $.crSettings.siteName);
 				}
 			}
 
@@ -648,7 +648,7 @@ TODO: pensar como mejorar esta parte
 		this.$entriesHead.text(filter.name);
 		this.$ulEntries.prepend(this.$entriesHead);				
 		
-		$('title').text(filter.name + ' | ' + SITE_NAME);
+		$('title').text(filter.name + ' | ' + $.crSettings.siteName);
 	},	
 	
 	selectFilters: function() {

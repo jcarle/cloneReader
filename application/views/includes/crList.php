@@ -147,11 +147,11 @@ unset($params['page']);
 
 $this->pagination->initialize(array(
 	'first_link'			=> '1',
-	'last_link'				=> ceil($list['foundRows'] /PAGE_SIZE),
+	'last_link'				=> ceil($list['foundRows'] / config_item('pageSize')),
 	'uri_segment'			=> 3,
 	'base_url'		 		=> current_url().'?'.http_build_query($params),
 	'total_rows'			=> $list['foundRows'],
-	'per_page'				=> PAGE_SIZE, 
+	'per_page'				=> config_item('pageSize'), 
 	'num_links' 			=> 2,
 	'page_query_string'		=> true,
 	'use_page_numbers'		=> true,
