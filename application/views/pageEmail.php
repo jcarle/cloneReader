@@ -1,7 +1,10 @@
+<?php
+$siteLogo = config_item('siteLogo');
+?>
 <div>
 	<div style="">
 		<div style="border-bottom: 1px solid #E5E5E5;  padding: 10px;">
-			<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="151" height="39">
+			<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">
 		</div>
 		<div  style="padding: 10px;">
 <?php 

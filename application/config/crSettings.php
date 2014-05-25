@@ -8,6 +8,8 @@ $config['defaultCurrencyName'] = 'AR$';
 $config['autocompleteSize'] =	50;
 $config['siteLogo'] = array('w' => 151, 'h' => 39);
 
+$config['hasRss'] = true;
+
 $config['siteName'] = 'cloneReader BETA';
 $config['siteId'] = 'cloneReader';
 
@@ -22,3 +24,25 @@ $config['siteAssets'] = array(
 	),
 	'css' => array()
 );
+
+
+
+$config['tagAll'] = 1;
+$config['tagStar'] = 2;
+$config['tagHome'] = 3;
+$config['tagBrowse'] = 4;
+
+$config['feedMaxCount'] = 1000;
+
+$config['feedCloneReader'] = 1633; 	// 	id del feed propio, se muestra en el filtro 'home'
+$config['feedStatusPending'] = 0; 	
+$config['FEED_STATUS_APPROVED'] = 1;
+$config['FEED_STATUS_INVALID_FORMAT'] = 3;
+$config['FEED_STATUS_NOT_FOUND'] = 404;
+
+$config['FEED_MAX_RETRIES'] = 10; // maxima cantidad de reintentos si un feed tiene algun error 
+
+$config['FEED_TIME_SCAN'] = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
+$config['feedTimeSave'] = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
+$config['feedTimeReload'] = 9999;  //  Cada cuanto MINUTOS recarga el menu con feeds
+$config['entriesPageSize'] = 30;

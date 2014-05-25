@@ -35,27 +35,27 @@ class Entries_Model extends CI_Model {
 				'page'			=> 1,
 				'onlyUnread'	=> true,
 				'sortDesc'	 	=> true,
-				'id' 			=> TAG_HOME, 
+				'id' 			=> config_item('tagHome'), 
 				'type'	 		=> 'tag',
 				'viewType'	 	=> 'detail',
 				'isMaximized' 	=> false,
 			), $aFilters);
 
-		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_STAR) {
+		if ($userFilters['type'] == 'tag' && $userFilters['id'] == config_item('tagStar')) {
 			$userFilters['onlyUnread'] = false;
 		}
 		
 		$this->updateUserFilters($userFilters, $userId);
 		
 		// Tag home, lo tienen todos los usuarios
-		if ($userFilters['type'] == 'tag' && $userFilters['id'] == TAG_HOME) {
+		if ($userFilters['type'] == 'tag' && $userFilters['id'] == config_item('tagHome')) {
 			return $this->selectFeedCR($userId, $userFilters);
 		}
 
 
 		$indexName = 'PRIMARY';
 		$query = $this->db
-			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.TAG_STAR.', true, false) AS starred, entryRead', false)
+			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.config_item('tagStar').', true, false) AS starred, entryRead', false)
 			->join('entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->where('users_entries.userId', $userId);
@@ -63,7 +63,7 @@ class Entries_Model extends CI_Model {
 		if ($userFilters['type'] == 'feed') {
 			$indexName = 'indexFeed';
 			$this->db->where('users_entries.feedId', (int)$userFilters['id']);
-			$this->db->where('users_entries.tagId', TAG_ALL);
+			$this->db->where('users_entries.tagId', config_item('tagAll'));
 		}
 		if ($userFilters['type'] == 'tag') {
 			$indexName = 'indexTag';
@@ -75,7 +75,7 @@ class Entries_Model extends CI_Model {
 
 		$query = $this->db
 			->order_by('users_entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
-			->get('users_entries FORCE INDEX ('.$indexName.')', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)
+			->get('users_entries FORCE INDEX ('.$indexName.')', config_item('entriesPageSize'), ((int)$userFilters['page'] * config_item('entriesPageSize')) - config_item('entriesPageSize'))
 			->result_array();
 		//pr($this->db->last_query()); die;
 		
@@ -87,9 +87,9 @@ class Entries_Model extends CI_Model {
 		$query = $this->db
 			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor ', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
-			->where('feeds.feedId', FEED_CLONEREADER)
+			->where('feeds.feedId', config_item('feedCloneReader'))
 			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
-			->get('entries ', ENTRIES_PAGE_SIZE, ((int)$userFilters['page'] * ENTRIES_PAGE_SIZE) - ENTRIES_PAGE_SIZE)			
+			->get('entries ', config_item('entriesPageSize'), ((int)$userFilters['page'] * config_item('entriesPageSize')) - config_item('entriesPageSize'))
 			->result_array();
 		//pr($this->db->last_query()); 
 		
@@ -104,19 +104,19 @@ class Entries_Model extends CI_Model {
 			'filters'	=> array(
 				array(
 					'type'		=> 'tag',
-					'id'		=> TAG_HOME,
+					'id'		=> config_item('tagHome'),
 					'name'		=> $this->lang->line('@tag-home'),
 					'icon'		=> site_url().'assets/images/default_feed.png', 
 				),
 				array(
 					'type'		=> 'tag',
-					'id'		=> TAG_STAR,
+					'id'		=> config_item('tagStar'),
 					'name'		=> $this->lang->line('@tag-star'), 
 					'icon'		=> site_url().'assets/images/star-on.png', 
 				),
 				array(
 					'type'			=> 'tag',
-					'id'			=> TAG_BROWSE,
+					'id'			=> config_item('tagBrowse'),
 					'name'			=> $this->lang->line('@tag-browse'), 
 					'classIcon'		=> 'fa fa-tags', 
 				)
@@ -125,7 +125,7 @@ class Entries_Model extends CI_Model {
 
 		$aFilters['tags'] = array(
 			'type'		=> 'tag',
-			'id'		=> TAG_ALL,		
+			'id'		=> config_item('tagAll'),		
 			'name'		=> $this->lang->line('@tag-all'),
 			'count'		=> 380,
 			'expanded'	=> true,
@@ -136,13 +136,13 @@ class Entries_Model extends CI_Model {
 
 // FIXME: la version de mysql que hay en dreamhost no soporta pasar limit como parametro de una function
 // 	esta harckodeado el valor 1050 adentro de countUnread()! 
-		$query = $this->db->select('feeds.feedId, feeds.statusId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon, countUnread('.$userId.', feeds.feedId, '.TAG_ALL.', '.(FEED_MAX_COUNT + 50).') AS unread', false)
+		$query = $this->db->select('feeds.feedId, feeds.statusId, feedName, feedUrl, tags.tagId, tagName, users_tags.expanded AS eee, IF(users_tags.expanded = 1, true, false) AS expanded, feeds.feedLink, feeds.feedIcon, countUnread('.$userId.', feeds.feedId, '.config_item('tagAll').', '.(config_item('feedMaxCount') + 50).') AS unread', false)
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
 						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
 						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
 						->join('users_tags', 'users_tags.userId = users_feeds.userId AND users_tags.tagId = tags.tagId', 'left')
 						->where('users_feeds.userId', $userId)
-//						->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+//						->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.')')
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds');
 		//pr($this->db->last_query());				
@@ -186,9 +186,9 @@ class Entries_Model extends CI_Model {
 					FROM users_entries FORCE INDEX (indexUnread)
 					WHERE feedId 		= '.$feedId.'
 					AND   userId	 	= '.$userId.'
-					AND   tagId			= '.TAG_ALL.' 
+					AND   tagId			= '.config_item('tagAll').' 
 					AND   entryRead 	= false 
-					LIMIT '.(FEED_MAX_COUNT + 50).' 
+					LIMIT '.(config_item('feedMaxCount') + 50).' 
 			) AS tmp ';
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());
@@ -199,7 +199,7 @@ class Entries_Model extends CI_Model {
 		$query = $this->db->select('tags.tagId, tagName ', false)
 			->join('users_tags', 'users_tags.tagId = tags.tagId', 'inner')
 			->where('users_tags.userId', $userId)
-			->where('tags.tagId NOT IN ('.TAG_ALL.', '.TAG_STAR.', '.TAG_HOME.')')
+			->where('tags.tagId NOT IN ('.config_item('tagAll').', '.config_item('tagStar').', '.config_item('tagHome').')')
 			->order_by('tagName asc')
 			->get('tags');
 		//pr($this->db->last_query());				
@@ -325,20 +325,20 @@ class Entries_Model extends CI_Model {
 			if ($entry['starred'] == true) {
 				//$aQueries[] = 
 				$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate)  
-					SELECT userId, entryId, feedId, '.TAG_STAR.', entryRead, entryDate
+					SELECT userId, entryId, feedId, '.config_item('tagStar').', entryRead, entryDate
 					FROM users_entries 
 					WHERE 	userId	= '.$userId.'
-					AND 	tagId	= '.TAG_ALL.'
+					AND 	tagId	= '.config_item('tagAll').'
 					AND 	entryId = '.$entry['entryId'];
 				$this->db->query($query);
 				//pr($this->db->last_query());	 
 			}
 			else {
-				//$aQueries[] = 'DELETE FROM users_entries WHERE userId = '.$userId.' AND entryId = '.$entry['entryId'].' AND tagId = '.TAG_STAR;
+				//$aQueries[] = 'DELETE FROM users_entries WHERE userId = '.$userId.' AND entryId = '.$entry['entryId'].' AND tagId = '.config_item('tagStar');
 				$this->db->delete('users_entries', array(
 					'userId'	=> $userId,
 					'entryId'	=> $entry['entryId'],
-					'tagId'		=> TAG_STAR
+					'tagId'		=> config_item('tagStar')
 				));
 			}
 			
@@ -400,7 +400,7 @@ class Entries_Model extends CI_Model {
 						FROM users_entries
 						WHERE users_entries.userId 	= '.$userId.'
 						AND   users_entries.feedId 	= '.$feedId.'
-						AND   users_entries.tagId	= '.TAG_ALL.' ';			
+						AND   users_entries.tagId	= '.config_item('tagAll').' ';			
 		$this->db->query($query);
 		//pr($this->db->last_query());
 								
@@ -457,7 +457,7 @@ class Entries_Model extends CI_Model {
 		$this->db->delete('users_feeds', array('feedId' => $feedId, 'userId' => $userId));
 		//pr($this->db->last_query());
 		
-		$this->db->delete('users_entries', array('feedId' => $feedId, 'userId' => $userId, 'tagId <>' => TAG_STAR));
+		$this->db->delete('users_entries', array('feedId' => $feedId, 'userId' => $userId, 'tagId <>' => config_item('tagStar')));
 		//pr($this->db->last_query());
 		
 		$this->db->delete('users_feeds_tags', array('feedId' => $feedId, 'userId' => $userId));
@@ -469,7 +469,7 @@ class Entries_Model extends CI_Model {
 		$aFeedId = array();
 
 		if ($type == 'tag') {
-			if ($id != TAG_ALL) {
+			if ($id != config_item('tagAll')) {
 				$query = $this->db->select('feedId')
 					->from('users_feeds_tags')
 					->where('tagId', $id)
@@ -501,7 +501,7 @@ class Entries_Model extends CI_Model {
 		}
 		
 		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 		
-						SELECT '.$userId.', entries.entryId, entries.feedId, '.TAG_ALL.', FALSE , entries.entryDate
+						SELECT '.$userId.', entries.entryId, entries.feedId, '.config_item('tagAll').', FALSE , entries.entryDate
 						FROM entries 
 						WHERE '.implode(' AND ', $aWhere).'						
 						ORDER BY entryId DESC
@@ -558,7 +558,7 @@ class Entries_Model extends CI_Model {
 			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
 			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.FEED_TIME_SCAN.' MINUTE)')
-			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.')')
 			->where('feedMaxRetries < '.FEED_MAX_RETRIES)
 //->where('feeds.feedId IN (340, 512, 555, 989)')
 			->order_by('feedLastScan ASC');
@@ -593,7 +593,7 @@ class Entries_Model extends CI_Model {
 		$query = $this->db
 			->select('feeds.feedId')
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-//			->where('feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.')')
+//			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.')')
 			->get('feeds');
 		//pr($this->db->last_query()); 
 		foreach ($query->result() as $row) {		
@@ -640,16 +640,16 @@ class Entries_Model extends CI_Model {
 						MAX(entryId) AS entryId
 						FROM  users_entries  
 						WHERE userId  	= '.$userId.' 
-						AND   tagId 	= '.TAG_ALL;
+						AND   tagId 	= '.config_item('tagAll');
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query()); die;
 		if (!empty($query)) {
 			$entryId = $query[0]['entryId'];
 		}		
 
-		// save TAG_ALL
+		// save tagAll
 		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
-					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.TAG_ALL.', false, entries.entryDate 
+					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.config_item('tagAll').', false, entries.entryDate 
 					FROM entries 
 					INNER JOIN users_feeds 
 						ON entries.feedId = users_feeds.feedId
@@ -658,7 +658,7 @@ class Entries_Model extends CI_Model {
 						ON 		users_entries.userId 	= users_feeds.userId
 						AND 	users_entries.entryId 	= entries.entryId
 						AND 	users_entries.feedId 	= entries.feedId
-						AND 	users_entries.tagId 	= '.TAG_ALL.'
+						AND 	users_entries.tagId 	= '.config_item('tagAll').'
 					WHERE users_entries.userId IS NULL
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 				ORDER BY entries.entryId LIMIT '.$limit;
@@ -704,7 +704,7 @@ class Entries_Model extends CI_Model {
 		// Completo datos en la tabla tags y feeds_tags, basado en los tags de cada entry, y en como tageo cada user un feed.
 		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
 		
-		$aSystenTags 	= array(TAG_ALL, TAG_STAR, TAG_HOME, TAG_BROWSE);
+		$aSystenTags 	= array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
 		$dayOfLastEntry = 21;
 		
 		$this->db->query('DELETE FROM feeds_tags ');
@@ -717,7 +717,7 @@ class Entries_Model extends CI_Model {
 			INNER JOIN entries USING (entryId)
 			INNER JOIN feeds USING (feedId)
 			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
-			AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
+			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.') 
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
 			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, tagId 
@@ -741,7 +741,7 @@ class Entries_Model extends CI_Model {
 			INNER JOIN tags USING (tagId)
 			INNER JOIN feeds USING (feedId)
 			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
-			AND feeds.statusId IN ('.FEED_STATUS_PENDING.', '.FEED_STATUS_APPROVED.') 
+			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.FEED_STATUS_APPROVED.') 
 			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
 			AND feeds.feedSuggest = TRUE 
 			GROUP BY feedId, userId  ';

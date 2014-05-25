@@ -83,7 +83,7 @@ class Feeds_Model extends CI_Model {
 		
 		$values = array(
 			'feedUrl' 			=> $data['feedUrl'], 
-			'statusId' 			=> FEED_STATUS_PENDING,
+			'statusId' 			=> config_item('feedStatusPending'),
 			'countryId'			=> element('countryId', $data),
 			'langId'			=> element('langId', $data),
 			'feedSuggest' 		=> element('feedSuggest', $data),
@@ -226,7 +226,7 @@ class Feeds_Model extends CI_Model {
 			$this->db->update('feeds', 
 				array(
 					'feedMaxRetries'	=> $feedMaxRetries + 1,
-					'statusId'			=> FEED_STATUS_PENDING,
+					'statusId'			=> config_item('feedStatusPending'),
 					'feedLastScan'		=> date("Y-m-d H:i:s"),
 					'feedLastEntryDate'	=> $this->Entries_Model->getLastEntryDate($feedId),
 				),
@@ -355,7 +355,7 @@ class Feeds_Model extends CI_Model {
 		$query = ' SELECT COUNT(1) AS total 
 			FROM users_entries
 			WHERE 	feedId 	= '.$feedId.' 
-			AND 	tagId	= '.TAG_STAR;
+			AND 	tagId	= '.config_item('tagStar');
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());
 		return $query[0]['total'];
@@ -401,7 +401,7 @@ class Feeds_Model extends CI_Model {
 						SELECT entries.*
 						FROM entries 
 						WHERE feedId = '.$feedId.'
-						AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.TAG_STAR.' AND feedId = '.$feedId.') 
+						AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.config_item('tagStar').' AND feedId = '.$feedId.') 
 				) AS entries
 			) 
 			LIMIT '.$limit;

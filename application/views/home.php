@@ -1,14 +1,18 @@
+<?php
+$crSettings = array(
+	'tagAll'           => config_item('tagAll'),
+	'tagStar'          => config_item('tagStar'),
+	'tagHome'          => config_item('tagHome'),
+	'tagBrowse'        => config_item('tagBrowse'),
+	'feedTimeSave'     => config_item('feedTimeSave'),
+	'feedTimeReload'   => config_item('feedTimeReload'),
+	'entriesPageSize'  => config_item('entriesPageSize'),
+	'feedMaxCount'     => config_item('feedMaxCount'),
+);
+?>
 <script>
-var TAG_HOME			= <?php echo TAG_HOME; ?>;
-var TAG_ALL			 	= <?php echo TAG_ALL; ?>;
-var TAG_STAR			= <?php echo TAG_STAR; ?>;
-var TAG_BROWSE			= <?php echo TAG_BROWSE; ?>;
-var FEED_TIME_SAVE		= <?php echo FEED_TIME_SAVE; ?>;
-var FEED_TIME_RELOAD 	= <?php echo FEED_TIME_RELOAD; ?>;
-var ENTRIES_PAGE_SIZE	= <?php echo ENTRIES_PAGE_SIZE;?>;
-var FEED_MAX_COUNT		= <?php echo FEED_MAX_COUNT; ?>;
-
 $(document).ready(function() {
+	$.crSettings = $.extend($.crSettings, <?php echo json_encode($crSettings); ?>);
 	cloneReader.init(<?php echo $userFilters; ?>);
 });
 </script>

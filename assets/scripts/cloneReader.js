@@ -21,13 +21,13 @@ cloneReader = {
 			'page':			1,
 			'onlyUnread':	true,
 			'sortDesc': 	true,
-			'id': 			TAG_HOME, 
+			'id': 			$.crSettings.tagHome, 
 			'type': 		'tag',
 			'viewType': 	'detail',
 			'isMaximized': 	false
 		}, aFilters);	
 		this.isMaximized		= (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
-		this.aSystemTags		= [TAG_ALL, TAG_STAR, TAG_HOME, TAG_BROWSE];
+		this.aSystemTags		= [$.crSettings.tagAll, $.crSettings.tagStar, $.crSettings.tagHome, $.crSettings.tagBrowse];
 		this.isLoaded			= false;
 		
 		this.buildCache();
@@ -95,9 +95,9 @@ cloneReader = {
 		, this));
 					
 		
-		setInterval(function() { cloneReader.saveData(true); }, (FEED_TIME_SAVE * 1000)); 
-//		setInterval(function() { cloneReader.loadFilters(true); }, (FEED_TIME_RELOAD * 60000));
-		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (FEED_TIME_RELOAD * 60000));
+		setInterval(function() { cloneReader.saveData(true); }, ($.crSettings.feedTimeSave * 1000)); 
+//		setInterval(function() { cloneReader.loadFilters(true); }, ($.crSettings.feedTimeReload * 60000));
+		setInterval(function() { cloneReader.updateEntriesDateTime(); }, ($.crSettings.feedTimeReload * 60000));
 
 		this.$ulEntries
 			.on({ 'tap' : 
@@ -439,7 +439,7 @@ cloneReader = {
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-					cloneReader.isLastPage 		= (response.result.length < ENTRIES_PAGE_SIZE);
+					cloneReader.isLastPage 		= (response.result.length < $.crSettings.entriesPageSize);
 					cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
 					cloneReader.renderEntries(response.result);
 				}
@@ -514,7 +514,7 @@ cloneReader = {
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
 		
-		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == TAG_HOME) {
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == $.crSettings.tagHome) {
 			$entry.find('.star, .footer, .entryOrigin').remove();
 		} 
 		
@@ -754,7 +754,7 @@ TODO: pensar como mejorar esta parte
 		}
 					
 		var $count = $filter.find('.count:first');
-		$count.text('(' + (count > FEED_MAX_COUNT ? FEED_MAX_COUNT + '+' : count) + ')');
+		$count.text('(' + (count > $.crSettings.feedMaxCount ? $.crSettings.feedMaxCount + '+' : count) + ')');
 		$count.hide();
 		if (count > 0) {
 			$count.show();
@@ -794,7 +794,7 @@ TODO: pensar como mejorar esta parte
 		this.$mainToolbar.find('.filterUnread').hide();
 		this.$mainToolbar.find('.btnMarkAllAsRead').hide();
 		
-		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [TAG_STAR, TAG_HOME]) != -1)) {
+		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [$.crSettings.tagStar, $.crSettings.tagHome]) != -1)) {
 			this.$mainToolbar.find('.btnMarkAllAsRead').show();
 			this.$mainToolbar.find('.filterUnread').show();
 		}
@@ -804,8 +804,8 @@ TODO: pensar como mejorar esta parte
 
 	updateMenuCount: function() {
 		var count = this.getCountFilter(this.getFilter(this.aFilters));
-		if (count > FEED_MAX_COUNT) {
-			count = FEED_MAX_COUNT + '+';
+		if (count > $.crSettings.feedMaxCount) {
+			count = $.crSettings.feedMaxCount + '+';
 		}
 		this.$mainToolbar.find('.filterUnread .count').text(count);
 		this.$page.find('.filterOnlyUnread .count').text(count);
@@ -1088,7 +1088,7 @@ console.timeEnd("t1");
 		if (tmp != null) {
 			return tmp;
 		}	
-		return this.indexFilters['tag'][TAG_ALL];	
+		return this.indexFilters['tag'][$.crSettings.tagAll];	
 	},
 	
 	getAllParentsByFilter: function(filter){
@@ -1388,7 +1388,7 @@ console.timeEnd("t1");
 						'success': 	
 							function(response) {
 								if ($.hasAjaxDefaultAction(response) == true) { return; }
-								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': TAG_ALL });
+								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': $.crSettings.tagAll });
 								cloneReader.loadFilters(true);
 							}
 					});
@@ -1591,7 +1591,7 @@ console.timeEnd("t1");
 	},
 	
 	isBrowseTags: function() {
-		if (this.aFilters.type == 'tag' && this.aFilters.id == TAG_BROWSE) {
+		if (this.aFilters.type == 'tag' && this.aFilters.id == $.crSettings.tagBrowse) {
 			return true;
 		}
 		return false;
