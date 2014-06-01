@@ -23,7 +23,9 @@ class Controllers extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit controllers'),
 			'list'			=> array(
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'controllers/listing',
+				'urlEdit'		=> 'controllers/edit/%s',
+				'urlAdd'		=> 'controllers/add',			
 				'columns'		=> array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,

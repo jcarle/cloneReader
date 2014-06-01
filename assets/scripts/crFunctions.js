@@ -16,6 +16,10 @@ $.extend({
 		
 		return o;
 	},
+	
+	base_url: function() {
+		// TODO: implementar !
+	},
 
 	isMobile: function() {
 		return $(window).width() < 768;		

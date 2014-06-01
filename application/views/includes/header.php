@@ -145,7 +145,7 @@ $siteLogo = config_item('siteLogo');
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand logo" href="<?php echo base_url()?>"> 
+			<a class="navbar-brand logo" href="<?php echo base_url(); ?>"> 
 				<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">  
 			</a>
 		</div>

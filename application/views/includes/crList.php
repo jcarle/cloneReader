@@ -6,7 +6,7 @@ $readOnly 	= element('readOnly', $list, false);
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
-		<form method="get" class="panel-heading" action="<?php echo base_url($list['controller']); ?>" id="frmCrList" role="search">
+		<form method="get" class="panel-heading" action="<?php echo base_url($list['urlList']); ?>" id="frmCrList" role="search">
 			<div class="btn-group">
 				<div class="input-group">
 					<span class="input-group-addon">
@@ -74,10 +74,10 @@ foreach ($sort as $key => $value) {
 			<thead>
 				<tr class="label-primary">
 <?php
-$urlDelete 	= element('urlDelete', $list);
-$showId 	= element('showId', $list);
-if ($urlDelete == true) {
-	echo '<th class="checkbox">	<input type="checkbox"> </th>';	
+$showCheckbox   = element('showCheckbox', $list);
+$showId         = element('showId', $list);
+if ($showCheckbox == true) {
+	echo '<th class="rowCheckbox"> <input type="checkbox"> </th>';	
 }
 if ($showId == true) {
 	echo '<th class="numeric"> # </th>';	
@@ -101,10 +101,16 @@ if (count($list['data']) == 0) {
 	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> '.$CI->lang->line('No results').' </td></tr>';
 }
 foreach ($list['data'] as $row) {
-	$id = reset($row);
-	echo '<tr data-controller="'.base_url($list['controller'].'/edit/'.$id).'">';
-	if ($urlDelete == true) {	
-		echo '<td class="checkbox">'.form_checkbox('chkDelete', $id).'</td>';
+	$id        = reset($row);
+	$urlEdit   = null;
+	
+	if ($readOnly != true && isset($list['urlEdit'])) {
+		$urlEdit   = base_url(sprintf($list['urlEdit'], $id));
+	}
+	
+	echo '<tr data-url-edit="'.$urlEdit.'">';
+	if ($showCheckbox == true) {	
+		echo '<td class="rowCheckbox">'.form_checkbox('chkDelete', $id).'</td>';
 	}
 	if ($showId == true) {
 		echo '<td class="numeric">'.$id.'</td>';
@@ -129,11 +135,11 @@ foreach ($list['data'] as $row) {
 		<div class="panel-footer row">
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 <?php
-if ($urlDelete == true) {
+if ($showCheckbox == true && isset($list['urlDelete'])) {
 	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
 }
-if ($readOnly !== true) {
-	echo '<a href="'.base_url($list['controller'].'/add').'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
+if ($readOnly !== true && isset($list['urlAdd']) ) {
+	echo '<a href="'.base_url($list['urlAdd']).'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
 }
 ?>				
 				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>

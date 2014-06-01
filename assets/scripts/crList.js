@@ -1,3 +1,27 @@
+/**
+ * El listado tiene que tener este formato:
+ * 
+ * $list = array(
+ * 		'urlList'		=> 'services/listing', 		// url del listado
+ * 		'urlEdit'		=> 'services/edit/%s', 		// Url para editar el item ( se reemplaza el %s por el id),
+ * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
+ * 		'urlDelete'		=> '',						// TODO: falta implementar
+ * 		'showCheckbox'	=> false, 					// muestra un checkbox en cada row
+ * 		'columns'			=> array(							// array con las columnas, con el formato: $key => $value; se pueden incluir un className para los datetiem y los numeric  
+ * 			'serviceName' 		=> $this->lang->line('Name'),
+ * 			'newDate' 			=> array('class' => 'date', 'value' => $this->lang->line('Date'),  
+ * 		),
+ * 		'data'			=> $data,						// los datos a mostrar en el listado; macheando el mismo key que en la propertie columns
+ * 		'foundRows'		=> $foundRows, 					// cantidad de registros, se usa en la paginación
+ * 		'showId'		=> true,						// Indica si muestra el id en el listado
+ * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm
+ * 		'sort' 			=> array(),						// Un array con los items por los que se puede ordenar el listado
+ * 		'readOnly'		=> false,						// Indica si el listaod es de solo lectura ( no son cliqueables los rows, y no muestra el btn add)
+ * 
+ * ); 
+ * 
+ */
+
 ;(function($) {
 	var 
 		methods,
@@ -122,12 +146,14 @@
 					$(document).crAlert( {
 						'msg': 			crLang.line('Are you sure?'),
 						'isConfirm': 	true,
-						'callback': 	function() {}
+						'callback': 	function() {
+							// TODO: implementar
+						}
 					});
 				}
 			, this));
 			
-			this.$table.find('tbody tr td.checkbox').click(
+			this.$table.find('tbody tr td.rowCheckbox').click(
 				function(event) {
 					event.stopPropagation();
 				}
@@ -149,7 +175,7 @@
 			if (this.options['readOnly'] != true) {
 				this.$table.find('tbody tr').on('click', 
 					function (event) {
-						$.goToUrl($(this).data('controller') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+						$.goToUrl($(this).data('url-edit') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
 					}
 				);
 				
@@ -210,7 +236,7 @@
 		var $crList		= $('<div class="crList"></div>').appendTo($parentNode);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
 		var $form 		= $('\
-			<form method="get" class="panel-heading" id="frmCrList" role="search" action="' + data['controller'] + '" >\
+			<form method="get" class="panel-heading" id="frmCrList" role="search" action="' + base_url + data['urlList'] + '" >\
 				<div class="btn-group">\
 					<div class="input-group">\
 						<span class="input-group-addon">\
@@ -269,7 +295,7 @@
 				var $li 	= $('<li/>').appendTo($ul);
 				var $link 	= $('<a/>')
 					.appendTo($li)
-					.attr('href', base_url + data['controller'] + '?' + $.param(params))
+					.attr('href', base_url + data['urlList'] + '?' + $.param(params))
 					.text(data['sort'][key]);
 		
 				if (orderBy == key) {
@@ -278,15 +304,15 @@
 			}
 		}
 
-		var $div 		= $('<div class="table-responsive" />').appendTo($crList);
-		var $table 		= $('<table class="table" />').appendTo($div);
-		var $thead		= $('<thead />').appendTo($table);
-		var $tr			= $('<tr class="label-primary" />').appendTo($thead);
-		var urlDelete 	= data['urlDelete'] == true;
-		var readOnly	= data['readOnly'] == true;
-		var showId 		= data['showId'] == true;
-		if (urlDelete == true) {
-			$('<th class="checkbox">	<input type="checkbox"> </th>').appendTo($tr);	
+		var $div           = $('<div class="table-responsive" />').appendTo($crList);
+		var $table         = $('<table class="table" />').appendTo($div);
+		var $thead         = $('<thead />').appendTo($table);
+		var $tr            = $('<tr class="label-primary" />').appendTo($thead);
+		var showCheckbox   = data['showCheckbox'] == true;
+		var readOnly       = data['readOnly'] == true;
+		var showId         = data['showId'] == true;
+		if (showCheckbox == true) {
+			$('<th class="rowCheckbox">	<input type="checkbox"> </th>').appendTo($tr);	
 		}
 		if (readOnly != true) {
 			$table.addClass('table-hover');
@@ -313,12 +339,18 @@
 		}
 
 		for (var i=0; i<data['data'].length; i++) {
-			var row = data['data'][i];
-			var id 	= row[Object.keys(row)[0]];
-			var $tr	= $( '<tr data-controller="' + base_url + data['controller'] + '/edit/' + id +'">').appendTo($tbody);
+			var row      = data['data'][i];
+			var id 	     = row[Object.keys(row)[0]];
+			var urlEdit  = null;
+	
+			if (readOnly != true && data['urlEdit'] != null) {
+				urlEdit   = base_url + $.sprintf(data['urlEdit'], id);
+			}
 			
-			if (urlDelete == true) {	
-				$('	<td class="checkbox"> <input name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
+			var $tr	= $( '<tr data-url-edit="' + urlEdit +'">').appendTo($tbody);
+			
+			if (showCheckbox == true) {	
+				$('	<td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
 			}
 			if (showId == true) {
 				$('<td class="numeric" />').appendTo($tr).text(id);
@@ -339,12 +371,12 @@
 		var $row	= $('<div class="panel-footer row" />').appendTo($footer);
 		var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 
-		if (urlDelete == true) {
+		if (showCheckbox == true) {
 			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + crLang.line('Delete') + ' </a>').appendTo($div);
 		}
 		if (readOnly != true) {
 			$('\
-				<a href="' + data['controller'] + '/add" class="btnAdd btn btn-sm btn-success">\
+				<a href="' + base_url + data['urlAdd'] + '" class="btnAdd btn btn-sm btn-success">\
 					<i class="fa fa-file-o fa-fw"></i>\
 					' + crLang.line('Add') + '\
 				</a>\
@@ -403,7 +435,7 @@
 			'pageUrl': 				function(type, page, current){
 				var params 		= $.url().param();
 				params['page'] 	= page;			
-				return base_url + data['controller'] + '?' + $.param(params);
+				return base_url + data['urlList'] + '?' + $.param(params);
 			},
 		});
 		

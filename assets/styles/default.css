@@ -284,21 +284,21 @@ body.isLoading, body.isLoading * {
 					text-shadow: 1px 1px 0 #555;
 					min-width: 25px;
 				}
-				.crList table thead tr th.checkbox {
+				.crList table thead tr th.rowCheckbox {
 					min-width: 20px;
 					width:20px;
 				}
 			.crList table.table-hover tbody tr {
 				cursor: pointer;
 			}
-				.crList table tbody tr td.checkbox,
+				.crList table tbody tr td.rowCheckbox,
 				.crList table tbody tr.warning td{
 					cursor: default;
 				} 
 				.crList table tbody tr td {
 					word-break: break-all;
 				}
-		.crList table .checkbox input[type=checkbox] {
+		.crList table .rowCheckbox input[type=checkbox] {
 			margin-left: 0;
 		}				
 	.crList .footer {

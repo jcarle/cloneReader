@@ -37,7 +37,9 @@ class Users extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit users'),
 			'list'			=> array(
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'users/listing',
+				'urlEdit'		=> 'users/edit/%s',
+				'urlAdd'		=> 'users/add',
 				'columns'		=> array(
 					'userEmail' 		=> $this->lang->line('Email'), 
 					'userFullName' 		=> $this->lang->line('Name'), 

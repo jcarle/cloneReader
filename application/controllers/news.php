@@ -23,7 +23,9 @@ class News extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit news'),
 			'list'			=> array(
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'news/listing',
+				'urlEdit'		=> 'news/edit/%s',
+				'urlAdd'		=> 'news/add',
 				'columns'		=> array('userFullName' => $this->lang->line('Author'), 'newTitle' => $this->lang->line('Title'), 'newSef' => $this->lang->line('Sef'), 'newDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,

@@ -23,7 +23,9 @@ class Testing extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> 'Edit testing',
 			'list'			=> array(
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'testing/listing',
+				'urlEdit'		=> 'testing/edit/%s',
+				'urlAdd'		=> 'testing/add',
 				'columns'		=> array('testName' => 'Name', 'countryName' => 'Country', 'stateName' => 'State'),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,

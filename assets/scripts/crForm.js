@@ -3,13 +3,14 @@
  * 
 $form = array(
 	'frmId'		=> 'frmId',
-	'action'	=> base_url('save'), // 
+	'action'	=> base_url('entity/save'), // 
 	'fields'	=> array(), // fields que va a incluir el formulario
 	'rules'		=> array(), // reglas de validacion para cada campo
 	'buttons'	=> array(), // los bottones que se van a mostrar 
 	'info'		=> array('position' => 'left|right', 'html' => ''), // si incluye info a los costados
 	'title'		=> 'title',
 	'icon'		=> 'fa fa-edit', // se utiliza en los popup form,
+	'urlDelete' => base_url('entity/delete'), // url para borrar 
 	'callback'	=> function javascript que se llama al enviar el form 
 );
 */
