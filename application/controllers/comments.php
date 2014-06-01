@@ -24,7 +24,9 @@ class Comments extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit comments'),
 			'list'			=> array(
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'comments/listing',
+				'urlEdit'		=> 'comments/edit/%s',
+				'urlAdd'		=> 'comments/add',
 				'columns'		=> array(
 					'commentDesc'		=> $this->lang->line('Description'),
 					'commentDate'		=> array('class' => 'datetime', 'value' => $this->lang->line('Date')),

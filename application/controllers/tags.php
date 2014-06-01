@@ -23,7 +23,9 @@ class Tags extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit tags'),
 			'list'			=> array(
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'tags/listing',
+				'urlEdit'		=> 'tags/edit/%s',
+				'urlAdd'		=> 'tags/add',
 				'columns'		=> array('tagName' => $this->lang->line('Name')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,

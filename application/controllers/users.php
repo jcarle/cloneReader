@@ -246,7 +246,7 @@ class Users extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('User logs'),
 			'list'			=> array(
-				'controller'	=> 'users/logs',
+				'urlList'		=> 'users/logs',
 				'readOnly'		=> true,
 				'columns'		=> array(
 					'userEmail' 		=> $this->lang->line('Email'),

@@ -43,7 +43,9 @@ class Feeds extends CI_Controller {
 			'title'			=> $this->lang->line('Edit feeds'),
 			'list'			=> array(
 				'showId' => true,
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> 'feeds/listing',
+				'urlEdit'		=> 'feeds/edit/%s',
+				'urlAdd'		=> 'feeds/add',
 				'columns'		=> array(
 					'feedName' 			=> $this->lang->line('Name'),  
 					'feedDescription' 	=> $this->lang->line('Description'),  
