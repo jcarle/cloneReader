@@ -20,6 +20,12 @@
  * 
  * ); 
  * 
+ * classNames:
+ * 		date: 		formatea una fecha
+ * 		datetime:	formatea una fecha y hora
+ * 		numeric:	aliea el texto a la izquierza // TODO: hacer que formatee pasando un par de parametros mas
+ * 		dotdotdot:	trunca el texto a y muestra '...' si corresponde 
+ * 
  */
 
 ;(function($) {
@@ -77,6 +83,16 @@
 				$.formatDate($(this));
 			}
 		);
+		
+		this.$table.find('tbody td.dotdotdot').each(
+			function() {
+				var $td  = $(this);
+				var value = $td.html();
+				$td.html('');
+				var $div = $('<div />').html(value).appendTo($td);
+			}
+		);
+		
 
 		this.$filter = this.$form.find('input[name=filter]');
 		

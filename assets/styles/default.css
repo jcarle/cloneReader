@@ -552,6 +552,16 @@ table .numeric, table .date, table .datetime, table .text-right {
 	white-space: nowrap;
 	width: 5px;
 }
+table .dotdotdot {
+	white-space: nowrap;
+	max-width:250px;
+}
+	table .dotdotdot div {
+		height: 20px;
+		line-height: 20px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
 
 .modal {
