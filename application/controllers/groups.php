@@ -22,9 +22,9 @@ class Groups extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit groups'),
 			'list'			=> array(
-				'urlList'		=> 'groups/listing',
-				'urlEdit'		=> 'groups/edit/%s',
-				'urlAdd'		=> 'groups/add',			
+				'urlList'		=> strtolower(__CLASS__).'/listing',
+				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'		=> strtolower(__CLASS__).'/add',
 				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('Home page')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,

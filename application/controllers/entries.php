@@ -37,10 +37,9 @@ class Entries extends CI_Controller {
 			'view'			=> 'includes/crList', 
 			'title'			=> $this->lang->line('Edit entries'),
 			'list'			=> array(
-				'urlList'		=> 'entries/listing',
-				'urlEdit'		=> 'entries/edit/%s',
-				'urlAdd'		=> 'entries/add',
-				'controller'	=> strtolower(__CLASS__),
+				'urlList'		=> strtolower(__CLASS__).'/listing',
+				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'		=> strtolower(__CLASS__).'/add',
 				'columns'		=> array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,

@@ -17,7 +17,6 @@
  * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm
  * 		'sort' 			=> array(),						// Un array con los items por los que se puede ordenar el listado
  * 		'readOnly'		=> false,						// Indica si el listaod es de solo lectura ( no son cliqueables los rows, y no muestra el btn add)
- * 
  * ); 
  * 
  * classNames:
@@ -89,7 +88,7 @@
 				var $td  = $(this);
 				var value = $td.html();
 				$td.html('');
-				var $div = $('<div />').html(value).appendTo($td);
+				var $div = $('<div />').attr('title', value).html(value).appendTo($td);
 			}
 		);
 		
