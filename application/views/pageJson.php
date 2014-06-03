@@ -10,6 +10,9 @@ if (isset($hasUploadFile)) {
 if (isset($notRefresh)) {
 	$result['notRefresh'] = $notRefresh;
 }
+if (isset($showTitle)) {
+	$result['showTitle'] = $showTitle;
+}
 if (isset($breadcrumb)) {
 	$result['breadcrumb'] = $breadcrumb;
 }

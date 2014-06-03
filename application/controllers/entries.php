@@ -418,7 +418,7 @@ class Entries extends CI_Controller {
 			true);
 		//echo $message; die;	
 
-		$this->email->from('clonereader@gmail.com', config_item('siteName'));
+		$this->email->from(config_item('emailFrom'), config_item('siteName'));
 		$this->email->to($userFriendEmail); 
 		$this->email->reply_To($user['userEmail'], $userFullName);
 		if ($sendMeCopy == true) {

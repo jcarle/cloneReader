@@ -13,7 +13,7 @@ class Profile extends CI_Controller {
 	
 	function edit() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+	
 		$this->load->view('pageHtml', array(
 			'view'		=> 'profile', 
 			'title'		=> $this->lang->line('Edit profile'),
@@ -144,7 +144,7 @@ class Profile extends CI_Controller {
 		
 		$this->Users_Model->updateChangeEmailKey($userId, $userEmail, $changeEmailKey);
 
-		$this->email->from('clonereader@gmail.com', config_item('siteName'));
+		$this->email->from(config_item('emailFrom'), config_item('siteName'));
 		$this->email->to($userEmail); 
 		$this->email->subject(config_item('siteName').' - '.$this->lang->line('Change email'));
 		$this->email->message($message);

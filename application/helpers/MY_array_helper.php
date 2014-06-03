@@ -58,9 +58,13 @@ function loadViewAjax($code, $result = null) {
 }
 
 function getPageName() {
-	$CI = &get_instance();
-	
-	return 'cr-page-'.$CI->router->class.($CI->router->method != 'index' ? '-'.$CI->router->method : '');
+	$CI  = &get_instance();
+	$url = uri_string();
+	if (uri_string() == '') {
+		$url = $CI->router->default_controller;
+	}
+
+	return 'cr-page-'.str_replace('/', '-', $url);
 }
 
 function formatCurrency($value, $currencyName = null) {

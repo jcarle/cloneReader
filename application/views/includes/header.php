@@ -14,7 +14,7 @@ $CI->carabiner->minify_css	= true;
 
 $aScripts = array();
 
-if ($_SERVER['SERVER_NAME'] == 'jcarle.redirectme.net') {
+if (ENVIRONMENT == 'development') {
 	$CI->carabiner->minify_js 	= false;
 	$CI->carabiner->minify_css	= false;
 }
@@ -24,6 +24,7 @@ $CI->carabiner->js('jquery-1.7.2.js');
 $CI->carabiner->js('jquery.json-2.3.js');
 $CI->carabiner->js('jquery.printf.js');
 $CI->carabiner->js('jquery.url.js');
+$CI->carabiner->js('jquery.dotdotdot.js');
 $CI->carabiner->js('moment-with-langs.js');
 $CI->carabiner->js('bootstrap.js');
 $CI->carabiner->js('crFunctions.js');
@@ -108,11 +109,11 @@ if (isset($aServerData)) {
 	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
 }
 
-if (in_array($_SERVER['SERVER_NAME'], array('www.jcarle.com.ar', 'www.clonereader.com.ar'))) {
+if (ENVIRONMENT == 'production' && config_item('google-analytics-Account') != '') {
 	$aScripts[] = "
 
 	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-41589815-1']);
+	_gaq.push(['_setAccount', '".config_item('google-analytics-Account')."']);
 	_gaq.push(['_trackPageview']);
 
 	(function() {

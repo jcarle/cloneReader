@@ -7,11 +7,11 @@
  * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
  * 		'urlDelete'		=> '',						// TODO: falta implementar
  * 		'showCheckbox'	=> false, 					// muestra un checkbox en cada row
- * 		'columns'			=> array(							// array con las columnas, con el formato: $key => $value; se pueden incluir un className para los datetiem y los numeric  
- * 			'serviceName' 		=> $this->lang->line('Name'),
- * 			'newDate' 			=> array('class' => 'date', 'value' => $this->lang->line('Date'),  
+ * 		'columns'			=> array(							// array con las columnas, con el formato: $key => $value; se pueden incluir un className para los datetime y los numeric  
+ * 			'entityName' 		=> $this->lang->line('Name'),
+ * 			'entityDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date'),  
  * 		),
- * 		'data'			=> $data,						// los datos a mostrar en el listado; macheando el mismo key que en la propertie columns
+ * 		'data'			=> $data,						// los datos a mostrar en el listado; macheando el mismo key que en la property columns
  * 		'foundRows'		=> $foundRows, 					// cantidad de registros, se usa en la paginación
  * 		'showId'		=> true,						// Indica si muestra el id en el listado
  * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm

@@ -11,6 +11,9 @@ $config['hasRss'] = true;
 
 $config['siteName'] = 'cloneReader BETA';
 $config['siteId'] = 'cloneReader';
+$config['emailFrom'] = 'clonereader@gmail.com';
+$config['google-analytics-Account'] = 'UA-41589815-1';
+
 
 /**
  * Js y Css adicionales para que sea compilado con carabiner
@@ -45,3 +48,4 @@ $config['feedTimeScan'] = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
 $config['feedTimeSave'] = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
 $config['feedTimeReload'] = 9999;  //  Cada cuanto MINUTOS recarga el menu con feeds
 $config['entriesPageSize'] = 30;
+
