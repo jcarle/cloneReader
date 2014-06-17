@@ -34,28 +34,28 @@ class Entries extends CI_Controller {
 		$query = $this->Entries_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $feedId, $this->input->get('orderBy'), $this->input->get('orderDir'));
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit entries'),
-			'list'			=> array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
-				'showId'		=> false,
-				'filters'		=> array(
+			'view'      => 'includes/crList', 
+			'meta'      => array( 'title' => $this->lang->line('Edit entries')),
+			'list'       => array(
+				'urlList'       => strtolower(__CLASS__).'/listing',
+				'urlEdit'       => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'        => strtolower(__CLASS__).'/add',
+				'columns'       => array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
+				'data'          => $query->result_array(),
+				'foundRows'     => $query->foundRows,
+				'showId'        => false,
+				'filters'       => array(
 					'feedId' => array(
-						'type' 		=> 'typeahead',
-						'label'		=> $this->lang->line('Feed'),
-						'source' 	=> base_url('feeds/search/'),
-						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
+						'type'      => 'typeahead',
+						'label'     => $this->lang->line('Feed'),
+						'source'    => base_url('feeds/search/'),
+						'value'     => array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
 					),
 				),
 				'sort' => array(
-					'entryId'			=> '#',
-					'entryDate'			=> $this->lang->line('Date'),
-				)				
+					'entryId'     => '#',
+					'entryDate'   => $this->lang->line('Date'),
+				)
 			)
 		));
 	}
@@ -91,10 +91,10 @@ class Entries extends CI_Controller {
 		} 
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit entries'),
-			'form'		=> populateCrForm($form, $this->Entries_Model->get($entryId, true)),
-		));		
+			'view'  => 'includes/crForm', 
+			'meta'  => array( 'title' => $this->lang->line('Edit entries')),
+			'form'  => populateCrForm($form, $this->Entries_Model->get($entryId, true)),
+		));
 	}
 
 	function add(){

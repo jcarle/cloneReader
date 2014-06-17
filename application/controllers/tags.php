@@ -20,9 +20,9 @@ class Tags extends CI_Controller {
 		$query = $this->Tags_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'));
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit tags'),
-			'list'			=> array(
+			'view'   => 'includes/crList', 
+			'meta'   => array('title' => $this->lang->line('Edit tags')),
+			'list'   => array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
@@ -51,9 +51,9 @@ class Tags extends CI_Controller {
 		}
 				
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit tags'),
-			'form'		=> populateCrForm($form, $this->Tags_Model->get($tagId)),
+			'view'   => 'includes/crForm', 
+			'meta'   => array('title' => $this->lang->line('Edit tags')),
+			'form'   => populateCrForm($form, $this->Tags_Model->get($tagId)),
 		));		
 	}
 

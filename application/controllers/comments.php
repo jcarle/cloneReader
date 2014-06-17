@@ -20,22 +20,21 @@ class Comments extends CI_Controller {
 		$query = $this->Comments_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'));
 		
 		$this->load->view('pageHtml', array(
-			'controller'	=> strtolower(__CLASS__),
-			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit comments'),
-			'list'			=> array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array(
-					'commentDesc'		=> $this->lang->line('Description'),
-					'commentDate'		=> array('class' => 'datetime', 'value' => $this->lang->line('Date')),
-					'commentUserName'	=> $this->lang->line('Name'), 
-					'commentUserEmail'	=> $this->lang->line('Email'),
+			'view'    => 'includes/crList', 
+			'meta'    => array( 'title' => $this->lang->line('Edit comments')),
+			'list'    => array(
+				'urlList'   => strtolower(__CLASS__).'/listing',
+				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'    => strtolower(__CLASS__).'/add',
+				'columns'   => array(
+					'commentDesc'       => $this->lang->line('Description'),
+					'commentDate'       => array('class' => 'datetime', 'value' => $this->lang->line('Date')),
+					'commentUserName'   => $this->lang->line('Name'), 
+					'commentUserEmail'  => $this->lang->line('Email'),
 				),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
-				'showId'		=> true,
+				'data'       => $query->result_array(),
+				'foundRows'  => $query->foundRows,
+				'showId'     => true,
 			)
 		));
 	}
@@ -57,10 +56,10 @@ class Comments extends CI_Controller {
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'meta'      => array('title'		=> $this->lang->line('Edit comments')),
-			'form'		=> populateCrForm($form, $this->Comments_Model->get($commentId)),
-		));		
+			'view'    => 'includes/crForm', 
+			'meta'    => array('title'		=> $this->lang->line('Edit comments')),
+			'form'    => populateCrForm($form, $this->Comments_Model->get($commentId)),
+		));	
 	}
 	
 	function add(){

@@ -19,9 +19,9 @@ class News extends CI_Controller {
 		$query = $this->News_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'));
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'meta'			=> array( 'title' => $this->lang->line('Edit news') ),
-			'list'			=> array(
+			'view'   => 'includes/crList', 
+			'meta'   => array( 'title' => $this->lang->line('Edit news') ),
+			'list'   => array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
@@ -50,9 +50,9 @@ class News extends CI_Controller {
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit news'),
-			'form'		=> populateCrForm($form, $this->News_Model->get($newId, true)),
+			'view'   => 'includes/crForm', 
+			'meta'   => array('title' => $this->lang->line('Edit news')),
+			'form'   => populateCrForm($form, $this->News_Model->get($newId, true)),
 		));		
 	}
 
@@ -129,9 +129,9 @@ class News extends CI_Controller {
 		
 		$this->load->view('pageHtml', 
 			array(
-				'view'			=> 'newView', 
-				'title'			=> $new['newTitle'],
-				'new'			=> $new,
+				'view'   => 'newView', 
+				'meta'   => array( 'title' => $new['newTitle']),
+				'new'    => $new,
 				'breadcrumb'	=> array(
 					array('text' => 'home', 'href' => base_url()),
 					array('text' => $new['newTitle'], 'active' => true),
