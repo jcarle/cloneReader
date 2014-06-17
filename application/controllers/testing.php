@@ -18,10 +18,13 @@ class Testing extends CI_Controller {
 		if ($page == 0) { $page = 1; }
 		
 		$query = $this->Testing_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $this->input->get('countryId'));
-				
+
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'title'			=> 'Edit testing',
+			'meta'			=> array(
+				'title'			=> $this->lang->line('Edit testing'),
+				'h1'			=> $this->lang->line('Edit testing')
+			),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
@@ -88,22 +91,41 @@ class Testing extends CI_Controller {
 				'testDate' => array(
 					'type'	=> 'datetime',
 					'label'	=> 'Fecha', 
-				),				
+				),
 			)
 		);
 		
 		if ((int)$testId > 0) {
 			$form['urlDelete'] = base_url('testing/delete/');
 			
-			$form['fields']['gallery'] = array(
-				'type'			=> 'gallery',
-				'label'			=> 'Pictures',
-				'urlGet' 		=> base_url('files/testing/'.$testId),
-				'urlSave' 		=> base_url('files/save'),
-				'entityName'	=> 'testing',
-				'entityId'		=> $testId
+			$form['fields']['testPicture'] = array(
+				'type'             => 'upload',
+				'label'            => $this->lang->line('Logo'),
+				'urlSave'          => base_url('testing/savePicture/'.$testId),
+				'urlDelete'        => base_url('testing/deletePicture/'.$testId),
+				'isPicture'        => true,
+			);
+			$form['fields']['testDoc'] = array(
+				'type'       => 'upload',
+				'label'      => $this->lang->line('pdf'),
+				'urlSave'    => base_url('testing/saveDoc/'.$testId),
+				'urlDelete'  => base_url('testing/deleteDoc/'.$testId),
 			);
 			
+			$form['fields']['testIco'] = array(
+				'type'       => 'upload',
+				'label'      => $this->lang->line('Icon'),
+				'isPicture'  => true,
+				'disabled'   => true,
+			);
+						
+			$form['fields']['gallery'] = array(
+				'type'          => 'gallery',
+				'label'         => 'Pictures',
+				'urlGallery'    => base_url('gallery/select/'.config_item('entityTypeTesting').'/'.$testId),
+				'entityTypeId'  => config_item('entityTypeTesting'),
+				'entityId'      => $testId,
+			);
 			$form['fields']['testChilds'] = array(
 				'type'			=> 'subform',
 				'label'			=> 'childs', 
@@ -131,11 +153,14 @@ class Testing extends CI_Controller {
 				return loadViewAjax($code);
 			}
 		}
-				
+
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'title'		=> 'Edit testing',
-			'form'		=> populateCrForm($form, $this->Testing_Model->get($testId)),
+			'meta'		=> array(
+				'title'			=> $this->lang->line('Edit testing'),
+				'h1'			=> $this->lang->line('Edit testing')
+			),
+			'form'		=> populateCrForm($form, $this->Testing_Model->get($testId, true)),
 		));
 	}
 
@@ -161,7 +186,7 @@ class Testing extends CI_Controller {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 		
 		$data = $this->Testing_Model->selectChildsByTestId($testId);
-		$data[] = '<tr><td>asdf asdf asdf</td></tr>';
+		$data[] = '<tr><td colspan="3">asdf asdf asdf</td></tr>';
 		
 		$list = array(
 			'controller'	=> strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
@@ -308,8 +333,8 @@ class Testing extends CI_Controller {
 				array(
 					'field' => 'userId',
 					'label' => $this->lang->line('User'),
-					'rules' => 'required'				
-				),			
+					'rules' => 'required'
+				),
 			)
 		);
 		
@@ -341,4 +366,63 @@ class Testing extends CI_Controller {
 		
 		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)) ));
 	}	
+	
+	
+	function savePicture($testId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		
+		$this->deletePicture($testId);
+		
+		$result  = savePicture(config_item('testPicture'));
+		
+		if ($result['code'] != true) {
+			return loadViewAjax(false, $result['result']);
+		}
+		
+		$testPictureFileId = $result['fileId'];
+
+		$this->Testing_Model->savePicture($testId, $testPictureFileId);
+
+		return loadViewAjax(true, array('reloadUrl' => true));
+	}
+	
+	function deletePicture($testId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		
+		$this->load->model('Files_Model');
+		
+		$data = $this->Testing_Model->get($testId);
+		
+		$this->Files_Model->deleteFile(config_item('testPicture'), $data['testPictureFileId']);
+
+		return loadViewAjax(true, array('reloadUrl' => true));
+	}
+
+	function saveDoc($testId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		
+		$this->deleteDoc($testId);
+		
+		$result = saveFile(config_item('testDoc'));
+		
+		if ($result['code'] != true) {
+			return loadViewAjax(false, $result['result']);
+		}
+		
+		$this->Testing_Model->saveDoc($testId, $result['fileId']);
+
+		return loadViewAjax(true, array('reloadUrl' => true));
+	}
+
+	function deleteDoc($testId) {
+		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		
+		$this->load->model('Files_Model');
+		$data = $this->Testing_Model->get($testId);
+		if (!empty($data)) {
+			$this->Files_Model->deleteFile(config_item('testDoc'), $data['testDocFileId']);
+		}
+
+		return loadViewAjax(true, array('reloadUrl' => true));
+	}
 }

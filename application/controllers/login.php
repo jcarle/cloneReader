@@ -53,12 +53,14 @@ class Login extends CI_Controller {
 				return loadViewAjax($code, $code == false ? validation_errors() : array('goToUrl' => base_url('home'), 'skipAppLink' => true));
 			}
 		}
-			
+		
 		return $this->load->view('pageHtml', array(
 			'view'			=> 'login', 
 			'title'			=> $this->lang->line('Login'),
 			'form'			=> $form,
 			'meta'			=> array(
+				'title'			=> $this->lang->line('Login'),
+				'h1'			=> $this->lang->line('Login'),
 				'description' 	=> 'Login in clone Reader. Reader of feeds, rss, news',
 				'keywords'		=> 'cReader cloneReader login '
 			),

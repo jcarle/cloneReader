@@ -18,13 +18,13 @@ class Error extends CI_Controller {
 		}		
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'error', 
-			'meta'          => array(
-				'title'			=> 'Error 403',
-				'h1'			=> $this->lang->line('Error 403'),
+			'view'      => 'error', 
+			'meta'      => array(
+				'title' => $this->lang->line('Error 403'),
+				'h1'    => $this->lang->line('Error 403'),
 			),
-			'message'		=> $this->lang->line('Not authorized for the action to take'),
-			'status_code'	=> 403
+			'message'     => $this->lang->line('Not authorized for the action to take'),
+			'status_code' => 403
 		));
 	}	
 	

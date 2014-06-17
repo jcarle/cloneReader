@@ -13,10 +13,13 @@ class Profile extends CI_Controller {
 	
 	function edit() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-	
+
 		$this->load->view('pageHtml', array(
 			'view'		=> 'profile', 
-			'title'		=> $this->lang->line('Edit profile'),
+			'meta'		=> array(
+				'title'			=> $this->lang->line('Edit profile'),
+				'h1'			=> $this->lang->line('Edit profile'),
+			),
 		));		
 	}
 

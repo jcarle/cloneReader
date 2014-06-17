@@ -32,11 +32,11 @@ function populateCrForm($form, $data) {
 			case 'dropdown':
 			case 'date':
 			case 'datetime':
-			case 'logo':
 			case 'typeahead':
 			case 'textarea':
 			case 'raty':
 			case 'numeric':
+			case 'upload':
 				// TODO: revisar este IF. Esta puesto para que no sobreescriba fields hiddens con el parentId que se usa para agregar un child
 				if ( element('value', $form['fields'][$fieldName]) === false ) { 
 					$form['fields'][$fieldName]['value'] = element($fieldName, $data, '');
@@ -63,10 +63,10 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 	
 	foreach ($aFieldName as $fieldName) {
 		$subscribe[] = array(
-			'field' 		=> $fieldName,
-			'event'			=> 'change', 
-			'callback'		=> 'calculatePrice',
-			'arguments'		=> array(
+			'field'         => $fieldName,
+			'event'         => 'change', 
+			'callback'      => 'calculatePrice',
+			'arguments'     => array(
 				'this.getFieldByName(\''.$price['name'].'\')',
 				'this.getFieldByName(\''.$currency['name'].'\')',
 				'this.getFieldByName(\''.$exchange['name'].'\')',
@@ -79,34 +79,34 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			
 	return array(
 		$price['name']	=> array(
-			'type'	 		=> 'text',
-			'name'			=> $price['name'],
-			'label'			=> $price['label'], 
-			'value'			=> element('value', $price, 0),
-			'placeholder'	=> '0,00',
+			'type'          => 'text',
+			'name'          => $price['name'],
+			'label'         => $price['label'], 
+			'value'         => element('value', $price, 0),
+			'placeholder'   => '0,00',
 		),
-		$currency['name']	=> array(
-			'type'			=> 'dropdown',
-			'name' 			=> $currency['name'],
-			'label'			=> $currency['label'], 
-			'value'			=> element('value', $currency),
-			'source'		=> $CI->Coins_Model->selectToDropdown(),
+		$currency['name']   => array(
+			'type'          => 'dropdown',
+			'name'          => $currency['name'],
+			'label'         => $currency['label'], 
+			'value'         => element('value', $currency),
+			'source'        => $CI->Coins_Model->selectToDropdown(),
 		),
-		$exchange['name']	=> array(
-			'type'	 		=> 'text',
-			'name'			=> $exchange['name'],
-			'label'			=> $exchange['label'], 
-			'value'			=> element('value', $exchange, 0),
-			'placeholder'	=> '0,00',
+		$exchange['name']   => array(
+			'type'          => 'text',
+			'name'          => $exchange['name'],
+			'label'         => $exchange['label'], 
+			'value'         => element('value', $exchange, 0),
+			'placeholder'   => '0,00',
 		),
-		$total['name']	=> array(
-			'type'	 		=> 'text',
-			'name'			=> $total['name'],
-			'label'			=> $total['label'], 
-			'value'			=> null,
-			'disabled'		=> true,
-			'subscribe'		=> $subscribe
-		),		
+		$total['name']      => array(
+			'type'          => 'text',
+			'name'          => $total['name'],
+			'label'         => $total['label'], 
+			'value'         => null,
+			'disabled'      => true,
+			'subscribe'     => $subscribe
+		),
 	);
 }
 
@@ -159,6 +159,108 @@ function hasCrUploadFile($form) {
 	return false;
 }
 
+/**
+ * Guarda una imagen y la rezisea segun los parametros seteados en el config
+ * 
+ * @param $config array. Ejemplo de $config = array(
+ *		'folder'        => '/assets/images/%s/original/',
+ *		'allowed_types' => 'gif|jpg|png',
+ *		'max_size'      => 1024 * 8,
+ *		'sizes'         => array(
+ *			'thumb' => array( 'width' => 150,  'height' => 100, 'folder' => '/assets/images/%s/thumb/' ),
+ *		)
+ *	)
+ * @return array
+ * */
+function savePicture($config) {
+	$CI = &get_instance();
+	
+	$CI->load->model('Files_Model');
+
+	$CI->load->library('upload', array(
+		'upload_path'     => '.'.$config['folder'],
+		'allowed_types'   => $config['allowed_types'],
+		'max_size'        => $config['max_size'],
+		'encrypt_name'    => true,
+		'is_image'        => true
+	));
+
+	if (!$CI->upload->do_upload()) {
+		return array( 'code' => false, 'result'	=> $CI->upload->display_errors('', '') );
+	}
+
+	$data = $CI->upload->data();
+
+	$CI->load->library('image_lib');
+		
+	// creo los sizes que esten seteados en el config
+	if (is_array($config['sizes'])) {
+		foreach ($config['sizes'] as $size) {
+			$config = array(
+				'source_image'      => $data['full_path'],
+				'new_image'         => '.'.$size['folder'],
+				'maintain_ratio'    => true,
+				'width'             => $size['width'],
+				'height'            => $size['height']
+			);
+			$CI->image_lib->initialize($config);
+			$CI->image_lib->resize();
+		}
+	}
+
+	$fileId = $CI->Files_Model->insert($data['file_name'], '' /*$_POST['title']*/); // TODO:
+	if(!$fileId) {
+		@unlink($data['full_path']);
+		return array( 'code' => false, 'result'	=> 'Something went wrong when saving the file, please try again');
+	}
+
+	@unlink($_FILES[$file_element_name]);
+	
+	return array( 'code' => true, 'fileId'	=> $fileId);
+}
+
+
+
+
+/**
+ * Guarda un archivo segun los parametros seteados en el config
+ * 
+ * @param $config array. Ejemplo de $config = array(
+ *		'folder'        => '/assets/images/%s/original/',
+ *		'allowed_types' => 'gif|jpg|png',
+ *		'max_size'      => 1024 * 8,
+ *	)
+ * @return array
+ * */
+function saveFile($config) {
+	$CI = &get_instance();
+	
+	$CI->load->model('Files_Model');
+
+	$CI->load->library('upload', array(
+		'upload_path' 		=> '.'.$config['folder'],
+		'allowed_types' 	=> $config['allowed_types'],
+		'max_size'			=> $config['max_size'],
+		'encrypt_name'		=> true,
+	));
+
+	if (!$CI->upload->do_upload()) {
+		return array( 'code' => false, 'result'	=> $CI->upload->display_errors('', '') );
+	}
+
+	$data = $CI->upload->data();
+
+	$fileId = $CI->Files_Model->insert($data['file_name'], $data['client_name']);
+	if(!$fileId) {
+		@unlink($data['full_path']);
+		return array( 'code' => false, 'result'	=> 'Something went wrong when saving the file, please try again');
+	}
+
+	@unlink($_FILES[$file_element_name]);
+	
+	return array( 'code' => true, 'fileId'	=> $fileId);
+}
+
 function renderCrFormFields($form) {
 	$CI			= &get_instance();
 	$aFields 	= array();
@@ -204,11 +306,7 @@ function renderCrFormFields($form) {
 				break;			
 			case 'dropdown':
 				$source = element('source', $field, array());
-				
 				$source = sourceToDropdown($source, element('appendNullOption', $field));
-				/*if (element('appendNullOption', $field) == true) {
-					$source = array('' => '-- '.$CI->lang->line('Choose').' --') + $source;
-				}*/
 
 				$properties = array('class="form-control"');
 				if (element('disabled', $field) == true) {
@@ -216,7 +314,7 @@ function renderCrFormFields($form) {
 				}
 
 				$aFields[] = sprintf($sField, form_dropdown($name, $source, element('value', $field, null), implode(' ', $properties)));
-				break;						
+				break;
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);
 				$sTmp = '<ul class="groupCheckBox" name="'.$name.'"> <li><input type="text" style="display:none" /> </li>';
@@ -289,14 +387,14 @@ function renderCrFormFields($form) {
 				break;
 			case 'upload':
 				$aFields[] = sprintf($sField, '
-					<div class="col-md-5">
+					<div class="col-md-6" name="'.$name.'">
 						<span class="btn btn-success fileinput-button">
 							<i class="fa fa-plus"></i>
-							<span>'.$CI->lang->line('Add File').'</span>
+							<span>'.$CI->lang->line('Choose file').'</span>
 							<input type="file" name="userfile" >
 						</span>
 					</div>
-					<div class="col-md-5 fileupload-progress fade">
+					<div class="col-md-6 fileupload-progress fade">
 						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
 							<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
 						</div>
@@ -304,15 +402,11 @@ function renderCrFormFields($form) {
 					</div>
 				');
 				break;
-			case 'logo':
-				// TODO: mejorar este field, agregar el btn upload, etc
-				$aFields[] = sprintf($sField, '<img src="'.$field['value'].'" />');				
-				break;
 			case 'html':
 				$aFields[] = $field['value'];
 				break;
-		}	
-	}	
+		}
+	}
 	
 	return $aFields;
 }
@@ -348,11 +442,11 @@ function appendCrFormJsAndCss($aScripts) {
 	if ($CI->session->userdata('langId') != 'en') {
 		$aTmp = explode('-', $CI->session->userdata('langId'));
 		if (count($aTmp) == 2) {
-			$CI->carabiner->js('select2/select2_locale_'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');	
+			$CI->carabiner->js('select2/select2_locale_'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');
 			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.'.$aTmp[0].'-'.strtoupper($aTmp[1]).'.js');
 		}
 		else {
-			$CI->carabiner->js('select2/select2_locale_'.$CI->session->userdata('langId').'.js');	
+			$CI->carabiner->js('select2/select2_locale_'.$CI->session->userdata('langId').'.js');
 			$CI->carabiner->js('datetimepicker/bootstrap-datetimepicker.'.$CI->session->userdata('langId').'.js');
 		}
 	}
@@ -384,7 +478,5 @@ function appendCrListJsAndCss($aScripts) {
 	$CI->carabiner->js('crList.js');
 	$CI->carabiner->js('bootstrap-paginator.js');
 	
-	return $aScripts; 	
+	return $aScripts;
 }
-
-
