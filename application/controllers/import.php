@@ -23,10 +23,10 @@ class Import extends CI_Controller {
 		);
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Import feeds'),
-			'form'		=> $form
-		));		
+			'view'   => 'includes/crForm', 
+			'meta'   => array( 'title' => $this->lang->line('Import feeds')),
+			'form'   => $form,
+		));
 	}
 
 	function doImportFeeds() {
@@ -107,10 +107,10 @@ class Import extends CI_Controller {
 		);
 		
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Import starred'),
-			'form'		=> $form
-		));		
+			'view'   => 'includes/crForm', 
+			'meta'   => array( 'title' => $this->lang->line('Import starred')),
+			'form'   => $form
+		));
 	}
 	
 	function doImportStarred() {

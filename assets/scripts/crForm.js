@@ -403,6 +403,10 @@
 						<div class="progress-extended">&nbsp;</div> \
 					</div> ');
 			}
+			
+			if (field.value == null) {
+				field.value = '';
+			}
 
 			if (typeof field.value == 'string') {
 				if (field.value.trim() != '') {
