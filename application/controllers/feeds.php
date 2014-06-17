@@ -171,8 +171,10 @@ class Feeds extends CI_Controller {
 					'label'		=> $this->lang->line('Name'), 
 				),
 				'feedIcon' => array(
-					'type'		=> 'logo',
-					'label'		=> $this->lang->line('Icon'), 
+					'type'      => 'upload',
+					'label'     => $this->lang->line('Icon'),
+					'isPicture' => true,
+					'disabled'  => true, 
 				),
 				'feedDescription' => array(
 					'type'		=> 'text',

@@ -26,6 +26,20 @@
 	position:absolute;
 	left:0;
 }
+
+
+#frmFeedEdit.crForm fieldset .fieldUpload a.thumbnail   {
+	width:16px;
+	height:16px;
+	padding: 0;
+	border:0px solid #DDDDDD;
+	border-radius:0;
+}
+	#frmFeedEdit.crForm fieldset .fieldUpload a.thumbnail {
+		width:16px;
+		height:16px;
+	}
+
 #cloneReader .popupForm {
 	padding: 5px 10px;
 	width:300px;
@@ -339,8 +353,8 @@
 					margin: 0 5px 20px;
 					border:0;
 					padding:0;
-				    background: transparent;
-				    box-shadow: none;
+					background: transparent;
+					box-shadow: none;
 				}
 					#cloneReader .ulEntries > li.browseTags div h4 {
 						background-position: left 2px;
@@ -348,7 +362,7 @@
 						padding: 0 0 0 20px;
 					}
 					#cloneReader .ulEntries > li.browseTags div .feedLink {
-						margin:10px 0 0 0;					
+						margin:10px 0 0 0;
 					}
 					#cloneReader .ulEntries > li.browseTags div p {
 						margin:10px 0 0 0;
