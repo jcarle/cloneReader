@@ -8,8 +8,8 @@ if (!isset($fileupload)) {
 <div class="modal" style="display:none" id="fileupload">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form action="<?php echo base_url() . 'files/save'; ?>"  method="POST" enctype="multipart/form-data">
-				<?php echo form_hidden('entityName', element('entityName', $fileupload)); ?>
+			<form action="<?php echo base_url('gallery/savePicture'); ?>"  method="POST" enctype="multipart/form-data">
+				<?php echo form_hidden('entityTypeId', element('entityTypeId', $fileupload)); ?>
 				<?php echo form_hidden('entityId', element('entityId', $fileupload)); ?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
@@ -104,14 +104,14 @@ if (!isset($fileupload)) {
 	<tr class="template-download fade">
 		<td>
 			<span class="preview">
-				{% if (file.thumbnailUrl) { %}
-					<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery data-skip-app-link="true"><img src="{%=file.thumbnailUrl%}"></a>
+				{% if (file.urlThumbnail) { %}
+					<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery data-skip-app-link="true"><img src="{%=file.urlThumbnail%}"></a>
 				{% } %}
 			</span>
 		</td>
 		<td>
 <!--			<p class="name">
-				<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+				<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.urlThumbnail?'data-gallery':''%}>{%=file.name%}</a>
 </p>-->
 			{% if (file.error) { %}
 				<div><span class="label label-important">Error</span> {%=file.error%}</div>
@@ -121,7 +121,7 @@ if (!isset($fileupload)) {
 <!--			<span class="size">{%=o.formatFileSize(file.size)%}</span>-->
 		</td>
 		<td class="text-right">
-			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+			<button class="btn btn-danger delete" data-type="DELETE" data-url="{%=file.urlDelete%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 				<i class="fa fa-trash-o"></i>
 				<span> <?php echo $this->lang->line('Delete'); ?> </span>
 			</button>
