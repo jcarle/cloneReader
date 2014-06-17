@@ -386,6 +386,23 @@
 		
 		initFieldUpload: function(field) {
 			field.$input.parent().addClass('fieldUpload');
+			
+			if (field.disabled != true) {
+				field.$input.append('\
+					<div class="col-md-6 fileupload-btn" >\
+						<span class="btn btn-success fileinput-button">\
+							<i class="fa fa-plus"></i>\
+							<span>' + crLang.line('Choose file') + '</span> \
+							<input type="file" name="userfile" > \
+						</span> \
+					</div> \
+					<div class="col-md-6 fileupload-progress fade"> \
+						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"> \
+							<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div> \
+						</div> \
+						<div class="progress-extended">&nbsp;</div> \
+					</div> ');
+			}
 
 			if (typeof field.value == 'string') {
 				if (field.value.trim() != '') {
@@ -407,7 +424,7 @@
 				}
 				
 				if (field.urlDelete != null) {
-					field.$input
+					field.$input.find('.fileupload-btn')
 						.append('<a class="btn btn-danger "> <i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + '</a>')
 						.find('.btn-danger').click( $.proxy(
 						function (field, event) {
@@ -417,10 +434,6 @@
 						}
 					, this, field));
 				}
-			}
-			
-			if (field.disabled == true) {
-				field.$input.find('.btn-success, .btn-danger').remove();
 			}
 			
 			field.$input.parent().fileupload( { 
@@ -1103,19 +1116,7 @@
 					break;
 				case 'upload':
 					$div.append('\
-						<div class="col-md-6" name="' + name + '">\
-							<span class="btn btn-success fileinput-button">\
-								<i class="fa fa-plus"></i>\
-								<span>' + crLang.line('Choose file') + '</span> \
-								<input type="file" name="userfile" > \
-							</span> \
-						</div> \
-						<div class="col-md-6 fileupload-progress fade"> \
-							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"> \
-								<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div> \
-							</div> \
-							<div class="progress-extended">&nbsp;</div> \
-						</div> ');
+						<div name="' + name + '"> </div> ');
 					break;
 				case 'html':
 					$fieldset = $(field['value']);

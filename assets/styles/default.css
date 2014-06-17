@@ -327,7 +327,10 @@ body.isLoading, body.isLoading * {
 	.crList .footer .pagination {
 		margin: 5px 0 0 0;
 		float:none;
-	}						
+	}
+	.crForm fieldset .fieldUpload .fileupload-progress {
+		margin-top:10px;
+	}
 }
 
 .crForm { }
@@ -372,11 +375,8 @@ body.isLoading, body.isLoading * {
 			.crForm fieldset .groupCheckBox li:last-child {
 				border:0;
 			}
-			.crForm fieldset .fieldUpload > div {
+			.crForm fieldset .fieldUpload .fileupload-btn {
 				padding-left:0;
-			}
-			.crForm fieldset .fieldUpload .fileupload-progress {
-				margin-top:10px;
 			}
 				.crForm fieldset .fieldUpload .fileupload-progress .progress {
 					margin-bottom:0px;

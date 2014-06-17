@@ -387,20 +387,7 @@ function renderCrFormFields($form) {
 				break;
 			case 'upload':
 				$aFields[] = sprintf($sField, '
-					<div class="col-md-6" name="'.$name.'">
-						<span class="btn btn-success fileinput-button">
-							<i class="fa fa-plus"></i>
-							<span>'.$CI->lang->line('Choose file').'</span>
-							<input type="file" name="userfile" >
-						</span>
-					</div>
-					<div class="col-md-6 fileupload-progress fade">
-						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-							<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div>
-						</div>
-						<div class="progress-extended">&nbsp;</div>
-					</div>
-				');
+					<div name="'.$name.'"> </div> ');
 				break;
 			case 'html':
 				$aFields[] = $field['value'];
