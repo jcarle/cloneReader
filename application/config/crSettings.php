@@ -2,10 +2,10 @@
 
 
 $config['urlSecretTime'] = 180;// Cuantos MINUTOS esta vivo el link para resetear password y cambiar email
-$config['pageSize'] =	15;
+$config['pageSize'] = 15;
 $config['defaultCurrencyId'] = 1;
 $config['defaultCurrencyName'] = 'AR$';
-$config['autocompleteSize'] =	50;
+$config['autocompleteSize'] = 50;
 $config['siteLogo'] = array('w' => 151, 'h' => 39);
 $config['hasRss'] = true;
 
@@ -51,17 +51,7 @@ $config['testDoc'] = array(
 	'max_size'      => 1024 * 8,
 );
 
-/**
- * Js y Css adicionales para que sea compilado con carabiner
- */
-$config['siteAssets'] = array(
-	'js' => array(
-		'feeds.js',
-		'cloneReader.js', 
-		'jquery.visible.min.js',
-	),
-	'css' => array()
-);
+
 
 /*
 *	Metas por default, sino existe el meta en la vista
@@ -90,6 +80,18 @@ $config['meta'] = array(
 		'description'   => 'Clone Reader. Create account.',
 		'keywords'      => 'cReader cloneReader new account'
 	),
+);
+
+/**
+ * Js y Css adicionales para que sea compilado con carabiner
+ */
+$config['siteAssets'] = array(
+	'js' => array(
+		'feeds.js',
+		'cloneReader.js', 
+		'jquery.visible.min.js',
+	),
+	'css' => array()
 );
 
 $config['tagAll'] = 1;
