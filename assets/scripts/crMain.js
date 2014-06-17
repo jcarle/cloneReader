@@ -93,7 +93,7 @@ crMain = {
 			crMain.loadUrl(location.href);
 		});  
 
-		if ($('.container > .page').length == 0) {
+		if ($('.pageContainer > .page').length == 0) {
 			crMain.loadUrl(location.href);
 		}
 	},
@@ -127,9 +127,9 @@ crMain = {
 	 * */
 	loadUrl: function(controller) {
 		var pageName = this.getPageName();
-		this.aPages[pageName] = $('.container > .' + pageName);
+		this.aPages[pageName] = $('.pageContainer > .' + pageName);
 		if (this.aPages[pageName].length == 0) {
-			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.container'));
+			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.pageContainer'));
 		}
 
 		if (this.ajax) {
@@ -246,7 +246,7 @@ crMain = {
 		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 
 		var $page 		= this.aPages[pageName];
-		var $otherPages = $('.container > .page:visible:not(.' + pageName + ')');
+		var $otherPages = $('.pageContainer > .page:visible:not(.' + pageName + ')');
 		
 		$otherPages.hide().trigger('onHide');
 

@@ -1,20 +1,3 @@
-/**
- * El form tiene que tener este formato:
- * 
-$form = array(
-	'frmId'		=> 'frmId',
-	'action'	=> base_url('entity/save'), // 
-	'fields'	=> array(), // fields que va a incluir el formulario
-	'rules'		=> array(), // reglas de validacion para cada campo
-	'buttons'	=> array(), // los bottones que se van a mostrar 
-	'info'		=> array('position' => 'left|right', 'html' => ''), // si incluye info a los costados
-	'title'		=> 'title',
-	'icon'		=> 'fa fa-edit', // se utiliza en los popup form,
-	'urlDelete' => base_url('entity/delete'), // url para borrar 
-	'callback'	=> function javascript que se llama al enviar el form 
-);
-*/
-
 ;(function($) {
 	var 
 		methods,
@@ -91,7 +74,7 @@ $form = array(
 		
 		this.options.urlSave = this.$form.attr('action');
 		
-		this.$form.find('.btn-danger').click($.proxy(
+		this.$form.find('.formButtons .btn-danger').click($.proxy(
 			function(event) {
 				event.stopPropagation();
 				
@@ -236,7 +219,7 @@ $form = array(
 							field.$input.change();
 							break;
 						case 'gallery':
-							this.initFileupload(field);
+							this.initUploadGallery(field);
 							break;
 						case 'subform':
 							this.loadSubForm(field);
@@ -252,29 +235,8 @@ $form = array(
 							});
 							break;
 						case 'upload':
-							this.$form.attr('enctype', 'multipart/form-data');
-							this.$form.fileupload( { 
-								'autoUpload': 	true,
-								'done': 		
-									function (event, data) {
-										var response = data.result;
-										if ($.hasAjaxDefaultAction(response) == true) { return; }
-										$(document).crAlert({
-											'msg': 		response['result']['msg'],
-											'callback': function() {
-												$.goToUrl(response['result']['goToUrl']);
-											}
-										});
-									},
-								'fail': 		
-									function (event, data) {
-										if (data.jqXHR.status === 0) {
-											return $(document).crAlert( crLang.line('Not connected. Please verify your network connection') );
-										}
-										var response = $.parseJSON(data.jqXHR.responseText);
-										$.hasAjaxDefaultAction(response);
-									}
-							});
+							this.initFieldUpload(field);
+							break;
 						case 'numeric':
 							$maskNumeric = field.$input.clone();
 							field.$input.hide();
@@ -422,14 +384,81 @@ $form = array(
 			return $.validateEmail($input.val());
 		},
 		
-		initFileupload: function(field) {	
-			this.fileupload 	= field;	
-			var $gallery 		= $('.gallery');
+		initFieldUpload: function(field) {
+			field.$input.parent().addClass('fieldUpload');
+
+			if (typeof field.value == 'string') {
+				if (field.value.trim() != '') {
+					field.value = {'url': field.value, 'name': field.value};
+				}
+			}
+			else if (field.value.url == null) {
+				field.value = {'url': null, 'name': null};
+			}
+
+			if (field.value.url != null) {
+				if (field.isPicture == true) {
+					field.$input.prepend('<a class="thumbnail"><img  src="' + field.value.url + '" /></a>');
+					field.$input.find('img').imgCenter( { show: false, createFrame: true } );
+				}
+				else {
+					field.$input.prepend('<div class="fileName"> <a download="' + field.value.name + '" target="_blank" href="' + field.value.url + '" data-skip-app-link="true"> <i class="fa fa-download"/> <span />  </a> </div>');
+					field.$input.find('.fileName span').text(field.value.name);
+				}
+				
+				if (field.urlDelete != null) {
+					field.$input
+						.append('<a class="btn btn-danger "> <i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + '</a>')
+						.find('.btn-danger').click( $.proxy(
+						function (field, event) {
+							cn(field.urlDelete);
+							this.$form.attr('action', field.urlDelete);
+							this.sendForm();
+						}
+					, this, field));
+				}
+			}
+			
+			if (field.disabled == true) {
+				field.$input.find('.btn-success, .btn-danger').remove();
+			}
+			
+			field.$input.parent().fileupload( { 
+				'autoUpload': true,
+				'url':        field.urlSave,
+				'done': 
+					function (event, data) {
+						var response = data.result;
+						if ($.hasAjaxDefaultAction(response) == true) { return; }
+						$(document).crAlert({
+							'msg': 		response['result']['msg'],
+							'callback': function() {
+								$.goToUrl(response['result']['goToUrl']);
+							}
+						});
+					},
+				'fail': 
+					function (event, data) {
+						if ($.isUnloadPage == true) {
+							return;
+						}
+						if (data.jqXHR.status === 0) {
+							return $(document).crAlert( crLang.line('Not connected. Please verify your network connection') );
+						}
+						var response = $.parseJSON(data.jqXHR.responseText);
+						$.hasAjaxDefaultAction(response);
+					}
+			} );
+		},
+
+		initUploadGallery: function(field) {
+			this.fileupload   = field;
+			var $gallery      = this.$form.find('.gallery');
 			this.reloadGallery();
 			
 			$('#fileupload').data( { 'crForm': this } )
 			
-			$('.btnEditPhotos', $gallery).click( $.proxy(
+			$gallery.find('.btnEditPhotos').click( $.proxy(
 				function () {
 					if (this.$fileupload == null) {
 						this.$fileupload = $('#fileupload');
@@ -444,7 +473,7 @@ $form = array(
 						);
 					}
 
-					this.$fileupload.find('input[name=entityName]').val(this.fileupload.entityName);
+					this.$fileupload.find('input[name=entityTypeId]').val(this.fileupload.entityTypeId);
 					this.$fileupload.find('input[name=entityId]').val(this.fileupload.entityId);
 
 					$.showModal(this.$fileupload, false, false);
@@ -464,7 +493,7 @@ $form = array(
 		},
 		
 		reloadGallery: function() {
-			var $gallery = $('.gallery');
+			var $gallery = this.$form.find('.gallery');
 			
 			if ($gallery.data('initGallery') != true) {
 				$gallery.find('.thumbnails').click(function(event) {
@@ -482,7 +511,7 @@ $form = array(
 			$('#fileupload tbody').children().remove();
 
 			$.ajax({
-				'url': 		this.fileupload.urlGet,
+				'url': 		this.fileupload.urlGallery,
 				'data': 	{ },
 				'success': 	
 					function (response) {
@@ -498,13 +527,13 @@ $form = array(
 							var photo = result.files[i];
 							
 							$('<a class="thumbnail " data-skip-app-link="true" />')
-								.append($('<img />').prop('src', photo.thumbnailUrl))
-								.prop('href', photo.url)
+								.append($('<img />').prop('src', photo.urlThumbnail))
+								.prop('href', photo.urlLarge)
 								.prop('title', ''  /*photo.title*/)
 								.appendTo($gallery.find('.thumbnails'));
 						}
 		
-						$('img', $gallery).imgCenter( { show: false, createFrame: true } );
+						$gallery.find('img').imgCenter( { show: false, createFrame: true } );
 					},
 			});
 		},
@@ -795,7 +824,7 @@ $form = array(
 		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
-			$div = $('<div class="form-actions panel-footer" > ').appendTo($form);
+			$div = $('<div class="formButtons form-actions panel-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
 				$div
 					.append($(data['buttons'][i]))
@@ -909,7 +938,7 @@ $form = array(
 		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
-			$modalFooter = $('<div class="form-actions panel-footer" > ').appendTo($form);
+			$modalFooter = $('<div class="formButtons form-actions panel-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
 				$modalFooter
 					.append($(data['buttons'][i]))
@@ -1074,23 +1103,19 @@ $form = array(
 					break;
 				case 'upload':
 					$div.append('\
-						<div class="col-md-5">\
+						<div class="col-md-6" name="' + name + '">\
 							<span class="btn btn-success fileinput-button">\
 								<i class="fa fa-plus"></i>\
-								<span>' + crLang.line('Add File') + '</span> \
+								<span>' + crLang.line('Choose file') + '</span> \
 								<input type="file" name="userfile" > \
 							</span> \
 						</div> \
-						<div class="col-md-5 fileupload-progress fade"> \
+						<div class="col-md-6 fileupload-progress fade"> \
 							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"> \
 								<div class="progress-bar progress-bar-success bar bar-success" style="width:0%;"></div> \
 							</div> \
 							<div class="progress-extended">&nbsp;</div> \
 						</div> ');
-					break;
-				case 'logo':
-					// TODO: mejorar este field, agregar el btn upload, etc
-					$div.append('<img src="' + field['value'] + '" />');
 					break;
 				case 'html':
 					$fieldset = $(field['value']);

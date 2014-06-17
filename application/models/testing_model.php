@@ -39,11 +39,24 @@ class testing_Model extends CI_Model {
 		return $this->db->get('testing');
 	}
 
-	function get($testId){
-		$result = $this->db
+	function get($testId, $getPicture = false){
+		$query = $this->db
 					->where('testId', $testId)
 					->get('testing')->row_array();
-		return $result;
+					
+		if ($getPicture == true) {
+			$this->load->model('Files_Model');
+			$config = config_item('testPicture');
+			$query['testPicture'] = $this->Files_Model->get($query['testPictureFileId'], $config['sizes']['thumb']['folder'], 'fileUrl');
+
+			$config           = config_item('testDoc');
+			$testDoc          = $this->Files_Model->get($query['testDocFileId'], $config['folder']);
+			$query['testDoc'] = array('url' => $testDoc['fileUrl'], 'name' => $testDoc['fileTitle']);
+			
+			$query['testIco']     = base_url('assets/images/logo.png');
+		}
+//pr($query);die;
+		return $query;
 	}	
 
 	function save($values){
@@ -61,13 +74,11 @@ class testing_Model extends CI_Model {
 	}
 	
 	function delete($testId) {
-		$entityName = 'testing';
 		$CI =& get_instance();
 		$CI->load->model('Files_Model');
-		$aProperties 	= $this->Files_Model->getPropertyByEntityName($entityName);
-		$query 			= $this->Files_Model->getFilesByEntity($entityName, $testId, null);
+		$query 			= $this->Files_Model->selectEntityFiles($testId, config_item('entityTypeTesting'), $testId);
 		foreach ($query->result_array() as $row) {
-			$this->Files_Model->deleteByFileId($entityName, $testId, $row['fileId']);
+			$this->Files_Model->deleteEntityFile(config_item('entityTypeTesting'), $row['fileId']);
 		}
 		
 		
@@ -162,4 +173,12 @@ class testing_Model extends CI_Model {
 
 		return true;		
 	} 
+	
+	function savePicture($testId, $testPictureFileId) {
+		$this->db->where('testId', $testId)->update('testing', array('testPictureFileId' => $testPictureFileId));
+	}
+
+	function saveDoc($testId, $testDocFileId) {
+		$this->db->where('testId', $testId)->update('testing', array('testDocFileId' => $testDocFileId));
+	}
 }

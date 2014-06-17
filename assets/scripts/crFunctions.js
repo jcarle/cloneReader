@@ -375,6 +375,7 @@ $.extend({
 	 * 		notification				muestra una notificación
 	 * 		msg							muestra un alert, y al cerrarlo carga una url
 	 * 		loadMenuAndTranslations		vuelve a pedir el menu y las traducciones
+	 * 		reloadUrl					vuelve a cargar la url actual
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
@@ -410,6 +411,11 @@ $.extend({
 		}
 		if (result['goToUrl'] != null) {
 			$.goToUrl(result['goToUrl']);
+			return true;
+		}
+		
+		if (result['reloadUrl'] == true) {
+			$.reloadUrl();
 			return true;
 		}
 					

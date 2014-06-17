@@ -1,32 +1,3 @@
-/**
- * El listado tiene que tener este formato:
- * 
- * $list = array(
- * 		'urlList'		=> 'services/listing', 		// url del listado
- * 		'urlEdit'		=> 'services/edit/%s', 		// Url para editar el item ( se reemplaza el %s por el id),
- * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
- * 		'urlDelete'		=> '',						// TODO: falta implementar
- * 		'showCheckbox'	=> false, 					// muestra un checkbox en cada row
- * 		'columns'			=> array(							// array con las columnas, con el formato: $key => $value; se pueden incluir un className para los datetime y los numeric  
- * 			'entityName' 		=> $this->lang->line('Name'),
- * 			'entityDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date'),  
- * 		),
- * 		'data'			=> $data,						// los datos a mostrar en el listado; macheando el mismo key que en la property columns
- * 		'foundRows'		=> $foundRows, 					// cantidad de registros, se usa en la paginación
- * 		'showId'		=> true,						// Indica si muestra el id en el listado
- * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm
- * 		'sort' 			=> array(),						// Un array con los items por los que se puede ordenar el listado
- * 		'readOnly'		=> false,						// Indica si el listaod es de solo lectura ( no son cliqueables los rows, y no muestra el btn add)
- * ); 
- * 
- * classNames:
- * 		date: 		formatea una fecha
- * 		datetime:	formatea una fecha y hora
- * 		numeric:	aliea el texto a la izquierza // TODO: hacer que formatee pasando un par de parametros mas
- * 		dotdotdot:	trunca el texto a y muestra '...' si corresponde 
- * 
- */
-
 ;(function($) {
 	var 
 		methods,

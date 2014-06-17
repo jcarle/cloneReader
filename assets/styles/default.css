@@ -188,18 +188,7 @@ body.isLoading, body.isLoading * {
 					background: -moz-linear-gradient(center top , #3176CB, #4397F3) repeat scroll 0 0 transparent;
 					background: -webkit-gradient(linear, left top, left bottom,from(#4397F3),to(#3176CB));
 				}
-						
-.content {
-	margin: 0 auto;
-	min-width: 240px;
-}			
-	.content > h1{
-		 font-size:large;
-		 padding:5px;
-		 margin: 0;
-		 font-weight: normal;
-	}			
-					
+
 #footer {
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
 	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
@@ -383,6 +372,32 @@ body.isLoading, body.isLoading * {
 			.crForm fieldset .groupCheckBox li:last-child {
 				border:0;
 			}
+			.crForm fieldset .fieldUpload > div {
+				padding-left:0;
+			}
+			.crForm fieldset .fieldUpload .fileupload-progress {
+				margin-top:10px;
+			}
+				.crForm fieldset .fieldUpload .fileupload-progress .progress {
+					margin-bottom:0px;
+				}
+				.crForm fieldset .fieldUpload .fileName {
+					display:block;
+				}
+				.crForm fieldset .fieldUpload a.thumbnail {
+					background: white;
+					width: 115px;
+					height: 115px;
+					display: block;
+					margin: 0 15px 5px 0;
+				}
+					.crForm fieldset .fieldUpload a.thumbnail img {
+						background: white;
+						width:115px;
+						height:115px;
+						display:inline-block;
+						margin: 0 15px 20px 0;
+					}
 			.crForm fieldset .groupCheckBox li.active {
 				background: #D9EDF7;
 			}

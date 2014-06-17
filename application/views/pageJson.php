@@ -16,16 +16,19 @@ if (isset($showTitle)) {
 if (isset($breadcrumb)) {
 	$result['breadcrumb'] = $breadcrumb;
 }
+if (!isset($meta)) {
+	$meta = array();
+}
 
 switch ($view) {
 	case 'includes/crList':
-		$result['title'] 	= $title;
+		$result['title'] 	= element('title', $meta);
 		$result['js']		= 'crList';
 		$result['list']		= $list;
 		break;
 	case 'includes/crForm':
 		$form  = appendMessagesToCrForm($form);
-		$result['title']	= $title;
+		$result['title']	= element('title', $meta);
 		$result['js']		= 'crForm';
 		$result['form'] 	= $form;
 		if (hasCrUploadFile($form) == true) { 
@@ -33,7 +36,7 @@ switch ($view) {
 		}
 		break;
 	default: 
-		$result['title']	= $title;
+		$result['title']	= element('title', $meta);
 		$result['html'] 	= $this->load->view($view, '', true); 
 }
 

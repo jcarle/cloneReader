@@ -4,8 +4,10 @@ $CI = &get_instance();
 $userId = $this->session->userdata('userId');
 
 $CI->load->driver('cache', array('adapter' => 'file'));
-$CI->Menu_Model->createMenuCache($userId);
-
+if (!is_array($CI->cache->file->get('MENU_PROFILE_'.$userId))) {
+	$CI->load->model('Menu_Model');
+	$CI->Menu_Model->createMenuCache($userId);
+}
 
 $this->load->spark('carabiner/1.5.4');
 
@@ -54,9 +56,38 @@ foreach ($siteAssets['css'] as $css) {
 }
 
 
-
+/*
+ * Armado de los title, h1, metaDescription y metaKeywords
+ * Los meta se setean en los controller de las vistas
+ * Ej: $meta = array(
+			'title'			=> $this->lang->line('Home - Maniacos'),
+			'h1'			=> $this->lang->line('Home - Maniacos'),
+		);
+ * En el config existe un array por defecto que sea ROUTER/METHOD
+ * Si el array de la vista esta incompleto se completa con el array por default
+ * 
+ * Tiene mas peso siempre los textos seteados en las vistas(views)
+ */
+$metaDefault = array();
 if (!isset($meta)) {
 	$meta = array();
+}
+//Meta por Default seteados en el config crSettings.php
+$configMeta	= config_item('meta');
+$index = $CI->router->class.'/'.$CI->router->method;
+if(!empty($configMeta[$index])){
+	$metaDefault = $configMeta[$index];
+}
+//Busco los textos que le faltan al array de la vista
+$diffMeta = array_diff($metaDefault, $meta);
+if(!empty($diffMeta)){
+	foreach ($metaDefault as $keyDefault => $textDefault) {
+		//Si existe el texto en la vista lo ignoro,
+		//sino agrego el texto por default y lo paso por traduccion
+		if(empty($meta[$keyDefault])){
+			$meta[$keyDefault] = $CI->lang->line($textDefault);
+		}
+	}
 }
 
 $CI->carabiner->css('default.css');
@@ -94,9 +125,9 @@ $crSettings = array(
 );
 ?>	
 	<script type="text/javascript">
-		$.crSettings = <?php echo json_encode($crSettings); ?>;		
-		var base_url				= '<?php echo base_url(); ?>';
-		var datetime				= '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
+		$.crSettings    = <?php echo json_encode($crSettings); ?>;		
+		var base_url    = '<?php echo base_url(); ?>';
+		var datetime    = '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
 <?php
 if (!isset($langs)) {
 	$langs = array();
@@ -177,8 +208,8 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 <?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
 		</div>
 	</nav>	
-	<div class="container content">
-		<div class="page <?php echo getPageName(); ?>"  data-title="<?php echo $title; ?>">
+	<div class="container pageContainer ">
+		<div class="page <?php echo getPageName(); ?>"  data-title="<?php echo element('title', $meta); ?>">
 <?php
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';
@@ -198,7 +229,7 @@ if (!isset($showTitle)) {
 }
 if ($showTitle == true) {
 	echo '	<div class="pageTitle">
-				<h2>'. $title .' <small> </small></h2>
+				<h2>'. element('title', $meta).' <small> </small></h2>
 			</div>';
 }
 
