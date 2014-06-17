@@ -21,10 +21,7 @@ class Testing extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'meta'			=> array(
-				'title'			=> $this->lang->line('Edit testing'),
-				'h1'			=> $this->lang->line('Edit testing')
-			),
+			'meta'			=> array( 'title' => $this->lang->line('Edit testing') ),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
@@ -156,10 +153,7 @@ class Testing extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'meta'		=> array(
-				'title'			=> $this->lang->line('Edit testing'),
-				'h1'			=> $this->lang->line('Edit testing')
-			),
+			'meta'		=> array( 'title' => $this->lang->line('Edit testing') ),
 			'form'		=> populateCrForm($form, $this->Testing_Model->get($testId, true)),
 		));
 	}

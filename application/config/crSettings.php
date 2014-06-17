@@ -71,10 +71,25 @@ $config['siteAssets'] = array(
 */
 
 $config['meta'] = array(
-	'home/index' => array(
+	'default' => array(
+		'title'         => 'Home',
+		'h1'            => 'Home',
 		'description'  => 'Clone Reader. Clone of google reader. Reader of feeds, rss news. Open source',
 		'keyword'      => 'cReader cloneReader news feeds rss reader open source',	
-	)
+	),
+	'profile' => array(
+		'title' => 'Edit profile',
+	),
+	'login'			=> array(
+		'title'			=> 'Login',
+		'description' 	=> 'Login in clone Reader. Reader of feeds, rss, news',
+		'keywords'		=> 'cReader cloneReader login '
+	),
+	'register' => array(
+		'title'         => 'Signup',
+		'description'   => 'Clone Reader. Create account.',
+		'keywords'      => 'cReader cloneReader new account'
+	),
 );
 
 $config['tagAll'] = 1;

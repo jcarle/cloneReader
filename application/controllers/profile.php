@@ -16,11 +16,7 @@ class Profile extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'profile', 
-			'meta'		=> array(
-				'title'			=> $this->lang->line('Edit profile'),
-				'h1'			=> $this->lang->line('Edit profile'),
-			),
-		));		
+		));
 	}
 
 	function editProfile() {

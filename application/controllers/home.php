@@ -6,11 +6,6 @@ class Home extends CI_Controller {
 		$this->load->view('pageHtml', 
 			array(
 				'view'			=> 'home', 
-				'title'			=> 'News reader and feeds',
-				'meta'			=> array(
-					'description' 	=> 'Clone Reader. Clone of google reader. Reader of feeds, rss news. Open source',
-					'keywords'		=> 'cReader cloneReader news feeds rss reader open source'
-				), 
 				'userFilters'	=> $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
 				'showTitle'		=> false,
 				'notRefresh'	=> true,

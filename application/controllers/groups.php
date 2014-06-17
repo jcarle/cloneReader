@@ -20,10 +20,7 @@ class Groups extends CI_Controller {
 		
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'meta'			=> array(
-				'title'			=> $this->lang->line('Edit groups'),
-				'h1'			=> $this->lang->line('Edit groups'),
-			),
+			'meta'			=> array( 'title' => $this->lang->line('Edit groups') ),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',

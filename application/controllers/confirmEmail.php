@@ -21,10 +21,7 @@ class ConfirmEmail extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'message', 
-			'meta'		=> array(
-				'title'			=> $this->lang->line('Change email'),
-				'h1'			=> $this->lang->line('Change email'),
-			),
+			'meta'		=> array( 'title' => $this->lang->line('Change email') ),
 			'message'	=> $this->lang->line('Your email has been updated')
 		));	
 	}

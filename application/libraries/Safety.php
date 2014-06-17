@@ -4,7 +4,7 @@ class Safety {
 		$CI 			= &get_instance();
 		$this->db 		= $CI->db;
 		$this->session 	= $CI->session;
-//$CI->output->enable_profiler(TRUE);		
+// $CI->output->enable_profiler(TRUE);		
 	}
 	
 	function initSession() {

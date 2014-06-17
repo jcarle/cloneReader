@@ -55,40 +55,10 @@ foreach ($siteAssets['css'] as $css) {
 	$CI->carabiner->css($css);
 }
 
-
-/*
- * Armado de los title, h1, metaDescription y metaKeywords
- * Los meta se setean en los controller de las vistas
- * Ej: $meta = array(
-			'title'			=> $this->lang->line('Home - Maniacos'),
-			'h1'			=> $this->lang->line('Home - Maniacos'),
-		);
- * En el config existe un array por defecto que sea ROUTER/METHOD
- * Si el array de la vista esta incompleto se completa con el array por default
- * 
- * Tiene mas peso siempre los textos seteados en las vistas(views)
- */
-$metaDefault = array();
 if (!isset($meta)) {
 	$meta = array();
 }
-//Meta por Default seteados en el config crSettings.php
-$configMeta	= config_item('meta');
-$index = $CI->router->class.'/'.$CI->router->method;
-if(!empty($configMeta[$index])){
-	$metaDefault = $configMeta[$index];
-}
-//Busco los textos que le faltan al array de la vista
-$diffMeta = array_diff($metaDefault, $meta);
-if(!empty($diffMeta)){
-	foreach ($metaDefault as $keyDefault => $textDefault) {
-		//Si existe el texto en la vista lo ignoro,
-		//sino agrego el texto por default y lo paso por traduccion
-		if(empty($meta[$keyDefault])){
-			$meta[$keyDefault] = $CI->lang->line($textDefault);
-		}
-	}
-}
+$meta = getMetaByController($meta);
 
 $CI->carabiner->css('default.css');
 $CI->carabiner->css( config_item('siteId').'.css');
@@ -100,7 +70,7 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
 <?php
 if (config_item('hasRss') == true) {
-	echo ' <link rel="alternate" type="application/rss+xml" title="cloneReader Feed" href="'. base_url('rss').'" />';
+	echo ' <link rel="alternate" type="application/rss+xml" title="Feed | '.config_item('siteName').'" href="'. base_url('rss').'" />';
 }	
 ?>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -160,7 +130,7 @@ echo implode(' ', $aScripts);
 $siteLogo = config_item('siteLogo');
 ?>
 	</script>	
-	<title><?php echo $title.' | '.config_item('siteName'); ?> </title>
+	<title><?php echo element('title', $meta). ' | '.config_item('siteName'); ?> </title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-warning navbar-fixed-top">

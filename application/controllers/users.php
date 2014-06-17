@@ -35,7 +35,7 @@ class Users extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit users'),
+			'meta'			=> array( 'title' => $this->lang->line('Edit users') ),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
@@ -187,7 +187,7 @@ class Users extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit users'),
+			'meta'		=> array( 'title' => $this->lang->line('Edit users') ),
 			'form'		=> populateCrForm($form, $this->Users_Model->get($userId)),
 		));		
 	}
@@ -244,7 +244,7 @@ class Users extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('User logs'),
+			'meta'			=> array( 'title' => $this->lang->line('User logs') ),
 			'list'			=> array(
 				'urlList'		=> 'users/logs',
 				'readOnly'		=> true,

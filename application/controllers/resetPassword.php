@@ -54,11 +54,10 @@ class ResetPassword extends CI_Controller {
 			return $this->_saveResetPassword();
 		}		
 		
-		
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm',
 			'form'			=> $form,
-			'title'			=> $this->lang->line('Reset password'),
+			'meta'			=> array( 'title' => $this->lang->line('Reset password') ),
 			'code'			=> true
 		));		
 	}

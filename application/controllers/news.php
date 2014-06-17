@@ -20,7 +20,7 @@ class News extends CI_Controller {
 		
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit news'),
+			'meta'			=> array( 'title' => $this->lang->line('Edit news') ),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',

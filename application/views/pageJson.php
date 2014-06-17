@@ -19,6 +19,7 @@ if (isset($breadcrumb)) {
 if (!isset($meta)) {
 	$meta = array();
 }
+$meta = getMetaByController($meta);
 
 switch ($view) {
 	case 'includes/crList':
