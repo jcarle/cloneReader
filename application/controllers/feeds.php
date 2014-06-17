@@ -39,9 +39,9 @@ class Feeds extends CI_Controller {
 		$query	= $this->Feeds_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest, $this->input->get('orderBy'), $this->input->get('orderDir') );
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit feeds'),
-			'list'			=> array(
+			'view'      => 'includes/crList', 
+			'meta'      => array('title' => $this->lang->line('Edit feeds')),
+			'list'      => array(
 				'showId' => true,
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
@@ -142,7 +142,7 @@ class Feeds extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit feeds'),
+			'meta'      => array('title' => $this->lang->line('Edit feeds') ),
 			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true))
 		));
 	}

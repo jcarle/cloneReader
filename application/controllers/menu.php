@@ -4,7 +4,7 @@ class Menu extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model('Controllers_Model');
+		$this->load->model(array('Controllers_Model', 'Menu_Model'));
 	}
 	
 	function index() {
