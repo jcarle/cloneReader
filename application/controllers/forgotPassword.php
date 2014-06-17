@@ -37,7 +37,10 @@ class ForgotPassword extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Reset password'),
+			'meta'		=> array(
+				'title'			=> $this->lang->line('Reset password'),
+				'h1'			=> $this->lang->line('Reset password'),
+			),
 			'form'		=> $form,
 		));
 	}

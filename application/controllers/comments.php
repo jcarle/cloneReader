@@ -58,7 +58,7 @@ class Comments extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit comments'),
+			'meta'      => array('title'		=> $this->lang->line('Edit comments')),
 			'form'		=> populateCrForm($form, $this->Comments_Model->get($commentId)),
 		));		
 	}

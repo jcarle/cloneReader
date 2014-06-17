@@ -21,7 +21,10 @@ class Controllers extends CI_Controller {
 		
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
-			'title'			=> $this->lang->line('Edit controllers'),
+			'meta'			=> array(
+				'title'			=> $this->lang->line('Edit controllers'),
+				'h1'			=> $this->lang->line('Edit controllers'),
+			),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
@@ -91,7 +94,10 @@ class Controllers extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
-			'title'		=> $this->lang->line('Edit controllers'),
+			'meta'		=> array(
+				'title'			=> $this->lang->line('Edit controllers'),
+				'h1'			=> $this->lang->line('Edit controllers'),
+			),
 			'form'		=> populateCrForm($form, $this->Controllers_Model->get($controllerId)),
 		));		
 	}

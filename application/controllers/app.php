@@ -10,9 +10,14 @@ class App extends CI_Controller {
 	}
 	
 	function selectMenuAndTranslations() {
+		$this->load->driver('cache', array('adapter' => 'file'));
 		$userId = $this->session->userdata('userId');
-		$this->Menu_Model->createMenuCache($userId);
-	
+		
+		if (!is_array($this->cache->file->get('MENU_PROFILE_'.$userId))) {
+			$this->load->model('Menu_Model');
+			$this->Menu_Model->createMenuCache($userId);
+		}
+		
 		$aMenu = array(
 			'MENU_PROFILE' => array(
 				'items' 	=> $this->cache->file->get('MENU_PROFILE_'.$userId), 
