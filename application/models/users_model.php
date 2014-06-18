@@ -74,7 +74,7 @@ class Users_Model extends CI_Model {
 			->join('languages', 'users.langId = languages.langId', 'left')
 			->join('users_groups', 'users.userId = users_groups.userId', 'left')
 			->join('groups', 'groups.groupId = users_groups.groupId', 'left');
-						
+
 		if ($filter != null) {	
 			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
 		}
@@ -222,6 +222,7 @@ class Users_Model extends CI_Model {
 			}		
 		}
 		
+		$this->load->model('Menu_Model');
 		$this->Menu_Model->destroyMenuCache();
 		
 		return true;

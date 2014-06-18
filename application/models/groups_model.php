@@ -60,7 +60,8 @@ class Groups_Model extends CI_Model {
 				$this->db->insert('groups_controllers', array('groupId' => $groupId, 'controllerId' => $controllerId));			
 			}		
 		}
-		
+
+		$this->load->model('Menu_Model');
 		$this->Menu_Model->destroyMenuCache();
 		
 		return true;

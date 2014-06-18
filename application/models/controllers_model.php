@@ -51,6 +51,7 @@ class Controllers_Model extends CI_Model {
 			$this->db->insert('controllers', $data);
 		}
 		
+		$this->load->model('Menu_Model');
 		$this->Menu_Model->destroyMenuCache();
 		
 		return true;
