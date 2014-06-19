@@ -208,7 +208,7 @@ function savePicture($config) {
 		}
 	}
 
-	$fileId = $CI->Files_Model->insert($data['file_name'], '' /*$_POST['title']*/); // TODO:
+	$fileId = $CI->Files_Model->insert($data['file_name'], $data['client_name']);
 	if(!$fileId) {
 		@unlink($data['full_path']);
 		return array( 'code' => false, 'result'	=> 'Something went wrong when saving the file, please try again');

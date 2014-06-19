@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `cloneReader_empty`
+-- Database: `cloneReader`
 --
-CREATE DATABASE IF NOT EXISTS `cloneReader_empty` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `cloneReader_empty`;
+CREATE DATABASE IF NOT EXISTS `cloneReader` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `cloneReader`;
 
 DELIMITER $$
 --

@@ -58,6 +58,7 @@ class Login extends CI_Controller {
 			'view'			=> 'login', 
 			'title'			=> $this->lang->line('Login'),
 			'form'			=> $form,
+			'meta'			=> array( 'title' => $this->lang->line('Login') )
 		));
 	}
 

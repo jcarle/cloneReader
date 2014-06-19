@@ -79,8 +79,9 @@ class Register extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
+			'meta'		=> array( 'title' => $this->lang->line('Signup') ),
 			'form'		=> populateCrForm($form, array()),
-		));		
+		));
 	}
 
 	function _validate_exitsEmail() {

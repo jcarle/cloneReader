@@ -153,6 +153,7 @@ crMain = {
 				function(pageName, response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					this.renderPage(response, pageName);
+					$('html, body').animate({ scrollTop: 0 }, 'fast');
 				}
 			, this, pageName)
 		})
