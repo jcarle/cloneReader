@@ -374,7 +374,7 @@ cloneReader = {
 		if (clear == true && this.isMobile == true && this.$ulEntries.children().length != 0) { // Si no es la primera carga y es mobile, maximizo al cambiar el filtro
 			this.maximiseUlEntries(true, false);
 		}
-				
+
 		if (forceRefresh != true && $.toJSON(this.aFilters) === lastFilters) {
 			return;
 		}
@@ -400,8 +400,11 @@ cloneReader = {
 
 		// Si SOLO cambio el tipo de vista reendereo sin pasar por el servidor
 		if ($.inArray($.toJSON(aFilters), ['{"viewType":"detail"}', '{"viewType":"list"}']) != -1) {
-			this.renderEntries(this.currentEntries);
 			this.updateUserFilters();
+			if (this.isLoadEntries == true) {
+				return;
+			}
+			this.renderEntries(this.currentEntries);
 			return;
 		}
 		
@@ -426,6 +429,7 @@ cloneReader = {
 			return;
 		}
 		
+		this.isLoadEntries = true;
 		
 		this.ajax = $.ajax({		
 			'url': 		base_url + 'entries/select',
@@ -442,6 +446,10 @@ cloneReader = {
 					cloneReader.isLastPage 		= (response.result.length < $.crSettings.entriesPageSize);
 					cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
 					cloneReader.renderEntries(response.result);
+				},
+			'complete':
+				function () {
+					cloneReader.isLoadEntries = false;
 				}
 		});	
 	},

@@ -145,3 +145,4 @@ $lang['User logs'] = 'User logs';
 $lang['Wait while data sync'] = 'Espere mientras se sincronizan los datos';
 $lang['Information'] = 'Información';
 $lang['Your request has been sent successfully'] = 'Su consulta ha sido enviada con éxito';
+$lang['View logs'] = 'Ver logs';
