@@ -202,6 +202,13 @@
 					font-size: 100%;
 					background: transparent;
 				}
+				#cloneReader .ulEntries > li p h1,
+				#cloneReader .ulEntries > li p h2,
+				#cloneReader .ulEntries > li p h3,
+				#cloneReader .ulEntries > li p h4 {
+					font-size: 120%;
+					font-weight: bolder;
+				}
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 					height:auto;
@@ -313,7 +320,8 @@
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
-					max-width: 70%;
+/*					max-width: 70%;*/
+					max-width: calc(100% - 150px);
 					height:25px;
 					line-height:25px;
 				}
@@ -322,7 +330,7 @@
 					margin: 5px 10px 0 0;
 					color: gray;
 					font-size:smaller;
-				}				
+				}
 				#cloneReader .ulEntries.list > li .title .entryContent {
 					float: none;
 					clear:both;
@@ -570,6 +578,9 @@
 			float:none;
 			display: block;
 		}
+/*		#cloneReader .ulEntries.list > li .title .feedName {
+			max-width: calc(100% - 125px);
+		}*/
 		#cloneReader .ulEntries > li .header .star {
 			float: none;
 			position: absolute;

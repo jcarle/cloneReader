@@ -10,7 +10,6 @@ class Entries_Model extends CI_Model {
 		}
 		if ($feedId != null) {
 			$this->db->where('feeds.feedId', $feedId);
-			
 		}
 			
 		if (!in_array($orderBy, array('entryId', 'entryDate' ))) {
@@ -206,14 +205,14 @@ class Entries_Model extends CI_Model {
 		return $query->result_array();
 	}
 
-	function get($entryId, $isfForm = false){
+	function get($entryId, $isForm = false){
 		$result = $this->db
 				->select('entries.*, feedName, feedLink, feedUrl', true)
 				->where('entryId', $entryId)
 				->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 				->get('entries')->row_array();
 				
-		if ($isfForm == true) {
+		if ($isForm == true) {
 			$result['feedId'] = array( 'id' => element('feedId', $result), 'text' => element('feedName', $result));
 		}
 
