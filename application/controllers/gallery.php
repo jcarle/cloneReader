@@ -17,7 +17,7 @@ class Gallery extends CI_Controller {
 	function savePicture() {
 		$entityTypeId   = $this->input->post('entityTypeId');
 		$entityId       = $this->input->post('entityId');
-		$config         = getEntityConfig($entityTypeId);
+		$config         = getEntityGalleryConfig($entityTypeId);
 		
 		if (! $this->safety->allowByControllerName($config['controller']) ) { return errorForbidden(); }
 		
@@ -36,7 +36,7 @@ class Gallery extends CI_Controller {
 	}
 
 	function deletePicture($entityTypeId, $fileId) {
-		$config    = getEntityConfig($entityTypeId);
+		$config    = getEntityGalleryConfig($entityTypeId);
 		if (! $this->safety->allowByControllerName($config['controller']) ) { return errorForbidden(); }
 				
 		$this->Files_Model->deleteEntityFile($entityTypeId, $fileId);

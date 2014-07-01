@@ -32,8 +32,7 @@ class Files_Model extends CI_Model {
 	}
 	
 	function deleteEntityFile($entityTypeId, $fileId) {
-		$config    = getEntityConfig($entityTypeId);
-		
+		$config = getEntityGalleryConfig($entityTypeId);
 		return $this->deleteFile($config, $fileId);
 	}
 	
@@ -61,7 +60,7 @@ class Files_Model extends CI_Model {
 	}
 	
 	function selectEntityFiles($entityTypeId, $entityId, $fileId = null) {
-		$config   = getEntityConfig($entityTypeId);
+		$config   = getEntityGalleryConfig($entityTypeId);
 		$result   = array();
 
 		$this->db->select('files.fileId, fileName, fileTitle')
@@ -77,7 +76,7 @@ class Files_Model extends CI_Model {
 	}
 	
 	function selectEntityGallery($entityTypeId, $entityId, $fileId = null, $allowDelete = false, $calculateSize = false) {
-		$config    = getEntityConfig($entityTypeId);
+		$config    = getEntityGalleryConfig($entityTypeId);
 		$result    = array();
 		$query     = $this->selectEntityFiles($entityTypeId, $entityId, $fileId);
 
@@ -101,7 +100,7 @@ class Files_Model extends CI_Model {
 	}
 	
 	function getEntityPicture($entityTypeId, $entityId, $size = 'thumb') {
-		$config       = getEntityConfig($entityTypeId);
+		$config       = getEntityGalleryConfig($entityTypeId);
 		$pictures     = $this->selectEntityFiles($entityTypeId, $entityId);
 		if (!empty($pictures)) {
 			return base_url($config['sizes'][$size]['folder'].$pictures[0]['fileName']);

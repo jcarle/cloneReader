@@ -139,3 +139,4 @@ $lang['Not connected. Please verify your network connection'] = 'Not connected. 
 $lang['Keyboard shortcut'] = 'Keyboard shortcut';
 $lang['Users'] = 'Users';
 $lang['User logs'] = 'User logs';
+$lang['Your request has been sent successfully'] = 'Your request has been sent successfully';

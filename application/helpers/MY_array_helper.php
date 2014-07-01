@@ -81,24 +81,40 @@ function formatCurrency($value, $currencyName = null) {
 /*
  * Devuelve las porperties de una entidad, se utiliza para definir el upload de archivos, folder, tamaños, etc
  */
-function getEntityConfig($entityTypeId) {
-	$gallery = config_item('gallery');
-	$config  = element($entityTypeId, $gallery);
-	if ($config != null) {
-		return $config;
+function getEntityConfig($entityTypeId, $key = null) {
+	$entityConfig = config_item('entityConfig');
+	$entityConfig  = element($entityTypeId, $entityConfig);
+	if ($entityConfig != null) {
+		if ($key != null) {
+			return $entityConfig[$key];
+		}
+		return $entityConfig;
+	}
+
+	return null;
+}
+
+/**
+ * Devuelve el config de una gallery, si no esta definida usa la gallery por default
+ */
+function getEntityGalleryConfig($entityTypeId) {
+	$config   = getEntityConfig($entityTypeId);
+	$gallery  = element('gallery', $config);
+	if ($gallery != null) {
+		return $gallery;
 	}
 
 	// Si no existe, devuelve las properties por defecto, haciendo un sprintf de los folder y del controller con el name de la entidad
-	$entitiesType = config_item('entitiesType');
-	$name         = $entitiesType[$entityTypeId];
-	$config       = element('default', $gallery);
+	$entityConfig   = config_item('entityConfig');
+	$galleryDefault = $entityConfig['default']['gallery'];
+	$entityName     = $entityConfig[$entityTypeId]['entityName'];
 	
-	$config['controller']                = sprintf($config['controller'], $name);
-	$config['folder']                    = sprintf($config['folder'], $name);
-	$config['sizes']['thumb']['folder']  = sprintf($config['sizes']['thumb']['folder'], $name);
-	$config['sizes']['large']['folder']  = sprintf($config['sizes']['large']['folder'], $name);
+	$galleryDefault['controller']                = sprintf($galleryDefault['controller'], $entityName);
+	$galleryDefault['folder']                    = sprintf($galleryDefault['folder'], $entityName);
+	$galleryDefault['sizes']['thumb']['folder']  = sprintf($galleryDefault['sizes']['thumb']['folder'], $entityName);
+	$galleryDefault['sizes']['large']['folder']  = sprintf($galleryDefault['sizes']['large']['folder'], $entityName);
 
-	return $config;
+	return $galleryDefault;
 }
 
 

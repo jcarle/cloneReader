@@ -141,6 +141,7 @@ crMain = {
 		var $page 	= this.aPages[pageName];
 		if ($page.data('notRefresh') == true) {
 			this.showPage(pageName);
+			$('html, body').animate({ scrollTop: 0 }, 'fast');
 			return;
 		}
 		
