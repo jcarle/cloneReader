@@ -44,7 +44,7 @@ class testing_Model extends CI_Model {
 					->where('testId', $testId)
 					->get('testing')->row_array();
 					
-		if ($getPicture == true) {
+		if (!empty($query) && $getPicture == true) {
 			$this->load->model('Files_Model');
 			$config = config_item('testPicture');
 			$query['testPicture'] = $this->Files_Model->get($query['testPictureFileId'], $config['sizes']['thumb']['folder'], 'fileUrl');

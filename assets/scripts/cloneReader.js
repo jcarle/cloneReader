@@ -87,7 +87,7 @@ cloneReader = {
 				$('#header .logo').attr('href', base_url);
 				$('#header').css( {'box-shadow': 'none' });
 				$('.menu').show();
-				$('body').css({ 'background': 'white', 'overflow': 'auto' });
+				$('body').css({ 'background': 'white', 'overflow': '' });
 				
 				this.resizeWindow();
 				this.updateMainMenu();
