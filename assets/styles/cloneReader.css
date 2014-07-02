@@ -209,6 +209,11 @@
 					font-size: 120%;
 					font-weight: bolder;
 				}
+				#cloneReader .ulEntries > li p blockquote {
+					padding: 10px 20px;
+					margin: 0 0 20px;
+					border-left: 5px solid #eee;
+				}
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 					height:auto;
@@ -320,7 +325,6 @@
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
-/*					max-width: 70%;*/
 					max-width: calc(100% - 150px);
 					height:25px;
 					line-height:25px;
