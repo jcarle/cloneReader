@@ -648,7 +648,7 @@ class Entries_Model extends CI_Model {
 
 		// save tagAll
 		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
-					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.config_item('tagAll').', false, entries.entryDate 
+					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.config_item('tagAll').', FALSE, entries.entryDate 
 					FROM entries 
 					INNER JOIN users_feeds 
 						ON entries.feedId = users_feeds.feedId

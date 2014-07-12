@@ -1271,6 +1271,10 @@ console.timeEnd("t1");
 	},
 	
 	addToSave: function(entry) {
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == $.crSettings.tagHome) { // si estoy en el tag home, no guardo nada 
+			return;
+		}
+		
 		this.aUserEntries[entry.entryId] = {
 			'entryId': 		entry.entryId,	
 			'entryRead': 	entry.entryRead,
