@@ -244,7 +244,7 @@ crMain = {
 	showPage: function(pageName) {
 		$.showWaiting(true);
 		
-		$('.datetimepicker, select2-drop, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
+		$('.datetimepicker, .select2-drop, .select2-drop-mask, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
 		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 
 		var $page 		= this.aPages[pageName];

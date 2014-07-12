@@ -50,6 +50,7 @@ class Safety {
 	}
 
 	function allowByControllerName($controllerName) {
+// TODO: menter esta query en un file, asi no pide a cada rato los datos!		
 		$query = $this->db
 			->where(array('controllerActive' => true, 'controllerName' => str_replace('::', '/', strtolower($controllerName)), 'userId' => $this->session->userdata('userId')))
 			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId')

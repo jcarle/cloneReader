@@ -151,9 +151,10 @@
 //									openOnEnter: false,
 									minimumInputLength: 1,
 									ajax: {
-										url: 		field['source'],
-										dataType: 	'json',
-										data: 		function (term, page) {
+										url:        field['source'],
+										dataType:   'json',
+										params:     { skipwWaiting: true }, 
+										data:       function (term, page) {
 											return { 'query': term };
 										},
 										results: 	function (data, page) {

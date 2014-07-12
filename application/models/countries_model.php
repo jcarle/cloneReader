@@ -9,5 +9,5 @@ class Countries_Model extends CI_Model {
 			-> select('countryId AS id, countryName AS text', true)
 			->order_by('countryName')
 			->get('countries')->result_array();
-	}	
+	}
 }
