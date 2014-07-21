@@ -50,7 +50,7 @@ class Feedbacks_Model extends CI_Model {
 		return true;
 	}
 	
-	function get($feedbacksId) {
+	function get($feedbackId) {
 		$query = $this->db
 				->select('feedbacks.feedbackId, feedbackDesc, users.userId, feedbackDate, feedbackUserName, feedbackUserEmail ', false)
 				->where('feedbacks.feedbackId', $feedbackId)

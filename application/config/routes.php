@@ -41,6 +41,7 @@
 $route['default_controller'] = "home";
 $route['404_override'] = 'error/error404';
 
+$route['feedback'] = "feedbacks/addFeedback";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
