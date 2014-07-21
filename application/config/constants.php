@@ -42,6 +42,10 @@ define('GROUP_DEFAULT', 3);
 define('MENU_ADMIN', 1);
 define('MENU_PROFILE', 10);
 define('MENU_PUBLIC', 8);
+define('TASK_PENDING', 0);
+define('TASK_RUNNING', 1);
+define('TASK_CANCEL', 2);
+define('TASK_RETRY', 5);
 
 
 /* End of file constants.php */

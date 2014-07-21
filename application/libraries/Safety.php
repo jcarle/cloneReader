@@ -89,5 +89,23 @@ class Safety {
 
 	public static function isCommandLine() {
 		return PHP_SAPI === 'cli';
-	}	
+	}
+	
+	function allowAccountPrivilege($accountId, $privilegeId) {
+		$CI = &get_instance();
+		$CI->load->driver('cache', array('adapter' => 'file'));
+		if (!is_array($CI->cache->file->get('ACCOUNT_'.$accountId))) {
+			$CI->load->model('Accounts_Model');
+			$CI->Accounts_Model->createAccountCache($accountId);
+		}
+
+		$account = $CI->cache->file->get('ACCOUNT_'.$accountId);
+		for ($i=0; $i<count($account['privileges']); $i++) {
+			if ($account['privileges'][$i] == $privilegeId) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
