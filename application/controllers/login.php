@@ -74,20 +74,20 @@ class Login extends CI_Controller {
 		$this->_oauth2('google');
 	}	
 	
-	function _oauth2($provider) {
+	function _oauth2($providerName) {
 		if (! $this->safety->allowByControllerName('login') ) { return errorForbidden(); }
 		
 		$this->load->spark('oauth2/0.4.0/');
 		$this->config->load('oauth2');
 		
 		$config = $this->config->item('oauth2');
-		$config = $config[$provider];
+		$config = $config[$providerName];
 
 
-		$provider = $this->oauth2->provider($provider, array(
+		$provider = $this->oauth2->provider($providerName, array(
 			'id' => 	$config['id'],
 			'secret' => $config['secret'],
-			'scope'	=> 	'email',
+			'scope'  => $config['scope'],
 		));
 
 		if ( ! $this->input->get('code')) {
@@ -98,7 +98,7 @@ class Login extends CI_Controller {
 		try  {
 			$token 	= $provider->access($_GET['code']);
 			$user 	= $provider->get_user_info($token);
-			$user 	= $this->Users_Model->loginRemote($user['email'], $user['last_name'], $user['first_name'], $provider, $user['uid'] );
+			$user 	= $this->Users_Model->loginRemote($user['email'], $user['last_name'], $user['first_name'], $user['location'], $user['birthday'], $providerName, $user['uid'] );
 			
 			if ($user == null) {
 				return errorForbidden();

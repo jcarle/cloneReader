@@ -8,9 +8,8 @@ class Users_Model extends CI_Model {
 		return $this->db->get('users');
 	}
 	
-	function loginRemote($userEmail, $userLastName, $userFirstName, $provider, $remoteUserId) {
-		
-		$fieldName = ($provider == 'facebook' ? 'facebookUserId' : 'googleUserId');
+	function loginRemote($userEmail, $userLastName, $userFirstName, $userLocation, $userBirthday, $providerName, $remoteUserId) {
+		$fieldName = ($providerName == 'facebook' ? 'facebookUserId' : 'googleUserId');
 
 		$query = $this->db
 			->where($fieldName, $remoteUserId)
@@ -18,11 +17,35 @@ class Users_Model extends CI_Model {
 		if ($query->num_rows() > 0) { // ya existe
 			return $query->row();
 		}
+
+		//Seteo el Pais del Usuario
+		$countryId = null;
+		if(!empty($userLocation)){
+			$aZones = array_reverse(explode(',', $userLocation));
+			if(!empty($aZones[0])){
+				$this->load->model('Countries_Model');
+				$rsCountry = $this->Countries_Model->search(trim($aZones[0]));
+				if(!empty($rsCountry)){
+					$countryId = $rsCountry['id'];
+				}
+			}
+		}
+		
+		//Seteo Fecha de Cumpleaños del Usuario
+		$birthday = null;
+		if(!empty($userBirthday)){
+			$date = explode('/', $userBirthday);
+			if(isset($date[2]) && isset($date[0]) && isset($date[1])){
+				$birthday = $date[2].'-'.$date[0]."-".$date[1];
+			}
+		}
 		
 		$values = array(
-			'userLastName' 		=> $userLastName, 
-			'userFirstName'		=> $userFirstName, 
-			$fieldName			=> $remoteUserId, 
+			'userLastName' 		=> $userLastName,
+			'userFirstName'		=> $userFirstName,
+			'countryId'			=> $countryId,
+			'userBirthDate'		=> $birthday,
+			$fieldName			=> $remoteUserId
 		);		
 
 		if (trim($userEmail) == '') {
