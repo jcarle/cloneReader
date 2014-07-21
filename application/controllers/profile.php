@@ -29,11 +29,11 @@ class Profile extends CI_Controller {
 			'fields'		=> array(
 				'userFirstName' => array(
 					'type'	=> 'text',
-					'label'	=> $this->lang->line('First Name'), 
+					'label'	=> $this->lang->line('First name'), 
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
-					'label'	=> $this->lang->line('Last Name'), 
+					'label'	=> $this->lang->line('Last name'), 
 				),
 				'userEmail' => array(
 					'type'		=> 'text',
@@ -116,41 +116,16 @@ class Profile extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		
 		if ($this->input->post() != false) {
-			return $this->_sendEmailToChangeEmail();
-		}
+			$this->load->model(array('Tasks_Model'));
+			$data = array(
+				'userId'	=> $this->session->userdata('userId'),
+				'userEmail' => $this->input->post('userEmail')
+			);
+			$this->Tasks_Model->addTask('sendEmailToChangeEmail', $data);
+			return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to change your email')));	
+		}		
 		
 		return $this->load->view('includes/crJsonForm', array( 'form' => $form ));
-	}
-
-	function _sendEmailToChangeEmail() {
-		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjax(false);	
-		}
-
-		$this->load->library('email');
-
-		$userId 		= $this->session->userdata('userId');
-		$userEmail 		= $this->input->post('userEmail');
-		$user 			= $this->Users_Model->get($userId);
-		$changeEmailKey = random_string('alnum', 20);
-		$url 			= base_url('confirmEmail?key='.$changeEmailKey);
-		$message 		= $this->load->view('pageEmail',
-			array(
-				'emailView' => 'email/changeEmail.php',
-				'user' 		=> $user, 
-				'url' 		=> $url
-			), true);
-		
-		$this->Users_Model->updateChangeEmailKey($userId, $userEmail, $changeEmailKey);
-
-		$this->email->from(config_item('emailFrom'), config_item('siteName'));
-		$this->email->to($userEmail); 
-		$this->email->subject(config_item('siteName').' - '.$this->lang->line('Change email'));
-		$this->email->message($message);
-		$this->email->send();
-		//echo $this->email->print_debugger();	die;	
-
-		return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to change your email')));	
 	}
 
 	function changePassword() {

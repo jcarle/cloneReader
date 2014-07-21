@@ -5,12 +5,10 @@ $lang['_validate_exitsEmail'] = 'El mail ingresado ya existe en la base de datos
 $lang['_validate_notExitsEmail'] = 'El mail ingresado no existe en la base de datos';
 $lang['_validate_exitsName'] = 'El nombre ingresado ya existe en la base de datos';
 $lang['_validate_exitsDNI'] = 'El DNI ingresado ya existe en la base de datos';
+$lang['_validate_terms_agree'] = 'Debe aceptar los términos de uso';
 
 $lang['Not authorized for the action to take'] = 'No tiene permisos para la acción que desea realizar';
 $lang['The page you requested does not exist'] = 'La página solicitada no existe';
-
-
-
 
 $lang['DATE_FORMAT'] = 'dd/mm/yyyy ';
 $lang['MOMENT_DATE_FORMAT'] = 'DD/MM/YYYY';
@@ -57,14 +55,17 @@ $lang['Edit controllers'] = 'Editar controladores';
 $lang['Edit groups'] = 'Editar grupos';
 $lang['Edit menu'] = 'Editar menu';
 $lang['Edit comments'] = 'Editar comentarios';
+$lang['Edit contacts'] = 'Editar contactos';
+$lang['Edit accounts'] = 'Editar cuentas';
+$lang['Privileges'] = 'Privilegios';
 
 $lang['Email'] = 'Email';
 $lang['Password'] = 'Contraseña';
 $lang['Login'] = 'Ingresar';
 $lang['Facebook Login'] = 'Ingresar con Facebook';
 $lang['Google Login'] = 'Ingresar con Google';
-$lang['First Name'] = 'Nombre';
-$lang['Last Name'] = 'Apellido';
+$lang['First name'] = 'Nombre';
+$lang['Last name'] = 'Apellido';
 $lang['Country'] = 'País';
 $lang['Countries'] = 'Paises';
 $lang['Edit profile'] = 'Editar perfil';
@@ -126,7 +127,8 @@ $lang['New password'] = 'Nueva contraseña';
 $lang['Repeat new password'] = 'Repetir contraseña';
 $lang['Icon'] = 'Icono';
 $lang['We have sent you an email with instructions to reset your password'] = 'Te hemos mandado un email con instrucciones para restablecer tu contraseña';
-$lang['Hello %s, <p>To change your  email in %s, click <a href="%s">here</a></p>'] = 'Hola %s, <p> Para cambiar tu email en %s, hace click <a href="%s">aquí</a></p>';
+$lang['Hello %s'] = 'Hola %s';
+$lang['To change your  email in %s, click <a href="%s">here</a>'] = 'Para cambiar tu email en %s, hace click <a href="%s">aquí</a>';
 $lang['We have sent you an email with instructions to change your email'] = 'Te hemos mandado un email con instrucciones para cambiar tu dirección de email';
 $lang['Your email has been updated'] = 'Tu email ha sido actualizado';
 $lang['Enter a url'] = 'Introduzca una url';
@@ -146,3 +148,6 @@ $lang['Wait while data sync'] = 'Espere mientras se sincronizan los datos';
 $lang['Information'] = 'Información';
 $lang['Your request has been sent successfully'] = 'Su consulta ha sido enviada con éxito';
 $lang['View logs'] = 'Ver logs';
+$lang['Rate'] = 'Calificar';
+$lang['Rate %s'] = 'Calificar %s';
+$lang['Thank you for using %s'] = 'Gracias por usar %s';

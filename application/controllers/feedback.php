@@ -4,7 +4,7 @@ class Feedback extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Comments_Model', 'Users_Model'));
+		$this->load->model(array('Feedbacks_Model', 'Users_Model'));
 	}
 	
 	function index() {
@@ -18,30 +18,30 @@ class Feedback extends CI_Controller {
 			$data = $this->Users_Model->get($userId);
 		}
 
-		$commentUserEmail = element('userEmail', $data);
-		if (valid_email($commentUserEmail) == false) {
-			$commentUserEmail = '';
+		$feedbackUserEmail = element('userEmail', $data);
+		if (valid_email($feedbackUserEmail) == false) {
+			$feedbackUserEmail = '';
 		}
 
 		$form = array(
-			'frmId'		=> 'frmCommentEdit',
+			'frmId'		=> 'frmFeedbackEdit',
 			'callback' 	=> 'function(response) { $.Feedback.onSaveFeedback(response); };',
 			'fields' => array( 
-				'commentId' => array(
+				'feedbackId' => array(
 					'type'	=> 'hidden', 
-					'value'	=> element('commentId', $data, 0)
+					'value'	=> element('feedbackId', $data, 0)
 				),
-				'commentUserName' => array(
+				'feedbackUserName' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Name'), 
 					'value'		=> trim(element('userFirstName', $data).' '.element('userLastName', $data)),
 				),						
-				'commentUserEmail' => array(
+				'feedbackUserEmail' => array(
 					'type' 		=> 'text',
 					'label'		=> $this->lang->line('Email'), 
-					'value'		=> $commentUserEmail
+					'value'		=> $feedbackUserEmail
 				),										
-				'commentDesc' => array(
+				'feedbackDesc' => array(
 					'type'		=> 'textarea',
 					'label'		=> $this->lang->line('Comment'), 
 					'value'		=> ''
@@ -52,18 +52,18 @@ class Feedback extends CI_Controller {
 		
 		$form['rules'] = array(
 			array(
-				'field' => 'commentUserName',
-				'label' => $form['fields']['commentUserName']['label'],
+				'field' => 'feedbackUserName',
+				'label' => $form['fields']['feedbackUserName']['label'],
 				'rules' => 'trim|required'
 			),
 			array(
-				'field' => 'commentUserEmail',
-				'label' => $form['fields']['commentUserEmail']['label'],
+				'field' => 'feedbackUserEmail',
+				'label' => $form['fields']['feedbackUserEmail']['label'],
 				'rules' => 'trim|required|valid_email'
 			),			
 			array(
-				'field' => 'commentDesc',
-				'label' => $form['fields']['commentDesc']['label'],
+				'field' => 'feedbackDesc',
+				'label' => $form['fields']['feedbackDesc']['label'],
 				'rules' => 'trim|required'
 			),
 		);	
@@ -73,7 +73,7 @@ class Feedback extends CI_Controller {
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
-				$this->Comments_Model->saveFeedback($this->input->post());
+				$this->Feedbacks_Model->saveFeedback($this->input->post());
 			}
 			
 			if ($this->input->is_ajax_request()) {

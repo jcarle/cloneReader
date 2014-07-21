@@ -118,11 +118,11 @@ class Users extends CI_Controller {
 				),
 				'userFirstName' => array(
 					'type'	=> 'text',
-					'label'	=> $this->lang->line('First Name'), 
+					'label'	=> $this->lang->line('First name'), 
 				),
 				'userLastName' => array(
 					'type'	=> 'text',
-					'label'	=> $this->lang->line('Last Name'), 
+					'label'	=> $this->lang->line('Last name'), 
 				),
 				'countryId' => array(
 					'type'				=> 'dropdown',

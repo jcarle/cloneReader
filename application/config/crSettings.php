@@ -88,9 +88,9 @@ $config['testDoc'] = array(
 
 
 /*
-*	Meta por default, sino existe el meta en el controller
-*	busca en este array por controller/method y carga ese texto 
-*   Los textos que se carguen en este config no hace falta traduccion, luego el header se va a encargar de pasarlo por traduccion.
+*   Meta por default, sino existe el meta en el controller
+*   busca en este array por controller/method y carga ese texto 
+*   Los textos que se carguen en este config se traducen en el header.
 */
 $config['meta'] = array(
 	'default' => array(
