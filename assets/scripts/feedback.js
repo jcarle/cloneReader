@@ -5,7 +5,7 @@ $.Feedback = {
 		if ($.hasAjaxDefaultAction(response) == true) { return; }
 
 		var $alert = $('<div class="alert alert-success"> <strong>' + crLang.line('Thanks for contacting us') + ' </strong> </div>');
-		$('#frmCommentEdit')
+		$('#frmFeedbackEdit')
 			.hide()
 			.parent().append($alert);
 			

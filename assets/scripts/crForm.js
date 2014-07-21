@@ -226,14 +226,16 @@
 							this.loadSubForm(field);
 							break;
 						case 'raty':
-							field.$input.raty( {
-								score: 		field['value'],
-								scoreName: 	field['name'],
-								path: 		base_url + 'assets/images/',
-								click:		$.proxy(function() {
-									this.changeField();
-								}, this)
-							});
+							field.$input
+								.removeAttr('name')
+								.raty( {
+									score: 		field['value'],
+									scoreName: 	field['name'],
+									path: 		base_url + 'assets/images/',
+									click:		$.proxy(function() {
+										this.changeField();
+									}, this)
+								});
 							break;
 						case 'upload':
 							this.initFieldUpload(field);
@@ -249,7 +251,7 @@
 									$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 								});
 							break;
-						case 'groupCheckBox':	
+						case 'groupCheckBox':
 							field.$input.removeAttr('name');
 							var $field = field.$input.find('input:first').attr('name', field['name']);
 							field.$input.data('$field', $field);
@@ -353,15 +355,16 @@
 		
 		validate: function() {
 			for (var i = 0; i<this.options.rules.length; i++){
-				var field 	= this.options.rules[i];
-				var rules 	= field['rules'].split('|');
-				var $input 	= this.options.fields[field.field].$input;
-				
+				var field   = this.options.rules[i];
+				var rules   = field['rules'].split('|');
+				var field   = this.options.fields[field.field];
+				var $input  = field.$input;
+
 				this.$form.find('fieldset').removeClass('has-error');
 				
 				for (var z=0; z<rules.length; z++) {
 					if (typeof this[rules[z]] === 'function') {
-						if (this[rules[z]]($input) == false) {
+						if (this[rules[z]]($input, field) == false) {
 							$input.parents('fieldset').addClass('has-error');
 							$input.crAlert($.sprintf(this.options.messages[rules[z]], field['label']));
 							return false;
@@ -377,8 +380,17 @@
 			return !isNaN($input.val());
 		},
 		
-		required: function($input) {
-			return ( $input.val().trim() != '');
+		required: function($input, field) {
+			switch (field['type']) {
+				case 'raty':
+					return ( $input.find('input').val().trim() != '');
+					break;
+				case 'checkbox':
+					return $input.is(':checked');
+					break;
+				default:
+					return ( $input.val().trim() != '');
+			}
 		},
 		
 		valid_email: function($input){

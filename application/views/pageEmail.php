@@ -8,7 +8,7 @@ $siteLogo = config_item('siteLogo');
 		</div>
 		<div  style="padding: 10px;">
 <?php 
-$this->load->view($emailView); 
+$this->load->view($view); 
 if (isset($url)) {
 ?>	
 			<div style=" background: #F5F5F5; border:1px solid #E5E5E5; border-radius: 5px; padding: 10px;">

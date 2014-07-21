@@ -689,7 +689,9 @@ table .dotdotdot {
 .progress-animated .bar {
 	background: url(../images/progressbar.gif) !important;
 }
-
+.notification.alert {
+	border-radius:0;
+}
 
 .line-clamp {
 	position: relative;

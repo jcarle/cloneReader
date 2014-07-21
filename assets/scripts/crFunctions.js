@@ -243,7 +243,7 @@ $.extend({
 		if (className == null) {
 			className = 'alert-success';
 		}
-		$div = $('<div class="alert ' + className +' fade in navbar-fixed-top"><strong>' + msg + '</strong></div>')
+		$div = $('<div class="notification alert ' + className +' fade in navbar-fixed-top"><strong>' + msg + '</strong></div>')
 			.appendTo('body')
 			.fadeTo('slow', 0.95).delay(2000).slideUp('slow');
 	},

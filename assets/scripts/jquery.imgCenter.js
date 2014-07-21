@@ -64,7 +64,7 @@
 			var parWidth 	= parseInt($theParent.width());
 			var parHeight 	= parseInt($theParent.height());
 			var parAspect 	= parWidth / parHeight;
-
+			
 			$img.load($.proxy(
 				function(event) {
 					imgMath($(event.target));
@@ -78,11 +78,16 @@
 			function imgMath($img) {
 				// reset properties
 				$img.css({'margin': 0, 'width': 'auto', 'height': 'auto' });
-
+				
 				// Get image properties.		
 				var imgWidth 	= parseInt($img.get(0).width);
 				var imgHeight 	= parseInt($img.get(0).height);
 				var imgAspect 	= imgWidth / imgHeight;
+				
+				if (parAspect == Infinity) {
+					parWidth  = imgWidth;
+					parHeight = imgHeight;
+				}
 
 				// Center the image.
 				if(parWidth != imgWidth || parHeight != imgHeight){
@@ -129,7 +134,6 @@
 					}
 				}
 
-				
 				opts.complete.call(this, $img);
 				if(current == len){
 					opts.end.call(this);

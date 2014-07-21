@@ -17,7 +17,7 @@
  * 		'showId'		=> true,						// Indica si muestra el id en el listado
  * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm
  * 		'sort' 			=> array(),						// Un array con los items por los que se puede ordenar el listado
- * 		'readOnly'		=> false,						// Indica si el listaod es de solo lectura ( no son cliqueables los rows, y no muestra el btn add)
+ * 		'readOnly'		=> false,						// Indica si el listado es de solo lectura ( no son cliqueables los rows, y no muestra el btn add)
  * ); 
  * 
  * classNames:
@@ -50,7 +50,7 @@ $readOnly 	= element('readOnly', $list, false);
 			</div>
 <?php
 if ($filters != null) {
-	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));			
+	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));
 }
 
 if ($sort != null) {

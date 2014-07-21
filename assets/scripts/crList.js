@@ -237,7 +237,10 @@
 			</form>\
 		');
 		$form.appendTo($panel);
-		$form.find('input[name=filter]').val(params['filter']);
+
+		if ($.trim(params['filter']) != '') {
+			$form.find('input[name=filter]').val(decodeURIComponent(params['filter']));
+		}
 		
 		if ($.trim(params['filter']) != '' && $.isMobile() == false) {
 			$form.find('input[name=filter]').focus();

@@ -99,7 +99,7 @@ class Users_Model extends CI_Model {
 			->join('groups', 'groups.groupId = users_groups.groupId', 'left');
 
 		if ($filter != null) {	
-			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
+			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter, 'userEmail' => $filter));
 		}
 		if ($countryId != null) {
 			$this->db->where('users.countryId', $countryId);
