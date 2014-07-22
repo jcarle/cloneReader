@@ -1,7 +1,4 @@
 <?php
-// TODO: falta setear el idioma en el que se va a enviar el email
-// TODO: los links en el email le pegan a localhost a ejecutar el controlador por consola; hay que poner un par de ifs para arreglarlo
-
 class SendMails {
 	/*
 	 * 

@@ -14,6 +14,11 @@ $config['siteId'] = 'cloneReader';
 $config['emailFrom'] = 'clonereader@gmail.com';
 $config['google-analytics-Account'] = 'UA-41589815-1';
 
+$config['urlDev']  = 'http://jcarle.redirectme.net/dev/jcarle/cloneReader/';
+$config['urlQa']   = 'http://www.jcarle.com.ar/cloneReader';
+$config['urlProd'] = 'http://www.clonereader.com.ar';
+
+
 $config['entityTypeTesting'] = 1;
 $config['entityTypeCountry'] = 2;
 $config['entityTypeState'] = 3;
