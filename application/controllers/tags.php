@@ -99,7 +99,7 @@ class Tags extends CI_Controller {
 	}
 
 	function search() { // TODO: implementar la seguridad!
-		return $this->load->view('ajax', array(
+		return $this->load->view('json', array(
 			'result' 	=> $this->Tags_Model->search($this->input->get('query'), $this->input->get('onlyWithFeeds') == 'true')
 		));
 	}	

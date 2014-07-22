@@ -42,7 +42,7 @@ switch ($view) {
 }
 
 
-return 	$this->load->view('ajax', array(
+return 	$this->load->view('json', array(
 	'view' 		=> null,
 	'code'		=> true,
 	'result'	=> $result

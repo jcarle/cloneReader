@@ -171,7 +171,7 @@ class Testing extends CI_Controller {
 	function selectStatesByCountryId($countryId) { // TODO: centralizar en otro lado!
 		$this->load->model('States_Model');
 	
-		return $this->load->view('ajax', array(
+		return $this->load->view('json', array(
 			'result' => $this->States_Model->selectStatesByCountryId($countryId)
 		));
 	}

@@ -51,7 +51,7 @@ function error404() {
 function loadViewAjax($code, $result = null) {
 	$CI = &get_instance();
 	
-	return $CI->load->view('ajax', array(
+	return $CI->load->view('json', array(
 		'code'		=> $code, 
 		'result' 	=> $result != null ? $result : validation_errors() 
 	));	

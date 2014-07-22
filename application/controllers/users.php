@@ -201,7 +201,7 @@ class Users extends CI_Controller {
 	}
 	
 	function search() { // TODO: implementar la seguridad!
-		return $this->load->view('ajax', array(
+		return $this->load->view('json', array(
 			'result' 	=> $this->Users_Model->search($this->input->get('query'), $this->input->get('groupId'))
 		));
 	}
@@ -223,7 +223,7 @@ class Users extends CI_Controller {
 			$result[] = array('id' => $query, 'text' => $query);
 		}
 		
-		return $this->load->view('ajax', array(
+		return $this->load->view('json', array(
 			'result' 	=> $result
 		));
 	}	

@@ -15,8 +15,8 @@ if (isset($url)) {
 				<?php echo sprintf($this->lang->line('Trouble clicking? Copy and paste this URL into your browser: <br/> %s'), $url); ?>
 			</div>
 <?php
-	}
-?>			
+}
+?>
 		</div>
 		<div style="background: #F5F5F5; text-align: center; border-top: 1px solid #E5E5E5; padding: 10px;">
 			<?php echo sprintf($this->lang->line('Thank you for using %s'), config_item('siteName')); ?>

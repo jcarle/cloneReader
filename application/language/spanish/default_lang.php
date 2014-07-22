@@ -152,3 +152,7 @@ $lang['View logs'] = 'Ver logs';
 $lang['Rate'] = 'Calificar';
 $lang['Rate %s'] = 'Calificar %s';
 $lang['Thank you for using %s'] = 'Gracias por usar %s';
+$lang['Information request for %s'] = 'Solicitud de información para %s';
+$lang['Your request to be sent to %s'] = 'Su solicitud a sido enviada a %s';
+$lang['A user has requested information about the service %s'] = 'Un usuario ha solicitado información acerca del servicio %s';
+

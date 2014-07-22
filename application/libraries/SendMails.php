@@ -5,10 +5,8 @@
 class SendMails {
 	/*
 	 * 
-	 * Libreria de emails, cada metodo debe corresponder
-	 * a un email determinado.
-	 * El metodo solo recibe un array con los datos necesarios 
-	 * para el email especifico.
+	 * Libreria de emails, cada metodo debe corresponder a un email determinado.
+	 * El metodo solo recibe un array con los datos necesarios  para el email especifico.
 	 * 
 	 */
 	
@@ -118,50 +116,4 @@ class SendMails {
 		//echo $this->CI->email->print_debugger();	die;
 	}
 
-	function sendEmailToContactService($params = array()) {
-		if(empty($params) || !is_array($params)){
-			return false;
-		}
-		
-		$this->CI->load->model(array('Contacts_Model', 'Services_Model'));
-		
-		$contactId = $params['contactId'];
-		$contact   = $this->CI->Contacts_Model->get($contactId, true);
-		if (empty($contact)) {
-			return false;
-		}
-		
-		$serviceId = $contact['entityId'];
-		$service = $this->CI->Services_Model->get($serviceId);
-		if (empty($service)) {
-			return false;
-		}
-
-		$contactServiceKey = random_string('alnum', 20);
-		$url               = base_url('services/rate/'.$serviceId.'?key='.$contactServiceKey);
-
-		$contactEmail = $contact['contactEmail'];
-		$message      = $this->load->view('pageEmail',
-			array(
-				'view'      => 'email/changeEmail.php',
-				'contact'   => $contact, 
-				'service'   => $service,
-				'url'       => $url
-			), true);
-
-pr($message);	die;
-
-
-		$this->Users_Model->updateServiceCommentKey($userId, $userEmail, $serviceCommentKey);
-
-		$this->email->from(config_item('emailFrom'), config_item('siteName'));
-		$this->_addEmailTo($userEmail); 
-		$this->email->subject(config_item('siteName').' - '.$this->lang->line('Change email'));
-		$this->email->message($message);
-		if ($this->email->send()) {
-			return true;
-		}
-		//echo $this->email->print_debugger();	die;	
-		return false;
-	}
 }

@@ -327,13 +327,13 @@ class Feeds extends CI_Controller {
 	
 
 	function search() { // TODO: implementar la seguridad!
-		return $this->load->view('ajax', array(
+		return $this->load->view('json', array(
 			'result' 	=> $this->Feeds_Model->search($this->input->get('query'))
 		));
 	}
 	
 	function searchTags() { // TODO: implementar la seguridad!
-		return $this->load->view('ajax', array(
+		return $this->load->view('json', array(
 			'result' 	=> $this->Feeds_Model->searchTags($this->input->get('query'))
 		));
 	}

@@ -53,10 +53,10 @@ function initLang() {
 	$CI = &get_instance();
 	
 	$languages = array(
-		'es'	 	=> 'spanish',
-		'pt-br' 	=> 'portuguese-br',
-		'en' 		=> 'english',		
-		'zh-cn'		=> 'zh-CN',
+		'es'      => 'spanish',
+		'pt-br'   => 'portuguese-br',
+		'en'      => 'english',
+		'zh-cn'   => 'zh-CN',
 	);
 	
 	$langId = $CI->session->userdata('langId');
@@ -82,7 +82,6 @@ function initLang() {
 
 	$CI->config->set_item('language', $langName);
 	$CI->config->set_item('langId', $langId);
-
 
 	$CI->session->set_userdata('langId', $langId);
 	$CI->lang->load('default', $langName);	
