@@ -25,7 +25,7 @@ class SendMails {
 			return;
 		}
 		
-		$this->CI->email->to('jcarle@gmail.com, pilchoide@gmail.com');  // TODO: desharckodear!
+		$this->CI->email->to(config_item('emailDebug'));
 	}
 	
 	function sendEmailToResetPassword($params = array()) {
@@ -103,7 +103,7 @@ class SendMails {
 			true);
 		
 		$this->CI->email->from(element('feedbackUserEmail', $params), element('feedbackUserName', $params));
-		$this->_addEmailTo('jcarle@gmail.com, pilchoide@gmail.com');  // TODO: desharckodear!
+		$this->_addEmailTo(config_item('emailDebug'));
 		$this->CI->email->subject(config_item('siteName').' - Comentario de '.element('feedbackUserName', $params));
 		$this->CI->email->message($message);
 		if($this->CI->email->send()){
@@ -113,4 +113,52 @@ class SendMails {
 		//echo $this->CI->email->print_debugger();	die;
 	}
 
+	function shareByEmail($params = array()) {
+		if(empty($params) || !is_array($params)){
+			return false;
+		}
+
+		$this->CI->load->model(array('Users_Model', 'Entries_Model'));
+		
+		$userId                = $params['userId'];
+		$entryId               = $params['entryId'];
+		$userFriendEmail       = $params['userFriendEmail'];
+		$sendMeCopy            = $params['sendMeCopy'];
+		$shareByEmailComment   = $params['shareByEmailComment'];
+		$entry                 = $this->CI->Entries_Model->get($entryId, false);
+		$user                  = $this->CI->Users_Model->get($userId);
+		$userFullName          = $user['userFirstName'].' '.$user['userLastName'];
+
+		if ($entry['entryAuthor'] == '') {
+			$entryOrigin = sprintf($this->CI->lang->line('From %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>');
+		}
+		else {
+			$entryOrigin = sprintf($this->CI->lang->line('From %s by %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>', $entry['entryAuthor']);
+		}
+
+		$message = $this->CI->load->view('pageEmail',
+			array(
+				'view'                  => 'email/shareEntry.php',
+				'shareByEmailComment'   => $shareByEmailComment,
+				'userFullName'          => $userFullName,
+				'entry'                 => $entry,
+				'entryOrigin'           => $entryOrigin,
+			),
+			true);
+		//echo $message; die;	
+
+		$this->CI->email->from(config_item('emailFrom'), config_item('siteName'));
+		$this->_addEmailTo($userFriendEmail); 
+		$this->CI->email->reply_To($user['userEmail'], $userFullName);
+		if ($sendMeCopy == true) {
+			$this->CI->email->cc($user['userEmail']); 
+		}
+		$this->CI->email->subject(config_item('siteName').' - '.$entry['entryTitle']);
+		$this->CI->email->message($message);
+		if($this->CI->email->send()){
+			return true;
+		}
+		return false;
+		//echo $this->CI->email->print_debugger();	die;
+	}
 }

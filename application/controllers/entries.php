@@ -377,8 +377,7 @@ class Entries extends CI_Controller {
 			return loadViewAjax(false);
 		}
 
-		$this->load->model('Users_Model');
-		
+		$this->load->model(array('Users_Model', 'Tasks_Model'));
 		
 		$userId 				= $this->session->userdata('userId');
 		$entryId				= $this->input->post('entryId');
@@ -392,41 +391,16 @@ class Entries extends CI_Controller {
 			'userFriendId'			=> $userFriendId,
 			'shareByEmailComment'	=> $shareByEmailComment,
 		));
-		$entry 				= $this->Entries_Model->get($entryId, false);
-		$user 				= $this->Users_Model->get($userId);
-		$userFullName		= $user['userFirstName'].' '.$user['userLastName'];		
 
+		$params = array(		
+			'userId'               => $userId,
+			'entryId'              => $entryId,
+			'userFriendEmail'      => $userFriendEmail,
+			'sendMeCopy'           => $sendMeCopy,
+			'shareByEmailComment'  => $shareByEmailComment,
+		);
 		
-		$this->load->library('email');
-		$this->load->helper('email');
-
-		if ($entry['entryAuthor'] == '') {
-			$entryOrigin = sprintf($this->lang->line('From %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>');
-		}
-		else {
-			$entryOrigin = sprintf($this->lang->line('From %s by %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>', $entry['entryAuthor']);
-		}
-
-		$message = $this->load->view('pageEmail',
-			array(
-				'emailView' 			=> 'email/shareEntry.php',
-				'shareByEmailComment' 	=> $shareByEmailComment,
-				'userFullName'			=> $userFullName,
-				'entry'					=> $entry,
-				'entryOrigin'			=> $entryOrigin,
-			),
-			true);
-		//echo $message; die;	
-
-		$this->email->from(config_item('emailFrom'), config_item('siteName'));
-		$this->email->to($userFriendEmail); 
-		$this->email->reply_To($user['userEmail'], $userFullName);
-		if ($sendMeCopy == true) {
-			$this->email->cc($user['userEmail']); 
-		}
-		$this->email->subject(config_item('siteName').' - '.$entry['entryTitle']);
-		$this->email->message($message);
-		$this->email->send();
+		$this->Tasks_Model->addTask('shareByEmail', $params);
 
 		return loadViewAjax(true, array('notification' => $this->lang->line('The email has been sent')));
 	}	

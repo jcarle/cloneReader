@@ -12,6 +12,7 @@ $config['hasRss'] = true;
 $config['siteName'] = 'cloneReader BETA';
 $config['siteId'] = 'cloneReader';
 $config['emailFrom'] = 'clonereader@gmail.com';
+$config['emailDebug'] = 'jcarle@gmail.com';
 $config['google-analytics-Account'] = 'UA-41589815-1';
 
 $config['urlDev']  = 'http://jcarle.redirectme.net/dev/jcarle/cloneReader/';
