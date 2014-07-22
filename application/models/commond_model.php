@@ -209,28 +209,39 @@ class Commond_Model extends CI_Model {
 
 
 	/**
-	 * Obtiene las zonas de una entidad
+	 * Obtiene el detalle de las zonas 
+	 * @param (array) $data debe tener alguno de los items: [countryId, stateId, cityId]
+	 * @return (array) devuelve un array con el detalle de las zonas
 	 * */
-	function selectZoneDetail($query) {
-
-		$this->db
-			->select('countries.countryId, countryName, states.stateId, stateName, stateSef, cities.cityId, cityName, citySef ')
-			->join('states', 'states.countryId = countries.countryId', 'left')
-			->join('cities', 'cities.stateId = states.stateId', 'left');
+	function selectZoneDetail($data) {
+		if (element('countryId', $data) == null && element('stateId', $data) == null && element('cityId', $data) == null) {
+			return array();
+		}
+		if (element('countryId', $data) == null) {
+			return array();
+		}		
 		
-		if (element('countryId', $query) != null) {
-			$this->db->where('countries.countryId', element('countryId', $query));
+		$aFields = array('countries.countryId', 'countryName');
+		$this->db->where('countries.countryId', element('countryId', $data));
+
+		if (element('stateId', $data) != null) {
+			$aFields = array_merge($aFields, array('states.stateId', 'stateName', 'stateSef'));
+			$this->db
+				->join('states', 'states.countryId = countries.countryId', 'inner')
+				->where('states.stateId', element('stateId', $data));
 		}
-		if (element('stateId', $query) != null) {
-			$this->db->where('states.stateId', element('stateId', $query));
-		}
-		if (element('cityId', $query) != null) {
-			$this->db->where('cities.cityId', element('cityId', $query));
+		if (element('cityId', $data) != null) {
+			$aFields = array_merge($aFields, array('cities.cityId', 'cityName', 'citySef'));
+			$this->db
+				->join('cities', 'cities.stateId = states.stateId', 'inner')
+				->where('cities.cityId', element('cityId', $data));
 		}
 			
-		$query = $this->db->get('countries')->row_array();
-		return $query;
-		//pr($this->db->last_query()); die; 
+		$this->db->select(implode(', ', $aFields));
+			
+		$data = $this->db->get('countries')->row_array();
+		//pr($this->db->last_query()); die;
+		return $data;
 	}
 
 	/*

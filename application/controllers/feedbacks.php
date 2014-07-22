@@ -109,7 +109,7 @@ class Feedbacks extends CI_Controller {
 				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'    => strtolower(__CLASS__).'/add',
 				'columns'   => array(
-					'feedbackDesc'       => $this->lang->line('Description'),
+					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  $this->lang->line('Description')),
 					'feedbackDate'       => array('class' => 'datetime', 'value' => $this->lang->line('Date')),
 					'feedbackUserName'   => $this->lang->line('Name'), 
 					'feedbackUserEmail'  => $this->lang->line('Email'),

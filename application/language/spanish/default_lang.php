@@ -57,6 +57,7 @@ $lang['Edit menu'] = 'Editar menu';
 $lang['Edit comments'] = 'Editar comentarios';
 $lang['Edit contacts'] = 'Editar contactos';
 $lang['Edit accounts'] = 'Editar cuentas';
+$lang['Edit feedbacks'] = 'Editar feedbacks';
 $lang['Privileges'] = 'Privilegios';
 
 $lang['Email'] = 'Email';

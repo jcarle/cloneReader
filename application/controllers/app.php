@@ -9,7 +9,10 @@ class App extends CI_Controller {
 	function index() {
 	}
 	
+	// TODO: cachear este metodo; que devuelva un archivo en los assetss
 	function selectMenuAndTranslations() {
+//		$this->output->cache(50);
+		
 		$this->load->driver('cache', array('adapter' => 'file'));
 		$userId = $this->session->userdata('userId');
 		
