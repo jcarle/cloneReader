@@ -200,34 +200,6 @@ class Users extends CI_Controller {
 		return loadViewAjax($this->Users_Model->delete($this->input->post('userId')));
 	}
 	
-	function search() { // TODO: implementar la seguridad!
-		return $this->load->view('json', array(
-			'result' 	=> $this->Users_Model->search($this->input->get('query'), $this->input->get('groupId'))
-		));
-	}
-	
-	function searchFriends() {
-		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
-			return errorForbidden();
-		}
-		
-		// FIXME: chapuza; hacer que los fields typeahead permitan agregar datos y validarlos
-		// Si el item que ingreso el usuario es un mail valido, lo apendeo a los resultados del autocomplete para que pueda seleccionarlo!
-		$this->load->helper('email');
-		
-		$query 	= $this->input->get('query');
-		$result = $this->Users_Model->searchFriends($query, $this->session->userdata('userId'));
-		
-		
-		if (valid_email($query) == true) {
-			$result[] = array('id' => $query, 'text' => $query);
-		}
-		
-		return $this->load->view('json', array(
-			'result' 	=> $result
-		));
-	}	
-	
 	function logs() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
@@ -260,7 +232,7 @@ class Users extends CI_Controller {
 					'userId' => array(
 						'type' 			=> 'typeahead',
 						'label'			=> $this->lang->line('User'),
-						'source' 		=> base_url('users/search/'),
+						'source' 		=> base_url('search/users/'),
 						'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
 						'multiple'		=> false,
 						'placeholder' 	=> $this->lang->line('User')

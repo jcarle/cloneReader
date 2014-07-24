@@ -96,6 +96,7 @@ $lang['Description'] = 'Descripción';
 $lang['Choose'] = 'Seleccione';
 $lang['Address'] = 'Dirección';
 $lang['Phone'] = 'Teléfono';
+$lang['P:'] = 'Tel:';
 $lang['Birthday'] = 'Fecha de nacimiento';
 $lang['DNI'] = 'DNI';
 $lang['State'] = 'Provincia';
@@ -151,8 +152,12 @@ $lang['Your request has been sent successfully'] = 'Su consulta ha sido enviada 
 $lang['View logs'] = 'Ver logs';
 $lang['Rate'] = 'Calificar';
 $lang['Rate %s'] = 'Calificar %s';
+$lang['Comments'] = 'Comentarios';
 $lang['Thank you for using %s'] = 'Gracias por usar %s';
 $lang['Information request for %s'] = 'Solicitud de información para %s';
 $lang['Your request to be sent to %s'] = 'Su solicitud a sido enviada a %s';
 $lang['A user has requested information about the service %s'] = 'Un usuario ha solicitado información acerca del servicio %s';
-
+$lang['Rate the service %s'] = 'Calificá el servicio %s';
+$lang['To qualify to %s makes click <a href="%s">here</a>'] = 'Para calificar el servicio %s, hace click <a href="%s">aquí</a>';
+$lang['I accept the <a href="%s">terms and conditions</a>'] = 'Acepto los <a href="%s">términos y condiciones</a>';
+$lang['Schedule date'] = 'Fecha programada';

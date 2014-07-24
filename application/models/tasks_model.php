@@ -1,14 +1,17 @@
 <?php
 class Tasks_Model extends CI_Model {
 	
-	function addTask($taskMethod, $taskParams=array(), $langId = null) {
+	function addTask($taskMethod, $taskParams=array(), $langId = null, $taskSchedule = null) {
 		if(empty($taskMethod)){
 			return false;
 		}
 		
 		if ($langId == null) {
 			$langId = $this->session->userdata('langId');
-		}		
+		}
+		if ($taskSchedule == null) {
+			$taskSchedule = date("Y-m-d H:i:s");
+		}
 		
 		$this->db->insert('tasks_email', array(
 			'langId'        => $langId,
@@ -16,27 +19,55 @@ class Tasks_Model extends CI_Model {
 			'taskParams'    => json_encode($taskParams),
 			'taskRunning'   => TASK_PENDING,
 			'taskRetries'   => 0,
-			'taskDate'      => date("Y-m-d H:i:s")
+			'taskSchedule'  => $taskSchedule,
 		));
 		
 		return $this->db->insert_id();
 	}
 	
-	function selectToList($num, $offset, $taskRunning = null, $orderBy = 'taskId', $orderDir = 'asc' ){
+	
+	/**
+	 * @param  (int )   $num
+	 * @param  (int)    $offset
+	 * @param  (array)  $filters es un array con el formato: 
+	 * 						array(
+	 * 							'filter'         => null, 
+	 * 							'taskRunning'    => null, 
+	 * 							'validDate'      => null, // Filtra las emails que ya pueden enviarse 
+	 *						) 
+	 * @param   $orders    un array con el formato:
+	 * 						array(
+	 * 							array(
+	 * 								'orderBy'  = 'taskId', 
+	 * 								'orderDir' = 'asc',
+	 * 							)
+	 * 						);
+	 * */	
+	function selectToList($num, $offset, array $filters, array $orders ){
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS tasks_email.taskId, tasks_email.taskMethod, tasks_email.taskParams, tasks_email.taskRunning, tasks_email.taskRetries, tasks_email.taskDate, tasks_status.statusTaskName, langId ', false)
+			->select('SQL_CALC_FOUND_ROWS tasks_email.taskId, tasks_email.taskMethod, tasks_email.taskParams, tasks_email.taskRunning, tasks_email.taskRetries, tasks_email.taskSchedule, tasks_status.statusTaskName, languages.langId, langName ', false)
+			->join('languages', 'tasks_email.langId = languages.langId', 'inner')
 			->join('tasks_status', 'tasks_status.statusTaskId = tasks_email.taskRunning', 'inner');
 		
-		if ($taskRunning !== null) {
-			$this->db->where('taskRunning', $taskRunning);
+		if (element('taskRunning', $filters) != null) {
+			$this->db->where('taskRunning', $filters['taskRunning']);
 		}
-		if (!in_array($orderBy, array('taskId'))) {
-			$orderBy = 'taskId';
+		if (element('validDate', $filters) == true) {
+			$this->db->where('taskSchedule < NOW() ');
+		}
+		
+		if (empty($orders)) {
+			$orders[] = array('orderBy' => 'serviceId', 'orderDir' => 'asc');
+		}
+		for ($i=0; $i<count($orders); $i++) {
+			if (!in_array($orders[$i]['orderBy'], array('taskId', 'taskMethod', 'taskSchedule'))) {
+				$orders[$i]['orderBy'] = 'taskId';
+			}
+			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
 		}
 
-		$query = $this->db
-			->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc')
-			->get('tasks_email', $num, $offset);
+		$query = $this->db->get('tasks_email', $num, $offset);
+		//pr($this->db->last_query()); die;		
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}

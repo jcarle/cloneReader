@@ -41,7 +41,12 @@
 $route['default_controller']  = "home";
 $route['404_override']        = 'error/error404';
 
-$route['feedback'] = "feedbacks/addFeedback";
+$route['feedback']       = "feedbacks/addFeedback";
+$route['confirmEmail']   = "profile/confirmEmail";
+$route['forgotPassword'] = "profile/forgotPassword";
+$route['resetPassword']  = "profile/resetPassword";
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

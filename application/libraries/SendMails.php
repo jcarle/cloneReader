@@ -99,12 +99,13 @@ class SendMails {
 				'feedbackUserEmail'     => element('feedbackUserEmail', $params),
 				'feedbackDesc'          => element('feedbackDesc', $params),
 				'feedbackDate'          => element('feedbackDate', $params),
+				'url'                   => null,
 			),
 			true);
 		
 		$this->CI->email->from(element('feedbackUserEmail', $params), element('feedbackUserName', $params));
 		$this->_addEmailTo(config_item('emailDebug'));
-		$this->CI->email->subject(config_item('siteName').' - Comentario de '.element('feedbackUserName', $params));
+		$this->CI->email->subject('Comentario de '.element('feedbackUserName', $params));
 		$this->CI->email->message($message);
 		if($this->CI->email->send()){
 			return true;
@@ -143,6 +144,7 @@ class SendMails {
 				'userFullName'          => $userFullName,
 				'entry'                 => $entry,
 				'entryOrigin'           => $entryOrigin,
+				'url'                   => null,
 			),
 			true);
 		//echo $message; die;	
@@ -153,7 +155,7 @@ class SendMails {
 		if ($sendMeCopy == true) {
 			$this->CI->email->cc($user['userEmail']); 
 		}
-		$this->CI->email->subject(config_item('siteName').' - '.$entry['entryTitle']);
+		$this->CI->email->subject($entry['entryTitle']);
 		$this->CI->email->message($message);
 		if($this->CI->email->send()){
 			return true;

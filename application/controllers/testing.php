@@ -64,7 +64,7 @@ class Testing extends CI_Controller {
 				'stateId' => array(
 					'type'			=> 'dropdown',
 					'label'			=> 'State', 
-					'controller'	=> base_url('testing/selectStatesByCountryId/'),
+					'controller'	=> base_url('search/selectStatesByCountryId/'),
 					'subscribe'		=> array(
 						array(					
 							'field' 		=> 'countryId',
@@ -167,14 +167,6 @@ class Testing extends CI_Controller {
 		
 		return loadViewAjax($this->Testing_Model->delete($this->input->post('testId')));
 	}	
-	
-	function selectStatesByCountryId($countryId) { // TODO: centralizar en otro lado!
-		$this->load->model('States_Model');
-	
-		return $this->load->view('json', array(
-			'result' => $this->States_Model->selectStatesByCountryId($countryId)
-		));
-	}
 
 	function selectChildsByTestId($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
@@ -317,7 +309,7 @@ class Testing extends CI_Controller {
 				'userId' => array(
 					'type' 			=> 'typeahead',
 					'label'			=> $this->lang->line('User'),
-					'source' 		=> base_url('users/search/'),
+					'source' 		=> base_url('search/users/'),
 					'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
 					'multiple'		=> false,
 					'placeholder' 	=> $this->lang->line('User')

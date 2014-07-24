@@ -48,7 +48,7 @@ class Entries extends CI_Controller {
 					'feedId' => array(
 						'type'      => 'typeahead',
 						'label'     => $this->lang->line('Feed'),
-						'source'    => base_url('feeds/search/'),
+						'source'    => base_url('search/feeds'),
 						'value'     => array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
 					),
 				),
@@ -117,7 +117,7 @@ class Entries extends CI_Controller {
 				'feedId' => array(
 					'type' 		=> 'typeahead',
 					'label'		=> $this->lang->line('Feed'),
-					'source' 	=> base_url('feeds/search/'),
+					'source' 	=> base_url('search/feeds/'),
 				),
 				'entryTitle' => array(
 					'type'		=> 'text',
@@ -340,7 +340,7 @@ class Entries extends CI_Controller {
 				'userFriendEmail' => array(
 					'type'		=> 'typeahead',
 					'label'		=> $this->lang->line('For'),
-					'source' 	=> base_url('users/searchFriends/'),
+					'source' 	=> base_url('search/searchFriends/'),
 					'value'		=> array( 'id' => null, 'text' => null ),
 				),
 				'shareByEmailComment' => array(

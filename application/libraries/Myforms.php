@@ -54,7 +54,7 @@ class Myforms {
 			$form['fields']['entityId'] = array(
 				'type' 		=> 'typeahead',
 				'label'		=> $CI->lang->line('Service'),
-				'source' 	=> base_url('services/search/'),
+				'source' 	=> base_url('search/services/'),
 			);
 		}
 		else {
@@ -146,7 +146,7 @@ class Myforms {
 			$form['fields']['entityId'] = array(
 				'type' 		=> 'typeahead',
 				'label'		=> $CI->lang->line('Service'),
-				'source' 	=> base_url('services/search/'),
+				'source' 	=> base_url('search/services/'),
 			);
 		}
 		else {

@@ -17,50 +17,55 @@ class Tasks extends CI_Controller {
 
 		$this->load->model('Tasks_Status_Model');
 		
-		$taskRunning = $this->input->get('taskRunning');
-		if($taskRunning === false){
-			$taskRunning = null;
-		}
+		$filters = array(
+			'filter'       => $this->input->get('filter'),
+			'taskRunning'  => ($this->input->get('taskRunning') === false ? null : $this->input->get('taskRunning')),
+		);
+		$orders  = array(
+			array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir') ),
+		);
 		
-		$query = $this->Tasks_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $taskRunning, $this->input->get('orderBy'), $this->input->get('orderDir') );
+		$query = $this->Tasks_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $filters, $orders );
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList',
-			'meta'			=> array( 'title' => $this->lang->line('Edit tasks') ),
-			'list'			=> array(
+			'view'   => 'includes/crList',
+			'meta'   => array( 'title' => $this->lang->line('Edit tasks') ),
+			'list'   => array(
 				'urlList'       => strtolower(__CLASS__).'/listing',
 				'readOnly'      => true,
 				'columns'       => array(
-					'taskMethod' 		=> $this->lang->line('Method'),
-					'taskParams'		=> array('value' => $this->lang->line('Params'), 'class' => 'dotdotdot'),
-					'statusTaskName'	=> $this->lang->line('Running'),
-					'taskRetries'		=> $this->lang->line('Retries'),
-					'taskDate'			=> $this->lang->line('Date')
+					'taskMethod'        => $this->lang->line('Method'),
+					'taskParams'        => array('value' => $this->lang->line('Params'), 'class' => 'dotdotdot'),
+					'statusTaskName'    => $this->lang->line('Running'),
+					'langName'          => $this->lang->line('Language'),
+					'taskRetries'       => $this->lang->line('Retries'),
+					'taskSchedule'      => array('value' => $this->lang->line('Schedule date'), 'class' => 'datetime'), 
 				),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
-				'showId'		=> true,
-				'filters'		=> array(
+				'data'        => $query->result_array(),
+				'foundRows'   => $query->foundRows,
+				'showId'      => true,
+				'filters'     => array(
 					'taskRunning' => array(
-						'type'				=> 'dropdown',
-						'label'				=> $this->lang->line('Status Running'),
-						'value'				=> $this->input->get('taskRunning'),
-						'source'			=> $this->Tasks_Status_Model->selectToDropdown(),
-						'appendNullOption'	=> true,
-					),					
-				),				
+						'type'              => 'dropdown',
+						'label'             => $this->lang->line('Status Running'),
+						'value'             => $this->input->get('taskRunning'),
+						'source'            => $this->Tasks_Status_Model->selectToDropdown(),
+						'appendNullOption' => true,
+					),
+				),
 				'sort' => array(
-					'taskId' => $this->lang->line('Process')
+					'taskId'        => $this->lang->line('#'),
+					'taskMethod'    => $this->lang->line('Method'),
+					'taskSchedule'  => $this->lang->line('Schedule date'),
 				)
 			)
 		));
 	}	
 	
 	/*
-	 * Metodo que se llama desde un cronjobs para iniciar 
-	 * el envio de las tasks_email
+	 * Metodo que se llama desde un cronjobs para iniciar  el envio de las tasks_email
 	 */
-	function run(){
+	function sendEmails(){
 		set_time_limit(0);
 		if(!$this->input->is_cli_request()){return error404();}
 		
@@ -76,8 +81,13 @@ class Tasks extends CI_Controller {
 				break;
 		}
 
-		$query	= $this->Tasks_Model->selectToList(100, 0, TASK_PENDING);
-		$rsTasks= $query->result_array();
+		$filters = array(
+			'taskRunning'  => TASK_PENDING,
+			'validDate'    => true
+		);		
+		
+		$query   = $this->Tasks_Model->selectToList(100, 0, $filters, array() );
+		$rsTasks = $query->result_array();
 		if(!empty($rsTasks)){
 			$this->load->library('SendMails');
 			
@@ -86,7 +96,7 @@ class Tasks extends CI_Controller {
 				$this->Tasks_Model->save($task);
 				try {
 					//Sino se envio la tarea genero una excepcion
-					if(!$this->runTask($task)){
+					if(!$this->_sendEmail($task)){
 						throw new Exception('No se pode enviar el correo - taskId: '.$task['taskId']);
 					}
 				} catch (Exception $e) {
@@ -111,14 +121,15 @@ class Tasks extends CI_Controller {
 	
 	/*
 	 * 
-	 * Metodo que ejecuta cada una de las tareas de envio de email, lo llama self::run
+	 * Metodo que ejecuta cada una de las tareas de envio de email, lo llama self::sendEmails
 	 * El array que recibe debe tener el indice taskMethod obligatorio
 	 * @param array task
 	 * @return boolean
 	 * 
 	 */	
-	function runTask($task) {
-		if(!$this->input->is_cli_request()){return error404();}
+	function _sendEmail($task) {
+		if(!$this->input->is_cli_request()){ return error404(); }
+		
 		$return = false;
 		if(empty($task) || !is_array($task) || empty($task['taskMethod']) ){
 			return $return;
@@ -134,8 +145,7 @@ class Tasks extends CI_Controller {
 
 		if (method_exists($this->sendmails, $taskMethod)) {
 			if(!empty($taskParams)){
-				$taskParams		= (array)json_decode($taskParams);
-				$this->sendmails->$taskMethod($taskParams);
+				$this->sendmails->$taskMethod((array)json_decode($taskParams));
 			}else{
 				$this->sendmails->$taskMethod();
 			}
@@ -145,6 +155,6 @@ class Tasks extends CI_Controller {
 		unset($taskMethod);
 		unset($taskParams);
 		return $return;
-	}	
+	}
 }
 
