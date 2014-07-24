@@ -218,6 +218,14 @@
 					max-width:100%;
 					height:auto;
 				}
+				#cloneReader .ulEntries > li p img.imgError {
+					max-width:250px;
+					opacity:0.7;
+					background: #f5f5f5;
+					border: 1px #ddd solid;
+					border-radius: 4px;
+display: none;
+				}
 				#cloneReader .ulEntries > li p a {
 					text-decoration: underline;
 					color: #1155CC;
