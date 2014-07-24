@@ -4,7 +4,9 @@
 
 $config['oauth2']['facebook']['id'] = '';
 $config['oauth2']['facebook']['secret'] = '';
+$config['oauth2']['facebook']['scope'] = 'email,user_hometown,user_birthday';
 
 
 $config['oauth2']['google']['id'] = '';
 $config['oauth2']['google']['secret'] = '';
+$config['oauth2']['google']['scope'] = 'email';
