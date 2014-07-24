@@ -1736,15 +1736,7 @@ console.timeEnd("t1");
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						$.showPopupForm(response['result']['form']);
 					}
-				, this),
-			'error':
-				function (response) {
-					if (response.statusText == 'abort') {
-						return;
-					}
-					response = $.parseJSON(response.responseText);
-					$.hasAjaxDefaultAction(response);
-				}
+				, this)
 		});
 	},
 	
