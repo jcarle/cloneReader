@@ -18,7 +18,7 @@ class Search extends CI_Controller {
 		));
 	}
 	
-	function searchFriends() {
+	function friends() {
 		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
 			return errorForbidden();
 		}

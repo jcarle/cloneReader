@@ -340,7 +340,7 @@ class Entries extends CI_Controller {
 				'userFriendEmail' => array(
 					'type'		=> 'typeahead',
 					'label'		=> $this->lang->line('For'),
-					'source' 	=> base_url('search/searchFriends/'),
+					'source' 	=> base_url('search/friends/'),
 					'value'		=> array( 'id' => null, 'text' => null ),
 				),
 				'shareByEmailComment' => array(
