@@ -86,7 +86,7 @@ class Feeds extends CI_Controller {
 					'tagId' => array(
 						'type' 			=> 'typeahead',
 						'label'			=> 'Tags',
-						'source' 		=> base_url('feeds/searchTags/'),
+						'source' 		=> base_url('search/tags?onlyWithFeeds=true'),
 						'value'			=> array( 'id' => element('tagId', $tag), 'text' => element('tagName', $tag)), 
 						'multiple'		=> false,
 						'placeholder' 	=> 'tags'
@@ -94,7 +94,7 @@ class Feeds extends CI_Controller {
 					'userId' => array(
 						'type' 			=> 'typeahead',
 						'label'			=> $this->lang->line('User'),
-						'source' 		=> base_url('users/search/'),
+						'source' 		=> base_url('search/users/'),
 						'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
 						'multiple'		=> false,
 						'placeholder' 	=> $this->lang->line('User')
@@ -214,7 +214,7 @@ class Feeds extends CI_Controller {
 				'aTagId' => array(
 					'type' 			=> 'typeahead',
 					'label'			=> 'Tags',
-					'source' 		=> base_url('tags/search/'),
+					'source' 		=> base_url('search/tags/'),
 					'multiple'		=> true,
 					'placeholder' 	=> 'tags'
 				),
@@ -324,19 +324,6 @@ class Feeds extends CI_Controller {
 				
 		return loadViewAjax(true, $this->Feeds_Model->saveFeedIcon($feedId, null, true));
 	}	
-	
-
-	function search() { // TODO: implementar la seguridad!
-		return $this->load->view('json', array(
-			'result' 	=> $this->Feeds_Model->search($this->input->get('query'))
-		));
-	}
-	
-	function searchTags() { // TODO: implementar la seguridad!
-		return $this->load->view('json', array(
-			'result' 	=> $this->Feeds_Model->searchTags($this->input->get('query'))
-		));
-	}
 	
 	function deleteOldEntriesByFeedId($feedId) {
 		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }

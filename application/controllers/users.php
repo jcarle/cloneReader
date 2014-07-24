@@ -79,7 +79,7 @@ class Users extends CI_Controller {
 					'feedId' => array(
 						'type' 		=> 'typeahead',
 						'label'		=> $this->lang->line('Feed'),
-						'source' 	=> base_url('feeds/search/'),
+						'source' 	=> base_url('search/feeds/'),
 						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
 					),
 					'remoteLogin' => array(

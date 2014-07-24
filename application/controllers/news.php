@@ -84,7 +84,7 @@ class News extends CI_Controller {
 				'userId' => array(
 					'type' 		=> 'typeahead',
 					'label'		=> $this->lang->line('Author'),
-					'source' 	=> base_url('users/search/'),
+					'source' 	=> base_url('search/users/'),
 				),
 				'newDate' => array(
 					'type' 		=> 'datetime',

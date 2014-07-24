@@ -48,14 +48,22 @@ class Tags_Model extends CI_Model {
 		return true;
 	}
 	
-	function search($filter){
+	function search($filter, $onlyWithFeeds = false){
 		$filter = $this->db->escape_like_str($filter);
 
-		return $this->db
+		$this->db
 			->select('DISTINCT tags.tagId AS id, tagName AS text  ', false)
 			->like('tagName', $filter)
-			->order_by('text')
-			->get('tags', config_item('autocompleteSize'))->result_array();
+			->order_by('text');
+			
+			
+		if ($onlyWithFeeds == true) {
+			$this->db->join('feeds_tags', 'feeds_tags.tagId = tags.tagId ', 'inner');
+		}	
+			
+		$query = $this->db->get('tags', config_item('autocompleteSize'))->result_array();
+		//pr($this->db->last_query()); die;
+		return $query;
 	}
 	
 	function selectByFeedId($feedId) {

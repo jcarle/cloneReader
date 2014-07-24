@@ -138,21 +138,6 @@ class Feeds_Model extends CI_Model {
 			->get('feeds', config_item('autocompleteSize'))->result_array();
 	}	
 	
-	
-	/**
-	 * Busca tags que tengan feeds. 
-	 */
-	function searchTags($filter){
-		$filter = $this->db->escape_like_str($filter);
-
-		return $this->db
-			->select('DISTINCT tags.tagId AS id, tagName AS text  ', false)
-			->join('feeds_tags', 'feeds_tags.tagId = tags.tagId ', 'inner')
-			->like('tagName', $filter)
-			->order_by('text')
-			->get('tags', config_item('autocompleteSize'))->result_array();
-	}	
-	
 	function saveFeedIcon($feedId, $feed = null, $force = false) {
 		if ($force == true) {
 			$this->db->update('feeds', array( 'feedIcon' => null), array('feedId' => $feedId) );	
