@@ -217,6 +217,7 @@
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 					height:auto;
+					margin-bottom: 20px;
 				}
 				#cloneReader .ulEntries > li p img.imgError {
 					max-width:250px;
