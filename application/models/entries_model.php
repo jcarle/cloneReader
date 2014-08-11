@@ -634,50 +634,52 @@ class Entries_Model extends CI_Model {
 		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
 		$entryId	 	= null;
 		$limit	 		= 2000;
+
+		$aFeedId = array();
+		$query = $this->db
+			->select('feedId')
+			->from('users_feeds') 
+			->where('userId', $userId)
+			->get()->result_array();
+		foreach ($query as $data) {
+			$aFeedId[] = $data['feedId'];
+		}
+		
+		if (empty($aFeedId)) {
+			return false;
+		}
 		
 		$query = ' SELECT
 						MAX(entryId) AS entryId
 						FROM  users_entries  
 						WHERE userId  	= '.$userId.' 
 						AND   tagId 	= '.config_item('tagAll');
-		$query = $this->db->query($query)->result_array();
+		$query = $this->db->query($query)->row_array();
 		//pr($this->db->last_query()); die;
 		if (!empty($query)) {
-			$entryId = $query[0]['entryId'];
+			$entryId = $query['entryId'];
 		}		
 
 		// save tagAll
 		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
-					SELECT users_feeds.userId, entries.entryId, entries.feedId, '.config_item('tagAll').', FALSE, entries.entryDate 
-					FROM entries 
-					INNER JOIN users_feeds 
-						ON entries.feedId = users_feeds.feedId
-						AND users_feeds.userId = '.$userId.' 
-					LEFT JOIN users_entries
-						ON 		users_entries.userId 	= users_feeds.userId
-						AND 	users_entries.entryId 	= entries.entryId
-						AND 	users_entries.feedId 	= entries.feedId
-						AND 	users_entries.tagId 	= '.config_item('tagAll').'
-					WHERE users_entries.userId IS NULL
+					SELECT '.$userId.', entries.entryId, entries.feedId, '.config_item('tagAll').', FALSE, entries.entryDate 
+					FROM entries
+					WHERE feedId IN ('.implode(',', $aFeedId).') 
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 				ORDER BY entries.entryId LIMIT '.$limit;
 		$this->db->query($query);
 		//vd($this->db->last_query());
+		
 		$rowsAffected = $this->db->affected_rows();
 		
 		// save Custom Tags
 		$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate) 
-					SELECT users_feeds_tags.userId, entries.entryId, entries.feedId, users_feeds_tags.tagId, false, entries.entryDate
+					SELECT '.$userId.', entries.entryId, entries.feedId, users_feeds_tags.tagId, FALSE, entries.entryDate
 					FROM entries 
 					INNER JOIN users_feeds_tags FORCE INDEX (indexUserIdFeedId) 
 						ON users_feeds_tags.feedId = entries.feedId 
 						AND users_feeds_tags.userId = '.$userId.' 
-					LEFT JOIN users_entries
-						ON users_entries.userId  		= users_feeds_tags.userId
-						AND   users_entries.entryId 	= entries.entryId
-						AND   users_entries.feedId		= entries.feedId 
-						AND   users_entries.tagId		= users_feeds_tags.tagId 
-					WHERE users_entries.userId IS NULL 
+					WHERE entries.feedId IN ('.implode(',', $aFeedId).') 
 					'.($entryId != null ? ' AND entries.entryId > '.$entryId : '').'
 					ORDER BY entries.entryId LIMIT '.$limit;
 		$this->db->query($query);
