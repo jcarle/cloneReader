@@ -1702,6 +1702,8 @@ console.timeEnd("t1");
 				function($tag, response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					
+					$parent = $tag; 
+					
 					for (var i=0; i<response.result.feeds.length; i++) {
 						var feed            = response.result.feeds[i];
 						var feedId          = feed.feedId;
@@ -1728,7 +1730,8 @@ console.timeEnd("t1");
 						this.renderBrowseFeedTags(feed.tags, $feed.find('.alert'));
 						
 						$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')')
-						$tag.after($feed);
+						$parent.after($feed);
+						$parent = $feed;
 					}
 					
 					//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
