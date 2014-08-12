@@ -65,15 +65,42 @@ class Tags_Model extends CI_Model {
 		//pr($this->db->last_query()); die;
 		return $query;
 	}
-	
-	function selectByFeedId($feedId) {
-		$query = $this->db
+
+	/*
+	 * @param   $orders    un array con el formato:
+	 * 						array(
+	 * 							array(
+	 * 								'orderBy'  = 'tagName', 
+	 * 								'orderDir' = 'asc',
+	 * 							)
+	 * 						);	
+	 * */	
+	function selectByFeedId($feedId, $limit = null, $orders = array()) {
+		$aSystenTags = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
+		
+		$this->db
 			->select(' tags.tagId, tagName ', false)
+			->from('tags')
 			->join('feeds_tags', 'feeds_tags.tagId = tags.tagId', 'inner')
 			->where('feedId', $feedId)
-			->order_by('tagName')
-			->get('tags')->result_array();
-						
+			->where_not_in('tags.tagId', $aSystenTags);
+			
+		if ($limit != null) {
+			$this->db->limit($limit);
+		}
+		
+		if (empty($orders)) {
+			$orders[] = array('orderBy' => 'tagName', 'orderDir' => 'asc');
+		}
+		for ($i=0; $i<count($orders); $i++) {
+			if (!in_array($orders[$i]['orderBy'], array('tagName', 'countTotal'))) {
+				$orders[$i]['orderBy'] = 'tagName';
+			}
+			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
+		}
+		
+		$query = $this->db->get()->result_array();
+
 		return $query;
 	}	
 }

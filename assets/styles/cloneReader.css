@@ -390,6 +390,13 @@
 						display:block;
 						margin:10px 0 0 0;
 					}
+					#cloneReader .ulEntries > li.browseTags .alert {
+						margin:15px 0;
+					}
+						#cloneReader .ulEntries > li.browseTags .alert .label {
+							display: inline-block;
+							margin-top: 5px;
+						}
 
 
 	#cloneReader ul.ulFilters {

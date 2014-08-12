@@ -528,10 +528,13 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function browseFeedsByTagId($userId, $tagId) {
-		$this->load->model('Languages_Model');
+		$this->load->model(array('Languages_Model', 'Tags_Model'));
 		$languages = $this->Languages_Model->getRelatedLangs($this->session->userdata('langId'));
+		$result    = array('tag' => null, 'feeds' => array());
+		$tag       = $this->Tags_Model->get($tagId);
+		$result['tag'] = array('tagId' => $tagId, 'tagName' => $tag['tagName']);
 				
-		$query = ' SELECT DISTINCT feeds.feedId, feedName, feedUrl, feedLink, feeds.feedIcon, feedDescription
+		$query = ' SELECT DISTINCT feeds.feedId, feedName, feedUrl, feedLink, feeds.feedIcon, feedDescription, feedCountUsers
 						FROM tags 
 						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
 						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
@@ -540,8 +543,17 @@ class Entries_Model extends CI_Model {
 						AND feeds.langId IN (\''.implode('\' , \'', $languages).'\')
 						ORDER BY feedName ASC LIMIT 50 ';	
 		$query = $this->db->query($query)->result_array();
-		//pr($this->db->last_query());   die;			
-		return $query;
+		//pr($this->db->last_query());   die;
+		foreach ($query as $data) {
+			$tags = $this->Tags_Model->selectByFeedId($data['feedId'], 100, array(array('orderBy' =>'countTotal', 'orderDir' =>'desc'))); // TODO: harckodeta!!
+			foreach ($tags as $tag) {
+				$data['tags'][] = array('tagId' => $tag['tagId'], 'tagName' => $tag['tagName']);
+			}
+
+			$result['feeds'][] = $data;
+		}
+		
+		return $result;
 	}	
 	
 	function updateUserFilters($userFilters, $userId){
@@ -737,7 +749,7 @@ class Entries_Model extends CI_Model {
 		}
 		
 		
-		$query = ' SELECT feedId, tagId, COUNT(*) AS countUsers
+		$query = ' SELECT feedId, tagId, COUNT(1) AS countUsers
 			FROM users_feeds_tags
 			INNER JOIN tags USING (tagId)
 			INNER JOIN feeds USING (feedId)

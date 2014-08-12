@@ -1659,72 +1659,111 @@ console.timeEnd("t1");
 		
 		this.$noResult.hide();
 		
-		var $li 	= $('<li class="browseTags"></li>').appendTo(this.$ulEntries);
-		var $ul		= $('<div class="list-group"></div>').appendTo($li);
+		this.aBrowseTags = {}; // Para guardar una referencia al $elemento
+		
+		var $li = $('<li class="browseTags"></li>').appendTo(this.$ulEntries);
+		var $ul = $('<div class="list-group"></div>').appendTo($li);
 		
 		for (var i=0; i<result.length; i++) {
-			var tag = result[i];
-			
-			var $tag = $('<a class="list-group-item" href="javascript:void(0);"><i class="icon fa fa-tag"></i> ' + tag.tagName + ' </a>').appendTo($ul);
-			$tag
-				.data('tag', tag)
-				.click($.proxy(
-					function(event) {
-						var $tag = $(event.target);
-						
-						$tag.parent().find('div.list-group-item').remove();
-						
-						if ($tag.hasClass('active')) {
-							$tag.removeClass('active');
-							return;
-						}
-						
-						$tag.parent().find('.list-group-item').removeClass('active');
-						$tag.addClass('active');
-
-						this.ajax = $.ajax({		
-							'url': 		base_url + 'entries/browseFeedsByTagId',
-							'data': 	{ 'tagId': $tag.data('tag').tagId },
-							'success': 	
-								$.proxy( 
-									function($tag, response) {
-										if ($.hasAjaxDefaultAction(response) == true) { return; }
-										
-										for (var i=0; i<response.result.length; i++) {
-											var feed 	= response.result[i];
-											var feedId 	= feed.feedId;
-											
-// TODO: refactorizar, para que no metan tags html.  ej "Sinergia sin control"
-											var $feed = $(
-											'<div class="list-group-item">\
-												<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
-												<p class="list-group-item-text">' + (feed.feedDescription == null ? '' : feed.feedDescription) + '</p>  \
-												<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
-												<button title="' + crLang.line('Subscribe') + '" class="btn btn-success" type="button"> \
-													<i class="fa fa-plus"  /> \
-													<span class="btnLabel">' +  crLang.line('Subscribe') + '</span> \
-												</button> \
-											</div>');
-											
-											$feed.find('button').click($.proxy(
-												function(feedId) {
-													this.subscribeFeed(feedId);
-												}
-											, this, feedId));
-											
-											
-											$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')')
-											$tag.after($feed);
-										}
-										
-										//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
-										this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!! 
-									}
-								, this, $tag)
-						})
-					}
-				,this));
+			var tag  = result[i];
+			this.appendBrowseTag(tag, $ul);
 		}
+		
+		$ul.on('click', 'a.list-group-item', function(event) {
+			var $tag = $(event.target);
+			cloneReader.browseFeedsByTagId($tag);
+		});
+	},
+	
+	appendBrowseTag: function(tag, $parent) {
+		var $tag = $('<a class="list-group-item" href="javascript:void(0);"><i class="icon fa fa-tag"></i> ' + tag.tagName + ' </a>').appendTo($parent);
+		tag.$tag = $tag;
+		$tag.data('tag', tag);
+			
+		this.aBrowseTags[tag.tagId] = $tag;	
+	},
+	
+	browseFeedsByTagId: function($tag) {
+		this.$ulEntries.find('.browseTags div.list-group-item').remove();
+				
+		var tag = $tag.data('tag');
+		if ($tag.hasClass('active')) {
+			$tag.removeClass('active');
+			return;
+		}
+
+		$tag.parent().find('.list-group-item').removeClass('active');
+		$tag.addClass('active');
+
+		this.ajax = $.ajax({
+			'url':       base_url + 'entries/browseFeedsByTagId',
+			'data':      { 'tagId': tag.tagId },
+			'success':   $.proxy( 
+				function($tag, response) {
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
+					
+					for (var i=0; i<response.result.feeds.length; i++) {
+						var feed            = response.result.feeds[i];
+						var feedId          = feed.feedId;
+						var feedDescription = $.stripTags(feed.feedDescription);
+						var $feed = $(
+						'<div class="list-group-item">\
+							<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
+							<p class="list-group-item-text">' + feedDescription + '</p>  \
+							<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
+							<br/> <span class="label label-warning"> ' + $.sprintf(crLang.line('%s users'), feed.feedCountUsers) + ' </span> \
+							<div class="alert alert-warning"> </div> \
+							<button title="' + crLang.line('Subscribe') + '" class="btn btn-success" type="button"> \
+								<i class="fa fa-plus"  /> \
+								<span class="btnLabel">' +  crLang.line('Subscribe') + '</span> \
+							</button> \
+						</div>');
+						
+						$feed.find('button').click($.proxy(
+							function(feedId) {
+								this.subscribeFeed(feedId);
+							}
+						, this, feedId));
+						
+						this.renderBrowseFeedTags(feed.tags, $feed.find('.alert'));
+						
+						$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')')
+						$tag.after($feed);
+					}
+					
+					//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
+					this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!! 
+				}, this, $tag)
+			});
+	},
+	
+	renderBrowseFeedTags: function(tags, $parent) {
+		if (tags.length == 0) {
+			$parent.remove();
+			return;
+		}
+		
+		for (var i=0; i<tags.length; i++) {
+			var tag  = tags[i];
+			var $tag = $('<a href="javascript:void(0);" class="label label-info" data-tagId="' + tag.tagId + '">' + tag.tagName + '</a>');
+			tag.$tag = $tag;
+			$tag.data('tag', tag);
+			$parent.append($tag);
+			$parent.append(' ');
+		}
+
+		$parent.find('a.label').on('click', $.proxy(
+			function(event) {
+				var tag = $(event.target).data('tag');
+				
+				if (this.aBrowseTags[tag.tagId] == null) {
+					var $ul = this.$ulEntries.find('.browseTags div.list-group');
+					this.appendBrowseTag(tag, $ul);
+				}
+				var $tag = this.aBrowseTags[tag.tagId];
+				this.browseFeedsByTagId($tag);
+			}
+		, this));
 	},
 	
 	humanizeDatetime: function(datetime, format) {

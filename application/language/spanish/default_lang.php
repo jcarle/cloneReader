@@ -161,3 +161,4 @@ $lang['Rate the service %s'] = 'Calificá el servicio %s';
 $lang['To qualify to %s makes click <a href="%s">here</a>'] = 'Para calificar el servicio %s, hace click <a href="%s">aquí</a>';
 $lang['I accept the <a href="%s">terms and conditions</a>'] = 'Acepto los <a href="%s">términos y condiciones</a>';
 $lang['Schedule date'] = 'Fecha programada';
+$lang['%s users'] = '%s usuarios';

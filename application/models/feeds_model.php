@@ -330,7 +330,7 @@ class Feeds_Model extends CI_Model {
 	function countEntriesByFeedId($feedId) {
 		$query = ' SELECT COUNT(1) AS total 
 			FROM entries
-			WHERE feedId 		= '.$feedId.' ';
+			WHERE feedId = '.$feedId.' ';
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());
 		return $query[0]['total'];
