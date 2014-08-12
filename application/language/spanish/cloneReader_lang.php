@@ -69,4 +69,5 @@ $lang['Mark item as star'] = 'Marcar item como favorito';
 $lang['Mark item as unread'] = 'Marcar como no leído';
 $lang['View original'] = 'Ver original';
 $lang['Send entry by email'] = 'Enviar entrada por email';
-
+$lang['Not subscribed to any feeds'] = 'No estás subscripto a ningún feed';
+$lang['Browser tags'] = 'Navegar tags';

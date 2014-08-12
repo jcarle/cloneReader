@@ -688,6 +688,24 @@ TODO: pensar como mejorar esta parte
 		}
 		else {
 			this.$noResult.html('<div class="well well-lg"> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');
+			
+			if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == $.crSettings.tagAll) {
+				if (Object.keys(this.indexFilters['feed']).length == 0) {
+					this.$noResult.html('<div class="well well-lg"> \
+						' + crLang.line('Not subscribed to any feeds') + ' \
+						<ul class="list-group"> \
+							<li class="list-group-item"> <a href="javascript:void(0);" class="addFeed" > ' + crLang.line('Add feed') + ' </a> </li> \
+							<li class="list-group-item"> <a href="' + base_url + 'import/feeds"> ' + crLang.line('Import feeds') + ' </a> </li> \
+							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + $.crSettings.tagBrowse + ' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
+						</ul> \
+					</div>');
+					
+					this.$noResult.find('.addFeed').on('click', function(event) { 
+						event.stopPropagation();
+						cloneReader.$mainToolbar.find('.add').click(); 
+					});
+				}
+			}
 		}
 		
 		this.resizeNoResult();
