@@ -1683,11 +1683,11 @@ console.timeEnd("t1");
 		this.aBrowseTags[tag.tagId] = $tag;	
 	},
 	
-	browseFeedsByTagId: function($tag) {
+	browseFeedsByTagId: function($tag, reload) {
 		this.$ulEntries.find('.browseTags div.list-group-item').remove();
 				
 		var tag = $tag.data('tag');
-		if ($tag.hasClass('active')) {
+		if ($tag.hasClass('active') && reload != true) {
 			$tag.removeClass('active');
 			return;
 		}
@@ -1761,7 +1761,7 @@ console.timeEnd("t1");
 					this.appendBrowseTag(tag, $ul);
 				}
 				var $tag = this.aBrowseTags[tag.tagId];
-				this.browseFeedsByTagId($tag);
+				this.browseFeedsByTagId($tag, true);
 			}
 		, this));
 	},
