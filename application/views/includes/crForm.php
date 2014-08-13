@@ -95,9 +95,7 @@ echo ' </div>';
 
 if (!empty($form['buttons'])) {
 	echo 	'<div class="formButtons form-actions panel-footer" > ';
-	foreach ($form['buttons'] as $button) {
-		echo $button.' ';
-	}
+	echo implode(' ', $form['buttons']);
 	echo '</div>';
 }
 

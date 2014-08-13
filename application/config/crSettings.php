@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+$CI = &get_instance();
 
 $config['urlSecretTime'] = 180;// Cuantos MINUTOS esta vivo el link para resetear password y cambiar email
 $config['pageSize'] = 15;
@@ -126,11 +127,15 @@ $config['meta'] = array(
 $config['siteAssets'] = array(
 	'js' => array(
 		'feeds.js',
+		'tools.js',
 		'cloneReader.js', 
 		'jquery.visible.min.js',
 	),
-	'css' => array()
+	'css' => array(
+		'cloneReader.css',
+	)
 );
+
 
 $config['tagAll'] = 1;
 $config['tagStar'] = 2;

@@ -3,7 +3,7 @@
  * El listado tiene que tener este formato:
  * 
  * $list = array(
- * 		'urlList'		=> 'services/listing', 		// url del listado
+ * 		'urlList'		=> 'services/listing', 		// Url del listado
  * 		'urlEdit'		=> 'services/edit/%s', 		// Url para editar el item ( se reemplaza el %s por el id),
  * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
  * 		'urlDelete'		=> '',						// TODO: falta implementar
@@ -165,15 +165,21 @@ foreach ($list['data'] as $row) {
 		<div class="panel-footer row">
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 <?php
-if ($showCheckbox == true && isset($list['urlDelete'])) {
-	echo '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
+if (!isset($list['buttons'])) {
+	$list['buttons'] = array();
+	if ($showCheckbox == true && isset($list['urlDelete'])) {
+		$list['buttons'][] = '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
+	}
+	if ($readOnly !== true && isset($list['urlAdd']) ) {
+		$list['buttons'][] = '<a href="'.base_url($list['urlAdd']).'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
+	}
 }
-if ($readOnly !== true && isset($list['urlAdd']) ) {
-	echo '<a href="'.base_url($list['urlAdd']).'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
+if (!empty($list['buttons'])) {
+	echo implode(' ', $list['buttons']);
 }
-?>				
+?>
 				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
-			</div>						
+			</div>
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				<ul class="pagination">
 <?php
@@ -182,29 +188,29 @@ parse_str(element('query', $url), $params);
 unset($params['page']);
 
 $this->pagination->initialize(array(
-	'first_link'			=> '1',
-	'last_link'				=> ceil($list['foundRows'] / config_item('pageSize')),
-	'uri_segment'			=> 3,
-	'base_url'		 		=> current_url().'?'.http_build_query($params),
-	'total_rows'			=> $list['foundRows'],
-	'per_page'				=> config_item('pageSize'), 
-	'num_links' 			=> 2,
-	'page_query_string'		=> true,
-	'use_page_numbers'		=> true,
-	'query_string_segment' 	=> 'page',
-	'first_tag_open'		=> '<li>',
-	'first_tag_close'		=> '</li>',
-	'last_tag_open'			=> '<li>',
-	'last_tag_close'		=> '</li>',
-	'first_url'				=> '', // Alternative URL for the First Page.
-	'cur_tag_open'			=> '<li class="active"><a>',
-	'cur_tag_close'			=> '</a></li>',
-	'next_tag_open'			=> '<li>',
-	'next_tag_close'		=> '</li>',
-	'prev_tag_open'			=> '<li>',
-	'prev_tag_close'		=> '</li>',
-	'num_tag_open'			=> '<li>',
-	'num_tag_close'			=> '</li>',
+	'first_link'            => '1',
+	'last_link'             => ceil($list['foundRows'] / config_item('pageSize')),
+	'uri_segment'           => 3,
+	'base_url'              => current_url().'?'.http_build_query($params),
+	'total_rows'            => $list['foundRows'],
+	'per_page'              => config_item('pageSize'), 
+	'num_links'             => 2,
+	'page_query_string'     => true,
+	'use_page_numbers'      => true,
+	'query_string_segment'  => 'page',
+	'first_tag_open'        => '<li>',
+	'first_tag_close'       => '</li>',
+	'last_tag_open'         => '<li>',
+	'last_tag_close'        => '</li>',
+	'first_url'             => '', // Alternative URL for the First Page.
+	'cur_tag_open'          => '<li class="active"><a>',
+	'cur_tag_close'         => '</a></li>',
+	'next_tag_open'         => '<li>',
+	'next_tag_close'        => '</li>',
+	'prev_tag_open'         => '<li>',
+	'prev_tag_close'        => '</li>',
+	'num_tag_open'          => '<li>',
+	'num_tag_close'         => '</li>',
 )); 
 			
 echo $this->pagination->create_links();

@@ -415,4 +415,109 @@ class Feeds_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return $query;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * @param   $filters   un array con el formato:
+	 * 						array(
+	 * 							'filter' => 'bla'
+	 *						);
+	 * @param   $orders    un array con el formato:
+	 * 						array(
+	 * 							array(
+	 * 								'orderBy'  => 'feedName', 
+	 * 								'orderDir' => 'asc',
+	 * 							)
+	 * 						);	
+	 * */	
+	function selectByUserId($num, $offset, $userId, array $filters, array $orders ){
+		$this->db
+			->select(' SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedUrl ', false)
+			->from('feeds')
+			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
+			->where('userId', $userId);
+			
+		if (element('filter', $filters) != null) {
+			$this->db->like('feedName', $filters['filter']);
+		}
+		
+		if (empty($orders)) {
+			$orders[] = array('orderBy' => 'feedName', 'orderDir' => 'asc');
+		}
+		for ($i=0; $i<count($orders); $i++) {
+			if (!in_array($orders[$i]['orderBy'], array('feedName'))) {
+				$orders[$i]['orderBy'] = 'feedName';
+			}
+			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
+		}
+		
+		$this->db->limit($num, $offset);
+
+		$query = $this->db->get();
+		//pr($this->db->last_query()); die;
+		
+		$query->foundRows = $this->Commond_Model->getFoundRows();
+		return $query;
+	}
+	
+	/*
+	function saveTagByUserId($userId, $tagId, $tagName) {
+		$tagName  = substr(trim($tagName), 0, 200);
+
+		$query = $this->db->where('tagName', $tagName)->get('tags')->result_array();
+		//pr($this->db->last_query()); 
+		if (!empty($query)) {
+			$newTagId = $query[0]['tagId'];
+		}
+		else {
+			$this->db->insert('tags', array( 'tagName'	=> $tagName ));
+			$newTagId = $this->db->insert_id();
+			//pr($this->db->last_query());
+		}
+
+		// users_tags
+		$this->db->ignore()->insert('users_tags', array( 'tagId'=> $newTagId, 'userId' => $userId ));
+
+		// users_feeds_tags
+		$query = ' INSERT IGNORE INTO users_feeds_tags
+				(userId, feedId, tagId)
+				SELECT userId, feedId, '.$newTagId.'
+				FROM users_feeds_tags
+				WHERE userId = '.(int)$userId.' 
+				AND   tagId  = '.(int)$tagId.' ';
+		$this->db->query($query);
+		
+		// users_entries
+		$query = ' INSERT IGNORE INTO users_entries
+				(userId, entryId, tagId, feedId, entryRead, entryDate)
+				SELECT userId, entryId, '.$newTagId.', feedId, entryRead, entryDate
+				FROM users_entries
+				WHERE userId = '.(int)$userId.' 
+				AND   tagId  = '.(int)$tagId.' ';
+		$this->db->query($query);
+		
+		$this->deleteTagByUserId($userId, $tagId);
+		
+		return $newTagId;
+	}
+	
+	function deleteTagByUserId($userId, $tagId) {
+		$this->db->delete('users_tags', array('tagId' => $tagId, 'userId' => $userId));
+
+		$this->db->delete('users_feeds_tags', array('tagId' => $tagId, 'userId' => $userId));
+		
+		$this->db->delete('users_entries', array('tagId' => $tagId, 'userId' => $userId));
+		
+		return true;
+	}	*/	
 }

@@ -1485,6 +1485,12 @@ console.timeEnd("t1");
 					cloneReader.showPopupForm(crLang.line('Add new tag'), crLang.line('enter tag name'), function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
 				}
 			},
+			{ 'html': crLang.line('Edit tags'), 'callback': 
+				function(event) {
+					event.stopPropagation(); 
+					$.goToUrl(base_url + 'tools/tags');
+				}
+			},
 			{ 'class': 'divider' }
 		];
 

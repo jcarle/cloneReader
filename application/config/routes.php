@@ -50,5 +50,8 @@ $route['resetPassword']  = "profile/resetPassword";
 $route['tools/tags/(:any)'] = "tools/tagEdit/$1";
 $route['tools/tags/add'] = "tools/tagAdd";
 
+$route['tools/feeds/(:any)'] = "tools/feedEdit/$1";
+$route['tools/feeds/add'] = "tools/feedAdd";
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

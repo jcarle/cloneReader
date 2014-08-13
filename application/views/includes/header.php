@@ -9,59 +9,10 @@ if (!is_array($CI->cache->file->get('MENU_PROFILE_'.$userId))) {
 	$CI->Menu_Model->createMenuCache($userId);
 }
 
-$this->load->spark('carabiner/1.5.4');
-
-$CI->carabiner->minify_js 	= true;
-$CI->carabiner->minify_css	= true;
-
-$aScripts = array();
-
-if (ENVIRONMENT == 'development') {
-	$CI->carabiner->minify_js 	= false;
-	$CI->carabiner->minify_css	= false;
-}
-
-$CI->carabiner->js('jquery-1.7.2.js');
-//$CI->carabiner->js('jquery-1.11.0.js');
-$CI->carabiner->js('jquery.json-2.3.js');
-$CI->carabiner->js('jquery.printf.js');
-$CI->carabiner->js('jquery.url.js');
-$CI->carabiner->js('jquery.dotdotdot.js');
-$CI->carabiner->js('moment-with-langs.js');
-$CI->carabiner->js('bootstrap.js');
-$CI->carabiner->js('crFunctions.js');
-$CI->carabiner->js('crMain.js');
-$CI->carabiner->js('crLang.js');
-$CI->carabiner->js('crAlert.js');
-$CI->carabiner->js('crMenu.js');
-$CI->carabiner->js('feedback.js');
-$CI->carabiner->js('profile.js');
-
-
-$CI->carabiner->css('bootstrap.css');
-//$CI->carabiner->css('bootstrap-theme.css');
-$CI->carabiner->css('bootstrap-social.css');
-$CI->carabiner->css('font-awesome.css');
-
-$aScripts = appendCrFormJsAndCss($aScripts); 
-$aScripts = appendCrListJsAndCss($aScripts);
-
-
-$siteAssets = config_item('siteAssets');
-foreach ($siteAssets['js'] as $js) {
-	$CI->carabiner->js($js);
-}
-foreach ($siteAssets['css'] as $css) {
-	$CI->carabiner->css($css);
-}
-
 if (!isset($meta)) {
 	$meta = array();
 }
 $meta = getMetaByController($meta);
-
-$CI->carabiner->css('default.css');
-$CI->carabiner->css( config_item('siteId').'.css');
 
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -82,6 +33,17 @@ if (config_item('hasRss') == true) {
 		
 	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
 <?php
+$this->load->spark('carabiner/1.5.4');
+
+$CI->carabiner->minify_js 	= true;
+$CI->carabiner->minify_css	= true;
+if (ENVIRONMENT == 'development') {
+	$CI->carabiner->minify_js 	= false;
+	$CI->carabiner->minify_css	= false;
+}
+
+appendFilesToCarabiner();
+
 $CI->carabiner->display('css');
 $CI->carabiner->display('js');
 
@@ -102,9 +64,9 @@ $crSettings = array(
 if (!isset($langs)) {
 	$langs = array();
 }
-$langs  = getLangToJs($langs);
+$langs      = getLangToJs($langs);
+$aScripts   = array();
 $aScripts[] = langJs($langs);
-
 
 if (isset($aServerData)) {
 	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
