@@ -197,7 +197,13 @@ class Tools extends CI_Controller {
 	}
 
 	function feedDelete() {
-		return loadViewAjax($this->Feeds_Model->deleteFeedByUserId($this->session->userdata('userId'), $this->input->post('feedId')));
+		$aFeedId = (array)json_decode($this->input->post('aDelete'));
+		
+		foreach ($aFeedId as $feedId){
+			$this->Entries_Model->unsubscribeFeed($feedId, (int)$this->session->userdata('userId'));
+		}
+		
+		return loadViewAjax(true);
 	}
 
 

@@ -128,13 +128,29 @@
 					}
 
 					if (aDelete.length == 0) { return;  }
-					
+
 					$(document).crAlert( {
 						'msg': 			crLang.line('Are you sure?'),
 						'isConfirm': 	true,
-						'callback': 	function() {
-							// TODO: implementar
-						}
+						'callback': 	$.proxy(
+								function(aDelete, b, c) {
+									$.ajax( {
+										'type':     'post', 
+										'url':      base_url + this.options['urlDelete'],
+										'data':     { 'aDelete': $.toJSON(aDelete) },
+										'success':
+										$.proxy(
+											function (response) {
+												if ($.hasAjaxDefaultAction(response) == true) { return; }
+												
+												$.reloadUrl();
+											}
+										, this),
+									});
+		
+									// TODO: implementar
+								}
+						, this, aDelete)
 					});
 				}
 			, this));
