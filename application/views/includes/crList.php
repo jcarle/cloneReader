@@ -17,8 +17,7 @@
  * 		'showId'		=> true,						// Indica si muestra el id en el listado
  * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm
  * 		'sort' 			=> array(),						// Un array con los items por los que se puede ordenar el listado
- * 		'readOnly'		=> false,						// Indica si el listado es de solo lectura ( no son cliqueables los rows, y no muestra el btn add)
- * ); 
+  * ); 
  * 
  * classNames:
  * 		date: 		formatea una fecha
@@ -29,10 +28,10 @@
  */
  
  
-$CI			= &get_instance();
-$filters 	= element('filters', $list);
-$sort  		= element('sort', $list);
-$readOnly 	= element('readOnly', $list, false);
+$CI               = &get_instance();
+$filters          = element('filters', $list);
+$sort             = element('sort', $list);
+$list['urlEdit']  = element('urlEdit', $list, null);
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
@@ -100,7 +99,7 @@ foreach ($sort as $key => $value) {
 	</div>
 				
 	<div class="table-responsive">
-		<table class="table <?php echo ($readOnly == false ? ' table-hover ' : ''); ?>">
+		<table class="table <?php echo ($list['urlEdit'] != false ? ' table-hover ' : ''); ?>">
 			<thead>
 				<tr class="label-primary">
 <?php
@@ -132,13 +131,13 @@ if (count($list['data']) == 0) {
 }
 foreach ($list['data'] as $row) {
 	$id        = reset($row);
-	$urlEdit   = null;
+	$urlEdit   = '';
 	
-	if ($readOnly != true && isset($list['urlEdit'])) {
-		$urlEdit   = base_url(sprintf($list['urlEdit'], $id));
+	if ($list['urlEdit'] != null) {
+		$urlEdit   = ' data-url-edit="'.base_url(sprintf($list['urlEdit'], $id)).'" ';;
 	}
 	
-	echo '<tr data-url-edit="'.$urlEdit.'">';
+	echo '<tr '.$urlEdit.' >';
 	if ($showCheckbox == true) {	
 		echo '<td class="rowCheckbox">'.form_checkbox('chkDelete', $id).'</td>';
 	}
@@ -170,7 +169,7 @@ if (!isset($list['buttons'])) {
 	if ($showCheckbox == true && isset($list['urlDelete'])) {
 		$list['buttons'][] = '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
 	}
-	if ($readOnly !== true && isset($list['urlAdd']) ) {
+	if (isset($list['urlAdd']) ) {
 		$list['buttons'][] = '<a href="'.base_url($list['urlAdd']).'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
 	}
 }

@@ -157,14 +157,14 @@
 				}
 			, this));			
 			
-			
-			if (this.options['readOnly'] != true) {
+			if (this.options['urlEdit'] != null) {
 				this.$table.find('tbody tr').on('click', 
 					function (event) {
 						$.goToUrl($(this).data('url-edit') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
 					}
 				);
-				
+			}
+			if (this.options['urlAdd'] != null) {
 				this.$crList.find('.btnAdd').on('click',
 					function (event) {
 						$.goToUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
@@ -218,6 +218,20 @@
 	},
 		
 	renderCrList = function(data, $parentNode) {
+		var showCheckbox   = data['showCheckbox'] == true;
+		var showId         = data['showId'] == true;		
+		var buttons        = [];
+		if (showCheckbox == true && data['urlDelete'] != null) {
+			buttons.push( '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + crLang.line('Delete') + ' </a>' );
+		}
+		if (data['urlAdd'] != null ) {
+			buttons.push( '<a href="' + (base_url + data['urlAdd']) + '" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> ' + crLang.line('Add') + ' </a> ');
+		}
+
+		if (data['buttons'] == null) {
+			data['buttons'] = buttons;
+		}
+				
 		var params 		= $.url().param();
 		var $crList		= $('<div class="crList"></div>').appendTo($parentNode);
 		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
@@ -237,6 +251,8 @@
 			</form>\
 		');
 		$form.appendTo($panel);
+		
+
 
 		if ($.trim(params['filter']) != '') {
 			$form.find('input[name=filter]').val(decodeURIComponent(params['filter']));
@@ -297,13 +313,11 @@
 		var $table         = $('<table class="table" />').appendTo($div);
 		var $thead         = $('<thead />').appendTo($table);
 		var $tr            = $('<tr class="label-primary" />').appendTo($thead);
-		var showCheckbox   = data['showCheckbox'] == true;
-		var readOnly       = data['readOnly'] == true;
-		var showId         = data['showId'] == true;
+
 		if (showCheckbox == true) {
 			$('<th class="rowCheckbox">	<input type="checkbox"> </th>').appendTo($tr);	
 		}
-		if (readOnly != true) {
+		if (data['urlEdit'] != null) {
 			$table.addClass('table-hover');
 		}
 		if (showId == true) {
@@ -328,15 +342,13 @@
 		}
 
 		for (var i=0; i<data['data'].length; i++) {
-			var row      = data['data'][i];
-			var id 	     = row[Object.keys(row)[0]];
-			var urlEdit  = null;
+			var row    = data['data'][i];
+			var id 	   = row[Object.keys(row)[0]];
+			var $tr    = $( '<tr />').appendTo($tbody);
 	
-			if (readOnly != true && data['urlEdit'] != null) {
-				urlEdit   = base_url + $.sprintf(data['urlEdit'], id);
+			if (data['urlEdit'] != null) {
+				$tr.attr('data-url-edit', base_url + $.sprintf(data['urlEdit'], id));
 			}
-			
-			var $tr	= $( '<tr data-url-edit="' + urlEdit +'">').appendTo($tbody);
 			
 			if (showCheckbox == true) {	
 				$('	<td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
@@ -360,16 +372,12 @@
 		var $row	= $('<div class="panel-footer row" />').appendTo($footer);
 		var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 
-		if (showCheckbox == true) {
-			$('<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + crLang.line('Delete') + ' </a>').appendTo($div);
-		}
-		if (readOnly != true) {
-			$('\
-				<a href="' + base_url + data['urlAdd'] + '" class="btnAdd btn btn-sm btn-success">\
-					<i class="fa fa-file-o fa-fw"></i>\
-					' + crLang.line('Add') + '\
-				</a>\
-			').appendTo($div);
+		if (data['buttons'].length != 0) {
+			for (var i=0; i<data['buttons'].length; i++) {
+				$div
+					.append($(data['buttons'][i]))
+					.append(' ');
+			}
 		}
 		
 		$(' <span> ' + $.sprintf(crLang.line('%s rows'), $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);		
