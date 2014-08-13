@@ -1,5 +1,5 @@
 <?php 
-class Settings extends CI_Controller {
+class Tools extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();	
@@ -29,13 +29,13 @@ class Settings extends CI_Controller {
 				'columns'		=> array('tagName' => $this->lang->line('Name')),
 				'data'			=> $query->result_array(),
 				'foundRows'		=> $query->foundRows,
-				'showId'		=> true,
+				'showId'		=> false,
 			)
 		));
 	}
 	
 	function tagEdit($tagId) {
-		if (! $this->safety->allowByControllerName('settings/tags') ) { return errorForbidden(); }
+		if (! $this->safety->allowByControllerName('tools/tags') ) { return errorForbidden(); }
 		
 		$form = array(
 			'frmId'		=> 'frmTagEdit',
@@ -53,7 +53,7 @@ class Settings extends CI_Controller {
 		);
 		
 		if ((int)$tagId > 0) {
-			$form['urlDelete'] = base_url('settings/tagDelete/');
+			$form['urlDelete'] = base_url('tools/tagDelete/');
 		}
 		
 		$form['rules'] += array( 

@@ -106,11 +106,15 @@ class Tags_Model extends CI_Model {
 	
 	
 	/*
+	 * @param   $filters   un array con el formato:
+	 * 						array(
+	 * 							'filter' => 'bla'
+	 *						);
 	 * @param   $orders    un array con el formato:
 	 * 						array(
 	 * 							array(
-	 * 								'orderBy'  = 'tagName', 
-	 * 								'orderDir' = 'asc',
+	 * 								'orderBy'  => 'tagName', 
+	 * 								'orderDir' => 'asc',
 	 * 							)
 	 * 						);	
 	 * */	
@@ -124,6 +128,10 @@ class Tags_Model extends CI_Model {
 			->join('users_tags', 'users_tags.tagId = tags.tagId', 'inner')
 			->where('userId', $userId)
 			->where_not_in('tags.tagId', $aSystenTags);
+			
+		if (element('filter', $filters) != null) {
+			$this->db->like('tagName', $filters['filter']);
+		}
 		
 		if (empty($orders)) {
 			$orders[] = array('orderBy' => 'tagName', 'orderDir' => 'asc');

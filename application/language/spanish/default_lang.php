@@ -162,3 +162,4 @@ $lang['To qualify to %s makes click <a href="%s">here</a>'] = 'Para calificar el
 $lang['I accept the <a href="%s">terms and conditions</a>'] = 'Acepto los <a href="%s">términos y condiciones</a>';
 $lang['Schedule date'] = 'Fecha programada';
 $lang['%s users'] = '%s usuarios';
+$lang['Tools'] = 'Herramientas';

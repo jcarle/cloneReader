@@ -47,8 +47,8 @@ $route['forgotPassword'] = "profile/forgotPassword";
 $route['resetPassword']  = "profile/resetPassword";
 
 
-$route['settings/tags/(:any)'] = "settings/tagEdit/$1";
-$route['settings/tags/add'] = "settings/tagAdd";
+$route['tools/tags/(:any)'] = "tools/tagEdit/$1";
+$route['tools/tags/add'] = "tools/tagAdd";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

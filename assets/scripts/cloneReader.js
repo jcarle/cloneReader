@@ -969,6 +969,7 @@ console.time("t1");
 							this.$ulFilters.scrollTop(scrollTop);
 							this.$ulFilters.find('.selected').hide().fadeIn('slow');
 							this.updateMenuCount();
+							this.renderEntriesHead();
 						}
 						else {
 							this.loadEntries(true, false, {});
