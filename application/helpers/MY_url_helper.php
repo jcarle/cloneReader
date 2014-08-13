@@ -90,7 +90,6 @@ function appendFilesToCarabiner() {
 		'jquery.fileupload-ui.css',
 		
 		'default.css',
-		'cloneReader.css',
 	);
 	
 	if ($CI->session->userdata('langId') != 'en') {

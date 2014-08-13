@@ -264,8 +264,6 @@
 			</form>\
 		');
 		$form.appendTo($panel);
-		
-
 
 		if ($.trim(params['filter']) != '') {
 			$form.find('input[name=filter]').val(decodeURIComponent(params['filter']));
