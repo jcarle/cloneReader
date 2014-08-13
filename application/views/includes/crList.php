@@ -6,7 +6,7 @@
  * 		'urlList'		=> 'services/listing', 		// Url del listado
  * 		'urlEdit'		=> 'services/edit/%s', 		// Url para editar el item ( se reemplaza el %s por el id),
  * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
- * 		'urlDelete'		=> '',						// TODO: falta implementar
+ * 		'urlDelete'		=> '',						// Url para eliminar elementos desde el listado, se envia un json con el array de los ids seleccionados
  * 		'showCheckbox'	=> false, 					// muestra un checkbox en cada row
  * 		'columns'			=> array(							// array con las columnas, con el formato: $key => $value; se pueden incluir un className para los datetime y los numeric  
  * 			'entityName' 		=> $this->lang->line('Name'),

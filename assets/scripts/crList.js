@@ -142,13 +142,10 @@
 										$.proxy(
 											function (response) {
 												if ($.hasAjaxDefaultAction(response) == true) { return; }
-												
 												$.reloadUrl();
 											}
 										, this),
 									});
-		
-									// TODO: implementar
 								}
 						, this, aDelete)
 					});

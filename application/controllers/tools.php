@@ -155,7 +155,8 @@ class Tools extends CI_Controller {
 				),
 				'feedUrl' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Url'), 
+					'label'  => $this->lang->line('Url'),
+					'placeholder' => $this->lang->line('Add feed url'), 
 				),
 			),
 		);
