@@ -417,8 +417,8 @@ class Entries_Model extends CI_Model {
 	}
 
 	function addTag($tagName, $userId = null, $feedId = null) {
-		$tagName 	= substr(trim($tagName), 0, 200);
-		$tagId		= null;
+		$tagName  = substr(trim($tagName), 0, 200);
+		$tagId    = null;
 
 		$query = $this->db->where('tagName', $tagName)->get('tags')->result_array();
 		//pr($this->db->last_query()); 
