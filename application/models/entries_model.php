@@ -432,7 +432,6 @@ class Entries_Model extends CI_Model {
 		}
 
 		if ($userId != null) {
-// FIXME: no esta guardando los entries que ya existen en el nuevo tag en la tabla 'users_entries'			
 			$this->db->ignore()->insert('users_tags', array( 'tagId'=> $tagId, 'userId' => $userId ));
 			//pr($this->db->last_query());
 		}
@@ -440,6 +439,17 @@ class Entries_Model extends CI_Model {
 		if ($feedId != null) {
 			$this->db->replace('users_feeds_tags', array( 'tagId'=> $tagId, 'feedId'	=> $feedId, 'userId' => $userId ));
 			//pr($this->db->last_query());
+		}
+		
+		if ($userId != null && $feedId != null) {
+			$query = ' INSERT IGNORE INTO users_entries
+					(userId, entryId, tagId, feedId, entryRead, entryDate)
+					SELECT userId, entryId, '.$tagId.', feedId, entryRead, entryDate
+					FROM users_entries
+					WHERE userId = '.(int)$userId.' 
+					AND   tagId  = '.(int)config_item('tagAll').' 
+					AND   feedId = '.(int)$feedId.' ';
+			$this->db->query($query);
 		}
 		
 		return $tagId;

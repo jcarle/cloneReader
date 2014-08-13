@@ -1748,7 +1748,7 @@ console.timeEnd("t1");
 		
 		for (var i=0; i<tags.length; i++) {
 			var tag  = tags[i];
-			var $tag = $('<a href="javascript:void(0);" class="label label-info" data-tagId="' + tag.tagId + '">' + tag.tagName + '</a>');
+			var $tag = $('<a href="javascript:void(0);" class="label label-info">' + tag.tagName + '</a>');
 			tag.$tag = $tag;
 			$tag.data('tag', tag);
 			$parent.append($tag);
