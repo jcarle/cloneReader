@@ -27,8 +27,8 @@ class Controllers extends CI_Controller {
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
 				'columns'		=> array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
+				'data'			=> $query['data'],
+				'foundRows'		=> $query['foundRows'],
 				'showId'		=> true
 			)
 		));

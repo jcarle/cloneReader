@@ -67,8 +67,8 @@ class Feeds extends CI_Controller {
 					'feedCountUsers' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Users')),
 					'feedCountEntries' 	=> array('class' => 'numeric', 'value' => $this->lang->line('Entries')),
 				),
-				'foundRows'		=> $query->foundRows,
-				'data'			=> $query->result_array(),
+				'foundRows'		=> $query['foundRows'],
+				'data'			=> $query['data'],
 				'filters'	=> array(
 					'statusId' => array(
 						'type'				=> 'dropdown',

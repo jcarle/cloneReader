@@ -60,8 +60,8 @@ class Users extends CI_Controller {
 					'facebookUserId'	=> 'Facebook', 
 					'googleUserId'		=> 'Google',
 				),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
+				'data'			=> $query['data'],
+				'foundRows'		=> $query['foundRows'],
 				'showId'		=> true,
 				'filters'		=> array(
 					'countryId' => array(
@@ -239,8 +239,8 @@ class Users extends CI_Controller {
 					'userFullName' 		=> $this->lang->line('Name'), 
 					'userLogDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date')),
 				),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
+				'data'			=> $query['data'],
+				'foundRows'		=> $query['foundRows'],
 				'showId'		=> true,
 				'filters'		=> array(
 					'userId' => array(

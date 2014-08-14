@@ -136,8 +136,8 @@ class Tools extends CI_Controller {
 				'urlDelete'     => strtolower(__CLASS__).'/feedDelete',
 // TODO: ver si se puede agregar el icono				
 				'columns'       => array('feedName' => $this->lang->line('Name'), 'feedUrl' => $this->lang->line('Url') ),
-				'data'          => $query->result_array(),
-				'foundRows'     => $query->foundRows,
+				'data'          => $query['data'],
+				'foundRows'     => $query['foundRows'],
 				'showId'        => true,
 				'showCheckbox'  => true,
 				'buttons'       => array(

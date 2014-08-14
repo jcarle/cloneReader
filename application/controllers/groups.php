@@ -26,8 +26,8 @@ class Groups extends CI_Controller {
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
 				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('Home page')),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
+				'data'			=> $query['data'],
+				'foundRows'		=> $query['foundRows'],
 				'showId'		=> true
 			)
 		));

@@ -32,8 +32,8 @@ class Testing extends CI_Controller {
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
 				'columns'		=> array('testName' => 'Name', 'countryName' => 'Country', 'stateName' => 'State'),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
+				'data'			=> $query['data'],
+				'foundRows'		=> $query['foundRows'],
 				'filters'		=> array(
 					'countryId' => array(
 						'type'				=> 'dropdown',

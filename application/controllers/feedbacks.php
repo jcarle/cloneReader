@@ -114,8 +114,8 @@ class Feedbacks extends CI_Controller {
 					'feedbackUserName'   => $this->lang->line('Name'), 
 					'feedbackUserEmail'  => $this->lang->line('Email'),
 				),
-				'data'       => $query->result_array(),
-				'foundRows'  => $query->foundRows,
+				'data'       => $query['data'],
+				'foundRows'  => $query['foundRows'],
 				'showId'     => true,
 			)
 		));

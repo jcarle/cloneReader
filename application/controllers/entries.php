@@ -45,8 +45,8 @@ class Entries extends CI_Controller {
 				'urlEdit'       => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'        => strtolower(__CLASS__).'/add',
 				'columns'       => array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
-				'data'          => $query->result_array(),
-				'foundRows'     => $query->foundRows,
+				'data'          => $query['data'],
+				'foundRows'     => $query['foundRows'],
 				'showId'        => false,
 				'filters'       => array(
 					'feedId' => array(

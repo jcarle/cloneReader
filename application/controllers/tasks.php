@@ -41,8 +41,8 @@ class Tasks extends CI_Controller {
 					'taskRetries'       => $this->lang->line('Retries'),
 					'taskSchedule'      => array('value' => $this->lang->line('Schedule date'), 'class' => 'datetime'), 
 				),
-				'data'        => $query->result_array(),
-				'foundRows'   => $query->foundRows,
+				'data'        => $query['data'],
+				'foundRows'   => $query['foundRows'],
 				'showId'      => true,
 				'filters'     => array(
 					'taskRunning' => array(
