@@ -142,7 +142,10 @@
 										$.proxy(
 											function (response) {
 												if ($.hasAjaxDefaultAction(response) == true) { return; }
-												$.reloadUrl();
+												
+												var params = $.url().param();
+												delete params['page'];
+												$.goToUrl(base_url + this.options['urlList'] + '?' + $.param(params));
 											}
 										, this),
 									});
@@ -349,7 +352,7 @@
 
 		var $tbody = $(' <tbody />').appendTo($table);
 		if (data['data'].length == 0) {
-			$( '<tr class="warning"><td colspan="' + (Object.keys(data['columns']).length + 1) + '"> ' + crLang.line('No results') + ' </td></tr>').appendTo($tbody);
+			$( '<tr class="warning"><td colspan="' + (Object.keys(data['columns']).length + (showCheckbox == true ? 2 : 1)) + '"> ' + crLang.line('No results') + ' </td></tr>').appendTo($tbody);
 		}
 
 		for (var i=0; i<data['data'].length; i++) {

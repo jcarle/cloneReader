@@ -127,7 +127,7 @@ foreach ($list['columns'] as $columnName) {
 		<tbody>
 <?php 				
 if (count($list['data']) == 0) {
-	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + 1).'"> '.$CI->lang->line('No results').' </td></tr>';
+	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + ($showCheckbox == true ? 2 : 1)).'"> '.$CI->lang->line('No results').' </td></tr>';
 }
 foreach ($list['data'] as $row) {
 	$id        = reset($row);
