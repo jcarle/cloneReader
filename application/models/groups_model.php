@@ -1,10 +1,18 @@
 <?php
 class Groups_Model extends CI_Model {
-	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS groupId, groupName, groupHomePage', false)
-						->like('groupName', $filter)
-		 				->get('groups', $num, $offset);
-						
+	function selectToList($num, $offset, array $filters = array()){
+		$query = $this->db
+			->select('SQL_CALC_FOUND_ROWS groupId, groupName, groupHomePage', false)
+			->from('groups');
+			
+		if (element('filter', $filters) != null) {
+			$this->db->like('groupName', $filters['filter']);
+		}
+
+		$query = $this->db
+			->limit($num, $offset)
+			->get();
+
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}

@@ -149,8 +149,7 @@ class Users_Model extends CI_Model {
 			->group_by('users.userId')
 			->limit($num, $offset)
 			->get();
-						
-//pr($this->db->last_query()); die;
+		//pr($this->db->last_query()); die;
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

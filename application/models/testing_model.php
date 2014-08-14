@@ -1,22 +1,24 @@
 <?php
 class testing_Model extends CI_Model {
 	
-	function selectToList($num, $offset, $filter = null, $countryId = null){
+	function selectToList($num, $offset, array $filters = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS testing.testId, testName, countries.countryName, states.stateName', false)
+			->from('testing')
 			->join('countries', 'countries.countryId = testing.countryId', 'inner')
 			->join('states', 'states.stateId = testing.stateId', 'inner');
 			
-		if ($filter != null) {
-			$this->db->like(array('testName' => $filter));
+		if (element('filter', $filters) != null) {
+					$this->db->like(array('testName' => $filters['filter']));
 		}
-		if ($countryId != null) {
-			$this->db->where('testing.countryId', $countryId);
+		if (element('countryId', $filters) != null) {
+			$this->db->where('testing.countryId', $filters['countryId']);
 		}
 
 		$query = $this->db
 			->order_by('testName')
-		 	->get('testing', $num, $offset);
+			->limit($num, $offset)
+		 	->get();
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

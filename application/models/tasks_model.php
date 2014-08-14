@@ -59,7 +59,7 @@ class Tasks_Model extends CI_Model {
 		$this->Commond_Model->appendOrderByInQuery($orders, array('taskId', 'taskMethod', 'taskSchedule'));
 
 		$query = $this->db->get('tasks_email', $num, $offset);
-		//pr($this->db->last_query()); die;		
+		//pr($this->db->last_query()); die;
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}
