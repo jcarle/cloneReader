@@ -84,7 +84,7 @@
 			}
 		, this));
 		
-		if ($.trim($.url().param('filter')) != '' && $.isMobile() == false) {
+		if ($.trim($.url().param('search')) != '' && $.isMobile() == false) {
 			this.$filter.focus();
 		}
 	
@@ -268,11 +268,11 @@
 		');
 		$form.appendTo($panel);
 
-		if ($.trim(params['filter']) != '') {
-			$form.find('input[name=filter]').val(decodeURIComponent(params['filter']));
+		if ($.trim(params['search']) != '') {
+			$form.find('input[name=filter]').val(decodeURIComponent(params['search']));
 		}
 		
-		if ($.trim(params['filter']) != '' && $.isMobile() == false) {
+		if ($.trim(params['search']) != '' && $.isMobile() == false) {
 			$form.find('input[name=filter]').focus();
 		}
 

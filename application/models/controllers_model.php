@@ -5,8 +5,8 @@ class Controllers_Model extends CI_Model {
 			->select('SQL_CALC_FOUND_ROWS controllerId, controllerName, controllerUrl, IF(controllerActive, \'X\', \'\') AS controllerActive ', false)
 			->from('controllers');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('controllerName', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('controllerName', $filters['search']);
 		}
 			
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);

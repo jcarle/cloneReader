@@ -18,7 +18,7 @@ class Testing extends CI_Controller {
 		if ($page == 0) { $page = 1; }
 		
 		$filters = array(
-			'filter'    => $this->input->get('filter'), 
+			'search'    => $this->input->get('search'), 
 			'countryId' => $this->input->get('countryId')
 		);
 		

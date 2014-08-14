@@ -94,7 +94,7 @@ class Users_Model extends CI_Model {
 	/*
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 		array(
-	 * 			'filter'         => null, 
+	 * 			'search'         => null, 
 	 * 			'countryId'      => null, 
 	 * 			'langId'         => null, 
 	 * 			'groupId'        => null, 
@@ -112,8 +112,8 @@ class Users_Model extends CI_Model {
 			->join('users_groups', 'users.userId = users_groups.userId', 'left')
 			->join('groups', 'groups.groupId = users_groups.groupId', 'left');
 
-		if (element('filter', $filters) != null) {
-			$this->db->or_like(array('userFirstName' => $filters['filter'], 'userLastName' => $filters['filter'], 'userEmail' => $filters['filter']));
+		if (element('search', $filters) != null) {
+			$this->db->or_like(array('userFirstName' => $filters['search'], 'userLastName' => $filters['search'], 'userEmail' => $filters['search']));
 		}
 		if (element('countryId', $filters) != null) {
 			$this->db->where('users.countryId', $filters['countryId']);
@@ -157,7 +157,7 @@ class Users_Model extends CI_Model {
 	/*
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 		array(
-	 * 			'filter'      => null, 
+	 * 			'search'      => null, 
 	 * 			'userId'      => null,
 	 * 		);
 	 * */
@@ -169,8 +169,8 @@ class Users_Model extends CI_Model {
 			->select(' SQL_CALC_FOUND_ROWS DISTINCT users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
 			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
 
-		if (element('filter', $filters) != null) {
-			$this->db->or_like(array('userFirstName' => $filters['filter'], 'userLastName' => $filters['filter']));
+		if (element('search', $filters) != null) {
+			$this->db->or_like(array('userFirstName' => $filters['search'], 'userLastName' => $filters['search']));
 		}
 		if (element('userId', $filters) != null) {
 			$this->db->where('users.userId', $filters['userId']);

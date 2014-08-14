@@ -4,7 +4,7 @@ class Entries_Model extends CI_Model {
 	/*
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 		array(
-	 * 			'filter'      => null, 
+	 * 			'search'      => null, 
 	 * 			'feedId'      => null
 	 * 		);
 	 * 
@@ -15,8 +15,8 @@ class Entries_Model extends CI_Model {
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('entryTitle', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('entryTitle', $filters['search']);
 		}
 		if (element('feedId', $filters) != null) {
 			$this->db->where('feeds.feedId', $filters['feedId']);

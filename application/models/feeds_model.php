@@ -4,7 +4,7 @@ class Feeds_Model extends CI_Model {
 	/*
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 		array(
-	 * 			'filter'      => null, 
+	 * 			'search'      => null, 
 	 * 			'statusId'    => null, 
 	 * 			'countryId'   => null, 
 	 * 			'langId'      => null, 
@@ -28,8 +28,8 @@ class Feeds_Model extends CI_Model {
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('feedName', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('feedName', $filters['search']);
 		}
 		if (element('statusId', $filters) != null) {
 			$this->db->where('feeds.statusId', $filters['statusId']);

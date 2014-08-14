@@ -18,7 +18,7 @@ class Tasks extends CI_Controller {
 		$this->load->model('Tasks_Status_Model');
 		
 		$filters = array(
-			'filter'       => $this->input->get('filter'),
+			'search'       => $this->input->get('search'),
 			'taskRunning'  => ($this->input->get('taskRunning') === false ? null : $this->input->get('taskRunning')),
 		);
 		$orders  = array(

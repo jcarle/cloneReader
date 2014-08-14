@@ -6,8 +6,8 @@ class Feedbacks_Model extends CI_Model {
 			->from('feedbacks')
 			->join('users', 'feedbacks.userId = users.userId', 'inner');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('feedbackDesc', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('feedbackDesc', $filters['search']);
 		}
 		
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);

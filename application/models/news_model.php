@@ -6,8 +6,8 @@ class News_Model extends CI_Model {
 			->from('news')
 			->join('users', 'news.userId = users.userId', 'inner');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('newTitle', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('newTitle', $filters['search']);
 		}
 		
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);

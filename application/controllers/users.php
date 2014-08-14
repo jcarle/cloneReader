@@ -32,7 +32,7 @@ class Users extends CI_Controller {
 		}
 		
 		$filters = array(
-			'filter'         => $this->input->get('filter'), 
+			'search'         => $this->input->get('search'), 
 			'countryId'      => $this->input->get('countryId'), 
 			'langId'         => $this->input->get('langId'), 
 			'groupId'        => $this->input->get('groupId'), 
@@ -222,7 +222,7 @@ class Users extends CI_Controller {
 		}
 		
 		$filters = array(
-			'filter'      => $this->input->get('filter'),
+			'search'      => $this->input->get('search'),
 			'userId'      => $userId
 		);
 

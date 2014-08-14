@@ -5,8 +5,8 @@ class Groups_Model extends CI_Model {
 			->select('SQL_CALC_FOUND_ROWS groupId, groupName, groupHomePage', false)
 			->from('groups');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('groupName', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('groupName', $filters['search']);
 		}
 		
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);

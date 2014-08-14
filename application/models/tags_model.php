@@ -4,7 +4,7 @@ class Tags_Model extends CI_Model {
 	/*
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 		array(
-	 * 			'filter'          => null, 
+	 * 			'search'          => null, 
 	 * 			'userId'          => null,
 	 * 			'feedId'          => null,
 	 * 			'hideSystemTags'  => null,
@@ -15,8 +15,8 @@ class Tags_Model extends CI_Model {
 			->select('SQL_CALC_FOUND_ROWS tags.tagId, tagName', false)
 			->from('tags');
 			
-		if (element('filter', $filters) != null) {
-			$this->db->like('tagName', $filters['filter']);
+		if (element('search', $filters) != null) {
+			$this->db->like('tagName', $filters['search']);
 		}
 		if (element('userId', $filters) != null) {
 			$this->db

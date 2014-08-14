@@ -17,7 +17,7 @@ class Tags extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query = $this->Tags_Model->selectToList($page, config_item('pageSize'), array('filter' => $this->input->get('filter')));
+		$query = $this->Tags_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
 		
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 

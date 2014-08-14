@@ -18,7 +18,7 @@ class Tools extends CI_Controller {
 		if ($page == 0) { $page = 1; }
 		
 		$filters = array(
-			'filter'         => $this->input->get('filter'), 
+			'search'         => $this->input->get('search'), 
 			'userId'         => $userId,
 			'hideSystemTags' => true,
 		);
@@ -125,7 +125,7 @@ class Tools extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query = $this->Feeds_Model->selectToList($page, config_item('pageSize'), array('filter' => $this->input->get('filter'), 'userId' => $userId ));
+		$query = $this->Feeds_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search'), 'userId' => $userId ));
 		
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 

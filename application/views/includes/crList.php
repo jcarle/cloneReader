@@ -43,7 +43,7 @@ $CI->load->library('pagination');
 					<span class="input-group-addon">
 						<i class="fa fa-times" ></i>
 					</span>
-					<?php echo form_input(array('name' => 'filter',  'value' => $this->input->get('filter'), 'class' => 'form-control', 'placeholder' => $CI->lang->line('search'))); ?>
+					<?php echo form_input(array('name' => 'search',  'value' => $this->input->get('search'), 'class' => 'form-control', 'placeholder' => $CI->lang->line('search'))); ?>
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default"><?php echo $CI->lang->line('Search'); ?></button>
 					</span>

@@ -8,8 +8,8 @@ class testing_Model extends CI_Model {
 			->join('countries', 'countries.countryId = testing.countryId', 'inner')
 			->join('states', 'states.stateId = testing.stateId', 'inner');
 			
-		if (element('filter', $filters) != null) {
-					$this->db->like(array('testName' => $filters['filter']));
+		if (element('search', $filters) != null) {
+					$this->db->like(array('testName' => $filters['search']));
 		}
 		if (element('countryId', $filters) != null) {
 			$this->db->where('testing.countryId', $filters['countryId']);

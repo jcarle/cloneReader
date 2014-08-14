@@ -31,7 +31,7 @@ class Entries extends CI_Controller {
 		}
 		
 		$filters = array(
-			'filter'  => $this->input->get('filter'), 
+			'search'  => $this->input->get('search'), 
 			'feedId'  => $feedId, 
 		);
 		

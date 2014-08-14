@@ -31,7 +31,7 @@ class Tasks_Model extends CI_Model {
 	 * @param  (int)    $pageSize
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 						array(
-	 * 							'filter'         => null, 
+	 * 							'search'         => null, 
 	 * 							'taskRunning'    => null, 
 	 * 							'validDate'      => null, // Filtra las emails que ya pueden enviarse 
 	 *						) 

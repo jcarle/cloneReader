@@ -35,7 +35,7 @@ class Feeds extends CI_Controller {
 		
 		$feedSuggest = $this->input->get('feedSuggest') == 'on';
 		$filters = array(
-			'filter'      => $this->input->get('filter'), 
+			'search'      => $this->input->get('search'), 
 			'statusId'    => $statusId, 
 			'countryId'   => $this->input->get('countryId'), 
 			'langId'      => $this->input->get('langId'), 
