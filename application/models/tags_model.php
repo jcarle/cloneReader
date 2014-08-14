@@ -37,7 +37,7 @@ class Tags_Model extends CI_Model {
 
 		$this->Commond_Model->appendOrderByInQuery($orders, array( 'tagId', 'tagName', 'countTotal'));
 		
-		if ($num != null) {
+		if ($pageCurrent != null) {
 			$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 		}
 
