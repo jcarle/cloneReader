@@ -23,7 +23,7 @@ class Tools extends CI_Controller {
 			'hideSystemTags' => true,
 		);
 		
-		$query = $this->Tags_Model->selectToList($page, config_item('pageSize'), $filters, array());
+		$query = $this->Tags_Model->selectToList($page, config_item('pageSize'), $filters, array(array('orderBy' => 'tagName', 'orderDir' => 'asc')));
 		
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 

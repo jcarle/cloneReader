@@ -31,13 +31,13 @@ class Testing extends CI_Controller {
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('testName' => 'Name', 'countryName' => 'Country', 'stateName' => 'State'),
+				'columns'		=> array('testName' => 'Name', 'countryName' => $this->lang->line('Country'), 'stateName' => 'State'),
 				'data'			=> $query['data'],
 				'foundRows'		=> $query['foundRows'],
 				'filters'		=> array(
 					'countryId' => array(
 						'type'				=> 'dropdown',
-						'label'				=> 'Country', 
+						'label'				=> $this->lang->line('Country'), 
 						'value'				=> $this->input->get('countryId'),
 						'source'			=> $this->Countries_Model->selectToDropdown(),
 						'appendNullOption' 	=> true
@@ -63,7 +63,7 @@ class Testing extends CI_Controller {
 				),
 				'countryId' => array(
 					'type'		=> 'dropdown',
-					'label'		=> 'Country', 
+					'label'		=> $this->lang->line('Country'), 
 					'source'	=> $this->Countries_Model->selectToDropdown(),
 				),
 				'stateId' => array(
@@ -183,7 +183,7 @@ class Testing extends CI_Controller {
 			'controller'	=> strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
 			'columns'		=> array( 
 				'testChildName' 	=> 'Name', 
-				'countryName' 		=> 'Country', 
+				'countryName' 		=> $this->lang->line('Country'), 
 				'testChildDate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
 			'data'			=> $data,
 		);
@@ -214,7 +214,7 @@ class Testing extends CI_Controller {
 				),				
 				'countryId' => array(
 					'type'		=> 'dropdown',
-					'label'		=> 'Country',
+					'label'		=> $this->lang->line('Country'),
 					'source'	=> $this->Countries_Model->selectToDropdown()
 				),
 				'testChildDate' => array(
