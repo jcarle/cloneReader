@@ -1,20 +1,32 @@
 <?php
 class Entries_Model extends CI_Model {
-	function selectToList($num, $offset, $filter, $feedId = null, array $orders = array()){
+	
+	/*
+	 * @param  (array)  $filters es un array con el formato: 
+	 * 		array(
+	 * 			'filter'      => null, 
+	 * 			'feedId'      => null
+	 * 		);
+	 * 
+	 * */	
+	function selectToList($num, $offset, array $filters = array(), array $orders = array()){
 		$this->db
+			->from('entries')
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner');
 			
-		if  ($filter != '') {
-			$this->db->like('entryTitle', $filter);
+		if (element('filter', $filters) != null) {
+			$this->db->like('entryTitle', $filters['filter']);
 		}
-		if ($feedId != null) {
-			$this->db->where('feeds.feedId', $feedId);
+		if (element('feedId', $filters) != null) {
+			$this->db->where('feeds.feedId', $filters['feedId']);
 		}
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('entryId', 'entryDate' ));
 		
-		$query = $this->db->get('entries ', $num, $offset);
+		$query = $this->db
+			->limit($num, $offset)
+			->get();
 		//pr($this->db->last_query()); die;
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();

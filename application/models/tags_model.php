@@ -1,12 +1,20 @@
 <?php
 class Tags_Model extends CI_Model {
-	// TODO: quitar el like si $filter esta vacio
-	function selectToList($num, $offset, $filter){
-		$query = $this->db->select('SQL_CALC_FOUND_ROWS tags.tagId, tagName', false)
-						->like('tagName', $filter)
-						->order_by('tagId')
-		 				->get('tags', $num, $offset);
-		//pr($this->db->last_query());						
+
+	function selectToList($num, $offset, $filters){
+		$this->db
+			->select('SQL_CALC_FOUND_ROWS tags.tagId, tagName', false)
+			->from('tags');
+			
+		if (element('filter', $filters) != null) {
+			$this->db->like('tagName', $filters['filter']);
+		}
+
+		 $query = $this->db
+			->order_by('tagId')
+		 	->limit($num, $offset)
+		 	->get();
+		//pr($this->db->last_query());
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}

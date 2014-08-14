@@ -1,13 +1,20 @@
 <?php
 class News_Model extends CI_Model {
-	function selectToList($num, $offset, $filter){
-		$query = $this->db
+	function selectToList($num, $offset, array $filters = array()){
+		$this->db
 			->select('SQL_CALC_FOUND_ROWS news.newId, newTitle, newSef, newDate, CONCAT(userFirstName, \' \', userLastName) AS userFullName ', false)
-			->like('newTitle', $filter)
-			->join('users', 'news.userId = users.userId', 'inner')
+			->from('news')
+			->join('users', 'news.userId = users.userId', 'inner');
+			
+		if (element('filter', $filters) != null) {
+			$this->db->like('newTitle', $filters['filter']);
+		}
+		
+		$query = $this->db
 			->order_by('news.newId')
-		 	->get('news', $num, $offset);
-						
+		 	->limit($num, $offset)
+		 	->get();
+
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}
