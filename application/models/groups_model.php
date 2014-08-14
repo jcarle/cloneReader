@@ -1,6 +1,6 @@
 <?php
 class Groups_Model extends CI_Model {
-	function selectToList($num, $offset, array $filters = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array()){
 		$query = $this->db
 			->select('SQL_CALC_FOUND_ROWS groupId, groupName, groupHomePage', false)
 			->from('groups');
@@ -8,10 +8,10 @@ class Groups_Model extends CI_Model {
 		if (element('filter', $filters) != null) {
 			$this->db->like('groupName', $filters['filter']);
 		}
+		
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 
-		$query = $this->db
-			->limit($num, $offset)
-			->get();
+		$query = $this->db->get();
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

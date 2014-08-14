@@ -13,7 +13,7 @@ class Feeds_Model extends CI_Model {
 	 * 			'feedSuggest' => null
 	 * 		);
 	 * */
-	function selectToList($num, $offset, array $filters = array(), array $orders = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
 		$languages = null;
 		if (element('langId', $filters) != null) {
 			// TODO: poner un ckeckbox para definir si queres aplicar el filtro asi o no
@@ -53,11 +53,10 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array( 'feedId', 'feedName', 'feedLastEntryDate', 'feedLastScan', 'feedCountUsers', 'feedCountEntries' ));
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 		
-		$query = $this->db
-			->limit($num, $offset)
-			->get();
-		// pr($this->db->last_query()); die;
+		$query = $this->db->get();
+		//pr($this->db->last_query()); die;
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
@@ -416,7 +415,6 @@ class Feeds_Model extends CI_Model {
 	}
 
 	function selectFeedsOPML($userId) {
-
 		$query = $this->db->select('feeds.feedId, feedName, feedUrl, tags.tagId, tagName, feeds.feedLink ', false)
 						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
 						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
@@ -425,49 +423,6 @@ class Feeds_Model extends CI_Model {
 						->order_by('tagName IS NULL, tagName asc, feedName asc')
 		 				->get('feeds')->result_array();
 		//pr($this->db->last_query());
-		return $query;
-	}
-	
-	/*
-	 * @param   $filters   un array con el formato:
-	 * 						array(
-	 * 							'filter' => 'bla'
-	 *						);
-	 * @param   $orders    un array con el formato:
-	 * 						array(
-	 * 							array(
-	 * 								'orderBy'  => 'feedName', 
-	 * 								'orderDir' => 'asc',
-	 * 							)
-	 * 						);	
-	 * */	
-	function selectByUserId($num, $offset, $userId, array $filters, array $orders ){
-		$this->db
-			->select(' SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedUrl ', false)
-			->from('feeds')
-			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-			->where('userId', $userId);
-			
-		if (element('filter', $filters) != null) {
-			$this->db->like('feedName', $filters['filter']);
-		}
-		
-		if (empty($orders)) {
-			$orders[] = array('orderBy' => 'feedName', 'orderDir' => 'asc');
-		}
-		for ($i=0; $i<count($orders); $i++) {
-			if (!in_array($orders[$i]['orderBy'], array('feedName'))) {
-				$orders[$i]['orderBy'] = 'feedName';
-			}
-			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
-		}
-		
-		$this->db->limit($num, $offset);
-
-		$query = $this->db->get();
-		//pr($this->db->last_query()); die;
-		
-		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}
 }

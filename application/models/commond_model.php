@@ -41,6 +41,18 @@ class Commond_Model extends CI_Model {
 	}
 	
 	/**
+	 * Apendea los limit en una queries
+	 */
+	function appendLimitInQuery($pageCurrent = 1, $pageSize = null) {
+		if ($pageSize == null) {
+			$pageSize = config_item('pageSize');
+		}
+		
+		$this->db->limit($pageSize, ($pageCurrent * $pageSize) - $pageSize);
+	}
+	
+	
+	/**
 	 * Guarda el sef de una entidad
 	 * Los parametros $entitySef y $entityName son opcionales; pero deben incluirse alguno de los dos
 	 * @return $entitySef

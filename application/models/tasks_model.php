@@ -27,8 +27,8 @@ class Tasks_Model extends CI_Model {
 	
 	
 	/**
-	 * @param  (int )   $num
-	 * @param  (int)    $offset
+	 * @param  (int )   $pageCurrent
+	 * @param  (int)    $pageSize
 	 * @param  (array)  $filters es un array con el formato: 
 	 * 						array(
 	 * 							'filter'         => null, 
@@ -43,9 +43,10 @@ class Tasks_Model extends CI_Model {
 	 * 							)
 	 * 						);
 	 * */	
-	function selectToList($num, $offset, array $filters = array(), array $orders = array() ){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array() ){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS tasks_email.taskId, tasks_email.taskMethod, tasks_email.taskParams, tasks_email.taskRunning, tasks_email.taskRetries, tasks_email.taskSchedule, tasks_status.statusTaskName, languages.langId, langName ', false)
+			->from('tasks_email')
 			->join('languages', 'tasks_email.langId = languages.langId', 'inner')
 			->join('tasks_status', 'tasks_status.statusTaskId = tasks_email.taskRunning', 'inner');
 		
@@ -57,8 +58,9 @@ class Tasks_Model extends CI_Model {
 		}
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('taskId', 'taskMethod', 'taskSchedule'));
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 
-		$query = $this->db->get('tasks_email', $num, $offset);
+		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

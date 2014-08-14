@@ -10,7 +10,7 @@ class Tags_Model extends CI_Model {
 	 * 			'hideSystemTags'  => null,
 	 * 		);
 	 * */	
-	function selectToList($num = null, $offset = null, array $filters = array(), array $orders = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS tags.tagId, tagName', false)
 			->from('tags');
@@ -38,7 +38,7 @@ class Tags_Model extends CI_Model {
 		$this->Commond_Model->appendOrderByInQuery($orders, array( 'tagId', 'tagName', 'countTotal'));
 		
 		if ($num != null) {
-			$this->db->limit($num, $offset);
+			$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 		}
 
 		$result = array('data' => $this->db->get()->result_array());

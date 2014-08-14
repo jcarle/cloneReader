@@ -22,7 +22,7 @@ class Testing extends CI_Controller {
 			'countryId' => $this->input->get('countryId')
 		);
 		
-		$query = $this->Testing_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'),  $filters);
+		$query = $this->Testing_Model->selectToList($page, config_item('pageSize'),  $filters);
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 

@@ -1,6 +1,6 @@
 <?php
 class News_Model extends CI_Model {
-	function selectToList($num, $offset, array $filters = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS news.newId, newTitle, newSef, newDate, CONCAT(userFirstName, \' \', userLastName) AS userFullName ', false)
 			->from('news')
@@ -10,10 +10,11 @@ class News_Model extends CI_Model {
 			$this->db->like('newTitle', $filters['filter']);
 		}
 		
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
+		
 		$query = $this->db
 			->order_by('news.newId')
-		 	->limit($num, $offset)
-		 	->get();
+			->get();
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

@@ -1,6 +1,6 @@
 <?php
 class Feedbacks_Model extends CI_Model {
-	function selectToList($num, $offset, array $filters = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feedbacks.feedbackId, feedbackDesc, feedbackDate, feedbackUserName, feedbackUserEmail ', false)
 			->from('feedbacks')
@@ -10,9 +10,9 @@ class Feedbacks_Model extends CI_Model {
 			$this->db->like('feedbackDesc', $filters['filter']);
 		}
 		
-		$query = $this->db
-			->limit($num, $offset)
-			->get();
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
+		
+		$query = $this->db->get();
 		//pr($this->db->last_query());				
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;

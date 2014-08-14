@@ -103,7 +103,7 @@ class Users_Model extends CI_Model {
 	 * 		);
 	 * 
 	 * */
-	function selectToList($num, $offset, array $filters = array(), array $orders = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
 			->from('users')
@@ -144,10 +144,10 @@ class Users_Model extends CI_Model {
 		}
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ));
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 
 		$query = $this->db
 			->group_by('users.userId')
-			->limit($num, $offset)
 			->get();
 		//pr($this->db->last_query()); die;
 						
@@ -162,7 +162,7 @@ class Users_Model extends CI_Model {
 	 * 			'userId'      => null,
 	 * 		);
 	 * */
-	function selectUsersLogsToList($num, $offset, array $filters = array(), array $orders = array()){
+	function selectUsersLogsToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
 		// TODO: mejorar esta query, si hay muchos datos puede explotar
 		// quizás haya que agrupar en otra tabla
 		$this->db
@@ -178,13 +178,11 @@ class Users_Model extends CI_Model {
 		} 
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userLogDate' ));
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 
+		$query = $this->db->get();
+		//pr($this->db->last_query()); die;
 
-		$query = $this->db
-			->limit($num, $offset)
-			->get();
-//pr($this->db->last_query()); die;
-						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}

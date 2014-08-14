@@ -1,7 +1,7 @@
 <?php
 class testing_Model extends CI_Model {
 	
-	function selectToList($num, $offset, array $filters = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS testing.testId, testName, countries.countryName, states.stateName', false)
 			->from('testing')
@@ -14,10 +14,11 @@ class testing_Model extends CI_Model {
 		if (element('countryId', $filters) != null) {
 			$this->db->where('testing.countryId', $filters['countryId']);
 		}
+		
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 
 		$query = $this->db
 			->order_by('testName')
-			->limit($num, $offset)
 		 	->get();
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();

@@ -1,6 +1,6 @@
 <?php
 class Controllers_Model extends CI_Model {
-	function selectToList($num, $offset, array $filters = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS controllerId, controllerName, controllerUrl, IF(controllerActive, \'X\', \'\') AS controllerActive ', false)
 			->from('controllers');
@@ -9,9 +9,9 @@ class Controllers_Model extends CI_Model {
 			$this->db->like('controllerName', $filters['filter']);
 		}
 			
-		$query = $this->db
-			->limit($num, $offset)
-			->get();
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
+		
+		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();

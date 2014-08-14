@@ -35,7 +35,7 @@ class Entries extends CI_Controller {
 			'feedId'  => $feedId, 
 		);
 		
-		$query = $this->Entries_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))));
+		$query = $this->Entries_Model->selectToList($page, config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))));
 		
 		$this->load->view('pageHtml', array(
 			'view'      => 'includes/crList', 

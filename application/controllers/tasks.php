@@ -25,7 +25,7 @@ class Tasks extends CI_Controller {
 			array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir') ),
 		);
 		
-		$query = $this->Tasks_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $filters, $orders );
+		$query = $this->Tasks_Model->selectToList($page, config_item('pageSize'), $filters, $orders );
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList',

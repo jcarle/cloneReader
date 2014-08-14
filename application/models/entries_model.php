@@ -9,7 +9,7 @@ class Entries_Model extends CI_Model {
 	 * 		);
 	 * 
 	 * */	
-	function selectToList($num, $offset, array $filters = array(), array $orders = array()){
+	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
 		$this->db
 			->from('entries')
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
@@ -23,10 +23,9 @@ class Entries_Model extends CI_Model {
 		}
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('entryId', 'entryDate' ));
+		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 		
-		$query = $this->db
-			->limit($num, $offset)
-			->get();
+		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();
