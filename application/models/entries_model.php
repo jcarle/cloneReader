@@ -1,6 +1,6 @@
 <?php
 class Entries_Model extends CI_Model {
-	function selectToList($num, $offset, $filter, $feedId = null, $orderBy = '', $orderDir = ''){
+	function selectToList($num, $offset, $filter, $feedId = null, array $orders = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS entries.entryId, feedName, entryTitle, entryUrl, entryDate', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner');
@@ -11,15 +11,10 @@ class Entries_Model extends CI_Model {
 		if ($feedId != null) {
 			$this->db->where('feeds.feedId', $feedId);
 		}
-			
-		if (!in_array($orderBy, array('entryId', 'entryDate' ))) {
-			$orderBy = 'entryId';
-		}
-		$this->db->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc');
-
+		
+		$this->Commond_Model->appendOrderByInQuery($orders, array('entryId', 'entryDate' ));
 		
 		$query = $this->db->get('entries ', $num, $offset);
-
 		//pr($this->db->last_query()); die;
 
 		$query->foundRows = $this->Commond_Model->getFoundRows();

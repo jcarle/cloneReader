@@ -3,7 +3,7 @@ class Feedbacks_Model extends CI_Model {
 	function selectToList($num, $offset, $filter){
 		$query = $this->db->select('SQL_CALC_FOUND_ROWS feedbacks.feedbackId, feedbackDesc, feedbackDate, feedbackUserName, feedbackUserEmail ', false)
 						->like('feedbackDesc', $filter)
-						->join('users', 'feedbacks.userId = users.userId', 'inner')						
+						->join('users', 'feedbacks.userId = users.userId', 'inner')
 		 				->get('feedbacks', $num, $offset);
 		//pr($this->db->last_query());				
 		$query->foundRows = $this->Commond_Model->getFoundRows();

@@ -90,9 +90,10 @@ class Users_Model extends CI_Model {
 //$this->db->insert('users_logs', array( 'userId' => $userId, 'userLogDate' => $date ));
 	}
 	
-	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $groupId = null, $aRemoteLogin = null, $feedId = null, $orderBy = 'userId', $orderDir = 'asc' ){
+	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $groupId = null, $aRemoteLogin = null, $feedId = null, array $orders = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
+			->from('users')
 			->join('countries', 'users.countryId = countries.countryId', 'left')
 			->join('languages', 'users.langId = languages.langId', 'left')
 			->join('users_groups', 'users.userId = users_groups.userId', 'left')
@@ -129,14 +130,12 @@ class Users_Model extends CI_Model {
 				->where('users_feeds.feedId', $feedId);
 		}
 		
-		if (!in_array($orderBy, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ))) {
-			$orderBy = 'userId';
-		}
+		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ));
 
 		$query = $this->db
 			->group_by('users.userId')
-			->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc')
-			->get('users', $num, $offset);
+			->limit($num, $offset)
+			->get();
 						
 //pr($this->db->last_query()); die;
 						
@@ -144,10 +143,11 @@ class Users_Model extends CI_Model {
 		return $query;
 	}
 
-	function selectUsersLogsToList($num, $offset, $filter = null, $userId = null, $orderBy = 'userId', $orderDir = 'asc' ){
+	function selectUsersLogsToList($num, $offset, $filter = null, $userId = null, array $orders = array()){
 		// TODO: mejorar esta query, si hay muchos datos puede explotar
 		// quizás haya que agrupar en otra tabla
 		$this->db
+			->from('usertracking')
 			->select(' SQL_CALC_FOUND_ROWS DISTINCT users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
 			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
 						
@@ -158,13 +158,12 @@ class Users_Model extends CI_Model {
 			$this->db->where('users.userId', $userId);
 		} 
 		
-		if (!in_array($orderBy, array('userId', 'userEmail', 'userLogDate' ))) {
-			$orderBy = 'userId';
-		}
+		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userLogDate' ));
+
 
 		$query = $this->db
-			->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc')
-			->get('usertracking', $num, $offset);
+			->limit($num, $offset)
+			->get();
 //pr($this->db->last_query()); die;
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();

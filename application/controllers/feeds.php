@@ -34,9 +34,9 @@ class Feeds extends CI_Controller {
 			$user = $this->Users_Model->get($userId);
 		}		
 		
-		$feedSuggest = $this->input->get('feedSuggest') == 'on';		
+		$feedSuggest = $this->input->get('feedSuggest') == 'on';
 		
-		$query	= $this->Feeds_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest, $this->input->get('orderBy'), $this->input->get('orderDir') );
+		$query	= $this->Feeds_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
 		
 		$this->load->view('pageHtml', array(
 			'view'      => 'includes/crList', 

@@ -43,7 +43,7 @@ class Tasks_Model extends CI_Model {
 	 * 							)
 	 * 						);
 	 * */	
-	function selectToList($num, $offset, array $filters, array $orders ){
+	function selectToList($num, $offset, array $filters = array(), array $orders = array() ){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS tasks_email.taskId, tasks_email.taskMethod, tasks_email.taskParams, tasks_email.taskRunning, tasks_email.taskRetries, tasks_email.taskSchedule, tasks_status.statusTaskName, languages.langId, langName ', false)
 			->join('languages', 'tasks_email.langId = languages.langId', 'inner')
@@ -56,15 +56,7 @@ class Tasks_Model extends CI_Model {
 			$this->db->where('taskSchedule < NOW() ');
 		}
 		
-		if (empty($orders)) {
-			$orders[] = array('orderBy' => 'serviceId', 'orderDir' => 'asc');
-		}
-		for ($i=0; $i<count($orders); $i++) {
-			if (!in_array($orders[$i]['orderBy'], array('taskId', 'taskMethod', 'taskSchedule'))) {
-				$orders[$i]['orderBy'] = 'taskId';
-			}
-			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
-		}
+		$this->Commond_Model->appendOrderByInQuery($orders, array('taskId', 'taskMethod', 'taskSchedule'));
 
 		$query = $this->db->get('tasks_email', $num, $offset);
 		//pr($this->db->last_query()); die;		

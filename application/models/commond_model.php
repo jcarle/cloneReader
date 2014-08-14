@@ -11,6 +11,35 @@ class Commond_Model extends CI_Model {
 		return $row->datetime;
 	}
 	
+	/*
+	 * Agrega uno o varios order_by a una query. 
+	 * 
+	 * @param   $orders    un array con el formato:
+	 * 						array(
+	 * 							array(
+	 * 								'orderBy'  = 'serviceId', 
+	 * 								'orderDir' = 'asc',
+	 * 							)
+	 * 						);	
+	 * @param   $allowFields  un array con los fields permitidos para ordenar
+	 * @param   $defaultOrderDir 
+	 * 
+	 * */
+	function appendOrderByInQuery($orders, array $allowFields = array(), $defaultOrderDir = 'asc') {
+		if (empty($orders)) {
+			if (!empty($allowFields)) {
+				$orders[] = array('orderBy' => $allowFields[0], 'orderDir' => $defaultOrderDir);
+			}
+		}
+
+		for ($i=0; $i<count($orders); $i++) {
+			if (!in_array($orders[$i]['orderBy'], $allowFields)) {
+				$orders[$i]['orderBy'] = $allowFields[0];
+			}
+			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
+		}
+	}
+	
 	/**
 	 * Guarda el sef de una entidad
 	 * Los parametros $entitySef y $entityName son opcionales; pero deben incluirse alguno de los dos

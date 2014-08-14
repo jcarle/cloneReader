@@ -1,6 +1,6 @@
 <?php
 class Feeds_Model extends CI_Model {
-	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null, $orderBy = '', $orderDir = ''){
+	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null, array $orders = array()){
 		$languages = null;
 		if ($langId != null) { // Busca lenguages relacionados: si el filtro esta seteado en 'en', trae resultados con 'en-us', 'en-uk', etc tambien
 			// TODO: poner un ckeckbox para definir si queres aplicar el filtro asi o no
@@ -10,6 +10,7 @@ class Feeds_Model extends CI_Model {
 				
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate, feedCountUsers, feedCountEntries', false)
+			->from('feeds')
 			->join('status', 'status.statusId = feeds.statusId', 'left')
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
@@ -38,14 +39,12 @@ class Feeds_Model extends CI_Model {
 			$this->db->where('feeds.feedSuggest', true);
 		}
 		
-		if (!in_array($orderBy, array( 'feedId', 'feedName', 'feedLastEntryDate', 'feedLastScan', 'feedCountUsers', 'feedCountEntries' ))) {
-			$orderBy = 'feedId';
-		}
-		$this->db->order_by($orderBy, $orderDir == 'desc' ? 'desc' : 'asc');
+		$this->Commond_Model->appendOrderByInQuery($orders, array( 'feedId', 'feedName', 'feedLastEntryDate', 'feedLastScan', 'feedCountUsers', 'feedCountEntries' ));
 		
-		
-		$query = $this->db->get('feeds', $num, $offset);
-		//pr($this->db->last_query()); die;
+		$query = $this->db
+			->limit($num, $offset)
+			->get();
+		// pr($this->db->last_query()); die;
 						
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
