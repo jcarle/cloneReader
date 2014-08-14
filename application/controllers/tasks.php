@@ -86,7 +86,7 @@ class Tasks extends CI_Controller {
 			'validDate'    => true
 		);		
 		
-		$query   = $this->Tasks_Model->selectToList(100, 0, $filters, array() );
+		$query   = $this->Tasks_Model->selectToList(1, 100, $filters, array() );
 		$rsTasks = $query->result_array();
 		if(!empty($rsTasks)){
 			$this->load->library('SendMails');

@@ -562,7 +562,7 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query());   die;
 		foreach ($query as $data) {
 			// TODO: harckodeta!!
-			$tags = $this->Tags_Model->selectToList(15, null, array('feedId' => $data['feedId']), array(array('orderBy' =>'countTotal', 'orderDir' =>'desc')));
+			$tags = $this->Tags_Model->selectToList(1, 15, array('feedId' => $data['feedId']), array(array('orderBy' =>'countTotal', 'orderDir' =>'desc')));
 			foreach ($tags['data'] as $tag) {
 				$data['tags'][] = array('tagId' => $tag['tagId'], 'tagName' => $tag['tagName']);
 			}
