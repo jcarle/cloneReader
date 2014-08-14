@@ -33,8 +33,8 @@ class Tools extends CI_Controller {
 				'urlEdit'		=> strtolower(__CLASS__).'/tags/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/tags/add',
 				'columns'		=> array('tagName' => $this->lang->line('Name')),
-				'data'			=> $query->result_array(),
-				'foundRows'		=> $query->foundRows,
+				'data'			=> $query['data'],
+				'foundRows'		=> $query['foundRows'],
 				'showId'		=> false,
 			)
 		));
