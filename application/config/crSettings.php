@@ -126,7 +126,6 @@ $config['meta'] = array(
 $config['siteAssets'] = array(
 	'js' => array(
 		'feeds.js',
-		'tools.js',
 		'cloneReader.js', 
 		'jquery.visible.min.js',
 	),

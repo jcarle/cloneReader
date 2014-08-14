@@ -133,10 +133,10 @@ class Tools extends CI_Controller {
 				'foundRows'     => $query->foundRows,
 				'showId'        => true,
 				'showCheckbox'  => true,
-/*				'buttons'       => array(
+				'buttons'       => array(
 					'<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$this->lang->line('Unsubscribe').' </a>',
 					'<a href="'.base_url('tools/feeds/add').'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$this->lang->line('Add').' </a> ',
-				),*/
+				),
 			)
 		));
 	}
