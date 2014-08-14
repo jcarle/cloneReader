@@ -72,7 +72,7 @@ class Feeds_Model extends CI_Model {
 		
 		if ($getTags == true) {
 			$result['aTagId'] = array();
-			$query = $this->Tags_Model->selectByFeedId($feedId);
+			$query = $this->Tags_Model->selectToList(null, null, array('feedId' => $feedId));
 			foreach ($query as $data) {
 				$result['aTagId'][] = array('id' => $data['tagId'], 'text' => $data['tagName']);
 			}

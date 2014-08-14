@@ -1,7 +1,16 @@
 <?php
 class Tags_Model extends CI_Model {
 
-	function selectToList($num, $offset, $filters){
+	/*
+	 * @param  (array)  $filters es un array con el formato: 
+	 * 		array(
+	 * 			'filter'          => null, 
+	 * 			'userId'          => null,
+	 * 			'feedId'          => null,
+	 * 			'hideSystemTags'  => null,
+	 * 		);
+	 * */	
+	function selectToList($num = null, $offset = null, array $filters = array(), array $orders = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS tags.tagId, tagName', false)
 			->from('tags');
@@ -9,14 +18,33 @@ class Tags_Model extends CI_Model {
 		if (element('filter', $filters) != null) {
 			$this->db->like('tagName', $filters['filter']);
 		}
+		if (element('userId', $filters) != null) {
+			$this->db
+				->join('users_tags', 'users_tags.tagId = tags.tagId', 'inner')
+				->where('userId', $filters['userId']);
+		}
+		if (element('feedId', $filters) != null) {
+			$this->db
+				->join('feeds_tags', 'feeds_tags.tagId = tags.tagId', 'inner')
+				->where('feedId', $filters['feedId']);
+		}
 
-		 $query = $this->db
-			->order_by('tagId')
-		 	->limit($num, $offset)
-		 	->get();
-		//pr($this->db->last_query());
-		$query->foundRows = $this->Commond_Model->getFoundRows();
-		return $query;
+		if (element('hideSystemTags', $filters) == true) {
+			// TODO: meter $aSystenTags en el config
+			$aSystenTags = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
+			$this->db->where_not_in('tags.tagId', $aSystenTags);
+		}
+
+		$this->Commond_Model->appendOrderByInQuery($orders, array( 'tagId', 'tagName', 'countTotal'));
+		
+		if ($num != null) {
+			$this->db->limit($num, $offset);
+		}
+
+		$result = array('data' => $this->db->get()->result_array());
+		//pr($this->db->last_query()); die;
+		$result['foundRows'] = $this->Commond_Model->getFoundRows();
+		return $result;
 	}
 	
 	function select(){
@@ -73,93 +101,6 @@ class Tags_Model extends CI_Model {
 		//pr($this->db->last_query()); die;
 		return $query;
 	}
-
-	/*
-	 * @param   $orders    un array con el formato:
-	 * 						array(
-	 * 							array(
-	 * 								'orderBy'  = 'tagName', 
-	 * 								'orderDir' = 'asc',
-	 * 							)
-	 * 						);	
-	 * */	
-	function selectByFeedId($feedId, $limit = null, $orders = array()) {
-		$aSystenTags = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
-		
-		$this->db
-			->select(' tags.tagId, tagName ', false)
-			->from('tags')
-			->join('feeds_tags', 'feeds_tags.tagId = tags.tagId', 'inner')
-			->where('feedId', $feedId)
-			->where_not_in('tags.tagId', $aSystenTags);
-			
-		if ($limit != null) {
-			$this->db->limit($limit);
-		}
-		
-		if (empty($orders)) {
-			$orders[] = array('orderBy' => 'tagName', 'orderDir' => 'asc');
-		}
-		for ($i=0; $i<count($orders); $i++) {
-			if (!in_array($orders[$i]['orderBy'], array('tagName', 'countTotal'))) {
-				$orders[$i]['orderBy'] = 'tagName';
-			}
-			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
-		}
-		
-		$query = $this->db->get()->result_array();
-
-		return $query;
-	}
-	
-	
-	/*
-	 * @param   $filters   un array con el formato:
-	 * 						array(
-	 * 							'filter' => 'bla'
-	 *						);
-	 * @param   $orders    un array con el formato:
-	 * 						array(
-	 * 							array(
-	 * 								'orderBy'  => 'tagName', 
-	 * 								'orderDir' => 'asc',
-	 * 							)
-	 * 						);	
-	 * */	
-	function selectByUserId($num, $offset, $userId, array $filters, array $orders ){
-		// TODO: meter $aSystenTags en el config
-		$aSystenTags = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
-		
-		$this->db
-			->select(' SQL_CALC_FOUND_ROWS tags.tagId, tagName ', false)
-			->from('tags')
-			->join('users_tags', 'users_tags.tagId = tags.tagId', 'inner')
-			->where('userId', $userId)
-			->where_not_in('tags.tagId', $aSystenTags);
-			
-		if (element('filter', $filters) != null) {
-			$this->db->like('tagName', $filters['filter']);
-		}
-		
-		if (empty($orders)) {
-			$orders[] = array('orderBy' => 'tagName', 'orderDir' => 'asc');
-		}
-		for ($i=0; $i<count($orders); $i++) {
-			if (!in_array($orders[$i]['orderBy'], array('tagName'))) {
-				$orders[$i]['orderBy'] = 'tagName';
-			}
-			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
-		}
-		
-		$this->db->limit($num, $offset);
-
-		$query = $this->db->get();
-		//pr($this->db->last_query()); die;
-		
-		$query->foundRows = $this->Commond_Model->getFoundRows();
-		return $query;
-	}
-	
 	
 	function saveTagByUserId($userId, $tagId, $tagName) {
 		$tagName  = substr(trim($tagName), 0, 200);

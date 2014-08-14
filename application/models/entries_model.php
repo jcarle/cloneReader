@@ -562,14 +562,15 @@ class Entries_Model extends CI_Model {
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());   die;
 		foreach ($query as $data) {
-			$tags = $this->Tags_Model->selectByFeedId($data['feedId'], 15, array(array('orderBy' =>'countTotal', 'orderDir' =>'desc'))); // TODO: harckodeta!!
-			foreach ($tags as $tag) {
+			// TODO: harckodeta!!
+			$tags = $this->Tags_Model->selectToList(15, null, array('feedId' => $data['feedId']), array(array('orderBy' =>'countTotal', 'orderDir' =>'desc')));
+			foreach ($tags['data'] as $tag) {
 				$data['tags'][] = array('tagId' => $tag['tagId'], 'tagName' => $tag['tagName']);
 			}
 
 			$result['feeds'][] = $data;
 		}
-		
+
 		return $result;
 	}	
 	
