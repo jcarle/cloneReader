@@ -14,13 +14,13 @@ class Rss extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		
+		$news = $this->News_Model->selectToRss();
 		
 		$this->load->view('rss', array(
 			'feedTitle'		=> 'cloneReader',
 			'feedDesc'		=> 'news of cloneReader',
 			'title'			=> 'Edit Feeds',
-			'news'			=> $this->News_Model->selectToRss()->result_array()
+			'news'			=> $news['data'],
 		));
 	}
 	

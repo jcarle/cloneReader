@@ -32,6 +32,8 @@ $CI               = &get_instance();
 $filters          = element('filters', $list);
 $sort             = element('sort', $list);
 $list['urlEdit']  = element('urlEdit', $list, null);
+
+$CI->load->library('pagination');
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
@@ -186,7 +188,7 @@ $url = parse_url($_SERVER['REQUEST_URI']);
 parse_str(element('query', $url), $params);
 unset($params['page']);
 
-$this->pagination->initialize(array(
+$CI->pagination->initialize(array(
 	'first_link'            => '1',
 	'last_link'             => ceil($list['foundRows'] / config_item('pageSize')),
 	'uri_segment'           => 3,
@@ -212,7 +214,7 @@ $this->pagination->initialize(array(
 	'num_tag_close'         => '</li>',
 )); 
 			
-echo $this->pagination->create_links();
+echo $CI->pagination->create_links();
 ?>
 				</ul>
 			</div>

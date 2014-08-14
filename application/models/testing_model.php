@@ -19,10 +19,9 @@ class testing_Model extends CI_Model {
 
 		$query = $this->db
 			->order_by('testName')
-		 	->get();
-						
-		$query->foundRows = $this->Commond_Model->getFoundRows();
-		return $query;
+			->get();
+
+		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
 	
 	function search($filter){

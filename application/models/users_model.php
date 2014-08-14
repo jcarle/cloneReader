@@ -150,9 +150,8 @@ class Users_Model extends CI_Model {
 			->group_by('users.userId')
 			->get();
 		//pr($this->db->last_query()); die;
-						
-		$query->foundRows = $this->Commond_Model->getFoundRows();
-		return $query;
+		
+		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
 
 	/*
@@ -183,8 +182,7 @@ class Users_Model extends CI_Model {
 		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
 
-		$query->foundRows = $this->Commond_Model->getFoundRows();
-		return $query;
+		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
 	
 	function search($filter, $groupId = null){

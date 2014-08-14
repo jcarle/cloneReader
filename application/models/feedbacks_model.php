@@ -13,9 +13,9 @@ class Feedbacks_Model extends CI_Model {
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 		
 		$query = $this->db->get();
-		//pr($this->db->last_query());				
-		$query->foundRows = $this->Commond_Model->getFoundRows();
-		return $query;
+		//pr($this->db->last_query());	
+		
+		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());			
 	}
 			
 	function save($data){
