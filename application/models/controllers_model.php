@@ -14,8 +14,7 @@ class Controllers_Model extends CI_Model {
 		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
 		
-		$result = array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
-		return $result;		
+		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
 	
 	function select($onlyActive = false){

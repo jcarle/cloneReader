@@ -41,10 +41,10 @@ class Tags_Model extends CI_Model {
 			$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 		}
 
-		$result = array('data' => $this->db->get()->result_array());
+		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
-		$result['foundRows'] = $this->Commond_Model->getFoundRows();
-		return $result;
+		
+		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
 	
 	function select(){

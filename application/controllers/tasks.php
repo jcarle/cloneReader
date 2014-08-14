@@ -87,7 +87,7 @@ class Tasks extends CI_Controller {
 		);		
 		
 		$query   = $this->Tasks_Model->selectToList(1, 100, $filters, array() );
-		$rsTasks = $query->result_array();
+		$rsTasks = $query['data'];
 		if(!empty($rsTasks)){
 			$this->load->library('SendMails');
 			

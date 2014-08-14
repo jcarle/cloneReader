@@ -64,7 +64,7 @@
 		);
 		
 
-		this.$filter = this.$form.find('input[name=filter]');
+		this.$search = this.$form.find('input[name=search]');
 		
 		this.$form.find('.fa-times').parent()
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
@@ -85,7 +85,7 @@
 		, this));
 		
 		if ($.trim($.url().param('search')) != '' && $.isMobile() == false) {
-			this.$filter.focus();
+			this.$search.focus();
 		}
 	
 		this.$crFilterList.click(function(event) {
@@ -258,7 +258,7 @@
 						<span class="input-group-addon">\
 							<i class="fa fa-times" ></i>\
 						</span>\
-						<input type="text" name="filter" value="" class="form-control" placeholder="' + crLang.line('search') + '" />\
+						<input type="text" name="search" value="" class="form-control" placeholder="' + crLang.line('search') + '" />\
 						<span class="input-group-btn">\
 							<button type="submit" class="btn btn-default">' + crLang.line('Search') + '</button>\
 						</span>\
@@ -269,11 +269,11 @@
 		$form.appendTo($panel);
 
 		if ($.trim(params['search']) != '') {
-			$form.find('input[name=filter]').val(decodeURIComponent(params['search']));
+			$form.find('input[name=search]').val(decodeURIComponent(params['search']));
 		}
 		
 		if ($.trim(params['search']) != '' && $.isMobile() == false) {
-			$form.find('input[name=filter]').focus();
+			$form.find('input[name=search]').focus();
 		}
 
 		if (data['filters'] != null) {
