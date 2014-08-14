@@ -1,13 +1,26 @@
 <?php
 class Feeds_Model extends CI_Model {
-	function selectToList($num, $offset, $filter = null, $statusId = null, $countryId = null, $langId = null, $tagId = null, $userId = null, $feedSuggest = null, array $orders = array()){
+	
+	/*
+	 * @param  (array)  $filters es un array con el formato: 
+	 * 		array(
+	 * 			'filter'      => null, 
+	 * 			'statusId'    => null, 
+	 * 			'countryId'   => null, 
+	 * 			'langId'      => null, 
+	 * 			'tagId'       => null, 
+	 * 			'userId'      => null, 
+	 * 			'feedSuggest' => null
+	 * 		);
+	 * */
+	function selectToList($num, $offset, array $filters = array(), array $orders = array()){
 		$languages = null;
-		if ($langId != null) { // Busca lenguages relacionados: si el filtro esta seteado en 'en', trae resultados con 'en-us', 'en-uk', etc tambien
+		if (element('langId', $filters) != null) {
 			// TODO: poner un ckeckbox para definir si queres aplicar el filtro asi o no
-			$this->load->model('Languages_Model');
-			$languages = $this->Languages_Model->getRelatedLangs($langId);
+			$this->load->model('Languages_Model'); // Busca lenguages relacionados: si el filtro esta seteado en 'en', trae resultados con 'en-us', 'en-uk', etc tambien
+			$languages = $this->Languages_Model->getRelatedLangs($filters['langId']);
 		}
-				
+		
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate, feedCountUsers, feedCountEntries', false)
 			->from('feeds')
@@ -15,27 +28,27 @@ class Feeds_Model extends CI_Model {
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')
 			->join('languages', 'languages.langId = feeds.langId', 'left');
 			
-		if ($filter != null) {
-			$this->db->like('feedName', $filter);
+		if (element('filter', $filters) != null) {
+			$this->db->like('feedName', $filters['filter']);
 		}
-		if ($statusId != null) {
-			$this->db->where('feeds.statusId', $statusId);
+		if (element('statusId', $filters) != null) {
+			$this->db->where('feeds.statusId', $filters['statusId']);
 		}
-		if ($countryId != null) {
-			$this->db->where('feeds.countryId', $countryId);
+		if (element('countryId', $filters) != null) {
+			$this->db->where('feeds.countryId', $filters['countryId']);
 		}
 		if ($languages != null) {
 			$this->db->where('feeds.langId IN (\''.implode('\', \'', $languages).'\')' );
 		}
-		if ($tagId != null) {
+		if (element('tagId', $filters) != null) {
 			$this->db->join('feeds_tags', 'feeds_tags.feedId = feeds.feedId', 'inner');
-			$this->db->where('feeds_tags.tagId', $tagId);
+			$this->db->where('feeds_tags.tagId', $filters['tagId']);
 		}
-		if ($userId != null) {
+		if (element('userId', $filters) != null) {
 			$this->db->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner');
-			$this->db->where('users_feeds.userId', $userId);
+			$this->db->where('users_feeds.userId', $filters['userId']);
 		}
-		if ($feedSuggest == true) {
+		if (element('feedSuggest', $filters) == true) {
 			$this->db->where('feeds.feedSuggest', true);
 		}
 		
@@ -45,7 +58,7 @@ class Feeds_Model extends CI_Model {
 			->limit($num, $offset)
 			->get();
 		// pr($this->db->last_query()); die;
-						
+
 		$query->foundRows = $this->Commond_Model->getFoundRows();
 		return $query;
 	}

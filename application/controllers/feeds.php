@@ -21,22 +21,30 @@ class Feeds extends CI_Controller {
 		if ($statusId === false) {
 			$statusId = '';
 		}
-		
 
-		$tag 	= null;
+		$tag   = null;
 		$tagId = $this->input->get('tagId');
 		if ($tagId != null) {
 			$tag = $this->Tags_Model->get($tagId);
 		}
-		$user 	= null;
+		$user   = null;
 		$userId = $this->input->get('userId');
 		if ($userId != null) {
 			$user = $this->Users_Model->get($userId);
 		}		
 		
 		$feedSuggest = $this->input->get('feedSuggest') == 'on';
+		$filters = array(
+			'filter'      => $this->input->get('filter'), 
+			'statusId'    => $statusId, 
+			'countryId'   => $this->input->get('countryId'), 
+			'langId'      => $this->input->get('langId'), 
+			'tagId'       => $tagId, 
+			'userId'      => $userId, 
+			'feedSuggest' => $feedSuggest
+		);
 		
-		$query	= $this->Feeds_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $statusId, $this->input->get('countryId'), $this->input->get('langId'), $tagId, $userId, $feedSuggest, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
+		$query = $this->Feeds_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
 		
 		$this->load->view('pageHtml', array(
 			'view'      => 'includes/crList', 

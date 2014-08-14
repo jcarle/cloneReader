@@ -90,7 +90,20 @@ class Users_Model extends CI_Model {
 //$this->db->insert('users_logs', array( 'userId' => $userId, 'userLogDate' => $date ));
 	}
 	
-	function selectToList($num, $offset, $filter = null, $countryId = null, $langId = null, $groupId = null, $aRemoteLogin = null, $feedId = null, array $orders = array()){
+	
+	/*
+	 * @param  (array)  $filters es un array con el formato: 
+	 * 		array(
+	 * 			'filter'         => null, 
+	 * 			'countryId'      => null, 
+	 * 			'langId'         => null, 
+	 * 			'groupId'        => null, 
+	 * 			'aRemoteLogin'   => null, 
+	 * 			'feedId'         => null,
+	 * 		);
+	 * 
+	 * */
+	function selectToList($num, $offset, array $filters = array(), array $orders = array()){
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, countryName, langName, GROUP_CONCAT(groups.groupName) AS groupsName, userDateAdd, userLastAccess, IF(facebookUserId IS NULL, \'\', \'X\') AS facebookUserId, IF(googleUserId IS NULL, \'\', \'X\') AS googleUserId', false)
 			->from('users')
@@ -99,35 +112,35 @@ class Users_Model extends CI_Model {
 			->join('users_groups', 'users.userId = users_groups.userId', 'left')
 			->join('groups', 'groups.groupId = users_groups.groupId', 'left');
 
-		if ($filter != null) {	
-			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter, 'userEmail' => $filter));
+		if (element('filter', $filters) != null) {
+			$this->db->or_like(array('userFirstName' => $filters['filter'], 'userLastName' => $filters['filter'], 'userEmail' => $filters['filter']));
 		}
-		if ($countryId != null) {
-			$this->db->where('users.countryId', $countryId);
+		if (element('countryId', $filters) != null) {
+			$this->db->where('users.countryId', $filters['countryId']);
 		} 
-		if ($langId != null) {
-			$this->db->where('users.langId', $langId);
+		if (element('langId', $filters) != null) {
+			$this->db->where('users.langId', $filters['langId']);
 		}
-		if ($groupId != null) {
-			$this->db->where('users_groups.groupId', $groupId);
+		if (element('groupId', $filters) != null) {
+			$this->db->where('users_groups.groupId', $filters['groupId']);
 		}
 		
-		if ($aRemoteLogin != null) {
+		if (element('aRemoteLogin', $filters) != null) {
 			$aTmp = array();
-			if (in_array('facebook', $aRemoteLogin)) {
+			if (in_array('facebook', $filters['aRemoteLogin'])) {
 				$aTmp[] = 'facebookUserId IS NOT NULL';
 			}
-			if (in_array('google', $aRemoteLogin)) {
+			if (in_array('google', $filters['aRemoteLogin'])) {
 				$aTmp[] = 'googleUserId IS NOT NULL';
 			}
 			if (!empty($aTmp)) {
 				$this->db->where('('.implode(' OR ', $aTmp). ' )');
 			}
 		}
-		if ($feedId != null) {
+		if (element('feedId', $filters) != null) {
 			$this->db
 				->join('users_feeds', 'users.userId = users_feeds.userId', 'left')
-				->where('users_feeds.feedId', $feedId);
+				->where('users_feeds.feedId', $filters['feedId']);
 		}
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userDateAdd', 'userLastAccess' ));
@@ -143,19 +156,26 @@ class Users_Model extends CI_Model {
 		return $query;
 	}
 
-	function selectUsersLogsToList($num, $offset, $filter = null, $userId = null, array $orders = array()){
+	/*
+	 * @param  (array)  $filters es un array con el formato: 
+	 * 		array(
+	 * 			'filter'      => null, 
+	 * 			'userId'      => null,
+	 * 		);
+	 * */
+	function selectUsersLogsToList($num, $offset, array $filters = array(), array $orders = array()){
 		// TODO: mejorar esta query, si hay muchos datos puede explotar
 		// quizás haya que agrupar en otra tabla
 		$this->db
 			->from('usertracking')
 			->select(' SQL_CALC_FOUND_ROWS DISTINCT users.userId, userEmail, CONCAT(userFirstName, \' \', userLastName) AS userFullName, user_identifier, DATE_FORMAT(from_unixtime(timestamp), \'%Y-%m-%d\') AS userLogDate ', false) 
 			->join('users', 'users.userId = usertracking.user_identifier', 'inner');
-						
-		if ($filter != null) {	
-			$this->db->or_like(array('userFirstName' => $filter, 'userLastName' => $filter));
+
+		if (element('filter', $filters) != null) {
+			$this->db->or_like(array('userFirstName' => $filters['filter'], 'userLastName' => $filters['filter']));
 		}
-		if ($userId != null) {
-			$this->db->where('users.userId', $userId);
+		if (element('userId', $filters) != null) {
+			$this->db->where('users.userId', $filters['userId']);
 		} 
 		
 		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userLogDate' ));

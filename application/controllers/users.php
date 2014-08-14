@@ -29,9 +29,18 @@ class Users extends CI_Controller {
 		$feedId = $this->input->get('feedId');
 		if ($feedId != null) {
 			$feed = $this->Feeds_Model->get($feedId);
-		}		
+		}
+		
+		$filters = array(
+			'filter'         => $this->input->get('filter'), 
+			'countryId'      => $this->input->get('countryId'), 
+			'langId'         => $this->input->get('langId'), 
+			'groupId'        => $this->input->get('groupId'), 
+			'aRemoteLogin'   => $aRemoteLogin, 
+			'feedId'         => $feedId,
+		);
 
-		$query = $this->Users_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $this->input->get('countryId'), $this->input->get('langId'), $this->input->get('groupId'), $aRemoteLogin, $feedId, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
+		$query = $this->Users_Model->selectToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
@@ -211,8 +220,13 @@ class Users extends CI_Controller {
 		if ($userId != null) {
 			$user = $this->Users_Model->get($userId);
 		}
+		
+		$filters = array(
+			'filter'      => $this->input->get('filter'),
+			'userId'      => $userId
+		);
 
-		$query = $this->Users_Model->selectUsersLogsToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $this->input->get('filter'), $userId, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
+		$query = $this->Users_Model->selectUsersLogsToList(config_item('pageSize'), ($page * config_item('pageSize')) - config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList', 
