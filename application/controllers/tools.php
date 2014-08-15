@@ -122,7 +122,7 @@ class Tools extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		
-		$query = $this->Feeds_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search'), 'userId' => $userId ));
+		$query = $this->Feeds_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search'), 'userId' => $userId ), array(array('orderBy' => 'feedName', 'orderDir' => 'asc')));
 		$data  = array();
 		foreach ($query['data'] as $row) {
 			$data[] = array(
