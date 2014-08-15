@@ -8,11 +8,12 @@
  * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
  * 		'urlDelete'		=> '',						// Url para eliminar elementos desde el listado, se envia un json con el array de los ids seleccionados
  * 		'showCheckbox'	=> false, 					// muestra un checkbox en cada row
- * 		'columns'			=> array(							// array con las columnas, con el formato: $key => $value; se pueden incluir un className para los datetime y los numeric  
+ * 		'columns'		=> array(					// array con las columnas, con el formato: $key => $value. También puede ser un array con las properties: {'className': incluye un class para los datetime y los numeric,  'isHtml': permite codigo html en la columna }
  * 			'entityName' 		=> $this->lang->line('Name'),
- * 			'entityDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date'),  
+ * 			'entityDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date'), 'isHtml' => true ),  
  * 		),
- * 		'data'			=> $data,						// los datos a mostrar en el listado; macheando el mismo key que en la property columns
+ * 		'data'			=> $data,						// los datos a mostrar en el listado; 
+ * 															Cada row puede ser un array macheando el mismo key que en la property columns; o un string html el tr
  * 		'foundRows'		=> $foundRows, 					// cantidad de registros, se usa en la paginación
  * 		'showId'		=> true,						// Indica si muestra el id en el listado
  * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm
@@ -132,30 +133,35 @@ if (count($list['data']) == 0) {
 	echo '<tr class="warning"><td colspan="'.(count($list['columns']) + ($showCheckbox == true ? 2 : 1)).'"> '.$CI->lang->line('No results').' </td></tr>';
 }
 foreach ($list['data'] as $row) {
-	$id        = reset($row);
-	$urlEdit   = '';
-	
-	if ($list['urlEdit'] != null) {
-		$urlEdit   = ' data-url-edit="'.base_url(sprintf($list['urlEdit'], $id)).'" ';;
+	if (!is_array($row)) {
+		echo $row;
 	}
-	
-	echo '<tr '.$urlEdit.' >';
-	if ($showCheckbox == true) {	
-		echo '<td class="rowCheckbox">'.form_checkbox('chkDelete', $id).'</td>';
-	}
-	if ($showId == true) {
-		echo '<td class="numeric">'.$id.'</td>';
-	}
-	
-	foreach ($list['columns'] as $fieldName => $columnName) {
-		$class 	= '';
-		if (is_array($columnName)) {
-			$class 		= ' class="'.element('class', $columnName).'" ';
+	else {
+		$id        = reset($row);
+		$urlEdit   = '';
+		
+		if ($list['urlEdit'] != null) {
+			$urlEdit   = ' data-url-edit="'.base_url(sprintf($list['urlEdit'], $id)).'" ';;
 		}
 		
-		echo '	<td '.$class.'>'.$row[$fieldName].'</td>';
+		echo '<tr '.$urlEdit.' >';
+		if ($showCheckbox == true) {	
+			echo '<td class="rowCheckbox">'.form_checkbox('chkDelete', $id).'</td>';
+		}
+		if ($showId == true) {
+			echo '<td class="numeric">'.$id.'</td>';
+		}
+		
+		foreach ($list['columns'] as $fieldName => $columnName) {
+			$class 	= '';
+			if (is_array($columnName)) {
+				$class 		= ' class="'.element('class', $columnName).'" ';
+			}
+			
+			echo '	<td '.$class.'>'. (element('isHtml', $list['columns'][$fieldName]) == true ? $row[$fieldName] : htmlentities($row[$fieldName])).'</td>';
+		}
+		echo '</tr>';
 	}
-	echo '</tr>';
 }
 ?>		
 			</tbody>

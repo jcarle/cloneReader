@@ -356,28 +356,40 @@
 		}
 
 		for (var i=0; i<data['data'].length; i++) {
-			var row    = data['data'][i];
-			var id 	   = row[Object.keys(row)[0]];
-			var $tr    = $( '<tr />').appendTo($tbody);
-	
-			if (data['urlEdit'] != null) {
-				$tr.attr('data-url-edit', base_url + $.sprintf(data['urlEdit'], id));
+			var row = data['data'][i];
+
+			if ($.isPlainObject(row) == false) {
+				$(row).appendTo($tbody);
 			}
-			
-			if (showCheckbox == true) {	
-				$('	<td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
-			}
-			if (showId == true) {
-				$('<td class="numeric" />').appendTo($tr).text(id);
-			}
-	
-			for (columnName in data['columns']) {
-				var $td = $(' <td />')
-					.text(row[columnName] || '')
-					.appendTo($tr);
+			else {
+				var id 	   = row[Object.keys(row)[0]];
+				var $tr    = $( '<tr />').appendTo($tbody);
+		
+				if (data['urlEdit'] != null) {
+					$tr.attr('data-url-edit', base_url + $.sprintf(data['urlEdit'], id));
+				}
 				
-				if ($.isPlainObject(data['columns'][columnName])) {
-					$td.addClass(data['columns'][columnName]['class']);
+				if (showCheckbox == true) {	
+					$('	<td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
+				}
+				if (showId == true) {
+					$('<td class="numeric" />').appendTo($tr).text(id);
+				}
+		
+				for (columnName in data['columns']) {
+					var $td = $(' <td />').appendTo($tr);
+					
+					if (data['columns'][columnName]['isHtml'] == true ) {
+						$td.html(row[columnName] || '');
+					}
+					else {
+						$td.text(row[columnName] || '');
+					}
+					
+					
+					if ($.isPlainObject(data['columns'][columnName])) {
+						$td.addClass(data['columns'][columnName]['class']);
+					}
 				}
 			}
 		}

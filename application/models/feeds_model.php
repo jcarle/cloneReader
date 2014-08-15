@@ -22,7 +22,7 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate, feedCountUsers, feedCountEntries', false)
+			->select('SQL_CALC_FOUND_ROWS feeds.feedId, feedName, feedDescription, feedUrl, feedLink, statusName, countryName, langName, feedLastScan, feedLastEntryDate, feedCountUsers, feedCountEntries, feedIcon', false)
 			->from('feeds')
 			->join('status', 'status.statusId = feeds.statusId', 'left')
 			->join('countries', 'countries.countryId = feeds.countryId', 'left')

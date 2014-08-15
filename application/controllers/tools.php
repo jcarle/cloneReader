@@ -98,25 +98,6 @@ class Tools extends CI_Controller {
 		return loadViewAjax($this->Tags_Model->deleteTagByUserId($this->session->userdata('userId'), $this->input->post('tagId')));
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	function feeds() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
@@ -126,6 +107,23 @@ class Tools extends CI_Controller {
 		if ($page == 0) { $page = 1; }
 		
 		$query = $this->Feeds_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search'), 'userId' => $userId ));
+		$data  = array();
+		foreach ($query['data'] as $row) {
+/*			$data[] = '
+				<tr >
+					<td class="rowCheckbox">'.form_checkbox('chkDelete', $row['feedId']).'</td>
+					<td> <img src="'.($row['feedIcon']== null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row['feedIcon']).'" /> </td> 
+					<td>'.htmlentities($row['feedName']).' </td>
+					<td>'.htmlentities($row['feedUrl']). ' </td>
+				</tr>';*/
+			
+			$data[] = array(
+				'feedId'   => $row['feedId'], 
+				'feedIcon' => '<img width="16" height="16" src="'.($row['feedIcon']== null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row['feedIcon']).'" />',
+				'feedName' => $row['feedName'], 
+				'feedUrl'  => $row['feedUrl'],
+			);
+		}
 		
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 
@@ -135,10 +133,14 @@ class Tools extends CI_Controller {
 				'urlAdd'        => strtolower(__CLASS__).'/feeds/add',
 				'urlDelete'     => strtolower(__CLASS__).'/feedDelete',
 // TODO: ver si se puede agregar el icono				
-				'columns'       => array('feedName' => $this->lang->line('Name'), 'feedUrl' => $this->lang->line('Url') ),
-				'data'          => $query['data'],
+				'columns'       => array(
+					'feedIcon'  => array('value' => '', 'isHtml' => true),
+					'feedName'  => $this->lang->line('Name'), 
+					'feedUrl'   => $this->lang->line('Url') 
+				),
+				'data'          => $data,
 				'foundRows'     => $query['foundRows'],
-				'showId'        => true,
+				'showId'        => false,
 				'showCheckbox'  => true,
 				'buttons'       => array(
 					'<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$this->lang->line('Unsubscribe').' </a>',

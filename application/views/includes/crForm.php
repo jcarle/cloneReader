@@ -39,8 +39,7 @@
  * 
  * 		$gallery = array(
  *				'label'         => 'Pictures',
- *				
- *				'entityTypeId'  => $entityTypeId,
+  *				'entityTypeId'  => $entityTypeId,
  *				'entityId'      => $entityId,
  *			);
  * 		Las gallery le pegan al controlador base_url('gallery/savePicture') y necesitan los parametros  $entityTypeId y $entityId
