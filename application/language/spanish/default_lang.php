@@ -163,3 +163,4 @@ $lang['I accept the <a href="%s">terms and conditions</a>'] = 'Acepto los <a hre
 $lang['Schedule date'] = 'Fecha programada';
 $lang['%s users'] = '%s usuarios';
 $lang['Tools'] = 'Herramientas';
+$lang['Admin tags'] = 'Administrar tags';

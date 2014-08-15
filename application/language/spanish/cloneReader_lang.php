@@ -71,3 +71,4 @@ $lang['View original'] = 'Ver original';
 $lang['Send entry by email'] = 'Enviar entrada por email';
 $lang['Not subscribed to any feeds'] = 'No estás subscripto a ningún feed';
 $lang['Browser tags'] = 'Navegar tags';
+$lang['Admin feeds'] = 'Administrar feeds';

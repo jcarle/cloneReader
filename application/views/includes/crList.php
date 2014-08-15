@@ -8,12 +8,21 @@
  * 		'urlAdd'		=> 'services/add', 			// Url para agregar un item
  * 		'urlDelete'		=> '',						// Url para eliminar elementos desde el listado, se envia un json con el array de los ids seleccionados
  * 		'showCheckbox'	=> false, 					// muestra un checkbox en cada row
- * 		'columns'		=> array(					// array con las columnas, con el formato: $key => $value. También puede ser un array con las properties: {'className': incluye un class para los datetime y los numeric,  'isHtml': permite codigo html en la columna }
+ * 		'columns'		=> array(					// array con las columnas, con el formato: $key => $value. También puede ser un array con las properties: {'value': nombre de la columna, 'className': incluye un class para los datetime y los numeric,  'isHtml': permite codigo html en la columna }
  * 			'entityName' 		=> $this->lang->line('Name'),
  * 			'entityDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date'), 'isHtml' => true ),  
  * 		),
- * 		'data'			=> $data,						// los datos a mostrar en el listado; 
- * 															Cada row puede ser un array macheando el mismo key que en la property columns; o un string html el tr
+ * 		'data'			=> (array) $data,			// los datos a mostrar en el listado; 
+ * 													Cada row puede ser un array macheando el mismo key que en la property columns; o un string html del <tr/>
+ * 								Ej:
+ * 									$data = array();
+ * 									foreach ($query['data'] as $row) {
+ *										$data[] = array(
+ * 											'icon' => '<img width="16" height="16" src="assets/images/default_feed.png" />',
+ *											'name' => $row['name'], 
+ *										);
+ *									}
+ * 								$data[] = '<tr class="success"><td colspan="4"> bla bla</td></tr>';
  * 		'foundRows'		=> $foundRows, 					// cantidad de registros, se usa en la paginación
  * 		'showId'		=> true,						// Indica si muestra el id en el listado
  * 		'filters'		=> array()						// Filtros para el listado, es un array con los fields similar a un crForm

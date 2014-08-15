@@ -202,15 +202,19 @@
 		},
 		
 		checkedRow: function(row) {
-			$(row).removeClass('info');
+			if (this.options.data.length == 0) {
+				return;
+			}
+						
+			var $row = $(row);
+			$row.removeClass('info');
 			
-			if ($('input[type=checkbox]', row).is(':checked')) {
-				$(row).addClass('info');
+			if ($row.find('input[type=checkbox]').is(':checked')) {
+				$row.addClass('info');
 			}
 			
-			
 			this.$table.find('thead input[type=checkbox]').removeAttr('checked', 'checked');
-			if (!$('tbody input[type=checkbox]:not(:checked)').length) {
+			if (! this.$table.find('tbody input[type=checkbox]:not(:checked)').length) {
 				this.$table.find('thead input[type=checkbox]').attr('checked', 'checked');
 			}
 		},
@@ -329,7 +333,7 @@
 		var $tr            = $('<tr class="label-primary" />').appendTo($thead);
 
 		if (showCheckbox == true) {
-			$('<th class="rowCheckbox">	<input type="checkbox"> </th>').appendTo($tr);	
+			$('<th class="rowCheckbox">	<input type="checkbox" > </th>').appendTo($tr);	
 		}
 		if (data['urlEdit'] != null) {
 			$table.addClass('table-hover');
@@ -409,7 +413,7 @@
 		$(' <span> ' + $.sprintf(crLang.line('%s rows'), $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);		
 	
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
-		var $ul	= $('<ul class="pagination">').appendTo($div);
+		var $ul  = $('<ul class="pagination">').appendTo($div);
 	
 		var params 		= $.url().param();
 		var currentPage = params['page'];

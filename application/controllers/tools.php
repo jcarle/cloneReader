@@ -109,14 +109,6 @@ class Tools extends CI_Controller {
 		$query = $this->Feeds_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search'), 'userId' => $userId ));
 		$data  = array();
 		foreach ($query['data'] as $row) {
-/*			$data[] = '
-				<tr >
-					<td class="rowCheckbox">'.form_checkbox('chkDelete', $row['feedId']).'</td>
-					<td> <img src="'.($row['feedIcon']== null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row['feedIcon']).'" /> </td> 
-					<td>'.htmlentities($row['feedName']).' </td>
-					<td>'.htmlentities($row['feedUrl']). ' </td>
-				</tr>';*/
-			
 			$data[] = array(
 				'feedId'   => $row['feedId'], 
 				'feedIcon' => '<img width="16" height="16" src="'.($row['feedIcon']== null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row['feedIcon']).'" />',
@@ -124,7 +116,7 @@ class Tools extends CI_Controller {
 				'feedUrl'  => $row['feedUrl'],
 			);
 		}
-		
+
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 
 			'meta'   => array('title' => $this->lang->line('Edit feeds')),
@@ -132,7 +124,6 @@ class Tools extends CI_Controller {
 				'urlList'       => strtolower(__CLASS__).'/feeds',
 				'urlAdd'        => strtolower(__CLASS__).'/feeds/add',
 				'urlDelete'     => strtolower(__CLASS__).'/feedDelete',
-// TODO: ver si se puede agregar el icono				
 				'columns'       => array(
 					'feedIcon'  => array('value' => '', 'isHtml' => true),
 					'feedName'  => $this->lang->line('Name'), 
@@ -215,7 +206,4 @@ class Tools extends CI_Controller {
 		
 		return loadViewAjax(true);
 	}
-
-
-
 }

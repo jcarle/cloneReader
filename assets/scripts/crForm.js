@@ -319,15 +319,29 @@
 		},
 		
 		sendForm: function() {
+			if (this.$btnSubmit.is(':disabled') == true) {
+				return;
+			}
+			
 			if (this.options.modalHideOnSubmit == true) {
 				this.$form.parents('.modal').first().modal('hide');
 			}
+
+			this.$btnSubmit.attr('disabled', 'disabled');
+			this.$btnSubmit.append(' <i class="iconLoading fa fa-spinner fa-spin " /> ');
 			
 			$.ajax({
-				'type': 	'post',
-				'url': 		this.$form.attr('action'),
-				'data': 	this.$form.serialize(),
-				'success': 	
+				'type':     'post',
+				'url':      this.$form.attr('action'),
+				'data':     this.$form.serialize(),
+				'complete':
+					$.proxy(
+						function() {
+							this.$btnSubmit.find('.iconLoading').remove();
+							this.$btnSubmit.removeAttr('disabled');
+						}
+					, this),
+				'success':
 					$.proxy(
 						function(response) {
 							if (this.options.callback != null) {
