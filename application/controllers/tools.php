@@ -29,13 +29,15 @@ class Tools extends CI_Controller {
 			'view'   => 'includes/crList', 
 			'meta'   => array('title' => $this->lang->line('Edit tags')),
 			'list'   => array(
-				'urlList'		=> strtolower(__CLASS__).'/tags',
-				'urlEdit'		=> strtolower(__CLASS__).'/tags/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/tags/add',
-				'columns'		=> array('tagName' => $this->lang->line('Name')),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'showId'		=> false,
+				'urlList'       => strtolower(__CLASS__).'/tags',
+				'urlEdit'       => strtolower(__CLASS__).'/tags/%s',
+				'urlAdd'        => strtolower(__CLASS__).'/tags/add',
+				'urlDelete'     => strtolower(__CLASS__).'/tagsDelete',
+				'columns'       => array('tagName' => $this->lang->line('Name')),
+				'data'          => $query['data'],
+				'foundRows'     => $query['foundRows'],
+				'showId'        => false,
+				'showCheckbox'  => true,
 			)
 		));
 	}
@@ -95,8 +97,22 @@ class Tools extends CI_Controller {
 	}
 
 	function tagDelete() {
+		if (! $this->safety->allowByControllerName('tools/tags') ) { return errorForbidden(); }
+		
 		return loadViewAjax($this->Tags_Model->deleteTagByUserId($this->session->userdata('userId'), $this->input->post('tagId')));
 	}
+	
+	function tagsDelete() {
+		if (! $this->safety->allowByControllerName('tools/tags') ) { return errorForbidden(); }
+		
+		$aTagId = (array)json_decode($this->input->post('aDelete'));
+		
+		foreach ($aTagId as $tagId){
+			$this->Tags_Model->deleteTagByUserId($this->session->userdata('userId'), $tagId);
+		}
+		
+		return loadViewAjax(true);
+	}	
 	
 	function feeds() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
@@ -123,7 +139,7 @@ class Tools extends CI_Controller {
 			'list'   => array(
 				'urlList'       => strtolower(__CLASS__).'/feeds',
 				'urlAdd'        => strtolower(__CLASS__).'/feeds/add',
-				'urlDelete'     => strtolower(__CLASS__).'/feedDelete',
+				'urlDelete'     => strtolower(__CLASS__).'/feedsDelete',
 				'columns'       => array(
 					'feedIcon'  => array('value' => '', 'isHtml' => true),
 					'feedName'  => $this->lang->line('Name'), 
@@ -197,7 +213,9 @@ class Tools extends CI_Controller {
 		$this->feedEdit(0);
 	}
 
-	function feedDelete() {
+	function feedsDelete() {
+		if (! $this->safety->allowByControllerName('tools/feeds') ) { return errorForbidden(); }
+		
 		$aFeedId = (array)json_decode($this->input->post('aDelete'));
 		
 		foreach ($aFeedId as $feedId){

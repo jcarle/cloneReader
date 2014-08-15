@@ -101,7 +101,7 @@
 					
 					this.$form.attr('action', this.options.urlSave);
 					if (this.options.sendWithAjax == true) {
-						this.sendForm();
+						this.sendForm(true);
 						return false;
 					}
 					
@@ -318,18 +318,19 @@
 			}
 		},
 		
-		sendForm: function() {
-			if (this.$btnSubmit.is(':disabled') == true) {
-				return;
+		sendForm: function(saved) {
+			if (saved == true) {
+				if (this.$btnSubmit.is(':disabled') == true) {
+					return;
+				}
+				this.$btnSubmit.attr('disabled', 'disabled');
+				this.$btnSubmit.append(' <i class="iconLoading fa fa-spinner fa-spin " /> ');
 			}
 			
 			if (this.options.modalHideOnSubmit == true) {
 				this.$form.parents('.modal').first().modal('hide');
 			}
 
-			this.$btnSubmit.attr('disabled', 'disabled');
-			this.$btnSubmit.append(' <i class="iconLoading fa fa-spinner fa-spin " /> ');
-			
 			$.ajax({
 				'type':     'post',
 				'url':      this.$form.attr('action'),
@@ -459,7 +460,6 @@
 						.append('<a class="btn btn-danger "> <i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + '</a>')
 						.find('.btn-danger').click( $.proxy(
 						function (field, event) {
-							cn(field.urlDelete);
 							this.$form.attr('action', field.urlDelete);
 							this.sendForm();
 						}
