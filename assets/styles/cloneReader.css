@@ -186,21 +186,48 @@
 					float: right;
 					cursor:pointer;
 				}
-			#cloneReader .ulEntries > li p {
+			#cloneReader .ulEntries > li > p,
+			#cloneReader .ulEntries > li > .detail > p {
 				margin:0 10px 10px 10px;
 				max-width: 100%;
 				overflow: auto;
 				position: relative;	
 				font-size: 100%;
-				white-space: pre-wrap;
 			}
+				#cloneReader .ulEntries > li p,
+				#cloneReader .ulEntries > li p pre {
+					white-space: pre-wrap;
+				}
 				#cloneReader .ulEntries > li p * {
+					font-size: 100%;
+					background: transparent;
+					text-align: left;
+				}
+				#cloneReader .ulEntries > li p * {
+					white-space: normal;
+				}
+				#cloneReader .ulEntries > li p *:not(table, thead, tbody, th, tr, td) {
 					position: relative;
 					margin: 0; 
 					padding: 0;
 					border: 0 none;
-					font-size: 100%;
-					background: transparent;
+				}
+				#cloneReader .ulEntries > li p .table-responsive th,
+				#cloneReader .ulEntries > li p .table-responsive td {
+					white-space: nowrap;
+				}
+				#cloneReader .ulEntries > li p code {
+					white-space: pre-line;
+					margin: 5px 0;
+					padding: 10px;
+					border:1px #CCC solid;
+					display: block;
+					background-color: #f9f2f4;
+					border-radius: 4px;
+					color: #c7254e;
+					font-size: 90%;
+					overflow-y:hidden;
+					overflow-x:auto;
 				}
 				#cloneReader .ulEntries > li p h1,
 				#cloneReader .ulEntries > li p h2,
@@ -217,7 +244,6 @@
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 					height:auto;
-					margin-bottom: 20px;
 				}
 				#cloneReader .ulEntries > li p img.imgError {
 					max-width:250px;
@@ -231,11 +257,11 @@
 					color: #1155CC;
 				}
 				#cloneReader .ulEntries > li p ul,
-				#cloneReader .ulEntries > li p ol,
-				#cloneReader .ulEntries > li p li 
+				#cloneReader .ulEntries > li p ol 
 				{
 					margin:auto;
 					padding:0 0 0 40px;
+					list-style-type: disc;
 				}
 			#cloneReader .ulEntries > li .footer {
 				min-height: 1px;

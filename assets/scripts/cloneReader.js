@@ -557,8 +557,8 @@ cloneReader = {
 			}
 		);
 
-		var entryContent 	= $('<div>' + entry.entryContent + '</div>').clone().find('script, noscript, style, iframe, link, meta, br').remove().end().html();
-		var $p 				= $('<p/>').html(entryContent).appendTo($entry);
+		var entryContent  = $('<div>' + entry.entryContent + '</div>').clone().find('script, noscript, style, iframe, link, meta, br').remove().end().html();
+		var $p            = $('<p/>').html(entryContent).appendTo($entry);
 
 		$entry.find('img').error(
 			function() {
@@ -620,6 +620,14 @@ TODO: pensar como mejorar esta parte
 		
 		$entry.find('p').children().removeAttr('class');
 		$entry.find('a').attr('target', '_blank');
+		
+		$p.find('table').each(function() {
+			var $table = $(this);
+			var $div   = $('<div class="table-responsive" />');
+cn($div);			
+			$table.before($div);
+			$table.appendTo($div).addClass('table table-bordered table-condensed');
+		});
 		
 		$entry.click(function(event) {
 			var $entry = $(event.target).parents('.entry');
