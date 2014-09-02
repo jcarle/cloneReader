@@ -29,6 +29,15 @@ body.isLoading, body.isLoading * {
 		text-shadow: 1px 1px 0 black;	
 		margin-right: 10px;
 	}
+	
+.page-header {
+	margin:0px;
+	border-bottom: 0px solid #eee;
+	padding-bottom: 0px;
+}
+	.page-header h1 {
+		font-size:30px;
+	}
 
 #header {
 	margin:0 auto;
@@ -391,13 +400,7 @@ body.isLoading, body.isLoading * {
 					display: block;
 					margin: 0 15px 5px 0;
 				}
-					.crForm fieldset .fieldUpload a.thumbnail img {
-						background: white;
-						width:115px;
-						height:115px;
-						display:inline-block;
-						margin: 0 15px 20px 0;
-					}
+					.crForm fieldset .fieldUpload a.thumbnail img { }
 			.crForm fieldset .groupCheckBox li.active {
 				background: #D9EDF7;
 			}
@@ -524,15 +527,22 @@ footer {
 }
 
 
-.imgCenterFrame {
-	width: 100%;
-	height: 100%;
+.imgCenter {
 	position:relative;
+	padding:0;
+	text-align: center;
+	overflow: hidden;
+	-webkit-transition: none;
+	transition: none;	
 }
-	.imgCenterFrame img {
-		box-shadow: #000 0 0 0; 
+	.imgCenter img  {
+		max-width:none;
+		max-height:none;
+		margin: 0;
+		width: auto;
+		height: auto;
 	}
-	.imgCenterFrame i {
+	.imgCenter i {
 		color: #333333;
 		left: 50%;
 		line-height: 20px;
@@ -542,6 +552,36 @@ footer {
 		text-align: center;
 		top: 50%;
 		width: 20px;
+	}
+.imgCenter.imgCenterOutside:after { 
+	border: 4px solid white;
+	content: "";
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+.imgCenter.imgCenterInside {
+	vertical-align:middle;
+	height: 100px;
+	padding:4px;
+	box-shadow:none;
+}
+	.imgCenter.imgCenterInside img {
+		border-radius:4px;
+		max-width:100%;
+		max-height:100%;
+		margin: 0 auto;
+		margin: 0 auto;
+		display: table;
+		position: relative;
+		top: 50%;
+		-webkit-transform: translateY(-50%);
+		-moz-transform: translateY(-50%);
+		-o-transform: translateY(-50%);
+		-ms-transform: translateY(-50%);
+		transform: translateY(-50%);
 	}
 	
 

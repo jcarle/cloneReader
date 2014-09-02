@@ -39,7 +39,8 @@ function vd($value) {
 function errorForbidden() {
 	$CI = &get_instance();
 	$CI->load->library('../controllers/error');
-	$CI->error->forbidden();	
+	initLang(); // FIXME: revisar; se esta vaciando la session al hacer el redirect
+	$CI->error->forbidden();
 }
 
 function error404() {

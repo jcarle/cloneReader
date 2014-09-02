@@ -253,6 +253,10 @@
 					border: 1px #ddd solid;
 					border-radius: 4px;
 				}
+				#cloneReader .ulEntries > li p img.imgLarge {
+					margin-bottom:10px;
+					display:block;
+				}
 				#cloneReader .ulEntries > li p a {
 					text-decoration: underline;
 					color: #1155CC;

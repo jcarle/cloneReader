@@ -28,15 +28,58 @@ class SendMails {
 		$this->CI->email->to(config_item('emailDebug'));
 	}
 	
+	function _sendEmail($emailTo, $subject, $message, $emailCc = null, $emailFrom = null) {
+		if ($emailFrom != null) {
+			$this->CI->email->from($emailFrom['email'], $emailFrom['name']);
+		}
+		else {		
+			$this->CI->email->from(config_item('emailFrom'), config_item('siteName'));
+		}
+		$this->_addEmailTo($emailTo);
+
+		if ($emailCc != null) {
+			$this->CI->email->cc($emailCc);
+		}
+		
+		$this->CI->email->subject($subject);
+		$this->CI->email->message($message);
+		if ($this->CI->email->send()) {
+			return true;
+		}
+		//echo $this->CI->email->print_debugger();	die;
+		return false;	
+	}
+	
+	function sendEmailWelcome($params = array()) {
+		if(empty($params) || !is_array($params)){
+			return false;
+		}
+		$this->CI->load->model('Users_Model');
+		$user  = $this->CI->Users_Model->get($params['userId'], false);
+		$url   = ($user['confirmEmailKey'] != null ? base_url('confirmEmail?key='.$user['confirmEmailKey']) : null);
+		$message         = $this->CI->load->view('pageEmail',
+			array(
+				'view'   => 'email/welcome.php',
+				'user'   => $user, 
+				'url'    => $url
+			), true);
+		
+
+		return $this->_sendEmail($user['userEmail'], sprintf($this->CI->lang->line('Welcome to %s'), config_item('siteName')), $message);
+	}
+	
 	function sendEmailToResetPassword($params = array()) {
 		if(empty($params) || !is_array($params)){
 			return false;
 		}
 		$this->CI->load->model('Users_Model');
-		$user 				= $this->CI->Users_Model->getByUserEmail($params['userEmail']);
-		$resetPasswordKey 	= random_string('alnum', 20);
-		$url 				= base_url('resetPassword?key='.$resetPasswordKey);
-		$message 			= $this->CI->load->view('pageEmail',
+		
+		$user = $this->CI->Users_Model->get($params['userId'], false);
+
+		$userEmail          = $user['userEmail'];		
+		$resetPasswordKey   = $user['resetPasswordKey'];
+		$url                = base_url('resetPassword?key='.$resetPasswordKey);
+		$message            = $this->CI->load->view('pageEmail',
 			array(
 				'view'  => 'email/resetPassword.php',
 				'user'  => $user,
@@ -44,16 +87,7 @@ class SendMails {
 			),
 			true);
 		
-		$this->CI->Users_Model->updateResetPasswordKey($user['userId'], $resetPasswordKey);
-		$this->CI->email->from(config_item('emailFrom'), config_item('siteName'));
-		$this->_addEmailTo($user['userEmail']); 
-		$this->CI->email->subject(config_item('siteName').' - '.$this->CI->lang->line('Reset password'));
-		$this->CI->email->message($message);
-		if($this->CI->email->send()){
-			return true;
-		}
-		return false;
-		// echo $this->CI->email->print_debugger();	die;	
+		return $this->_sendEmail($userEmail, sprintf($this->CI->lang->line('Reset password in %s'), config_item('siteName')), $message);
 	}
 	
 	function sendEmailToChangeEmail($params = array()) {
@@ -62,29 +96,19 @@ class SendMails {
 		}
 		
 		$this->CI->load->model('Users_Model');
-		$userId 		= $params['userId'];
-		$userEmail 		= $params['userEmail'];
-		$user 			= $this->CI->Users_Model->get($userId);
-		$changeEmailKey = random_string('alnum', 20);
-		$url 			= base_url('confirmEmail?key='.$changeEmailKey);
-		$message 		= $this->CI->load->view('pageEmail',
+		$userId          = $params['userId'];
+		$user            = $this->CI->Users_Model->get($userId, false);
+		$userEmail       = $user['confirmEmailValue'];
+		$confirmEmailKey = $user['confirmEmailKey'];
+		$url             = base_url('confirmEmail?key='.$confirmEmailKey);
+		$message         = $this->CI->load->view('pageEmail',
 			array(
 				'view'   => 'email/changeEmail.php',
 				'user'   => $user, 
 				'url'    => $url
 			), true);
-		
-		$this->CI->Users_Model->updateChangeEmailKey($userId, $userEmail, $changeEmailKey);
 
-		$this->CI->email->from(config_item('emailFrom'), config_item('siteName'));
-		$this->_addEmailTo($userEmail); 
-		$this->CI->email->subject(config_item('siteName').' - '.$this->CI->lang->line('Change email'));
-		$this->CI->email->message($message);
-		if($this->CI->email->send()){
-			return true;
-		}
-		return false;
-		//echo $this->CI->email->print_debugger();	die;	
+		return $this->_sendEmail($userEmail, sprintf($this->CI->lang->line('Change email in %s'), config_item('siteName')), $message);
 	}
 	
 	function sendFeedback($params = array()) {
@@ -103,15 +127,7 @@ class SendMails {
 			),
 			true);
 		
-		$this->CI->email->from(element('feedbackUserEmail', $params), element('feedbackUserName', $params));
-		$this->_addEmailTo(config_item('emailDebug'));
-		$this->CI->email->subject('Comentario de '.element('feedbackUserName', $params));
-		$this->CI->email->message($message);
-		if($this->CI->email->send()){
-			return true;
-		}
-		return false;
-		//echo $this->CI->email->print_debugger();	die;
+		return $this->_sendEmail(config_item('emailDebug'), 'Comentario de '.element('feedbackUserName', $params), $message, null, array('email' => element('feedbackUserEmail', $params), 'name' => element('feedbackUserName', $params)));
 	}
 
 	function shareByEmail($params = array()) {

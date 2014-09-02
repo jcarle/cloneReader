@@ -8,14 +8,10 @@ class Safety {
 	}
 	
 	function initSession() {
-		$CI 			= &get_instance();
+		$CI = &get_instance();
 
 		if ($this->session->userdata('userId') == null) {
 			$this->session->set_userdata('userId', USER_ANONYMOUS);
-			$CI->load->library('user_agent');
-			if ($this->isCommandLine() != true && uri_string() != 'rss' && $CI->input->is_ajax_request() != true && $CI->agent->is_robot() != true) {
-				redirect('login');
-			}
 		}
 
 		if ($this->session->userdata('userId') != USER_ANONYMOUS) {
@@ -42,7 +38,7 @@ class Safety {
 		$CI->session->set_userdata(array(
 			'userId'  	=> $row->userId,
 			'langId'	=> $row->langId,
-		));		
+		));
 		
 		$CI->Users_Model->updateUserLastAccess();
 		

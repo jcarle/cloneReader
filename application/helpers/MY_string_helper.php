@@ -9,3 +9,16 @@ function hide_mail($email) {
 function hide_phone($phone) {
 	return substr($phone, 0, -4) . '****';
 }
+
+function truncate($string, $limit, $break=" ", $pad="...") {
+	if(strlen($string) <= $limit){
+		return $string;
+	}
+	
+	if(false !== ($breakpoint = strpos($string, $break, $limit))) {
+		if($breakpoint < strlen($string) - 1){
+			$string = substr($string, 0, $breakpoint) . $pad;
+		}
+	}
+	return $string;
+}

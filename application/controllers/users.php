@@ -197,7 +197,7 @@ class Users extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'meta'		=> array( 'title' => $this->lang->line('Edit users') ),
-			'form'		=> populateCrForm($form, $this->Users_Model->get($userId)),
+			'form'		=> populateCrForm($form, $this->Users_Model->get($userId, true)),
 		));		
 	}
 
@@ -218,7 +218,7 @@ class Users extends CI_Controller {
 		$user 	= null;
 		$userId = $this->input->get('userId');
 		if ($userId != null) {
-			$user = $this->Users_Model->get($userId);
+			$user = $this->Users_Model->get($userId, true);
 		}
 		
 		$filters = array(

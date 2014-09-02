@@ -230,13 +230,13 @@ crMain = {
 			data['showTitle'] = true;
 		}
 		if (data['showTitle'] == true) {
-			$pageTitle = $('\
-				<div class="pageTitle">\
-					<h2> <small> </small></h2>\
+			var $pageHeader = $('\
+				<div class="page-header">\
+					<h1> <small> </small></h1>\
 				</div>\
 			').appendTo($page);
 			
-			$pageTitle.find('h2').text(data['title']);
+			$pageHeader.find('h1').text(data['title']);
 		}
 
 	},

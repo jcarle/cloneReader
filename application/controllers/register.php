@@ -4,8 +4,8 @@ class Register extends CI_Controller {
 	function __construct() {
 		parent::__construct();	
 		
-		$this->load->model(array('Users_Model', 'Countries_Model'));
-	}  
+		$this->load->model(array('Users_Model', 'Countries_Model', 'Tasks_Model'));
+	}
 	
 	function index() {
 		$this->register();
@@ -64,11 +64,21 @@ class Register extends CI_Controller {
 
 		$this->form_validation->set_rules($form['rules']);
 
-		if ($this->input->post() != false) {		
+		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Users_Model->register($userId, $this->input->post());
-				$this->safety->login($this->input->post('userEmail'), $this->input->post('userPassword'));
+				$userEmail = $this->input->post('userEmail');
+				
+				if ($this->safety->login($this->input->post('userEmail'), $this->input->post('userPassword')) != true) {
+					return loadViewAjax(false);
+				}
+	
+				$userId          = $this->session->userdata('userId');
+				$confirmEmailKey = random_string('alnum', 20);
+				$this->Users_Model->updateConfirmEmailKey($userId, $userEmail, $confirmEmailKey);
+				$this->Tasks_Model->addTask('sendEmailWelcome', array('userId' => $userId));
+				
 				return loadViewAjax($code, array('goToUrl' => base_url('home'), 'skipAppLink' => true));
 			}
 

@@ -31,7 +31,7 @@ if (config_item('hasRss') == true) {
 	<meta name="description" content="<?php echo element('description', $meta); ?>" />
 	<meta name="keywords" content="<?php echo element('keywords', $meta); ?>" />
 		
-	<link rel="icon" href="<?php echo base_url();?>favicon.png" type="image/png">
+	<link rel="icon" href="<?php echo base_url('favicon.png');?>" type="image/png">
 <?php
 $this->load->spark('carabiner/1.5.4');
 
@@ -74,7 +74,6 @@ if (isset($aServerData)) {
 
 if (ENVIRONMENT == 'production' && config_item('google-analytics-Account') != '') {
 	$aScripts[] = "
-
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', '".config_item('google-analytics-Account')."']);
 	_gaq.push(['_trackPageview']);
@@ -99,7 +98,6 @@ $siteLogo = config_item('siteLogo');
 		<i class="fa fa-spinner fa-spin fa-lg"></i>
 		<small> <?php echo $this->lang->line('loading ...'); ?></small>
 	</div>
-	
 	
 	<nav class="navbar navbar-default" role="navigation" id="header">
 		<div class="navbar-header">
@@ -147,7 +145,7 @@ if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';
 	foreach ($breadcrumb as $link) {
 		if (element('active', $link) == true) {
-			echo '<li class="active"> '.$link['text'].'</li>';			
+			echo '<li class="active">'.$link['text'].'</li>';			
 		}
 		else {
 			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
@@ -160,8 +158,8 @@ if (!isset($showTitle)) {
 	$showTitle = true;
 }
 if ($showTitle == true) {
-	echo '	<div class="pageTitle">
-				<h2>'. element('title', $meta).' <small> </small></h2>
+	echo '	<div class="page-header">
+				<h1>'. element('title', $meta).' <small> </small></h1>
 			</div>';
 }
 
@@ -195,7 +193,7 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 		}
 						
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" href="'.base_url().$aMenu[$i]['url'].'" '.$attr.'>'.$icon.$label.'</a>';
+			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" href="'.base_url($aMenu[$i]['url']).'" '.$attr.'>'.$icon.$label.'</a>';
 		}
 		else {
 			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';

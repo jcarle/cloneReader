@@ -85,7 +85,7 @@ class Login extends CI_Controller {
 
 
 		$provider = $this->oauth2->provider($providerName, array(
-			'id' => 	$config['id'],
+			'id'     => $config['id'],
 			'secret' => $config['secret'],
 			'scope'  => $config['scope'],
 		));
@@ -93,24 +93,30 @@ class Login extends CI_Controller {
 		if ( ! $this->input->get('code')) {
 			$url = $provider->authorize();
 			redirect($url);
-		} 
+		}
 
 		try  {
-			$token 	= $provider->access($_GET['code']);
-			$user 	= $provider->get_user_info($token);
-			$user 	= $this->Users_Model->loginRemote($user['email'], $user['last_name'], $user['first_name'], $user['location'], $user['birthday'], $providerName, $user['uid'] );
+			$token = $provider->access($_GET['code']);
+			$user  = $provider->get_user_info($token);
+			$user  = $this->Users_Model->loginRemote($user['email'], $user['last_name'], $user['first_name'], $user['location'], $user['birthday'], $providerName, $user['uid'] );
 			
 			if ($user == null) {
 				return errorForbidden();
 			}
 
 			$this->session->set_userdata(array(
-				'userId'  		=> $user->userId,
-				'langId'  		=> $user->langId,
+				'userId'  => $user['userId'],
+				'langId'  => $user['langId'],
 			));
-			
+
 			$this->Users_Model->updateUserLastAccess();
 			
+			// Si el usuario es nuevo y tiene email le enviamos el email de bienvenida 
+			if (element('isNewUser', $user) == true && $user['userEmail'] != null) {
+				$this->load->model('Tasks_Model');
+				$this->Tasks_Model->addTask('sendEmailWelcome', array('userId' => $user['userId']));
+			}
+
 			redirect('');
 		}
 		catch (OAuth2_Exception $e) {

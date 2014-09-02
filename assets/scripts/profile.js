@@ -21,7 +21,7 @@ $.Profile = {
 	
 	loadTab: function(controller, $content) {
 		if ($content.children().length > 0) {
-			this.$page.find('.pageTitle h2').text( $content.find('.panel-heading').text() );
+			this.$page.find('.page-header h1').text( $content.find('.panel-heading').text() );
 			return;
 		}
 		
@@ -35,7 +35,7 @@ $.Profile = {
 
 						$content.children().remove();
 						var $form  = $(document).crForm('renderAjaxForm', response['result']['form'], $content);
-						this.$page.find('.pageTitle h2').text( $content.find('.panel-heading').text() );
+						this.$page.find('.page-header h1').text( $content.find('.panel-heading').text() );
 					}
 				, this),
 		});

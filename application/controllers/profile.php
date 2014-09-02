@@ -71,7 +71,7 @@ class Profile extends CI_Controller {
 		$userId = $this->session->userdata('userId');
 		$form['fields']['countryId']['source'] = $this->Countries_Model->selectToDropdown();
 		
-		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Users_Model->get($userId)) ));
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Users_Model->get($userId, false)) ));
 	}
 
 	function _saveEditProfile() {
@@ -88,7 +88,7 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$userId = $this->session->userdata('userId');
-		$data 	= $this->Users_Model->get($userId);
+		$data 	= $this->Users_Model->get($userId, false);
 		
 		$this->load->helper('email');
 		
@@ -117,11 +117,14 @@ class Profile extends CI_Controller {
 		
 		if ($this->input->post() != false) {
 			$this->load->model(array('Tasks_Model'));
-			$data = array(
-				'userId'	=> $this->session->userdata('userId'),
-				'userEmail' => $this->input->post('userEmail')
-			);
-			$this->Tasks_Model->addTask('sendEmailToChangeEmail', $data);
+			
+			$userId          = $this->session->userdata('userId');
+			$userEmail       = $this->input->post('userEmail');
+			$confirmEmailKey = random_string('alnum', 20);
+			
+			$this->Users_Model->updateConfirmEmailKey($userId, $userEmail, $confirmEmailKey);
+			
+			$this->Tasks_Model->addTask('sendEmailToChangeEmail', array( 'userId' => $userId,));
 			return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to change your email')));	
 		}		
 		
@@ -131,21 +134,19 @@ class Profile extends CI_Controller {
 	function confirmEmail() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
-		$this->load->model(array('Users_Model', 'Countries_Model'));
-		
-		$changeEmailKey = $this->input->get('key');
-		$userId 		= $this->session->userdata('userId');
-		$user 			= $this->Users_Model->getUserByUserIdAndChangeEmailKey($userId, $changeEmailKey);
+		$confirmEmailKey = $this->input->get('key');
+		$userId          = $this->session->userdata('userId');
+		$user            = $this->Users_Model->getUserByUserIdAndConfirmEmailKey($userId, $confirmEmailKey);
 		if (empty($user)) {
 			return error404();
 		}
-		
+
 		$this->Users_Model->confirmEmail($userId);
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'message', 
-			'meta'		=> array( 'title' => $this->lang->line('Change email') ),
-			'message'	=> $this->lang->line('Your email has been updated')
+			'view'     => 'message', 
+			'meta'     => array( 'title' => $this->lang->line('Confirm email') ),
+			'message'  => $this->lang->line('Your email has been confirmed'),
 		));	
 	}
 
@@ -153,21 +154,21 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$form = array(
-			'frmId'			=> 'frmChangePassword',
-			'title'			=> $this->lang->line('Change password'),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Change password').' </button>'),
-			'fields'		=> array(
+			'frmId'     => 'frmChangePassword',
+			'title'     => $this->lang->line('Change password'),
+			'buttons'   => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
+			'fields'    => array(
 				'passwordOld' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('Current password'), 
+					'type'  => 'password',
+					'label' => $this->lang->line('Current password'), 
 				),
 				'passwordNew' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('New password'), 
+					'type'   => 'password',
+					'label'  => $this->lang->line('New password'), 
 				),
 				'passwordRepeatNew' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('Repeat new password'), 
+					'type'   => 'password',
+					'label'  => $this->lang->line('Repeat new password'), 
 				),
 			)
 		);
@@ -188,7 +189,7 @@ class Profile extends CI_Controller {
 				'label' => $form['fields']['passwordRepeatNew']['label'],
 				'rules' => 'trim|required'
 			)
-		);		
+		);
 		
 		$this->form_validation->set_rules($form['rules']);
 		
@@ -204,7 +205,7 @@ class Profile extends CI_Controller {
 			return loadViewAjax(false);
 		}
 
-		$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));		
+		$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));
 		
 		return loadViewAjax(true, array('notification' => $this->lang->line('Data updated successfully')));
 	}
@@ -213,12 +214,12 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
 		$form = array(
-			'frmId'			=> 'frmForgotPassword',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Send').' </button>'),
-			'fields'		=> array(
+			'frmId'      => 'frmForgotPassword',
+			'buttons'    => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Send').' </button>'),
+			'fields'     => array(
 				'userEmail' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Email'),
+					'type'  => 'text',
+					'label' => $this->lang->line('Email'),
 				),
 			)
 		);
@@ -238,10 +239,14 @@ class Profile extends CI_Controller {
 				return loadViewAjax(false);
 			}else{
 				$this->load->model(array('Tasks_Model'));
-				$data = array(
-					'userEmail' => $this->input->post('userEmail')
-				);
-				$this->Tasks_Model->addTask('sendEmailToResetPassword', $data);
+				
+				$user             = $this->Users_Model->getByUserEmail($this->input->post('userEmail'));
+				$userId           = $user['userId'];
+				$resetPasswordKey = random_string('alnum', 20);
+				
+				$this->Users_Model->updateResetPasswordKey($userId, $resetPasswordKey);
+				
+				$this->Tasks_Model->addTask('sendEmailToResetPassword', array( 'userId' => $userId ));
 				return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to reset your password')));
 			}
 		}
@@ -264,7 +269,7 @@ class Profile extends CI_Controller {
 		
 		$form = array(
 			'frmId'			=> 'frmResetPassword',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Reset password').' </button>'),			
+			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Reset password').' </button>'),
 			'fields'		=> array(
 				'resetPasswordKey' => array(
 					'type'	=> 'hidden',
@@ -277,7 +282,7 @@ class Profile extends CI_Controller {
 				'passwordRepeatNew' => array(
 					'type'	=> 'password',
 					'label'	=> $this->lang->line('Repeat new password'), 
-				),				
+				),
 			)
 		);
 		
@@ -301,10 +306,10 @@ class Profile extends CI_Controller {
 		}		
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crForm',
-			'form'			=> $form,
-			'meta'			=> array( 'title' => $this->lang->line('Reset password') ),
-			'code'			=> true
+			'view'  => 'includes/crForm',
+			'form'  => $form,
+			'meta'  => array( 'title' => $this->lang->line('Reset password') ),
+			'code'  => true
 		));		
 	}
 
@@ -334,6 +339,37 @@ class Profile extends CI_Controller {
 
 	function _validate_notExitsEmail() {
 		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
+	}
+
+
+	function removeAccount() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+		
+		$form = array(
+			'frmId'         => 'frmRemoveAccount',
+			'urlDelete'     => base_url('profile/doRemoveAccount'),
+			'buttons'       => array('<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> '.$this->lang->line('Remove account').' </button>'),
+			'title'         => $this->lang->line('Remove account'),
+			'fields'        => array(
+				'removeAccount' => array(
+					'type'  => 'html',
+					'value' => '<p>'.$this->lang->line('Are you sure you want to remove your account?').'</p>
+								<div class="alert alert-danger" role="alert">'.$this->lang->line('Deleting your member account will be permanent').'</div>'
+				),
+			)
+		);
+
+		return $this->load->view('includes/crJsonForm', array( 'form' => $form ));
+	}
+	
+	function doRemoveAccount() {
+		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
+
+		$this->Users_Model->removeAccount($this->session->userdata('userId'));
+		
+		$this->session->sess_destroy();
+		
+		return loadViewAjax(true, array('goToUrl' => base_url(''), 'skipAppLink' => true));
 	}
 
 	function downloadOPML() {

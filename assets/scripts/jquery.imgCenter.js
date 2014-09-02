@@ -18,11 +18,10 @@
 	$.fn.imgCenter = function(options) {
 
 		var defaults = {
-			parentSteps: 0,
 			scaleToFit: true,
 			centerVertical: true,
+			centerType: 'outside', // [ 'outside', 'inside']
 			show: true,
-			createFrame: false,
 			complete: function(){},
 			start: function(){},
 			end: function(){}
@@ -37,33 +36,33 @@
 		return this.each(function(i){
 			var current = i;
 			
-			// Declare the current Image as a variable.
-			var $img = $(this);
+			var $img    = $(this);
+			var $parent = $img.parent();
 			
-			if (opts.createFrame == true) {
-				if ($img.parent().hasClass('imgCenterFrame') == true) {
-					var $div = $img.parent();
-					if ($div.find('i').length == 0) {
-						$div.append('<i class="fa fa-spinner fa-spin fa-lg" />');
-					}
-				}
-				else {
-					var $div = $('<div />').addClass('imgCenterFrame');
-					$div.insertBefore($img).append($img).show().css('visibility', 'visible');
-					$div.append('<i class="fa fa-spinner fa-spin fa-lg" />')
-				}
+			if ($img.data('imgCenterComplete') == true) {
+				return;
+			}
+			
+			$parent.addClass('imgCenter');
+			
+			if (opts.centerType == 'outside') {
+				$parent.addClass('imgCenterOutside');
+			}
+			else {
+				$parent.addClass('imgCenterInside');
+			}
+			
+			if ($parent.find('i').length == 0) {
+				$parent.append('<i class="fa fa-spinner fa-spin fa-lg" />');
 			}
 
 			$img.hide();
 			
 			// Move up Parents until the spcified limit has been met.
-			var $theParent = $img;
-			for (var i=0; i <= opts.parentSteps; i++){
-				$theParent = $theParent.parent();
-			}
-			var parWidth 	= parseInt($theParent.width());
-			var parHeight 	= parseInt($theParent.height());
-			var parAspect 	= parWidth / parHeight;
+			
+			var parWidth   = parseInt($parent.innerWidth());
+			var parHeight  = parseInt($parent.innerHeight());
+			var parAspect  = parWidth / parHeight;
 			
 			$img.load($.proxy(
 				function(event) {
@@ -76,60 +75,57 @@
 			}
 
 			function imgMath($img) {
-				// reset properties
-				$img.css({'margin': 0, 'width': 'auto', 'height': 'auto' });
-				
-				// Get image properties.		
-				var imgWidth 	= parseInt($img.get(0).width);
-				var imgHeight 	= parseInt($img.get(0).height);
-				var imgAspect 	= imgWidth / imgHeight;
-				
-				if (parAspect == Infinity) {
-					parWidth  = imgWidth;
-					parHeight = imgHeight;
-				}
-
-				// Center the image.
-				if(parWidth != imgWidth || parHeight != imgHeight){
-					$theParent.css('overflow', 'hidden');
+				if (opts.centerType == 'outside') {
+					// Get image properties.		
+					var imgWidth 	= parseInt($img.get(0).width);
+					var imgHeight 	= parseInt($img.get(0).height);
+					var imgAspect 	= imgWidth / imgHeight;
 					
-					if(opts.scaleToFit){
-						if(parAspect >= 1){
-							$img.css({'width': parWidth +'px'});
-							imgWidth = parWidth;
-							imgHeight = Math.round(imgWidth / imgAspect);
-							
-							if((parWidth / imgAspect) < parHeight){
-								$img.css({'height': parHeight +'px', 'width': 'auto'});
-								imgHeight = parHeight;
-								imgWidth = Math.round(imgHeight * imgAspect);
-							}				
-						} else {
-							$img.css({'height': parHeight +'px'});
-							imgHeight = parHeight;
-							imgWidth = Math.round(imgHeight * imgAspect);
-							if((parHeight * imgAspect) < parWidth){
-								$img.css({'width': parWidth +'px', 'height': 'auto'});
+					if (parAspect == Infinity) {
+						parWidth  = imgWidth;
+						parHeight = imgHeight;
+					}
+	
+					// Center the image.
+					if(parWidth != imgWidth || parHeight != imgHeight){
+						if(opts.scaleToFit){
+							if(parAspect >= 1){
+								$img.css({'width': parWidth +'px'});
 								imgWidth = parWidth;
 								imgHeight = Math.round(imgWidth / imgAspect);
+								
+								if((parWidth / imgAspect) < parHeight){
+									$img.css({'height': parHeight +'px', 'width': 'auto'});
+									imgHeight = parHeight;
+									imgWidth = Math.round(imgHeight * imgAspect);
+								}				
+							} else {
+								$img.css({'height': parHeight +'px'});
+								imgHeight = parHeight;
+								imgWidth = Math.round(imgHeight * imgAspect);
+								if((parHeight * imgAspect) < parWidth){
+									$img.css({'width': parWidth +'px', 'height': 'auto'});
+									imgWidth = parWidth;
+									imgHeight = Math.round(imgWidth / imgAspect);
+								}
 							}
-						}
-						if(imgWidth > parWidth){
-							$img.css({'margin-left': '-'+ Math.round((imgWidth - parWidth) / 2) + 'px'});
-						}
-						if(imgHeight > parHeight && opts.centerVertical){
-							$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
-						}		
-					} else {
-						if(imgWidth > parWidth){
-							$img.css({'margin-left': '-' + Math.round((imgWidth - parWidth) / 2) + 'px'});
-						} else if(imgWidth < parWidth){
-							$img.css({'margin-left': Math.round((parWidth -imgWidth) / 2) + 'px'});
-						}
-						if(imgHeight > parHeight && opts.centerVertical){
-							$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
-						} else if(imgHeight < parHeight && opts.centerVertical){
-							$img.css({'margin-top': Math.round((parHeight - imgHeight) / 2) + 'px'});
+							if(imgWidth > parWidth){
+								$img.css({'margin-left': '-'+ Math.round((imgWidth - parWidth) / 2) + 'px'});
+							}
+							if(imgHeight > parHeight && opts.centerVertical){
+								$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
+							}		
+						} else {
+							if(imgWidth > parWidth){
+								$img.css({'margin-left': '-' + Math.round((imgWidth - parWidth) / 2) + 'px'});
+							} else if(imgWidth < parWidth){
+								$img.css({'margin-left': Math.round((parWidth -imgWidth) / 2) + 'px'});
+							}
+							if(imgHeight > parHeight && opts.centerVertical){
+								$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
+							} else if(imgHeight < parHeight && opts.centerVertical){
+								$img.css({'margin-top': Math.round((parHeight - imgHeight) / 2) + 'px'});
+							}
 						}
 					}
 				}
@@ -138,6 +134,8 @@
 				if(current == len){
 					opts.end.call(this);
 				}
+				
+				$img.data('imgCenterComplete', true);
 				
 				if (opts.show == true) {
 					$img.show();

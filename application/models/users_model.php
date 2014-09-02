@@ -2,10 +2,10 @@
 class Users_Model extends CI_Model {
 	
 	function login($userEmail, $userPassword) {
-		$this->db->where('userEmail', $userEmail);
-		$this->db->where('userPassword', md5($userPassword));
-
-		return $this->db->get('users');
+		return $this->db
+			->where('userEmail', $userEmail)
+			->where('userPassword', md5($userPassword))
+			->get('users');
 	}
 	
 	function loginRemote($userEmail, $userLastName, $userFirstName, $userLocation, $userBirthday, $providerName, $remoteUserId) {
@@ -15,7 +15,7 @@ class Users_Model extends CI_Model {
 			->where($fieldName, $remoteUserId)
 			->get('users');
 		if ($query->num_rows() > 0) { // ya existe
-			return $query->row();
+			return $query->row_array();
 		}
 
 		//Seteo el Pais del Usuario
@@ -41,42 +41,49 @@ class Users_Model extends CI_Model {
 		}
 		
 		$values = array(
-			'userLastName' 		=> $userLastName,
-			'userFirstName'		=> $userFirstName,
-			'countryId'			=> $countryId,
-			'userBirthDate'		=> $birthday,
-			$fieldName			=> $remoteUserId
-		);		
+			'userLastName'     => $userLastName,
+			'userFirstName'    => $userFirstName,
+			'countryId'        => $countryId,
+			'userBirthDate'    => $birthday,
+			$fieldName         => $remoteUserId
+		);
 
 		if (trim($userEmail) == '') {
 			$userEmail = null;
 		}
-		
+
 		if ($userEmail != null) {
+			$values['verifiedUserEmail'] = true;
+			
 			$query = $this->db
 				->where('userEmail', $userEmail)
 				->get('users');
 			if ($query->num_rows() > 0) { // si existe un user con el mail, updateo
+				$user = $query->row_array();
+				
 				$this->db
-					->where('userId', $query->row()->userId)
+					->where('userId', $user['userId'])
 					->update('users', $values);
-					return $query->row();
+				return $user;
 			}
 		}
 
 
 		// creo el usuario
-		$values['userEmail'] 	= $userEmail;
-		$values['userDateAdd'] 	= date("Y-m-d H:i:s");
+		$values['userEmail']    = $userEmail;
+		$values['userDateAdd']  = date("Y-m-d H:i:s");
+		$values['langId']        = $this->session->userdata('langId');
 		$this->db->insert('users', $values);
 		$userId = $this->db->insert_id();
 
-		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));			
+		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));
 
-		$query = $this->db
+		$user = $this->db
 			->where($fieldName, $remoteUserId)
-			->get('users');
-		return $query->row();
+			->get('users')->row_array();
+		$user['isNewUser'] = true; // indica que el usuario acaba de ser creado para enviarle el email de bienvenida
+			
+		return $user;
 	}
 
 	function updateUserLastAccess() {
@@ -87,7 +94,7 @@ class Users_Model extends CI_Model {
 			->where('userId', $userId)
 			->update('users', array('userLastAccess' => $date));
 			
-//$this->db->insert('users_logs', array( 'userId' => $userId, 'userLogDate' => $date ));
+		//$this->db->insert('users_logs', array( 'userId' => $userId, 'userLogDate' => $date ));
 	}
 	
 	
@@ -212,11 +219,15 @@ class Users_Model extends CI_Model {
 		return $this->db->get('users');
 	}
 
-	function get($userId){
-		$this->db->where('userId', $userId);
-		$result				= $this->db->get('users')->row_array();
-		$result['groups'] 	= sourceToArray($this->getGroups($userId), 'groupId');
-		return $result;
+	function get($userId, $getGroups = true){
+		$query = $this->db
+			->where('userId', $userId)
+			->get('users')->row_array();
+		
+		if ($getGroups == true) {
+			$query['groups'] = sourceToArray($this->getGroups($userId), 'groupId');
+		}
+		return $query;
 	}	
 	
 	function getByUserEmail($userEmail) {
@@ -284,21 +295,22 @@ class Users_Model extends CI_Model {
 	
 	function register($userId, $data){
 		$values = array(
-			'userEmail' 	=> element('userEmail', $data),
-			'userPassword' 	=> md5(element('userPassword', $data)),
+			'userEmail'     => element('userEmail', $data),
+			'userPassword'  => md5(element('userPassword', $data)),
 			'userFirstName' => element('userFirstName', $data),
-			'userLastName' 	=> element('userLastName', $data),
-			'countryId' 	=> element('countryId', $data, null),
-			'userDateAdd' 	=> date("Y-m-d H:i:s"),
+			'userLastName'  => element('userLastName', $data),
+			'countryId'     => element('countryId', $data, null),
+			'userDateAdd'   => date("Y-m-d H:i:s"),
+			'langId'        => $this->session->userdata('langId'),
 		);
 		
 		$this->db->insert('users', $values);
 
 		$userId = $this->db->insert_id();
 
-		$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));			
+		$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));
 
-		return true;
+		return $userId;
 	}		
 	
 	function exitsEmail($userEmail, $userId) {
@@ -318,16 +330,16 @@ class Users_Model extends CI_Model {
 	
 	function updatePassword($userId, $userPassword) {
 		$values = array(
-			'userPassword' 			=> md5($userPassword),
-			'resetPasswordKey'		=> null,
-			'resetPasswordDate'		=> null,
+			'userPassword'        => md5($userPassword),
+			'resetPasswordKey'    => null,
+			'resetPasswordDate'   => null,
 		);
 
 		$this->db->update('users', $values, array('userId' => $userId));
 	}
 
-	function updateChangeEmailKey($userId, $changeEmailValue, $changeEmailKey) {
-		$this->db->update('users', array('changeEmailKey' => $changeEmailKey, 'changeEmailValue' => $changeEmailValue, 'changeEmailDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
+	function updateConfirmEmailKey($userId, $confirmEmailValue, $confirmEmailKey) {
+		$this->db->update('users', array('confirmEmailKey' => $confirmEmailKey, 'confirmEmailValue' => $confirmEmailValue, 'confirmEmailDate' => date("Y-m-d H:i:s")), array('userId' => $userId ));
 	}
 
 	function updateUserFiltersByUserId($userFilters, $userId) {
@@ -347,11 +359,11 @@ class Users_Model extends CI_Model {
 		return $query;
 	}
 	
-	function getUserByUserIdAndChangeEmailKey($userId, $changeEmailKey) {
+	function getUserByUserIdAndConfirmEmailKey($userId, $confirmEmailKey) {
 		$query = $this->db
 			->where('userId', $userId)
-			->where('changeEmailKey', $changeEmailKey) 
-			->where('DATE_ADD(changeEmailDate, INTERVAL '.config_item('urlSecretTime').' MINUTE)  > NOW()')
+			->where('confirmEmailKey', $confirmEmailKey) 
+			->where('DATE_ADD(confirmEmailDate, INTERVAL '.config_item('urlSecretTime').' MINUTE)  > NOW()')
 			->get('users')->row_array();	
 		//pr($this->db->last_query()); die;
 		return $query;
@@ -359,15 +371,15 @@ class Users_Model extends CI_Model {
 	
 	function confirmEmail($userId){
 		$this->db
-			->set('userEmail', 'changeEmailValue', false)
-			->set('changeEmailKey', null) 
-			->set('changeEmailDate', null)
-			->set('changeEmailValue', null)
+			->set('userEmail', 'confirmEmailValue', false)
+			->set('verifiedUserEmail', true)
+			->set('confirmEmailKey', null) 
+			->set('confirmEmailDate', null)
+			->set('confirmEmailValue', null)
 			->where('userId', $userId)
 			->update('users');
 		//pr($this->db->last_query()); die;		
-	}	
-	
+	}
 
 	function getUserFiltersByUserId($userId) {
 		if ($userId == USER_ANONYMOUS) {
@@ -384,7 +396,6 @@ class Users_Model extends CI_Model {
 	function updateLangIdByUserId($langId, $userId) {
 		$this->db->where('userId', $userId)->update('users', array('langId' => $langId));
 	}
-	
 	
 	function saveUserFriend($userId, $userFriendEmail, $userFriendName) {
 		if (trim($userFriendEmail) == '') {
@@ -420,7 +431,9 @@ class Users_Model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	
+	/**
+	 * Se utiliza en los hooks de usertracking
+	 */
 	function getUserId() {
 		return $this->session->userdata('userId');
 	}	
@@ -430,5 +443,19 @@ class Users_Model extends CI_Model {
 			return false;
 		}
 		return true;
+	}
+	
+	function removeAccount($userId) {
+		$aTables = array('cars', 'comments', 'contacts', 'feedbacks', );
+		
+		foreach ($aTables as $table) {
+			$this->db
+				->set('userId',USER_ANONYMOUS)
+				->where('userId', $userId)
+				->update($table);
+			//pr($this->db->last_query()); die;	
+		}
+
+		$this->db->delete('users', array('userId' => $userId));
 	}
 }
