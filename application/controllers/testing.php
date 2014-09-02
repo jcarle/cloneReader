@@ -296,7 +296,7 @@ class Testing extends CI_Controller {
 		
 		$user 	= null;
 		if ((int)$userId != 0) {
-			$user = $this->Users_Model->get($userId, false);
+			$user = $this->Users_Model->get($userId);
 		}		
 		
 		$form = array(

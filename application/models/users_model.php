@@ -219,7 +219,7 @@ class Users_Model extends CI_Model {
 		return $this->db->get('users');
 	}
 
-	function get($userId, $getGroups = true){
+	function get($userId, $getGroups = false){
 		$query = $this->db
 			->where('userId', $userId)
 			->get('users')->row_array();

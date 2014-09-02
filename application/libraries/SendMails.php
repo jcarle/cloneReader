@@ -55,7 +55,7 @@ class SendMails {
 			return false;
 		}
 		$this->CI->load->model('Users_Model');
-		$user  = $this->CI->Users_Model->get($params['userId'], false);
+		$user  = $this->CI->Users_Model->get($params['userId']);
 		$url   = ($user['confirmEmailKey'] != null ? base_url('confirmEmail?key='.$user['confirmEmailKey']) : null);
 		$message         = $this->CI->load->view('pageEmail',
 			array(
@@ -74,7 +74,7 @@ class SendMails {
 		}
 		$this->CI->load->model('Users_Model');
 		
-		$user = $this->CI->Users_Model->get($params['userId'], false);
+		$user = $this->CI->Users_Model->get($params['userId']);
 
 		$userEmail          = $user['userEmail'];		
 		$resetPasswordKey   = $user['resetPasswordKey'];
@@ -97,7 +97,7 @@ class SendMails {
 		
 		$this->CI->load->model('Users_Model');
 		$userId          = $params['userId'];
-		$user            = $this->CI->Users_Model->get($userId, false);
+		$user            = $this->CI->Users_Model->get($userId);
 		$userEmail       = $user['confirmEmailValue'];
 		$confirmEmailKey = $user['confirmEmailKey'];
 		$url             = base_url('confirmEmail?key='.$confirmEmailKey);

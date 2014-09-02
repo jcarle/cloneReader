@@ -71,7 +71,7 @@ class Profile extends CI_Controller {
 		$userId = $this->session->userdata('userId');
 		$form['fields']['countryId']['source'] = $this->Countries_Model->selectToDropdown();
 		
-		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Users_Model->get($userId, false)) ));
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Users_Model->get($userId)) ));
 	}
 
 	function _saveEditProfile() {
@@ -88,7 +88,7 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$userId = $this->session->userdata('userId');
-		$data 	= $this->Users_Model->get($userId, false);
+		$data 	= $this->Users_Model->get($userId);
 		
 		$this->load->helper('email');
 		

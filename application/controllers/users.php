@@ -218,7 +218,7 @@ class Users extends CI_Controller {
 		$user 	= null;
 		$userId = $this->input->get('userId');
 		if ($userId != null) {
-			$user = $this->Users_Model->get($userId, true);
+			$user = $this->Users_Model->get($userId);
 		}
 		
 		$filters = array(
