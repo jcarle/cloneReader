@@ -28,7 +28,7 @@ class SendMails {
 		$this->CI->email->to(config_item('emailDebug'));
 	}
 	
-	function _sendEmail($emailTo, $subject, $message, $emailCc = null, $emailFrom = null) {
+	function _sendEmail($emailTo, $subject, $message, $emailCc = null, $emailFrom = null, $emailReplyTo = null) {
 		if ($emailFrom != null) {
 			$this->CI->email->from($emailFrom['email'], $emailFrom['name']);
 		}
@@ -39,6 +39,9 @@ class SendMails {
 
 		if ($emailCc != null) {
 			$this->CI->email->cc($emailCc);
+		}
+		if ($emailReplyTo != null) {
+			$this->CI->email->reply_To($emailReplyTo['email'], $emailReplyTo['name']);
 		}
 		
 		$this->CI->email->subject($subject);
@@ -165,18 +168,10 @@ class SendMails {
 			true);
 		//echo $message; die;	
 
-		$this->CI->email->from(config_item('emailFrom'), config_item('siteName'));
-		$this->_addEmailTo($userFriendEmail); 
-		$this->CI->email->reply_To($user['userEmail'], $userFullName);
+		$emailCc = null;
 		if ($sendMeCopy == true) {
-			$this->CI->email->cc($user['userEmail']); 
+			$emailCc = $user['userEmail']; 
 		}
-		$this->CI->email->subject($entry['entryTitle']);
-		$this->CI->email->message($message);
-		if($this->CI->email->send()){
-			return true;
-		}
-		return false;
-		//echo $this->CI->email->print_debugger();	die;
+		return $this->_sendEmail($userFriendEmail, $entry['entryTitle'], $message, $emailCc, null, array('email' => $user['userEmail'], 'name' => $userFullName)); 
 	}
 }

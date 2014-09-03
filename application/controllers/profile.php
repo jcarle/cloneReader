@@ -437,8 +437,4 @@ class Profile extends CI_Controller {
 
 		force_download('cReader.opml', $xml->saveXML());
 	}
-	
-	function removeAccount() {
-		return loadViewAjax(false, 'coming soon');
-	}	
 }
