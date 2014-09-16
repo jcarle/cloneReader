@@ -560,13 +560,22 @@ cloneReader = {
 		var entryContent  = $('<div>' + entry.entryContent + '</div>').clone().find('script, noscript, style, iframe, link, meta, br').remove().end().html();
 		var $p            = $('<p/>').html(entryContent).appendTo($entry);
 
-		$entry.find('img').error(
-			function() {
-				$(this)
-					.addClass('imgError')
-					.attr('title', 'No network connection or image is not available')
-					.attr('src', 'assets/images/error.svg');
-			});
+		$entry.find('img')
+			.load(
+				function() {
+					var $img = $(this);
+					if ($img.width() >= 150 || $img.height() >= 150) {
+						$img.addClass('imgLarge');
+					}
+				}
+			)
+			.error(
+				function() {
+					$(this)
+						.addClass('imgError')
+						.attr('title', 'No network connection or image is not available')
+						.attr('src', 'assets/images/error.svg');
+				});
 
 		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
 

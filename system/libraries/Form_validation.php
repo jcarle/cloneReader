@@ -1374,6 +1374,10 @@ class CI_Form_validation {
 		return str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $str);
 	}
 
+	public function get_error_array()
+	{
+		return $this->_error_array;
+	}
 }
 // END Form Validation Class
 

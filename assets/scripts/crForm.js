@@ -41,7 +41,7 @@
 		
 		showSubForm: function(controller) {
 			$(this).data('crForm').showSubForm(controller);
-			return $(this);			
+			return $(this);
 		},
 
 		options: function(){
@@ -60,12 +60,12 @@
 	}
 	
 	crForm = function($form, options) {
-		this.$form 		= $form;
-		this.$btnSubmit	= this.$form.find('button[type=submit]');
-		this.options 	= $.extend({
-			sendWithAjax: 	true,
-			fields:			[],
-			rules: 			[]
+		this.$form         = $form;
+		this.$btnSubmit    = this.$form.find('button[type=submit]');
+		this.options       = $.extend({
+			sendWithAjax:  true,
+			fields:        [],
+			rules:         []
 		}, options );
 		
 		this.initFields();
@@ -79,9 +79,9 @@
 				event.stopPropagation();
 				
 				$(document).crAlert( {
-					'msg': 			crLang.line('Are you sure?'),
-					'isConfirm': 	true,
-					'callback': 	$.proxy(
+					'msg':        crLang.line('Are you sure?'),
+					'isConfirm':  true,
+					'callback':   $.proxy(
 						function() {
 							this.$form.attr('action', this.options.urlDelete);
 							this.sendForm();
@@ -353,6 +353,7 @@
 								return;
 							}
 							
+							response['result']['crForm'] = this;
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
 
 							if (this.$form.parents('.modal:first').length == true) {
@@ -369,13 +370,14 @@
 		},
 		
 		validate: function() {
+			this.$form.find('fieldset').removeClass('has-error');
+			
 			for (var i = 0; i<this.options.rules.length; i++){
 				var field   = this.options.rules[i];
 				var rules   = field['rules'].split('|');
 				var field   = this.options.fields[field.field];
 				var $input  = field.$input;
 
-				this.$form.find('fieldset').removeClass('has-error');
 				
 				for (var z=0; z<rules.length; z++) {
 					if (typeof this[rules[z]] === 'function') {
@@ -702,7 +704,12 @@
 		},
 		
 		getFieldByName: function(fieldName){
-			return $('*[name="' + fieldName + '"]', this.$form);
+			return this.$form.find('*[name="' + fieldName + '"]');
+		},
+		
+		setErrorField: function(fieldName) {
+			var $input = this.getFieldByName(fieldName);
+			$input.parents('fieldset').addClass('has-error');
 		},
 		
 		toogleField: function($field, value) { // TODO: implementar los otros metodos! ( show, hide, etc)
@@ -927,15 +934,7 @@
 		var $modalBody 	= $('<div class="modal-body" />').appendTo($form);
 		var $parentNode = $modalBody;
 		
-		if (data.info != null) {
-			var $row 	= $('<div class="row">').appendTo($modalBody);
-			$parentNode = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').appendTo($row);
-			
-			var $info 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').html(data.info.html).appendTo($row);
-			if (data.info.position == 'left' ) {
-				$info.before($parentNode);
-			}
-		}
+		$parentNode = this.renderCrFormInfo(data, $parentNode);
 		
 		this.renderCrFormFields(data.fields, $parentNode);
 
@@ -979,6 +978,7 @@
 		}
 
 		var $div = $('<div class="panel-body" />').appendTo($form); 
+		$div = renderCrFormInfo(data, $div);
 		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
@@ -1097,9 +1097,13 @@
 					}
 					break;
 				case 'checkbox':
+					var className = '';
+					if (field['hideOffset'] == true) {
+						className = ' hide ';
+					}
 					$fieldset = $('\
 						<fieldset class="form-group">\
-							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 "> </div>\
+							<div class="' + className + ' hidden-xs  col-sm-3 col-md-3 col-lg-3 "> </div>\
 							<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 "> \
 								<div class="checkbox" > \
 									<label> \
@@ -1156,6 +1160,22 @@
 			
 			$($fieldset).appendTo($parentNode);
 		}
+	},
+	
+	renderCrFormInfo = function(data, $parentNode) {
+		if (data.info == null) {
+			return $parentNode;
+		}
+		
+		var $row 	= $('<div class="row">').appendTo($parentNode);
+		$parentNode = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').appendTo($row);
+		
+		var $info 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').html(data.info.html).appendTo($row);
+		if (data.info.position == 'left' ) {
+			$info.before($parentNode);
+		}
+
+		return $parentNode;
 	},
 	
 	renderCrFormTree = function(aTree, value, $parent){

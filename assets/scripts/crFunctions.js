@@ -376,6 +376,9 @@ $.extend({
 	 * 		msg							muestra un alert, y al cerrarlo carga una url
 	 * 		loadMenuAndTranslations		vuelve a pedir el menu y las traducciones
 	 * 		reloadUrl					vuelve a cargar la url actual
+	 * 		formErrors					un array con el formato: {'fieldName': 'errorMessage' }. 
+	 * 										muestra un alert con los errores del form; 
+	 * 										en las  llamadas a esta funcion desde crForm se agrega la referencia "response['result']['crForm']" para agregar el has-error a los fields con errores
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
@@ -390,7 +393,20 @@ $.extend({
 		
 		if (result['skipAppLink'] == true) {
 			$.support.pushState = false;
-		}		
+		}
+		
+		if (response['code'] != true && result['crForm'] != null && result['formErrors'] != null) {
+			var msg = '';
+			for (var fieldName in result['formErrors']){
+				result['crForm'].setErrorField(fieldName);
+				msg += '<p>' + result['formErrors'][fieldName] + '</p>';
+			}
+			if (msg != '') {
+				$(document).crAlert(msg);
+				return true;
+			}
+		}
+		
 		if (response['code'] != true) {
 			$(document).crAlert(result);
 			return true;
@@ -398,7 +414,7 @@ $.extend({
 		
 		if (result['msg'] != null && result['goToUrl'] != null) {
 			$(document).crAlert({
-				'msg': 		result['msg'],
+				'msg':      result['msg'],
 				'callback': function() {
 					$.goToUrl(result['goToUrl']);
 				}
@@ -418,7 +434,7 @@ $.extend({
 			$.reloadUrl();
 			return true;
 		}
-					
+
 		return false;
 	},
 	
