@@ -565,7 +565,11 @@ cloneReader = {
 				function() {
 					var $img = $(this);
 					if ($img.width() >= 150 || $img.height() >= 150) {
-						$img.addClass('imgLarge');
+						if ($img.parent('a').length == 0) { 
+							$img.addClass('imgLarge');
+							return;
+						}
+						$img.parent('a').addClass('imgLarge');
 					}
 				}
 			)

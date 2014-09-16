@@ -265,9 +265,10 @@
 					border: 1px #ddd solid;
 					border-radius: 4px;
 				}
-				#cloneReader .ulEntries > li p img.imgLarge {
+
+				#cloneReader .ulEntries > li p .imgLarge {
 					margin-bottom:10px;
-					display:inline-block;
+					display: table;
 				}
 				#cloneReader .ulEntries > li p a {
 					text-decoration: underline;
