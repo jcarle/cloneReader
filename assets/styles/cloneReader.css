@@ -267,7 +267,7 @@
 				}
 				#cloneReader .ulEntries > li p img.imgLarge {
 					margin-bottom:10px;
-					display:block;
+					display:inline-block;
 				}
 				#cloneReader .ulEntries > li p a {
 					text-decoration: underline;
