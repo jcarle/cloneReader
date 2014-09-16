@@ -139,7 +139,7 @@ $config['siteAssets'] = array(
 );
 
 
-$config['aUserTables'] = array('comments', 'contacts', 'feedbacks', ); // Tablas en las que se va a setear el usuario anonimo al eliminar un usuario
+$config['aUserTables'] = array( 'feedbacks', ); // Tablas en las que se va a setear el usuario anonimo al eliminar un usuario
 
 $config['tagAll'] = 1;
 $config['tagStar'] = 2;
