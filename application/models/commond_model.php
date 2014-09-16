@@ -126,33 +126,33 @@ class Commond_Model extends CI_Model {
 		return $result;	
 	}
 
-	
-	function searchZoneResume($filter, $reverse){
+	function searchEntities($filter, $reverse, $searchKey) {
 		if (trim($filter) == '') {
 			return array();
 		}
 		
-		$filter    = '+'.str_replace(' ', ' +', $this->db->escape_like_str($filter)).'*';
-		$fieldTree = ($reverse == true ? 'zonaReverseTree' : 'zonaTree');
-		$match     = 'MATCH ('.$fieldTree.') AGAINST (\''.$filter.'\' IN BOOLEAN MODE)';
-		
+		$filter    = $searchKey.' +'.str_replace(' ', ' +', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $this->db->escape_like_str($filter)))).'*';
+		$fieldTree = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+		$match     = 'MATCH (entitySearch) AGAINST (\' '.$filter.'\' IN BOOLEAN MODE)';
 		$query = $this->db
-			->select('DISTINCT CONCAT(entityTypeId, \'-\', entityId) AS id, '.$fieldTree.' AS text, '.$match.' AS rating ', false)
+			->select('CONCAT(entityTypeId, \'-\', entityId) AS id, '.$fieldTree.' AS text, '.$match.' AS score ', false)
+			->from('entities_search')
 			->where($match, NULL, FALSE)
-			->order_by('rating')
-			->get('zones_resume', config_item('autocompleteSize'))->result_array();
+//			->order_by('entityTypeId')
+			->limit(config_item('autocompleteSize'))
+			->get()->result_array();
 		//pr($this->db->last_query());  die;
 		return $query;
 	}
 	
-	function getZonaTree($entityTypeId, $entityId, $reverse = true) {
-		$fieldTree = ($reverse == true ? 'zonaReverseTree' : 'zonaTree');
+	function getEntitySearch($entityTypeId, $entityId, $reverse = true) {
+		$fieldTree = ($reverse == true ? 'entityReverseTree' : 'entityTree');
 		
 		$query = $this->db
-			->select('DISTINCT CONCAT(entityTypeId, \'-\', entityId) AS id, '.$fieldTree.' AS text ', false)
+			->select(' CONCAT(entityTypeId, \'-\', entityId) AS id, '.$fieldTree.' AS text ', false)
 			->where('entityTypeId', $entityTypeId)
 			->where('entityId', $entityId)
-			->get('zones_resume')->row_array();
+			->get('entities_search')->row_array();
 		//pr($this->db->last_query());  die;
 		return $query;
 	}
@@ -205,7 +205,7 @@ class Commond_Model extends CI_Model {
 	
 	/**
 	 * 
-	 * Apendea al array filters el id del typo de zona que corresponda (countryId, stateId, cityId)
+	 * Apendea al array filters el id del tipo de zona que corresponda (countryId, stateId, cityId)
 	 * Se utiliza en los listados 
 	 * 
 	 * @param array $filters
@@ -235,17 +235,17 @@ class Commond_Model extends CI_Model {
 	/**
 	 * 
 	 * 
-	 * @param     (string) $zoneId  un string con el formato: [entityTypeId]-[entityId]
+	 * @param     (string) $id  un string con el formato: [entityTypeId]-[entityId]
 	 * @return    (array)  devuelve un array con el formato:  
-	 * 		array( 'stateId' => 1822, 'categoryId' => 33 ) 	
+	 * 		array( 'id' => 1822, 'text' => 'country' ) 	
 	 * */
-	function getZoneToTypeahead($zoneId) {
-		if (empty($zoneId)) {
+	function getEntityToTypeahead($id) {
+		if (empty($id)) {
 			return array();
 		}
 		
-		$aTmp = explode('-', $zoneId);
-		return $this->Commond_Model->getZonaTree($aTmp[0], $aTmp[1]);
+		$aTmp = explode('-', $id);
+		return $this->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1]);
 	}
 
 

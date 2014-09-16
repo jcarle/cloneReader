@@ -29,6 +29,10 @@ $config['entitiesType'] = array(
 	$config['entityTypeTesting'] => 'testing',
 );
 
+$config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
+	'searchZones',
+);
+
 /**
  * Config con las properties de cada entidad
  * Si alguna entidad tiene gallery, se puede utilizar la gallery por default, o customizarla
@@ -134,6 +138,8 @@ $config['siteAssets'] = array(
 	)
 );
 
+
+$config['aUserTables'] = array('comments', 'contacts', 'feedbacks', ); // Tablas en las que se va a setear el usuario anonimo al eliminar un usuario
 
 $config['tagAll'] = 1;
 $config['tagStar'] = 2;

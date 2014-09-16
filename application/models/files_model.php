@@ -51,7 +51,7 @@ class Files_Model extends CI_Model {
 	}
 	
 	function saveFileRelation($entityTypeId, $entityId, $fileId) {
-		$this->db->insert('entity_files', 
+		$this->db->insert('entities_files', 
 			array(
 				'entityTypeId'   => $entityTypeId,
 				'entityId'       => $entityId,
@@ -64,8 +64,8 @@ class Files_Model extends CI_Model {
 		$result   = array();
 
 		$this->db->select('files.fileId, fileName, fileTitle')
-			->join('entity_files', 'files.fileId =  entity_files.fileId', 'inner')
-			->where('entity_files.entityTypeId', $entityTypeId)
+			->join('entities_files', 'files.fileId =  entities_files.fileId', 'inner')
+			->where('entities_files.entityTypeId', $entityTypeId)
 			->where('entityId', $entityId);
 		if ($fileId != null) {
 			$this->db->where('files.fileId', $fileId);

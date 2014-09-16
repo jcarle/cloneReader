@@ -264,10 +264,17 @@ function saveFile($config) {
 function renderCrFormFields($form) {
 	$CI			= &get_instance();
 	$aFields 	= array();
+	$formErrors = array_keys(validation_array_errors());
 	
 	foreach ($form['fields'] as $name => $field) {
+		
+		$hasError = null;
+		if (in_array($name, $formErrors)) {
+			$hasError = 'has-error';
+		}
+		
 		$sField = '
-			<fieldset class="form-group">
+			<fieldset class="form-group '.$hasError.'">
 				'.form_label(element('label', $field), null, array('class' => 'col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label')).'
 				<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> %s </div>
 			</fieldset>';
@@ -334,10 +341,14 @@ function renderCrFormFields($form) {
 				$aFields[] = sprintf($sField, $sTmp);
 				break;		
 			case 'checkbox':
+				$className = '';
+				if (element('hideOffset', $field) == true) {
+					$className = ' hide ';
+				}
+
 				$aFields[] = '
 					<fieldset class="form-group">
-						<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 ">
-						</div>
+						<div class="'.$className.'  hidden-xs col-sm-3 col-md-3 col-lg-3 "> </div>
 						<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 ">
 							<div class="checkbox" >
 								<label>
@@ -411,4 +422,13 @@ function renderCrFormTree($aTree, $value){
 	}
 	$sTmp .= '</ul>';
 	return $sTmp;
+}
+
+function validation_array_errors() {
+	if (FALSE === ($OBJ =& _get_validation_object()))
+	{
+		return array();
+	}
+	
+	return $OBJ->get_error_array();
 }

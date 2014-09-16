@@ -49,9 +49,11 @@ class Search extends CI_Controller {
 		));
 	}
 	
-	function zones($reverse = true) { 
+	function zones($reverse = true) {
+		$searchKey = ' +searchZones ';
+
 		return $this->load->view('json', array(
-			'result' 	=> $this->Commond_Model->searchZoneResume($this->input->get('query'), $reverse)
+			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), $reverse, $searchKey)
 		));
 	}
 	

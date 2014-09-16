@@ -446,7 +446,7 @@ class Users_Model extends CI_Model {
 	}
 	
 	function removeAccount($userId) {
-		$aTables = array('cars', 'comments', 'contacts', 'feedbacks', );
+		$aTables = config_item('aUserTables');
 		
 		foreach ($aTables as $table) {
 			$this->db

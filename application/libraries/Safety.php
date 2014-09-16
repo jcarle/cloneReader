@@ -83,6 +83,7 @@ class Safety {
 			->get('users_groups')->result_array();
 	}
 
+// TODO: usar $this->input->is_cli_request() 
 	public static function isCommandLine() {
 		return PHP_SAPI === 'cli';
 	}

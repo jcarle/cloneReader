@@ -88,7 +88,7 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$userId = $this->session->userdata('userId');
-		$data 	= $this->Users_Model->get($userId);
+		$data   = $this->Users_Model->get($userId);
 		
 		$this->load->helper('email');
 		
@@ -150,9 +150,138 @@ class Profile extends CI_Controller {
 		));	
 	}
 
+	/**
+	 * Muestro 3 tipos de forms dependiendo de cada caso:
+	 * 		Si el usuario no tiene email: email, nuevo password. Se envia por mail un link de confirmación de email
+	 * 		Si el usuario no tiene password: nuevo password
+	 * 		Si el usuario tiene email y password: old password, nuevo password
+	 * */
 	function changePassword() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
+		
+		$user = $this->Users_Model->get($this->session->userdata('userId'));
+		if ($user['userEmail'] == null) {
+			return $this->_insertEmailAndPassword();
+		}
+		else if ($user['userPassword'] == null) {
+			return $this->_insertPassword();
+		}	
+		else {
+			return $this->_updatePassword();
+		}
+	}
+	
+	function _insertEmailAndPassword() {
+		$form = array(
+			'frmId'     => 'frmChangePassword',
+			'title'     => $this->lang->line('Change password'),
+			'buttons'   => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
+//			'info'		=> array('position' => 'left|right', 'html' => '<div class="alert alert-info"> No t </div>'),
+			'fields'    => array(
+				'userEmail' => array(
+					'type'	=> 'text',
+					'label'	=> $this->lang->line('Email'),
+				),
+				'passwordNew' => array(
+					'type'   => 'password',
+					'label'  => $this->lang->line('New password'), 
+				),
+				'passwordRepeatNew' => array(
+					'type'   => 'password',
+					'label'  => $this->lang->line('Repeat new password'), 
+				),
+			)
+		);
+		
+		$form['rules'] = array( 
+			array(
+				'field' => 'userEmail',
+				'label' => $form['fields']['userEmail']['label'],
+				'rules' => 'trim|required|valid_email|callback__validate_exitsEmail'
+			),
+			array(
+				'field' => 'passwordNew',
+				'label' => $form['fields']['passwordNew']['label'],
+				'rules' => 'trim|required|matches[passwordRepeatNew]'
+			),
+			array(
+				'field' => 'passwordRepeatNew',
+				'label' => $form['fields']['passwordRepeatNew']['label'],
+				'rules' => 'trim|required'
+			)
+		);
+		
+		$this->form_validation->set_rules($form['rules']);
+		
+		if ($this->input->post() != false) {
+			if ($this->form_validation->run() == FALSE) {
+				return loadViewAjax(false);
+			}
+
+
+			$this->load->model(array('Tasks_Model'));
+			
+			$userId          = $this->session->userdata('userId');
+			$userEmail       = $this->input->post('userEmail');
+			$confirmEmailKey = random_string('alnum', 20);
+			
+			$this->Users_Model->updateConfirmEmailKey($userId, $userEmail, $confirmEmailKey);
+			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));
+			
+			$this->Tasks_Model->addTask('sendEmailToChangeEmail', array( 'userId' => $userId,));
+			return loadViewAjax(true, array( 'notification' => $this->lang->line('We have sent you an email with instructions to change your email')));	
+		}
+
+		$this->load->view('includes/crJsonForm', array( 'form' => $form ));	
+	}	
+	
+	function _insertPassword() {
+		$form = array(
+			'frmId'     => 'frmChangePassword',
+			'title'     => $this->lang->line('Change password'),
+			'buttons'   => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
+			'fields'    => array(
+				'passwordNew' => array(
+					'type'   => 'password',
+					'label'  => $this->lang->line('New password'), 
+				),
+				'passwordRepeatNew' => array(
+					'type'   => 'password',
+					'label'  => $this->lang->line('Repeat new password'), 
+				),
+			)
+		);
+		
+		$form['rules'] = array( 
+			array(
+				'field' => 'passwordNew',
+				'label' => $form['fields']['passwordNew']['label'],
+				'rules' => 'trim|required|matches[passwordRepeatNew]'
+			),
+			array(
+				'field' => 'passwordRepeatNew',
+				'label' => $form['fields']['passwordRepeatNew']['label'],
+				'rules' => 'trim|required'
+			)
+		);
+		
+		$this->form_validation->set_rules($form['rules']);
+		
+		if ($this->input->post() != false) {
+			if ($this->form_validation->run() == FALSE) {
+				return loadViewAjax(false);
+			}
+
+			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));
+			
+			return loadViewAjax(true, array('notification' => $this->lang->line('Data updated successfully')));
+		}
+
+		$this->load->view('includes/crJsonForm', array( 'form' => $form ));	
+	}
+	
+	function _updatePassword() {
 		$form = array(
 			'frmId'     => 'frmChangePassword',
 			'title'     => $this->lang->line('Change password'),
@@ -194,21 +323,18 @@ class Profile extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		
 		if ($this->input->post() != false) {
-			return $this->_saveChangePassword();
+			if ($this->form_validation->run() == FALSE) {
+				return loadViewAjax(false);
+			}
+
+			$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));
+			
+			return loadViewAjax(true, array('notification' => $this->lang->line('Data updated successfully')));			
 		}
 
-		$this->load->view('includes/crJsonForm', array( 'form' => $form ));
-	}
-
-	function _saveChangePassword() {
-		if ($this->form_validation->run() == FALSE) {
-			return loadViewAjax(false);
-		}
-
-		$this->Users_Model->updatePassword($this->session->userdata('userId'), $this->input->post('passwordNew'));
-		
-		return loadViewAjax(true, array('notification' => $this->lang->line('Data updated successfully')));
-	}
+		$this->load->view('includes/crJsonForm', array( 'form' => $form ));	
+	}	
+	
 
 	function forgotPassword() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
@@ -261,27 +387,23 @@ class Profile extends CI_Controller {
 	function resetPassword() {
 		if (! $this->safety->allowByControllerName('profile/forgotPassword') ) { return errorForbidden(); }
 		
-		$resetPasswordKey 	= $this->input->get('key');
-		$user 				= $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
-		if (empty($user)) {
-			return error404();
-		}
+		$resetPasswordKey  = $this->input->get('key');
 		
 		$form = array(
-			'frmId'			=> 'frmResetPassword',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Reset password').' </button>'),
-			'fields'		=> array(
+			'frmId'     => 'frmResetPassword',
+			'buttons'   => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Reset password').' </button>'),
+			'fields'    => array(
 				'resetPasswordKey' => array(
-					'type'	=> 'hidden',
+					'type'  => 'hidden',
 					'value' => $resetPasswordKey, 
-				),			
+				),
 				'passwordNew' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('New password'), 
+					'type'   => 'password',
+					'label'  => $this->lang->line('New password'), 
 				),
 				'passwordRepeatNew' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('Repeat new password'), 
+					'type'   => 'password',
+					'label'  => $this->lang->line('Repeat new password'), 
 				),
 			)
 		);
@@ -303,19 +425,25 @@ class Profile extends CI_Controller {
 		
 		if ($this->input->post() != false) {
 			return $this->_saveResetPassword();
-		}		
+		}
+		else {
+			$user = $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
+			if (empty($user)) {
+				return error404();
+			}
+		}
 		
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm',
 			'form'  => $form,
 			'meta'  => array( 'title' => $this->lang->line('Reset password') ),
 			'code'  => true
-		));		
+		));	
 	}
 
 	function _saveResetPassword() {
-		$resetPasswordKey 	= $this->input->post('resetPasswordKey');
-		$user 				= $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
+		$resetPasswordKey  = $this->input->post('resetPasswordKey');
+		$user              = $this->Users_Model->getUserByResetPasswordKey($resetPasswordKey);
 		if (empty($user)) {
 			return error404();
 		}
@@ -341,28 +469,59 @@ class Profile extends CI_Controller {
 		return $this->Users_Model->exitsEmail($this->input->post('userEmail'), 0);
 	}
 
+	function _validate_remove_account($str) {
+		return ( $this->input->post('chkRemoveAccount') == true );
+	}
 
 	function removeAccount() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$form = array(
 			'frmId'         => 'frmRemoveAccount',
-			'urlDelete'     => base_url('profile/doRemoveAccount'),
+			'urlDelete'     => base_url('profile/removeAccount'),
 			'buttons'       => array('<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> '.$this->lang->line('Remove account').' </button>'),
 			'title'         => $this->lang->line('Remove account'),
 			'fields'        => array(
+				'fieldRemoveAccount' => array( // FIXME: agrego un field para que  " if ($this->input->post() != false) "
+					'type'	=> 'hidden',
+					'value' => 'true', 
+				),
 				'removeAccount' => array(
 					'type'  => 'html',
 					'value' => '<p>'.$this->lang->line('Are you sure you want to remove your account?').'</p>
 								<div class="alert alert-danger" role="alert">'.$this->lang->line('Deleting your member account will be permanent').'</div>'
 				),
+				'chkRemoveAccount' => array(
+					'type'       => 'checkbox',
+					'label'      => $this->lang->line('I understand, delete my account'),
+					'checked'    => false,
+					'hideOffset' => true,
+				)
 			)
 		);
+		
+		$form['rules'] = array(
+			array(
+				'field' => 'chkRemoveAccount',
+				'label' => ' eliminar ', 
+				'rules' => 'callback__validate_remove_account',
+			),
+		);
+		
+		$this->form_validation->set_rules($form['rules']);
+		$this->form_validation->set_message('_validate_remove_account', $this->lang->line('You must confirm the deletion of your account'));
+		
+		if ($this->input->post() != false) {
+			if ($this->form_validation->run() == FALSE) {
+				return loadViewAjax(false);
+			}
+			return $this->_saveRemoveAccount();
+		}
 
 		return $this->load->view('includes/crJsonForm', array( 'form' => $form ));
 	}
 	
-	function doRemoveAccount() {
+	function _saveRemoveAccount() {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 
 		$this->Users_Model->removeAccount($this->session->userdata('userId'));

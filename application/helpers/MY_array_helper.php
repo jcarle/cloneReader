@@ -52,9 +52,16 @@ function error404() {
 function loadViewAjax($code, $result = null) {
 	$CI = &get_instance();
 	
+	if ($code != true && $result == null) {
+		$result = array('formErrors' => validation_array_errors());
+	}
+	if ($result == null) {
+		$result = array();
+	}
+	
 	return $CI->load->view('json', array(
 		'code'		=> $code, 
-		'result' 	=> $result != null ? $result : validation_errors() 
+		'result' 	=> $result,
 	));	
 }
 
