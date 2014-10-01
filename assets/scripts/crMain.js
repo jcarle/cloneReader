@@ -3,7 +3,7 @@ crMain = {
 	
 	init: function() {
 		$.support.pushState = (history.pushState == false ? false : true);
-		
+
 		crMenu.initMenu();
 		this.initEvents();
 		this.iniAppAjax();
@@ -89,7 +89,7 @@ crMain = {
 
 		this.loadMenuAndTranslations(false);
 
-		$(window).bind("popstate", function () {  
+		$(window).bind('popstate', function () {
 			crMain.loadUrl(location.href);
 		});  
 
@@ -131,14 +131,20 @@ crMain = {
 		if (this.aPages[pageName].length == 0) {
 			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.pageContainer'));
 		}
+		
+		
+		var $page = this.aPages[pageName];
+		
+		if ($page.children().length > 0 && $page.is(':visible') == true && location.hash != '') {
+			return;
+		}
 
 		if (this.ajax) {
 			this.ajax.abort();
 			this.ajax = null;
 		}
 		
-		var url 	= base_url + controller.replace(base_url, '');
-		var $page 	= this.aPages[pageName];
+		var url = base_url + controller.replace(base_url, '');
 		if ($page.data('notRefresh') == true) {
 			this.showPage(pageName);
 			$('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -217,7 +223,7 @@ crMain = {
 			for (var i=0; i<data['breadcrumb'].length; i++) {
 				var link = data['breadcrumb'][i];
 				if (link['active'] == true) {
-					$('<li class="active" />').text(' ' + link['text']).appendTo($ol);
+					$('<li class="active" />').text(link['text']).appendTo($ol);
 				}
 				else {
 					var $li = $('<li/>').appendTo($ol);
@@ -263,7 +269,10 @@ crMain = {
 		var pageName = location.href.replace(base_url, '');
 		if (pageName.indexOf('?') != -1){
 			pageName = pageName.substr(0, pageName.indexOf('?'));
-		}		
+		}
+		if (pageName.indexOf('#') != -1) {
+			pageName = pageName.substr(0, pageName.indexOf('#'));
+		}
 		var aTmp = pageName.split('/');
 		var controller = aTmp[0];
 		if (controller.trim() == '') {

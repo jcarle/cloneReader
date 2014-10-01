@@ -176,7 +176,9 @@
 			if (this.options['urlEdit'] != null) {
 				this.$table.find('tbody tr').on('click', 
 					function (event) {
-						$.goToUrl($(this).data('url-edit') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+						if ($(this).data('url-edit')) {
+							$.goToUrl($(this).data('url-edit') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
+						}
 					}
 				);
 			}

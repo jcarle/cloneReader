@@ -434,6 +434,12 @@ $.extend({
 			$.reloadUrl();
 			return true;
 		}
+		if (result['msg'] != null) {
+			$(document).crAlert({
+				'msg':      result['msg']
+			});
+			return true;
+		}
 
 		return false;
 	},
@@ -462,6 +468,27 @@ $.extend({
 		}
 		
 		return langId;
+	},
+	
+	initGallery: function($gallery) {
+		if ($gallery.data('initGallery') == true) {
+			return;
+		}
+		
+		$gallery.on('click', 
+			function(event) {
+				var target 	= event.target;
+				if ($(target).hasClass('thumbnail') == false) {
+					return;
+				}
+				var link    = target.src ? $(target).parents('a').get(0) : target;
+				var options = {index: link, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false};
+				var links   = this.getElementsByTagName('a');
+				blueimp.Gallery(links, options);
+			}
+		);
+		
+		$gallery.data('initGallery', true);
 	}
 });
 

@@ -78,8 +78,8 @@ class testing_Model extends CI_Model {
 	function delete($testId) {
 		$CI =& get_instance();
 		$CI->load->model('Files_Model');
-		$query 			= $this->Files_Model->selectEntityFiles($testId, config_item('entityTypeTesting'), $testId);
-		foreach ($query->result_array() as $row) {
+		$query = $this->Files_Model->selectEntityFiles(config_item('entityTypeTesting'), $testId);
+		foreach ($query as $row) {
 			$this->Files_Model->deleteEntityFile(config_item('entityTypeTesting'), $row['fileId']);
 		}
 		

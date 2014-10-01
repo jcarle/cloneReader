@@ -540,19 +540,7 @@
 		
 		reloadGallery: function() {
 			var $gallery = this.$form.find('.gallery');
-			
-			if ($gallery.data('initGallery') != true) {
-				$gallery.find('.thumbnails').click(function(event) {
-					var target 	= event.target;
-					var link 	= target.src ? $(target).parents('a').get(0) : target;
-					var options = {index: link, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false},
-					links 		= this.getElementsByTagName('a');
-					blueimp.Gallery(links, options);
-				});
-				
-				$gallery.data('initGallery', true);
-			}
-
+			$.initGallery($gallery);
 			$gallery.find('a').remove();
 			$('#fileupload tbody').children().remove();
 

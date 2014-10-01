@@ -126,16 +126,17 @@ class Commond_Model extends CI_Model {
 		return $result;	
 	}
 
-	function searchEntities($filter, $reverse, $searchKey) {
+	function searchEntities($filter, $reverse = false, $searchKey = '', $contactEntityTypeId = true, $onlyApproved = false) {
 		if (trim($filter) == '') {
 			return array();
 		}
 		
-		$filter    = $searchKey.' +'.str_replace(' ', ' +', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $this->db->escape_like_str($filter)))).'*';
-		$fieldTree = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+		$filter    = ($onlyApproved ? ' +statusApproved ' : ''). $searchKey.' +'.str_replace(' ', ' +', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $this->db->escape_like_str($filter)))).'*';
+		$fieldId   = ($contactEntityTypeId == true ? ' CONCAT(entityTypeId, \'-\', entityId) ' : ' entityId ');
+		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
 		$match     = 'MATCH (entitySearch) AGAINST (\' '.$filter.'\' IN BOOLEAN MODE)';
 		$query = $this->db
-			->select('CONCAT(entityTypeId, \'-\', entityId) AS id, '.$fieldTree.' AS text, '.$match.' AS score ', false)
+			->select($fieldId.' AS id, '.$fieldName.' AS text, '.$match.' AS score ', false)
 			->from('entities_search')
 			->where($match, NULL, FALSE)
 //			->order_by('entityTypeId')
@@ -145,11 +146,12 @@ class Commond_Model extends CI_Model {
 		return $query;
 	}
 	
-	function getEntitySearch($entityTypeId, $entityId, $reverse = true) {
-		$fieldTree = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+	function getEntitySearch($entityTypeId, $entityId, $reverse = false, $contactEntityTypeId = true) {
+		$fieldId   = ($contactEntityTypeId == true ? ' CONCAT(entityTypeId, \'-\', entityId) ' : ' entityId ');
+		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
 		
 		$query = $this->db
-			->select(' CONCAT(entityTypeId, \'-\', entityId) AS id, '.$fieldTree.' AS text ', false)
+			->select($fieldId.' AS id, '.$fieldName.' AS text ', false)
 			->where('entityTypeId', $entityTypeId)
 			->where('entityId', $entityId)
 			->get('entities_search')->row_array();
@@ -191,12 +193,7 @@ class Commond_Model extends CI_Model {
 		}
 
 		if ($entityTypeId == config_item('entityTypeCountry')) {
-			$query = $this->db
-				->select('* ', false)
-				->where('countryId', $entityId)
-				->get('countries')->row_array();
-			//pr($this->db->last_query());  die;
-			$values['countryId'] = $query['countryId'];
+			$values['countryId'] = $entityId;
 			return $values;
 		}
 		
@@ -236,16 +233,17 @@ class Commond_Model extends CI_Model {
 	 * 
 	 * 
 	 * @param     (string) $id  un string con el formato: [entityTypeId]-[entityId]
+	 * @param     (bool)   $reverse 
 	 * @return    (array)  devuelve un array con el formato:  
-	 * 		array( 'id' => 1822, 'text' => 'country' ) 	
+	 * 		array( 'id' => 3-1822, 'text' => 'country' ) 	
 	 * */
-	function getEntityToTypeahead($id) {
+	function getEntityToTypeahead($id, $reverse = false) {
 		if (empty($id)) {
 			return array();
 		}
 		
 		$aTmp = explode('-', $id);
-		return $this->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1]);
+		return $this->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1], $reverse);
 	}
 
 

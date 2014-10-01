@@ -30,6 +30,7 @@ $config['entitiesType'] = array(
 );
 
 $config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
+	'statusApproved',
 	'searchZones',
 );
 

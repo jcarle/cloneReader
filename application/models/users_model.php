@@ -439,7 +439,7 @@ class Users_Model extends CI_Model {
 	}	
 	
 	function allowTracking() {
-		if ($this->safety->isCommandLine() == true) {
+		if ($this->input->is_cli_request() == true) {
 			return false;
 		}
 		return true;

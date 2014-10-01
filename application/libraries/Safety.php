@@ -46,7 +46,7 @@ class Safety {
 	}
 
 	function allowByControllerName($controllerName) {
-// TODO: menter esta query en un file, asi no pide a cada rato los datos!		
+// TODO: meter esta query en un file, asi no pide a cada rato los datos!		
 		$query = $this->db
 			->where(array('controllerActive' => true, 'controllerName' => str_replace('::', '/', strtolower($controllerName)), 'userId' => $this->session->userdata('userId')))
 			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId')
@@ -83,11 +83,6 @@ class Safety {
 			->get('users_groups')->result_array();
 	}
 
-// TODO: usar $this->input->is_cli_request() 
-	public static function isCommandLine() {
-		return PHP_SAPI === 'cli';
-	}
-	
 	function allowAccountPrivilege($accountId, $privilegeId) {
 		$CI = &get_instance();
 		$CI->load->driver('cache', array('adapter' => 'file'));
