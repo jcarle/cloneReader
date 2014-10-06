@@ -211,17 +211,17 @@ class Entries_Model extends CI_Model {
 	}
 
 	function get($entryId, $isForm = false){
-		$result = $this->db
+		$query = $this->db
 				->select('entries.*, feedName, feedLink, feedUrl', true)
 				->where('entryId', $entryId)
 				->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 				->get('entries')->row_array();
 				
-		if ($isForm == true) {
-			$result['feedId'] = array( 'id' => element('feedId', $result), 'text' => element('feedName', $result));
+		if (!empty($query) && $isForm == true) {
+			$query['feedId'] = array( 'id' => element('feedId', $query), 'text' => element('feedName', $query));
 		}
 
-		return $result;
+		return $query;
 	}
 
 	function getEntryIdByFeedIdAndEntryUrl($feedId, $entryUrl) {

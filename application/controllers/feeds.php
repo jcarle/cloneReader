@@ -128,13 +128,16 @@ class Feeds extends CI_Controller {
 	function edit($feedId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Feeds_Model->get($feedId, true, true), $feedId);
+		if ($data === null) { return error404(); }
+		
 		$form = $this->_getFormProperties($feedId);
 
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
-				$_POST['feedSuggest']		= $this->input->post('feedSuggest') == 'on';
-				$_POST['fixLocale'] 		= $this->input->post('fixLocale') == 'on';
+				$_POST['feedSuggest']  = $this->input->post('feedSuggest') == 'on';
+				$_POST['fixLocale']    = $this->input->post('fixLocale') == 'on';
 				$this->Feeds_Model->save($this->input->post());
 			}
 			
@@ -149,9 +152,9 @@ class Feeds extends CI_Controller {
 		$form['fields']['statusId']['source']	= $this->Status_Model->selectToDropdown();
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'meta'      => array('title' => $this->lang->line('Edit feeds') ),
-			'form'		=> populateCrForm($form, $this->Feeds_Model->get($feedId, true, true))
+			'view'   => 'includes/crForm', 
+			'meta'   => array('title' => $this->lang->line('Edit feeds') ),
+			'form'   => populateCrForm($form, $data)
 		));
 	}
 

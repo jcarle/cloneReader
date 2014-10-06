@@ -36,6 +36,9 @@ class News extends CI_Controller {
 	function edit($newId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->News_Model->get($newId, true), $newId);
+		if ($data === null) { return error404(); }
+		
 		$form = $this->_getFormProperties($newId);
 
 		if ($this->input->post() != false) {
@@ -52,7 +55,7 @@ class News extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm', 
 			'meta'   => array('title' => $this->lang->line('Edit news')),
-			'form'   => populateCrForm($form, $this->News_Model->get($newId, true)),
+			'form'   => populateCrForm($form, $data),
 		));		
 	}
 

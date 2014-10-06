@@ -67,6 +67,9 @@ class Feeds_Model extends CI_Model {
 
 	function get($feedId, $getTags = false, $getIcon = false){
 		$result = $this->db->where('feeds.feedId', $feedId)->get('feeds')->row_array();
+		if (empty($result)) {
+			return $result;
+		}
 		
 		if ($getTags == true) {
 			$result['aTagId'] = array();
@@ -349,7 +352,7 @@ class Feeds_Model extends CI_Model {
 	function countEntriesStarredByFeedId($feedId) {
 		$query = ' SELECT COUNT(1) AS total 
 			FROM users_entries
-			WHERE 	feedId 	= '.$feedId.' 
+			WHERE 	feedId 	= '.(int)$feedId.' 
 			AND 	tagId	= '.config_item('tagStar');
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());

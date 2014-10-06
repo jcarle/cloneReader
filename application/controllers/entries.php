@@ -81,6 +81,9 @@ class Entries extends CI_Controller {
 	function edit($entryId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Entries_Model->get($entryId, true), $entryId);
+		if ($data === null) { return error404(); }
+		
 		$form = $this->_getFormProperties($entryId);
 		
 		if ($this->input->post() != false) {
@@ -97,7 +100,7 @@ class Entries extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm', 
 			'meta'  => array( 'title' => $this->lang->line('Edit entries')),
-			'form'  => populateCrForm($form, $this->Entries_Model->get($entryId, true)),
+			'form'  => populateCrForm($form, $data),
 		));
 	}
 

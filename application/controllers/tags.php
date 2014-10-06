@@ -37,6 +37,9 @@ class Tags extends CI_Controller {
 	function edit($tagId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Tags_Model->get($tagId), $tagId);
+		if ($data === null) { return error404(); }
+		
 		$form = $this->_getFormProperties($tagId);
 
 		if ($this->input->post() != false) {
@@ -53,7 +56,7 @@ class Tags extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm', 
 			'meta'   => array('title' => $this->lang->line('Edit tags')),
-			'form'   => populateCrForm($form, $this->Tags_Model->get($tagId)),
+			'form'   => populateCrForm($form, $data),
 		));		
 	}
 

@@ -20,30 +20,30 @@ class News_Model extends CI_Model {
 	}
 
 	function get($newId, $isForm = false){
-		$result = $this->db
+		$query = $this->db
 				->select('news.*', true)
 				->where('newId', $newId)
 				->get('news')->row_array();
 				
-		if ($isForm == true) {
-			$userId = element('userId', $result);
+		if (!empty($query) && $isForm == true) {
+			$userId = element('userId', $query);
 			if ($userId == null) {
 				$userId = $this->session->userdata('userId');
 			}
 				
 			$user = $this->Users_Model->get($userId);
-			$result['userId'] = array( 'id' => $user['userId'], 'text' => $user['userFirstName'].' '.$user['userLastName']);
+			$query['userId'] = array( 'id' => $user['userId'], 'text' => $user['userFirstName'].' '.$user['userLastName']);
 		}
 		
-		return $result;
+		return $query;
 	}
 	
 	function getByNewSef($newSef){
-		$result = $this->db
+		$query = $this->db
 				->select('news.*', true)
 				->where('newSef', $newSef)
 				->get('news')->row_array();
-		return $result;
+		return $query;
 	}	
 	
 	function save($data){
