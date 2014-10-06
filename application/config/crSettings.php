@@ -41,7 +41,7 @@ $config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
  */
 $config['entityConfig'] = array( 
 	'default' => array(
-		'entityName' => null,
+		'entityTypeName' => null,
 		'gallery' => array(  // Default config gallery 
 			'controller'    => '%s/edit',
 			'folder'        => '/assets/images/%s/original/',
@@ -54,28 +54,28 @@ $config['entityConfig'] = array(
 		)
 	),
 	$config['entityTypeTesting'] => array(
-		'entityName' => 'testing',
+		'entityTypeName' => 'testing',
 	),
 	$config['entityTypeCountry'] => array(
-		'entityName'   => 'countries',	
-		'tableName'    => 'countries',
-		'fieldId'      => 'countryId',
-		'fieldName'    => 'countryName',
-		'fieldSef'     => 'countryId',
+		'entityTypeName'  => 'countries',
+		'tableName'       => 'countries',
+		'fieldId'         => 'countryId',
+		'fieldName'       => 'countryName',
+		'fieldSef'        => 'countryId',
 	),	
 	$config['entityTypeState'] => array(
-		'entityName'   => 'states',	
-		'tableName'    => 'states',
-		'fieldId'      => 'stateId',
-		'fieldName'    => 'stateName',
-		'fieldSef'     => 'stateSef',
+		'entityTypeName'  => 'states',	
+		'tableName'       => 'states',
+		'fieldId'         => 'stateId',
+		'fieldName'       => 'stateName',
+		'fieldSef'        => 'stateSef',
 	),
 	$config['entityTypeCity'] => array(
-		'entityName'   => 'cities',	
-		'tableName'    => 'cities',
-		'fieldId'      => 'cityId',
-		'fieldName'    => 'cityName',
-		'fieldSef'     => 'citySef',
+		'entityTypeName'  => 'cities',
+		'tableName'       => 'cities',
+		'fieldId'         => 'cityId',
+		'fieldName'       => 'cityName',
+		'fieldSef'        => 'citySef',
 	),
 );
 

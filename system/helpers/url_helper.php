@@ -501,6 +501,7 @@ if ( ! function_exists('url_title'))
 					);
 
 		$str = strip_tags($str);
+		$str = str_replace('.', '' , $str);
 
 		foreach ($trans as $key => $val)
 		{

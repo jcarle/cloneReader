@@ -46,6 +46,10 @@ $route['confirmEmail']   = "profile/confirmEmail";
 $route['forgotPassword'] = "profile/forgotPassword";
 $route['resetPassword']  = "profile/resetPassword";
 
+$route['contacts/(:any)/listing']       = "contacts/listing/$1";
+$route['contacts/(:any)/edit/(:any)']   = "contacts/edit/$1/$2";
+$route['comments/(:any)/listing']       = "comments/listing/$1";
+$route['comments/(:any)/edit/(:any)']   = "comments/edit/$1/$2";
 
 $route['tools/tags/(:any)'] = "tools/tagEdit/$1";
 $route['tools/tags/add'] = "tools/tagAdd";
