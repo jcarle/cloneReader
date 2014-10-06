@@ -44,18 +44,21 @@ class Tools extends CI_Controller {
 	
 	function tagEdit($tagId) {
 		if (! $this->safety->allowByControllerName('tools/tags') ) { return errorForbidden(); }
+				
+		$data = getCrFormData($this->Tags_Model->get($tagId), $tagId);
+		if ($data === null) { return error404(); }
 		
 		$form = array(
-			'frmId'		=> 'frmTagEdit',
-			'rules'		=> array(),
-			'fields'	=> array(
+			'frmId'   => 'frmTagEdit',
+			'rules'   => array(),
+			'fields'  => array(
 				'tagId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> $tagId,
+					'type'  => 'hidden', 
+					'value' => $tagId,
 				),
 				'tagName' => array(
-					'type'		=> 'text',
-					'label'		=> $this->lang->line('Name'), 
+					'type'   => 'text',
+					'label'  => $this->lang->line('Name'), 
 				),
 			),
 		);
@@ -88,7 +91,7 @@ class Tools extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm', 
 			'meta'   => array('title' => $this->lang->line('Edit tags')),
-			'form'   => populateCrForm($form, $this->Tags_Model->get($tagId)),
+			'form'   => populateCrForm($form, $data),
 		));	
 	}
 
@@ -205,7 +208,7 @@ class Tools extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm', 
 			'meta'   => array('title' => $this->lang->line('Add feed')),
-			'form'   => populateCrForm($form, $this->Feeds_Model->get($feedId)),
+			'form'   => populateCrForm($form, array()),
 		));	
 	}
 

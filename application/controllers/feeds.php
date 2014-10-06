@@ -163,8 +163,8 @@ class Feeds extends CI_Controller {
 	}
 	
 	function delete() {
-		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
-				
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+
 		return loadViewAjax($this->Feeds_Model->delete($this->input->post('feedId')));
 	}
 	
@@ -337,8 +337,8 @@ class Feeds extends CI_Controller {
 	}	
 	
 	function deleteOldEntriesByFeedId($feedId) {
-		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
-		
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+
 		return loadViewAjax(true, 'affected rows: '.$this->Feeds_Model->deleteOldEntriesByFeedId($feedId));	
 	}
 }

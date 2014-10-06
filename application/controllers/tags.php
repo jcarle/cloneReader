@@ -65,6 +65,8 @@ class Tags extends CI_Controller {
 	}
 
 	function delete() {
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+		
 		return loadViewAjax($this->Tags_Model->delete($this->input->post('tagId')));	
 	}
 

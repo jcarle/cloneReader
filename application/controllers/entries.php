@@ -109,6 +109,8 @@ class Entries extends CI_Controller {
 	}
 	
 	function delete() {
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+		
 		return loadViewAjax($this->Entries_Model->delete($this->input->post('entryId')));	
 	}
 

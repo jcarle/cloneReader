@@ -64,7 +64,9 @@ class News extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjax($this->News_Model->delete($this->input->post('newId')));	
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+			
+		return loadViewAjax($this->News_Model->delete($this->input->post('newId')));
 	}
 
 	function _getFormProperties($newId) {
