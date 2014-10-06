@@ -21,7 +21,7 @@
 			scaleToFit: true,
 			centerVertical: true,
 			centerType: 'outside', // [ 'outside', 'inside']
-			show: true,
+			autoRedraw: false, // 
 			complete: function(){},
 			start: function(){},
 			end: function(){}
@@ -35,15 +35,26 @@
 		
 		return this.each(function(i){
 			var current = i;
-			
 			var $img    = $(this);
 			var $parent = $img.parent();
+
+			if (opts.autoRedraw == true && $img.data('registerEvent') != true) {
+				$(window).resize($.proxy(
+					function(opts) {
+						var $img = $(this);
+						$img.data('imgCenterComplete', false);
+						$img.imgCenter(opts);
+					}
+				, this, opts));
+				$img.data('registerEvent', true);
+			}
 			
 			if ($img.data('imgCenterComplete') == true) {
 				return;
 			}
 			
 			$parent.addClass('imgCenter');
+			$parent.removeClass('imgCenterComplete');
 			
 			if (opts.centerType == 'outside') {
 				$parent.addClass('imgCenterOutside');
@@ -53,15 +64,14 @@
 			}
 			
 			if ($parent.find('i').length == 0) {
-				$parent.append('<i class="fa fa-spinner fa-spin fa-lg" />');
+				$img.before('<i class="fa fa-file-image-o fa-3x" />');
 			}
-
-			$img.hide();
 			
-			// Move up Parents until the spcified limit has been met.
+			// reset properties
+			$img.removeAttr('style');
 			
-			var parWidth   = parseInt($parent.innerWidth());
-			var parHeight  = parseInt($parent.innerHeight());
+			var parWidth   = parseInt($parent.actual('innerWidth'));
+			var parHeight  = parseInt($parent.actual('innerHeight'));
 			var parAspect  = parWidth / parHeight;
 			
 			$img.load($.proxy(
@@ -77,10 +87,10 @@
 			function imgMath($img) {
 				if (opts.centerType == 'outside') {
 					// Get image properties.		
-					var imgWidth 	= parseInt($img.get(0).width);
-					var imgHeight 	= parseInt($img.get(0).height);
+					var imgWidth 	= parseInt($img.get(0).naturalWidth);
+					var imgHeight 	= parseInt($img.get(0).naturalHeight);
 					var imgAspect 	= imgWidth / imgHeight;
-					
+
 					if (parAspect == Infinity) {
 						parWidth  = imgWidth;
 						parHeight = imgHeight;
@@ -134,19 +144,9 @@
 				if(current == len){
 					opts.end.call(this);
 				}
-				
+
 				$img.data('imgCenterComplete', true);
-				
-				if (opts.show == true) {
-					$img.show();
-					$img.parent().find('i').remove();
-				}
-				else {
-					$img.fadeIn('slow', function() {
-						var $icon = $(this).parent().find('i');
-						$icon.remove();
-					});
-				}
+				$img.parent().addClass('imgCenterComplete');
 			}
 		});
 	}

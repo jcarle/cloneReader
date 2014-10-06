@@ -103,6 +103,21 @@ function getEntityConfig($entityTypeId, $key = null) {
 }
 
 /**
+ * @return $entityTypeId 
+ * 
+ * */
+function getEntityTypeIdByEnityTypeName($entityTypeName) {
+	$entities = config_item('entityConfig');
+	// TODO: pensar si conviene indexar el entityTypeName, para que no tenga que recorrerlo
+	foreach ($entities as $entityTypeId => $entityConfig) {
+		if ($entityConfig['entityTypeName'] == $entityTypeName) {
+			return $entityTypeId;
+		}
+	}
+	return null;
+}
+
+/**
  * Devuelve el config de una gallery, si no esta definida usa la gallery por default
  */
 function getEntityGalleryConfig($entityTypeId) {
@@ -115,12 +130,12 @@ function getEntityGalleryConfig($entityTypeId) {
 	// Si no existe, devuelve las properties por defecto, haciendo un sprintf de los folder y del controller con el name de la entidad
 	$entityConfig   = config_item('entityConfig');
 	$galleryDefault = $entityConfig['default']['gallery'];
-	$entityName     = $entityConfig[$entityTypeId]['entityName'];
+	$entityTypeName = $entityConfig[$entityTypeId]['entityTypeName'];
 	
-	$galleryDefault['controller']                = sprintf($galleryDefault['controller'], $entityName);
-	$galleryDefault['folder']                    = sprintf($galleryDefault['folder'], $entityName);
-	$galleryDefault['sizes']['thumb']['folder']  = sprintf($galleryDefault['sizes']['thumb']['folder'], $entityName);
-	$galleryDefault['sizes']['large']['folder']  = sprintf($galleryDefault['sizes']['large']['folder'], $entityName);
+	$galleryDefault['controller']                = sprintf($galleryDefault['controller'], $entityTypeName);
+	$galleryDefault['folder']                    = sprintf($galleryDefault['folder'], $entityTypeName);
+	$galleryDefault['sizes']['thumb']['folder']  = sprintf($galleryDefault['sizes']['thumb']['folder'], $entityTypeName);
+	$galleryDefault['sizes']['large']['folder']  = sprintf($galleryDefault['sizes']['large']['folder'], $entityTypeName);
 
 	return $galleryDefault;
 }

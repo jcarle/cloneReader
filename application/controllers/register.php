@@ -88,9 +88,9 @@ class Register extends CI_Controller {
 		$form['fields']['countryId']['source'] = $this->Countries_Model->selectToDropdown();
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'meta'		=> array( 'title' => $this->lang->line('Signup') ),
-			'form'		=> populateCrForm($form, array()),
+			'view'  => 'includes/crForm', 
+			'meta'  => array( 'title' => $this->lang->line('Signup') ),
+			'form'  => populateCrForm($form, array()),
 		));
 	}
 

@@ -309,20 +309,38 @@ $.extend({
 	},
 	
 	formatDate: function($element) {
-		var value = $element.text();
-		if (value == '') {
+		if ($.crSettings.momentLoaded != true) {
+			$.crSettings.momentLoaded = true;
+			moment.lang($.crSettings.langId);
+		}
+		
+		if ($element.data('datetime') == null) {
+			$element.data('datetime', $element.text());
+		}
+
+		var datetime = $element.data('datetime');
+		if (datetime == '') {
 			return;
 		}
-		if (moment($element.text(), 'YYYY-MM-DDTHH:mm:ss').isValid() == false) {
+		if (moment(datetime, 'YYYY-MM-DDTHH:mm:ss').isValid() == false) {
 			$element.text('');
 			return;
 		}
 		
-		var format = crLang.line('MOMENT_DATE_FORMAT');
+		var $moment = moment(datetime, 'YYYY-MM-DDTHH:mm:ss' );
+		var format  = crLang.line('MOMENT_DATE_FORMAT');
 		if ($element.hasClass('datetime')) {
 			format += ' HH:mm:ss';
 		}
-		$element.text( moment($element.text(), 'YYYY-MM-DDTHH:mm:ss' ).format( format) );		
+		
+		$element.attr('title', $moment.format(format) );
+		
+		if ($element.hasClass('fromNow')) {
+			$element.text( $moment.fromNow() );
+		}
+		else {
+			$element.text( $moment.format( format) );
+		}
 	},
 	
 	hideMobileNavbar: function() {

@@ -107,7 +107,6 @@ class Feedbacks extends CI_Controller {
 			'list'    => array(
 				'urlList'   => strtolower(__CLASS__).'/listing',
 				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'    => strtolower(__CLASS__).'/add',
 				'columns'   => array(
 					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  $this->lang->line('Description')),
 					'feedbackDate'       => array('class' => 'datetime', 'value' => $this->lang->line('Date')),
@@ -124,6 +123,9 @@ class Feedbacks extends CI_Controller {
 	function edit($feedbackId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Feedbacks_Model->get($feedbackId), $feedbackId);
+		if ($data === null) { return error404(); }
+		
 		$form = $this->_getFormProperties($feedbackId, false);
 		
 		if ($this->input->post() != false) {
@@ -139,41 +141,37 @@ class Feedbacks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'    => 'includes/crForm', 
-			'meta'    => array('title'		=> $this->lang->line('Edit feedbacks')),
-			'form'    => populateCrForm($form, $this->Feedbacks_Model->get($feedbackId)),
+			'meta'    => array('title' => $this->lang->line('Edit feedbacks')),
+			'form'    => populateCrForm($form, $data),
 		));	
-	}
-	
-	function add(){
-		$this->edit(0);
 	}
 
 	function _getFormProperties($feedbackId) {
 		$form = array(
-			'frmId'		=> 'frmFeedbackEdit',
-			'buttons' 	=> array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
+			'frmId'    => 'frmFeedbackEdit',
+			'buttons'  => array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
 			'fields' => array( 
 				'feedbackId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> $feedbackId,
+					'type'  => 'hidden', 
+					'value' => $feedbackId,
 				),
 				'feedbackUserName' => array(
-					'type' 			=> 'text',
-					'label'			=> $this->lang->line('Name'),
-					'disabled'		=> true, 
+					'type'      => 'text',
+					'label'     => $this->lang->line('Name'),
+					'disabled'  => true, 
 				),
 				'feedbackUserEmail' => array(
-					'type' 		=> 'text',
-					'label'		=> $this->lang->line('Email'), 
+					'type'   => 'text',
+					'label'  => $this->lang->line('Email'), 
 				),
 				'feedbackDesc' => array(
-					'type'		=> 'textarea',
-					'label'		=> $this->lang->line('Description'), 
+					'type'   => 'textarea',
+					'label'  => $this->lang->line('Description'), 
 				),
 				'feedbackDate' => array(
-					'type' 		=> 'datetime',
-					'label'		=> $this->lang->line('Date'), 
-				),		
+					'type'   => 'datetime',
+					'label'  => $this->lang->line('Date'), 
+				),
 			)
 		);
 
@@ -187,7 +185,7 @@ class Feedbacks extends CI_Controller {
 				'field' => 'feedbackDate',
 				'label' => $form['fields']['feedbackDate']['label'],
 				'rules' => 'trim|required'
-			),			
+			),
 		);	
 
 		if ((int)$feedbackId > 0) {
@@ -202,6 +200,8 @@ class Feedbacks extends CI_Controller {
 	}
 
 	function delete() {
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+		
 		return loadViewAjax($this->Feedbacks_Model->delete($this->input->post('feedbackId')));
 	}	
 }

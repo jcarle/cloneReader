@@ -36,25 +36,28 @@ class Groups extends CI_Controller {
 	function edit($groupId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Groups_Model->get($groupId), $groupId);
+		if ($data === null) { return error404(); }
+		
 		$form = array(
-			'frmId'		=> 'frmGroupsEdit',
-			'fields'	=> array(
+			'frmId'  => 'frmGroupsEdit',
+			'fields' => array(
 				'groupId' => array(
-					'type'		=> 'hidden', 
-					'value'		=> $groupId,
+					'type'  => 'hidden', 
+					'value' => $groupId,
 				),
 				'groupName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Name'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('Name'), 
 				),
 				'groupHomePage' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Home page'),
+					'type'  => 'text',
+					'label' => $this->lang->line('Home page'),
 				),
 				'controllers' => array(
-					'type'		=> 'groupCheckBox',
-					'label'		=> $this->lang->line('Controllers'),
-					'showId'	=> true
+					'type'   => 'groupCheckBox',
+					'label'  => $this->lang->line('Controllers'),
+					'showId' => true
 				)
 			)
 		);
@@ -63,13 +66,13 @@ class Groups extends CI_Controller {
 			$form['urlDelete'] = base_url('groups/delete/');
 		}
 		
-		$form['rules'] 	= array( 
+		$form['rules'] = array( 
 			array(
 				'field' => 'groupName',
 				'label' => $form['fields']['groupName']['label'],
 				'rules' => 'trim|required'
 			),
-		);		
+		);
 
 		$this->form_validation->set_rules($form['rules']);
 
@@ -87,9 +90,9 @@ class Groups extends CI_Controller {
 		$form['fields']['controllers']['source'] = $this->Controllers_Model->selectToDropdown(true);
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crForm', 
-			'meta'			=> array( 'title' => $this->lang->line('Edit groups') ),
-			'form'			=> populateCrForm($form, $this->Groups_Model->get($groupId)),
+			'view' => 'includes/crForm', 
+			'meta' => array( 'title' => $this->lang->line('Edit groups') ),
+			'form' => populateCrForm($form, $data),
 		));
 	}
 
@@ -98,6 +101,8 @@ class Groups extends CI_Controller {
 	}
 	
 	function delete() {
-		return loadViewAjax($this->Groups_Model->delete($this->input->post('groupId')));	
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+
+		return loadViewAjax($this->Groups_Model->delete($this->input->post('groupId')));
 	}
 }

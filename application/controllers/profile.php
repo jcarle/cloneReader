@@ -23,32 +23,32 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 		
 		$form = array(
-			'frmId'			=> 'frmEditProfile',
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
-			'title'			=> $this->lang->line('Edit profile'),
-			'fields'		=> array(
+			'frmId'    => 'frmEditProfile',
+			'buttons'  => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
+			'title'    => $this->lang->line('Edit profile'),
+			'fields'   => array(
 				'userFirstName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('First name'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('First name'), 
 				),
 				'userLastName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Last name'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('Last name'), 
 				),
 				'userEmail' => array(
-					'type'		=> 'text',
-					'label'		=> $this->lang->line('Email'),
-					'disabled' 	=> true
+					'type'      => 'text',
+					'label'     => $this->lang->line('Email'),
+					'disabled'  => true
 				),
 				'countryId' => array(
-					'type'				=> 'dropdown',
-					'label'				=> $this->lang->line('Country'),
-					'appendNullOption' 	=> true,
+					'type'             => 'dropdown',
+					'label'            => $this->lang->line('Country'),
+					'appendNullOption' => true,
 				),
 			)
 		);
 		
-		$form['rules'] 	= array( 
+		$form['rules'] = array( 
 			array(
 				'field' => 'userFirstName',
 				'label' => $form['fields']['userFirstName']['label'],
@@ -59,7 +59,7 @@ class Profile extends CI_Controller {
 				'label' => $form['fields']['userLastName']['label'],
 				'rules' => 'trim|required'
 			)
-		);		
+		);
 		
 		$this->form_validation->set_rules($form['rules']);
 		

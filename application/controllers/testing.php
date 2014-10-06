@@ -50,49 +50,52 @@ class Testing extends CI_Controller {
 	function edit($testId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Testing_Model->get($testId, true), $testId);
+		if ($data === null) { return error404(); }
+		
 		$form = array(
-			'frmId'		=> 'frmTestingEdit',
-			'fields'	=> array(
+			'frmId'  => 'frmTestingEdit',
+			'fields' => array(
 				'testId' => array(
-					'type' 		=> 'hidden',
-					'value'		=> (int)$testId,
+					'type'  => 'hidden',
+					'value' => (int)$testId,
 				),
 				'testName' => array(
-					'type'	=> 'text',
-					'label'	=> 'Name', 
+					'type'   => 'text',
+					'label'  => 'Name', 
 				),
 				'countryId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('Country'), 
-					'source'	=> $this->Countries_Model->selectToDropdown(),
+					'type'    => 'dropdown',
+					'label'   => $this->lang->line('Country'), 
+					'source'  => $this->Countries_Model->selectToDropdown(),
 				),
 				'stateId' => array(
-					'type'			=> 'dropdown',
-					'label'			=> 'State', 
-					'controller'	=> base_url('search/selectStatesByCountryId/'),
-					'subscribe'		=> array(
-						array(					
-							'field' 		=> 'countryId',
-							'event'			=> 'change',   
-							'callback'		=> 'loadDropdown',
-							'arguments'		=> array(
+					'type'        => 'dropdown',
+					'label'       => 'State', 
+					'controller'  => base_url('search/selectStatesByCountryId/'),
+					'subscribe'   => array(
+						array(
+							'field'      => 'countryId',
+							'event'      => 'change',   
+							'callback'   => 'loadDropdown',
+							'arguments'  => array(
 								'this.getFieldByName(\'countryId\').val()'
 							),
-							'runOnInit'		=> true
+							'runOnInit'  => true
 						)
 					)
 				),
 				'testRating' => array(
-					'type'	=> 'raty',
-					'label'	=> 'Rating', 
+					'type'   => 'raty',
+					'label'  => 'Rating', 
 				),
 				'testDesc' => array(
-					'type'	=> 'textarea',
-					'label'	=> 'Description', 
+					'type'  => 'textarea',
+					'label' => 'Description', 
 				),
 				'testDate' => array(
-					'type'	=> 'datetime',
-					'label'	=> 'Fecha', 
+					'type'  => 'datetime',
+					'label' => 'Fecha', 
 				),
 			)
 		);
@@ -129,19 +132,19 @@ class Testing extends CI_Controller {
 				'entityId'      => $testId,
 			);
 			$form['fields']['testChilds'] = array(
-				'type'			=> 'subform',
-				'label'			=> 'childs', 
-				'controller'	=> base_url('testing/selectChildsByTestId/'.$testId),
+				'type'        => 'subform',
+				'label'       => 'childs', 
+				'controller'  => base_url('testing/selectChildsByTestId/'.$testId),
 			);
 		}
 		
-		$form['rules'] 	= array( 
+		$form['rules'] = array( 
 			array(
 				'field' => 'testName',
 				'label' => $form['fields']['testName']['label'],
 				'rules' => 'required'
 			)
-		);		
+		);
 
 		$this->form_validation->set_rules($form['rules']);
 
@@ -159,7 +162,7 @@ class Testing extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'		=> 'includes/crForm', 
 			'meta'		=> array( 'title' => $this->lang->line('Edit testing') ),
-			'form'		=> populateCrForm($form, $this->Testing_Model->get($testId, true)),
+			'form'		=> populateCrForm($form, $data),
 		));
 	}
 
@@ -168,7 +171,7 @@ class Testing extends CI_Controller {
 	}
 	
 	function delete() {
-		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
 		
 		return loadViewAjax($this->Testing_Model->delete($this->input->post('testId')));
 	}	
@@ -191,43 +194,44 @@ class Testing extends CI_Controller {
 		return loadViewAjax(true, array('list' => $list));
 	}
 	
-	
-	
 	function popupTestingChilds($testId, $testChildId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Testing_Model->getTestChild($testChildId), $testChildId);
+		if ($data === null) { return error404(); }
+		
 		$form = array(
-			'frmId'		=> 'frmTestChildEdit',
-			'title'		=> 'Edit test child',
-			'fields'	=> array(
+			'frmId'  => 'frmTestChildEdit',
+			'title'  => 'Edit test child',
+			'fields' => array(
 				'testChildId' => array(
-					'type' 	=> 'hidden',
-					'value'	=> (int)$testChildId
+					'type'  => 'hidden',
+					'value' => (int)$testChildId
 				),
 				'testId' => array(
-					'type' 	=> 'hidden',
-					'value'	=> (int)$testId
+					'type'  => 'hidden',
+					'value' => (int)$testId
 				),
 				'testChildName' => array(
-					'type'		=> 'text',
-					'label'		=> $this->lang->line('Name'),
-				),				
+					'type'  => 'text',
+					'label' => $this->lang->line('Name'),
+				),
 				'countryId' => array(
-					'type'		=> 'dropdown',
-					'label'		=> $this->lang->line('Country'),
-					'source'	=> $this->Countries_Model->selectToDropdown()
+					'type'   => 'dropdown',
+					'label'  => $this->lang->line('Country'),
+					'source' => $this->Countries_Model->selectToDropdown()
 				),
 				'testChildDate' => array(
-					'type'	=> 'datetime',
-					'label'	=> $this->lang->line('Date'), 
+					'type'  => 'datetime',
+					'label' => $this->lang->line('Date'), 
 				),
 			),
-			'rules' 	=> array(
+			'rules' => array(
 				array(
 					'field' => 'testChildName',
 					'label' => $this->lang->line('Name'),
-					'rules' => 'required'				
-				),			
+					'rules' => 'required'
+				),
 				array(
 					'field' => 'testChildDate',
 					'label' => $this->lang->line('Date'),
@@ -236,28 +240,27 @@ class Testing extends CI_Controller {
 			)
 		);
 		
-		$price 		= array('name' => 'testChildPrice', 		'label' => $this->lang->line('Price'), 	);
-		$exchange 	= array('name' => 'testChildExchange',	'label' => $this->lang->line('Exchange rate'), 	);
+		$price      = array('name' => 'testChildPrice',    'label' => $this->lang->line('Price'), );
+		$exchange  = array('name' => 'testChildExchange',  'label' => $this->lang->line('Exchange rate'), );
 		
 		$form['fields'] += getCrFormFieldMoney(
 			$price,
-			array('name' => 'currencyId', 				'label' => $this->lang->line('Currency'), ),
+			array('name' => 'currencyId',           'label' => $this->lang->line('Currency'), ),
 			$exchange,
-			array('name' => 'testChildTotalPrice', 	'label' => 'Total')
+			array('name' => 'testChildTotalPrice',  'label' => 'Total')
 		);
 		
-		$form['rules'] 		= array_merge($form['rules'], getCrFormValidationFieldMoney($price, $exchange));		
+		$form['rules'] = array_merge($form['rules'], getCrFormValidationFieldMoney($price, $exchange));		
 		
 		if ((int)$testChildId > 0) {
 			$form['urlDelete'] = base_url('testing/deleteTestChild/');
 			
 			$form['fields']['testChildsUsers'] = array(
-				'type'			=> 'subform',
-				'label'			=> 'Users', 
-				'controller'	=> base_url('testing/selectUsersByTestChildId/'.$testChildId),
+				'type'        => 'subform',
+				'label'       => 'Users', 
+				'controller'  => base_url('testing/selectUsersByTestChildId/'.$testChildId),
 			);
 		}
-		
 
 		$this->form_validation->set_rules($form['rules']);
 
@@ -270,7 +273,7 @@ class Testing extends CI_Controller {
 			return loadViewAjax($code);
 		}
 
-		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)) ));
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $data) ));
 	}
 
 
@@ -294,33 +297,36 @@ class Testing extends CI_Controller {
 	function popupTestChildUser($testChildId, $userId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 		
-		$user 	= null;
+		$data = getCrFormData($this->Testing_Model->getTestChild($testChildId), $testChildId);
+		if ($data === null) { return error404(); }
+		
+		$user = null;
 		if ((int)$userId != 0) {
 			$user = $this->Users_Model->get($userId);
-		}		
+		}
 		
 		$form = array(
-			'frmId'		=> 'frmTestChildUserEdit',
-			'title'		=> 'Edit user',
-			'fields'	=> array(
+			'frmId'  => 'frmTestChildUserEdit',
+			'title'  => 'Edit user',
+			'fields'  => array(
 				'testChildId' => array(
-					'type' 	=> 'hidden',
-					'value'	=> (int)$testChildId
+					'type'  => 'hidden',
+					'value' => (int)$testChildId
 				),
 				'currentUserId' => array(
-					'type' 	=> 'hidden',
-					'value'	=> (int)$userId
+					'type'  => 'hidden',
+					'value' => (int)$userId
 				),
 				'userId' => array(
-					'type' 			=> 'typeahead',
-					'label'			=> $this->lang->line('User'),
-					'source' 		=> base_url('search/users/'),
-					'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
-					'multiple'		=> false,
-					'placeholder' 	=> $this->lang->line('User')
+					'type'          => 'typeahead',
+					'label'         => $this->lang->line('User'),
+					'source'        => base_url('search/users/'),
+					'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
+					'multiple'      => false,
+					'placeholder'  => $this->lang->line('User')
 				)
 			),
-			'rules' 	=> array(
+			'rules' => array(
 				array(
 					'field' => 'userId',
 					'label' => $this->lang->line('User'),
@@ -329,11 +335,9 @@ class Testing extends CI_Controller {
 			)
 		);
 		
-		
 		if ((int)$testChildId > 0) {
 			$form['urlDelete'] = base_url('testing/deleteTestChild/');
 		}
-		
 
 		$this->form_validation->set_rules($form['rules']);
 
@@ -341,8 +345,8 @@ class Testing extends CI_Controller {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 			
-				$testChildId 		= $this->input->post('testChildId');
-				$userId 			= $this->input->post('userId');
+				$testChildId = $this->input->post('testChildId');
+				$userId      = $this->input->post('userId');
 			
 				if ($this->Testing_Model->exitsTestChildUser($testChildId, $userId) == true) {
 					return loadViewAjax(false, 'El usuario ya exite che');
@@ -355,9 +359,8 @@ class Testing extends CI_Controller {
 			return loadViewAjax($code);
 		}
 		
-		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $this->Testing_Model->getTestChild($testChildId)) ));
-	}	
-	
+		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $data) ));
+	}
 	
 	function savePicture($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
@@ -378,7 +381,7 @@ class Testing extends CI_Controller {
 	}
 	
 	function deletePicture($testId) {
-		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
 		
 		$this->load->model('Files_Model');
 		
@@ -406,7 +409,7 @@ class Testing extends CI_Controller {
 	}
 
 	function deleteDoc($testId) {
-		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
 		
 		$this->load->model('Files_Model');
 		$data = $this->Testing_Model->get($testId);

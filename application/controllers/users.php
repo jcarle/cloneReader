@@ -114,53 +114,56 @@ class Users extends CI_Controller {
 	function edit($userId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Users_Model->get($userId, true), $userId);
+		if ($data === null) { return error404(); }
+		
 		$form = array(
-			'frmId'		=> 'frmUsersEdit',
-			'fields'	=> array(
+			'frmId'  => 'frmUsersEdit',
+			'fields' => array(
 				'userId' => array(
-					'type' 		=> 'hidden',
-					'value'		=> $userId,
+					'type'  => 'hidden',
+					'value' => $userId,
 				),
 				'userEmail' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Email'),
+					'type'  => 'text',
+					'label' => $this->lang->line('Email'),
 				),
 				'userFirstName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('First name'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('First name'), 
 				),
 				'userLastName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Last name'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('Last name'), 
 				),
 				'countryId' => array(
-					'type'				=> 'dropdown',
-					'label'				=> $this->lang->line('Country'),
-					'appendNullOption'	=> true,
+					'type'              => 'dropdown',
+					'label'             => $this->lang->line('Country'),
+					'appendNullOption'  => true,
 				),
 				'groups' => array(
-					'type'		=> 'groupCheckBox',
-					'label'		=> $this->lang->line('Groups'),
-					'showId'	=> true,
+					'type'   => 'groupCheckBox',
+					'label'  => $this->lang->line('Groups'),
+					'showId' => true,
 				),
 			)
 		);
 		
 		if ((int)$userId > 0) {
-			$form['urlDelete'] 		= base_url('users/delete/');
+			$form['urlDelete']           = base_url('users/delete/');
 			$form['fields']['userFeeds']	= array(
 				'type'	=> 'link',
 				'label'	=> $this->lang->line('View feeds'), 
 				'value'	=> base_url('feeds/listing/?userId='.$userId),
 			);
-			$form['fields']['userLogs']	= array(
-				'type'	=> 'link',
-				'label'	=> $this->lang->line('View logs'), 
-				'value'	=> base_url('users/logs/?userId='.$userId.'&orderBy=userLogDate&orderDir=desc'),
-			);			
+			$form['fields']['userLogs']  = array(
+				'type'  => 'link',
+				'label' => $this->lang->line('View logs'), 
+				'value' => base_url('users/logs/?userId='.$userId.'&orderBy=userLogDate&orderDir=desc'),
+			);
 		}
 		
-		$form['rules'] 	= array(
+		$form['rules']= array(
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
@@ -176,7 +179,7 @@ class Users extends CI_Controller {
 				'label' => $form['fields']['userLastName']['label'],
 				'rules' => 'trim|required'
 			)
-		);		
+		);
 
 		$this->form_validation->set_rules($form['rules']);
 
@@ -191,14 +194,14 @@ class Users extends CI_Controller {
 			}
 		}
 		
-		$form['fields']['countryId']['source'] 	= $this->Countries_Model->selectToDropdown();
-		$form['fields']['groups']['source']		= $this->Groups_Model->selectToDropdown();
+		$form['fields']['countryId']['source'] = $this->Countries_Model->selectToDropdown();
+		$form['fields']['groups']['source']    = $this->Groups_Model->selectToDropdown();
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'meta'		=> array( 'title' => $this->lang->line('Edit users') ),
-			'form'		=> populateCrForm($form, $this->Users_Model->get($userId, true)),
-		));		
+			'view' => 'includes/crForm', 
+			'meta' => array( 'title' => $this->lang->line('Edit users') ),
+			'form' => populateCrForm($form, $data),
+		));
 	}
 
 	function add(){
@@ -206,6 +209,8 @@ class Users extends CI_Controller {
 	}
 	
 	function delete() {
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+		
 		return loadViewAjax($this->Users_Model->delete($this->input->post('userId')));
 	}
 	

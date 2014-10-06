@@ -47,7 +47,9 @@ function appendFilesToCarabiner() {
 		'jquery.json-2.3.js',
 		'jquery.printf.js',
 		'jquery.url.js',
-		'jquery.dotdotdot.js',
+//		'jquery.dotdotdot.js',
+		'jquery.actual.js',
+		
 		'moment-with-langs.js',
 		'bootstrap.js',
 		'crFunctions.js',

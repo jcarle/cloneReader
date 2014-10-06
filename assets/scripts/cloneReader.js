@@ -1798,7 +1798,7 @@ console.timeEnd("t1");
 	},
 	
 	humanizeDatetime: function(datetime, format) {
-		datetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
+		var datetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
 		if (datetime >= moment()) {
 			datetime = moment().add('ms', -1);
 		} 

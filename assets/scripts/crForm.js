@@ -450,7 +450,7 @@
 			if (field.value.url != null) {
 				if (field.isPicture == true) {
 					field.$input.prepend('<a class="thumbnail"><img  src="' + field.value.url + '" /></a>');
-					field.$input.find('img').imgCenter( { show: false, centerType: 'inside' } );
+					field.$input.find('img').imgCenter( { centerType: 'inside' } );
 				}
 				else {
 					field.$input.prepend('<div class="fileName"> <a download="' + field.value.name + '" target="_blank" href="' + field.value.url + '" data-skip-app-link="true"> <i class="fa fa-download"/> <span />  </a> </div>');
@@ -567,7 +567,7 @@
 								.appendTo($gallery.find('.thumbnails'));
 						}
 		
-						$gallery.find('img').imgCenter( { show: false } );
+						$gallery.find('img').imgCenter( {  } );
 					},
 			});
 		},

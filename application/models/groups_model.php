@@ -28,17 +28,21 @@ class Groups_Model extends CI_Model {
 	}
 			
 	function get($groupId){
-		$this->db->where('groupId', $groupId);
-		$result 				= $this->db->get('groups')->row_array();
-		$result['controllers'] 	= sourceToArray($this->getControllers($groupId), 'controllerId');
-		return $result;
+		$query = $this->db
+			->where('groupId', $groupId)
+			->get('groups')->row_array();
+		if (empty($query)) {
+			return $query;
+		}
+		$query['controllers'] = sourceToArray($this->getControllers($groupId), 'controllerId');
+		return $query;
 	}	
 	
 	function getControllers($groupId){
 		$this->db->where('groupId', $groupId);
-		$result = $this->db->get('groups_controllers')->result_array();
+		$query = $this->db->get('groups_controllers')->result_array();
 
-		return $result;		
+		return $query;		
 	}
 	
 	function save($data){
@@ -59,8 +63,7 @@ class Groups_Model extends CI_Model {
 		}
 		
 		
-		$this->db->where('groupId', $groupId);
-		$result = $this->db->delete('groups_controllers');
+		$this->db->where('groupId', $groupId)->delete('groups_controllers');
 		$controllers = json_decode(element('controllers', $data));
 		if (is_array($controllers)) {
 			foreach ($controllers as $controllerId) {

@@ -14,49 +14,52 @@ class Menu extends CI_Controller {
 	function edit($menuId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Menu_Model->get($menuId), $menuId);
+		if ($data === null) { return error404(); }
+		
 		$form = array(
-			'frmId'			=> 'frmMenuEdit',
-			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').'</button> '),
-			'fields'		=> array(
+			'frmId'     => 'frmMenuEdit',
+			'buttons'  => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').'</button> '),
+			'fields'   => array(
 				'menuId' => array(
-					'type'	=> 'hidden',
-					'value'	=> $menuId
+					'type'  => 'hidden',
+					'value' => $menuId
 				),
 				'menuTree' => array(
-					'type'		=> 'tree',
-					'value'		=> $menuId,
-					'source'	=> $this->Menu_Model->getMenu(0, false, $fields = array(
+					'type'   => 'tree',
+					'value'  => $menuId,
+					'source'  => $this->Menu_Model->getMenu(0, false, $fields = array(
 						"menuId AS id", 
 						"CONCAT(menuName, ' (', menuId, ')', IF(ISNULL(controllerName), '', CONCAT(' (', controllerName, ')'))) AS label", 
 						"CONCAT('menu/edit/', menuId) AS url"
-					)),					
+					)),
 				),
 				'menuName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Name'),
+					'type'  => 'text',
+					'label' => $this->lang->line('Name'),
 				),
 				'controllerId' => array(
-					'type'				=> 'dropdown',
-					'label'				=> $this->lang->line('Controller'), 
-					'appendNullOption' 	=> true,
+					'type'             => 'dropdown',
+					'label'            => $this->lang->line('Controller'), 
+					'appendNullOption' => true,
 				),
 				'menuParentId' => array(
-					'type'	=> 'text',
-					'label'	=> 'menuParentId', 
+					'type'  => 'text',
+					'label' => 'menuParentId', 
 				),
 				'menuPosition' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Position'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('Position'), 
 				),
 				'menuIcon' => array(
-					'type'	=> 'text',
-					'label'	=> 'Icon', 
+					'type'  => 'text',
+					'label' => 'Icon', 
 				)
 			)
 		);
 		
 		if ((int)$menuId > 0) {
-			$form['urlDelete'] 	= base_url('menu/delete');
+			$form['urlDelete'] = base_url('menu/delete');
 			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>');
 			array_unshift($form['buttons'], '<button type="button" class="btn btn-default" onclick="$.goToUrl(\''.base_url('menu').'\');" ><i class="fa fa-arrow-left"></i> '.$this->lang->line('Cancel').' </button>');
 		}
@@ -85,10 +88,10 @@ class Menu extends CI_Controller {
 		$form['fields']['controllerId']['source'] = $this->Controllers_Model->selectToDropdown(true);
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crForm', 
-			'meta'			=> array( 'title' => $this->lang->line('Edit menu') ),
-			'form'			=> populateCrForm($form, $this->Menu_Model->get($menuId)),
-		));		
+			'view'  => 'includes/crForm', 
+			'meta'  => array( 'title' => $this->lang->line('Edit menu') ),
+			'form'  => populateCrForm($form, $data),
+		));
 	}
 
 	function add(){
@@ -96,6 +99,8 @@ class Menu extends CI_Controller {
 	}
 	
 	function delete() {
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+		
 		return loadViewAjax($this->Menu_Model->delete($this->input->post('menuId')));	
 	}
 }

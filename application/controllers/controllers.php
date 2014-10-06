@@ -37,24 +37,27 @@ class Controllers extends CI_Controller {
 	function edit($controllerId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 		
+		$data = getCrFormData($this->Controllers_Model->get($controllerId), $controllerId);
+		if ($data === null) { return error404(); }
+		
 		$form = array(
-			'frmId'		=> 'frmControllersEdit',
-			'fields'	=> array(
+			'frmId'  => 'frmControllersEdit',
+			'fields' => array(
 				'controllerId' => array(
-					'type'		=> 'hidden', 
-					'value'		=> $controllerId,
+					'type'   => 'hidden', 
+					'value'  => $controllerId,
 				),
 				'controllerName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Controller'),
+					'type'  => 'text',
+					'label' => $this->lang->line('Controller'),
 				),
 				'controllerUrl' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Url'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('Url'), 
 				),
 				'controllerActive' => array(
-					'type'		=> 'checkbox',
-					'label'		=> $this->lang->line('Active'),
+					'type'   => 'checkbox',
+					'label'  => $this->lang->line('Active'),
 				)
 			)
 		);
@@ -90,10 +93,10 @@ class Controllers extends CI_Controller {
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
-			'meta'		=> array( 'title' => $this->lang->line('Edit controllers') ),
-			'form'		=> populateCrForm($form, $this->Controllers_Model->get($controllerId)),
-		));		
+			'view'  => 'includes/crForm', 
+			'meta'  => array( 'title' => $this->lang->line('Edit controllers') ),
+			'form'  => populateCrForm($form, $data),
+		));
 	}
 
 	function add(){
@@ -101,6 +104,8 @@ class Controllers extends CI_Controller {
 	}
 	
 	function delete() {
+		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
+
 		return loadViewAjax($this->Controllers_Model->delete($this->input->post('controllerId'))); 
 	}
 	

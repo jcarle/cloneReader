@@ -52,7 +52,26 @@ function populateCrForm($form, $data) {
 	}
 	
 	return $form;
-} 
+}
+
+/**
+ * Para chequear los datos de un crForm 
+ * @param $data
+ * @param $id 
+ * @return si no esta vacio devuelve $data, si $id == 0 devuelve true (%s/add ), sino devuelve null 
+ */
+function getCrFormData($data, $id) {
+	if (!is_numeric($id)) {
+		return null;
+	}
+	if (!empty($data)) {
+		return $data;
+	}
+	if ($id == 0) {
+		return true;
+	}
+	return null;
+}
 
 function getCrFormFieldMoney(array $price, array $currency, array $exchange, array $total) {
 	$CI = &get_instance();

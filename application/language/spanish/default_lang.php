@@ -195,3 +195,6 @@ $lang['Terms of Service'] = 'Condiciones del servicio';
 $lang['Cars'] = 'Autos';
 $lang['Use of this website constitutes acceptance of the %s terms and Conditions %s'] = 'El uso de este sitio web implica la aceptación de los %s términos y condiciones %s';
 $lang['Terms and Conditions'] = 'Términos y condiciones';
+$lang['Edit contacts of %s'] = 'Editar contactos de %s';
+$lang['Edit comments of %s'] = 'Editar comentarios de %s';
+$lang['Contacts'] = 'Contactos';
