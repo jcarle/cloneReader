@@ -18,9 +18,11 @@
 		margin-bottom: 1px;
 	}
 
-#header .container.fullSize {
-	width:100%;
-	padding:0;
+@media (min-width: 768px) {
+	#header .container.fullSize {
+		width:100%;
+		padding:0;
+	}
 }
 			
 #cloneReader {
