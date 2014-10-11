@@ -331,7 +331,7 @@ cloneReader = {
 			</ul> \
 		');
 		
-		this.$mainToolbar 		= this.$toolbar.find('.mainToolbar');
+		this.$mainToolbar       = this.$toolbar.find('.mainToolbar');
 		this.$popupFeedSettings = this.$toolbar.find('.popupFeedSettings');
 
 		
@@ -355,7 +355,7 @@ cloneReader = {
 		);
 		this.$mainToolbar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
 		
-		this.$mainToolbar.find('.filterUnread, .filterSort, .feedSettings').hide();
+		this.toogleMainToolbarItem(['.filterUnread', '.filterSort', '.feedSettings'], false);
 		this.$mainToolbar.find('.dropdown-toggle').click(
 			function(event) {
 				cloneReader.hidePopupWindow();
@@ -843,20 +843,33 @@ cn($div);
 			this.$mainToolbar.find('.viewList').addClass('active');
 		}
 
-		this.$mainToolbar.find('.feedSettings').hide();
+		this.toogleMainToolbarItem(['.feedSettings'], false);
 		if (this.aFilters.type == 'feed') {
-			this.$mainToolbar.find('.feedSettings').show();
+			this.toogleMainToolbarItem(['.feedSettings'], true);
 		}
 		
-		this.$mainToolbar.find('.filterUnread').hide();
-		this.$mainToolbar.find('.btnMarkAllAsRead').hide();
+		this.toogleMainToolbarItem(['.filterUnread'], false);
+		this.toogleMainToolbarItem(['.btnMarkAllAsRead'], false);
 		
 		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [$.crSettings.tagStar, $.crSettings.tagHome]) != -1)) {
-			this.$mainToolbar.find('.btnMarkAllAsRead').show();
-			this.$mainToolbar.find('.filterUnread').show();
+			this.toogleMainToolbarItem(['.btnMarkAllAsRead'], true);
+			this.toogleMainToolbarItem(['.filterUnread'], true);
 		}
 		
-		this.$mainToolbar.find('.filterSort').show();
+		this.toogleMainToolbarItem(['.filterSort'], true);
+	},
+	
+	toogleMainToolbarItem: function(aItems, show) {
+		for (var i=0; i<aItems.length; i++) {
+			var $li = this.$mainToolbar.find(aItems[i]).parents('li');
+			if (show == true){
+				$li.show();
+			}
+			else {
+				$li.hide();
+			}
+		}
+		
 	},
 
 	updateMenuCount: function() {
