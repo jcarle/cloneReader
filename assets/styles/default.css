@@ -167,7 +167,7 @@ body.isLoading, body.isLoading * {
 	.menu div {
 		margin: 0 auto;
 		max-width: 1004px;
-		height: 32px;
+		height: auto;
 		position:relative;
 	}
 		.menu div ul.menuPublic {
