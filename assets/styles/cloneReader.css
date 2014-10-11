@@ -33,10 +33,13 @@
 }
 
 
-#frmFeedEdit.crForm fieldset .fieldUpload a.thumbnail   {
+#frmFeedEdit.crForm fieldset .fieldUpload a.thumbnail {
 	width:26px;
 	height:26px;
 }
+	#frmFeedEdit.crForm fieldset .fieldUpload a.thumbnail i {
+		font-size: 10px;
+	}
 	#frmFeedEdit.crForm fieldset .fieldUpload a.thumbnail img {
 		width:16px;
 		height:16px;

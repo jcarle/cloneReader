@@ -549,18 +549,21 @@ footer {
 	}
 	.imgCenter i {
 		color: #c0c0c0;
-		left: 50%;
-		line-height: 40px;
-		margin-left: -20px;
-		margin-top: -20px;
+		margin: 0;
 		position: absolute;
 		text-align: center;
-		top: 50%;
-		width: 20px;
 		-webkit-transition: opacity 1s ease;
 		-moz-transition: opacity 1s ease;
 		-o-transition: opacity 1s ease;
 		transition: opacity 1s ease;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 0px solid red;
+		left: 4px;
+		right: 4px;
+		top: 4px;
+		bottom: 4px;
 	}
 .imgCenter.imgCenterComplete img {
 	opacity:1;
