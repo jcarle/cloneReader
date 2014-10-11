@@ -68,6 +68,7 @@ cloneReader = {
 			function() {
 				$('.menu').hide();
 				$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
+				$('#header .container').addClass('fullSize');
 				
 				this.resizeWindow();
 				this.updateMainMenu();
@@ -86,6 +87,7 @@ cloneReader = {
 				this.$toolbar.hide();
 				$('#header .logo').attr('href', base_url);
 				$('#header').css( {'box-shadow': 'none' });
+				$('#header .container').removeClass('fullSize');
 				$('.menu').show();
 				$('body').css({ 'background': 'white', 'overflow': '' });
 				

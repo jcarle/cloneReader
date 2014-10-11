@@ -68,6 +68,7 @@ if (!isset($langs)) {
 $langs      = getLangToJs($langs);
 $aScripts   = array();
 $aScripts[] = langJs($langs);
+$aScripts[] = ' $(document).ready(function() { $(\'.'.getPageName().'\').data(\'meta\', '.json_encode($meta).'); } ); ';
 
 if (isset($aServerData)) {
 	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
@@ -141,7 +142,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>	
 	<div class="container pageContainer ">
-		<div class="cr-page <?php echo getPageName(); ?>"  data-title="<?php echo element('title', $meta); ?>">
+		<div class="cr-page <?php echo getPageName(); ?>">
 <?php
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';

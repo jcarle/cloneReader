@@ -17,6 +17,11 @@
 	.mainToolbar .navbar-btn {
 		margin-bottom: 1px;
 	}
+
+#header .container.fullSize {
+	width:100%;
+	padding:0;
+}
 			
 #cloneReader {
 	position:relative;
