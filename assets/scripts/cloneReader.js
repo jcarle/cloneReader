@@ -566,6 +566,7 @@ cloneReader = {
 			.load(
 				function() {
 					var $img = $(this);
+					$img.addClass('imgLoaded');
 					if ($img.width() >= 150 || $img.height() >= 150) {
 						if ($img.parent('a').length == 0) { 
 							$img.addClass('imgLarge');
@@ -578,6 +579,7 @@ cloneReader = {
 			.error(
 				function() {
 					$(this)
+						.addClass('imgLoaded')
 						.addClass('imgError')
 						.attr('title', 'No network connection or image is not available')
 						.attr('src', 'assets/images/error.svg');
@@ -599,9 +601,9 @@ cloneReader = {
 			.appendTo($footer);	
 		
 		var aSocial = [
-			{'icon': 'fa fa-facebook-square', 		'app': 'fb:share/',	'url': 'http://www.facebook.com/sharer/sharer.php?u='},
-			{'icon': 'fa fa-twitter-square', 		'app': '',		'url': 'http://www.twitter.com/home?status='},
-			{'icon': 'fa fa-google-plus-square', 	'app': 'tw:',	'url': 'http://plus.google.com/share?url='},
+			{'icon': 'fa fa-facebook-square',    'app': 'fb:share/',  'url': 'http://www.facebook.com/sharer/sharer.php?u='},
+			{'icon': 'fa fa-twitter-square',     'app': '',           'url': 'http://www.twitter.com/home?status='},
+			{'icon': 'fa fa-google-plus-square', 'app': 'tw:',        'url': 'http://plus.google.com/share?url='},
 		];
 		for (var i=0; i<aSocial.length; i++) {
 			var url = aSocial[i].url + entry.entryUrl;

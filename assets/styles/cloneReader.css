@@ -265,6 +265,14 @@
 				#cloneReader .ulEntries > li p img {
 					max-width:100%;
 					height:auto;
+					opacity:0;
+					-webkit-transition: opacity 2s ease;
+					-moz-transition: opacity 2s ease;
+					-o-transition: opacity 2s ease;
+					transition: opacity 2s ease;
+				}
+				#cloneReader .ulEntries > li p img.imgLoaded {
+					opacity: 1;
 				}
 				#cloneReader .ulEntries > li p img.imgError {
 					max-width:250px;
