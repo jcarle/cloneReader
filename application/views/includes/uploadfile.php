@@ -8,7 +8,7 @@ if (!isset($fileupload)) {
 <div class="modal" style="display:none" id="fileupload">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form action="<?php echo base_url('gallery/savePicture'); ?>"  method="POST" enctype="multipart/form-data">
+			<form action="#"  method="POST" enctype="multipart/form-data">
 				<?php echo form_hidden('entityTypeId', element('entityTypeId', $fileupload)); ?>
 				<?php echo form_hidden('entityId', element('entityId', $fileupload)); ?>
 				<div class="modal-header">
@@ -54,8 +54,8 @@ if (!isset($fileupload)) {
 					
 					<div style="overflow: auto; max-height: 500px;">
 						<table role="presentation" class="table table-hover"><tbody class="files"></tbody></table>
-					</div>						
-				</div>		
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>
@@ -105,21 +105,16 @@ if (!isset($fileupload)) {
 		<td>
 			<span class="preview">
 				{% if (file.urlThumbnail) { %}
-					<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery data-skip-app-link="true"><img src="{%=file.urlThumbnail%}"></a>
+					<a class="thumbnail" href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery data-skip-app-link="true"><img src="{%=file.urlThumbnail%}"></a>
 				{% } %}
 			</span>
 		</td>
 		<td>
-<!--			<p class="name">
-				<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.urlThumbnail?'data-gallery':''%}>{%=file.name%}</a>
-</p>-->
 			{% if (file.error) { %}
 				<div><span class="label label-important">Error</span> {%=file.error%}</div>
 			{% } %}
 		</td>
-		<td>
-<!--			<span class="size">{%=o.formatFileSize(file.size)%}</span>-->
-		</td>
+		<td> </td>
 		<td class="text-right">
 			<button class="btn btn-danger delete" data-type="DELETE" data-url="{%=file.urlDelete%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 				<i class="fa fa-trash-o"></i>

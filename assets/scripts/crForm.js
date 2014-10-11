@@ -477,7 +477,7 @@
 						var response = data.result;
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						$(document).crAlert({
-							'msg': 		response['result']['msg'],
+							'msg':      response['result']['msg'],
 							'callback': function() {
 								$.goToUrl(response['result']['goToUrl']);
 							}
@@ -521,20 +521,27 @@
 
 					this.$fileupload.find('input[name=entityTypeId]').val(this.fileupload.entityTypeId);
 					this.$fileupload.find('input[name=entityId]').val(this.fileupload.entityId);
+					this.$fileupload.find('form').attr('action', this.fileupload.urlSave);
 
 					$.showModal(this.$fileupload, false, false);
 				}
 			, this));
 
-			$('#fileupload').fileupload( { autoUpload: true, getFilesFromResponse: 
-				function(data) {
+			$('#fileupload').fileupload({
+				autoUpload: true, 
+				getFilesFromResponse: function(data) {
 					if ($.isArray(data.result.result.files)) { 
 						return data.result.result.files;
 					}
 					
 					$.hasAjaxDefaultAction(data.result);
 					return [];
-				} 
+				},
+				add: function (e, data) {
+					var jqXHR = data.submit().complete(function (result, textStatus, jqXHR) {
+						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside' });
+					});
+				}
 			});
 		},
 		
@@ -545,9 +552,9 @@
 			$('#fileupload tbody').children().remove();
 
 			$.ajax({
-				'url': 		this.fileupload.urlGallery,
-				'data': 	{ },
-				'success': 	
+				'url':      this.fileupload.urlGallery,
+				'data':     { },
+				'success': 
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						
@@ -556,6 +563,8 @@
 						var files = result.files;
 						var fu = $('#fileupload').data('blueimpFileupload');
 						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in')
+						
+						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside' });
 
 						for (var i=0; i<result.files.length; i++) {
 							var photo = result.files[i];
@@ -832,7 +841,7 @@
 	
 	
 	renderCrForm = function(data, $parentNode) {
-		var buttons 	= [
+		var buttons = [
 			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + crLang.line('Back') + ' </button> ',
 			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
@@ -851,7 +860,6 @@
 			'frmId': 	'frmId',
 			'buttons': 	buttons
 		}, data);
-					
 
 		var $form = $('<form action="' + data['action'] + '" />')
 			.attr('id', data['frmId'])

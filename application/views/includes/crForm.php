@@ -39,15 +39,18 @@
  * 
  * 		$gallery = array(
  *				'label'         => 'Pictures',
-  *				'entityTypeId'  => $entityTypeId,
+ *				'entityTypeId'  => $entityTypeId,
  *				'entityId'      => $entityId,
  *			);
  * 		Las gallery le pegan al controlador base_url('gallery/savePicture') y necesitan los parametros  $entityTypeId y $entityId
- * 		Los metodos utilizan un archivo de configuracion con el formato:
+ *		En caso de necesitar validaciones adicionales, se puede customizar el controller y utilizar el helper savePicture 
+ * 		Los metodos utilizan una configuracion con el formato:
  * 			$config = array(
- *				'controller'    => '%s/edit', // controller con el que se va a validar que el usuario logeado tenga permisos
- *				'folder'        => '/assets/images/%s/original/', // folder con la imagen original
- * 				'urlGallery'    => base_url('gallery/select/'.$entityTypeId.'/'.$entityId), // url que devuelve un json con todas las imagenes de la gallery
+ *				'controller'    => '%s/edit',                                                   // controller con el que se va a validar que el usuario logeado tenga permisos
+ *				'folder'        => '/assets/images/%s/original/',                               // folder con la imagen original
+ * 				'urlGallery'    => base_url('gallery/select/$entityTypeId/$entityId),     // url que devuelve un json con todas las imagenes de la gallery
+ *				'urlSave'       => base_url('gallery/savePicture'),                             // url del controlador para guardar la imagen
+ *				'urlDelete'     => base_url('gallery/deletePicture/$entityTypeId/$fileId),     // url del controlador para borrar la imagen  
  *				'allowed_types' => 'gif|jpg|png',
  *				'max_size'      => 1024 * 8,
  *				'sizes'         => array( // thumb y large

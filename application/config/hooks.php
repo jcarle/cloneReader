@@ -12,24 +12,24 @@
 
 
 $hook['post_controller_constructor'][] = array(
-	'function' 	=> 'initLang',
-	'filename' 	=> 'MY_language_helper.php',
-	'filepath' 	=> 'helpers'
+	'function' => 'initLang',
+	'filename' => 'MY_language_helper.php',
+	'filepath' => 'helpers'
 );
 
 $hook['post_controller_constructor'][] = array(
-	'class' 	=> 'Safety', 
-	'function' 	=> 'initSession',
-	'filename' 	=> 'Safety.php',
-	'filepath' 	=> 'libraries'
+	'class'    => 'Safety', 
+	'function' => 'initSession',
+	'filename' => 'Safety.php',
+	'filepath' => 'libraries'
 );
 
 
 $hook['post_system'][] = array(
-	'class' 	=> 'Usertracking', 
-	'function' 	=> 'auto_track',
-	'filename' 	=> 'Usertracking.php',
-	'filepath' 	=> 'libraries'
+	'class'    => 'Usertracking', 
+	'function' => 'auto_track',
+	'filename' => 'Usertracking.php',
+	'filepath' => 'libraries'
 );
 
 

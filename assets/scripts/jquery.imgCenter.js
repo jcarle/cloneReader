@@ -18,13 +18,13 @@
 	$.fn.imgCenter = function(options) {
 
 		var defaults = {
-			scaleToFit: true,
+			scaleToFit:     true,
 			centerVertical: true,
-			centerType: 'outside', // [ 'outside', 'inside']
-			autoRedraw: false, // 
-			complete: function(){},
-			start: function(){},
-			end: function(){}
+			centerType:     'outside', // [ 'outside', 'inside']
+			autoRedraw:     false, // 
+			complete:       function(){},
+			start:          function(){},
+			end:            function(){}
 		};
 	 	var opts = $.extend(defaults, options);
 	 	
@@ -38,17 +38,35 @@
 			var $img    = $(this);
 			var $parent = $img.parent();
 
+			if ($img.data('eventImgError') == null) {
+				$img.error( function() { imgError($(this)); });
+				$img.data('eventImgError', true);
+			}
+
 			if (opts.autoRedraw == true && $img.data('registerEvent') != true) {
 				$(window).resize($.proxy(
 					function(opts) {
-						var $img = $(this);
+						var $img  = $(this);
 						$img.data('imgCenterComplete', false);
+						if ($img.parents('.cr-page').is(':visible') == false) {
+							return;
+						}
 						$img.imgCenter(opts);
 					}
 				, this, opts));
+				
+				$img.parents('.cr-page').bind('onVisible', $.proxy(
+					function($img, opts, event) {
+						if ($img.data('imgCenterComplete') != true) {
+							$img.imgCenter(opts);
+						}
+					}
+				, this, $img, opts));
+
 				$img.data('registerEvent', true);
 			}
 			
+
 			if ($img.data('imgCenterComplete') == true) {
 				return;
 			}
@@ -80,16 +98,21 @@
 				}
 			, this));
 
+
 			if($img[0].complete){
 				imgMath($img);
 			}
 
 			function imgMath($img) {
+				if (typeof $img.get(0).naturalWidth !== "undefined" && $img.get(0).naturalWidth === 0) {
+					return imgError($img);
+				}
+					
 				if (opts.centerType == 'outside') {
 					// Get image properties.		
-					var imgWidth 	= parseInt($img.get(0).naturalWidth);
-					var imgHeight 	= parseInt($img.get(0).naturalHeight);
-					var imgAspect 	= imgWidth / imgHeight;
+					var imgWidth   = parseInt($img.get(0).naturalWidth);
+					var imgHeight  = parseInt($img.get(0).naturalHeight);
+					var imgAspect  = imgWidth / imgHeight;
 
 					if (parAspect == Infinity) {
 						parWidth  = imgWidth;
@@ -147,6 +170,13 @@
 
 				$img.data('imgCenterComplete', true);
 				$img.parent().addClass('imgCenterComplete');
+			}
+			
+			function imgError($img) {
+				$img
+					.addClass('imgError')
+					.attr('title', 'No network connection or image is not available')
+					.attr('src', base_url + 'assets/images/error.svg');
 			}
 		});
 	}

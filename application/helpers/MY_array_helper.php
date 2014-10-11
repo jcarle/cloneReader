@@ -3,8 +3,8 @@
  * Convierte un sourde del tipo array('id' => '', 'text' => '') en un array valido para los dropdown de CI 
  */
 function sourceToDropdown($source, $appendNullOption) {
-	$CI 	= &get_instance();
-	$data 	= array();
+	$CI    = &get_instance();
+	$data  = array();
 	
 	if ($appendNullOption == true) {
 		$data[''] = '-- '.$CI->lang->line('Choose').' --';
@@ -20,11 +20,11 @@ function sourceToDropdown($source, $appendNullOption) {
  * Devuelve un array con los values de la key pasada como argumento
  */
 function sourceToArray($source, $fieldName) {
-	$data 	= array();
+	$data = array();
 	foreach ($source as $item) {
 		$data[] = $item[$fieldName];
 	}
-	return $data;	
+	return $data;
 }
 
 // TODO: mover esto de aca!
@@ -60,8 +60,8 @@ function loadViewAjax($code, $result = null) {
 	}
 	
 	return $CI->load->view('json', array(
-		'code'		=> $code, 
-		'result' 	=> $result,
+		'code'   => $code, 
+		'result' => $result,
 	));	
 }
 

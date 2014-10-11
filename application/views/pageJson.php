@@ -20,30 +20,28 @@ if (!isset($meta)) {
 	$meta = array();
 }
 $meta = getMetaByController($meta);
+$result['meta'] = $meta;
 
 switch ($view) {
 	case 'includes/crList':
-		$result['title'] 	= element('title', $meta);
-		$result['js']		= 'crList';
-		$result['list']		= $list;
+		$result['js']   = 'crList';
+		$result['list'] = $list;
 		break;
 	case 'includes/crForm':
 		$form  = appendMessagesToCrForm($form);
-		$result['title']	= element('title', $meta);
-		$result['js']		= 'crForm';
-		$result['form'] 	= $form;
+		$result['js']   = 'crForm';
+		$result['form'] = $form;
 		if (hasCrUploadFile($form) == true) { 
 			$result['hasUploadFile'] = true;
 		}
 		break;
 	default: 
-		$result['title']	= element('title', $meta);
 		$result['html'] 	= $this->load->view($view, '', true); 
 }
 
 
-return 	$this->load->view('json', array(
-	'view' 		=> null,
-	'code'		=> true,
-	'result'	=> $result
+return $this->load->view('json', array(
+	'view'   => null,
+	'code'   => true,
+	'result' => $result
 )); 

@@ -140,6 +140,7 @@ class Commond_Model extends CI_Model {
 			->from('entities_search')
 			->where($match, NULL, FALSE)
 //			->order_by('entityTypeId')
+			->order_by('entityTree')
 			->limit(config_item('autocompleteSize'))
 			->get()->result_array();
 		//pr($this->db->last_query());  die;

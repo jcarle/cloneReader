@@ -659,6 +659,10 @@ table .dotdotdot {
 #fileupload .modal-body {
 	max-height: none;
 }
+	#fileupload .thumbnail {
+		width: 150px;
+		height:100px;
+	}
 
 
 .table-force-responsive {
@@ -670,10 +674,6 @@ table .dotdotdot {
 	-ms-overflow-style: -ms-autohiding-scrollbar;
 	-webkit-overflow-scrolling: touch;
 }
-
-
-
-
 
 .form-control .select2-choice, 
 .form-control .select2-choices {

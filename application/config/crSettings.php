@@ -44,6 +44,9 @@ $config['entityConfig'] = array(
 		'entityTypeName' => null,
 		'gallery' => array(  // Default config gallery 
 			'controller'    => '%s/edit',
+			'urlGallery'    => 'gallery/select/$entityTypeId/$entityId',         // url que devuelve un json con todas las imagenes de la gallery
+			'urlSave'       => 'gallery/savePicture',                            // url del controlador para guardar una imagen
+			'urlDelete'     => 'gallery/deletePicture/$entityTypeId/$fileId',    // url del controlador para borrar una imagen  
 			'folder'        => '/assets/images/%s/original/',
 			'allowed_types' => 'gif|jpg|png',
 			'max_size'      => 1024 * 8,
@@ -129,14 +132,8 @@ $config['meta'] = array(
  * Js y Css adicionales para que sea compilado con carabiner
  */
 $config['siteAssets'] = array(
-	'js' => array(
-		'feeds.js',
-		'cloneReader.js', 
-		'jquery.visible.min.js',
-	),
-	'css' => array(
-		'cloneReader.css',
-	)
+	'js' => array( 'feeds.js', 'cloneReader.js',  'jquery.visible.min.js', ),
+	'css' => array( 'cloneReader.css', )
 );
 
 

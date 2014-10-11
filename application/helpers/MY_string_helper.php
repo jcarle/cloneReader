@@ -25,8 +25,12 @@ function truncate($string, $limit, $break=" ", $pad="...") {
 
 /**
  * TODO: documentar
+ * 
+ * @param $sort      array con los items del dropdown
+ * @param $current   item seleccionado
+ * @param $seoTag    indica si se hagrega un tag html dentro del link para mejorar el seo
  */
-function getHtmlDropdownSort($sort, $current) {
+function getHtmlDropdownSort($sort, $current, $seoTag = null) {
 	$CI = & get_instance();
 	
 	if (!isset($sort[$CI->input->get('sort')])) {
@@ -42,9 +46,16 @@ function getHtmlDropdownSort($sort, $current) {
 			</button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"> ';
 
+	$seoStart = null;
+	$seoEnd   = null;
+	if ($seoTag != null) {
+		$seoStart = '<'.$seoTag.'>';
+		$seoEnd   = '</'.$seoTag.'>';		
+	}
+
 	foreach ($sort as $key => $value) {
 		$html .= ' <li role="presentation" '.($current == $key ? ' class="active" ' : '').'>
-						<a role="menuitem" tabindex="-1" href="'. base_url( uri_string().'?sort='.$key).'">'. $value['label'].'</a>
+						<a role="menuitem" tabindex="-1" href="'. base_url( uri_string().'?sort='.$key).'">'.$seoStart. $value['label'].$seoEnd.'</a>
 					</li>';
 	}
 				

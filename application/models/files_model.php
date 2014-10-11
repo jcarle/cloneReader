@@ -4,15 +4,15 @@ class Files_Model extends CI_Model {
 	function insert($fileName, $fileTitle) {
 		
 		$this->db->insert('files', array(
-			'fileName'		=> $fileName,
-			'fileTitle'		=> $fileTitle
+			'fileName'   => $fileName,
+			'fileTitle'  => $fileTitle
 		));
 		
 		return $this->db->insert_id();
 	}
 	
 	function deleteFile($config, $fileId){
-		$data      = $this->get($fileId);
+		$data = $this->get($fileId);
 		if (empty($data)) {
 			return;
 		}
@@ -83,12 +83,12 @@ class Files_Model extends CI_Model {
 		foreach ($query as $row) {
 			$picture = array(
 				'name'           => $row['fileName'],
-				'fileTitle'  => $row['fileTitle'],
+				'fileTitle'      => $row['fileTitle'],
 				'urlLarge'       => base_url($config['sizes']['large']['folder'].$row['fileName']),
 				'urlThumbnail'   => base_url($config['sizes']['thumb']['folder'].$row['fileName']),
 			);
 			if ($allowDelete == true) {
-				$picture['urlDelete'] = base_url('gallery/deletePicture/'.$entityTypeId.'/'.$row['fileId']);
+				$picture['urlDelete'] = base_url(str_replace(array('$entityTypeId', '$fileId'), array($entityTypeId, $row['fileId']), $config['urlDelete']));
 			}
 			if ($calculateSize == true) {
 				$picture['size'] = filesize('.'.$config['folder'].$row['fileName']); 
@@ -105,5 +105,15 @@ class Files_Model extends CI_Model {
 		if (!empty($pictures)) {
 			return base_url($config['sizes'][$size]['folder'].$pictures[0]['fileName']);
 		}
+	}
+	
+	function hasFileIdInEntityTypeId($entityTypeId, $fileId) {
+		$query = $this->db->select('files.fileId ')
+			->join('entities_files', 'files.fileId =  entities_files.fileId', 'inner')
+			->where('entities_files.entityTypeId', $entityTypeId)
+			->where('files.fileId', $fileId)
+			->get('files')->result_array();
+		//pr($this->db->last_query());
+		return (!empty($query));
 	}
 }

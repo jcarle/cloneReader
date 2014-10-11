@@ -223,6 +223,9 @@ class Users_Model extends CI_Model {
 		$query = $this->db
 			->where('userId', $userId)
 			->get('users')->row_array();
+		if (empty($query)) {
+			return $query;
+		}
 		
 		if ($getGroups == true) {
 			$query['groups'] = sourceToArray($this->getGroups($userId), 'groupId');

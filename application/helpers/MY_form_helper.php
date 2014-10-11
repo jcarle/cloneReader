@@ -58,7 +58,7 @@ function populateCrForm($form, $data) {
  * Para chequear los datos de un crForm 
  * @param $data
  * @param $id 
- * @return si no esta vacio devuelve $data, si $id == 0 devuelve true (%s/add ), sino devuelve null 
+ * @return si no esta vacio devuelve $data, si $id == 0 devuelve true (se usa en %s/add ), sino devuelve null 
  */
 function getCrFormData($data, $id) {
 	if (!is_numeric($id)) {
@@ -71,6 +71,20 @@ function getCrFormData($data, $id) {
 		return true;
 	}
 	return null;
+}
+
+function getCrFormFieldGallery($entityTypeId, $entityId, $label) {
+	$config = getEntityGalleryConfig($entityTypeId);
+	
+	return array(
+		'type'          => 'gallery',
+		'label'         => $label,
+		'urlGallery'    => base_url(str_replace(array('$entityTypeId', '$entityId'), array($entityTypeId, $entityId),$config['urlGallery'])),
+		'urlSave'       => base_url($config['urlSave']),
+		'urlDelete'     => base_url($config['urlDelete']), 
+		'entityTypeId'  => $entityTypeId,
+		'entityId'      => $entityId,	
+	);
 }
 
 function getCrFormFieldMoney(array $price, array $currency, array $exchange, array $total) {
@@ -147,10 +161,10 @@ function getCrFormValidationFieldMoney(array $price, array $exchange) {
 function subscribeForCrFormSumValues($fieldName, array $aFieldName) {
 	foreach ($aFieldName as $fieldName) {
 		$subscribe[] = array(
-			'field' 		=> $fieldName,
-			'event'			=> 'change', 
-			'callback'		=> 'sumValues',
-			'arguments'		=> array( json_encode($aFieldName) )
+			'field'      => $fieldName,
+			'event'      => 'change', 
+			'callback'   => 'sumValues',
+			'arguments'  => array( json_encode($aFieldName) )
 		);
 	}
 	return $subscribe;
@@ -173,13 +187,23 @@ function hasCrUploadFile($form) {
 		}
 		if ($field['type'] == 'upload') {
 			return true;
-		}		
+		}
 	}
 	return false;
 }
 
+function selectGallery($entityTypeId, $entityId) {
+	$CI = &get_instance();
+	$CI->load->model('Files_Model');
+	
+	$files = $CI->Files_Model->selectEntityGallery($entityTypeId, $entityId, null, true);
+	return loadViewAjax(true,  array('files' => $files));	
+}
+
+
 /**
  * Guarda una imagen y la rezisea segun los parametros seteados en el config
+ * SI  entityTypeId != NULL AND $entityId != NULL guarda la relacion en la table entities_files
  * 
  * @param $config array. Ejemplo de $config = array(
  *		'folder'        => '/assets/images/%s/original/',
@@ -189,9 +213,11 @@ function hasCrUploadFile($form) {
  *			'thumb' => array( 'width' => 150,  'height' => 100, 'folder' => '/assets/images/%s/thumb/' ),
  *		)
  *	)
+ *  @param entityTypeId
+ *  @param $entityId
  * @return array
  * */
-function savePicture($config) {
+function savePicture($config, $entityTypeId = null, $entityId = null) {
 	$CI = &get_instance();
 	
 	$CI->load->model('Files_Model');
@@ -205,7 +231,7 @@ function savePicture($config) {
 	));
 
 	if (!$CI->upload->do_upload()) {
-		return array( 'code' => false, 'result'	=> $CI->upload->display_errors('', '') );
+		return array( 'code' => false, 'result' => $CI->upload->display_errors('', '') );
 	}
 
 	$data = $CI->upload->data();
@@ -230,16 +256,18 @@ function savePicture($config) {
 	$fileId = $CI->Files_Model->insert($data['file_name'], $data['client_name']);
 	if(!$fileId) {
 		@unlink($data['full_path']);
-		return array( 'code' => false, 'result'	=> 'Something went wrong when saving the file, please try again');
+		return array( 'code' => false, 'result' => 'Something went wrong when saving the file, please try again');
 	}
 
 	@unlink($_FILES[$file_element_name]);
 	
-	return array( 'code' => true, 'fileId'	=> $fileId);
+
+	if ($entityTypeId != null &&  $entityId != null) {
+		$CI->Files_Model->saveFileRelation($entityTypeId, $entityId ,$fileId);
+	}
+	
+	return array( 'code' => true, 'fileId' => $fileId);
 }
-
-
-
 
 /**
  * Guarda un archivo segun los parametros seteados en el config
@@ -257,10 +285,10 @@ function saveFile($config) {
 	$CI->load->model('Files_Model');
 
 	$CI->load->library('upload', array(
-		'upload_path' 		=> '.'.$config['folder'],
-		'allowed_types' 	=> $config['allowed_types'],
-		'max_size'			=> $config['max_size'],
-		'encrypt_name'		=> true,
+		'upload_path'     => '.'.$config['folder'],
+		'allowed_types'   => $config['allowed_types'],
+		'max_size'        => $config['max_size'],
+		'encrypt_name'    => true,
 	));
 
 	if (!$CI->upload->do_upload()) {
@@ -281,8 +309,8 @@ function saveFile($config) {
 }
 
 function renderCrFormFields($form) {
-	$CI			= &get_instance();
-	$aFields 	= array();
+	$CI         = &get_instance();
+	$aFields    = array();
 	$formErrors = array_keys(validation_array_errors());
 	
 	foreach ($form['fields'] as $name => $field) {
@@ -437,7 +465,7 @@ function renderCrFormTree($aTree, $value){
 			$sTmp .= renderCrFormTree($aTree[$i]['childs'], $value);
 		}
 		
-		$sTmp .= '</li>';		
+		$sTmp .= '</li>';
 	}
 	$sTmp .= '</ul>';
 	return $sTmp;

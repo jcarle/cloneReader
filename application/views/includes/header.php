@@ -24,6 +24,7 @@ if (config_item('hasRss') == true) {
 	echo ' <link rel="alternate" type="application/rss+xml" title="Feed | '.config_item('siteName').'" href="'. base_url('rss').'" />';
 }	
 ?>
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -100,36 +101,37 @@ $siteLogo = config_item('siteLogo');
 	</div>
 	
 	<nav class="navbar navbar-default" role="navigation" id="header">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand logo" href="<?php echo base_url(); ?>"> 
-				<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">  
-			</a>
-		</div>
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand logo" href="<?php echo base_url(); ?>"> 
+					<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">  
+				</a>
+			</div>
 
-		<div class="navbar-collapse collapse navbar-ex1-collapse ">
-	
-			<form class="navbar-form navbar-left" role="search" style="display:none"> <!--  TODO: implementar el buscador!-->
-				<div class="form-group" >
-					<div class="input-group">
-						<span class="input-group-addon">
-							<i class="fa fa-search" ></i>
-						</span>
-						<input type="text" class="form-control" placeholder="search ..." />
-						<span class="input-group-btn">
-							<button  class="btnSearch btn btn-default">Search</button>
-						</span>
+			<div class="navbar-collapse collapse navbar-ex1-collapse ">
+				<form class="navbar-form navbar-left" role="search" style="display:none"> <!--  TODO: implementar el buscador!-->
+					<div class="form-group" >
+						<div class="input-group">
+							<span class="input-group-addon">
+								<i class="fa fa-search" ></i>
+							</span>
+							<input type="text" class="form-control" placeholder="search ..." />
+							<span class="input-group-btn">
+								<button  class="btnSearch btn btn-default">Search</button>
+							</span>
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
 <?php
 echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav navbar-right');
 ?>
+			</div>
 		</div>
 	</nav>
 
@@ -139,13 +141,13 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 		</div>
 	</nav>	
 	<div class="container pageContainer ">
-		<div class="page <?php echo getPageName(); ?>"  data-title="<?php echo element('title', $meta); ?>">
+		<div class="cr-page <?php echo getPageName(); ?>"  data-title="<?php echo element('title', $meta); ?>">
 <?php
 if (isset($breadcrumb)) {
 	echo '<ol class="breadcrumb">';
 	foreach ($breadcrumb as $link) {
 		if (element('active', $link) == true) {
-			echo '<li class="active">'.$link['text'].'</li>';			
+			echo '<li class="active">'.$link['text'].'</li>';
 		}
 		else {
 			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
@@ -159,7 +161,7 @@ if (!isset($showTitle)) {
 }
 if ($showTitle == true) {
 	echo '	<div class="page-header">
-				<h1>'. element('title', $meta).' <small> </small></h1>
+				<h1>'. element('h1', $meta).' <small> </small></h1>
 			</div>';
 }
 
@@ -169,14 +171,14 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 		return;
 	}
 	
-	$CI	= &get_instance();
+	$CI = &get_instance();
 	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
-		$icon 		= '';
-		$hasChilds 	= count($aMenu[$i]['childs']) > 0;
-		$attr		= '';
-		$label 		= $CI->lang->line($aMenu[$i]['label']);
+		$icon       = '';
+		$hasChilds  = count($aMenu[$i]['childs']) > 0;
+		$attr       = '';
+		$label      = $CI->lang->line($aMenu[$i]['label']);
 		if ($label == '') {
 			$label = $aMenu[$i]['label'];
 		}
@@ -185,25 +187,25 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 		}
 		if ($hasChilds == true) {
 			$attr = ' class="dropdown-toggle" data-toggle="dropdown" ';
-		}		
+		}
 		
 		$submenuClass = '';
 		if ($depth >= 1 && $hasChilds == true) {
 			$submenuClass = ' class="dropdown-submenu dropdown-submenu-left" ';
 		}
-						
+
 		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" href="'.base_url($aMenu[$i]['url']).'" '.$attr.'>'.$icon.$label.'</a>';
+			$sTmp .= ' <li '.$submenuClass.'> <a title="'.$label.'" href="'.base_url($aMenu[$i]['url']).'" '.$attr.'>'.$icon.$label.'</a>';
 		}
 		else {
-			$sTmp .= '	<li '.$submenuClass.'> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';
+			$sTmp .= ' <li '.$submenuClass.'> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';
 		} 	
 		
 		if ($hasChilds == true) {
 			$sTmp .= renderMenu($aMenu[$i]['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
 		}
 		
-		$sTmp .= '</li>';		
+		$sTmp .= '</li>';
 	}
 	$sTmp .= '</ul>';
 	return $sTmp;

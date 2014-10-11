@@ -19,7 +19,7 @@ crMain = {
 
 		$(window).bind('beforeunload', function(){
 			$.isUnloadPage = true; // Para evitar tirar el error de conección perdida si unlodean la page
-		});		
+		});
 		
 		$('body').on('click', 'a',
 			function(event) {
@@ -40,7 +40,7 @@ crMain = {
 					return;
 				}
 				$.countProcess++;
-				$.showWaiting();	
+				$.showWaiting();
 			}
 		);
 
@@ -50,7 +50,7 @@ crMain = {
 					return;
 				}
 				$.countProcess--;
-				$.showWaiting();	
+				$.showWaiting();
 			}
 		);
 		
@@ -64,10 +64,10 @@ crMain = {
 				}
 				if (jqXHR.status === 0 && jqXHR.statusText === 'error') {
 					$(document).crAlert( {
-						'msg': 			crLang.line('Not connected. Please verify your network connection'),
-						'isConfirm': 	true,
-						'confirmText': 	crLang.line('Retry'),
-						'callback': 	$.proxy(
+						'msg':         crLang.line('Not connected. Please verify your network connection'),
+						'isConfirm':   true,
+						'confirmText': crLang.line('Retry'),
+						'callback':    $.proxy(
 							function() { $.ajax(ajaxOptions); }
 						, this)
 					});
@@ -93,15 +93,15 @@ crMain = {
 			crMain.loadUrl(location.href);
 		});  
 
-		if ($('.pageContainer > .page').length == 0) {
+		if ($('.pageContainer > .cr-page').length == 0) {
 			crMain.loadUrl(location.href);
 		}
 	},
 	
 	loadMenuAndTranslations: function(async) {
 		$.ajax({
-			'url': 		base_url + 'app/selectMenuAndTranslations',
-			'async':	(async == true),
+			'url':   base_url + 'app/selectMenuAndTranslations',
+			'async': (async == true),
 			'success': 
 				function(response) {
 					crLang.aLangs = response['result']['aLangs'];
@@ -129,7 +129,7 @@ crMain = {
 		var pageName = this.getPageName();
 		this.aPages[pageName] = $('.pageContainer > .' + pageName);
 		if (this.aPages[pageName].length == 0) {
-			this.aPages[pageName] = $('<div class="page ' + pageName + '"/>').appendTo($('.pageContainer'));
+			this.aPages[pageName] = $('<div class="cr-page ' + pageName + '"/>').appendTo($('.pageContainer'));
 		}
 		
 		
@@ -152,11 +152,11 @@ crMain = {
 		}
 		
 		this.ajax = $.ajax({
-			'url': 		url,
-			'data': 	{ 'pageJson': true },
-			'async':	true,
+			'url':      url,
+			'data':     { 'pageJson': true },
+			'async':    true,
 			'pageName': pageName,
-			'success': 	$.proxy(
+			'success':  $.proxy(
 				function(pageName, response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					this.renderPage(response, pageName);
@@ -184,8 +184,8 @@ crMain = {
 	},
 	
 	renderPage: function(response, pageName) {
-		var data 	= response['result'];
-		var $page 	= crMain.aPages[pageName];
+		var data   = response['result'];
+		var $page  = crMain.aPages[pageName];
 		$page.data(data);
 		
 		crMain.showPage(pageName);
@@ -193,20 +193,20 @@ crMain = {
 		crMain.renderPageTitle(data, $page);
 		
 		if (data['hasUploadFile'] == true) {
-			this.loadUploadFile();		
+			this.loadUploadFile();
 		}
 		
 		switch (data['js']) {
 			case 'crList':
 				$(null).crList($.extend({
-					'autoRender': 	true,
-					'$parentNode': 	$(crMain.aPages[pageName])
+					'autoRender':   true,
+					'$parentNode':  $(crMain.aPages[pageName])
 				} , data['list']));
 				break;
 			case 'crForm':
 				$(null).crForm( $.extend({
-					'autoRender': 	true,
-					'$parentNode': 	$(crMain.aPages[pageName])
+					'autoRender':  true,
+					'$parentNode': $(crMain.aPages[pageName])
 				} , data['form']));
 				break;
 			default:
@@ -215,7 +215,7 @@ crMain = {
 	},
 	
 	renderPageTitle: function(data, $page) {
-		$('title').text(data['title'] + ' | ' + $.crSettings.siteName);
+		$('title').text(data['meta']['title'] + ' | ' + $.crSettings.siteName);
 		
 		if (data['breadcrumb'] != null) {
 			var $ol = $('<ol class="breadcrumb">').appendTo($page);
@@ -242,9 +242,8 @@ crMain = {
 				</div>\
 			').appendTo($page);
 			
-			$pageHeader.find('h1').text(data['title']);
+			$pageHeader.find('h1').text(data['meta']['h1']);
 		}
-
 	},
 	
 	showPage: function(pageName) {
@@ -253,12 +252,13 @@ crMain = {
 		$('.datetimepicker, .select2-drop, .select2-drop-mask, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
 		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 
-		var $page 		= this.aPages[pageName];
-		var $otherPages = $('.pageContainer > .page:visible:not(.' + pageName + ')');
+		var $page       = this.aPages[pageName];
+		var $otherPages = $('.pageContainer > .cr-page:visible:not(.' + pageName + ')');
+		var meta        = $page.data('meta');
 		
 		$otherPages.hide().trigger('onHide');
 
-		$('title').text( $page.data('title') + ' | ' + $.crSettings.siteName);
+		$('title').text( meta['title'] + ' | ' + $.crSettings.siteName);
 		$page.stop().show();
 		$page.trigger('onVisible');
 

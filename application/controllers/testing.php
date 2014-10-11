@@ -123,14 +123,8 @@ class Testing extends CI_Controller {
 				'isPicture'  => true,
 				'disabled'   => true,
 			);
-						
-			$form['fields']['gallery'] = array(
-				'type'          => 'gallery',
-				'label'         => 'Pictures',
-				'urlGallery'    => base_url('gallery/select/'.config_item('entityTypeTesting').'/'.$testId),
-				'entityTypeId'  => config_item('entityTypeTesting'),
-				'entityId'      => $testId,
-			);
+
+			$form['fields']['gallery'] = getCrFormFieldGallery(config_item('entityTypeTesting'), $testId, 'Pictures');
 			$form['fields']['testChilds'] = array(
 				'type'        => 'subform',
 				'label'       => 'childs', 
