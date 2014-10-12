@@ -1,6 +1,6 @@
 <?php
 if ($shareByEmailComment != '') {
-	echo '<p>'.$shareByEmailComment.'</p>';
+	echo '<p>'.nl2br(htmlspecialchars($shareByEmailComment)).'</p>';
 }
 ?>
 <div style=" background: #F5F5F5; border:1px solid #E5E5E5; border-radius: 5px; padding: 10px;">
