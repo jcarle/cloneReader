@@ -36,17 +36,18 @@ class Entries_Model extends CI_Model {
 		// Default filters, por si viaja mal el js.
 		$userFilters = array_merge(
 			array(
-				'page'			=> 1,
-				'onlyUnread'	=> true,
-				'sortDesc'	 	=> true,
-				'id' 			=> config_item('tagHome'), 
-				'type'	 		=> 'tag',
-				'viewType'	 	=> 'detail',
-				'isMaximized' 	=> false,
+				'page'          => 1,
+				'onlyUnread'    => true,
+				'sortDesc'      => true,
+				'id'            => config_item('tagHome'), 
+				'type'          => 'tag',
+				'viewType'      => 'detail',
+				'isMaximized'   => false,
 			), $aFilters);
-
+			
+		$onlyUnread = $userFilters['onlyUnread']; // No guardo el filter onlyUnread si esta viendo los favoritos   
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == config_item('tagStar')) {
-			$userFilters['onlyUnread'] = false;
+			$onlyUnread = false;
 		}
 		
 		$this->updateUserFilters($userFilters, $userId);
@@ -73,7 +74,7 @@ class Entries_Model extends CI_Model {
 			$indexName = 'indexTag';
 			$this->db->where('users_entries.tagId', (int)$userFilters['id']);
 		}
-		if ($userFilters['onlyUnread'] == true) {
+		if ($onlyUnread == true) {
 			$this->db->where('users_entries.entryRead <> true');
 		}
 

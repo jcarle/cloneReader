@@ -1,34 +1,34 @@
 cloneReader = {
 	init: function(aFilters) {
-		this.$page 		= $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
-		this.$toolbar 	= $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
-		this.$ulFilters	= $('<ul class="ulFilters"/>').appendTo(this.$page);
-		this.$ulEntries	= $('<ul class="ulEntries"  />').appendTo(this.$page);
+		this.$page      = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
+		this.$toolbar   = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
+		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
+		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang($.crSettings.langId);
 		this.isMobile = $.isMobile();
 
-		this.minUnreadEntries 	= 2;
-		this.isLastPage			= false;
-		this.currentEntries		= []; // para guardar las entries visibles y no volver a pedir al servidor si solo se cambia el tipo de vista
-		this.aEntries	 		= {};
-		this.filters			= null;
-		this.tags				= null;
-		this.aUserEntries 		= {};
-		this.aUserTags			= {};
-		this.aFilters 			= $.extend({
-			'page':			1,
-			'onlyUnread':	true,
-			'sortDesc': 	true,
-			'id': 			$.crSettings.tagHome, 
-			'type': 		'tag',
-			'viewType': 	'detail',
-			'isMaximized': 	false
-		}, aFilters);	
-		this.isMaximized		= (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
-		this.aSystemTags		= [$.crSettings.tagAll, $.crSettings.tagStar, $.crSettings.tagHome, $.crSettings.tagBrowse];
-		this.isLoaded			= false;
+		this.minUnreadEntries   = 2;
+		this.isLastPage         = false;
+		this.currentEntries     = []; // para guardar las entries visibles y no volver a pedir al servidor si solo se cambia el tipo de vista
+		this.aEntries           = {};
+		this.filters            = null;
+		this.tags               = null;
+		this.aUserEntries       = {};
+		this.aUserTags          = {};
+		this.aFilters           = $.extend({
+			'page':         1,
+			'onlyUnread':   true,
+			'sortDesc':     true,
+			'id':           $.crSettings.tagHome, 
+			'type':         'tag',
+			'viewType':     'detail',
+			'isMaximized':  false
+		}, aFilters);
+		this.isMaximized  = (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
+		this.aSystemTags  = [$.crSettings.tagAll, $.crSettings.tagStar, $.crSettings.tagHome, $.crSettings.tagBrowse];
+		this.isLoaded     = false;
 		
 		this.buildCache();
 		this.renderToolbar();
@@ -633,7 +633,7 @@ TODO: pensar como mejorar esta parte
 				$checkbox = $checkbox.parents('.read:first');
 			}
 			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.hasClass('selected'));
-		});				
+		});
 		
 		$entry.find('p').children().removeAttr('class');
 		$entry.find('a').attr('target', '_blank');
@@ -641,7 +641,6 @@ TODO: pensar como mejorar esta parte
 		$p.find('table').each(function() {
 			var $table = $(this);
 			var $div   = $('<div class="table-responsive" />');
-cn($div);			
 			$table.before($div);
 			$table.appendTo($div).addClass('table table-bordered table-condensed');
 		});
@@ -1516,8 +1515,8 @@ console.timeEnd("t1");
 		var feedId = this.aFilters.id;
 
 		var aItems = [
-			{ 'html': crLang.line('Unsubscribe'), 		'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
-			{ 'html': crLang.line('New tag'), 			'class': 'newTag', 'callback': 
+			{ 'html': crLang.line('Unsubscribe'),  'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
+			{ 'html': crLang.line('New tag'),      'class': 'newTag', 'callback': 
 				function(event) {
 					event.stopPropagation(); 
 					cloneReader.showPopupForm(crLang.line('Add new tag'), crLang.line('enter tag name'), function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
@@ -1529,8 +1528,11 @@ console.timeEnd("t1");
 					$.goToUrl(base_url + 'tools/tags');
 				}
 			},
-			{ 'class': 'divider' }
 		];
+		
+		if (this.tags.length > 0) {
+			aItems.push( { 'class': 'divider' } );
+		}
 
 		for (var i=0; i<this.tags.length; i++) {
 			var tag = this.tags[i];
