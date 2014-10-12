@@ -216,15 +216,15 @@ cloneReader = {
 		}
 		if (this.$ulEntries.is(':animated') == true) {
 			return;
-		}		
+		}
 
-		var top 		= this.$ulEntries.offset().top;
-		var height	 	= this.$ulEntries.outerHeight();
-		var aLi			= this.$ulEntries.find('.entry');
+		var top      = this.$ulEntries.offset().top;
+		var height   = this.$ulEntries.outerHeight();
+		var aLi      = this.$ulEntries.find('.entry');
 		
 		for (var i=0; i<aLi.length; i++) {
-			var $entry 	= $(aLi[i]);
-			var offset 	= $entry.find('p:first').offset();
+			var $entry  = $(aLi[i]);
+			var offset  = $entry.find('p:first').offset();
 			if (top <= offset.top) { 
 				this.selectEntry($entry, false, false);
 				return;
@@ -234,14 +234,14 @@ cloneReader = {
 				return;
 			}
 		}
-	},	
+	},
 	
 	buildCache: function() {
 		$.ajax({
-			'url': 			base_url + 'entries/buildCache',
-			'async':		true, //false
-			'skipwWaiting':	true,
-			'success':  	
+			'url':          base_url + 'entries/buildCache',
+			'async':        true, //false
+			'skipwWaiting': true,
+			'success': 
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }		
 					if (response.result.hasNewEntries == true) {
@@ -434,14 +434,14 @@ cloneReader = {
 		this.isLoadEntries = true;
 		
 		this.ajax = $.ajax({		
-			'url': 		base_url + 'entries/select',
-			'data': 	{ 
-				'post': 				$.toJSON(this.aFilters), 
-				'pushTmpUserEntries': 	clear 
+			'url':      base_url + 'entries/select',
+			'data':    { 
+				'post':               $.toJSON(this.aFilters), 
+				'pushTmpUserEntries': clear 
 			},
-			'type':			'post',
-			'skipwWaiting':	true,
-			'success':  	
+			'type':        'post',
+			'skipwWaiting': true,
+			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
@@ -653,7 +653,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	renderListEntry: function($entry, entry) {
-		var $div 			= $('<div/>').addClass('title').appendTo($entry);
+		var $div = $('<div/>').addClass('title').appendTo($entry);
 
 		$('<label><i /></label>').addClass('fa star').appendTo($div);
 		$('<span />').addClass('feedName').html($.stripTags(entry.feedName, '')).appendTo($div);
@@ -671,6 +671,7 @@ TODO: pensar como mejorar esta parte
 					.removeClass('expanded')
 					.removeClass('selected')
 					.find('.detail').remove();
+				cloneReader.getMoreEntries();
 				return;
 			}
 			cloneReader.selectEntry($entry, true, false);
