@@ -615,38 +615,6 @@ class Entries_Model extends CI_Model {
 		$this->Users_Model->updateUserFiltersByUserId($userFilters, (int)$userId);
 	}
 
-	function getNewsEntries($userId = null, $feedId = null) {
-		set_time_limit(0);
-		
-		$this->db
-			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
-			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-			->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)')
-			->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').')')
-			->where('feedMaxRetries < '.config_item('feedMaxRetries'))
-//->where('feeds.feedId IN (340, 512, 555, 989)')
-			->order_by('feedLastScan ASC');
-
-		if (is_null($userId) == false) {
-			$this->db->where('users_feeds.userId', $userId);
-		}
-		if (is_null($feedId) == false) {
-			$this->db->where('feeds.feedId', $feedId);
-		}
-		 
-		$query = $this->db->get('feeds');
-		//vd($this->db->last_query()); 
-		$count = 0;
-		foreach ($query->result() as $row) {
-			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php feeds/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');
-			
-			$count++;
-			if ($count % 40 == 0) {
-				sleep(10);
-			}
-		}
-	}	
-
 	function populateMillionsEntries() {
 		ini_set('memory_limit', '-1');
 				

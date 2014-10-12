@@ -1,2 +1,2 @@
 Agregar al crontab:
-	php [PATH_TO_CLONEREADER]/cloneReader/index.php process/getNewsEntries
+	php [PATH_TO_CLONEREADER]/cloneReader/index.php process/scanAllFeeds

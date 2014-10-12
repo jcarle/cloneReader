@@ -13,13 +13,13 @@ $items = array(
 		'title' => 'Feeds',
 		'buttons' => array(	
 			array(
-				'text' => 'Scan feeds',
-				'url'  => 'process/getNewsEntries',
+				'text' => 'Scan',
+				'url'  => 'process/scanAllFeeds',
 			),
 			array(
-				'text' => 'Scan feeds 404',
-				'url'  => 'process/rescanFeeds404',
-			),			
+				'text' => 'Rescan 404',
+				'url'  => 'process/rescanAll404Feeds',
+			),
 		)
 	),
 );

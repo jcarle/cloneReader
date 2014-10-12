@@ -191,6 +191,50 @@ class Feeds_Model extends CI_Model {
 			array('feedId' => $feedId)
 		);
 	}
+	
+	/**
+	 * @param $userId
+	 * @param $feedId
+	 * @param $rescan   indica si SOLO reescanea los 404
+	 * 
+	 */
+	function scanAllFeeds($userId = null, $feedId = null, $rescan = false) {
+		set_time_limit(0);
+		
+		$this->db
+			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
+			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
+			->order_by('feedLastScan ASC');
+			
+		if ($rescan == false) {
+			$this->db
+				->where('feedLastScan < DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)')
+				->where('feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').')')
+				->where('feedMaxRetries < '.config_item('feedMaxRetries'));
+		}
+		else {
+			$this->db->where('feeds.statusId', config_item('feedStatusNotFound'));
+		}
+
+		if (is_null($userId) == false) {
+			$this->db->where('users_feeds.userId', $userId);
+		}
+		if (is_null($feedId) == false) {
+			$this->db->where('feeds.feedId', $feedId);
+		}
+		 
+		$query = $this->db->get('feeds');
+		// vd($this->db->last_query()); die; 
+		$count = 0;
+		foreach ($query->result() as $row) {
+			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php process/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');
+			
+			$count++;
+			if ($count % 40 == 0) {
+				sleep(10);
+			}
+		}
+	}
 
 	function scanFeed($feedId) {
 		set_time_limit(0);

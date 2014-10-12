@@ -27,32 +27,30 @@ class Process extends CI_Controller {
 	}
 	
 
-	function getNewsEntries($userId = null) {
-		$this->load->model(array('Entries_Model'));
+	function scanAllFeeds($userId = null) {
+		$this->load->model(array('Feeds_Model'));
 		
-		$this->Entries_Model->getNewsEntries($userId);
+		$this->Feeds_Model->scanAllFeeds($userId);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 	
-	function rescanFeeds404() {
-		set_time_limit(0);
+	function rescanAll404Feeds() {
+		$this->load->model(array('Feeds_Model'));
 		
-		$this->db
-			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
-			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
-			->where('feeds.statusId', config_item('feedStatusNotFound'));
+		$this->Feeds_Model->scanAllFeeds(null, null, true);
+		
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+	}
+	
+	function scanFeed($feedId) {
+		$this->load->model(array('Feeds_Model'));
+		
+		$this->db->trans_start();		
 
-		$query = $this->db->get('feeds');
-		//vd($this->db->last_query()); 
-		$count = 0;
-		foreach ($query->result() as $row) {
-			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php feeds/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');
-			
-			$count++;
-			if ($count % 40 == 0) {
-				sleep(10);
-			}
-		}
+		$this->Feeds_Model->scanFeed($feedId);
+		$this->Feeds_Model->updateFeedCounts($feedId);
+		
+		$this->db->trans_complete();
 	}
 }
