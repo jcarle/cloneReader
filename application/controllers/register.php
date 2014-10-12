@@ -79,6 +79,9 @@ class Register extends CI_Controller {
 				$this->Users_Model->updateConfirmEmailKey($userId, $userEmail, $confirmEmailKey);
 				$this->Tasks_Model->addTask('sendEmailWelcome', array('userId' => $userId));
 				
+				$this->load->model('Entries_Model');
+				$this->Entries_Model->addDefaultFeeds();
+				
 				return loadViewAjax($code, array('goToUrl' => base_url('home'), 'skipAppLink' => true));
 			}
 

@@ -234,32 +234,32 @@ class Users extends CI_Controller {
 		$query = $this->Users_Model->selectUsersLogsToList($page, config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'meta'			=> array( 'title' => $this->lang->line('User logs') ),
-			'list'			=> array(
-				'urlList'		=> 'users/logs',
-				'readOnly'		=> true,
-				'columns'		=> array(
-					'userEmail' 		=> $this->lang->line('Email'),
-					'userFullName' 		=> $this->lang->line('Name'), 
-					'userLogDate'		=> array('class' => 'date', 'value' => $this->lang->line('Date')),
+			'view'  => 'includes/crList', 
+			'meta'  => array( 'title' => $this->lang->line('User logs') ),
+			'list'  => array(
+				'urlList'   => 'users/logs',
+				'readOnly'  => true,
+				'columns'   => array(
+					'userEmail'     => $this->lang->line('Email'),
+					'userFullName'  => $this->lang->line('Name'), 
+					'userLogDate'   => array('class' => 'date', 'value' => $this->lang->line('Date')),
 				),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'showId'		=> true,
-				'filters'		=> array(
+				'data'      => $query['data'],
+				'foundRows' => $query['foundRows'],
+				'showId'    => true,
+				'filters'   => array(
 					'userId' => array(
-						'type' 			=> 'typeahead',
-						'label'			=> $this->lang->line('User'),
-						'source' 		=> base_url('search/users/'),
-						'value'			=> array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
-						'multiple'		=> false,
-						'placeholder' 	=> $this->lang->line('User')
-					),					
+						'type'        => 'typeahead',
+						'label'       => $this->lang->line('User'),
+						'source'      => base_url('search/users/'),
+						'value'       => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
+						'multiple'    => false,
+						'placeholder' => $this->lang->line('User')
+					),
 				),
 				'sort' => array(
-					'userId'		=> '#',
-					'userLogDate'	=> $this->lang->line('Date'),
+					'userId'      => '#',
+					'userLogDate' => $this->lang->line('Date'),
 				)
 			)
 		));

@@ -72,7 +72,7 @@ class Users_Model extends CI_Model {
 		// creo el usuario
 		$values['userEmail']    = $userEmail;
 		$values['userDateAdd']  = date("Y-m-d H:i:s");
-		$values['langId']        = $this->session->userdata('langId');
+		$values['langId']       = $this->session->userdata('langId');
 		$this->db->insert('users', $values);
 		$userId = $this->db->insert_id();
 
@@ -248,19 +248,19 @@ class Users_Model extends CI_Model {
 		$userId = $data['userId'];
 		
 		$values = array(
-			'userEmail' 		=> $data['userEmail'],
-			'userFirstName'		=> $data['userFirstName'],
-			'userLastName'		=> $data['userLastName'],
-			'countryId'			=> element('countryId', $data, null),
+			'userEmail'      => $data['userEmail'],
+			'userFirstName'  => $data['userFirstName'],
+			'userLastName'   => $data['userLastName'],
+			'countryId'      => element('countryId', $data, null),
 		);
 		
 
-		if ((int)$userId != 0) {		
+		if ((int)$userId != 0) {
 			$this->db->where('userId', $userId);
 			$this->db->update('users', $values);
 		}
 		else {
-			$values['userDateAdd'] 	= date("Y-m-d H:i:s");
+			$values['userDateAdd'] = date("Y-m-d H:i:s");
 			$this->db->insert('users', $values);
 			$userId = $this->db->insert_id();
 		}
@@ -270,7 +270,7 @@ class Users_Model extends CI_Model {
 		if (is_array($groups)) {
 			foreach ($groups as $groupId) {
 				$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => $groupId));
-			}		
+			}
 		}
 		
 		$this->load->model('Menu_Model');
@@ -423,11 +423,11 @@ class Users_Model extends CI_Model {
 	
 	function saveSharedByEmail($data) {
 		$values = array(
-			'userId'				=> element('userId', $data),
-			'entryId'				=> element('entryId', $data),
-			'userFriendId'			=> element('userFriendId', $data),
-			'shareByEmailDate'		=> date("Y-m-d H:i:s"),
-			'shareByEmailComment'	=> element('shareByEmailComment', $data),
+			'userId'               => element('userId', $data),
+			'entryId'              => element('entryId', $data),
+			'userFriendId'         => element('userFriendId', $data),
+			'shareByEmailDate'     => date("Y-m-d H:i:s"),
+			'shareByEmailComment'  => element('shareByEmailComment', $data),
 		);
 
 		$this->db->insert('shared_by_email', $values);

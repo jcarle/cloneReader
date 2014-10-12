@@ -113,8 +113,9 @@ class Login extends CI_Controller {
 			
 			// Si el usuario es nuevo y tiene email le enviamos el email de bienvenida 
 			if (element('isNewUser', $user) == true && $user['userEmail'] != null) {
-				$this->load->model('Tasks_Model');
+				$this->load->model(array('Tasks_Model', 'Entries_Model'));
 				$this->Tasks_Model->addTask('sendEmailWelcome', array('userId' => $user['userId']));
+				$this->Entries_Model->addDefaultFeeds();
 			}
 
 			redirect('');

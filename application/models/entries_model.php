@@ -304,6 +304,10 @@ class Entries_Model extends CI_Model {
 	}	
 
 	function saveTmpUsersEntries($userId, $entries) { // utilizo una tabla temporal para guardar los leidos y no romper la paginación infinita
+		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
+			$this->session->set_userdata('addDefaultFeeds', true); // Si crea un usuario en la app le guardo los feeds del user anonimo 
+		}
+	
 		$aQueries = array();
 		foreach ($entries as $entry) {
 			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.(element('entryRead', $entry) == true ? 'true' : 'false').', '.(element('starred', $entry) == true ? 'true' : 'false').') ';
@@ -459,6 +463,38 @@ class Entries_Model extends CI_Model {
 		}
 		
 		return $tagId;
+	}
+
+	function addDefaultFeeds() {
+		if ($this->session->userdata('addDefaultFeeds') != true) {
+			return;
+		}
+		
+		$userId = $this->session->userdata('userId');
+		
+		$query = ' INSERT INTO users_feeds
+			(userId, feedId )
+			SELECT '.$userId.', feedId
+			FROM users_feeds 
+			WHERE userId = '.USER_ANONYMOUS;
+		$this->db->query($query);
+		//pr($this->db->last_query());
+		
+		$query = ' INSERT INTO users_tags
+			(userId, tagId, expanded )
+			SELECT '.$userId.', tagId, expanded
+			FROM users_tags 
+			WHERE userId = '.USER_ANONYMOUS;
+		$this->db->query($query);
+		//pr($this->db->last_query());
+		
+		$query = ' INSERT INTO users_feeds_tags
+			(userId, feedId, tagId )
+			SELECT '.$userId.', feedId, tagId
+			FROM users_feeds_tags 
+			WHERE userId = '.USER_ANONYMOUS;
+		$this->db->query($query);
+		//pr($this->db->last_query());
 	}
 
 	function subscribeFeed($feedId, $userId) {
@@ -661,8 +697,8 @@ class Entries_Model extends CI_Model {
 		
 		// TODO: paginar este proceso para que guarde TODAS las entradas nuevas sin tener que relodear
 		// metiendo 20 millones de entradas nuevas hay que relodear bocha de veces hasta ver la mas nueva
-		$entryId	 	= null;
-		$limit	 		= 2000;
+		$entryId = null;
+		$limit   = 2000;
 
 		$aFeedId = array();
 		$query = $this->db
