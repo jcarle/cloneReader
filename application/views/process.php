@@ -20,6 +20,11 @@ $items = array(
 				'text' => 'Rescan 404',
 				'url'  => 'process/rescanAll404Feeds',
 			),
+			array(
+				'text' => 'Process feeds tags',
+				'url'  => 'process/processFeedsTags',
+			),
+			
 		)
 	),
 	array(

@@ -293,12 +293,6 @@ class Entries extends CI_Controller {
 		return loadViewAjax(true, $query);
 	}	
 	
-	function processTagBrowse() {
-		if (! $this->safety->allowByControllerName('feeds/edit') ) { return errorForbidden(); }
-		
-		$this->Entries_Model->processTagBrowse();
-	}
-	
 /*	function populateMillionsEntries() {
 		$this->Entries_Model->populateMillionsEntries();
 	}*/

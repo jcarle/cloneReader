@@ -11,6 +11,8 @@ class Process extends CI_Controller {
 		
 		set_time_limit(0);
 		ini_set('memory_limit', '512M');
+		
+		$this->load->model(array('Feeds_Model'));
 	}
 	
 	function index() {
@@ -28,24 +30,18 @@ class Process extends CI_Controller {
 	
 
 	function scanAllFeeds($userId = null) {
-		$this->load->model(array('Feeds_Model'));
-		
 		$this->Feeds_Model->scanAllFeeds($userId);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 	
 	function rescanAll404Feeds() {
-		$this->load->model(array('Feeds_Model'));
-		
 		$this->Feeds_Model->scanAllFeeds(null, null, true);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 	
 	function scanFeed($feedId) {
-		$this->load->model(array('Feeds_Model'));
-		
 		$this->db->trans_start();
 
 		$this->Feeds_Model->scanFeed($feedId);
@@ -55,8 +51,14 @@ class Process extends CI_Controller {
 	}
 	
 	function deleteOldEntries() {
-		$this->load->model(array('Feeds_Model'));
-			
 		$this->Feeds_Model->deleteOldEntries();
+		
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+	}
+	
+	function processFeedsTags() {
+		$this->Feeds_Model->processFeedsTags();
+		
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}	
 }

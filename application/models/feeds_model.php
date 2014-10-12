@@ -95,12 +95,12 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		$values = array(
-			'feedUrl' 			=> $data['feedUrl'], 
-			'statusId' 			=> config_item('feedStatusPending'),
-			'countryId'			=> element('countryId', $data),
-			'langId'			=> element('langId', $data),
-			'feedSuggest' 		=> element('feedSuggest', $data),
-			'fixLocale' 		=> element('fixLocale', $data),
+			'feedUrl'      => $data['feedUrl'], 
+			'statusId'     => config_item('feedStatusPending'),
+			'countryId'    => element('countryId', $data),
+			'langId'       => element('langId', $data),
+			'feedSuggest'  => element('feedSuggest', $data),
+			'fixLocale'    => element('fixLocale', $data),
 		);
 		
 		if (isset($data['feedName'])) {
@@ -165,14 +165,14 @@ class Feeds_Model extends CI_Model {
 		
 		if (trim($feedLink) != '' && $feedIcon == null) {
 			$this->load->spark('curl/1.2.1');
-			$img 			= $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
-			$parse 			= parse_url($feedLink);
-			$feedIcon 		= $parse['host'].'.png'; 
+			$img      = $this->curl->simple_get('https://plus.google.com/_/favicon?domain='.$feedLink);
+			$parse    = parse_url($feedLink);
+			$feedIcon = $parse['host'].'.png'; 
 			file_put_contents('./assets/favicons/'.$feedIcon, $img);
 			$this->db->update('feeds', array('feedIcon' => $feedIcon), array('feedId' => $feedId));	
 		}
 
-		return true;				
+		return true;
 	}
 	
 	function updateFeedStatus($feedId, $statusId) {
@@ -254,8 +254,8 @@ class Feeds_Model extends CI_Model {
 			return;
 		}
 		
-		$feedUrl		= $feed['feedUrl']; 
-		$fixLocale		= $feed['fixLocale'];
+		$feedUrl        = $feed['feedUrl']; 
+		$fixLocale      = $feed['fixLocale'];
 		$feedMaxRetries = $feed['feedMaxRetries'];
 
 		$this->load->spark('ci-simplepie/1.0.1/');
@@ -267,10 +267,10 @@ class Feeds_Model extends CI_Model {
 		if ($this->cisimplepie->error() ) {
 			$this->db->update('feeds', 
 				array(
-					'feedMaxRetries'	=> $feedMaxRetries + 1,
-					'statusId'			=> config_item('feedStatusPending'),
-					'feedLastScan'		=> date("Y-m-d H:i:s"),
-					'feedLastEntryDate'	=> $this->Entries_Model->getLastEntryDate($feedId),
+					'feedMaxRetries'    => $feedMaxRetries + 1,
+					'statusId'          => config_item('feedStatusPending'),
+					'feedLastScan'      => date("Y-m-d H:i:s"),
+					'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
 				),
 				array('feedId' => $feedId)
 			);
@@ -282,13 +282,13 @@ class Feeds_Model extends CI_Model {
 
 		$lastEntryDate = $feed['feedLastEntryDate'];
 		
-		$langId		= null;
-		$countryId 	= null;
+		$langId    = null;
+		$countryId = null;
 		if ($fixLocale == false) {
-			$langId 	= strtolower($this->cisimplepie->get_language());
-			$aLocale 	= explode('-', $langId);
+			$langId   = strtolower($this->cisimplepie->get_language());
+			$aLocale  = explode('-', $langId);
 			if (count($aLocale) == 2) {
-				$countryId 	= strtolower($aLocale[1]);
+				$countryId = strtolower($aLocale[1]);
 			}
 		}
 
@@ -311,12 +311,12 @@ class Feeds_Model extends CI_Model {
 			}
 
 			$data = array(
-				'feedId' 		=> $feedId,
-				'entryTitle'	=> $item->get_title(),
-				'entryContent'	=> (string)$item->get_content(),
-				'entryDate'		=> $item->get_date('Y-m-d H:i:s'),
-				'entryUrl'		=> (string)$item->get_link(),
-				'entryAuthor'	=> (string)$entryAuthor,
+				'feedId'       => $feedId,
+				'entryTitle'   => $item->get_title(),
+				'entryContent' => (string)$item->get_content(),
+				'entryDate'    => $item->get_date('Y-m-d H:i:s'),
+				'entryUrl'     => (string)$item->get_link(),
+				'entryAuthor'  => (string)$entryAuthor,
 			);
 
 			if ($data['entryDate'] == null) {
@@ -327,9 +327,9 @@ class Feeds_Model extends CI_Model {
 				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF y va a hacer queries al pedo
 				$this->db->update('feeds', 
 					array(
-						'statusId' 			=> config_item('feedStatusApproved'),
-						'feedLastScan' 		=> date("Y-m-d H:i:s"),
-						'feedMaxRetries'	=> 0,
+						'statusId'        => config_item('feedStatusApproved'),
+						'feedLastScan'    => date("Y-m-d H:i:s"),
+						'feedMaxRetries'  => 0,
 					), 
 					array('feedId' => $feedId)
 				);
@@ -340,10 +340,10 @@ class Feeds_Model extends CI_Model {
 		}
 
 		$values = array(
-			'statusId'			=> config_item('feedStatusApproved'),
-			'feedLastScan' 		=> date("Y-m-d H:i:s"),
+			'statusId'          => config_item('feedStatusApproved'),
+			'feedLastScan'      => date("Y-m-d H:i:s"),
 			'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
-			'feedMaxRetries'	=> 0,
+			'feedMaxRetries'    => 0,
 		); 
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
 			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
@@ -368,8 +368,8 @@ class Feeds_Model extends CI_Model {
 	
 	function updateFeedCounts($feedId) {
 		$values = array(
-			'feedCountUsers' 		=> $this->countUsersByFeedId($feedId),
-			'feedCountEntries' 		=> $this->countEntriesByFeedId($feedId)
+			'feedCountUsers'    => $this->countUsersByFeedId($feedId),
+			'feedCountEntries'  => $this->countEntriesByFeedId($feedId)
 		);
 
 		$this->db->update('feeds', $values, array('feedId' => $feedId));	
@@ -416,10 +416,10 @@ class Feeds_Model extends CI_Model {
 	}
 	
 	function deleteOldEntriesByFeedId($feedId, $count = 0) {
-		$feedId 			= (int)$feedId;
-		$minEntriesKeep		= 50;
-		$monthsTokeep		= 3;
-		$limit				= 500;
+		$feedId          = (int)$feedId;
+		$minEntriesKeep  = 50;
+		$monthsTokeep    = 3;
+		$limit           = 500;
 		
 		$query = '
 			DELETE FROM entries
@@ -460,14 +460,83 @@ class Feeds_Model extends CI_Model {
 		return $count;
 	}
 
+	function processFeedsTags() {
+		set_time_limit(0);
+		
+		$this->db->trans_start();
+
+		
+		// Completo datos en la tabla tags y feeds_tags, basado en los tags de cada entry, y en como tageo cada user un feed.
+		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
+		
+		$aSystenTags    = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
+		$dayOfLastEntry = 21;
+		
+		$this->db->query('DELETE FROM feeds_tags ');
+		
+		$this->db->update('tags', array('countFeeds' => 0, 'countEntries' => 0, 'countUsers' => 0, 'countTotal' => 0));
+		
+		$query = ' SELECT feedId, tagId, COUNT(tagId) AS countEntries
+			FROM entries_tags
+			INNER JOIN tags USING (tagId)
+			INNER JOIN entries USING (entryId)
+			INNER JOIN feeds USING (feedId)
+			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
+			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').') 
+			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
+			AND feeds.feedSuggest = TRUE 
+			GROUP BY feedId, tagId 
+			HAVING countEntries > 10 ';
+		$query = $this->db->query($query)->result_array();		
+		foreach ($query as $row) {		
+			$update = 'UPDATE tags SET 
+				countFeeds    = countFeeds + 1,
+				countEntries  = countEntries + '.$row['countEntries'].'
+				WHERE tagId   = '.$row['tagId'];
+			$this->db->query($update);
+			//pr($this->db->last_query()); 
+			
+			$update = 'REPLACE INTO feeds_tags (feedId, tagId) VALUES ('.$row['feedId'].', '.$row['tagId'].') ';
+			$this->db->query($update);
+		}
+		
+		
+		$query = ' SELECT feedId, tagId, COUNT(1) AS countUsers
+			FROM users_feeds_tags
+			INNER JOIN tags USING (tagId)
+			INNER JOIN feeds USING (feedId)
+			WHERE tags.tagId NOT IN ('.implode(', ', $aSystenTags).') 
+			AND feeds.statusId IN ('.config_item('feedStatusPending').', '.config_item('feedStatusApproved').') 
+			AND feedLastEntryDate > DATE_ADD(NOW(), INTERVAL -'.$dayOfLastEntry.' DAY)
+			AND feeds.feedSuggest = TRUE 
+			GROUP BY feedId, userId  ';
+		$query = $this->db->query($query)->result_array();		
+		foreach ($query as $row) {		
+			$update = 'UPDATE tags SET 
+				countUsers		= countUsers + 1
+				WHERE tagId 	= '.$row['tagId'];
+			$this->db->query($update);
+			//pr($this->db->last_query()); 
+			
+			$update = 'REPLACE INTO feeds_tags (feedId, tagId) VALUES ('.$row['feedId'].', '.$row['tagId'].') ';
+			$this->db->query($update);
+		}		
+		
+		
+		$update = ' UPDATE tags SET countTotal = (countFeeds * 1) + (countUsers + 10)  WHERE tagId NOT IN ('.implode(', ', $aSystenTags).')   ';
+		$this->db->query($update);
+		
+		$this->db->trans_complete();
+	}
+
 	function selectFeedsOPML($userId) {
 		$query = $this->db->select('feeds.feedId, feedName, feedUrl, tags.tagId, tagName, feeds.feedLink ', false)
-						->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
-						->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
-						->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
-						->where('users_feeds.userId', $userId)
-						->order_by('tagName IS NULL, tagName asc, feedName asc')
-		 				->get('feeds')->result_array();
+			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'left')
+			->join('users_feeds_tags', 'users_feeds_tags.feedId = feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'left')
+			->join('tags', 'users_feeds_tags.tagId = tags.tagId', 'left')
+			->where('users_feeds.userId', $userId)
+			->order_by('tagName IS NULL, tagName asc, feedName asc')
+			->get('feeds')->result_array();
 		//pr($this->db->last_query());
 		return $query;
 	}
