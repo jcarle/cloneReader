@@ -631,7 +631,7 @@ class Entries_Model extends CI_Model {
 			$this->db->where('users_feeds.userId', $userId);
 		}
 		if (is_null($feedId) == false) {
-			$this->db->where('feeds.feedId', $feedId);			
+			$this->db->where('feeds.feedId', $feedId);
 		}
 		 
 		$query = $this->db->get('feeds');

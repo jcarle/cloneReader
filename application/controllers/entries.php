@@ -116,40 +116,40 @@ class Entries extends CI_Controller {
 
 	function _getFormProperties($entryId) {
 		$form = array(
-			'frmId'		=> 'frmEntryEdit',
-			'rules'		=> array(),
-			'fields'	=> array(
+			'frmId'  => 'frmEntryEdit',
+			'rules'  => array(),
+			'fields' => array(
 				'entryId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> $entryId,
+					'type'  => 'hidden', 
+					'value' => $entryId,
 				),
 				'feedId' => array(
-					'type' 		=> 'typeahead',
-					'label'		=> $this->lang->line('Feed'),
-					'source' 	=> base_url('search/feeds/'),
+					'type'   => 'typeahead',
+					'label'  => $this->lang->line('Feed'),
+					'source' => base_url('search/feeds/'),
 				),
 				'entryTitle' => array(
-					'type'		=> 'text',
-					'label'		=> $this->lang->line('Title'), 
-				),				
+					'type'  => 'text',
+					'label' => $this->lang->line('Title'), 
+				),
 				'entryUrl' => array(
-					'type' 		=> 'text',
-					'label'		=> $this->lang->line('Url'), 
+					'type'  => 'text',
+					'label' => $this->lang->line('Url'), 
 				),
 				'entryContent' => array(
-					'type' 		=> 'textarea',
-					'label'		=> $this->lang->line('Content'), 
+					'type'   => 'textarea',
+					'label'  => $this->lang->line('Content'), 
 				),
 				'entryDate' => array(
-					'type' 		=> 'datetime',
-					'label'		=> $this->lang->line('Date'), 
+					'type'  => 'datetime',
+					'label' => $this->lang->line('Date'), 
 				),
 			),
 		);
 		
 		if ((int)$entryId > 0) {
 			$form['urlDelete'] = base_url('entries/delete/');
-		}		
+		}
 		
 		$form['rules'] += array(
 			array(
@@ -175,30 +175,14 @@ class Entries extends CI_Controller {
 	}
 
 	function getAsyncNewsEntries($userId = null) {
-		exec(PHP_PATH.'  '.BASEPATH.'../index.php entries/getNewsEntries/'.(int)$userId.' > /dev/null &');
+		exec(PHP_PATH.'  '.BASEPATH.'../index.php process/getNewsEntries/'.(int)$userId.' > /dev/null &');
 		return;
-		
-		
-		// TODO: revisar como pedir datos para los users logeados
-		// este metodo tarda casi un segundo creo; otro crontab ?
-		/*$this->load->spark('curl/1.2.1'); 
-		$this->curl->create(base_url().'entries/getNewsEntries/'.(int)$userId);
-		$this->curl->http_login($this->input->server('PHP_AUTH_USER'), $this->input->server('PHP_AUTH_PW'));
-		//$this->curl->options(array(CURLOPT_FRESH_CONNECT => 10, CURLOPT_TIMEOUT => 1));
-		$this->curl->execute();*/
-	}	
-	
-	function getNewsEntries($userId = null) {
-		// scanea todos los feeds!
-		$this->Entries_Model->getNewsEntries($userId);
-		
-		return loadViewAjax(true, 'ok');
 	}
 	
 	function saveData() {
-		$userId		= (int)$this->session->userdata('userId');
-		$entries 	= (array)json_decode($this->input->post('entries'), true);
-		$tags 		= (array)json_decode($this->input->post('tags'), true);
+		$userId   = (int)$this->session->userdata('userId');
+		$entries  = (array)json_decode($this->input->post('entries'), true);
+		$tags     = (array)json_decode($this->input->post('tags'), true);
 		
 		$this->Entries_Model->saveTmpUsersEntries((int)$userId, $entries);		
 		$this->Entries_Model->saveUserTags((int)$userId, $tags);

@@ -132,7 +132,7 @@ $config['meta'] = array(
  * Js y Css adicionales para que sea compilado con carabiner
  */
 $config['siteAssets'] = array(
-	'js' => array( 'feeds.js', 'cloneReader.js',  'jquery.visible.min.js', ),
+	'js' => array( 'feeds.js', 'process.js', 'cloneReader.js',  'jquery.visible.min.js', ),
 	'css' => array( 'cloneReader.css', )
 );
 
@@ -146,16 +146,16 @@ $config['tagBrowse'] = 4;
 
 $config['feedMaxCount'] = 1000;
 
-$config['feedCloneReader'] = 1633; 	// 	id del feed propio, se muestra en el filtro 'home'
-$config['feedStatusPending'] = 0; 	
-$config['feedStatusApproved'] = 1;
+$config['feedCloneReader']          = 1633; 	// id del feed propio, se muestra en el filtro 'home'
+$config['feedStatusPending']        = 0; 	
+$config['feedStatusApproved']       = 1;
 $config['feedStatusInvalidFormat"'] = 3;
-$config['feedStatusNotFound'] = 404;
+$config['feedStatusNotFound']       = 404;
 
 $config['feedMaxRetries'] = 10; // maxima cantidad de reintentos si un feed tiene algun error 
 
-$config['feedTimeScan'] = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
-$config['feedTimeSave'] = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
-$config['feedTimeReload'] = 9999;  //  Cada cuanto MINUTOS recarga el menu con feeds
+$config['feedTimeScan']    = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
+$config['feedTimeSave']    = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
+$config['feedTimeReload']  = 9999;  //  Cada cuanto MINUTOS recarga el menu con feeds
 $config['entriesPageSize'] = 30;
 
