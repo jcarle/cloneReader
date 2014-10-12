@@ -46,11 +46,17 @@ class Process extends CI_Controller {
 	function scanFeed($feedId) {
 		$this->load->model(array('Feeds_Model'));
 		
-		$this->db->trans_start();		
+		$this->db->trans_start();
 
 		$this->Feeds_Model->scanFeed($feedId);
 		$this->Feeds_Model->updateFeedCounts($feedId);
 		
 		$this->db->trans_complete();
 	}
+	
+	function deleteOldEntries() {
+		$this->load->model(array('Feeds_Model'));
+			
+		$this->Feeds_Model->deleteOldEntries();
+	}	
 }

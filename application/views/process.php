@@ -22,6 +22,15 @@ $items = array(
 			),
 		)
 	),
+	array(
+		'title' => 'Entries',
+		'buttons' => array(	
+			array(
+				'text' => 'Delete old entries',
+				'url'  => 'process/deleteOldEntries',
+			),
+		)
+	)
 );
 ?>
 <div class="row">
