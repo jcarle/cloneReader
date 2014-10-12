@@ -754,7 +754,7 @@ class Entries_Model extends CI_Model {
 
 		//vd($rowsAffected);
 		if ($rowsAffected == $limit) {
-			sleep(2);
+			sleep(1);
 			$this->saveEntriesTagByUser($userId);
 		}
 		

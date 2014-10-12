@@ -240,7 +240,7 @@ cloneReader = {
 		$.ajax({
 			'url':          base_url + 'entries/buildCache',
 			'async':        true, //false
-			'skipwWaiting': true,
+			'skipwWaiting': (this.$ulFilters.find('li:visible').length == 0 ? false : true),
 			'success': 
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }		
@@ -987,8 +987,8 @@ TODO: pensar como mejorar esta parte
 		this.saveData(false);
 		
 		$.ajax({ 
-			'url': 		base_url + 'entries/selectFilters',
-			'success': 	
+			'url':     base_url + 'entries/selectFilters',
+			'success': 
 				$.proxy(
 					function(reload, response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
@@ -1021,7 +1021,7 @@ console.timeEnd("t1");
 	
 	runIndexFilters: function(filters, parent, clear) {
 		if (clear == true) {
-			this.indexFilters 	= { 'tag': {}, 'feed': {}};
+			this.indexFilters = { 'tag': {}, 'feed': {}};
 			this.$ulFilters.children().remove();
 		}
 		
