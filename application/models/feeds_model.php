@@ -200,7 +200,7 @@ class Feeds_Model extends CI_Model {
 	 */
 	function scanAllFeeds($userId = null, $feedId = null, $rescan = false) {
 		set_time_limit(0);
-		
+
 		$this->db
 			->select(' DISTINCT feeds.feedId, feedUrl, feedLink, feedIcon, fixLocale', false)
 			->join('users_feeds', 'users_feeds.feedId = feeds.feedId', 'inner')
@@ -224,7 +224,7 @@ class Feeds_Model extends CI_Model {
 		}
 		 
 		$query = $this->db->get('feeds');
-		// vd($this->db->last_query()); die; 
+		//vd($this->db->last_query()); die; 
 		$count = 0;
 		foreach ($query->result() as $row) {
 			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php process/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');

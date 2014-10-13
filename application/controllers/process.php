@@ -43,6 +43,10 @@ class Process extends CI_Controller {
 	
 	function scanFeed($feedId) {
 		$this->db->trans_start();
+		
+		if ($this->input->is_cli_request()) {
+			echo date("Y-m-d H:i:s").' scan feed '.$feedId."\n";
+		}
 
 		$this->Feeds_Model->scanFeed($feedId);
 		$this->Feeds_Model->updateFeedCounts($feedId);
