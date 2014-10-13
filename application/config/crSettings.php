@@ -20,18 +20,19 @@ $config['urlQa']   = 'http://www.jcarle.com.ar/cloneReader';
 $config['urlProd'] = 'http://www.clonereader.com.ar';
 
 
-$config['entityTypeTesting'] = 1;
-$config['entityTypeCountry'] = 2;
-$config['entityTypeState'] = 3;
-$config['entityTypeCity'] = 4;
-
-$config['entitiesType'] = array(
-	$config['entityTypeTesting'] => 'testing',
-);
+$config['entityTypeTesting']  = 1;
+$config['entityTypeCountry']  = 2;
+$config['entityTypeState']    = 3;
+$config['entityTypeCity']     = 4;
+$config['entityTypeFeed']     = 5;
+$config['entityTypeTag']      = 6;
 
 $config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
 	'statusApproved',
 	'searchZones',
+	'searchFeeds',
+	'searchTags',
+	'tagHasFeed',
 );
 
 /**
@@ -79,6 +80,18 @@ $config['entityConfig'] = array(
 		'fieldId'         => 'cityId',
 		'fieldName'       => 'cityName',
 		'fieldSef'        => 'citySef',
+	),
+	$config['entityTypeFeed'] => array(
+		'entityTypeName'  => 'feeds',
+		'tableName'       => 'feeds',
+		'fieldId'         => 'feedId',
+		'fieldName'       => 'feedName',
+	),
+	$config['entityTypeTag'] => array(
+		'entityTypeName'  => 'tags',
+		'tableName'       => 'tags',
+		'fieldId'         => 'tagd',
+		'fieldName'       => 'tagName',
 	),
 );
 

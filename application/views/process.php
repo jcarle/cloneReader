@@ -1,14 +1,18 @@
 <?php
 $items = array(
-	/* array(
+	array(
 		'title' => 'Search',
 		'buttons' => array(
 			array(
-				'text'    => 'Zones',
-				'url'     => 'process/saveZonesSearch',
+				'text'    => 'Feeds',
+				'url'     => 'process/saveFeedsSearch',
 			),
+			array(
+				'text'    => 'Tags',
+				'url'     => 'process/saveTagsSearch',
+			),			
 		),
-	),*/
+	),
 	array(
 		'title' => 'Feeds',
 		'buttons' => array(	

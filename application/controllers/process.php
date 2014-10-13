@@ -64,5 +64,41 @@ class Process extends CI_Controller {
 		$this->Feeds_Model->processFeedsTags();
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+	}
+	
+	function saveFeedsSearch() {
+		$this->clearEntitySearch( array(config_item('entityTypeFeed')));
+
+		$searchKey = ' searchFeeds ';
+		$query = 'INSERT INTO entities_search
+			(entityTypeId, entityId, entitySearch, entityTree, entityReverseTree)
+			SELECT '.config_item('entityTypeFeed').', feedId, CONCAT(IF(statusId = '.config_item('feedStatusApproved').', \' feedStatusApproved \', \'\'),  \''.$searchKey.'\', feedName), FeedName, FeedName
+			FROM feeds  ';
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
+
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+	}
+	
+	function saveTagsSearch() {
+		$this->clearEntitySearch( array(config_item('entityTypeTag')));
+
+		$searchKey = ' searchTags ';
+		$query = 'INSERT INTO entities_search
+			(entityTypeId, entityId, entitySearch, entityTree, entityReverseTree)
+			SELECT DISTINCT '.config_item('entityTypeTag').', tags.tagId, CONCAT( IF(feedId IS NOT NULL, \' tagHasFeed \', \'\'), \''.$searchKey.'\', tagName), tagName, tagName
+			FROM tags
+			LEFT JOIN feeds_tags ON feeds_tags.tagId = tags.tagId
+			WHERE tags.tagId NOT IN ( '.config_item('tagAll').', '.config_item('tagStar').', '.config_item('tagHome').', '.config_item('tagBrowse').' )  ';
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
+
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}	
+	
+	function clearEntitySearch( array $aEntityTypeId) {
+		$this->db
+			->where_in('entityTypeId', $aEntityTypeId)
+			->delete('entities_search');
+	}
 }

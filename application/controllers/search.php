@@ -56,20 +56,24 @@ class Search extends CI_Controller {
 			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), $reverse, $searchKey)
 		));
 	}
-	
+
 	function feeds() {
-		$this->load->model('Feeds_Model');
+		$searchKey = ' +searchFeeds ';
 		
 		return $this->load->view('json', array(
-			'result' 	=> $this->Feeds_Model->search($this->input->get('query'))
+			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), false, $searchKey, false)
 		));
 	}
 	
 	function tags() {
-		$this->load->model('Tags_Model');
-	
+		$searchKey = ' +searchTags ';
+		
+		if ($this->input->get('onlyWithFeeds') == 'true') {
+			$searchKey .= ' +tagHasFeed ';
+		}
+		
 		return $this->load->view('json', array(
-			'result' 	=> $this->Tags_Model->search($this->input->get('query'), $this->input->get('onlyWithFeeds') == 'true')
+			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), false, $searchKey, false)
 		));
 	}
 }

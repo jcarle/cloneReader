@@ -140,17 +140,6 @@ class Feeds_Model extends CI_Model {
 		return true;
 	}
 	
-	function search($filter){
-		$filter = $this->db->escape_like_str($filter);
-		
-		return $this->db
-			->select('DISTINCT feedId AS id, feedName AS text  ', false)
-//			->where('statusId', STATUS_ACTIVE)
-			->like('feedName', $filter)
-			->order_by('text')
-			->get('feeds', config_item('autocompleteSize'))->result_array();
-	}	
-	
 	function saveFeedIcon($feedId, $feed = null, $force = false) {
 		if ($force == true) {
 			$this->db->update('feeds', array( 'feedIcon' => null), array('feedId' => $feedId) );	

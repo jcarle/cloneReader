@@ -1,2 +1,5 @@
 Agregar al crontab:
-	php [PATH_TO_CLONEREADER]/cloneReader/index.php process/scanAllFeeds
+
+0 */2 * * *   php [PATH_TO_CLONEREADER]/index.php process scanAllFeeds
+0 1 * * 0     php [PATH_TO_CLONEREADER]/index.php process rescanAll404Feeds
+*/10 * * * *  php [PATH_TO_CLONEREADER]/index.php tasks sendEmails
