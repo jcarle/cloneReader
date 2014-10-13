@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `cloneReader`
 --
-CREATE DATABASE IF NOT EXISTS `cloneReader` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `cloneReader` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `cloneReader`;
 
 DELIMITER $$
@@ -74,25 +74,6 @@ INSERT INTO `coins` (`currencyId`, `currencyName`, `currencyDesc`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comments`
---
-
-CREATE TABLE IF NOT EXISTS `comments` (
-  `commentId` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `commentUserName` varchar(255) NOT NULL,
-  `commentUserEmail` varchar(255) NOT NULL,
-  `commentTitle` varchar(255) NOT NULL,
-  `commentDesc` text NOT NULL,
-  `commentDate` datetime NOT NULL,
-  `userId` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`commentId`),
-  KEY `commentEmail` (`commentUserEmail`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `controllers`
 --
 
@@ -136,16 +117,20 @@ INSERT INTO `controllers` (`controllerId`, `controllerName`, `controllerUrl`, `c
 (24, 'langs/change/es', 'langs/change/es', 1),
 (25, 'langs/change/en', 'langs/change/en', 1),
 (26, 'langs/change/pt-br', 'langs/change/pt-br', 1),
-(27, 'comments/listing', 'comments', 1),
-(28, 'comments/edit', 'comments/edit', 1),
-(29, 'feedback', 'feedback', 1),
-(30, 'forgotPassword', 'forgotPassword', 1),
+(27, 'feedbacks/listing', 'feedbacks/listing', 1),
+(28, 'feedbacks/edit', 'feedbacks/edit', 1),
+(29, 'feedbacks/addFeedback', 'feedback', 1),
+(30, 'profile/forgotPassword', 'forgotPassword', 1),
 (31, 'help/keyboardShortcut', 'help/keyboardShortcut', 1),
 (32, 'testing/listing', 'testing', 1),
 (33, 'testing/edit', 'testing/edit', 1),
 (34, 'users/logs', 'users/logs', 1),
 (35, 'langs/change/zh-cn', 'langs/change/zh-cn', 1),
-(36, 'about', 'about', 1);
+(36, 'about', 'about', 1),
+(37, 'tasks/listing', 'tasks/listing', 1),
+(38, 'tools/feeds', 'tools/feeds', 1),
+(39, 'tools/tags', 'tools/tags', 1),
+(40, 'process', 'process', 1);
 
 -- --------------------------------------------------------
 
@@ -407,6 +392,41 @@ INSERT INTO `countries` (`countryId`, `countryName`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `entities_files`
+--
+
+CREATE TABLE IF NOT EXISTS `entities_files` (
+  `entityTypeId` int(10) unsigned NOT NULL,
+  `entityId` int(10) unsigned NOT NULL,
+  `fileId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`entityTypeId`,`entityId`,`fileId`),
+  KEY `fileId` (`fileId`),
+  KEY `entityTypeId` (`entityTypeId`),
+  KEY `entityId` (`entityId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `entities_type`
+--
+
+CREATE TABLE IF NOT EXISTS `entities_type` (
+  `entityTypeId` int(10) unsigned NOT NULL,
+  `entityTypeName` varchar(255) NOT NULL,
+  PRIMARY KEY (`entityTypeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `entities_type`
+--
+
+INSERT INTO `entities_type` (`entityTypeId`, `entityTypeName`) VALUES
+(1, 'testing');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `entries`
 --
 
@@ -439,6 +459,25 @@ CREATE TABLE IF NOT EXISTS `entries_tags` (
   PRIMARY KEY (`entryId`,`tagId`),
   KEY `tagId` (`tagId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedbacks`
+--
+
+CREATE TABLE IF NOT EXISTS `feedbacks` (
+  `feedbackId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `feedbackUserName` varchar(255) NOT NULL,
+  `feedbackUserEmail` varchar(255) NOT NULL,
+  `feedbackTitle` varchar(255) NOT NULL,
+  `feedbackDesc` text NOT NULL,
+  `feedbackDate` datetime NOT NULL,
+  `userId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`feedbackId`),
+  KEY `commentEmail` (`feedbackUserEmail`),
+  KEY `userId` (`userId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
 
 -- --------------------------------------------------------
 
@@ -601,7 +640,15 @@ INSERT INTO `groups_controllers` (`groupId`, `controllerId`) VALUES
 (3, 35),
 (1, 36),
 (2, 36),
-(3, 36);
+(3, 36),
+(2, 37),
+(1, 38),
+(2, 38),
+(3, 38),
+(1, 39),
+(2, 39),
+(3, 39),
+(2, 40);
 
 -- --------------------------------------------------------
 
@@ -778,26 +825,31 @@ INSERT INTO `menu` (`menuId`, `menuName`, `menuPosition`, `menuParentId`, `contr
 (8, 'menuMain', 4, 0, NULL, ''),
 (9, 'Edit feeds', 1, 17, 13, ''),
 (10, 'menuProfile', 2, 0, NULL, ''),
-(11, 'Profile', 1, 10, 10, 'fa fa-user'),
-(12, 'Logout', 3, 10, 2, 'fa fa-power-off'),
+(11, 'Profile', 2, 10, 10, 'fa fa-user'),
+(12, 'Logout', 8, 10, 2, 'fa fa-power-off'),
 (13, 'Login', 2, 10, 1, 'fa fa-sign-in'),
 (14, 'System', 1, 6, NULL, ''),
 (15, 'Signup', 1, 10, 12, 'fa fa-user'),
 (16, 'Edit tags', 3, 17, 18, ''),
 (17, 'Rss', 2, 6, NULL, ''),
-(20, 'Import', 3, 6, NULL, ''),
+(20, 'Import', 4, 6, NULL, ''),
 (21, 'Import feeds', 1, 20, 19, ''),
 (22, 'Import starred', 2, 20, 20, ''),
 (23, 'Edit news', 4, 17, 21, ''),
-(24, 'Language', 4, 10, NULL, 'fa fa-flag-o'),
+(24, 'Language', 9, 10, NULL, 'fa fa-flag-o'),
 (25, 'English', 1, 24, 25, 'lang-en'),
 (26, 'Spanish', 2, 24, 24, 'lang-es'),
 (27, 'Portuguese', 3, 24, 26, 'lang-pt-br'),
 (28, 'Feedback', 3, 10, 29, 'fa fa-comment'),
-(29, 'Edit comments', 5, 17, 27, ''),
+(29, 'Edit feedbacks', 5, 17, 27, ''),
 (30, 'Edit testing', 200, 14, 32, ''),
 (31, 'Chinese', 4, 24, 35, 'lang-zh-cn'),
-(32, 'About', 10, 6, 36, 'menuItemAbout');
+(32, 'About', 10, 6, 36, 'menuItemAbout'),
+(33, 'Edit tasks', 9, 14, 37, ''),
+(34, 'Tools', 3, 6, NULL, ''),
+(35, 'Admin feeds', 0, 34, 38, ''),
+(36, 'Admin tags', 2, 34, 39, ''),
+(37, 'Process', 10, 14, 40, '');
 
 -- --------------------------------------------------------
 
@@ -2325,6 +2377,47 @@ INSERT INTO `tags` (`tagId`, `tagName`, `countFeeds`, `countEntries`, `countUser
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tasks_email`
+--
+
+CREATE TABLE IF NOT EXISTS `tasks_email` (
+  `taskId` int(10) NOT NULL AUTO_INCREMENT,
+  `taskMethod` varchar(255) DEFAULT NULL,
+  `taskParams` text,
+  `taskRunning` int(1) NOT NULL,
+  `taskRetries` tinyint(4) NOT NULL,
+  `langId` varchar(10) NOT NULL,
+  `taskSchedule` datetime NOT NULL,
+  PRIMARY KEY (`taskId`),
+  KEY `langId` (`langId`),
+  KEY `taskSchedule` (`taskSchedule`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tasks_status`
+--
+
+CREATE TABLE IF NOT EXISTS `tasks_status` (
+  `statusTaskId` int(10) unsigned NOT NULL,
+  `statusTaskName` varchar(255) NOT NULL,
+  PRIMARY KEY (`statusTaskId`),
+  KEY `statusTaskName` (`statusTaskName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tasks_status`
+--
+
+INSERT INTO `tasks_status` (`statusTaskId`, `statusTaskName`) VALUES
+(2, 'cancel'),
+(0, 'pending'),
+(1, 'running');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `testing`
 --
 
@@ -2336,9 +2429,13 @@ CREATE TABLE IF NOT EXISTS `testing` (
   `countryId` char(2) DEFAULT NULL,
   `stateId` int(10) unsigned DEFAULT NULL,
   `testRating` int(1) unsigned NOT NULL,
+  `testPictureFileId` int(10) unsigned DEFAULT NULL,
+  `testDocFileId` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`testId`),
   KEY `countryId` (`countryId`),
-  KEY `stateId` (`stateId`)
+  KEY `stateId` (`stateId`),
+  KEY `fileIdTestPicture` (`testPictureFileId`),
+  KEY `fileIdTestDoc` (`testDocFileId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -2374,19 +2471,7 @@ CREATE TABLE IF NOT EXISTS `testing_childs_users` (
   KEY `userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `testing_files`
---
-
-CREATE TABLE IF NOT EXISTS `testing_files` (
-  `testId` int(10) unsigned NOT NULL,
-  `fileId` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`testId`,`fileId`),
-  KEY `testId` (`testId`),
-  KEY `fileId` (`fileId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -2415,7 +2500,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userPassword` char(255) DEFAULT NULL,
   `userFirstName` char(255) DEFAULT NULL,
   `userLastName` char(255) DEFAULT NULL,
-  `userBirthDate` date NOT NULL,
+  `userBirthDate` date DEFAULT NULL,
   `userDateAdd` datetime NOT NULL,
   `userLastAccess` datetime DEFAULT NULL,
   `countryId` char(2) DEFAULT NULL,
@@ -2425,21 +2510,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   `googleUserId` varchar(200) DEFAULT NULL,
   `resetPasswordKey` varchar(20) DEFAULT NULL,
   `resetPasswordDate` datetime DEFAULT NULL,
-  `changeEmailKey` varchar(20) DEFAULT NULL,
-  `changeEmailDate` datetime DEFAULT NULL,
-  `changeEmailValue` varchar(255) DEFAULT NULL,
+  `confirmEmailKey` varchar(20) DEFAULT NULL,
+  `confirmEmailDate` datetime DEFAULT NULL,
+  `confirmEmailValue` varchar(255) DEFAULT NULL,
+  `verifiedUserEmail` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userId`),
   UNIQUE KEY `userEmail` (`userEmail`),
   UNIQUE KEY `resetPasswordKey` (`resetPasswordKey`),
-  UNIQUE KEY `changeEmailKey` (`changeEmailKey`),
-  UNIQUE KEY `changeEmailValue` (`changeEmailValue`),
+  UNIQUE KEY `changeEmailKey` (`confirmEmailKey`),
+  UNIQUE KEY `changeEmailValue` (`confirmEmailValue`),
   KEY `countryId` (`countryId`),
   KEY `googleUserId` (`googleUserId`),
   KEY `oauth_uid` (`facebookUserId`),
   KEY `langId` (`langId`),
   KEY `userDateAdd` (`userDateAdd`),
   KEY `resetPasswordDate` (`resetPasswordDate`),
-  KEY `changeEmailDate` (`changeEmailDate`)
+  KEY `changeEmailDate` (`confirmEmailDate`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -2447,7 +2533,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`userId`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `userBirthDate`, `userDateAdd`, `userLastAccess`, `countryId`, `langId`, `userFilters`, `facebookUserId`, `googleUserId`, `resetPasswordKey`, `resetPasswordDate`, `changeEmailKey`, `changeEmailDate`, `changeEmailValue`) VALUES
-(1, '1@', NULL, 'anonymous', 'anonymous', '0000-00-00', '0000-00-00 00:00:00', NULL, 'ar', 'en', '{"onlyUnread":true,"sortDesc":true,"id":3,"type":"tag","viewType":"detail","isMaximized":false}', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(1, '1@', NULL, 'anonymous', 'anonymous', NULL, '2013-10-01 00:11:12', '2013-10-01 00:11:15', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (2, 'admin@creader.com', '63a9f0ea7bb98050796b649e85481845', 'admin', 'person', '0000-00-00', '0000-00-00 00:00:00', '2014-05-15 19:26:13', 'ar', 'en', '{"onlyUnread":true,"sortDesc":true,"id":3,"type":"tag","viewType":"detail","isMaximized":false}', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -2573,16 +2659,16 @@ CREATE TABLE IF NOT EXISTS `usertracking` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `comments`
+-- Constraints for table `entities_files`
 --
-ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `entities_files`
+  ADD CONSTRAINT `entities_files_ibfk_2` FOREIGN KEY (`fileId`) REFERENCES `files` (`fileId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `entities_files_ibfk_3` FOREIGN KEY (`entityTypeId`) REFERENCES `entities_type` (`entityTypeId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `entries`
@@ -2596,6 +2682,12 @@ ALTER TABLE `entries`
 ALTER TABLE `entries_tags`
   ADD CONSTRAINT `entries_tags_ibfk_1` FOREIGN KEY (`entryId`) REFERENCES `entries` (`entryId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `entries_tags_ibfk_2` FOREIGN KEY (`tagId`) REFERENCES `tags` (`tagId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `feedbacks`
+--
+ALTER TABLE `feedbacks`
+  ADD CONSTRAINT `feedbacks_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `feeds`
@@ -2645,35 +2737,40 @@ ALTER TABLE `states`
   ADD CONSTRAINT `states_ibfk_1` FOREIGN KEY (`countryId`) REFERENCES `countries` (`countryId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `testing_files`
+-- Constraints for table `tasks_email`
 --
-ALTER TABLE `testing_files`
-  ADD CONSTRAINT `testing_files_ibfk_1` FOREIGN KEY (`testId`) REFERENCES `testing` (`testId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `testing_files_ibfk_2` FOREIGN KEY (`fileId`) REFERENCES `files` (`fileId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `tasks_email`
+  ADD CONSTRAINT `tasks_email_ibfk_1` FOREIGN KEY (`langId`) REFERENCES `languages` (`langId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `testing`
+--
+ALTER TABLE `testing`
+  ADD CONSTRAINT `testing_ibfk_1` FOREIGN KEY (`testPictureFileId`) REFERENCES `files` (`fileId`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `testing_ibfk_2` FOREIGN KEY (`testDocFileId`) REFERENCES `files` (`fileId`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `tmp_users_entries`
 --
 ALTER TABLE `tmp_users_entries`
-  ADD CONSTRAINT `tmp_users_entries_ibfk_4` FOREIGN KEY (`entryId`) REFERENCES `entries` (`entryId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tmp_users_entries_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tmp_users_entries_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tmp_users_entries_ibfk_4` FOREIGN KEY (`entryId`) REFERENCES `entries` (`entryId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`countryId`) REFERENCES `countries` (`countryId`),
-  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`countryId`) REFERENCES `countries` (`countryId`),
   ADD CONSTRAINT `users_ibfk_3` FOREIGN KEY (`langId`) REFERENCES `languages` (`langId`);
 
 --
 -- Constraints for table `users_entries`
 --
 ALTER TABLE `users_entries`
-  ADD CONSTRAINT `users_entries_ibfk_8` FOREIGN KEY (`feedId`) REFERENCES `feeds` (`feedId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `users_entries_ibfk_5` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `users_entries_ibfk_6` FOREIGN KEY (`entryId`) REFERENCES `entries` (`entryId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_entries_ibfk_7` FOREIGN KEY (`tagId`) REFERENCES `tags` (`tagId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_entries_ibfk_7` FOREIGN KEY (`tagId`) REFERENCES `tags` (`tagId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_entries_ibfk_8` FOREIGN KEY (`feedId`) REFERENCES `feeds` (`feedId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users_feeds`
