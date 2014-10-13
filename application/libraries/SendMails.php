@@ -174,4 +174,33 @@ class SendMails {
 		}
 		return $this->_sendEmail($userFriendEmail, $entry['entryTitle'], $message, $emailCc, null, array('email' => $user['userEmail'], 'name' => $userFullName)); 
 	}
+
+	function changeFeedStatus($params = array()) {
+		if(empty($params) || !is_array($params)){
+			return false;
+		}
+		
+		$feedId = $params['feedId'];
+
+		$this->CI->load->model(array('Feeds_Model'));
+		$feed = $this->CI->Feeds_Model->get($feedId);
+		
+		if (element('newStatus', $params) == 'feedFound') {
+			$subject = 'Feed '.$feed['feedName'].' ('.$feed['feedId'].') activado automáticamente';
+		}
+		else {
+			$subject = 'Feed '.$feed['feedName'].' ('.$feed['feedId'].') desactivado automáticamente';
+		} 
+		
+		$message = $this->CI->load->view('pageEmail',
+			array(
+				'view'       => 'email/changeFeedStatus.php',
+				'feed'       => $feed,
+				'newStatus'  => element('newStatus', $params),
+				'url'        => null,
+			),
+			true);
+		
+		return $this->_sendEmail(config_item('emailDebug'), $subject, $message);
+	}
 }

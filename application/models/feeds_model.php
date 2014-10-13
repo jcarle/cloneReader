@@ -263,13 +263,13 @@ class Feeds_Model extends CI_Model {
 		}
 	}
 
-	function scanFeed($feedId) {
+	function scanFeed($feedId, $rescan = false) {
 		set_time_limit(0);
 		
 		$this->load->model('Entries_Model');
 	
 //sleep(5);
-
+		
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
 			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, statusId, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)) AS minutes ', false)
@@ -277,7 +277,7 @@ class Feeds_Model extends CI_Model {
 			->get('feeds')->result_array();
 		//pr($this->db->last_query());  die;
 		$feed = $query[0];
-		if ($feed['minutes'] != null && (int)$feed['minutes'] < config_item('feedTimeScan') ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
+		if ($rescan == false && $feed['minutes'] != null && (int)$feed['minutes'] < config_item('feedTimeScan') ) {  // si paso poco tiempo salgo, porque acaba de escanear el mismo feed otro proceso
 			return;
 		}
 		
