@@ -2532,9 +2532,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userId`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `userBirthDate`, `userDateAdd`, `userLastAccess`, `countryId`, `langId`, `userFilters`, `facebookUserId`, `googleUserId`, `resetPasswordKey`, `resetPasswordDate`, `changeEmailKey`, `changeEmailDate`, `changeEmailValue`) VALUES
+INSERT INTO `users` (`userId`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `userBirthDate`, `userDateAdd`, `userLastAccess`, `countryId`, `langId`, `userFilters`, `facebookUserId`, `googleUserId`, `resetPasswordKey`, `resetPasswordDate`, `confirmEmailKey`, `confirmEmailDate`, `confirmEmailValue`, `verifiedUserEmail`) VALUES
 (1, '1@', NULL, 'anonymous', 'anonymous', NULL, '2013-10-01 00:11:12', '2013-10-01 00:11:15', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(2, 'admin@creader.com', '63a9f0ea7bb98050796b649e85481845', 'admin', 'person', '0000-00-00', '0000-00-00 00:00:00', '2014-05-15 19:26:13', 'ar', 'en', '{"onlyUnread":true,"sortDesc":true,"id":3,"type":"tag","viewType":"detail","isMaximized":false}', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(2, 'admin@creader.com', '63a9f0ea7bb98050796b649e85481845', 'admin', 'person', '0000-00-00', '0000-00-00 00:00:00', '2014-05-15 19:26:13', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
