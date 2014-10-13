@@ -174,6 +174,33 @@ class Feeds_Model extends CI_Model {
 
 		return true;
 	}
+
+	function changeFeedStatus($feedId, $oldStatusId, $statusId) {
+		if ($oldStatusId == $statusId) {
+			return;
+		}
+		if (in_array($oldStatusId, array(config_item('feedStatusPending'), config_item('feedStatusApproved'))) && in_array($statusId, array(config_item('feedStatusPending'), config_item('feedStatusApproved')))) {
+			return;
+		}
+
+		$newStatus = null;
+		if ($oldStatusId == config_item('feedStatusNotFound')) {
+			$newStatus = 'feedFound';
+		}
+		else if ($statusId == config_item('feedStatusNotFound')) {
+			$newStatus = 'feedNotFound';
+		}
+		if ($newStatus == null) {
+			return;
+		}
+
+		$this->load->model('Tasks_Model');
+		$params = array(
+			'feedId'    => $feedId,
+			'newStatus' => $newStatus
+		);
+		$this->Tasks_Model->addTask('changeFeedStatus', $params);
+	}
 	
 	function updateFeedStatus($feedId, $statusId) {
 		$this->db->update('feeds', array('statusId' => $statusId), array('feedId' => $feedId));
@@ -183,10 +210,10 @@ class Feeds_Model extends CI_Model {
 	function resetFeed($feedId) { // Reseteo las propiedades del feed para reescanear
 		$this->db->update('feeds', 
 			array(
-				'feedLastScan' 			=> null,
-				'feedLastEntryDate'		=> null, 
-				'statusId' 				=> 0,
-				'feedMaxRetries'		=> 0,
+				'feedLastScan'       => null,
+				'feedLastEntryDate'  => null, 
+				'statusId'           => config_item('feedStatusPending'),
+				'feedMaxRetries'     => 0,
 			),
 			array('feedId' => $feedId)
 		);
@@ -245,7 +272,7 @@ class Feeds_Model extends CI_Model {
 
 		// vuelvo a preguntar si es momento de volver a scanner el feed, ya que pude haber sido scaneado recién al realizar multiples peticiones asyncronicas
 		$query = $this->db
-			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)) AS minutes ', false)
+			->select('feedLastEntryDate, feedUrl, fixLocale, feedMaxRetries, feedLink, feedIcon, statusId, TIMESTAMPDIFF(MINUTE, feedLastScan, DATE_ADD(NOW(), INTERVAL -'.config_item('feedTimeScan').' MINUTE)) AS minutes ', false)
 			->where('feeds.feedId', $feedId)
 			->get('feeds')->result_array();
 		//pr($this->db->last_query());  die;
@@ -265,17 +292,16 @@ class Feeds_Model extends CI_Model {
 		$this->cisimplepie->handle_content_type();
 
 		if ($this->cisimplepie->error() ) {
-			$this->db->update('feeds', 
-				array(
-					'feedMaxRetries'    => $feedMaxRetries + 1,
-					'statusId'          => config_item('feedStatusPending'),
-					'feedLastScan'      => date("Y-m-d H:i:s"),
-					'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
-				),
-				array('feedId' => $feedId)
+			$values = array(
+				'feedMaxRetries'    => $feedMaxRetries + 1,
+				'statusId'          => config_item('feedStatusPending'),
+				'feedLastScan'      => date("Y-m-d H:i:s"),
+				'feedLastEntryDate' => $this->Entries_Model->getLastEntryDate($feedId),
 			);
+			$this->db->update('feeds', $values, array('feedId' => $feedId) );
 			if (($feedMaxRetries + 1) >= config_item('feedMaxRetries')) {
 				$this->updateFeedStatus($feedId, config_item('feedStatusNotFound'));
+				$this->changeFeedStatus($feedId, $feed['statusId'], config_item('feedStatusNotFound'));
 			}
 			return;
 		}
@@ -325,6 +351,8 @@ class Feeds_Model extends CI_Model {
 
 			if ($data['entryDate'] == $lastEntryDate) { // si no hay nuevas entries salgo del metodo
 				// TODO: revisar, si la entry no tiene fecha, estoy seteando la fecha actual del sistema; y en este caso nunca va a entrar a este IF y va a hacer queries al pedo
+				$this->changeFeedStatus($feedId, $feed['statusId'], config_item('feedStatusApproved'));
+
 				$this->db->update('feeds', 
 					array(
 						'statusId'        => config_item('feedStatusApproved'),
@@ -346,7 +374,7 @@ class Feeds_Model extends CI_Model {
 			'feedMaxRetries'    => 0,
 		); 
 		if (trim((string)$this->cisimplepie->get_title()) != '') {
-			$values['feedName'] = (string)$this->cisimplepie->get_title(); 			
+			$values['feedName'] = (string)$this->cisimplepie->get_title();
 		}
 		if (trim((string)$this->cisimplepie->get_description()) != '') {
 			$values['feedDescription'] = (string)$this->cisimplepie->get_description();
@@ -362,6 +390,8 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		$this->db->update('feeds', $values, array('feedId' => $feedId));
+		
+		$this->changeFeedStatus($feedId, $feed['statusId'], config_item('feedStatusApproved'));
 
 		$this->saveFeedIcon($feedId, (element('feedLink', $feed) != '' ? $feed : null));
 	}

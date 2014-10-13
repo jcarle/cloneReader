@@ -360,20 +360,20 @@ class Entries extends CI_Controller {
 
 		$this->load->model(array('Users_Model', 'Tasks_Model'));
 		
-		$userId 				= $this->session->userdata('userId');
-		$entryId				= $this->input->post('entryId');
-		$userFriendEmail		= $this->input->post('userFriendEmail');
-		$sendMeCopy 			= $this->input->post('sendMeCopy')  == 'on';
-		$shareByEmailComment	= trim($this->input->post('shareByEmailComment'));
-		$userFriendId	 		= $this->Users_Model->saveUserFriend($userId, $userFriendEmail, '');
-		$shareByEmailId			= $this->Users_Model->saveSharedByEmail(array(
-			'userId'				=> $userId,
-			'entryId'				=> $entryId,
-			'userFriendId'			=> $userFriendId,
-			'shareByEmailComment'	=> $shareByEmailComment,
+		$userId               = $this->session->userdata('userId');
+		$entryId              = $this->input->post('entryId');
+		$userFriendEmail      = $this->input->post('userFriendEmail');
+		$sendMeCopy           = $this->input->post('sendMeCopy')  == 'on';
+		$shareByEmailComment  = trim($this->input->post('shareByEmailComment'));
+		$userFriendId         = $this->Users_Model->saveUserFriend($userId, $userFriendEmail, '');
+		$shareByEmailId       = $this->Users_Model->saveSharedByEmail(array(
+			'userId'              => $userId,
+			'entryId'             => $entryId,
+			'userFriendId'        => $userFriendId,
+			'shareByEmailComment' => $shareByEmailComment,
 		));
 
-		$params = array(		
+		$params = array(
 			'userId'               => $userId,
 			'entryId'              => $entryId,
 			'userFriendEmail'      => $userFriendEmail,

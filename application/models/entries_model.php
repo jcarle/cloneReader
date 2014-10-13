@@ -228,10 +228,13 @@ class Entries_Model extends CI_Model {
 	function getEntryIdByFeedIdAndEntryUrl($feedId, $entryUrl) {
 		$entryUrl = substr(trim($entryUrl), 0, 255);
 		
-		$result = $this->db
+		$query = $this->db
 				->where(array( 'feedId' => $feedId,'entryUrl' => $entryUrl ))
 				->get('entries')->row_array();
-		return $result['entryId'];		
+		if (empty($query)) {
+			return null;
+		}
+		return $query['entryId'];
 	} 
 	
 	function getLastEntryDate($feedId) {
