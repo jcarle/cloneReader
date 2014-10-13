@@ -50,8 +50,8 @@ class Process extends CI_Controller {
 		$this->db->trans_complete();
 	}
 	
-	function deleteOldEntries() {
-		$this->Feeds_Model->deleteOldEntries();
+	function deleteOldEntries($feedId = null) {
+		$this->Feeds_Model->deleteOldEntries($feedId);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}

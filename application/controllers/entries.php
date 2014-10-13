@@ -308,31 +308,31 @@ class Entries extends CI_Controller {
 		}
 		
 		$form = array(
-			'frmId'					=> 'frmShareByEmail',
-			'buttons'				=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-envelope "></i> '.$this->lang->line('Send').' </button>'),
-			'icon'					=> 'fa fa-envelope fa-lg text-primary',
-			'modalHideOnSubmit'		=> true,
-			'title'					=> sprintf($this->lang->line('Send by email %s'), ' "'.$data['entryTitle'].'" '),
-			'fields'				=> array(
+			'frmId'               => 'frmShareByEmail',
+			'buttons'             => array('<button type="submit" class="btn btn-primary"><i class="fa fa-envelope "></i> '.$this->lang->line('Send').' </button>'),
+			'icon'                => 'fa fa-envelope fa-lg text-primary',
+			'modalHideOnSubmit'   => true,
+			'title'               => sprintf($this->lang->line('Send by email %s'), ' "'.$data['entryTitle'].'" '),
+			'fields'              => array(
 				'entryId' => array(
-					'type'	=> 'hidden',
-					'value'	=> $entryId 
+					'type'  => 'hidden',
+					'value' => $entryId 
 				),
 				'userFriendEmail' => array(
-					'type'		=> 'typeahead',
-					'label'		=> $this->lang->line('For'),
-					'source' 	=> base_url('search/friends/'),
-					'value'		=> array( 'id' => null, 'text' => null ),
+					'type'   => 'typeahead',
+					'label'  => $this->lang->line('For'),
+					'source' => base_url('search/friends/'),
+					'value'  => array( 'id' => null, 'text' => null ),
 				),
 				'shareByEmailComment' => array(
-					'type'	=> 'textarea',
-					'label'	=> $this->lang->line('Comment'), 
+					'type'  => 'textarea',
+					'label' => $this->lang->line('Comment'), 
 				),
 				'sendMeCopy' => array(
-					'type'		=> 'checkbox',
-					'label'		=> $this->lang->line('Send me a copy'),
-					'checked'	=> true, 
-				),				
+					'type'    => 'checkbox',
+					'label'   => $this->lang->line('Send me a copy'),
+					'checked' => true, 
+				),
 			)
 		);
 		

@@ -159,3 +159,6 @@ $config['feedTimeSave']    = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
 $config['feedTimeReload']  = 9999;  //  Cada cuanto MINUTOS recarga el menu con feeds
 $config['entriesPageSize'] = 30;
 
+$config['entriesKeepMin']         = 50; // Cantidad minima de entries que se van a guardar al borrar entries antiguas
+$config['entrieskeepMonthMin']    = 3;  // Cantidad de meses que se van a guardar al borrar entries antiguas 
+

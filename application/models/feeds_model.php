@@ -378,7 +378,7 @@ class Feeds_Model extends CI_Model {
 	function countUsersByFeedId($feedId) {
 		$query = ' SELECT COUNT(1) AS total 
 			FROM users_feeds
-			WHERE feedId 		= '.$feedId.' ';
+			WHERE feedId = '.$feedId.' ';
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());
 		return $query[0]['total'];
@@ -396,68 +396,105 @@ class Feeds_Model extends CI_Model {
 	function countEntriesStarredByFeedId($feedId) {
 		$query = ' SELECT COUNT(1) AS total 
 			FROM users_entries
-			WHERE 	feedId 	= '.(int)$feedId.' 
-			AND 	tagId	= '.config_item('tagStar');
+			WHERE feedId = '.(int)$feedId.' 
+			AND   tagId  = '.config_item('tagStar');
 		$query = $this->db->query($query)->result_array();
 		//pr($this->db->last_query());
 		return $query[0]['total'];
 	}
 	
 	
-	function deleteOldEntries() {
+	function deleteOldEntries($feedId = null) {
+		$this->db
+			->select(' DISTINCT feeds.feedId ', false)
+			->from('feeds')
+			->join('entries', 'entries.feedId = feeds.feedId', 'inner')
+			->where('feedCountEntries > ', config_item('entriesKeepMin'))
+			->where('entryDate < DATE_ADD(NOW(), INTERVAL -'.config_item('entrieskeepMonthMin').' MONTH)');
+			
+		if ($feedId != null) {
+			$this->db->where('feeds.feedId', $feedId);
+		}
+
 		$query = $this->db
-			->select('feedId, feedName  ')
-			->order_by('feedId')
-			->get('feeds')->result_array();
+			->order_by('feedCountEntries', 'desc')
+			->get()->result_array();
+		// pr($this->db->last_query()); 
 		foreach ($query as $row) {
-			$affectedRows = $this->deleteOldEntriesByFeedId($row['feedId']);
-			echo $row['feedName'].' ('.$row['feedId'].') - <span style="'.($affectedRows > 0 ? ' color: #FF0000; font-weight: bold;' : '').'"> affected rows: '.$affectedRows.'</span><br/>';
+			$this->deleteOldEntriesByFeedId($row['feedId']);
 		}
 	}
 	
-	function deleteOldEntriesByFeedId($feedId, $count = 0) {
-		$feedId          = (int)$feedId;
-		$minEntriesKeep  = 50;
-		$monthsTokeep    = 3;
-		$limit           = 500;
+	function deleteOldEntriesByFeedId($feedId) {
+		$feedId     = (int)$feedId;
+		$limit      = 1000;
+		$aEntryId   = array();
 		
-		$query = '
-			DELETE FROM entries
-			WHERE feedId = '.$feedId.' 
-			AND entryId NOT IN (
-				SELECT entryId
-				FROM ( 
-						SELECT * 
-						FROM 
-							(
-							SELECT * FROM entries 
-							WHERE feedId = '.$feedId.' 
-							ORDER BY entries.entryDate DESC LIMIT '.$minEntriesKeep.'
-							) AS lastEntries
-					UNION ALL
-						SELECT *
-						FROM entries 
-						WHERE feedId = '.$feedId.'
-						AND  entryDate > DATE_ADD(NOW(), INTERVAL -'.$monthsTokeep.' MONTH)
-					UNION ALL
-						SELECT entries.*
-						FROM entries 
-						WHERE feedId = '.$feedId.'
-						AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.config_item('tagStar').' AND feedId = '.$feedId.') 
-				) AS entries
-			) 
-			LIMIT '.$limit;
-		$this->db->query($query);
+		$this->db->trans_start();
+		
 
-		$affectedrRows = $this->db->affected_rows();
-		$count += $affectedrRows;
-		if ($affectedrRows != 0) {
-			sleep(2);
-			return $this->deleteOldEntriesByFeedId($feedId, $count);
+		$query = ' SELECT entryId
+			FROM entries 
+			WHERE feedId = '.$feedId.'
+			AND   entryId NOT IN (
+				SELECT entryId 
+				FROM 
+					(
+					SELECT * FROM entries 
+					WHERE feedId = '.$feedId.' 
+					ORDER BY entries.entryDate DESC 
+					LIMIT '.config_item('entriesKeepMin').'
+					) AS lastEntries
+				UNION ALL
+					SELECT entryId
+					FROM entries 
+					WHERE feedId = '.$feedId.'
+					AND  entryDate > DATE_ADD(NOW(), INTERVAL -'.config_item('entrieskeepMonthMin').' MONTH)
+				UNION ALL
+					SELECT entries.entryId
+					FROM entries 
+					WHERE feedId = '.$feedId.'
+					AND entryId IN (SELECT entryId FROM users_entries WHERE tagId = '.config_item('tagStar').' AND feedId = '.$feedId.') 
+				) ';
+		$query = $this->db->query($query)->result_array();
+		// pr($this->db->last_query()); die;
+		foreach ($query as $data) {
+			$aEntryId[] = $data['entryId'];
+		}
+		$aEntryId       = array_unique($aEntryId);
+		$aDeleteEntryId = array();
+		$total          = count($aEntryId);
+		for ($i=0; $i<$total; $i++) {
+			$aDeleteEntryId[] = (int)$aEntryId[$i];
+			
+			if ($i % $limit == 0) {
+				$query = ' DELETE FROM entries
+					WHERE feedId = '.$feedId.' 
+					AND entryId IN ('.implode(', ', $aDeleteEntryId).' ) ';
+				$this->db->query($query);
+				//pr($this->db->last_query());
+				
+				$aDeleteEntryId = array();
+				sleep(1);
+			}
+		}
+		
+		if (!empty($aDeleteEntryId)) {
+				$query = ' DELETE FROM entries
+					WHERE feedId = '.$feedId.' 
+					AND entryId IN ('.implode(', ', $aDeleteEntryId).' ) ';
+				$this->db->query($query);
+				// pr($this->db->last_query());
 		}
 		
 		$this->updateFeedCounts($feedId);
-		return $count;
+		$this->db->trans_complete();
+		
+		file_put_contents("./application/logs/scanFeed.log", date("Y-m-d H:i:s")." - feedId: ".$feedId." - rows deleted: ".$total." \n", FILE_APPEND);
+		
+//$this->db->trans_rollback();
+		
+		return $total;
 	}
 
 	function processFeedsTags() {

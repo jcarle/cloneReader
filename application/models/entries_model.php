@@ -252,15 +252,15 @@ class Entries_Model extends CI_Model {
 		$entryId = $data['entryId'];
 
 		$values = array(
-			'feedId'			=> element('feedId', $data),
-			'entryTitle'		=> element('entryTitle', $data),
-			'entryContent'		=> element('entryContent', $data),
-			'entryAuthor'		=> element('entryAuthor', $data),
-			'entryDate'			=> element('entryDate', $data),
-			'entryUrl'			=> substr(trim(element('entryUrl', $data)), 0, 255),
+			'feedId'       => element('feedId', $data),
+			'entryTitle'   => element('entryTitle', $data),
+			'entryContent' => element('entryContent', $data),
+			'entryAuthor'  => element('entryAuthor', $data),
+			'entryDate'    => element('entryDate', $data),
+			'entryUrl'     => substr(trim(element('entryUrl', $data)), 0, 255),
 		);
 
-		if ((int)$entryId != 0) {		
+		if ((int)$entryId != 0) {
 			$this->db->where('entryId', $entryId)->update('entries', $values);
 		}
 		else {
@@ -635,12 +635,12 @@ class Entries_Model extends CI_Model {
 			$data = array();
 			for ($i=0; $i<10000; $i++) {
 				$data[] = array(
-					'feedId' 		=> $row->feedId,
-					'entryTitle'	=> 'titulooooo '.$entryId,
-					'entryContent'	=> 'contenido del entry <b><test/b>'.$entryId,
-					'entryDate'		=> date('Y-m-d H:i:s'),
-					'entryUrl'		=> 'http://saranga.com/dadadad/'.$entryId,
-					'entryAuthor'	=> 'el autor',
+					'feedId'        => $row->feedId,
+					'entryTitle'    => 'titulooooo '.$entryId,
+					'entryContent'  => 'contenido del entry <b><test/b>'.$entryId,
+					'entryDate'     => date('Y-m-d H:i:s'),
+					'entryUrl'      => 'http://saranga.com/dadadad/'.$entryId,
+					'entryAuthor'   => 'el autor',
 				);
 				
 				
