@@ -195,18 +195,6 @@ class Feeds_Model extends CI_Model {
 		$this->db->update('feeds', array('statusId' => $statusId), array('feedId' => $feedId));
 		//pr($this->db->last_query());		
 	}
-
-	function resetFeed($feedId) { // Reseteo las propiedades del feed para reescanear
-		$this->db->update('feeds', 
-			array(
-				'feedLastScan'       => null,
-				'feedLastEntryDate'  => null, 
-				'statusId'           => config_item('feedStatusPending'),
-				'feedMaxRetries'     => 0,
-			),
-			array('feedId' => $feedId)
-		);
-	}
 	
 	/**
 	 * @param $userId
@@ -526,7 +514,7 @@ class Feeds_Model extends CI_Model {
 		// Revisar las queries, quizas convenga ajustar un poco el juego para que tire resultados más relevantes
 		
 		$aSystenTags    = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
-		$dayOfLastEntry = 21;
+		$dayOfLastEntry = 90; // TODO: meter en una constante
 		
 		$this->db->query('DELETE FROM feeds_tags ');
 		

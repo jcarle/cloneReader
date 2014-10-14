@@ -308,7 +308,6 @@ class Feeds extends CI_Controller {
 		
 		$this->db->trans_start();
 		
-		$this->Feeds_Model->resetFeed($feedId);
 		$this->Feeds_Model->scanFeed($feedId, true);
 		$this->Feeds_Model->updateFeedCounts($feedId);
 		
