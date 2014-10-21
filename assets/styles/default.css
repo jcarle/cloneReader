@@ -547,7 +547,6 @@ footer {
 		opacity:0;
 		position: relative;
 	}
-	.imgCenter > i,
 	.imgCenter > .imageLoading {
 		color: #c0c0c0;
 		margin: 0;
@@ -588,7 +587,6 @@ footer {
 	.imgCenter.imgCenterComplete > img {
 		opacity:1;
 	}
-	.imgCenter.imgCenterComplete > i,
 	.imgCenter.imgCenterComplete > .imageLoading {
 		opacity:0;
 	}

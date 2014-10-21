@@ -682,7 +682,7 @@ TODO: pensar como mejorar esta parte
 		}
 
 		$entry.find('a.imgCenter > img')
-			.imgCenter( { centerType: 'inside', 'animateLoading': true, complete: 
+			.imgCenter( { centerType: 'inside', animateLoading: true, complete: 
 			function($img) {
 				cloneReader.checkPictureSize($img);
 			}

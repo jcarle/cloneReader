@@ -450,7 +450,7 @@
 			if (field.value.url != null) {
 				if (field.isPicture == true) {
 					field.$input.prepend('<a class="thumbnail"><img  src="' + field.value.url + '" /></a>');
-					field.$input.find('img').imgCenter( { centerType: 'inside' } );
+					field.$input.find('img').imgCenter( { centerType: 'inside', animateLoading: true } );
 				}
 				else {
 					field.$input.prepend('<div class="fileName"> <a download="' + field.value.name + '" target="_blank" href="' + field.value.url + '" data-skip-app-link="true"> <i class="fa fa-download"/> <span />  </a> </div>');
@@ -539,7 +539,7 @@
 				},
 				add: function (e, data) {
 					var jqXHR = data.submit().complete(function (result, textStatus, jqXHR) {
-						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside' });
+						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside', animateLoading: true });
 					});
 				}
 			});
@@ -564,7 +564,7 @@
 						var fu = $('#fileupload').data('blueimpFileupload');
 						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in')
 						
-						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside' });
+						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside', animateLoading: true });
 
 						for (var i=0; i<result.files.length; i++) {
 							var photo = result.files[i];
@@ -576,7 +576,7 @@
 								.appendTo($gallery.find('.thumbnails'));
 						}
 		
-						$gallery.find('img').imgCenter( {  } );
+						$gallery.find('img').imgCenter( { animateLoading: true } );
 					},
 			});
 		},
