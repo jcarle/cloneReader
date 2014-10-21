@@ -582,6 +582,7 @@ footer {
 		.imgCenter.imgCenterComplete > .imageLoading > img {
 			animation: none;
 			-webkit-animation: none;
+			display: none;
 		}	
 	.imgCenter.imgCenterComplete > img {
 		opacity:1;
@@ -589,7 +590,7 @@ footer {
 	.imgCenter.imgCenterComplete > .imageLoading {
 		opacity:0;
 	}
-.imgCenter.imgCenterOutside:after { 
+.imgCenter.imgCenterOutside:after {
 	border: 4px solid white;
 	content: "";
 	height: 100%;

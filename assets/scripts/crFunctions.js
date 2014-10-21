@@ -495,7 +495,7 @@ $.extend({
 		
 		$gallery.on('click', 
 			function(event) {
-				var target 	= event.target;
+				var target = event.target;
 				if ($(target).hasClass('thumbnail') == false) {
 					return;
 				}

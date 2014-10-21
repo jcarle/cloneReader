@@ -561,19 +561,20 @@
 						var result = response['result'];
 						
 						var files = result.files;
-						var fu = $('#fileupload').data('blueimpFileupload');
+						var fu    = $('#fileupload').data('blueimpFileupload');
 						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in')
 						
 						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside', animateLoading: true });
 
 						for (var i=0; i<result.files.length; i++) {
-							var photo = result.files[i];
+							var photo       = result.files[i];
+							var $thumbnails = $gallery.find('.thumbnails');
 							
 							$('<a class="thumbnail " data-skip-app-link="true" />')
 								.append($('<img />').prop('src', photo.urlThumbnail))
 								.prop('href', photo.urlLarge)
 								.prop('title', ''  /*photo.title*/)
-								.appendTo($gallery.find('.thumbnails'));
+								.appendTo($thumbnails);
 						}
 		
 						$gallery.find('img').imgCenter( { animateLoading: true } );
