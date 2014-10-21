@@ -186,6 +186,7 @@ $lang['Last news'] = 'Últimas noticias';
 $lang['Show all news'] = 'Mostrar todas las noticias';
 $lang['News'] = 'Noticias';
 $lang['Read more'] = 'Leer más';
+$lang['More info'] = 'Más info';
 $lang['Sort by %s'] = 'Ordenar por %s';
 $lang['Relevance'] = 'Relevancia';
 $lang['Filter for'] = 'Filtrar por';
