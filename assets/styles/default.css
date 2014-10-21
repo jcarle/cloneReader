@@ -556,7 +556,8 @@ footer {
 		-moz-transition: opacity 1s ease;
 		-o-transition: opacity 1s ease;
 		transition: opacity 1s ease;
-		display: block;
+		display: flex;
+		align-items: center;
 		border: 0px solid red;
 		left: 4px;
 		right: 4px;
@@ -570,8 +571,6 @@ footer {
 			max-height: 100%;
 			max-width: 50px;
 			opacity:1 !important;
-			top: 50%;
-			transform: translateY(-50%);
 			position: relative;
 		}
 		.imgCenter > .imageLoading.animate > img {

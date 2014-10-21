@@ -301,10 +301,9 @@
 					height:auto;
 					opacity:0;
 				}
-						#cloneReader .ulEntries > li p .imgCenter > .imageLoading > img {
-							top: 0;
-							transform: translateY(0);
-						}
+					#cloneReader .ulEntries > li p .imgCenter > .imageLoading {
+						align-items: flex-start;
+					}
 				#cloneReader .ulEntries > li p img.imgError {
 					max-width:250px;
 					max-height:250px;

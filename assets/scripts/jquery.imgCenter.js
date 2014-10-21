@@ -82,7 +82,7 @@
 				$parent.addClass('imgCenterInside');
 			}
 			
-			if ($parent.find('i').length == 0) {
+			if ($parent.find('.imageLoading').length == 0) {
 				$img.before('<div class="imageLoading"> <img src="' + base_url + 'assets/images/file-image-o.svg" /> </div>');
 			}
 			
@@ -171,7 +171,7 @@
 				}
 
 				$img.data('imgCenterComplete', true);
-//				$img.parent().addClass('imgCenterComplete');
+				$img.parent().addClass('imgCenterComplete');
 				
 				opts.complete.call(this, $img);
 				if(current == len){
