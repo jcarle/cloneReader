@@ -21,6 +21,7 @@
 			scaleToFit:     true,
 			centerVertical: true,
 			centerType:     'outside', // [ 'outside', 'inside']
+			animateLoading: false,
 			autoRedraw:     false, // 
 			complete:       function(){},
 			start:          function(){},
@@ -82,11 +83,16 @@
 			}
 			
 			if ($parent.find('i').length == 0) {
-				$img.before('<i class="fa fa-file-image-o fa-3x" />');
+//				$img.before('<i class="fa fa-file-image-o fa-3x" />');
+				$img.before('<div class="imageLoading"> <img src="' + base_url + 'assets/images/file-image-o.svg" /> </div>');
+			}
+			
+			if (opts.animateLoading == true) {
+				$img.parent().find('.imageLoading').addClass('animate');
 			}
 			
 			// reset properties
-			$img.removeAttr('style');
+//			$img.removeAttr('style');
 			
 			var parWidth   = parseInt($parent.actual('innerWidth'));
 			var parHeight  = parseInt($parent.actual('innerHeight'));
@@ -163,13 +169,13 @@
 					}
 				}
 
+				$img.data('imgCenterComplete', true);
+				$img.parent().addClass('imgCenterComplete');
+				
 				opts.complete.call(this, $img);
 				if(current == len){
 					opts.end.call(this);
 				}
-
-				$img.data('imgCenterComplete', true);
-				$img.parent().addClass('imgCenterComplete');
 			}
 			
 			function imgError($img) {

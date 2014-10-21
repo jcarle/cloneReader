@@ -131,9 +131,12 @@ cloneReader = {
 				if (this.$page.is(':visible') != true) {
 					return;
 				}
+				if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+					return;
+				}
 				
 				event.stopPropagation();
-//cn(event['keyCode']);
+				
 				switch (event['keyCode']) {
 					case 74: // J: next
 					case 75: // N: prev
@@ -505,6 +508,7 @@ cloneReader = {
 
 		if (this.aFilters.viewType == 'detail') {
 			this.renderDetailEntry($entry, entry);
+			this.renderEntryPictures($entry);
 		}
 		else {
 			this.renderListEntry($entry, entry);
@@ -543,7 +547,6 @@ cloneReader = {
 
 		$('<label title="' + crLang.line('Star') + '"><i /></label>').addClass('star fa').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
-					
 		
 		if (entry.entryAuthor == '') {
 			var entryOrigin = $.sprintf(crLang.line('From %s'), '<a >' + entry.feedName + '</a>');
@@ -561,31 +564,7 @@ cloneReader = {
 
 		var entryContent  = $('<div>' + entry.entryContent + '</div>').clone().find('script, noscript, style, iframe, link, meta, br').remove().end().html();
 		var $p            = $('<p/>').html(entryContent).appendTo($entry);
-
-		$entry.find('img')
-			.load(
-				function() {
-					var $img = $(this);
-					$img.addClass('imgLoaded');
-					if ($img.width() >= 150 || $img.height() >= 150) {
-						if ($img.parent('a').length == 0) { 
-							$img.addClass('imgLarge');
-							return;
-						}
-						$img.parent('a').addClass('imgLarge');
-					}
-				}
-			)
-			.error(
-				function() {
-					$(this)
-						.addClass('imgLoaded')
-						.addClass('imgError')
-						.attr('title', 'No network connection or image is not available')
-						.attr('src', 'assets/images/error.svg');
-				});
-
-		var $footer = $('<div class="panel-footer footer" />').appendTo($entry);
+		var $footer       = $('<div class="panel-footer footer" />').appendTo($entry);
 
 		$('<label class="star checkbox" title="' + crLang.line('Star') + '" > <i/> </label>').appendTo($footer);
 		$('<label class="read checkbox" > <i/> <span> ' + crLang.line('Keep unread') + ' </span> </label>').appendTo($footer);
@@ -661,7 +640,7 @@ TODO: pensar como mejorar esta parte
 		
 		$('<span />').addClass('entryContent').html($.stripTags(entry.entryContent, ''))
 			.appendTo($div)
-			.prepend($('<h2 />').html($.stripTags(entry.entryTitle, '')));		
+			.prepend($('<h2 />').html($.stripTags(entry.entryTitle, '')));
 
 		$entry.find('.title').click(function(event) {
 			var $entry = $(event.target).parents('.entry');
@@ -677,7 +656,52 @@ TODO: pensar como mejorar esta parte
 			cloneReader.selectEntry($entry, true, false);
 		});	
 	},
+
+	renderEntryPictures: function($entry) {
+		var aImg = $entry.find('img');
+		for (var i=0; i<aImg.length; i++) {
+			var $img   = $(aImg[i]);
+			var width  = $img.attr('width');
+			var height = $img.attr('height');
+
+			if (width != null) {
+				$img.css('width', width + 'px');
+			}
+			if (height != null) {
+				$img.css('height', height + 'px');
+			}
+
+			if (!($img.width() == 1 || $img.height() == 1)) {
+				if ($img.parent('a').length == 0) { 
+					$img.before('<a />').prev().append($img);
+				}
+				$img.parent('a').addClass('imgCenter imgCenterInside');
+
+				this.checkPictureSize($img);
+			}
+		}
+
+		$entry.find('a.imgCenter > img')
+			.imgCenter( { centerType: 'inside', 'animateLoading': true, complete: 
+			function($img) {
+				cloneReader.checkPictureSize($img);
+			}
+		} );
+	},
 	
+	checkPictureSize: function($img) {
+		if ($img.width() < 150 && $img.height() < 150) {
+			return;
+		}
+		var $parent = $img.parent('a');
+		if ($parent.prev().hasClass('clearfix') == false) {
+			$parent.before('<div class="clearfix"> </div>');
+		}
+		if ($parent.next().hasClass('clearfix') == false) {
+			$parent.after('<div class="clearfix"> </div>');
+		}
+	},
+
 	renderEntriesHead: function() {
 		var filter = this.getFilter(this.aFilters);
 		if (filter == null) { return; }
@@ -687,10 +711,10 @@ TODO: pensar como mejorar esta parte
 		}
 		
 		this.$entriesHead.text(filter.name);
-		this.$ulEntries.prepend(this.$entriesHead);				
+		this.$ulEntries.prepend(this.$entriesHead);
 		
 		$('title').text(filter.name + ' | ' + $.crSettings.siteName);
-	},	
+	},
 	
 	selectFilters: function() {
 		this.$ulFilters.find('li.selected').removeClass('selected');
@@ -899,11 +923,12 @@ TODO: pensar como mejorar esta parte
 			
 			$entry.addClass('expanded');
 			var entryId = $entry.data('entryId');
-			var entry 	= this.aEntries[entryId];		
+			var entry   = this.aEntries[entryId];
 			$div = $('<div/>').data('entryId', entryId).addClass('detail');
 			this.renderDetailEntry($div, entry);
 			$div.find('.header .entryDate, .header .star').remove();
 			$entry.append($div);
+			this.renderEntryPictures($entry);
 			
 			$entry.find('.footer .star').click(function(event) {
 				event.stopPropagation();
@@ -1612,8 +1637,8 @@ console.timeEnd("t1");
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('');
 
 		//var top		= $element.offset().top + $element.height() - this.$toolbar.offset().top;
-		var top		= 92; //FIXME: harckodeta! //this.$toolbar.height() + this.$toolbar.offset().top; 
-		var left 	= $element.offset().left - this.$page.offset().left;
+		var top  = 92; //FIXME: harckodeta! //this.$toolbar.height() + this.$toolbar.offset().top; 
+		var left = $element.offset().left - this.$page.offset().left;
 		
 		this.$popupForm
 			.css({ 'top': top,  'left': left, 'position': 'fixed' })
