@@ -533,6 +533,9 @@ footer {
 	overflow: hidden;
 	-webkit-transition: none;
 	transition: none;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
+
 }
 	.imgCenter > img  {
 		max-width:none;
