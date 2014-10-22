@@ -869,6 +869,7 @@
 			.appendTo($parentNode);
 
 		var $div = $('<div class="panel-body" />').appendTo($form); 
+		$div = renderCrFormInfo(data, $div);
 		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
@@ -960,8 +961,8 @@
 		}
 		
 		data = $.extend({
-			'frmId': 	'frmId',
-			'buttons': 	buttons
+			'frmId':   'frmId',
+			'buttons': buttons
 		}, data);
 		
 		var $form = $('<form action="' + data['action'] + '" />')

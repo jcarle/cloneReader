@@ -75,13 +75,28 @@ echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), '
 if (isset($form['title'])) {
 	echo '<div class="panel-heading">'.  $form['title'].'</div>';
 }
-echo '	<div class="panel-body"> '; 
+echo '	<div class="panel-body"> ';
+
 
 $this->load->view('includes/formError'); 
 
 $aFields = renderCrFormFields($form);
 
-echo implode(' ', $aFields);
+if (isset($form['info'])) {
+	$row = ' <div class="row"> 
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> %s </div>
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> %s </div>
+			</div>';
+	if ($form['info']['position'] == 'left' ) {
+		echo sprintf($row, $form['info']['html'], implode(' ', $aFields));
+	}
+	else {
+		echo sprintf($row, implode(' ', $aFields), $form['info']['html']);
+	}
+}
+else {
+	echo implode(' ', $aFields);
+}
 
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
