@@ -55,7 +55,7 @@ function getHtmlDropdownSort($sort, $current, $seoTag = null) {
 
 	foreach ($sort as $key => $value) {
 		$html .= ' <li role="presentation" '.($current == $key ? ' class="active" ' : '').'>
-						<a role="menuitem" tabindex="-1" href="'. base_url( uri_string().'?sort='.$key).'">'.$seoStart. $value['label'].$seoEnd.'</a>
+						<a title="'. $value['label'].'" role="menuitem" tabindex="-1" href="'. base_url( uri_string().'?sort='.$key).'">'.$seoStart. $value['label'].$seoEnd.'</a>
 					</li>';
 	}
 				
@@ -83,3 +83,42 @@ function getHtmlGallery($pictures, $alt = 'Picture %s') {
 	
 	return $html;
 }
+
+function getHtmlPagination($foundRows, $pageSize, $params) {
+	$CI = & get_instance();
+	$CI->load->library('pagination');
+	
+	$CI->pagination->initialize(array(
+		'first_link'            => '1',
+		'last_link'             => ceil($foundRows / $pageSize),
+		'uri_segment'           => 3,
+		'base_url'              => current_url().'?'.http_build_query($params),
+		'total_rows'            => $foundRows,
+		'per_page'              => $pageSize, 
+		'num_links'             => 2,
+		'page_query_string'     => true,
+		'use_page_numbers'      => true,
+		'query_string_segment'  => 'page',
+		'first_tag_open'        => '<li>',
+		'first_tag_close'       => '</li>',
+		'last_tag_open'         => '<li>',
+		'last_tag_close'        => '</li>',
+		'first_url'             => '', // Alternative URL for the First Page.
+		'cur_tag_open'          => '<li class="active"><a>',
+		'cur_tag_close'         => '</a></li>',
+		'next_tag_open'         => '<li>',
+		'next_tag_close'        => '</li>',
+		'prev_tag_open'         => '<li>',
+		'prev_tag_close'        => '</li>',
+		'num_tag_open'          => '<li>',
+		'num_tag_close'         => '</li>',
+	)); 
+
+	$links = $CI->pagination->create_links();
+	if (!empty($links)) {
+		return ' <ul class="pagination"> ' . $links .' </ul> ';
+	}
+	return '';
+}
+
+	

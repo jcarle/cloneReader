@@ -42,8 +42,6 @@ $CI               = &get_instance();
 $filters          = element('filters', $list);
 $sort             = element('sort', $list);
 $list['urlEdit']  = element('urlEdit', $list, null);
-
-$CI->load->library('pagination');
 ?>
 <div class="crList">
 	<div class="panel panel-default" >
@@ -197,41 +195,13 @@ if (!empty($list['buttons'])) {
 				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-				<ul class="pagination">
 <?php
 $url = parse_url($_SERVER['REQUEST_URI']);
 parse_str(element('query', $url), $params);
 unset($params['page']);
 
-$CI->pagination->initialize(array(
-	'first_link'            => '1',
-	'last_link'             => ceil($list['foundRows'] / config_item('pageSize')),
-	'uri_segment'           => 3,
-	'base_url'              => current_url().'?'.http_build_query($params),
-	'total_rows'            => $list['foundRows'],
-	'per_page'              => config_item('pageSize'), 
-	'num_links'             => 2,
-	'page_query_string'     => true,
-	'use_page_numbers'      => true,
-	'query_string_segment'  => 'page',
-	'first_tag_open'        => '<li>',
-	'first_tag_close'       => '</li>',
-	'last_tag_open'         => '<li>',
-	'last_tag_close'        => '</li>',
-	'first_url'             => '', // Alternative URL for the First Page.
-	'cur_tag_open'          => '<li class="active"><a>',
-	'cur_tag_close'         => '</a></li>',
-	'next_tag_open'         => '<li>',
-	'next_tag_close'        => '</li>',
-	'prev_tag_open'         => '<li>',
-	'prev_tag_close'        => '</li>',
-	'num_tag_open'          => '<li>',
-	'num_tag_close'         => '</li>',
-)); 
-			
-echo $CI->pagination->create_links();
+echo getHtmlPagination($list['foundRows'], config_item('pageSize'), $params);
 ?>
-				</ul>
 			</div>
 		</div>
 	</div>
