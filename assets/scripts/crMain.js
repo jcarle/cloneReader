@@ -217,7 +217,7 @@ crMain = {
 	renderPageTitle: function(data, $page) {
 		$('title').text(data['meta']['title'] + ' | ' + $.crSettings.siteName);
 		
-		if (data['breadcrumb'] != null) {
+		if (data['breadcrumb'].length != 0) {
 			var $ol = $('<ol class="breadcrumb">').appendTo($page);
 
 			for (var i=0; i<data['breadcrumb'].length; i++) {

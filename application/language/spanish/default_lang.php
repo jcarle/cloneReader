@@ -200,3 +200,5 @@ $lang['Edit contacts of %s'] = 'Editar contactos de %s';
 $lang['Edit comments of %s'] = 'Editar comentarios de %s';
 $lang['Contacts'] = 'Contactos';
 $lang['Page %s'] = 'Página %s';
+$lang['Home'] = 'Inicio';
+$lang['Process'] = 'Procesos';
