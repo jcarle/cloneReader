@@ -668,7 +668,8 @@ TODO: pensar como mejorar esta parte
 				$img.css('width', width + 'px');
 			}
 			if (height != null) {
-				$img.css('height', height + 'px');
+				// FIXME: revisar, las img se extiran en movile
+				// $img.css('height', height + 'px');
 			}
 
 			if (!($img.width() == 1 || $img.height() == 1)) {
