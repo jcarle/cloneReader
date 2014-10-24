@@ -143,7 +143,7 @@ function getEntityGalleryConfig($entityTypeId) {
 
 /*
  * Armado de los title, h1, metaDescription y metaKeywords
- * Los meta se setean en los controller de las vistas
+ * Los meta se setean en los controller 
  * Ej: $meta = array(
  *			'title'         => 'Home',
  *			'h1'            => 'Home',
@@ -193,3 +193,34 @@ function getMetaByController($meta = null, $controller = null) {
 
 	return $meta;
 }
+
+/**
+ * Revisa las variables de la vista, y si no existe devuelve un breadcrumb por defecto  
+ * 		array(
+ *			array('text' => 'Home',  'href' => base_url()),
+ *			array('text' => 'About', 'active' => true ) 
+ *		);
+ * 
+ * @param $breadcrumb        
+ * @param $meta              array meta, se utiliza el title para el breadcrumb por defecto
+ * @param $skipBreadcrumb    para forzar que no muestre el breadcrumb
+ * @return array 
+ */
+function getBreadcrumb(array $breadcrumb, array $meta, $skipBreadcrumb = false) {
+	$CI = &get_instance();
+	
+	if ($skipBreadcrumb == true) {
+		return array();
+	}
+	if (!empty($breadcrumb)) {
+		return $breadcrumb;
+	}
+	
+	$breadcrumb = array(
+		array('text' => $CI->lang->line('Home'),             'href' => base_url()),
+		array('text' => $meta['title'],     'active' => true ) 
+	);
+	
+	return $breadcrumb;	
+}
+

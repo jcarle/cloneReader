@@ -1,7 +1,4 @@
 <?php
-$CI = &get_instance();
-
-
 $result = array('pageName' => getPageName());
 
 if (isset($hasUploadFile)) {
@@ -13,14 +10,15 @@ if (isset($notRefresh)) {
 if (isset($showTitle)) {
 	$result['showTitle'] = $showTitle;
 }
-if (isset($breadcrumb)) {
-	$result['breadcrumb'] = $breadcrumb;
-}
 if (!isset($meta)) {
 	$meta = array();
 }
-$meta = getMetaByController($meta);
-$result['meta'] = $meta;
+$result['meta'] = getMetaByController($meta);
+
+if (!isset($breadcrumb)) {
+	$breadcrumb = array();
+}
+$result['breadcrumb'] = getBreadcrumb($breadcrumb, $result['meta'], isset($skipBreadcrumb) ? $skipBreadcrumb : false);
 
 switch ($view) {
 	case 'includes/crList':
@@ -36,7 +34,7 @@ switch ($view) {
 		}
 		break;
 	default: 
-		$result['html'] 	= $this->load->view($view, '', true); 
+		$result['html'] = $this->load->view($view, '', true); 
 }
 
 

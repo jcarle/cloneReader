@@ -137,8 +137,8 @@ class News extends CI_Controller {
 				'view'   => 'newView', 
 				'meta'   => array( 'title' => $new['newTitle']),
 				'new'    => $new,
-				'breadcrumb'	=> array(
-					array('text' => 'home', 'href' => base_url()),
+				'breadcrumb' => array(
+					array('text' => $this->lang->line('Home'), 'href' => base_url()),
 					array('text' => $new['newTitle'], 'active' => true),
 				)
 			)

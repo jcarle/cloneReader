@@ -14,6 +14,11 @@ if (!isset($meta)) {
 }
 $meta = getMetaByController($meta);
 
+if (!isset($breadcrumb)) {
+	$breadcrumb = array();
+}
+$breadcrumb = getBreadcrumb($breadcrumb, $meta, isset($skipBreadcrumb) ? $skipBreadcrumb : false);
+
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE HTML>
@@ -144,7 +149,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 	<div class="container pageContainer ">
 		<div class="cr-page <?php echo getPageName(); ?>">
 <?php
-if (isset($breadcrumb)) {
+if (!empty($breadcrumb)) {
 	echo '<ol class="breadcrumb">';
 	foreach ($breadcrumb as $link) {
 		if (element('active', $link) == true) {

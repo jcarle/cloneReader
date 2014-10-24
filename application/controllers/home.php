@@ -5,10 +5,11 @@ class Home extends CI_Controller {
 
 		$this->load->view('pageHtml',
 			array(
-				'view'          => 'home', 
-				'userFilters'   => $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
-				'showTitle'     => false,
-				'notRefresh'    => true,
+				'view'            => 'home', 
+				'userFilters'     => $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
+				'showTitle'       => false,
+				'notRefresh'      => true,
+				'skipBreadcrumb'  => true,
 			)
 		);
 	}

@@ -4,7 +4,7 @@ $CI = &get_instance();
 //sleep(5);
 
 if ($CI->input->get('pageJson') == true) {
-	return 	$this->load->view('pageJson');
+	return $this->load->view('pageJson');
 }
 
 

@@ -21,10 +21,6 @@ class Process extends CI_Controller {
 		$this->load->view('pageHtml', array(
 			'view'       => 'process',
 			'meta'       => array( 'title' => $this->lang->line('Process') ),
-			'breadcrumb' => array(
-				array('text' => $this->lang->line('Home'),      'href' => base_url()),
-				array('text' => $this->lang->line('Process'),   'active' => true ) 
-			)
 		));
 	}
 	
