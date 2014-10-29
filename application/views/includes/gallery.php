@@ -1,3 +1,7 @@
+<?php
+// FIXME: borrar este archivo
+// no se utiliza más, se crea el template con js ahora
+?>
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
 	<div class="slides"></div>
 	<h3 class="title"></h3>

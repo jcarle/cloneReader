@@ -28,30 +28,30 @@ class Feedbacks extends CI_Controller {
 		}
 
 		$form = array(
-			'frmId'		=> 'frmFeedbackEdit',
-			'callback' 	=> 'function(response) { $.Feedback.onSaveFeedback(response); };',
+			'frmId'     => 'frmFeedbackEdit',
+			'callback'  => 'function(response) { $.Feedback.onSaveFeedback(response); };',
 			'fields' => array( 
 				'feedbackId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> element('feedbackId', $data, 0)
+					'type'  => 'hidden', 
+					'value' => element('feedbackId', $data, 0)
 				),
 				'feedbackUserName' => array(
-					'type' 		=> 'text',
-					'label'		=> $this->lang->line('Name'), 
-					'value'		=> trim(element('userFirstName', $data).' '.element('userLastName', $data)),
-				),						
+					'type'   => 'text',
+					'label'  => $this->lang->line('Name'), 
+					'value'  => trim(element('userFirstName', $data).' '.element('userLastName', $data)),
+				),
 				'feedbackUserEmail' => array(
-					'type' 		=> 'text',
-					'label'		=> $this->lang->line('Email'), 
-					'value'		=> $feedbackUserEmail
-				),										
+					'type'   => 'text',
+					'label'  => $this->lang->line('Email'), 
+					'value'  => $feedbackUserEmail
+				),
 				'feedbackDesc' => array(
-					'type'		=> 'textarea',
-					'label'		=> $this->lang->line('Comment'), 
-					'value'		=> ''
+					'type'  => 'textarea',
+					'label' => $this->lang->line('Comment'), 
+					'value' => ''
 				),
 			),
-			'buttons'		=> array( '<button type="submit" class="btn btn-primary"><i class="fa fa-comment"></i> '.$this->lang->line('Send').'</button> '),
+			'buttons' => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-comment"></i> '.$this->lang->line('Send').'</button> '),
 		);
 		
 		$form['rules'] = array(
@@ -91,7 +91,7 @@ class Feedbacks extends CI_Controller {
 			'form'		=> $form,
 			'langs'		=> array( 'Thanks for contacting us' )
 		));
-	}	
+	}
 	
 	function listing() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }

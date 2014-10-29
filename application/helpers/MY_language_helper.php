@@ -4,16 +4,11 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
 /**
- * Save all lines into a json data for use in javascript
  *
  * @param array $lines array('line1, 'line2', ..., 'lineN')
- * @author porquero
- * @link porquero.blogspot.com
- *
  * @return string
  */
-function langJs($lines)
-{
+function langJs($lines) {
 	$CI = & get_instance();
 	$json = array();
 
@@ -21,7 +16,7 @@ function langJs($lines)
 		$json[$line] = $CI->lang->line($line);
 	}
 
-	$script = 'crLang.aLangs = ' . json_encode($json) . ';' . "\n";
+	$script = ' if (Object.keys(crLang.aLangs).length == 0) { crLang.aLangs = ' . json_encode($json) . '; } ';
 
 	return $script;
 

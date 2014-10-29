@@ -119,6 +119,4 @@ function getHtmlPagination($foundRows, $pageSize, $params) {
 		return ' <ul class="pagination"> ' . $links .' </ul> ';
 	}
 	return '';
-}
-
-	
+}	

@@ -29,8 +29,5 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-$(document).ready(function() {
-	$.Profile.init();
-});
-</script>
+<?php
+$this->myjs->add( ' $.Profile.init(); ');

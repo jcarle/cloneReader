@@ -118,9 +118,4 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
-?>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#<?php echo element('frmId', $form, 'frmId'); ?>').crForm(<?php echo json_encode($form); ?>);
-});
-</script>
+$this->myjs->add(' $(\'#'. element('frmId', $form, 'frmId').'\').crForm('. json_encode($form).'); ');

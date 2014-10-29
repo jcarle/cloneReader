@@ -167,13 +167,13 @@ crMain = {
 	},
 	
 	loadUploadFile: function() {
-		if (this.loadedUploadFile == true || $('#blueimp-gallery').length > 0 ) {
+		if (this.loadedUploadFile == true) {
 			return;
 		}
 		
 		$.ajax({
-			'url': 		base_url + 'app/uploadFile',
-			'async':	false,
+			'url':      base_url + 'app/uploadFile',
+			'async':    false,
 			'dataType': 'text',
 			'success': 
 				function(response) {
@@ -191,10 +191,6 @@ crMain = {
 		crMain.showPage(pageName);
 		$page.children().remove();
 		crMain.renderPageTitle(data, $page);
-		
-		if (data['hasUploadFile'] == true) {
-			this.loadUploadFile();
-		}
 		
 		switch (data['js']) {
 			case 'crList':
@@ -215,7 +211,7 @@ crMain = {
 	},
 	
 	renderPageTitle: function(data, $page) {
-		$('title').text(data['meta']['title'] + ' | ' + $.crSettings.siteName);
+		$('title').text(data['meta']['title'] + ' | ' + crSettings.siteName);
 		
 		if (data['breadcrumb'].length != 0) {
 			var $ol = $('<ol class="breadcrumb">').appendTo($page);
@@ -258,7 +254,7 @@ crMain = {
 		
 		$otherPages.hide().trigger('onHide');
 
-		$('title').text( meta['title'] + ' | ' + $.crSettings.siteName);
+		$('title').text( meta['title'] + ' | ' + crSettings.siteName);
 		$page.stop().show();
 		$page.trigger('onVisible');
 
@@ -276,7 +272,7 @@ crMain = {
 		var aTmp = pageName.split('/');
 		var controller = aTmp[0];
 		if (controller.trim() == '') {
-			controller = $.crSettings.pageHome;
+			controller = crSettings.pageHome;
 		}
 		
 		return 'cr-page-' + controller + (aTmp.length > 1 ? '-' + aTmp[1] : '');
@@ -317,5 +313,5 @@ crMain = {
 };
 
 $(document).ready( function() {
-	crMain.init(); 
+	crMain.init();
 });

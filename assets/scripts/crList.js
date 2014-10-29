@@ -419,7 +419,7 @@
 	
 		var params 		= $.url().param();
 		var currentPage = params['page'];
-		var totalPages	= Math.ceil(data['foundRows'] / $.crSettings.pageSize);
+		var totalPages	= Math.ceil(data['foundRows'] / crSettings.pageSize);
 		delete params['page'];
 	
 		$ul.bootstrapPaginator({

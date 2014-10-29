@@ -180,18 +180,6 @@ function getCrFieldGallery($form) {
 	return null;
 }
 
-function hasCrUploadFile($form) {
-	foreach ($form['fields'] as $name => $field) {
-		if ($field['type'] == 'gallery') {
-			return true;
-		}
-		if ($field['type'] == 'upload') {
-			return true;
-		}
-	}
-	return false;
-}
-
 function selectGallery($entityTypeId, $entityId) {
 	$CI = &get_instance();
 	$CI->load->model('Files_Model');

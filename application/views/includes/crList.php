@@ -207,8 +207,5 @@ echo getHtmlPagination($list['foundRows'], config_item('pageSize'), $params);
 	</div>
 </div>
 
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.crList').crList(<?php echo json_encode($list); ?>);	
-});
-</script>
+<?php
+$this->myjs->add(' $(\'.crList\').crList('. json_encode($list).'); ');	

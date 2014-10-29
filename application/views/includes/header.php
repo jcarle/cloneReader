@@ -51,53 +51,10 @@ if (ENVIRONMENT == 'development') {
 appendFilesToCarabiner();
 
 $CI->carabiner->display('css');
-$CI->carabiner->display('js');
-
-$crSettings = array(
-	'siteName'            => config_item('siteName'),
-	'pageSize'            => config_item('pageSize'),
-	'pageHome'            => $this->router->default_controller,
-	'langId'              => $this->session->userdata('langId'),
-	'defaultCurrencyId'   => config_item('defaultCurrencyId'),
-	'defaultCurrencyName' => config_item('defaultCurrencyName'),
-);
-?>	
-	<script type="text/javascript">
-		$.crSettings    = <?php echo json_encode($crSettings); ?>;		
-		var base_url    = '<?php echo base_url(); ?>';
-		var datetime    = '<?php echo $this->Commond_Model->getCurrentDateTime(); ?>';
-<?php
-if (!isset($langs)) {
-	$langs = array();
-}
-$langs      = getLangToJs($langs);
-$aScripts   = array();
-$aScripts[] = langJs($langs);
-$aScripts[] = ' $(document).ready(function() { $(\'.'.getPageName().'\').data(\'meta\', '.json_encode($meta).'); } ); ';
-
-if (isset($aServerData)) {
-	$aScripts[] = 'var SERVER_DATA = '.json_encode($aServerData).'; ';
-}
-
-if (ENVIRONMENT == 'production' && config_item('google-analytics-Account') != '') {
-	$aScripts[] = "
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', '".config_item('google-analytics-Account')."']);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-	";
-}
-
-echo implode(' ', $aScripts);
+//$CI->carabiner->display('js');
 
 $siteLogo = config_item('siteLogo');
 ?>
-	</script>	
 	<title><?php echo element('title', $meta). ' | '.config_item('siteName'); ?> </title>
 </head>
 <body>

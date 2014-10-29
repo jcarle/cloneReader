@@ -1,9 +1,6 @@
 <?php
 $result = array('pageName' => getPageName());
 
-if (isset($hasUploadFile)) {
-	$result['hasUploadFile'] = $hasUploadFile;
-}
 if (isset($notRefresh)) {
 	$result['notRefresh'] = $notRefresh;
 }
@@ -29,12 +26,10 @@ switch ($view) {
 		$form  = appendMessagesToCrForm($form);
 		$result['js']   = 'crForm';
 		$result['form'] = $form;
-		if (hasCrUploadFile($form) == true) { 
-			$result['hasUploadFile'] = true;
-		}
 		break;
 	default: 
-		$result['html'] = $this->load->view($view, '', true); 
+		$result['html'] = $this->load->view($view, '', true);
+		$result['html'].= $this->myjs->getHtml();  
 }
 
 

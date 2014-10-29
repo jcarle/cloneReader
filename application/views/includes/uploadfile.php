@@ -1,5 +1,4 @@
 <?php 
-$this->load->view('includes/gallery'); 
 if (!isset($fileupload)) {
 	$fileupload = array();
 }

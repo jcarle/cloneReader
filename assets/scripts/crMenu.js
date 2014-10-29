@@ -68,9 +68,9 @@ crMenu = {
 			$menuProfile.find('.menuItemAbout').parents('li').before($('<li role="presentation" class="divider"></li>'));
 		}
 
-		$menuProfile.find('.lang-' + $.crSettings.langId ).before('<i class="fa fa-check fa-fw"></i>');
+		$menuProfile.find('.lang-' + crSettings.langId ).before('<i class="fa fa-check fa-fw"></i>');
 		$menuProfile.find('.fa-flag-o').parent()
-			.append('<span class="badge pull-right">' + $.crSettings.langId + '</span>');
+			.append('<span class="badge pull-right">' + crSettings.langId + '</span>');
 	
 		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', 
 			function(event) {

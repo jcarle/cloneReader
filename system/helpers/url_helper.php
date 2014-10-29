@@ -489,6 +489,8 @@ if ( ! function_exists('url_title'))
 			$replace	= '_';
 		}
 
+		$str = utf8_encode(strtolower(strtr(utf8_decode($str), utf8_decode('ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ'), 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr')));
+		
 		$trans = array(
 						'&\#\d+?;'				=> '',
 						'&\S+?;'				=> '',

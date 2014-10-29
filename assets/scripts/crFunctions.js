@@ -22,7 +22,7 @@ $.extend({
 	},
 
 	isMobile: function() {
-		return $(window).width() < 768;		
+		return $(window).width() < 768;
 	},	
 	
 	validateEmail: function(value) {
@@ -309,9 +309,9 @@ $.extend({
 	},
 	
 	formatDate: function($element) {
-		if ($.crSettings.momentLoaded != true) {
-			$.crSettings.momentLoaded = true;
-			moment.lang($.crSettings.langId);
+		if (crSettings.momentLoaded != true) {
+			crSettings.momentLoaded = true;
+			moment.lang(crSettings.langId);
 		}
 		
 		if ($element.data('datetime') == null) {
@@ -495,6 +495,24 @@ $.extend({
 		
 		$gallery.on('click', 
 			function(event) {
+				if ($.hasCrGallery != true) {
+					$('<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls"> \
+						<div class="slides"></div> \
+						<h3 class="title"></h3> \
+						<a class="prev">‹</a> \
+						<a class="next">›</a> \
+						<a class="close">×</a> \
+						<a class="play-pause"></a> \
+						<ol class="indicator"></ol> \
+					</div> ').appendTo($('body'));
+					$.hasCrGallery = true;
+				}
+				else {
+cn('hasCrGallery');
+				}
+				
+				
+				
 				var target = event.target;
 				if ($(target).hasClass('thumbnail') == false) {
 					return;
@@ -507,7 +525,7 @@ $.extend({
 		);
 		
 		$gallery.data('initGallery', true);
-	}
+	}	
 });
 
 $(window).resize(function() {
