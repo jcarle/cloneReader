@@ -27,7 +27,7 @@ class Tools extends CI_Controller {
 		
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 
-			'meta'   => array('title' => $this->lang->line('Edit tags')),
+			'meta'   => array('title' => $this->lang->line('Edit tags'), 'robots' => 'noindex,nofollow'),
 			'list'   => array(
 				'urlList'       => strtolower(__CLASS__).'/tags',
 				'urlEdit'       => strtolower(__CLASS__).'/tags/%s',
@@ -90,7 +90,7 @@ class Tools extends CI_Controller {
 				
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm', 
-			'meta'   => array('title' => $this->lang->line('Edit tags')),
+			'meta'   => array('title' => $this->lang->line('Edit tags'), 'robots' => 'noindex,nofollow'),
 			'form'   => populateCrForm($form, $data),
 		));	
 	}
@@ -138,7 +138,7 @@ class Tools extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList', 
-			'meta'   => array('title' => $this->lang->line('Edit feeds')),
+			'meta'   => array('title' => $this->lang->line('Edit feeds'), 'robots' => 'noindex,nofollow'),
 			'list'   => array(
 				'urlList'       => strtolower(__CLASS__).'/feeds',
 				'urlAdd'        => strtolower(__CLASS__).'/feeds/add',
@@ -207,7 +207,7 @@ class Tools extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm', 
-			'meta'   => array('title' => $this->lang->line('Add feed')),
+			'meta'   => array('title' => $this->lang->line('Add feed'), 'robots' => 'noindex,nofollow'),
 			'form'   => populateCrForm($form, array()),
 		));	
 	}

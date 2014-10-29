@@ -507,11 +507,6 @@ $.extend({
 					</div> ').appendTo($('body'));
 					$.hasCrGallery = true;
 				}
-				else {
-cn('hasCrGallery');
-				}
-				
-				
 				
 				var target = event.target;
 				if ($(target).hasClass('thumbnail') == false) {
