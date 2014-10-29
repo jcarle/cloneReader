@@ -53,7 +53,8 @@ if (config_item('hasRss') == true) {
 	
 	<meta name="description" content="<?php echo element('description', $meta); ?>" />
 	<meta name="keywords" content="<?php echo element('keywords', $meta); ?>" />
-		
+	<meta name="robots" content="<?php echo element('robots', $meta); ?>" />
+
 	<link rel="icon" href="<?php echo base_url('favicon.png');?>" type="image/png">
 <?php
 $this->load->spark('carabiner/1.5.4');
@@ -72,7 +73,7 @@ $CI->carabiner->display('css');
 
 $siteLogo = config_item('siteLogo');
 ?>
-	<title><?php echo element('title', $meta). ' | '.config_item('siteName'); ?> </title>
+	<title><?php echo element('title', $meta). (config_item('addTitleSiteName') == true ? ' | '.config_item('siteName') : ''); ?> </title>
 </head>
 <body>
 	<div id="divWaiting" class="alert alert-warning navbar-fixed-top">

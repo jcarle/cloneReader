@@ -8,9 +8,9 @@ $config['defaultCurrencyName'] = 'AR$';
 $config['autocompleteSize'] = 50;
 $config['siteLogo'] = array('w' => 151, 'h' => 39);
 $config['hasRss'] = true;
-
 $config['siteName'] = 'cloneReader BETA';
 $config['siteId'] = 'cloneReader';
+$config['addTitleSiteName'] = true;
 $config['emailFrom'] = 'clonereader@gmail.com';
 $config['emailDebug'] = 'jcarle@gmail.com';
 $config['google-analytics-Account'] = 'UA-41589815-1';
@@ -121,10 +121,11 @@ $config['testDoc'] = array(
 */
 $config['meta'] = array(
 	'default' => array(
-		'title'         => 'Home',
-		'h1'            => 'Home',
+		'title'        => 'cloneReader reader feeds rss news',
+		'h1'           => 'cloneReader',
 		'description'  => 'Clone Reader. Clone of google reader. Reader of feeds, rss news. Open source',
-		'keyword'      => 'cReader cloneReader news feeds rss reader open source',	
+		'keyword'      => 'cReader cloneReader news feeds rss reader open source',
+		'robots'       => 'index,follow',	
 	),
 	'profile' => array(
 		'title' => 'Edit profile',

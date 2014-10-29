@@ -7,6 +7,7 @@ $crSettings = array(
 	'pageSize'            => config_item('pageSize'),
 	'pageHome'            => $this->router->default_controller,
 	'langId'              => $this->session->userdata('langId'),
+	'addTitleSiteName'    => config_item('addTitleSiteName'),
 	'defaultCurrencyId'   => config_item('defaultCurrencyId'),
 	'defaultCurrencyName' => config_item('defaultCurrencyName'),
 );
