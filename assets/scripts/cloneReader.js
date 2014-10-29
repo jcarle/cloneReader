@@ -6,7 +6,7 @@ cloneReader = {
 		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
 		
 		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
-		moment.lang($.crSettings.langId);
+		moment.lang(crSettings.langId);
 		this.isMobile = $.isMobile();
 
 		this.minUnreadEntries   = 2;
@@ -21,13 +21,13 @@ cloneReader = {
 			'page':         1,
 			'onlyUnread':   true,
 			'sortDesc':     true,
-			'id':           $.crSettings.tagHome, 
+			'id':           crSettings.tagHome, 
 			'type':         'tag',
 			'viewType':     'detail',
 			'isMaximized':  false
 		}, aFilters);
 		this.isMaximized  = (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
-		this.aSystemTags  = [$.crSettings.tagAll, $.crSettings.tagStar, $.crSettings.tagHome, $.crSettings.tagBrowse];
+		this.aSystemTags  = [crSettings.tagAll, crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse];
 		this.isLoaded     = false;
 		
 		this.buildCache();
@@ -75,7 +75,7 @@ cloneReader = {
 
 				if (this.indexFilters != null) {
 					var filter = this.getFilter(this.aFilters);
-					$('title').text(filter.name + ' | ' + $.crSettings.siteName);
+					$('title').text(filter.name + ' | ' + crSettings.siteName);
 				}
 			}
 
@@ -97,9 +97,9 @@ cloneReader = {
 		, this));
 					
 		
-		setInterval(function() { cloneReader.saveData(true); }, ($.crSettings.feedTimeSave * 1000)); 
-//		setInterval(function() { cloneReader.loadFilters(true); }, ($.crSettings.feedTimeReload * 60000));
-		setInterval(function() { cloneReader.updateEntriesDateTime(); }, ($.crSettings.feedTimeReload * 60000));
+		setInterval(function() { cloneReader.saveData(true); }, (crSettings.feedTimeSave * 1000)); 
+//		setInterval(function() { cloneReader.loadFilters(true); }, (crSettings.feedTimeReload * 60000));
+		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (crSettings.feedTimeReload * 60000));
 
 		this.$ulEntries
 			.on({ 'tap' : 
@@ -448,7 +448,7 @@ cloneReader = {
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-					cloneReader.isLastPage 		= (response.result.length < $.crSettings.entriesPageSize);
+					cloneReader.isLastPage 		= (response.result.length < crSettings.entriesPageSize);
 					cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
 					cloneReader.renderEntries(response.result);
 				},
@@ -528,7 +528,7 @@ cloneReader = {
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
 		
-		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == $.crSettings.tagHome) {
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagHome) {
 			$entry.find('.star, .footer, .entryOrigin').remove();
 		} 
 		
@@ -714,7 +714,7 @@ TODO: pensar como mejorar esta parte
 		this.$entriesHead.text(filter.name);
 		this.$ulEntries.prepend(this.$entriesHead);
 		
-		$('title').text(filter.name + ' | ' + $.crSettings.siteName);
+		$('title').text(filter.name + ' | ' + crSettings.siteName);
 	},
 	
 	selectFilters: function() {
@@ -739,14 +739,14 @@ TODO: pensar como mejorar esta parte
 		else {
 			this.$noResult.html('<div class="well well-lg"> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');
 			
-			if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == $.crSettings.tagAll) {
+			if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagAll) {
 				if (Object.keys(this.indexFilters['feed']).length == 0) {
 					this.$noResult.html('<div class="well well-lg"> \
 						' + crLang.line('Not subscribed to any feeds') + ' \
 						<ul class="list-group"> \
 							<li class="list-group-item"> <a href="javascript:void(0);" class="addFeed" > ' + crLang.line('Add feed') + ' </a> </li> \
 							<li class="list-group-item"> <a href="' + base_url + 'import/feeds"> ' + crLang.line('Import feeds') + ' </a> </li> \
-							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + $.crSettings.tagBrowse + ' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
+							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + crSettings.tagBrowse + ' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
 						</ul> \
 					</div>');
 					
@@ -838,7 +838,7 @@ TODO: pensar como mejorar esta parte
 		}
 					
 		var $count = $filter.find('.count:first');
-		$count.text('(' + (count > $.crSettings.feedMaxCount ? $.crSettings.feedMaxCount + '+' : count) + ')');
+		$count.text('(' + (count > crSettings.feedMaxCount ? crSettings.feedMaxCount + '+' : count) + ')');
 		$count.hide();
 		if (count > 0) {
 			$count.show();
@@ -878,7 +878,7 @@ TODO: pensar como mejorar esta parte
 		this.toogleMainToolbarItem(['.filterUnread'], false);
 		this.toogleMainToolbarItem(['.btnMarkAllAsRead'], false);
 		
-		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [$.crSettings.tagStar, $.crSettings.tagHome]) != -1)) {
+		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [crSettings.tagStar, crSettings.tagHome]) != -1)) {
 			this.toogleMainToolbarItem(['.btnMarkAllAsRead'], true);
 			this.toogleMainToolbarItem(['.filterUnread'], true);
 		}
@@ -901,8 +901,8 @@ TODO: pensar como mejorar esta parte
 
 	updateMenuCount: function() {
 		var count = this.getCountFilter(this.getFilter(this.aFilters));
-		if (count > $.crSettings.feedMaxCount) {
-			count = $.crSettings.feedMaxCount + '+';
+		if (count > crSettings.feedMaxCount) {
+			count = crSettings.feedMaxCount + '+';
 		}
 		this.$mainToolbar.find('.filterUnread .count').text(count);
 		this.$page.find('.filterOnlyUnread .count').text(count);
@@ -1187,7 +1187,7 @@ console.timeEnd("t1");
 		if (tmp != null) {
 			return tmp;
 		}	
-		return this.indexFilters['tag'][$.crSettings.tagAll];	
+		return this.indexFilters['tag'][crSettings.tagAll];	
 	},
 	
 	getAllParentsByFilter: function(filter){
@@ -1362,7 +1362,7 @@ console.timeEnd("t1");
 	},
 	
 	addToSave: function(entry) {
-		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == $.crSettings.tagHome) { // si estoy en el tag home, no guardo nada 
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagHome) { // si estoy en el tag home, no guardo nada 
 			return;
 		}
 		
@@ -1491,7 +1491,7 @@ console.timeEnd("t1");
 						'success': 	
 							function(response) {
 								if ($.hasAjaxDefaultAction(response) == true) { return; }
-								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': $.crSettings.tagAll });
+								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': crSettings.tagAll });
 								cloneReader.loadFilters(true);
 							}
 					});
@@ -1703,7 +1703,7 @@ console.timeEnd("t1");
 	},
 	
 	isBrowseTags: function() {
-		if (this.aFilters.type == 'tag' && this.aFilters.id == $.crSettings.tagBrowse) {
+		if (this.aFilters.type == 'tag' && this.aFilters.id == crSettings.tagBrowse) {
 			return true;
 		}
 		return false;

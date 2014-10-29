@@ -9,10 +9,6 @@ $crSettings = array(
 	'entriesPageSize'  => config_item('entriesPageSize'),
 	'feedMaxCount'     => config_item('feedMaxCount'),
 );
-?>
-<script>
-$(document).ready(function() {
-	$.crSettings = $.extend($.crSettings, <?php echo json_encode($crSettings); ?>);
-	cloneReader.init(<?php echo $userFilters; ?>);
-});
-</script>
+
+$this->myjs->add( ' crSettings = $.extend(crSettings, '. json_encode($crSettings) .'); ');
+$this->myjs->add( ' cloneReader.init('. $userFilters .'); ');
