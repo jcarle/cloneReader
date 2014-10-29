@@ -127,9 +127,6 @@ $config['meta'] = array(
 		'keyword'      => 'cReader cloneReader news feeds rss reader open source',
 		'robots'       => 'index,follow',	
 	),
-	'profile' => array(
-		'title' => 'Edit profile',
-	),
 	'login' => array(
 		'title'       => 'Login',
 		'description' => 'Login in clone Reader. Reader of feeds, rss, news',

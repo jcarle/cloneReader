@@ -43,69 +43,69 @@ class Users extends CI_Controller {
 		$query = $this->Users_Model->selectToList($page, config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'meta'			=> array( 'title' => $this->lang->line('Edit users') ),
-			'list'			=> array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array(
-					'userEmail' 		=> $this->lang->line('Email'), 
-					'userFullName' 		=> $this->lang->line('Name'), 
-					'countryName' 		=> $this->lang->line('Country'), 
-					'langName' 			=> $this->lang->line('Language'),
-					'groupsName' 		=> $this->lang->line('Groups'),
-					'userDateAdd'		=> array('class' => 'datetime', 'value' => $this->lang->line('Record date')),
-					'userLastAccess'	=> array('class' => 'datetime', 'value' => $this->lang->line('Last access')),
-					'facebookUserId'	=> 'Facebook', 
-					'googleUserId'		=> 'Google',
+			'view'  => 'includes/crList', 
+			'meta'  => array( 'title' => $this->lang->line('Edit users') ),
+			'list'  => array(
+				'urlList'  => strtolower(__CLASS__).'/listing',
+				'urlEdit'  => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'   => strtolower(__CLASS__).'/add',
+				'columns'  => array(
+					'userEmail'      => $this->lang->line('Email'), 
+					'userFullName'   => $this->lang->line('Name'), 
+					'countryName'    => $this->lang->line('Country'), 
+					'langName'       => $this->lang->line('Language'),
+					'groupsName'     => $this->lang->line('Groups'),
+					'userDateAdd'    => array('class' => 'datetime', 'value' => $this->lang->line('Record date')),
+					'userLastAccess' => array('class' => 'datetime', 'value' => $this->lang->line('Last access')),
+					'facebookUserId' => 'Facebook', 
+					'googleUserId'   => 'Google',
 				),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'showId'		=> true,
-				'filters'		=> array(
+				'data'       => $query['data'],
+				'foundRows'  => $query['foundRows'],
+				'showId'     => true,
+				'filters'    => array(
 					'countryId' => array(
-						'type'				=> 'dropdown',
-						'label'				=> $this->lang->line('Country'),
-						'value'				=> $this->input->get('countryId'),
-						'source'			=> $this->Countries_Model->selectToDropdown(),
-						'appendNullOption'	=> true,
-					),				
+						'type'             => 'dropdown',
+						'label'            => $this->lang->line('Country'),
+						'value'            => $this->input->get('countryId'),
+						'source'           => $this->Countries_Model->selectToDropdown(),
+						'appendNullOption' => true,
+					),
 					'langId' => array(
-						'type'				=> 'dropdown',
-						'label'				=> $this->lang->line('Language'), 
-						'value'				=> $this->input->get('langId'),
-						'source'			=> $this->Languages_Model->selectToDropdown(),
-						'appendNullOption'	=> true,
+						'type'             => 'dropdown',
+						'label'            => $this->lang->line('Language'), 
+						'value'            => $this->input->get('langId'),
+						'source'           => $this->Languages_Model->selectToDropdown(),
+						'appendNullOption' => true,
 					),
 					'groupId' => array(
-						'type'				=> 'dropdown',
-						'label'				=> $this->lang->line('Group'),
-						'source'			=> $this->Groups_Model->selectToDropdown(),
-						'value'				=> $this->input->get('groupId'),
-						'appendNullOption'	=> true,
+						'type'             => 'dropdown',
+						'label'            => $this->lang->line('Group'),
+						'source'           => $this->Groups_Model->selectToDropdown(),
+						'value'            => $this->input->get('groupId'),
+						'appendNullOption' => true,
 					),
 					'feedId' => array(
-						'type' 		=> 'typeahead',
-						'label'		=> $this->lang->line('Feed'),
-						'source' 	=> base_url('search/feeds/'),
-						'value'		=> array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
+						'type'    => 'typeahead',
+						'label'   => $this->lang->line('Feed'),
+						'source'  => base_url('search/feeds/'),
+						'value'   => array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)), 
 					),
 					'remoteLogin' => array(
-						'type'		=> 'groupCheckBox',
-						'label'		=> $this->lang->line('Remote login'),
-						'source'	=> array(
-							array('id' => 'facebook', 	'text' => 'Facebook'),
-							array('id' => 'google' ,	'text'	=> 'Google'),
+						'type'    => 'groupCheckBox',
+						'label'   => $this->lang->line('Remote login'),
+						'source'  => array(
+							array('id' => 'facebook',  'text' => 'Facebook'),
+							array('id' => 'google' ,   'text'	=> 'Google'),
 						), 
-						'value'		=> $aRemoteLogin
+						'value' => $aRemoteLogin
 					)
 				),
 				'sort' => array(
-					'userId'			=> '#',
-					'userEmail'			=> $this->lang->line('Email'),
-					'userDateAdd'		=> $this->lang->line('Record date'),
-					'userLastAccess'	=> $this->lang->line('Last access'),
+					'userId'          => '#',
+					'userEmail'       => $this->lang->line('Email'),
+					'userDateAdd'     => $this->lang->line('Record date'),
+					'userLastAccess'  => $this->lang->line('Last access'),
 				)
 			)
 		));
