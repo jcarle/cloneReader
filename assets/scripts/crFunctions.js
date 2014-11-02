@@ -493,34 +493,61 @@ $.extend({
 			return;
 		}
 		
-		$gallery.on('click', 
-			function(event) {
+		$gallery.on('click', 'a', $.proxy(
+			function($gallery, event) {
 				if ($.hasCrGallery != true) {
 					$('<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls"> \
 						<div class="slides"></div> \
 						<h3 class="title"></h3> \
-						<a class="prev">‹</a> \
-						<a class="next">›</a> \
-						<a class="close">×</a> \
-						<a class="play-pause"></a> \
+						<a title="‹" class="prev">‹</a> \
+						<a title="›" class="next">›</a> \
+						<a title="×" class="close">×</a> \
+						<a title="" class="play-pause"></a> \
 						<ol class="indicator"></ol> \
 					</div> ').appendTo($('body'));
 					$.hasCrGallery = true;
 				}
 				
-				var target = event.target;
+				var target = event.currentTarget;
 				if ($(target).hasClass('thumbnail') == false) {
 					return;
 				}
-				var link    = target.src ? $(target).parents('a').get(0) : target;
-				var options = {index: link, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false};
-				var links   = this.getElementsByTagName('a');
-				blueimp.Gallery(links, options);
+				blueimp.Gallery($gallery.find('a'), {index: target, event: event, startSlideshow: true, slideshowInterval: 5000, stretchImages: false});
 			}
-		);
+		, this, $gallery));
 		
 		$gallery.data('initGallery', true);
-	}	
+	},
+
+// TODO: pensar si conviene ir moviendo el div por cada $page, para que no se acumulen muchos
+	initMap: function(index, latitudes, longitudes, divMap, name) {
+		var myLocation = new google.maps.LatLng(latitudes[index], longitudes[index]);
+		var mapOptions = { center: myLocation, zoom: 16 };
+		var marker     = new google.maps.Marker({ position: myLocation, title: "'"+name+"'" });
+		var map        = new google.maps.Map(document.getElementById(divMap), mapOptions);
+		marker.setMap(map);
+	},
+
+	renderMap: function(lat, long, divMap, name){
+		if ($.hasGoogleMap != true) {
+			$.getScript('https://www.google.com/jsapi', 
+				function() {
+					google.load('maps', '3', { other_params: 'sensor=false', callback: 
+						function() {
+							var latitudes  = [lat];
+							var longitudes = [long];
+							$.initMap(0, latitudes, longitudes, divMap, name);
+						}
+					});
+				}
+			);
+			return;
+		}
+
+		var latitudes  = [lat];
+		var longitudes = [long];
+		$.initMap(0, latitudes, longitudes, divMap, name);
+	}
 });
 
 $(window).resize(function() {

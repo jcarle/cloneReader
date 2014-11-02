@@ -493,8 +493,8 @@ body.isLoading, body.isLoading * {
 					}
 		.crForm .gallery a.thumbnail {
 			background: white;
-			width:115px;
-			height:115px;
+			width:150px;
+			height:100px;
 			display:inline-block;
 			margin: 0 15px 20px 0;
 		}

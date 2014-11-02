@@ -163,7 +163,7 @@ if ( ! function_exists('anchor'))
 			$attributes = _parse_attributes($attributes);
 		}
 
-		return '<a href="'.$site_url.'"'.$attributes.'>'.$title.'</a>';
+		return '<a title="'.$title.'" href="'.$site_url.'"'.$attributes.'>'.$title.'</a>';
 	}
 }
 
@@ -196,7 +196,7 @@ if ( ! function_exists('anchor_popup'))
 
 		if ($attributes === FALSE)
 		{
-			return "<a href='javascript:void(0);' onclick=\"window.open('".$site_url."', '_blank');\">".$title."</a>";
+			return "<a title='".$title."' href='javascript:void(0);' onclick=\"window.open('".$site_url."', '_blank');\">".$title."</a>";
 		}
 
 		if ( ! is_array($attributes))
@@ -215,7 +215,7 @@ if ( ! function_exists('anchor_popup'))
 			$attributes = _parse_attributes($attributes);
 		}
 
-		return "<a href='javascript:void(0);' onclick=\"window.open('".$site_url."', '_blank', '"._parse_attributes($atts, TRUE)."');\"$attributes>".$title."</a>";
+		return "<a title='".$title."' href='javascript:void(0);' onclick=\"window.open('".$site_url."', '_blank', '"._parse_attributes($atts, TRUE)."');\"$attributes>".$title."</a>";
 	}
 }
 
@@ -243,7 +243,7 @@ if ( ! function_exists('mailto'))
 
 		$attributes = _parse_attributes($attributes);
 
-		return '<a href="mailto:'.$email.'"'.$attributes.'>'.$title.'</a>';
+		return '<a title="'.$title.'" href="mailto:'.$email.'"'.$attributes.'>'.$title.'</a>';
 	}
 }
 
@@ -273,7 +273,7 @@ if ( ! function_exists('safe_mailto'))
 
 		for ($i = 0; $i < 16; $i++)
 		{
-			$x[] = substr('<a href="mailto:', $i, 1);
+			$x[] = substr('<a title="'.$title.'" href="mailto:', $i, 1);
 		}
 
 		for ($i = 0; $i < strlen($email); $i++)
