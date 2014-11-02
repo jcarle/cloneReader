@@ -14,19 +14,19 @@ $this->load->view('includes/crForm');
 				</a>		
 			</li>	
 			<li class="list-group-item">
-				<a href="<?php echo base_url('register'); ?>" class="btn btn-info" >
+				<a title="<?php echo $this->lang->line('Create account'); ?>" href="<?php echo base_url('register'); ?>" class="btn btn-info" >
 					<i class="fa fa-user"></i>
 					<?php echo $this->lang->line('Create account'); ?>
 				</a>
 			</li>	
 			<li class="list-group-item">
-				<a href="<?php  echo base_url('login/facebook');?>" class="btn btn-facebook" data-skip-app-link="true" >
+				<a title="<?php echo $this->lang->line('Facebook Login'); ?>" href="<?php  echo base_url('login/facebook');?>" class="btn btn-facebook" data-skip-app-link="true" >
 					<i class="fa fa-facebook"></i>
 					<?php echo $this->lang->line('Facebook Login'); ?>
 				</a>
 			</li>
 			<li class="list-group-item">
-				<a href="<?php  echo base_url('login/google');?>" class="btn btn-google-plus" data-skip-app-link="true">
+				<a title="<?php echo $this->lang->line('Google Login'); ?>" href="<?php  echo base_url('login/google');?>" class="btn btn-google-plus" data-skip-app-link="true">
 					<i class="fa fa-google-plus"></i>
 					<?php echo $this->lang->line('Google Login'); ?>
 				</a>

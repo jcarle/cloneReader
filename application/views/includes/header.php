@@ -131,7 +131,7 @@ if (!empty($breadcrumb)) {
 			echo '<li class="active">'.$link['text'].'</li>';
 		}
 		else {
-			echo '<li><a href="'.$link['href'].'">'.$link['text'].'</a></li>';
+			echo '<li><a title="'.$link['text'].'" href="'.$link['href'].'">'.$link['text'].'</a></li>';
 		} 
 	}
 	echo '</ol>';  
