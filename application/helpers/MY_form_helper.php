@@ -207,7 +207,6 @@ function selectGallery($entityTypeId, $entityId) {
  * */
 function savePicture($config, $entityTypeId = null, $entityId = null) {
 	$CI = &get_instance();
-	
 	$CI->load->model('Files_Model');
 
 	$CI->load->library('upload', array(
@@ -227,19 +226,7 @@ function savePicture($config, $entityTypeId = null, $entityId = null) {
 	$CI->load->library('image_lib');
 		
 	// creo los sizes que esten seteados en el config
-	if (is_array($config['sizes'])) {
-		foreach ($config['sizes'] as $size) {
-			$config = array(
-				'source_image'      => $data['full_path'],
-				'new_image'         => '.'.$size['folder'],
-				'maintain_ratio'    => true,
-				'width'             => $size['width'],
-				'height'            => $size['height']
-			);
-			$CI->image_lib->initialize($config);
-			$CI->image_lib->resize();
-		}
-	}
+	resizePicure($config['sizes'], $data['full_path']);
 
 	$fileId = $CI->Files_Model->insert($data['file_name'], $data['client_name']);
 	if(!$fileId) {
@@ -255,6 +242,47 @@ function savePicture($config, $entityTypeId = null, $entityId = null) {
 	}
 	
 	return array( 'code' => true, 'fileId' => $fileId);
+}
+
+
+/**
+ * Rezisea una imagen segun los parametros seteados en el config
+ * TODO: hacer que $master_dim sea opcional
+ */
+function resizePicure($sizes, $sourceImage) {
+	if (!is_array($sizes)) {
+		return;
+	}
+	
+	$CI = &get_instance();
+	$CI->load->library('image_lib');
+	
+	$data       = getimagesize($sourceImage);
+	$origWidth  = $data[0];
+	$origHeight = $data[1];
+				
+	foreach ($sizes as $size) {
+		$width  = $size['width'];
+		$height = $size['height'];
+		$dim    = (intval($origWidth) / intval($origHeight)) - ($width / $height);		
+		if ($origWidth < $size['width']) {
+			$width = $origWidth;
+		}
+		else if ($origHeight < $size['height']) {
+			$height = $origHeight;
+		}
+
+		$config = array(
+			'source_image'      => $sourceImage,
+			'new_image'         => '.'.$size['folder'],
+			'maintain_ratio'    => true,
+			'width'             => $width,
+			'height'            => $height,
+			'master_dim'        => ($dim > 0) ? 'height' : 'width',
+		);
+		$CI->image_lib->initialize($config);
+		$CI->image_lib->resize();
+	}
 }
 
 /**

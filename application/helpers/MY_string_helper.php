@@ -75,7 +75,7 @@ function getHtmlGallery($pictures, $alt = 'Picture %s') {
 	$html = '';
 	$html .= ' <div data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery">';
 	foreach ($pictures as $number => $picture) {
-		$html .= '	<a class="thumbnail imgCenter" data-skip-app-link="true" href="'.$picture['urlLarge'].'"> 
+		$html .= '	<a class="thumbnail imgCenter" title="'.sprintf($alt, ++$number).'" data-skip-app-link="true" href="'.$picture['urlLarge'].'"> 
 					<img src="'.$picture['urlThumbnail'].'" alt="'.sprintf($alt, ++$number).'" />
 				</a>';
 	}

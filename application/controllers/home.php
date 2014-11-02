@@ -1,6 +1,10 @@
 <?php 
 class Home extends CI_Controller {
 	public function index() {
+		if (uri_string() == 'home') {
+			redirect('', 'location', 301);
+		}
+
 		$this->load->model('Users_Model');
 
 		$this->load->view('pageHtml',
