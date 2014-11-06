@@ -14,23 +14,23 @@ class App extends CI_Controller {
 //		$this->output->cache(50);
 		
 		$this->load->driver('cache', array('adapter' => 'file'));
-		$userId = $this->session->userdata('userId');
+		$groups = $this->session->userdata('groups');
 		
-		if (!is_array($this->cache->file->get('MENU_PROFILE_'.$userId))) {
+		if (!is_array($this->cache->file->get('MENU_PROFILE_'.json_encode($groups)))) {
 			$this->load->model('Menu_Model');
-			$this->Menu_Model->createMenuCache($userId);
+			$this->Menu_Model->createMenuCache($groups);
 		}
 		
 		$aMenu = array(
-			'MENU_PROFILE' => array(
-				'items' 	=> $this->cache->file->get('MENU_PROFILE_'.$userId), 
-				'className'	=> 'menuProfile nav navbar-nav navbar-right',
-				'parent'	=> '.navbar-ex1-collapse'
+			'MENU_PROFILE'  => array(
+				'items'     => $this->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 
+				'className' => 'menuProfile nav navbar-nav navbar-right',
+				'parent'    => '.navbar-ex1-collapse'
 			),
-			'MENU_PUBLIC' 	=> array(
-				'items' 	=> $this->cache->file->get('MENU_PUBLIC_'.$userId), 
+			'MENU_PUBLIC'   => array(
+				'items'     => $this->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 
 				'className' =>'menuPublic',
-				'parent'	=> '.menu.label-primary div',
+				'parent'    => '.menu.label-primary div',
 			)
 		);
 		
@@ -42,8 +42,8 @@ class App extends CI_Controller {
 		}
 
 		return loadViewAjax(true, array(
-			'aMenu' 	=> $aMenu,
-			'aLangs' 	=> $aLangs,
+			'aMenu'   => $aMenu,
+			'aLangs'  => $aLangs,
 		));
 	}
 	

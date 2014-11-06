@@ -17,17 +17,21 @@ crMenu = {
 	
 		
 		for (var i=0; i<aMenu.length; i++) {
-			var label 	= crLang.line(aMenu[i]['label']);
-			var $li 	= $('<li></li>').appendTo($ul);
-			var $link 	= $('<a></a>')
+			var item    = aMenu[i];
+			var label   = (item['menuTranslate'] == true ? crLang.line(item['label']) : item['label']);
+			var $li     = $('<li></li>').appendTo($ul);
+			var $link   = $('<a></a>')
 				.appendTo($li)
-				.attr('title', label)
-				.text(label);
+				.attr('title', label);
+
+			if (item['menuClassName'] != null)  {
+				$li.addClass(item['menuClassName']);
+			}
 			
-			if (aMenu[i]['url'] != null) {
-				$link.attr('href', base_url + aMenu[i]['url']);
+			if (item['url'] != null) {
+				$link.attr('href', base_url + item['url']);
 				
-				var aTmp = aMenu[i]['url'].split('/'); // Para quitar los parametros adicionales de un controller
+				var aTmp = item['url'].split('/'); // Para quitar los parametros adicionales de un controller
 				var controller = aTmp[0];
 				if (aTmp.length > 1) {
 					controller += '/' + aTmp[1];
@@ -36,37 +40,33 @@ crMenu = {
 					$link.attr('data-skip-app-link', true);
 				}
 			}
-			if (aMenu[i]['icon'] != null) {
-				$link.prepend(' <i class="' + aMenu[i]['icon'] + '" ></i> ')
+
+			if (item['icon'] != null) {
+				$link.append(' <i class="' + item['icon'] + '" ></i> ')
 			}
+			$('<span>').text(label).appendTo($link);
+
+			if (item['menuDividerBefore'] == true) {
+				$link.before(' <li role="presentation" class="divider"></li> ');
+			}
+			if (item['menuDividerAfter'] == true) {
+				$link.after(' <li role="presentation" class="divider"></li> ');
+			}
+
 			
-			if (aMenu[i]['childs'].length > 0) {
+			if (item['childs'].length > 0) {
 				$link.addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
 				if (depth >= 1) {
 					$li.addClass(' dropdown-submenu dropdown-submenu-left ');
 				}
 				
-				this.renderMenu(aMenu[i]['childs'], 'dropdown-menu' , $li, (depth + 1));
+				this.renderMenu(item['childs'], 'dropdown-menu' , $li, (depth + 1));
 			}
 		}
 	},
 	
 	initMenu: function() {
 		var $menuProfile = $('ul.menuProfile');
-		
-		var $iconGear 	= $menuProfile.find('.fa-gear');
-		var $settings 	= $iconGear.parent();
-		var label		= $settings.text();
-		$settings
-			.addClass('menuItemSettings')
-			.html('')
-			.append($iconGear)
-			.append('<span>' + label + '</span>');
-			
-			
-		if ($menuProfile.find('.menuItemAbout').parents('ul:first').find('li').length > 1) {
-			$menuProfile.find('.menuItemAbout').parents('li').before($('<li role="presentation" class="divider"></li>'));
-		}
 
 		$menuProfile.find('.lang-' + crSettings.langId ).before('<i class="fa fa-check fa-fw"></i>');
 		$menuProfile.find('.fa-flag-o').parent()

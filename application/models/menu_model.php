@@ -5,7 +5,7 @@ class Menu_Model extends CI_Model {
 		$aMenu = array();
 		
 		if ($fields == null) {
-			$fields = array('menuId AS id', 'menuName AS label', 'menuIcon AS icon', 'controllerUrl AS url', 'controllers.controllerId');
+			$fields = array('menuId AS id', 'menuName AS label', 'menuIcon AS icon', 'controllerUrl AS url', 'menuClassName', 'menuTranslate', 'menuDividerBefore', 'menuDividerAfter', 'controllers.controllerId');
 		}
 
 		$this->db
@@ -17,13 +17,14 @@ class Menu_Model extends CI_Model {
 		$query = $this->db->get('menu');
 		//pr($this->db->last_query());			
 		
-		$aController = $this->safety->getControllersByUser($this->session->userdata('userId'));
+		$aController = $this->safety->getControllerCache($this->session->userdata('groups'));
+		$aController = array_keys($aController);
 		foreach ($query->result_array() as $row){
 			$childs = $this->getMenu($row['id'], $checkPermissions, $fields);
 			if (!empty($childs) || $checkPermissions != true || in_array($row['controllerId'], $aController)) {
 				$row['childs'] = $childs;
 				$aMenu[] = $row;
-			}			
+			}
 		}
 		
 		return $aMenu;
@@ -43,13 +44,16 @@ class Menu_Model extends CI_Model {
 		$menuId = $data['menuId'];
 		
 		$values = array(
-			'menuName'			=> $data['menuName'],
-			'menuPosition'		=> $data['menuPosition'],
-			'menuParentId' 		=> $data['menuParentId'],
-			'menuIcon' 			=> $data['menuIcon'],
-			'controllerId' 		=> ((int)$data['controllerId'] > 0 ? $data['controllerId'] : null) 
+			'menuName'          => $data['menuName'],
+			'menuPosition'      => $data['menuPosition'],
+			'menuParentId'      => $data['menuParentId'],
+			'menuIcon'          => $data['menuIcon'],
+			'controllerId'      => ((int)$data['controllerId'] > 0 ? $data['controllerId'] : null) ,
+			'menuClassName'     => $data['menuClassName'],
+			'menuTranslate'     => $data['menuTranslate'] = (element('menuTranslate', $data) == 'on'),
+			'menuDividerBefore' => $data['menuDividerBefore'] = (element('menuDividerBefore', $data) == 'on'),
+			'menuDividerAfter'  => $data['menuDividerAfter'] = (element('menuDividerAfter', $data) == 'on'),
 		);
-		
 
 		if ((int)$menuId != 0) {		
 			$this->db->where('menuId', $menuId);
@@ -60,7 +64,7 @@ class Menu_Model extends CI_Model {
 			$menuId = $this->db->insert_id();
 		}
 		
-		$this->destroyMenuCache();
+		$this->safety->destroyMenuCache();
 
 		return true;
 	}
@@ -68,7 +72,7 @@ class Menu_Model extends CI_Model {
 	function delete($menuId) {
 		$this->db->delete('menu', array('menuId' => $menuId));
 		
-		$this->destroyMenuCache();
+		$this->safety->destroyMenuCache();
 		
 		return true;
 	}	
@@ -84,17 +88,21 @@ class Menu_Model extends CI_Model {
 		}
 	}
 	
-	function createMenuCache($userId) {
+	function createMenuCache($groups) {
+		if (empty($groups)) {
+			return;
+		}
+		
 		$this->load->driver('cache', array('adapter' => 'file'));
 
-		if (!is_array($this->cache->file->get('MENU_PROFILE_'.$userId))) {
-			$this->cache->file->save('MENU_PROFILE_'.$userId, $this->Menu_Model->getMenu(MENU_PROFILE));	
+		if (!is_array($this->cache->file->get('MENU_PROFILE_'.json_encode($groups)))) {
+			$this->cache->file->save('MENU_PROFILE_'.json_encode($groups), $this->getMenu(MENU_PROFILE));	
 		}
-		if (!is_array($this->cache->file->get('MENU_PUBLIC_'.$userId))) {
-			$this->cache->file->save('MENU_PUBLIC_'.$userId, $this->Menu_Model->getMenu(MENU_PUBLIC));	
+		if (!is_array($this->cache->file->get('MENU_PUBLIC_'.json_encode($groups)))) {
+			$this->cache->file->save('MENU_PUBLIC_'.json_encode($groups), $this->getMenu(MENU_PUBLIC));	
 		}
-		if (!is_array($this->cache->file->get('MENU_ADMIN_'.$userId))) {
-			$this->cache->file->save('MENU_ADMIN_'.$userId, $this->Menu_Model->getMenu(MENU_ADMIN));	
-		}	
+		/*if (!is_array($this->cache->file->get('MENU_ADMIN_'.json_encode($groups)))) {
+			$this->cache->file->save('MENU_ADMIN_'.json_encode($groups), $this->getMenu(MENU_ADMIN));	
+		}	*/
 	}
 }

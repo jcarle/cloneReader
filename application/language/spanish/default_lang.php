@@ -202,3 +202,4 @@ $lang['Contacts'] = 'Contactos';
 $lang['Page %s'] = 'Página %s';
 $lang['Home'] = 'Inicio';
 $lang['Process'] = 'Procesos';
+$lang['Translate'] = 'Traducir';

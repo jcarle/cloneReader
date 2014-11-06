@@ -1,24 +1,26 @@
 <?php
 class Safety {
 	function __construct() {
-		$CI 			= &get_instance();
-		$this->db 		= $CI->db;
-		$this->session 	= $CI->session;
-// $CI->output->enable_profiler(TRUE);		
+		$CI = &get_instance();
+
+//$CI->output->enable_profiler(FALSE);		
 	}
 	
 	function initSession() {
 		$CI = &get_instance();
-
-		if ($this->session->userdata('userId') == null) {
-			$this->session->set_userdata('userId', USER_ANONYMOUS);
+//pr($CI->session->userdata); die;
+		if ($CI->session->userdata('userId') == null) {
+			$CI->session->set_userdata(array(
+				'userId' => USER_ANONYMOUS,
+				'groups' => array(GROUP_ANONYMOUS),
+			));
 		}
 
-		if ($this->session->userdata('userId') != USER_ANONYMOUS) {
-			if ($this->session->userdata('last_activity') == $this->session->now) {
-				$CI = &get_instance();
-				$CI->load->model('Users_Model');			
+		if ($CI->session->userdata('userId') != USER_ANONYMOUS) {
+			if ($CI->session->userdata('last_activity') == $CI->session->now) {
+				$CI->load->model('Users_Model');
 				$CI->Users_Model->updateUserLastAccess();
+				$CI->session->set_userdata('groups', sourceToArray($CI->Users_Model->getGroups($CI->session->userdata('userId')), 'groupId'));
 			}
 		}
 	}
@@ -36,8 +38,9 @@ class Safety {
 		$row = $query->row();
 		
 		$CI->session->set_userdata(array(
-			'userId'  	=> $row->userId,
-			'langId'	=> $row->langId,
+			'userId'  => $row->userId,
+			'langId'  => $row->langId,
+			'groups'  => sourceToArray($CI->Users_Model->getGroups($row->userId), 'groupId'),
 		));
 		
 		$CI->Users_Model->updateUserLastAccess();
@@ -45,40 +48,30 @@ class Safety {
 		return true;
 	}
 
-	function allowByControllerName($controllerName) {
-// TODO: meter esta query en un file, asi no pide a cada rato los datos!		
-		$query = $this->db
-			->where(array('controllerActive' => true, 'controllerName' => str_replace('::', '/', strtolower($controllerName)), 'userId' => $this->session->userdata('userId')))
-			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId')
-			->join('users_groups', 'users_groups.groupId = groups_controllers.groupId')
-			->get('controllers');
-		//echo $this->db->last_query(); return true;
-		return ($query->num_rows() > 0);
-	}
-	
-	function getControllersByUser($userId) {
-		if (isset($this->aController)) {
-			return $this->aController;
+	function getControllerCache($groups) {
+		if (empty($groups)) {
+			return array();
 		}
+		$CI = &get_instance();
+		$CI->load->driver('cache', array('adapter' => 'file'));
+		if (!is_array($CI->cache->file->get('CONTROLLERS_'.json_encode($groups)))) {
+			$CI->load->model('Controllers_Model');
+			$CI->Controllers_Model->createControllersCache($groups);
+		}
+		return $CI->cache->file->get('CONTROLLERS_'.json_encode($groups));
+	}
+
+	function allowByControllerName($controllerName) {
+		$CI = &get_instance();
 		
-		$query = $this->db
-					->select('DISTINCT controllers.controllerId', false)
-					->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId', 'inner')
-					->join('users_groups', 'users_groups.groupId = groups_controllers.groupId', 'inner')
-					->where('controllerActive', true)
-					->where('users_groups.userId', $userId)
-					->get('controllers')->result_array(); 
-		//echo $this->db->last_query(); 					
-		
-		$this->aController = array();
-		foreach ($query as $row) {
-			$this->aController[] = $row['controllerId'];
-		}		
-		return $this->aController;
-	}	
+		$aController = $this->getControllerCache($CI->session->userdata('groups'));
+		return in_array(str_replace('::', '/', strtolower($controllerName)), $aController);
+	}
 
 	function getGroupsByIdUsuario($userId){
-		return $this->db
+		$CI = &get_instance();
+		
+		return $CI->db
 			->where('userId', $userId)
 			->get('users_groups')->result_array();
 	}
@@ -100,4 +93,16 @@ class Safety {
 		
 		return false;
 	}
+	
+	function destroyMenuCache() {
+		$CI = &get_instance();
+		$CI->load->model('Menu_Model');
+		$CI->Menu_Model->destroyMenuCache();
+	}
+	
+	function destroyControllersCache() {
+		$CI = &get_instance();
+		$CI->load->model('Controllers_Model');
+		$CI->Controllers_Model->destroyControllersCache();
+	}	
 }

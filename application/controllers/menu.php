@@ -51,10 +51,26 @@ class Menu extends CI_Controller {
 					'type'  => 'text',
 					'label' => $this->lang->line('Position'), 
 				),
+				'menuClassName' => array(
+					'type'  => 'text',
+					'label' => 'className', 
+				),
 				'menuIcon' => array(
 					'type'  => 'text',
 					'label' => 'Icon', 
-				)
+				),
+				'menuTranslate' => array(
+					'type'  => 'checkbox',
+					'label' => $this->lang->line('Translate'), 
+				),
+				'menuDividerBefore' => array(
+					'type'  => 'checkbox',
+					'label' => $this->lang->line('Divider before'), 
+				),
+				'menuDividerAfter' => array(
+					'type'  => 'checkbox',
+					'label' => $this->lang->line('Divider after'), 
+				),
 			)
 		);
 		

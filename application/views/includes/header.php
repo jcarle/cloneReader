@@ -1,12 +1,12 @@
 <?php
 $CI = &get_instance();
 
-$userId = $this->session->userdata('userId');
+$groups = $this->session->userdata('groups');
 
 $CI->load->driver('cache', array('adapter' => 'file'));
-if (!is_array($CI->cache->file->get('MENU_PROFILE_'.$userId))) {
+if (!is_array($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)))) {
 	$CI->load->model('Menu_Model');
-	$CI->Menu_Model->createMenuCache($userId);
+	$CI->Menu_Model->createMenuCache($groups);
 }
 
 if (!isset($meta)) {
@@ -110,7 +110,7 @@ $siteLogo = config_item('siteLogo');
 					</div>
 				</form>
 <?php
-echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav navbar-nav navbar-right');
+echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'menuProfile nav navbar-nav navbar-right');
 ?>
 			</div>
 		</div>
@@ -118,7 +118,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.$userId), 'menuProfile nav
 
 	<nav class="menu label-primary">
 		<div>
-<?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.$userId), 'menuPublic'); ?>
+<?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 'menuPublic'); ?>
 		</div>
 	</nav>	
 	<div class="container pageContainer ">
@@ -146,7 +146,6 @@ if ($showTitle == true) {
 			</div>';
 }
 
-
 function renderMenu($aMenu, $className = null, $depth = 0){
 	if (empty($aMenu)) {
 		return;
@@ -156,34 +155,40 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 	
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
+		$item       = $aMenu[$i];
 		$icon       = '';
-		$hasChilds  = count($aMenu[$i]['childs']) > 0;
+		$hasChilds  = count($item['childs']) > 0;
 		$attr       = '';
-		$label      = $CI->lang->line($aMenu[$i]['label']);
-		if ($label == '') {
-			$label = $aMenu[$i]['label'];
-		}
-		if ($aMenu[$i]['icon'] != null) {
-			$icon = ' <i class="'.$aMenu[$i]['icon'].'" ></i> ';
+		$label      = $item['menuTranslate'] == true ? $CI->lang->line($item['label']) : $item['label'];
+		$aClassName = array($item['menuClassName']);
+		if ($item['icon'] != null) {
+			$icon = ' <i class="'.$item['icon'].'" ></i> ';
 		}
 		if ($hasChilds == true) {
 			$attr = ' class="dropdown-toggle" data-toggle="dropdown" ';
 		}
 		
-		$submenuClass = '';
 		if ($depth >= 1 && $hasChilds == true) {
-			$submenuClass = ' class="dropdown-submenu dropdown-submenu-left" ';
+			$aClassName[] = 'dropdown-submenu dropdown-submenu-left';
 		}
 
-		if ($aMenu[$i]['url'] != null) {
-			$sTmp .= ' <li '.$submenuClass.'> <a title="'.$label.'" href="'.base_url($aMenu[$i]['url']).'" '.$attr.'>'.$icon.$label.'</a>';
+		if ($item['menuDividerBefore'] == true) {
+			$sTmp .= ' <li role="presentation" class="divider"></li> ';
+		}
+
+		if ($item['url'] != null) {
+			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" href="'.base_url($item['url']).'" '.$attr.'>'.$icon. '<span>'.$label.'</span></a>';
 		}
 		else {
-			$sTmp .= ' <li '.$submenuClass.'> <a title="'.$label.'" '.$attr.'>'.$icon.$label.'</a>';
+			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" '.$attr.'>'.$icon.'<span>'.$label.'</span></a>';
 		} 	
 		
 		if ($hasChilds == true) {
-			$sTmp .= renderMenu($aMenu[$i]['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
+			$sTmp .= renderMenu($item['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
+		}
+
+		if ($item['menuDividerAfter'] == true) {
+			$sTmp .= ' <li role="presentation" class="divider"></li> ';
 		}
 		
 		$sTmp .= '</li>';

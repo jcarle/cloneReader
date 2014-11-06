@@ -59,14 +59,18 @@ class Controllers_Model extends CI_Model {
 			$this->db->insert('controllers', $data);
 		}
 		
-		$this->load->model('Menu_Model');
-		$this->Menu_Model->destroyMenuCache();
+		$this->safety->destroyMenuCache();
+		$this->safety->destroyControllersCache();
 		
 		return true;
 	}
 	
 	function delete($controllerId) {
 		$this->db->delete('controllers', array('controllerId' => $controllerId));
+		
+		$this->safety->destroyMenuCache();
+		$this->safety->destroyControllersCache();
+		
 		return true;
 	}
 	
@@ -74,5 +78,64 @@ class Controllers_Model extends CI_Model {
 		$this->db->where('controllerName', $controllerName);
 		$this->db->where('controllerId !=', $controllerId);
 		return ($this->db->get('controllers')->num_rows() > 0);
+	}
+
+	function selectControllersByUserId($userId) {
+		$query = $this->db
+			->select('DISTINCT controllers.controllerId, controllerName', false)
+			->from('controllers')
+			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId', 'inner')
+			->join('users_groups', 'users_groups.groupId = groups_controllers.groupId', 'inner')
+			->where('controllerActive', true)
+			->where('users_groups.userId', $userId)
+			->get()->result_array(); 
+		//echo $this->db->last_query(); 				
+		return $query;
+	}
+	
+	function selectControllersByGroupId($groups) {
+		if (empty($groups)) {
+			return null;
+		}
+		$query = $this->db
+			->select('DISTINCT controllers.controllerId, controllerName', false)
+			->from('controllers')
+			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId', 'inner')
+			->where('controllerActive', true)
+			->where_in('groupId', $groups)
+			->get()->result_array(); 
+		//echo $this->db->last_query(); die; 				
+		return $query;
+	}	
+
+	function destroyControllersCache() {
+		$this->load->driver('cache', array('adapter' => 'file'));
+
+		$cache = $this->cache->cache_info();
+		foreach ($cache as $key => $value) {
+			if (strrpos($key, 'CONTROLLERS_') !== FALSE) {
+				$this->cache->delete($key);
+			}
+		}
+	}
+
+	/**
+	* Guarda un array en un archivo con los controllers permitidos por grupos, con el formato: 
+	*		array('controllerId' => 'controllerName')
+	*/
+	function createControllersCache($groups) {
+		if (empty($groups)) {
+			return;
+		}
+		$this->load->driver('cache', array('adapter' => 'file'));
+
+		if (!is_array($this->cache->file->get('CONTROLLERS_'.json_encode($groups)))) {
+			$aController = array();
+			$query = $this->selectControllersByGroupId($groups);
+			foreach ($query as $row) {
+				$aController[$row['controllerId']] = strtolower($row['controllerName']);
+			}
+			$this->cache->file->save('CONTROLLERS_'.json_encode($groups), $aController);
+		}
 	}
 }

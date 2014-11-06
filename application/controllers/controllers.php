@@ -20,16 +20,16 @@ class Controllers extends CI_Controller {
 		$query = $this->Controllers_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
 		
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'meta'			=> array( 'title' => $this->lang->line('Edit controllers') ),
-			'list'			=> array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'showId'		=> true
+			'view'  => 'includes/crList', 
+			'meta'  => array( 'title' => $this->lang->line('Edit controllers') ),
+			'list'  => array(
+				'urlList'    => strtolower(__CLASS__).'/listing',
+				'urlEdit'    => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'     => strtolower(__CLASS__).'/add',
+				'columns'    => array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
+				'data'       => $query['data'],
+				'foundRows'  => $query['foundRows'],
+				'showId'     => true
 			)
 		));
 	}

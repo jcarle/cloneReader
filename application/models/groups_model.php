@@ -71,8 +71,8 @@ class Groups_Model extends CI_Model {
 			}		
 		}
 
-		$this->load->model('Menu_Model');
-		$this->Menu_Model->destroyMenuCache();
+		$this->safety->destroyMenuCache();
+		$this->safety->destroyControllersCache();
 		
 		return true;
 	}
@@ -80,9 +80,9 @@ class Groups_Model extends CI_Model {
 	function delete($groupId) {
 		$this->db->delete('groups', array('groupId' => $groupId));
 		
-		$this->load->model('Menu_Model');
-		$this->Menu_Model->destroyMenuCache();
-		
+		$this->safety->destroyMenuCache();
+		$this->safety->destroyControllersCache();
+
 		return true;
 	}
 }

@@ -145,29 +145,35 @@
 								field.$input.attr('placeholder', field.placeholder);
 							}
 
-							field.$input
-								.select2({
-									multiple: field.multiple,
+							var config = {
+								multiple: field.multiple,
 //									openOnEnter: false,
-									minimumInputLength: 1,
-									ajax: {
-										url:        field['source'],
-										dataType:   'json',
-										params:     { skipwWaiting: true }, 
-										data:       function (term, page) {
-											return { 'query': term };
-										},
-										results: 	function (data, page) {
-											return {results: data};
-										}
+								minimumInputLength: 1,
+								ajax: {
+									url:        field['source'],
+									dataType:   'json',
+									params:     { skipwWaiting: true }, 
+									data:       function (term, page) {
+										return { 'query': term };
+									},
+									results: 	function (data, page) {
+										return {results: data};
 									}
-								})
+								}
+							};
+							if (field.multiple == false) {
+								config.placeholder = (field.placeholder != null ? field.placeholder : '-- ' + crLang.line('Choose') + ' --');
+								config.allowClear  = true;
+							}
+
+							field.$input
+								.select2(config)
 								.on('select2-open', function(event) {
 									$('a > .select2-input').addClass('form-control');
 								})
 								.on('select2-close', function(event) {
 									//$(event.target).parent().find('.form-control').css('border-radius', '4px');
-								})								
+								});
 
 								if (field.multiple == false) {
 									if (field.value.id != null && field.value.id != false) { 

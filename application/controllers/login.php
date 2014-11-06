@@ -107,6 +107,7 @@ class Login extends CI_Controller {
 			$this->session->set_userdata(array(
 				'userId'  => $user['userId'],
 				'langId'  => $user['langId'],
+				'groups'  => sourceToArray($this->Users_Model->getGroups($user['userId']), 'groupId'),
 			));
 
 			$this->Users_Model->updateUserLastAccess();

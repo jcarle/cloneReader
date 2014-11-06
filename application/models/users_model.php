@@ -223,6 +223,7 @@ class Users_Model extends CI_Model {
 		$query = $this->db
 			->where('userId', $userId)
 			->get('users')->row_array();
+		//echo $this->db->last_query(); die;
 		if (empty($query)) {
 			return $query;
 		}
@@ -273,8 +274,8 @@ class Users_Model extends CI_Model {
 			}
 		}
 		
-		$this->load->model('Menu_Model');
-		$this->Menu_Model->destroyMenuCache();
+		$this->safety->destroyMenuCache();
+		$this->safety->destroyControllersCache();
 		
 		return true;
 	}
@@ -287,8 +288,8 @@ class Users_Model extends CI_Model {
 	function editProfile($userId, $data){
 		$values = array(
 			'userFirstName' => element('userFirstName', $data),
-			'userLastName' 	=> element('userLastName', $data),
-			'countryId' 	=> element('countryId', $data, null),
+			'userLastName'  => element('userLastName', $data),
+			'countryId'     => element('countryId', $data, null),
 		);		
 		
 		$this->db->where('userId', $userId)->update('users', $values);

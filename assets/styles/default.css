@@ -78,7 +78,7 @@ body.isLoading, body.isLoading * {
 				text-transform: lowercase;
 			}
 			#header ul.menuProfile .menuItemSettings { }
-				#header ul.menuProfile .menuItemSettings span {
+				#header ul.menuProfile .menuItemSettings > a span {
 					display:none; 
 				}
 			#header ul.menuProfile .dropdown-submenu-left {
@@ -115,6 +115,9 @@ body.isLoading, body.isLoading * {
 				#header ul.menuProfile .dropdown-submenu-left > a:after,
 				#header ul.menuProfile .dropdown-submenu-left:hover > a:after {
 					border-color: transparent;
+				}
+				#header ul.menuProfile .dropdown-menu a i {
+					color: #777777;
 				}
 }
 
