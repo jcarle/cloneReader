@@ -6,7 +6,7 @@ $aFields = renderCrFormFields($form);
 
 <div class="btn-group">
 	<div class="dropdown">
-		<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle" type="button" data-toggle="dropdown">
+		<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle" data-toggle="dropdown">
 			<i class="fa fa-filter" ></i>
 		</button>	
 		<div class="crFilterList  panel panel-default fade in crForm form-horizontal dropdown-menu">

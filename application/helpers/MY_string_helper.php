@@ -98,7 +98,7 @@ function getHtmlPagination($foundRows, $pageSize, $params) {
 		'first_link'            => '1',
 		'last_link'             => ceil($foundRows / $pageSize),
 		'uri_segment'           => 3,
-		'base_url'              => current_url().'?'.http_build_query($params),
+		'base_url'              => current_url().'?'.http_build_query($params, '', '&amp;'),
 		'total_rows'            => $foundRows,
 		'per_page'              => $pageSize, 
 		'num_links'             => 2,

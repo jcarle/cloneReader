@@ -96,7 +96,7 @@ foreach ($sort as $key => $value) {
 		$icon = '<i class="fa fa-fw '.($orderDir == 'asc' ? 'fa-arrow-up' : 'fa-arrow-down').'" ></i>';
 	}
 	
-	echo '<li><a href="'.current_url().'?'.http_build_query($params).'">'.$icon.' '.$value.'</a></li>';
+	echo '<li><a href="'.current_url().'?'.http_build_query($params, '', '&amp;').'">'.$icon.' '.$value.'</a></li>';
 }
 ?>
 			</ul>
