@@ -82,7 +82,7 @@ if ($sort != null) {
 		<input type="hidden" name="orderBy"  value="<?php echo $orderBy; ?>" />
 		<input type="hidden" name="orderDir" value="<?php echo $orderDir; ?>" />
 		<div class="dropdown">
-			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder <?php if ($orderBy != $defaultOrderBy || $orderDir != 'asc') { echo ' btn-info '; } ?>" type="button" data-toggle="dropdown">
+			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder <?php if ($orderBy != $defaultOrderBy || $orderDir != 'asc') { echo ' btn-info '; } ?>" data-toggle="dropdown">
 				<i class="fa fa-sort-amount-asc" ></i>
 			</button>	
 			<ul class="dropdown-menu pull-right" role="menu">
