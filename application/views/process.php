@@ -3,6 +3,7 @@ $items = array(
 	array(
 		'title' => 'Search',
 		'buttons' => array(
+			array(
 				'text'    => 'Users',
 				'url'     => 'process/saveUsersSearch',
 			),
