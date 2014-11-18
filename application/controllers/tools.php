@@ -130,7 +130,7 @@ class Tools extends CI_Controller {
 		foreach ($query['data'] as $row) {
 			$data[] = array(
 				'feedId'   => $row['feedId'], 
-				'feedIcon' => '<img width="16" height="16" src="'.($row['feedIcon']== null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row['feedIcon']).'" />',
+				'feedIcon' => '<img alt="'.htmlspecialchars($row['feedName']).'" width="16" height="16" src="'.($row['feedIcon']== null ? site_url().'assets/images/default_feed.png' : site_url().'assets/favicons/'.$row['feedIcon']).'" />',
 				'feedName' => $row['feedName'], 
 				'feedUrl'  => $row['feedUrl'],
 			);
