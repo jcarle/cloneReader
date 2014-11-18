@@ -67,8 +67,8 @@ class SendMails {
 				'url'    => $url
 			), true);
 		
-
-		return $this->_sendEmail($user['userEmail'], sprintf($this->CI->lang->line('Welcome to %s'), config_item('siteName')), $message);
+		
+		return $this->_sendEmail($user['userEmail'], sprintf($this->CI->lang->line('Welcome to %s'), ucfirst(config_item('siteName'))), $message);
 	}
 	
 	function sendEmailToResetPassword($params = array()) {

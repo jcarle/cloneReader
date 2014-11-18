@@ -59,11 +59,11 @@ if (config_item('hasRss') == true) {
 <?php
 $this->load->spark('carabiner/1.5.4');
 
-$CI->carabiner->minify_js 	= true;
-$CI->carabiner->minify_css	= true;
+$CI->carabiner->minify_js  = true;
+$CI->carabiner->minify_css = true;
 if (ENVIRONMENT == 'development') {
-	$CI->carabiner->minify_js 	= false;
-	$CI->carabiner->minify_css	= false;
+	$CI->carabiner->minify_js  = false;
+	$CI->carabiner->minify_css = false;
 }
 
 appendFilesToCarabiner();
@@ -181,17 +181,17 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 		}
 		else {
 			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" '.$attr.'>'.$icon.'<span>'.$label.'</span></a>';
-		} 	
+		}	
 		
 		if ($hasChilds == true) {
 			$sTmp .= renderMenu($item['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
 		}
 
+		$sTmp .= '</li>';
+		
 		if ($item['menuDividerAfter'] == true) {
 			$sTmp .= ' <li role="presentation" class="divider"></li> ';
 		}
-		
-		$sTmp .= '</li>';
 	}
 	$sTmp .= '</ul>';
 	return $sTmp;

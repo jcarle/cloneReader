@@ -40,6 +40,7 @@ function errorForbidden() {
 	$CI = &get_instance();
 	$CI->load->library('../controllers/error');
 	initLang(); // FIXME: revisar; se esta vaciando la session al hacer el redirect
+	$CI->safety->initSession();
 	$CI->error->forbidden();
 }
 

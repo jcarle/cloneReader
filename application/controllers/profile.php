@@ -94,19 +94,19 @@ class Profile extends CI_Controller {
 		$this->load->helper('email');
 		
 		$form = array(
-			'frmId'			=> 'frmChangeEmail',
-			'title'			=> $this->lang->line('Change email'),
-			'buttons'		=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
-			'fields'		=> array(
+			'frmId'    => 'frmChangeEmail',
+			'title'    => $this->lang->line('Change email'),
+			'buttons'  => array('<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button>'),
+			'fields'   => array(
 				'userEmail' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Email'),
-					'value'	=> valid_email(element('userEmail', $data)) == true ? element('userEmail', $data) : '',
+					'type'  => 'text',
+					'label' => $this->lang->line('Email'),
+					'value' => valid_email(element('userEmail', $data)) == true ? element('userEmail', $data) : '',
 				),
 			)
 		);
 		
-		$form['rules'] 	= array( 
+		$form['rules'] = array( 
 			array(
 				'field' => 'userEmail',
 				'label' => $form['fields']['userEmail']['label'],
@@ -117,6 +117,10 @@ class Profile extends CI_Controller {
 		$this->form_validation->set_rules($form['rules']);
 		
 		if ($this->input->post() != false) {
+			if ($this->form_validation->run() == FALSE) {
+				return loadViewAjax(false);
+			}
+			
 			$this->load->model(array('Tasks_Model'));
 			
 			$userId          = $this->session->userdata('userId');

@@ -160,6 +160,14 @@ class Commond_Model extends CI_Model {
 		return $query;
 	}
 	
+	function getEntityName($entityTypeId, $entityId, $reverse = false) {
+		$entity = $this->getEntitySearch($entityTypeId, $entityId, $reverse);
+		if (!empty($entity)) {
+			return $entity['text'];
+		}
+		return '';
+	}
+	
 	/**
 	 * Apendea los indices countryId, stateId, y cityId al array $values
 	 * Se utiliza para guardar los datos devueltor por el autocomplete de zonas

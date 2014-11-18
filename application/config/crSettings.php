@@ -26,10 +26,12 @@ $config['entityTypeState']    = 3;
 $config['entityTypeCity']     = 4;
 $config['entityTypeFeed']     = 5;
 $config['entityTypeTag']      = 6;
+$config['entityTypeUser']     = 7;
 
 $config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
 	'statusApproved',
 	'searchZones',
+	'searchUsers',
 	'searchFeeds',
 	'searchTags',
 	'tagHasFeed',

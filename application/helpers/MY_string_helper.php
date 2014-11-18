@@ -1,5 +1,8 @@
 <?php
 function hide_mail($email) {
+	if (empty($email)) {
+		return '';
+	}
 	$mail_segments = explode('@', $email);
 	$mail_segments[0] = str_repeat('*', strlen($mail_segments[0]));
 
@@ -7,6 +10,9 @@ function hide_mail($email) {
 }
 
 function hide_phone($phone) {
+	if (empty($phone)) {
+		return '';
+	}
 	return substr($phone, 0, -4) . '****';
 }
 

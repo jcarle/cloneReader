@@ -161,7 +161,7 @@ $lang['Your request to be sent to %s'] = 'Su solicitud a sido enviada a %s';
 $lang['A user has requested information about the service %s'] = 'Un usuario ha solicitado información acerca del servicio %s';
 $lang['Rate the service %s'] = 'Calificá el servicio %s';
 $lang['To qualify to %s makes click <a href="%s">here</a>'] = 'Para calificar el servicio %s, hace click <a title="aqui" href="%s">aquí</a>';
-$lang['I accept the <a href="%s">terms and conditions</a>'] = 'Acepto los <a title="términos y condiciones" href="%s">términos y condiciones</a>';
+$lang['I accept the <a title="terms and conditions" href="%s">terms and conditions</a>'] = 'Acepto los <a title="términos y condiciones" href="%s">términos y condiciones</a>';
 $lang['Schedule date'] = 'Fecha programada';
 $lang['%s users'] = '%s usuarios';
 $lang['Tools'] = 'Herramientas';

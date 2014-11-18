@@ -75,6 +75,20 @@ class Process extends CI_Controller {
 
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
+
+	function saveUsersSearch() {
+		$this->clearEntitySearch( array(config_item('entityTypeUser')));
+
+		$searchKey = ' searchUsers  ';
+		$query = 'INSERT INTO entities_search
+			(entityTypeId, entityId, entitySearch, entityTree, entityReverseTree)
+			SELECT '.config_item('entityTypeUser').', userId, CONCAT(\''.$searchKey.'\', userFirstName, userLastName), CONCAT(userFirstName, \' \', userLastName), CONCAT(userLastName, \' \', userFirstName)
+			FROM users  ';
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
+		
+		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+	}
 	
 	function saveTagsSearch() {
 		$this->clearEntitySearch( array(config_item('entityTypeTag')));

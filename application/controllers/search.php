@@ -9,12 +9,12 @@ class Search extends CI_Controller {
 	
 	function index() {
 	}
-	
+
 	function users() {
-		$this->load->model('Users_Model');
-				
+		$searchKey = ' +searchUsers ';
+
 		return $this->load->view('json', array(
-			'result' 	=> $this->Users_Model->search($this->input->get('query'), $this->input->get('groupId'))
+			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), false, $searchKey, false)
 		));
 	}
 	

@@ -811,3 +811,45 @@ table .dotdotdot {
 		display: none;
 	}
 }
+
+
+.contentMap .gmnoprint img {
+	max-width: none; 
+}
+	.contentMap  .panel:hover {
+		background-color: rgb(237, 245, 252);
+	}
+	.contentMap .map {
+		min-width: 240px;
+		min-height: 300px;
+		width: 100%;
+		height: 100%;
+	}
+	.contentMap img {
+		max-width: 110%;
+		height: auto;
+	}
+	.contentMap .clearfix {
+		clear: both;
+	}
+	.contentMap .rowcolor {
+		background-color: #CCCCCC;
+	}
+	.contentMap .padall {
+		padding: 10px;
+	}
+	.contentMap .padbig {
+		padding: 20px;
+	}
+	.contentMap .icon {
+		font-size: 23px;
+		color: #197BB5;
+	}
+	
+
+.btn-social-icon{
+	text-align:left;
+}
+.btn-social-icon :first-child{
+	width:100% !important;
+}

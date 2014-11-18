@@ -3,7 +3,7 @@
  * TODO: documentar
  * 
  * 
- * Las entidades que tengan comentarios, tienen que tener un metodo 'saveContact' en su controller. Puede llamar al helper saveContact y validar los datos 
+ * Las entidades que tengan comentarios, tienen que tener un metodo 'saveContact' en su controller. Puede llamar al helper saveContact que valida los datos y graba la cookie 
  * 
  */
 
@@ -11,13 +11,12 @@ class Myforms {
 	function __construct() {
 	}
 	
-	public function getFormContact($contactId = null, $entityTypeId, $entityId = null) {
+	public function getFormContact($contactId = null, $entityTypeId, $entityId = null, $showTypeahead = false, $showContactDate = false, $showContactIp = false) {
 		$CI           = &get_instance();
 		$entityConfig = getEntityConfig($entityTypeId);
 		
 		$form = array(
 			'frmId'     => 'frm'.$CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])).'Contact',
-			'action'    => base_url($entityConfig['entityTypeName'].'/saveContact/'),
 			'fields'    => array(
 				'contactId' => array(
 					'type'     => 'hidden', 
@@ -30,9 +29,6 @@ class Myforms {
 				'entityId' => array(
 					'type'      => 'hidden', 
 					'value'     => $entityId,
-				),
-				'entityName' => array(
-					'type'      => 'hidden', 
 				),
 				'contactFirstName' => array(
 					'type'   => 'text',
@@ -58,29 +54,40 @@ class Myforms {
 					'type'   => 'textarea',
 					'label'  => $CI->lang->line('Comment'),
 				),
+				'contactIp' => array(
+					'type'     => 'text',
+					'label'    => 'Ip',
+					'disabled' => true,
+				),
 			)
 		);
 		
 		if ((int)$contactId > 0) {
-//			$form['urlDelete'] = base_url('contacts/delete/');
+			$form['urlDelete'] = base_url('contacts/'.$entityConfig['entityTypeName'].'/delete/');
+		}
+		
+		if ($showTypeahead == true) {
 			$form['fields']['entityId'] = array(
-				'type' 		=> 'typeahead',
-				'label'		=> $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
-				'source' 	=> base_url('search/'.$entityConfig['entityTypeName']),
+				'type'   => 'typeahead',
+				'label'  => $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
+				'source' => base_url('search/'.$entityConfig['entityTypeName']),
 			);
 		}
-		else {
+		if ($showContactDate == false) {
 			unset($form['fields']['contactDate']);
+		}
+		if ($showContactIp == false) {
+			unset($form['fields']['contactIp']);
 		}
 		
 		$form['rules'] = array();
-		if ((int)$contactId > 0) {
+		if ($showTypeahead == true) {
 			$form['rules'][] = array(
 				'field' => 'entityId',
 				'label' => $form['fields']['entityId']['label'],
 				'rules' => 'required'
 			);
-		}		 
+		} 
 		$form['rules'][] = array(
 			'field' => 'contactFirstName',
 			'label' => $form['fields']['contactFirstName']['label'],
@@ -96,7 +103,7 @@ class Myforms {
 			'label' => $form['fields']['contactEmail']['label'],
 			'rules' => 'required|valid_email'
 		);
-		if ((int)$contactId > 0) {
+		if ($showContactDate == true) {
 			$form['rules'][] = array(
 				'field' => 'contactDate',
 				'label' => $form['fields']['contactDate']['label'],
@@ -107,25 +114,28 @@ class Myforms {
 		return $form;
 	}
 	
-	public function getFormComment($commentId = null, $entityTypeId, $entityId = null) {
+	public function getFormComment($commentId = null, $entityTypeId, $entityId = null, $showTypeahead = false, $showCommentDate = false, $showCommentIp = false) {
 		$CI           = &get_instance();
 		$entityConfig = getEntityConfig($entityTypeId);
 		
 		$form = array(
 			'frmId'     => 'frm'.$CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])).'Comment',
-			'action'    => base_url($entityConfig['entityTypeName'].'/saveComment/'),
 			'fields'    => array(
 				'commentId' => array(
 					'type'     => 'hidden', 
 					'value'    => $commentId,
+				),
+				'userId' => array(
+					'type'     => 'hidden', 
 				),
 				'entityTypeId' => array(
 					'type'    => 'hidden', 
 					'value'   => $entityTypeId,
 				),
 				'entityId' => array(
-					'type'      => 'hidden', 
-					'value'     => $entityId,
+					'type'    => 'typeahead',
+					'label'   => $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
+					'source'  => base_url('search/'.$entityConfig['entityTypeName']),
 				),
 				'commentFirstName' => array(
 					'type'   => 'text',
@@ -151,29 +161,40 @@ class Myforms {
 					'type'   => 'textarea',
 					'label'  => $CI->lang->line('Comment'),
 				),
+				'commentIp' => array(
+					'type'     => 'text',
+					'label'    => 'Ip',
+					'disabled' => true,
+				),
 			)
 		);
-		
+
 		if ((int)$commentId > 0) {
-//			$form['urlDelete'] = base_url('comments/delete/');
+			$form['urlDelete'] = base_url('comments/'.$entityConfig['entityTypeName'].'/delete/');
+		}
+		
+		if ($showTypeahead == true) {
 			$form['fields']['entityId'] = array(
-				'type' 		=> 'typeahead',
-				'label'		=> $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
-				'source' 	=> base_url('search/'.$entityConfig['entityTypeName']),
+				'type'    => 'typeahead',
+				'label'   => $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
+				'source'  => base_url('search/'.$entityConfig['entityTypeName']),
 			);
 		}
-		else {
+		if ($showCommentDate == false) {
 			unset($form['fields']['commentDate']);
+		}
+		if ($showCommentIp == false) {
+			unset($form['fields']['commentIp']);
 		}
 		
 		$form['rules'] = array();
-		if ((int)$commentId > 0) {
+		if ($showTypeahead == true) {
 			$form['rules'][] = array(
 				'field' => 'entityId',
 				'label' => $form['fields']['entityId']['label'],
 				'rules' => 'required'
 			);
-		}		 
+		}
 		$form['rules'][] = array(
 			'field' => 'commentFirstName',
 			'label' => $form['fields']['commentFirstName']['label'],
@@ -189,7 +210,7 @@ class Myforms {
 			'label' => $form['fields']['commentEmail']['label'],
 			'rules' => 'required|valid_email'
 		);
-		if ((int)$commentId > 0) {
+		if ($showCommentDate == true) {
 			$form['rules'][] = array(
 				'field' => 'commentDate',
 				'label' => $form['fields']['commentDate']['label'],
@@ -208,7 +229,7 @@ class Myforms {
 	 */
 	function saveContact($values, $saveCookie = false) {
 		$CI = &get_instance();
-		$CI->load->model(array('Contacts_Model'));
+		$CI->load->model('Contacts_Model');
 
 		$form = $this->getFormContact($values['contactId'], $values['entityTypeId'], $values['entityId']);
 		$CI->form_validation->set_rules($form['rules']);
@@ -219,9 +240,7 @@ class Myforms {
 		if ($saveCookie == true) {
 			$CI->Contacts_Model->saveCookie($values, $form['frmId']);
 		}
-		
-		$values['userId']         = $CI->session->userdata('userId');
-		$values['contactIp']      = $CI->input->server('REMOTE_ADDR');
+
 		$contactId =  $CI->Contacts_Model->save($values); 
 
 		return $contactId;
@@ -231,23 +250,52 @@ class Myforms {
 	/**
 	 * Guarda un registro en la tabla comments
 	 * @param  $values  
-	 * @param  $saveCookie
 	 * @return $commentId si pudo grabar el comment o null en caso de error 
 	 */
 	function saveComment($values) {
 		$CI = &get_instance();
 		$CI->load->model(array('Comments_Model'));
 
-		$form = $this->getFormComment($values['commentId'], $values['entityTypeId'], $values['entityId']);
+		$form = $this->getFormComment($values, $values['entityTypeId'], $values['entityId']);
 		$CI->form_validation->set_rules($form['rules']);
 		if (!$CI->form_validation->run()) {
 			return null;
 		}
 		
-		$values['userId']         = $CI->session->userdata('userId');
-		$values['commentIp']      = $CI->input->server('REMOTE_ADDR');
 		$commentId =  $CI->Comments_Model->save($values); 
 
 		return $commentId;
 	}	
+	
+	function getHtmlComments($comments, $title = 'Comments') {
+		if (empty($comments)) {
+			return '';
+		}
+		$CI   = &get_instance();
+		$html = '<div class="entityComments">
+					<h2>'.$CI->lang->line($title).'</h2>';
+					
+		foreach ($comments as $comment) {
+			$html .= '
+				<div class="media">
+					<div class="pull-left" >
+						<a class="thumbnail" >
+							<i class="fa fa-user fa-4x"></i>
+						</a>
+						<div class="raty" data-score="'. $comment['commentRating'].'" ></div>
+						'.(isset($comment['entityUrl']) ? $comment['entityUrl'] : '').'
+					</div>
+					<div class="media-body">
+					<h3 class="media-heading"> 
+						'.htmlspecialchars($comment['commentFirstName'].' '.$comment['commentLastName']).' 
+						<small class="small datetime fromNow">'.$comment['commentDate'].'</small>
+					</h3>
+						<p>'. nl2br(htmlspecialchars($comment['commentDesc'])).'</p>
+					</div>
+				</div>';
+		}
+		$html .= '</div>';
+		
+		return $html;
+	}
 }

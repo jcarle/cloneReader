@@ -191,20 +191,6 @@ class Users_Model extends CI_Model {
 
 		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
-	
-	function search($filter, $groupId = null){
-		$this->db
-			->select('DISTINCT users.userId AS id, CONCAT(userFirstName, \' \', userLastName) AS text  ', false)
-			->join('users_groups', 'users.userId = users_groups.userId')
-			->or_like(array('userFirstName' => $filter, 'userLastName' => $filter))
-			->order_by('text');
-		 				
-		if ($groupId != null) {
-			$this->db->where('groupId', $groupId);	
-		}
-		
-		return $this->db->get('users', config_item('autocompleteSize'))->result_array();
-	}
 
 	function searchFriends($filter, $userId){
 		return $this->db
