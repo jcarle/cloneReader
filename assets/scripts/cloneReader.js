@@ -41,11 +41,16 @@ cloneReader = {
 	},
 
 	updateMainMenu: function() {
-		if (this.$dropdownMenu == null) {
-			this.$dropdownMenu 	= $('ul.menuProfile').find('.fa-gear').parent().parent().find('ul.dropdown-menu:first');
-			
-			$('<li role="presentation" class="divider"></li>').appendTo(this.$dropdownMenu);
-			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + crLang.line('Keyboard shortcut') + '">' + crLang.line('Keyboard shortcut') + '</a></li>').appendTo(this.$dropdownMenu);			
+		if (this.$helpKeyboardShortcut == null) {
+			var $ul                    = $('ul.menuProfile').find('.menuItemSettings ul').first();
+			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + crLang.line('Keyboard shortcut') + '">' + crLang.line('Keyboard shortcut') + '</a></li>');
+			if ($ul.find('.fa-power-off').length != 0) {
+				var $li = $ul.find('.fa-power-off').parent().parent();
+				$li.before( $('<li role="presentation" class="divider"></li>'), this.$helpKeyboardShortcut );
+			} 
+			else {
+				$ul.append( $('<li role="presentation" class="divider"></li>'), this.$helpKeyboardShortcut );
+			}
 		}
 		
 		if (this.$page.is(':visible') == true) {
