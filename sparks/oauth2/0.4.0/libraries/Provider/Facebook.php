@@ -15,7 +15,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 
 	public function url_authorize()
 	{
-		return 'https://www.facebook.com/dialog/oauth';
+		return 'https://www.facebook.com/v2.2/dialog/oauth';
 	}
 
 	public function url_access_token()
