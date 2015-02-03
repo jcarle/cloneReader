@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 15, 2014 at 07:27 PM
--- Server version: 5.5.37-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4
+-- Generation Time: Feb 03, 2015 at 01:07 AM
+-- Server version: 5.5.38-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -408,6 +408,23 @@ CREATE TABLE IF NOT EXISTS `entities_files` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `entities_search`
+--
+
+CREATE TABLE IF NOT EXISTS `entities_search` (
+  `entityTypeId` int(10) unsigned NOT NULL,
+  `entityId` varchar(100) NOT NULL,
+  `entitySearch` text NOT NULL,
+  `entityTree` text NOT NULL,
+  `entityReverseTree` text NOT NULL,
+  PRIMARY KEY (`entityTypeId`,`entityId`),
+  KEY `entityTypeId` (`entityTypeId`),
+  FULLTEXT KEY `entitySearch` (`entitySearch`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `entities_type`
 --
 
@@ -422,7 +439,9 @@ CREATE TABLE IF NOT EXISTS `entities_type` (
 --
 
 INSERT INTO `entities_type` (`entityTypeId`, `entityTypeName`) VALUES
-(1, 'testing');
+(1, 'testing'),
+(5, 'feeds'),
+(6, 'tags');
 
 -- --------------------------------------------------------
 
@@ -477,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `feedbacks` (
   PRIMARY KEY (`feedbackId`),
   KEY `commentEmail` (`feedbackUserEmail`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -805,6 +824,10 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `menuParentId` int(10) unsigned NOT NULL DEFAULT '0',
   `controllerId` int(10) unsigned DEFAULT NULL,
   `menuIcon` varchar(100) NOT NULL,
+  `menuClassName` varchar(50) NOT NULL,
+  `menuTranslate` int(11) NOT NULL,
+  `menuDividerBefore` int(1) NOT NULL,
+  `menuDividerAfter` int(1) NOT NULL,
   PRIMARY KEY (`menuId`) USING BTREE,
   KEY `functionId` (`controllerId`),
   KEY `menuParentId` (`menuParentId`)
@@ -814,42 +837,42 @@ CREATE TABLE IF NOT EXISTS `menu` (
 -- Dumping data for table `menu`
 --
 
-INSERT INTO `menu` (`menuId`, `menuName`, `menuPosition`, `menuParentId`, `controllerId`, `menuIcon`) VALUES
-(1, 'menuAdmin', 2, 0, NULL, ''),
-(2, 'Edit users', 1, 14, 3, ''),
-(3, 'Edit controllers', 2, 14, 5, ''),
-(4, 'Edit groups', 3, 14, 7, ''),
-(5, 'Edit menu', 5, 14, 9, ''),
-(6, 'Settings', 10, 10, NULL, 'fa fa-gear'),
-(7, 'Edit entries', 2, 17, 15, ''),
-(8, 'menuMain', 4, 0, NULL, ''),
-(9, 'Edit feeds', 1, 17, 13, ''),
-(10, 'menuProfile', 2, 0, NULL, ''),
-(11, 'Profile', 2, 10, 10, 'fa fa-user'),
-(12, 'Logout', 8, 10, 2, 'fa fa-power-off'),
-(13, 'Login', 2, 10, 1, 'fa fa-sign-in'),
-(14, 'System', 1, 6, NULL, ''),
-(15, 'Signup', 1, 10, 12, 'fa fa-user'),
-(16, 'Edit tags', 3, 17, 18, ''),
-(17, 'Rss', 2, 6, NULL, ''),
-(20, 'Import', 4, 6, NULL, ''),
-(21, 'Import feeds', 1, 20, 19, ''),
-(22, 'Import starred', 2, 20, 20, ''),
-(23, 'Edit news', 4, 17, 21, ''),
-(24, 'Language', 9, 10, NULL, 'fa fa-flag-o'),
-(25, 'English', 1, 24, 25, 'lang-en'),
-(26, 'Spanish', 2, 24, 24, 'lang-es'),
-(27, 'Portuguese', 3, 24, 26, 'lang-pt-br'),
-(28, 'Feedback', 3, 10, 29, 'fa fa-comment'),
-(29, 'Edit feedbacks', 5, 17, 27, ''),
-(30, 'Edit testing', 200, 14, 32, ''),
-(31, 'Chinese', 4, 24, 35, 'lang-zh-cn'),
-(32, 'About', 10, 6, 36, 'menuItemAbout'),
-(33, 'Edit tasks', 9, 14, 37, ''),
-(34, 'Tools', 3, 6, NULL, ''),
-(35, 'Admin feeds', 0, 34, 38, ''),
-(36, 'Admin tags', 2, 34, 39, ''),
-(37, 'Process', 10, 14, 40, '');
+INSERT INTO `menu` (`menuId`, `menuName`, `menuPosition`, `menuParentId`, `controllerId`, `menuIcon`, `menuClassName`, `menuTranslate`, `menuDividerBefore`, `menuDividerAfter`) VALUES
+(1, 'menuAdmin', 2, 0, NULL, '', '', 1, 0, 0),
+(2, 'Edit users', 1, 14, 3, '', '', 1, 0, 0),
+(3, 'Edit controllers', 2, 14, 5, '', '', 1, 0, 0),
+(4, 'Edit groups', 3, 14, 7, '', '', 1, 0, 0),
+(5, 'Edit menu', 5, 14, 9, '', '', 1, 0, 0),
+(6, 'Settings', 10, 10, NULL, 'fa fa-gear', 'menuItemSettings', 1, 0, 0),
+(7, 'Edit entries', 2, 17, 15, '', '', 1, 0, 0),
+(8, 'menuMain', 4, 0, NULL, '', '', 1, 0, 0),
+(9, 'Edit feeds', 1, 17, 13, '', '', 1, 0, 0),
+(10, 'menuProfile', 2, 0, NULL, '', '', 1, 0, 0),
+(11, 'Profile', 2, 10, 10, 'fa fa-user', '', 1, 0, 0),
+(12, 'Logout', 999, 6, 2, 'fa fa-power-off', '', 1, 1, 0),
+(13, 'Login', 2, 10, 1, 'fa fa-sign-in', '', 1, 0, 0),
+(14, 'System', 1, 6, NULL, '', '', 1, 0, 1),
+(15, 'Signup', 1, 10, 12, 'fa fa-user', '', 1, 0, 0),
+(16, 'Edit tags', 3, 17, 18, '', '', 1, 0, 0),
+(17, 'Rss', 2, 6, NULL, '', '', 1, 0, 0),
+(20, 'Import', 4, 6, NULL, '', '', 1, 0, 0),
+(21, 'Import feeds', 1, 20, 19, '', '', 1, 0, 0),
+(22, 'Import starred', 2, 20, 20, '', '', 1, 0, 0),
+(23, 'Edit news', 4, 17, 21, '', '', 1, 0, 0),
+(24, 'Language', 9, 10, NULL, 'fa fa-flag-o', '', 1, 0, 0),
+(25, 'English', 1, 24, 25, 'lang-en', '', 0, 0, 0),
+(26, 'Español', 2, 24, 24, 'lang-es', '', 0, 0, 0),
+(27, 'Português', 3, 24, 26, 'lang-pt-br', '', 0, 0, 0),
+(28, 'Feedback', 3, 10, 29, 'fa fa-comment', '', 1, 0, 0),
+(29, 'Edit feedbacks', 5, 17, 27, '', '', 1, 0, 0),
+(30, 'Edit testing', 200, 14, 32, '', '', 1, 0, 0),
+(31, '中国', 4, 24, 35, 'lang-zh-cn', '', 0, 0, 0),
+(32, 'About', 10, 6, 36, 'menuItemAbout', '', 1, 1, 0),
+(33, 'Edit tasks', 9, 14, 37, '', '', 1, 0, 0),
+(34, 'Tools', 3, 6, NULL, '', '', 1, 0, 0),
+(35, 'Admin feeds', 0, 34, 38, '', '', 1, 0, 0),
+(36, 'Admin tags', 2, 34, 39, '', '', 1, 0, 0),
+(37, 'Process', 10, 14, 40, '', '', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -867,7 +890,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`newId`),
   KEY `userId` (`userId`),
   KEY `newSef` (`newSef`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2391,7 +2414,7 @@ CREATE TABLE IF NOT EXISTS `tasks_email` (
   PRIMARY KEY (`taskId`),
   KEY `langId` (`langId`),
   KEY `taskSchedule` (`taskSchedule`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2657,7 +2680,7 @@ CREATE TABLE IF NOT EXISTS `usertracking` (
   `client_user_agent` text NOT NULL,
   `referer_page` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
