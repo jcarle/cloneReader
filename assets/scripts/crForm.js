@@ -135,6 +135,9 @@
 					switch (field['type']) {
 						case 'dropdown':
 							field.$input.select2();
+							if (field.multiple == true) {
+								this.initFieldDropdownMultiple(field);
+							}
 							break;
 						case 'typeahead':
 							if (field.multiple == null) {
@@ -148,7 +151,7 @@
 							var config = {
 								multiple: field.multiple,
 //									openOnEnter: false,
-								minimumInputLength: 1,
+								minimumInputLength: 3,
 								ajax: {
 									url:        field['source'],
 									dataType:   'json',
@@ -420,6 +423,33 @@
 			return $.validateEmail($input.val());
 		},
 		
+		initFieldDropdownMultiple: function(field) {
+			var $field = $('<input type="hidden" name="' + field.name + '" />').appendTo(field.$input.parent());
+
+			$field.on('change', function(event) {
+				var $field = $(this);
+				var value  = null;
+				try {
+					value = $.parseJSON($field.val());
+				}
+				catch(err) { 
+					$field.val('');
+				}
+				$(this).parent().find('select').select2('val', value);
+			});
+			
+			field.$input.on('change', function(event) {
+				if ($(this).val() != null) {
+					field.$input.data('$field').val( $.toJSON($(this).val()));
+				}
+			});
+
+			field.$input
+				.removeAttr('name')
+				.data('$field', $field)
+				.change();
+		},
+
 		initFieldUpload: function(field) {
 			crMain.loadUploadFile();
 			
@@ -583,7 +613,7 @@
 							$('<a class="thumbnail " data-skip-app-link="true" />')
 								.append($('<img />').prop('src', photo.urlThumbnail))
 								.prop('href', photo.urlLarge)
-								.prop('title', ''  /*photo.title*/)
+								.prop('title', $.sprintf(crLang.line('Picture %s'), (i + 1)))
 								.appendTo($thumbnails);
 						}
 		

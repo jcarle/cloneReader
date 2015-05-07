@@ -10,6 +10,7 @@ $crSettings = array(
 	'addTitleSiteName'    => config_item('addTitleSiteName'),
 	'defaultCurrencyId'   => config_item('defaultCurrencyId'),
 	'defaultCurrencyName' => config_item('defaultCurrencyName'),
+	'environment'         => ENVIRONMENT
 );
 
 echo '	
@@ -21,7 +22,7 @@ echo '
 
 $this->carabiner->display('js');		
 
-echo $this->myjs->getHtml();
+echo $this->my_js->getHtml();
 ?>		
 </body>
 </html>

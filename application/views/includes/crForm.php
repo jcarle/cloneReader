@@ -4,7 +4,8 @@
  * 
  * $form = array(
  *	'frmId'		=> 'frmId',
- *	'action'	=> base_url('entity/save'), // 
+ *	'action'	=> base_url('entity/save'), //
+ * 	'className' => 'panel panel-default crForm form-horizontal' // class del form 
  *	'fields'	=> array(), // fields que va a incluir el formulario
  *	'rules'		=> array(), // reglas de validacion para cada campo
  * 	'buttons'	=> array(), // los bottones que se van a mostrar 
@@ -67,10 +68,10 @@ $CI	= &get_instance();
 $form  = appendMessagesToCrForm($form);
 
 if (!isset($form['action'])) {
-	$form['action'] = base_url().$this->uri->uri_string(); 
+	$form['action'] = base_url($this->uri->uri_string()); 
 }
 
-echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => 'panel panel-default crForm form-horizontal', 'role' => 'form' ));
+echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => element('className', $form, 'panel panel-default crForm form-horizontal'), 'role' => 'form' ));
 
 if (isset($form['title'])) {
 	echo '<div class="panel-heading">'.  $form['title'].'</div>';
@@ -118,4 +119,4 @@ if (!empty($form['buttons'])) {
 
 echo form_close(); 
 
-$this->myjs->add(' $(\'#'. element('frmId', $form, 'frmId').'\').crForm('. json_encode($form).'); ');
+$this->my_js->add(' $(\'#'. element('frmId', $form, 'frmId').'\').crForm('. json_encode($form).'); ');

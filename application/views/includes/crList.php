@@ -208,4 +208,4 @@ echo getHtmlPagination($list['foundRows'], config_item('pageSize'), $params);
 </div>
 
 <?php
-$this->myjs->add(' $(\'.crList\').crList('. json_encode($list).'); ');	
+$this->my_js->add(' $(\'.crList\').crList('. json_encode($list).'); ');	

@@ -30,4 +30,4 @@
 </div>
 
 <?php
-$this->myjs->add( ' $.Profile.init(); ');
+$this->my_js->add( ' $.Profile.init(); ');

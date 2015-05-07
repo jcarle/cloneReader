@@ -10,7 +10,14 @@ class Countries_Model extends CI_Model {
 			->like('countryName', $filter)
 			->get('countries')->row_array();
 	}
-	
+
+	function getCountryById($id){
+		return $this->db
+			->select('countryId as id, countryName as text')
+			->where('countryId', $id)
+			->get('countries')->row_array();
+	}
+
 	function selectToDropdown(){
 		return $this->db
 			-> select('countryId AS id, countryName AS text', true)

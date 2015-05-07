@@ -14,6 +14,9 @@ crMenu = {
 		if (className != null) {
 			$ul.addClass(className);
 		}
+		if (depth == 0) {
+			$ul.addClass('crMenu');
+		}
 	
 		
 		for (var i=0; i<aMenu.length; i++) {

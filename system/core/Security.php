@@ -507,9 +507,20 @@ class CI_Security {
 			return $str;
 		}
 
-		$str = html_entity_decode($str, ENT_COMPAT, $charset);
-		$str = preg_replace('~&#x(0*[0-9a-f]{2,5})~ei', 'chr(hexdec("\\1"))', $str);
-		return preg_replace('~&#([0-9]{2,4})~e', 'chr(\\1)', $str);
+		// FIX https://github.com/inexor-game/community-site-deprecated/commit/dcc7c541bebe183516d08899bff8c654ff4acb01
+		if(version_compare(PHP_VERSION,5.5,'>=')){
+			$str = preg_replace_callback('~&#x(0*[0-9a-f]{2,5})~i', function(){return chr(hexdec('\\1'));}, $str, -1, $matches);
+			$str = preg_replace_callback('~&#([0-9]{2,4})~', function(){return chr('\\1');}, $str, -1, $matches1);
+		}else{
+			$str = preg_replace('~&#x(0*[0-9a-f]{2,5})~ei', 'chr(hexdec("\\1"))', $str, -1, $matches);
+			$str = preg_replace('~&#([0-9]{2,4})~e', 'chr(\\1)', $str, -1, $matches1);
+		}
+		
+		return $str;
+			
+//		$str = html_entity_decode($str, ENT_COMPAT, $charset);
+//		$str = preg_replace('~&#x(0*[0-9a-f]{2,5})~ei', 'chr(hexdec("\\1"))', $str);
+	//	return preg_replace('~&#([0-9]{2,4})~e', 'chr(\\1)', $str);
 	}
 
 	// --------------------------------------------------------------------

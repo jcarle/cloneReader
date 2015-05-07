@@ -397,6 +397,7 @@ $.extend({
 	 * 		formErrors					un array con el formato: {'fieldName': 'errorMessage' }. 
 	 * 										muestra un alert con los errores del form; 
 	 * 										en las  llamadas a esta funcion desde crForm se agrega la referencia "response['result']['crForm']" para agregar el has-error a los fields con errores
+	 * 		showPopupLogin				muestra el popup de login
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
@@ -423,6 +424,11 @@ $.extend({
 				$(document).crAlert(msg);
 				return true;
 			}
+		}
+		
+		if (result['showPopupLogin'] == true) {
+			$.showPopupLogin(response);
+			return true;
 		}
 		
 		if (response['code'] != true) {
@@ -463,12 +469,35 @@ $.extend({
 	},
 	
 	showPopupForm: function(form) {
-		var $subform 		= $(document).crForm('renderPopupForm', form);
-		var $modal			= $subform.parents('.modal');
+		var $subform = $(document).crForm('renderPopupForm', form);
+		var $modal   = $subform.parents('.modal');
 		
 		$.showModal($modal, false);
 		
 		return $modal;
+	},
+	
+	showPopupLogin: function(response) {
+		var $modal = $('\
+			<div class="modal" role="dialog" >\
+				<div class="modal-dialog" >\
+					<div class="modal-content" >\
+						<div class="modal-header">\
+							<button aria-hidden="true" data-dismiss="modal" class="close" type="button">\
+								<i class="fa fa-times"></i>\
+							</button>\
+							<h4 />\
+						</div> \
+						<div class="modal-body"> </div>\
+					</div>\
+				</div>\
+			</div>\
+		');
+		$modal.appendTo($('body'));
+		$modal.find('.modal-header h4').text(response['result']['title']);
+		$modal.find('.modal-body').append(response['result']['html']);
+
+		$.showModal($modal, false);
 	},
 	
 	formatNumber: function(value) { // TODO: ver si hay alguna manera de que autoNumeric devuelva el numero formateado sin tener que crear un $elemento
@@ -517,36 +546,6 @@ $.extend({
 		, this, $gallery));
 		
 		$gallery.data('initGallery', true);
-	},
-
-// TODO: pensar si conviene ir moviendo el div por cada $page, para que no se acumulen muchos
-	initMap: function(index, latitudes, longitudes, divMap, name) {
-		var myLocation = new google.maps.LatLng(latitudes[index], longitudes[index]);
-		var mapOptions = { center: myLocation, zoom: 16 };
-		var marker     = new google.maps.Marker({ position: myLocation, title: "'"+name+"'" });
-		var map        = new google.maps.Map(document.getElementById(divMap), mapOptions);
-		marker.setMap(map);
-	},
-
-	renderMap: function(lat, long, divMap, name){
-		if ($.hasGoogleMap != true) {
-			$.getScript('https://www.google.com/jsapi', 
-				function() {
-					google.load('maps', '3', { other_params: 'sensor=false', callback: 
-						function() {
-							var latitudes  = [lat];
-							var longitudes = [long];
-							$.initMap(0, latitudes, longitudes, divMap, name);
-						}
-					});
-				}
-			);
-			return;
-		}
-
-		var latitudes  = [lat];
-		var longitudes = [long];
-		$.initMap(0, latitudes, longitudes, divMap, name);
 	}
 });
 

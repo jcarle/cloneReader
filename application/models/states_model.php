@@ -11,4 +11,11 @@ class States_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return $query;
 	}
+
+	function getStateById($id){
+		return $this->db
+			->select('stateId as id, stateName as text')
+			->where('stateId', $id)
+			->get('states')->row_array();
+	}
 }

@@ -79,7 +79,7 @@ crMain = {
 				
 				crMain.renderPage(response, ajaxOptions.pageName);
 			}
-		);	
+		);
 	},
 	
 	iniAppAjax: function() {
@@ -108,9 +108,9 @@ crMain = {
 		
 					var aMenu = response['result']['aMenu'];
 					for (var menuName in aMenu) {
-						var $menu = $(aMenu[menuName]['parent']);
-						$menu.children().remove();
-						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $menu);
+						var $parent = $(aMenu[menuName]['parent']);
+						$parent.find('.crMenu').remove();
+						crMenu.renderMenu(aMenu[menuName]['items'], aMenu[menuName]['className'], $parent);
 					}
 					crMenu.initMenu();
 				}
@@ -120,10 +120,12 @@ crMain = {
 	/**
 	 * Propiedades que se setean desde el js de cada page; se guardan dentro $page.data(); se pueden setear desde la view ajax, o desde un js
 	 * 		notRefresh: no vuelve a pedir la page, solo muestra lo que ya hay en memoria
+	 * 		skipScrollTop: evita el scroll al cargar/mostrar la page
 	 * Eventos que dispara cada page; hay que setearlo en el js de cada page
 	 * 		onHide: se lanza al ocultar la page
 	 * 		onVisible: se lanza al mostrar la page
-	 * 
+	 * Eventos que dispara body:
+	 * 		showPage: se lanza al cambiar de page 
 	 * */
 	loadUrl: function(controller) {
 		var pageName = this.getPageName();
@@ -131,7 +133,6 @@ crMain = {
 		if (this.aPages[pageName].length == 0) {
 			this.aPages[pageName] = $('<div class="cr-page ' + pageName + '"/>').appendTo($('.pageContainer'));
 		}
-		
 		
 		var $page = this.aPages[pageName];
 		
@@ -146,8 +147,13 @@ crMain = {
 		
 		var url = base_url + controller.replace(base_url, '');
 		if ($page.data('notRefresh') == true) {
+			if ($page.is(':visible') == true) {
+				return;
+			}
 			this.showPage(pageName);
-			$('html, body').animate({ scrollTop: 0 }, 'fast');
+			if ($page.data('skipScrollTop') != true) {
+				$('html, body').animate({ scrollTop: 0 }, 'fast');
+			}
 			return;
 		}
 		
@@ -160,7 +166,9 @@ crMain = {
 				function(pageName, response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					this.renderPage(response, pageName);
-					$('html, body').animate({ scrollTop: 0 }, 'fast');
+					if ($page.data('skipScrollTop') != true) {
+						$('html, body').animate({ scrollTop: 0 }, 'fast');
+					}
 				}
 			, this, pageName)
 		})
@@ -208,6 +216,10 @@ crMain = {
 			default:
 				$page.append(data['html']);
 		}
+
+		if (typeof ga != "undefined") {
+			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
+		}
 	},
 	
 	renderPageTitle: function(data, $page) {
@@ -245,7 +257,7 @@ crMain = {
 	showPage: function(pageName) {
 		$.showWaiting(true);
 		
-		$('.datetimepicker, .select2-drop, .select2-drop-mask, .select2-hidden-accessible').remove(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
+		$('.datetimepicker, .select2-drop, .select2-drop-mask, .select2-hidden-accessible').hide(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
 		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 
 		var $page       = this.aPages[pageName];
@@ -254,9 +266,10 @@ crMain = {
 		
 		$otherPages.hide().trigger('onHide');
 
-		$('title').text( meta['title'] + ' | ' + crSettings.siteName);
+		$('title').text(meta['title'] + (crSettings.addTitleSiteName == true ? ' | ' + crSettings.siteName : ''));
 		$page.stop().show();
 		$page.trigger('onVisible');
+		$('body').trigger('showPage');
 
 		$.showWaiting(false);
 	},

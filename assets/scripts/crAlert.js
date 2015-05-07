@@ -75,18 +75,29 @@
 			// para evitar que se vaya el foco a otro elemento de la pagina con tab
 			$(document).bind('keydown.crAlertKeydown', ($.proxy(
 				function(event) {
-					event.preventDefault();
 					event.stopPropagation();
-					
-					if (event.keyCode == 27) { // esc!
-						
-						this.$modal.modal('hide');
-						return false;
+
+					switch (event.keyCode) {
+						case 27: // esc!
+							this.$modal.modal('hide');
+							return false;
+							break;
+						case 9: // tab
+							if (this.$modal.find('.btn-primary').length != 0 && this.$modal.find('.btn-primary').is(':focus') == false) {
+								this.$modal.find('.btn-primary').focus();
+							}
+							else {
+								this.$modal.find('.btn-default').focus();
+							}
+							return false;
+							break;
+						case 13: // enter
+							//return false;
+							break;
+						default:
+							event.preventDefault();
+							return false;
 					}
-					if ($.contains(this.$modal[0], event.target)) {
-						return true;
-					}
-					return false;
 				}
 			, this)));
 			

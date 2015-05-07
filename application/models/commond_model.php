@@ -125,16 +125,59 @@ class Commond_Model extends CI_Model {
 		}
 		return $result;	
 	}
+	
+	
+	function searchEntityFulltext($search, $searchKey = '', $pageCurrent, $pageSize, $onlyApproved = true) {
+		$result = array('data' => array(), 'foundRows' => 0);
+		if (trim($search) == '') {
+			return $result;
+		}
 
-	function searchEntities($filter, $reverse = false, $searchKey = '', $contactEntityTypeId = true, $onlyApproved = false) {
-		if (trim($filter) == '') {
+		$aSearchKey = array($searchKey);
+		if ($onlyApproved == true) {
+			 $aSearchKey[] = 'statusApproved';
+		}
+		$aSearch   = cleanSearchString($search, $aSearchKey);
+		if (empty($aSearch)) {
 			return array();
 		}
 		
-		$filter    = ($onlyApproved ? ' +statusApproved ' : ''). $searchKey.' +'.str_replace(' ', ' +', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $this->db->escape_like_str($filter)))).'*';
-		$fieldId   = ($contactEntityTypeId == true ? ' CONCAT(entityTypeId, \'-\', entityId) ' : ' entityId ');
-		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
-		$match     = 'MATCH (entitySearch) AGAINST (\' '.$filter.'\' IN BOOLEAN MODE)';
+// 		
+		$match     = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
+		$this->db
+			->select('SQL_CALC_FOUND_ROWS entityId, entityName, '.$match.' AS score, MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
+			->from('entities_search')
+			->where($match, NULL, FALSE)
+			->order_by('scoreName DESC, score DESC');
+			
+		$this->appendLimitInQuery($pageCurrent, $pageSize);
+
+		$query = $this->db->get()->result_array();
+		//pr($this->db->last_query()); die;
+
+		return array('data' => $query, 'foundRows' => $this->getFoundRows());
+	}
+
+	function searchEntityName($search, $searchKey = '', $fieldName = null, $contactEntityTypeId = false, $onlyApproved = true) {
+		if (trim($search) == '') {
+			return array();
+		}
+		
+		if ($fieldName == null) {
+			$fieldName = 'entityName';
+		}
+		
+		$aSearchKey = array($searchKey);
+		if ($onlyApproved == true) {
+			 $aSearchKey[] = 'statusApproved';
+		}
+		$aSearch   = cleanSearchString($search, $aSearchKey, true, true);
+		if (empty($aSearch)) {
+			return array();
+		}
+		
+		$fieldId   = ($contactEntityTypeId == true ? " CONCAT(entityTypeId, '-', entityId) " : " entityId ");
+		$match     = "MATCH (entityNameSearch) AGAINST ('".implode(' ', $aSearch)."' IN BOOLEAN MODE) ";
 		$query = $this->db
 			->select($fieldId.' AS id, '.$fieldName.' AS text, '.$match.' AS score ', false)
 			->from('entities_search')
@@ -143,13 +186,12 @@ class Commond_Model extends CI_Model {
 			->order_by('entityTree')
 			->limit(config_item('autocompleteSize'))
 			->get()->result_array();
-		//pr($this->db->last_query());  die;
+		// pr($this->db->last_query());  die;
 		return $query;
 	}
 	
-	function getEntitySearch($entityTypeId, $entityId, $reverse = false, $contactEntityTypeId = true) {
+	function getEntitySearch($entityTypeId, $entityId, $fieldName = 'entityName', $contactEntityTypeId = false) {
 		$fieldId   = ($contactEntityTypeId == true ? ' CONCAT(entityTypeId, \'-\', entityId) ' : ' entityId ');
-		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
 		
 		$query = $this->db
 			->select($fieldId.' AS id, '.$fieldName.' AS text ', false)
@@ -158,14 +200,6 @@ class Commond_Model extends CI_Model {
 			->get('entities_search')->row_array();
 		//pr($this->db->last_query());  die;
 		return $query;
-	}
-	
-	function getEntityName($entityTypeId, $entityId, $reverse = false) {
-		$entity = $this->getEntitySearch($entityTypeId, $entityId, $reverse);
-		if (!empty($entity)) {
-			return $entity['text'];
-		}
-		return '';
 	}
 	
 	/**
@@ -240,21 +274,33 @@ class Commond_Model extends CI_Model {
 	
 	/**
 	 * 
-	 * 
 	 * @param     (string) $id  un string con el formato: [entityTypeId]-[entityId]
-	 * @param     (bool)   $reverse 
+	 * @param     (string) $fieldName 
 	 * @return    (array)  devuelve un array con el formato:  
 	 * 		array( 'id' => 3-1822, 'text' => 'country' ) 	
 	 * */
-	function getEntityToTypeahead($id, $reverse = false) {
+	function getEntityToTypeahead($id, $fieldName = 'entityName') {
 		if (empty($id)) {
 			return array();
 		}
 		
 		$aTmp = explode('-', $id);
-		return $this->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1], $reverse);
+		return $this->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1], $fieldName, true);
 	}
 
+	/**
+	 * @param     (int)    $entityTypeId  
+	 * @param     (int)    $entityId  
+	 * @param     (string) $fieldName 
+	 * @return    (string) devuelve el nombre de la entity
+	 * */
+	function getEntityName($entityTypeId, $entityId, $fieldName = 'entityName') {
+		$entity = $this->getEntitySearch($entityTypeId, $entityId, $fieldName);
+		if (!empty($entity)) {
+			return $entity['text'];
+		}
+		return '';
+	}
 
 	/**
 	 * Obtiene el detalle de las zonas 

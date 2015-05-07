@@ -29,7 +29,7 @@ switch ($view) {
 		break;
 	default: 
 		$result['html'] = $this->load->view($view, '', true);
-		$result['html'].= $this->myjs->getHtml();  
+		$result['html'].= $this->my_js->getHtml();  
 }
 
 
