@@ -47,7 +47,7 @@ class Tasks extends CI_Controller {
 				'filters'     => array(
 					'taskRunning' => array(
 						'type'              => 'dropdown',
-						'label'             => $this->lang->line('Status Running'),
+						'label'             => $this->lang->line('Status'),
 						'value'             => $this->input->get('taskRunning'),
 						'source'            => $this->Tasks_Status_Model->selectToDropdown(),
 						'appendNullOption' => true,

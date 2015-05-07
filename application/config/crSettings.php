@@ -57,7 +57,21 @@ $config['entityConfig'] = array(
 				'thumb' => array( 'width' => 150,  'height' => 100, 'folder' => '/assets/images/%s/thumb/' ),
 				'large' => array( 'width' => 1024, 'height' => 660, 'folder' => '/assets/images/%s/large/' ),
 			)
-		)
+		),
+		'comments' => array(
+			'commentTitle'      => 'Comments', 
+			'allowAddMember'    => false,
+			'allowAddNotMember' => false,
+			'showTypeahead'     => false, 
+			'showCommentDate'   => false, 
+			'showCommentIp'     => false,
+			'hasCommentRating'  => true,
+		),
+		'contacts' => array(
+			'showTypeahead'     => false, 
+			'showContactDate'   => false, 
+			'showContactIp'     => false,
+		),
 	),
 	$config['entityTypeTesting'] => array(
 		'entityTypeName' => 'testing',

@@ -10,5 +10,5 @@ $crSettings = array(
 	'feedMaxCount'     => config_item('feedMaxCount'),
 );
 
-$this->myjs->add( ' crSettings = $.extend(crSettings, '. json_encode($crSettings) .'); ');
-$this->myjs->add( ' cloneReader.init('. $userFilters .'); ');
+$this->my_js->add( ' crSettings = $.extend(crSettings, '. json_encode($crSettings) .'); ');
+$this->my_js->add( ' cloneReader.init('. $userFilters .'); ');

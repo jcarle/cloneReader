@@ -5,7 +5,7 @@
  * 
  */
 
-class Myjs {
+class My_js {
 	public $aJs = array();
 	
 	function __construct() { }

@@ -82,7 +82,7 @@ class Register extends CI_Controller {
 				$this->load->model('Entries_Model');
 				$this->Entries_Model->addDefaultFeeds();
 				
-				return loadViewAjax($code, array('goToUrl' => base_url(''), 'skipAppLink' => true));
+				return loadViewAjax($code, array('goToUrl' => base_url(), 'skipAppLink' => true));
 			}
 
 			return loadViewAjax($code);

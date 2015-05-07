@@ -554,10 +554,6 @@ $(window).resize(function() {
 });
 
 function resizeWindow() {
-	return;
-	$('.content')
-		.css('min-height', 1)
-		.css('min-height', $(document).outerHeight(true) - $('.menu').offset().top - $('.menu').outerHeight(true) - $('footer').outerHeight(true) ); 
 }
 
 function cn(value) {

@@ -11,10 +11,10 @@ class Search extends CI_Controller {
 	}
 
 	function users() {
-		$searchKey = ' +searchUsers ';
+		$searchKey = 'searchUsers';
 
 		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), false, $searchKey, false)
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, null, false, false)
 		));
 	}
 	
@@ -37,7 +37,7 @@ class Search extends CI_Controller {
 		}
 		
 		return $this->load->view('json', array(
-			'result' 	=> $result
+			'result' => $result
 		));
 	}		
 	
@@ -50,31 +50,63 @@ class Search extends CI_Controller {
 	}
 	
 	function zones($reverse = true) {
-		$searchKey = ' +searchZones ';
+		$searchKey = 'searchZones';
+		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+		return $this->load->view('json', array(
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, $fieldName, true, false)
+		));
+	}
+	
+	function places($reverse = true) {
+		$searchKey = 'searchPlaces';
+		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+		return $this->load->view('json', array(
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, $fieldName, false, false)
+		));
+	}
+	
+	function brands() {
+		$searchKey = 'searchBrands';
 
 		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), $reverse, $searchKey)
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, false)
+		));
+	}
+	
+	function models() {
+		$searchKey = 'searchModels';
+		
+		return $this->load->view('json', array(
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, 'entityTree', false, $this->input->get('onlyApproved'))
+		));
+	}
+	
+	function cars() { 
+		$searchKey = 'searchCars';
+		
+		return $this->load->view('json', array(
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, 'entityTree', true, true)
 		));
 	}
 
 	function feeds() {
-		$searchKey = ' +searchFeeds ';
+		$searchKey = ' searchFeeds ';
 		
 		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), false, $searchKey, false)
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, null, false, false)
 		));
 	}
 	
 	function tags() {
-		$searchKey = ' +searchTags ';
+		$searchKey = ' searchTags ';
 		
 		if ($this->input->get('onlyWithFeeds') == 'true') {
-			$searchKey .= ' +tagHasFeed ';
+			$searchKey .= ' tagHasFeed ';
 		}
 		
 		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntities($this->input->get('query'), false, $searchKey, false)
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, false)
 		));
-	}
+	}	
 }
 

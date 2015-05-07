@@ -1,6 +1,19 @@
 <div class="row">
+<?php
+if (!isset($isPopUp)) {
+	$isPopUp = false;
+}
+
+if ($isPopUp == true) {
+	echo ' <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12"> 
+		<div class="alert alert-warning" role="alert"> 
+			<i class="fa fa-sign-in"></i> '.$this->lang->line('Please log in to continue').' 
+		</div> 
+	</div>';
+}
+?>
+
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-	
 <?php
 $this->load->view('includes/crForm');
 ?>

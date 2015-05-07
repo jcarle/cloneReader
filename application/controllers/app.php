@@ -25,7 +25,7 @@ class App extends CI_Controller {
 			'MENU_PROFILE'  => array(
 				'items'     => $this->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 
 				'className' => 'menuProfile nav navbar-nav navbar-right',
-				'parent'    => '.navbar-ex1-collapse'
+				'parent'    => '.navbar-ex1-collapse',
 			),
 			'MENU_PUBLIC'   => array(
 				'items'     => $this->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 

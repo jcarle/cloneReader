@@ -9,57 +9,87 @@ class Login extends CI_Controller {
 	
 	function index() {
 		if (! $this->safety->allowByControllerName('login') ) { return errorForbidden(); }
+
+		$form = $this->_getFormLogin();
+
+		if ($this->input->post() != false) {
+			$code = $this->form_validation->run();
+			if ($this->input->is_ajax_request()) {
+
+				$onLoginUrl = $this->session->userdata('onLoginUrl');
+				if ($onLoginUrl == null) {
+					$onLoginUrl = base_url();
+				}
+				return loadViewAjax($code, $code == false ? null : array('goToUrl' => $onLoginUrl, 'skipAppLink' => true));
+			}
+		}
 		
+		return $this->load->view('pageHtml', array(
+			'view'   => 'login', 
+			'title'  => $this->lang->line('Login'),
+			'form'   => $form,
+			'meta'   => array( 
+				'title' => $this->lang->line('Login'),
+				'description' => $this->lang->line('Ingresar - Motormaniaco del Auto, Services, Modelos, Marcas')
+			)
+		));
+	}
+
+	function popupLogin() {
+		if (! $this->safety->allowByControllerName('login') ) { return errorForbidden(); }
+		
+		$form          = $this->_getFormLogin();
+		$form['frmId'] = 'frmPopupLogin';
+
+		$result = array(
+			'html'           => $this->load->view('login', array( 'form' => $form, 'isPopUp' => true), true).$this->my_js->getHtml(),
+			'title'          => $this->lang->line('Login'),
+			'showPopupLogin' => true,
+		);
+
+		return loadViewAjax(true, $result);
+	}
+
+	function _getFormLogin() { 
 		$form = array(
-			'frmId'				=> 'frmLogin',
-			'buttons'			=> array('<button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> '.$this->lang->line('Login').' </button>'),
-			'fields'			=> array(
+			'frmId'    => 'frmLogin',
+			'action'   => base_url('login'),
+			'buttons'  => array('<button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> '.$this->lang->line('Login').' </button>'),
+			'fields'   => array(
 				'email' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Email'), 
-					'value'	=> set_value('email')
+					'type'  => 'text',
+					'label' => $this->lang->line('Email'), 
+					'value' => set_value('email')
 				),
 				'password' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('Password'), 
-					'value'	=> set_value('password')
+					'type'  => 'password',
+					'label' => $this->lang->line('Password'), 
+					'value' => set_value('password')
 				),
 				'link'	=> array(
-					'type'	=> 'link',
-					'label'	=> $this->lang->line('Forgot password'), 
-					'value'	=> base_url('forgotPassword'),
+					'type'  => 'link',
+					'label' => $this->lang->line('Forgot password'), 
+					'value' => base_url('forgotPassword'),
 				)
 			)
 		);
-		
+
 		$form['rules'] = array( 
 			array(
 				'field' => 'email',
 				'label' => $form['fields']['email']['label'],
 				'rules' => 'trim|required|valid_email|callback__validate_login'
 			),
-			array(				 
+			array(
 				'field' => 'password',
 				'label' => $form['fields']['password']['label'],
 				'rules' => 'trim|required'
 			)
-		);		
+		);
 		
 		$this->form_validation->set_rules($form['rules']);
-					
-		if ($this->input->post() != false) {
-			$code = $this->form_validation->run();
-			if ($this->input->is_ajax_request()) {
-				return loadViewAjax($code, $code == false ? null : array('goToUrl' => base_url(), 'skipAppLink' => true));
-			}
-		}
-		
-		return $this->load->view('pageHtml', array(
-			'view'			=> 'login', 
-			'title'			=> $this->lang->line('Login'),
-			'form'			=> $form,
-			'meta'			=> array( 'title' => $this->lang->line('Login') )
-		));
+
+		return $form;
 	}
 
 	function _validate_login() {
@@ -80,10 +110,8 @@ class Login extends CI_Controller {
 		$this->load->spark('oauth2/0.4.0/');
 		$this->config->load('oauth2');
 		
-		$config = $this->config->item('oauth2');
-		$config = $config[$providerName];
-
-
+		$config   = $this->config->item('oauth2');
+		$config   = $config[$providerName];
 		$provider = $this->oauth2->provider($providerName, array(
 			'id'     => $config['id'],
 			'secret' => $config['secret'],
@@ -119,7 +147,12 @@ class Login extends CI_Controller {
 				$this->Entries_Model->addDefaultFeeds();
 			}
 
-			redirect('');
+			$onLoginUrl = $this->session->userdata('onLoginUrl');
+			if ($onLoginUrl == null) {
+				$onLoginUrl = '';
+			}
+
+			redirect($onLoginUrl);
 		}
 		catch (OAuth2_Exception $e) {
 			redirect('login');

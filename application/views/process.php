@@ -57,7 +57,7 @@ foreach ($items as $item) {
 <?php
 	foreach ($item['buttons'] as $process) {
 ?>		
-				<a href="javascript:$.process.submit('<?php echo base_url($process['url']); ?>');" class="btn btn-primary" >
+				<a title="<?php echo $process['text']; ?>" href="javascript:$.process.submit('<?php echo base_url($process['url']); ?>');" class="btn btn-primary" >
 					<i class="fa fa-cog"></i>
 					<?php echo $process['text']; ?>
 				</a>
