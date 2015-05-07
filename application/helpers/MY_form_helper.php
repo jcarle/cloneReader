@@ -264,13 +264,15 @@ function resizePicure($sizes, $sourceImage) {
 	foreach ($sizes as $size) {
 		$width  = $size['width'];
 		$height = $size['height'];
-		$dim    = (intval($origWidth) / intval($origHeight)) - ($width / $height);		
+				
 		if ($origWidth < $size['width']) {
 			$width = $origWidth;
 		}
-		else if ($origHeight < $size['height']) {
+		if ($origHeight < $size['height']) {
 			$height = $origHeight;
 		}
+		
+		$dim    = (intval($origWidth) / intval($origHeight)) - ($width / $height);
 
 		$config = array(
 			'source_image'      => $sourceImage,
@@ -341,7 +343,6 @@ function renderCrFormFields($form) {
 				'.form_label(element('label', $field), null, array('class' => 'col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label')).'
 				<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> %s </div>
 			</fieldset>';
-		
 		switch ($field['type']) {
 			case 'hidden':
 				$aFields[] = form_hidden($name, $field['value']);
@@ -378,7 +379,11 @@ function renderCrFormFields($form) {
 				$source = element('source', $field, array());
 				$source = sourceToDropdown($source, element('appendNullOption', $field));
 
-				$properties = array('class="form-control"');
+				$properties = array('class="form-control"', 'placeholder' => element('placeholder', $field));
+
+				if (element('multiple', $field) == true) {
+					$properties[] = 'multiple="multiple"';
+				}
 				if (element('disabled', $field) == true) {
 					$properties[] = 'disabled="disabled"';
 				}
@@ -494,4 +499,65 @@ function validation_array_errors() {
 	}
 	
 	return $OBJ->get_error_array();
+}
+
+
+/**
+ * Se utiliza en comments y contacts
+ * Se utiliza un prefix para obtenes los nombres de los fields a guardar y devolver en la cookie  
+ */
+function saveCrFormCookie($data, $prefix = 'comment') {
+	$CI = &get_instance();
+	
+	$phone = '';
+	if (isset($data[$prefix.'Phone'])) {
+		$phone = $data[$prefix.'Phone'];
+	}
+	else {
+		$cookie = getCrFormCookie($prefix);
+		if (isset($cookie[$prefix.'Phone'])) {
+			$phone = $cookie[$prefix.'Phone'];
+		}
+	}
+	
+	$cookie = array(
+		'firstName'  => element($prefix.'FirstName', $data),
+		'lastName'   => element($prefix.'LastName', $data),
+		'email'      => element($prefix.'Email', $data),
+		'phone'      => $phone,
+	);
+
+	$CI->session->set_userdata('formCookie', $cookie);
+}
+	
+function getCrFormCookie($prefix = 'comment') {
+	$CI = &get_instance();
+	
+	$cookie = $CI->session->userdata('formCookie');
+
+	if (!empty($cookie)) {
+		if (is_array($cookie)) {
+			$cookie[$prefix.'FirstName'] = element('firstName', $cookie);
+			$cookie[$prefix.'LastName']  = element('lastName', $cookie);
+			$cookie[$prefix.'Email']     = element('email', $cookie);
+			$cookie[$prefix.'Phone']     = element('phone', $cookie);
+
+			return $cookie;
+		}
+	}
+
+	if ($CI->session->userdata('userId') == USER_ANONYMOUS) {
+		return array();
+	}
+		
+	$CI->load->model('Users_Model');
+		
+	$data = $CI->Users_Model->get($CI->session->userdata('userId'));
+		
+	return array(
+		$prefix.'FirstName'  => element('userFirstName', $data),
+		$prefix.'LastName'   => element('userLastName', $data),
+		$prefix.'Email'      => element('userEmail', $data),
+		$prefix.'Phone'      => element('userPhone', $data),
+	);
 }

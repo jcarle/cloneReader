@@ -27,66 +27,6 @@ function sourceToArray($source, $fieldName) {
 	return $data;
 }
 
-// TODO: mover esto de aca!
-function pr($value) {
-	print_r($value);
-}
-
-function vd($value) {
-	var_dump($value);
-}
-
-function errorForbidden() {
-	$CI = &get_instance();
-	$CI->load->library('../controllers/error');
-	initLang(); // FIXME: revisar; se esta vaciando la session al hacer el redirect
-	$CI->safety->initSession();
-	$CI->error->forbidden();
-}
-
-function error404() {
-	$CI = &get_instance();
-	$CI->load->library('../controllers/error');
-	$CI->error->error404();	
-}
-
-function loadViewAjax($code, $result = null) {
-	$CI = &get_instance();
-	
-	if ($code != true && $result == null) {
-		$result = array('formErrors' => validation_array_errors());
-	}
-	if ($result == null) {
-		$result = array();
-	}
-	
-	return $CI->load->view('json', array(
-		'code'   => $code, 
-		'result' => $result,
-	));	
-}
-
-function getPageName() {
-	$aTmp        = explode('/', uri_string());
-	$controller  = $aTmp[0];
-	if (trim($controller) == '') {
-		$CI         = &get_instance();
-		$controller = $CI->router->default_controller;
-	}
-
-	return 'cr-page-' . $controller . (count($aTmp) > 1 ? '-'.$aTmp[1] : '');
-}
-
-function formatCurrency($value, $currencyName = null) {
-	$CI = &get_instance();
-	
-	if ($currencyName == null) {
-		$currencyName = config_item('defaultCurrencyName');
-	}
-	 
-	return $currencyName.' '.number_format($value, 2, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'));
-}
-
 /*
  * Devuelve las porperties de una entidad, se utiliza para definir el upload de archivos, folder, tamaños, etc
  */
@@ -218,8 +158,8 @@ function getBreadcrumb(array $breadcrumb, array $meta, $skipBreadcrumb = false) 
 	}
 	
 	$breadcrumb = array(
-		array('text' => $CI->lang->line('Home'),             'href' => base_url()),
-		array('text' => $meta['title'],     'active' => true ) 
+		array('text' => $CI->lang->line('Home'),    'href' => base_url()),
+		array('text' => $meta['title'],             'active' => true ) 
 	);
 	
 	return $breadcrumb;	

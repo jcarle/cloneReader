@@ -1,4 +1,22 @@
 <?php
+function pr($value) {
+	print_r($value);
+}
+
+function vd($value) {
+	var_dump($value);
+}
+
+function formatCurrency($value, $currencyName = null) {
+	$CI = &get_instance();
+	
+	if ($currencyName == null) {
+		$currencyName = config_item('defaultCurrencyName');
+	}
+	 
+	return $currencyName.' '.number_format($value, 2, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'));
+}
+
 function hide_mail($email) {
 	if (empty($email)) {
 		return '';
@@ -30,27 +48,70 @@ function truncate($string, $limit, $break=" ", $pad="...") {
 }
 
 /**
- * TODO: documentar
+ * Elimina las palabras reservadas y las palabras muy cortas del string de búsqueda; 
+ * 	También reemplaza los caracteres especiales por caracteres buscables, ver la funcion searchReplace de mysql que hace el mismo REPLACE
  * 
- * @param $sort      array con los items del dropdown
+ * @param  (string) $search       a buscar
+ * @param  (array)  $aSearchKey   array con las $searchKey validas (ej: statusApproved, searchUsers)
+ * @param  (bool)   $addPlus      agrega a cada palabra el operador '+' para que la palabra sea obligatoria
+ * @param  (bool)   $addWildcard  agrega un asterisco a la ultima palabra, para busquedas parciales
+ * @return (array)  devuelve      un array con las palabras a buscar
+ * */
+function cleanSearchString($search, $aSearchKey, $addPlus = true, $addWildcard = false) {
+	$CI = & get_instance();
+
+	$result    = array();
+	$aSearch   = explode(' ', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $CI->db->escape_like_str($search))));
+	for($i=0; $i<count($aSearch); $i++) {
+		if (strlen($aSearch[$i]) >= 3 )  { // TODO: harckodeta
+			$result[] = str_replace(array('+', '-', '&'), array('plus', 'minus', 'ampersand'), $aSearch[$i]);
+		}
+	}
+	
+	if (empty($result)) {
+		return array();
+	}
+	
+	if ($addWildcard == true) {
+		$result[count($result)-1] = $result[count($result)-1].'*';
+	}
+	
+	for ($i=0; $i<count($aSearchKey);$i++) {
+		$aSearchKey[$i] = '+'.$aSearchKey[$i];
+	}
+	for ($i=0; $i<count($result);$i++) {
+		$result[$i] = ($addPlus == true ? '+' : '').$result[$i];
+	}
+	
+	$result = array_merge($aSearchKey, $result);
+	
+	return $result;
+}
+
+/**
+ *
+ * Devuelve un html con un dropdown que se utiliza para ordenar listados 
+ * 
+ * @param $sort      array con los items del dropdown, debe tener el formato :array('rating' => array( 'key' => 'label' ))
  * @param $current   item seleccionado
  * @param $seoTag    indica si se hagrega un tag html dentro del link para mejorar el seo
+ * @param $className el class que va a tener el dropdown
  */
-function getHtmlDropdownSort($sort, $current, $seoTag = null) {
+function getHtmlDropdownSort($sort, $current, $seoTag = null, $className = 'btn btn-default') {
 	$CI = & get_instance();
 	
-	if (!isset($sort[$CI->input->get('sort')])) {
+	if (!isset($sort[$current])) {
 		$aTmp    = array_keys($sort);
 		$current = $aTmp[0];	
 	}
 	
 	$html = '
 		<div class="dropdown">
-			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+			<a href="javascript:void(0);" class="'.$className.' dropdown-toggle" type="button" data-toggle="dropdown">
 				'. sprintf($CI->lang->line('Sort by %s'), strtolower($sort[$current]['label'])).'
 				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"> ';
+			</a>
+			<ul class="dropdown-menu" role="menu" > ';
 
 	$seoStart = null;
 	$seoEnd   = null;
@@ -61,7 +122,7 @@ function getHtmlDropdownSort($sort, $current, $seoTag = null) {
 
 	foreach ($sort as $key => $value) {
 		$html .= ' <li role="presentation" '.($current == $key ? ' class="active" ' : '').'>
-						<a title="'. $value['label'].'" role="menuitem" tabindex="-1" href="'. base_url( uri_string().'?sort='.$key).'">'.$seoStart. $value['label'].$seoEnd.'</a>
+						<a title="'. $value['label'].'" data-sort="'.$key.'" role="menuitem" tabindex="-1" href="'. base_url( uri_string().'?sort='.$key).'">'.$seoStart. $value['label'].$seoEnd.'</a>
 					</li>';
 	}
 				
@@ -73,9 +134,13 @@ function getHtmlDropdownSort($sort, $current, $seoTag = null) {
 /**
  * TODO: documentar!
  */
-function getHtmlGallery($pictures, $alt = 'Picture %s') {
+function getHtmlGallery($pictures, $alt = null) {
+	$CI = & get_instance();
 	if (empty($pictures)) {
 		return '';
+	}
+	if ($alt == null) {
+		$alt = $CI->lang->line('Picture %s');
 	}
 	
 	$html = '';

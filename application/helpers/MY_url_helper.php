@@ -19,6 +19,7 @@ function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $en
 		if ($entityTypeId == config_item('entityTypeCountry')) {
 			unset($currentFilters[config_item('entityTypeState')]);
 			unset($currentFilters[config_item('entityTypeCity')]);
+			unset($currentFilters[config_item('entityTypePlace')]);
 		}
 		if ($entityTypeId == config_item('entityTypeState')) {
 			unset($currentFilters[config_item('entityTypeCity')]);
@@ -117,4 +118,57 @@ function appendFilesToCarabiner() {
 	foreach ($aCss as $css) {
 		$CI->carabiner->css($css);
 	}
+}
+
+function errorForbidden() {
+	$CI = &get_instance();
+	$CI->load->library('../controllers/error');
+	initLang(); // FIXME: revisar; se esta vaciando la session al hacer el redirect
+	$CI->safety->initSession();
+	$CI->error->forbidden();
+}
+
+function error404() {
+	$CI = &get_instance();
+	$CI->load->library('../controllers/error');
+	$CI->error->error404();	
+}
+
+
+function popupLogin($onLoginUrl = null) {
+	$CI = &get_instance();
+	$CI->load->library('../controllers/login');
+
+	if ($onLoginUrl == null) {
+		$onLoginUrl = uri_string();
+	}
+	$CI->session->set_userdata(array( 'onLoginUrl'  => $onLoginUrl ));
+	$CI->login->popupLogin();
+}
+
+function loadViewAjax($code, $result = null) {
+	$CI = &get_instance();
+
+	if ($result == null) {
+		$result = array();
+	}	
+	if ($code != true) {
+		$result['formErrors'] = validation_array_errors();
+	}
+	
+	return $CI->load->view('json', array(
+		'code'   => $code, 
+		'result' => $result,
+	));	
+}
+
+function getPageName() {
+	$aTmp        = explode('/', uri_string());
+	$controller  = $aTmp[0];
+	if (trim($controller) == '') {
+		$CI         = &get_instance();
+		$controller = $CI->router->default_controller;
+	}
+
+	return 'cr-page-' . $controller . (count($aTmp) > 1 ? '-'.$aTmp[1] : '');
 }
