@@ -312,6 +312,7 @@ $.extend({
 		if (crSettings.momentLoaded != true) {
 			crSettings.momentLoaded = true;
 			moment.lang(crSettings.langId);
+			crSettings.fixDatetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		}
 		
 		if ($element.data('datetime') == null) {
@@ -322,11 +323,12 @@ $.extend({
 		if (datetime == '') {
 			return;
 		}
+		
 		if (moment(datetime, 'YYYY-MM-DDTHH:mm:ss').isValid() == false) {
 			$element.text('');
 			return;
 		}
-		
+
 		var $moment = moment(datetime, 'YYYY-MM-DDTHH:mm:ss' );
 		var format  = crLang.line('MOMENT_DATE_FORMAT');
 		if ($element.hasClass('datetime')) {
@@ -336,7 +338,7 @@ $.extend({
 		$element.attr('title', $moment.format(format) );
 		
 		if ($element.hasClass('fromNow')) {
-			$element.text( $moment.fromNow() );
+			$element.text( $moment.from( moment().add(-crSettings.fixDatetime, 'ms')));
 		}
 		else {
 			$element.text( $moment.format( format) );

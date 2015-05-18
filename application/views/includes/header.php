@@ -96,20 +96,8 @@ $siteLogo = config_item('siteLogo');
 			</div>
 
 			<div class="navbar-collapse collapse navbar-ex1-collapse ">
-				<form class="navbar-form navbar-left" role="search" style="display:none"> <!--  TODO: implementar el buscador!-->
-					<div class="form-group" >
-						<div class="input-group">
-							<span class="input-group-addon">
-								<i class="fa fa-search" ></i>
-							</span>
-							<input type="text" class="form-control" placeholder="search ..." />
-							<span class="input-group-btn">
-								<button  class="btnSearch btn btn-default">Search</button>
-							</span>
-						</div>
-					</div>
-				</form>
 <?php
+echo getHtmlFormSearch();
 echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'menuProfile nav navbar-nav navbar-right');
 ?>
 			</div>

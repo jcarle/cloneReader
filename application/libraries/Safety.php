@@ -3,7 +3,11 @@ class Safety {
 	function __construct() {
 		$CI = &get_instance();
 
-//$CI->output->enable_profiler(FALSE);		
+		if (ENVIRONMENT == 'production') {
+			$CI->db->save_queries = false;
+		}
+
+		//$CI->output->enable_profiler(FALSE);		
 	}
 	
 	function initSession() {

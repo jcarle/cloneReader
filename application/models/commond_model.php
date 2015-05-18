@@ -201,6 +201,15 @@ class Commond_Model extends CI_Model {
 		//pr($this->db->last_query());  die;
 		return $query;
 	}
+
+	function deleteEntitySearch( array $aEntityTypeId, $entityId = null) {
+		$this->db->where_in('entityTypeId', $aEntityTypeId);
+		if ($entityId != null) {
+			$this->db->where_in('entityId', $entityId);
+		}
+		
+		$this->db->delete('entities_search');
+	}
 	
 	/**
 	 * Apendea los indices countryId, stateId, y cityId al array $values
@@ -300,6 +309,22 @@ class Commond_Model extends CI_Model {
 			return $entity['text'];
 		}
 		return '';
+	}
+
+	function getProcessLastUpdate($processName) {
+		$query = $this->db
+			->where('processName', $processName)
+			->get('process')->row_array();
+		//pr($this->db->last_query()); die;
+		return $query['lastUpdate'];
+	}
+	
+	function updateProcessDate($processName) {
+		$query = " UPDATE process set 
+			lastUpdate = NOW()
+			WHERE processName = '".$processName."' ";
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
 	}
 
 	/**

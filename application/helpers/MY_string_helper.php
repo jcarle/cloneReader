@@ -191,3 +191,33 @@ function getHtmlPagination($foundRows, $pageSize, $params) {
 	}
 	return '';
 }	
+
+
+function getHtmlFormSearch($isHeader = true) {
+	$CI        = & get_instance();
+	$frmName   = 'frmSearch';
+	
+	$html = '
+		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('search').'">
+			<a href="'.base_url('search').'" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
+			
+			<input name="t" type="hidden" value="" />
+			
+			<div class="form-group '.($isHeader == true ? ' hidden-md hidden-sm ' : '').'" >
+				<div class="input-group">
+					<input type="text" class="form-control" name="q" placeholder="'. $CI->lang->line('search').' ..."  value="'.$CI->input->get('q').'" />
+					<span class="input-group-btn">
+						<button  class="btn btn-default"> '. $CI->lang->line('Search').'</button>
+					</span>
+				</div>
+			</div>
+		</form>	';
+	
+	return $html;
+}
+
+function getHtmlAdsense($slotName) {
+	$html = '<div class="adsbygoogle" data-slot-id="'.config_item('google-dfp-slotId').'" data-slot-name="'.$slotName.'"> </div>';
+
+	return $html;
+}

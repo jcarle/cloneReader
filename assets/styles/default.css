@@ -46,6 +46,9 @@ body.isLoading, body.isLoading * {
 	border-radius:0;
 	border-bottom: 1px #ccc solid;
 }
+		#header form .btn-default {
+			background: #F5F5F5;
+		}
 	#header .navbar-collapse {
 		max-height:none;
 	}
@@ -64,11 +67,8 @@ body.isLoading, body.isLoading * {
 				}
 			
 @media (min-width: 768px) {
-	#header .navbar-collapse {
-		float:right;
-	}
 	#header form {
-		max-width:350px;
+		max-width:450px;
 	}	
 	#header ul.menuProfile { }
 		#header ul.menuProfile > li { }
@@ -125,6 +125,7 @@ body.isLoading, body.isLoading * {
 	#header form {
 		border-top: 0 solid #FF0000;
 		margin-top: 4px;
+		box-shadow: none;
 	}		
 	#header ul.menuProfile {
 		float:none !important;

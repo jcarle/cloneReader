@@ -268,6 +268,9 @@ class Users_Model extends CI_Model {
 	
 	function delete($userId) {
 		$this->db->delete('users', array('userId' => $userId));
+		
+		$this->Commond_Model->deleteEntitySearch(array(config_item('entityTypeUser')), $userId);
+		
 		return true;
 	}		
 	
@@ -447,5 +450,39 @@ class Users_Model extends CI_Model {
 		}
 
 		$this->db->delete('users', array('userId' => $userId));
+	}
+	
+	function saveUsersSearch($deleteEntitySearch = false, $onlyUpdates = false, $userId = null) {
+		if ($deleteEntitySearch == true) {
+			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeUser')));
+		}
+		
+		$aWhere = array();
+		if ($onlyUpdates == true) {
+			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveUsersSearch');
+			$aWhere[] = ' users.lastUpdate > \''.$lastUpdate.'\' ';
+		}
+		if ($userId != null) {
+			$aWhere[] = ' users.userId = '.(int)$userId;
+		}
+
+		$searchKey = 'searchUsers';
+		$query = "REPLACE INTO entities_search
+			(entityTypeId, entityId, entityNameSearch, entityName, entityTree, entityReverseTree)
+			SELECT ".config_item('entityTypeUser').", userId, 
+			CONCAT_WS(' ', '$searchKey', userFirstName, userLastName), 
+			CONCAT_WS(' ', userFirstName, userLastName), 
+			CONCAT_WS(' ', userFirstName, userLastName),
+			CONCAT_WS(' ', userLastName, userFirstName)
+			FROM users 
+			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." ";
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
+		
+		if ($userId == null) {
+			$this->Commond_Model->updateProcessDate('saveUsersSearch');
+		}
+
+		return true;
 	}
 }

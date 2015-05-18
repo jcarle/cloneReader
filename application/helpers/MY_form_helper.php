@@ -379,7 +379,7 @@ function renderCrFormFields($form) {
 				$source = element('source', $field, array());
 				$source = sourceToDropdown($source, element('appendNullOption', $field));
 
-				$properties = array('class="form-control"', 'placeholder' => element('placeholder', $field));
+				$properties = array('class="form-control"', 'placeholder="'.element('placeholder', $field).'"');
 
 				if (element('multiple', $field) == true) {
 					$properties[] = 'multiple="multiple"';
