@@ -154,12 +154,12 @@ class Tags_Model extends CI_Model {
 		}
 
 		$searchKey = 'searchTags';
-		$query = 'INSERT INTO entities_search
+		$query = " INSERT INTO entities_search
 			(entityTypeId, entityId, entityNameSearch, entityName, entityTree)
-			SELECT DISTINCT '.config_item('entityTypeTag').', tags.tagId, CONCAT( IF(feedId IS NOT NULL, \' tagHasFeed \', \'\'), \''.$searchKey.'\', tagName), tagName, tagName
+			SELECT DISTINCT ".config_item('entityTypeTag').", tags.tagId, CONCAT( IF(feedId IS NOT NULL, ' tagHasFeed ', ''), '".$searchKey."', tagName), tagName, tagName
 			FROM tags
 			LEFT JOIN feeds_tags ON feeds_tags.tagId = tags.tagId
-			'.(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." ";
+			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." ";
 		$this->db->query($query);
 		//pr($this->db->last_query()); die;
 

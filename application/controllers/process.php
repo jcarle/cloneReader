@@ -67,21 +67,6 @@ class Process extends CI_Controller {
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
-	
-	function saveFeedsSearch() {
-		$this->load->model(array('Feeds_Model'));
-		$this->clearEntitySearch( array(config_item('entityTypeFeed')));
-
-		$searchKey = ' searchFeeds ';
-		$query = 'INSERT INTO entities_search
-			(entityTypeId, entityId, entitySearch, entityTree, entityReverseTree)
-			SELECT '.config_item('entityTypeFeed').', feedId, CONCAT(IF(statusId = '.config_item('feedStatusApproved').', \' feedStatusApproved \', \'\'),  \''.$searchKey.'\', feedName), FeedName, FeedName
-			FROM feeds  ';
-		$this->db->query($query);
-		//pr($this->db->last_query()); die;
-
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
-	}
 
 	function saveEntitiesSearch($entityTypeId = null, $onlyUpdates = false) {
 		$onlyUpdates = ($onlyUpdates == 'true');

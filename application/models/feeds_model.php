@@ -584,4 +584,35 @@ class Feeds_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return $query;
 	}
+	
+	function saveFeedsSearch($deleteEntitySearch = false, $onlyUpdates = false, $feedId = null) {
+		if ($deleteEntitySearch == true) {
+			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeFeed')));
+		}
+		
+		$aWhere = array();
+		if ($onlyUpdates == true) {
+			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveFeedsSearch');
+			$aWhere[] = ' feeds.lastUpdate > \''.$lastUpdate.'\' ';
+		}
+		if ($feedId != null) {
+			$aWhere[] = ' feeds.feedId = '.(int)$feedId;
+		}
+
+		$searchKey = 'searchFeeds';
+		
+		$query = " INSERT INTO entities_search
+			(entityTypeId, entityId, entityNameSearch, entityName, entityTree)
+			SELECT ".config_item('entityTypeFeed').", feedId, CONCAT(IF(statusId = ".config_item('feedStatusApproved').", ' feedStatusApproved ', ''),  '".$searchKey."', feedName), FeedName, FeedName
+			FROM feeds 
+			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." ";
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
+		
+		if ($feedId == null) {
+			$this->Commond_Model->updateProcessDate('saveFeedsSearch');
+		}
+
+		return true;
+	}	
 }

@@ -15,7 +15,7 @@ $items = array(
 			),
 			array(
 				'text'    => 'Feeds',
-				'url'     => 'process/saveFeedsSearch',
+				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeFeed'),
 				'childs' => array(
 					array(
 						'text'   => 'Only rows updated',
