@@ -137,5 +137,36 @@ class Tags_Model extends CI_Model {
 		$this->db->delete('users_entries', array('tagId' => $tagId, 'userId' => $userId));
 		
 		return true;
-	}	
+	}
+	
+	function saveTagsSearch($deleteEntitySearch = false, $onlyUpdates = false, $tagId = null) {
+		if ($deleteEntitySearch == true) {
+			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeTag')));
+		}
+		
+		$aWhere = array(' tags.tagId NOT IN ( '.config_item('tagAll').', '.config_item('tagStar').', '.config_item('tagHome').', '.config_item('tagBrowse').' ) ');
+		if ($onlyUpdates == true) {
+			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveTagsSearch');
+			$aWhere[] = ' tags.lastUpdate > \''.$lastUpdate.'\' ';
+		}
+		if ($tagId != null) {
+			$aWhere[] = ' tags.tagId = '.(int)$tagId;
+		}
+
+		$searchKey = 'searchTags';
+		$query = 'INSERT INTO entities_search
+			(entityTypeId, entityId, entityNameSearch, entityName, entityTree)
+			SELECT DISTINCT '.config_item('entityTypeTag').', tags.tagId, CONCAT( IF(feedId IS NOT NULL, \' tagHasFeed \', \'\'), \''.$searchKey.'\', tagName), tagName, tagName
+			FROM tags
+			LEFT JOIN feeds_tags ON feeds_tags.tagId = tags.tagId
+			'.(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." ";
+		$this->db->query($query);
+		//pr($this->db->last_query()); die;
+
+		if ($tagId == null) {
+			$this->Commond_Model->updateProcessDate('saveTagsSearch');
+		}
+
+		return true;
+	}
 }

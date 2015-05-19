@@ -25,7 +25,7 @@ $items = array(
 			),
 			array(
 				'text'    => 'Tags',
-				'url'     => 'process/saveTagsSearch',
+				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeTag'),
 				'childs' => array(
 					array(
 						'text'   => 'Only rows updated',

@@ -101,25 +101,21 @@ class Process extends CI_Controller {
 			$this->load->model('Users_Model');
 			$this->Users_Model->saveUsersSearch(($onlyUpdates != true), $onlyUpdates);
 		}
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeTag')) {
+			$this->load->model('Tags_Model');
+			$this->Tags_Model->saveTagsSearch(($onlyUpdates != true), $onlyUpdates);
+		}
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeFeed')) {
+			$this->load->model('Feeds_Model');
+			$this->Feeds_Model->saveFeedsSearch(($onlyUpdates != true), $onlyUpdates);
+		}
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeEntries')) {
+			$this->load->model('Entriess_Model');
+			$this->Entries_Model->saveEntriesSearch(($onlyUpdates != true), $onlyUpdates);
+		}
 
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
-	}		
-	
-	function saveTagsSearch() {
-		$this->clearEntitySearch( array(config_item('entityTypeTag')));
-
-		$searchKey = ' searchTags ';
-		$query = 'INSERT INTO entities_search
-			(entityTypeId, entityId, entitySearch, entityTree, entityReverseTree)
-			SELECT DISTINCT '.config_item('entityTypeTag').', tags.tagId, CONCAT( IF(feedId IS NOT NULL, \' tagHasFeed \', \'\'), \''.$searchKey.'\', tagName), tagName, tagName
-			FROM tags
-			LEFT JOIN feeds_tags ON feeds_tags.tagId = tags.tagId
-			WHERE tags.tagId NOT IN ( '.config_item('tagAll').', '.config_item('tagStar').', '.config_item('tagHome').', '.config_item('tagBrowse').' )  ';
-		$this->db->query($query);
-		//pr($this->db->last_query()); die;
-
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
-	}	
+	}
 	
 	function clearEntitySearch( array $aEntityTypeId) {
 		$this->db
