@@ -8,6 +8,7 @@ class Tags_Model extends CI_Model {
 	 * 			'userId'          => null,
 	 * 			'feedId'          => null,
 	 * 			'hideSystemTags'  => null,
+	 * 			'notOnlyFeedId'   => null, // filtra tags que tengan más feeds que el seleccionado 
 	 * 		);
 	 * */	
 	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
@@ -33,6 +34,10 @@ class Tags_Model extends CI_Model {
 			// TODO: meter $aSystenTags en el config
 			$aSystenTags = array(config_item('tagAll'), config_item('tagStar'), config_item('tagHome'), config_item('tagBrowse'));
 			$this->db->where_not_in('tags.tagId', $aSystenTags);
+		}
+		
+		if (element('notOnlyFeedId', $filters) == true && element('feedId', $filters) != null) {
+			$this->db->where(' tags.tagId IN ( SELECT tagId FROM feeds_tags WHERE feedId <> '.$filters['feedId'].')', null, false);
 		}
 
 		$this->Commond_Model->appendOrderByInQuery($orders, array( 'tagId', 'tagName', 'countTotal'));

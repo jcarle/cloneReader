@@ -5,7 +5,7 @@ cloneReader = {
 		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
 		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
 		
-		this.fixDatetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
+		this.fixDatetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
 		moment.lang(crSettings.langId);
 		this.isMobile = $.isMobile();
 
@@ -804,10 +804,14 @@ TODO: pensar como mejorar esta parte
 		this.aEntries[entryId].entryRead = value;
 		if (entryRead != value) {
 			this.addToSave(this.aEntries[entryId]);
+
+			var feedId  = this.aEntries[entryId].feedId;
+			var filter  = this.indexFilters['feed'][feedId];
+			var sum     = (value == true ? -1 : +1);
 			
-			var feedId 	= this.aEntries[entryId].feedId;
-			var filter 	= this.indexFilters['feed'][feedId];
-			var sum 	= (value == true ? -1 : +1);
+			if (filter == null) {
+				return;
+			}
 			
 			filter.count = parseInt(filter.count) + sum;
 			if (filter.count < 0) {
@@ -1332,9 +1336,13 @@ console.timeEnd("t1");
 			'success': 	
 				$.proxy(
 					function(feedId, response) {
-						if ($.hasAjaxDefaultAction(response) == true) { return; }
+						$.hasAjaxDefaultAction(response);
+						if (response['code'] != true  == true) { return; }
 						
-						cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': feedId }); 
+						var $button = this.$ulEntries.find('.browseTags .feedItem-' + feedId + ' button');
+						$button.after('<a title="' + crLang.line('Done') + '" class="btn btn-link"  > <i class="fa fa-check"  /> ' +  crLang.line('Done') + ' </a>');
+						$button.remove();
+
 						cloneReader.loadFilters(true);
 					}
 				, this, feedId)
@@ -1787,24 +1795,32 @@ console.timeEnd("t1");
 						var feed            = response.result.feeds[i];
 						var feedId          = feed.feedId;
 						var feedDescription = $.stripTags(feed.feedDescription);
+						if (feedDescription == null || feedDescription == 'null') {
+							feedDescription = '';
+						}
 						var $feed = $(
-						'<div class="list-group-item">\
+						'<div class="list-group-item feedItem-' + feedId + '">\
 							<h4 class="list-group-item-heading"> \ ' + feed.feedName + '</h4> \
 							<p class="list-group-item-text">' + feedDescription + '</p>  \
 							<a class="feedLink" href="' + feed.feedLink + '">' + (feed.feedLink == null ? '' : feed.feedLink) + '</a>  \
 							<br/> <span class="label label-warning"> ' + $.sprintf(crLang.line('%s users'), feed.feedCountUsers) + ' </span> \
 							<div class="alert alert-warning"> </div> \
-							<button title="' + crLang.line('Subscribe') + '" class="btn btn-success" type="button"> \
+							<button title="' + crLang.line('Subscribe') + '" class="btn btn-success" type="button" > \
 								<i class="fa fa-plus"  /> \
 								<span class="btnLabel">' +  crLang.line('Subscribe') + '</span> \
 							</button> \
 						</div>');
 						
-						$feed.find('button').click($.proxy(
-							function(feedId) {
-								this.subscribeFeed(feedId);
+						$feed.find('button')
+							.data('feedId', feedId)
+							.click(
+							function() {
+								var $button = $(this);
+								$button.attr('disabled', 'disabled');
+								$button.append(' <i class="iconLoading fa fa-spinner fa-spin " /> ');
+								cloneReader.subscribeFeed($button.data('feedId'));
 							}
-						, this, feedId));
+						);
 						
 						this.renderBrowseFeedTags(feed.tags, $feed.find('.alert'));
 						
@@ -1849,7 +1865,7 @@ console.timeEnd("t1");
 	},
 	
 	humanizeDatetime: function(datetime, format) {
-		var datetime = moment(datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
+		var datetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
 		if (datetime >= moment()) {
 			datetime = moment().add('ms', -1);
 		} 

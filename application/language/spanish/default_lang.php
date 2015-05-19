@@ -226,3 +226,4 @@ $lang['Add car'] = 'Agregar auto';
 $lang['Please log in to continue'] = 'Por favor, identificáte para continuar';
 $lang['Locate'] = 'Localizar';
 $lang['Only rows updated'] = 'Sólo los registros actualizados';
+$lang['Done'] = 'Hecho!';

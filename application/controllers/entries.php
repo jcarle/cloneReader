@@ -248,7 +248,7 @@ class Entries extends CI_Controller {
 		// guardo las entries en el user
 		$this->Entries_Model->saveUserEntries($userId, $feedId);
 
-		return loadViewAjax(true, 'ok');
+		return loadViewAjax(true, array('notification' => $this->lang->line('The feed has been sent successfully')) );
 	}
 	
 	function unsubscribeFeed() {

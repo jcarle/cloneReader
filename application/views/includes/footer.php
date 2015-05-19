@@ -10,14 +10,14 @@ $crSettings = array(
 	'addTitleSiteName'    => config_item('addTitleSiteName'),
 	'defaultCurrencyId'   => config_item('defaultCurrencyId'),
 	'defaultCurrencyName' => config_item('defaultCurrencyName'),
-	'environment'         => ENVIRONMENT
+	'environment'         => ENVIRONMENT,
+	'datetime'            => $this->Commond_Model->getCurrentDateTime(),
 );
 
 echo '	
 	<script type="text/javascript" >
 		var crSettings  = '.json_encode($crSettings).';
 		var base_url    = \''. base_url().'\';
-		var datetime    = \''. $this->Commond_Model->getCurrentDateTime().'\';
 	</script>';
 
 $this->carabiner->display('js');		

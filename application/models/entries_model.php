@@ -501,10 +501,10 @@ class Entries_Model extends CI_Model {
 	}
 
 	function subscribeFeed($feedId, $userId) {
-		$this->db->ignore()->insert('users_feeds', array( 'feedId'	=> $feedId, 'userId' => $userId ));
-		//pr($this->db->last_query());		
+		$this->db->ignore()->insert('users_feeds', array( 'feedId' => $feedId, 'userId' => $userId ));
+		//pr($this->db->last_query()); die;
 		
-		return true;		
+		return true;
 	}
 	
 	function unsubscribeFeed($feedId, $userId) {
@@ -591,8 +591,8 @@ class Entries_Model extends CI_Model {
 				
 		$query = ' SELECT DISTINCT feeds.feedId, feedName, feedUrl, feedLink, feeds.feedIcon, feedDescription, feedCountUsers
 						FROM tags 
-						INNER JOIN feeds_tags 	ON feeds_tags.tagId 	= tags.tagId 
-						INNER JOIN feeds 		ON feeds.feedId 		= feeds_tags.feedId 
+						INNER JOIN feeds_tags ON feeds_tags.tagId = tags.tagId 
+						INNER JOIN feeds      ON feeds.feedId     = feeds_tags.feedId 
 						WHERE tags.tagId = '.(INT)$tagId.'
 						AND feeds.feedId NOT IN ( SELECT feedId FROM users_feeds WHERE userId = '.(int)$userId.') 
 						AND feeds.langId IN (\''.implode('\' , \'', $languages).'\')
@@ -601,7 +601,7 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query());   die;
 		foreach ($query as $data) {
 			// TODO: harckodeta!!
-			$tags = $this->Tags_Model->selectToList(1, 15, array('feedId' => $data['feedId']), array(array('orderBy' =>'countTotal', 'orderDir' =>'desc')));
+			$tags = $this->Tags_Model->selectToList(1, 15, array('feedId' => $data['feedId'], 'notOnlyFeedId' => true), array(array('orderBy' =>'countTotal', 'orderDir' =>'desc')));
 			foreach ($tags['data'] as $tag) {
 				$data['tags'][] = array('tagId' => $tag['tagId'], 'tagName' => $tag['tagName']);
 			}
