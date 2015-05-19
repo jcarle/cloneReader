@@ -5,16 +5,34 @@ $items = array(
 		'buttons' => array(
 			array(
 				'text'    => 'Users',
-				'url'     => 'process/saveUsersSearch',
+				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeUser'),
+				'childs' => array(
+					array(
+						'text'   => 'Only rows updated',
+						'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeUser').'/true',
+					),
+				),
 			),
 			array(
 				'text'    => 'Feeds',
 				'url'     => 'process/saveFeedsSearch',
+				'childs' => array(
+					array(
+						'text'   => 'Only rows updated',
+						'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeFeed').'/true',
+					),
+				),1
 			),
 			array(
 				'text'    => 'Tags',
 				'url'     => 'process/saveTagsSearch',
-			),			
+				'childs' => array(
+					array(
+						'text'   => 'Only rows updated',
+						'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeTag').'/true',
+					),
+				),
+			),
 		),
 	),
 	array(
@@ -42,8 +60,8 @@ $items = array(
 				'text' => 'Delete old entries',
 				'url'  => 'process/deleteOldEntries',
 			),
-		)
-	)
+		),
+	),
 );
 ?>
 <div class="row">
@@ -53,16 +71,33 @@ $items = array(
 foreach ($items as $item) {
 ?>
 			<li class="list-group-item clearfix">
-				<h4 class="list-group-item-heading"><?php echo $item['title']; ?> </h4>
+				<h4 class="list-group-item-heading"><?php echo $this->lang->line($item['title']); ?> </h4>
 <?php
 	foreach ($item['buttons'] as $process) {
-?>		
-				<a title="<?php echo $process['text']; ?>" href="javascript:$.process.submit('<?php echo base_url($process['url']); ?>');" class="btn btn-primary" >
-					<i class="fa fa-cog"></i>
-					<?php echo $process['text']; ?>
-				</a>
-
-<?php
+		if (!isset($process['childs'])) {
+			echo '
+				<a title="'. $this->lang->line($process['text']).'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn btn-primary" >
+					<i class="fa fa-cog"></i> '. $this->lang->line($process['text']).'
+				</a>';
+		}
+		else {
+			echo '
+				<div class="btn-group">
+					<a title="'. $process['text'].'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn btn-primary" >
+						<i class="fa fa-cog"></i> '. $this->lang->line($process['text']).'
+					</a>
+					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu" role="menu"> ';
+			foreach ($process['childs'] as $child) {
+				echo ' <li> <a title="'. $this->lang->line($child['text']).'" href="javascript:$.process.submit(\''. base_url($child['url']).'\');"  > '. $this->lang->line($child['text']).' </a> </li>';
+			}
+			echo '
+					</ul>
+				</div> ';
+		}
 	}
 ?>
 			</li>

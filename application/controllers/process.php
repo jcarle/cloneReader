@@ -1,5 +1,6 @@
 <?php 
 class Process extends CI_Controller {
+
 	function __construct() {
 		parent::__construct();	
 		
@@ -8,11 +9,12 @@ class Process extends CI_Controller {
 				throw new Exception(' Not Found');
 			}
 		}
-		
+
+		$this->output->enable_profiler(false);
+		$this->db->save_queries = false;
+
 		set_time_limit(0);
 		ini_set('memory_limit', '512M');
-		
-		$this->load->model(array('Feeds_Model'));
 	}
 	
 	function index() {
@@ -26,18 +28,21 @@ class Process extends CI_Controller {
 	
 
 	function scanAllFeeds($userId = null) {
+		$this->load->model(array('Feeds_Model'));
 		$this->Feeds_Model->scanAllFeeds($userId);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 	
 	function rescanAll404Feeds() {
+		$this->load->model(array('Feeds_Model'));
 		$this->Feeds_Model->scanAllFeeds(null, null, true);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 	
 	function scanFeed($feedId) {
+		$this->load->model(array('Feeds_Model'));
 		$this->db->trans_start();
 		
 		if ($this->input->is_cli_request()) {
@@ -57,12 +62,14 @@ class Process extends CI_Controller {
 	}
 	
 	function processFeedsTags() {
+		$this->load->model(array('Feeds_Model'));
 		$this->Feeds_Model->processFeedsTags();
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 	
 	function saveFeedsSearch() {
+		$this->load->model(array('Feeds_Model'));
 		$this->clearEntitySearch( array(config_item('entityTypeFeed')));
 
 		$searchKey = ' searchFeeds ';
@@ -76,19 +83,27 @@ class Process extends CI_Controller {
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
 
-	function saveUsersSearch() {
-		$this->clearEntitySearch( array(config_item('entityTypeUser')));
-
-		$searchKey = ' searchUsers  ';
-		$query = 'INSERT INTO entities_search
-			(entityTypeId, entityId, entitySearch, entityTree, entityReverseTree)
-			SELECT '.config_item('entityTypeUser').', userId, CONCAT(\''.$searchKey.'\', userFirstName, userLastName), CONCAT(userFirstName, \' \', userLastName), CONCAT(userLastName, \' \', userFirstName)
-			FROM users  ';
-		$this->db->query($query);
-		//pr($this->db->last_query()); die;
+	function saveEntitiesSearch($entityTypeId = null, $onlyUpdates = false) {
+		$onlyUpdates = ($onlyUpdates == 'true');
+		if ($entityTypeId == 'null') {
+			$entityTypeId == null;
+		}
 		
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeCity')) {
+			$this->load->model('Countries_Model');
+			$this->Countries_Model->saveZonesSearch(($onlyUpdates != true), $onlyUpdates);
+		}
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypePlace')) {
+			$this->load->model('Places_Model');
+			$this->Places_Model->savePlacesSearch(($onlyUpdates != true), $onlyUpdates);
+		}
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeUser')) {
+			$this->load->model('Users_Model');
+			$this->Users_Model->saveUsersSearch(($onlyUpdates != true), $onlyUpdates);
+		}
+
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
-	}
+	}		
 	
 	function saveTagsSearch() {
 		$this->clearEntitySearch( array(config_item('entityTypeTag')));
