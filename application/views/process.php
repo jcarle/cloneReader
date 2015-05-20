@@ -21,7 +21,17 @@ $items = array(
 						'text'   => 'Only rows updated',
 						'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeFeed').'/true',
 					),
-				),1
+				),
+			),
+			array(
+				'text'    => 'Entries',
+				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeEntry'),
+				'childs' => array(
+					array(
+						'text'   => 'Only rows updated',
+						'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeEntry').'/true',
+					),
+				),
 			),
 			array(
 				'text'    => 'Tags',
@@ -30,6 +40,16 @@ $items = array(
 					array(
 						'text'   => 'Only rows updated',
 						'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeTag').'/true',
+					),
+				),
+			),
+			array(
+				'text'    => 'All entities',
+				'url'     => 'process/saveEntitiesSearch',
+				'childs' => array(
+					array(
+						'text'   => 'Only rows updated',
+						'url'    => 'process/saveEntitiesSearch/null/true',
 					),
 				),
 			),

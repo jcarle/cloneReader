@@ -731,4 +731,38 @@ class Entries_Model extends CI_Model {
 		
 		return ($rowsAffected > 0);
 	}
+
+	function saveEntriesSearch($deleteEntitySearch = false, $onlyUpdates = false, $entryId = null) {
+		if ($deleteEntitySearch == true) {
+			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeEntry')));
+		}
+		
+		$aWhere = array();
+		if ($onlyUpdates == true) {
+			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveEntriesSearch');
+			$aWhere[] = ' (entries.lastUpdate > \''.$lastUpdate.'\' OR feeds.lastUpdate > \''.$lastUpdate.'\') ';
+		}
+		if ($entryId != null) {
+			$aWhere[] = ' entries.entryId = '.(int)$entryId;
+		}
+
+		$searchKey = 'searchEntries';
+		
+		$query = " REPLACE INTO entities_search
+			(entityTypeId, entityId, entityFullSearch, entityName)
+			SELECT ".config_item('entityTypeEntry').", entryId, strip_tags(CONCAT_WS(' ', '".$searchKey."',  entryTitle, entryContent, feedName)), entryTitle
+			FROM entries
+			INNER JOIN feeds ON feeds.feedId = entries.feedId
+			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." 
+LIMIT 1000			
+			";
+		$this->db->query($query);
+		pr($this->db->last_query()); die;
+		
+		if ($entryId == null) {
+			$this->Commond_Model->updateProcessDate('saveEntriesSearch');
+		}
+
+		return true;
+	}	
 }

@@ -130,13 +130,17 @@ class Feeds_Model extends CI_Model {
 			$this->db->insert('feeds', $values);
 			$feedId = $this->db->insert_id();
 		}
+
 		//pr($this->db->last_query());
+		$this->saveFeedsSearch(false, false, $feedId);
 
 		return $feedId;
 	}
 	
 	function delete($feedId) {
 		$this->db->delete('feeds', array('feedId' => $feedId));
+		$this->Commond_Model->deleteEntitySearch(array(config_item('entityTypeFeed')), $feedId);
+
 		return true;
 	}
 	
@@ -193,6 +197,7 @@ class Feeds_Model extends CI_Model {
 	
 	function updateFeedStatus($feedId, $statusId) {
 		$this->db->update('feeds', array('statusId' => $statusId), array('feedId' => $feedId));
+		$this->saveFeedsSearch(false, false, $feedId);
 		//pr($this->db->last_query());		
 	}
 	
@@ -601,9 +606,9 @@ class Feeds_Model extends CI_Model {
 
 		$searchKey = 'searchFeeds';
 		
-		$query = " INSERT INTO entities_search
+		$query = " REPLACE INTO entities_search
 			(entityTypeId, entityId, entityNameSearch, entityName, entityTree)
-			SELECT ".config_item('entityTypeFeed').", feedId, CONCAT(IF(statusId = ".config_item('feedStatusApproved').", ' feedStatusApproved ', ''),  '".$searchKey."', feedName), FeedName, FeedName
+			SELECT ".config_item('entityTypeFeed').", feedId, CONCAT_WS(' ', IF(statusId = ".config_item('feedStatusApproved').", ' feedStatusApproved ', ''),  '".$searchKey."', feedName), FeedName, FeedName
 			FROM feeds 
 			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." ";
 		$this->db->query($query);

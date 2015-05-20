@@ -439,9 +439,12 @@
 			});
 			
 			field.$input.on('change', function(event) {
-				if ($(this).val() != null) {
-					field.$input.data('$field').val( $.toJSON($(this).val()));
+				var value  = null;
+				var $input = $(this);
+				if ($input.val() != null) {
+					value  = $.toJSON($input.val()); 
 				}
+				$input.data('$field').val(value);
 			});
 
 			field.$input
@@ -1049,13 +1052,15 @@
 					break;
 				case 'text':
 				case 'numeric':
+				case 'typeahead':
 					var $input = $('<input type="text" />')
 						.attr('name', name)
-						.val( field['value'])
 						.addClass('form-control')
 						.attr('placeholder',  field['placeholder'])
 						.appendTo($div);
-
+					if (field['type'] != 'typeahead') {
+						$input.val( field['value']);
+					}
 					if (field['disabled'] == true) {
 						$input.attr('disabled', 'disabled');
 					}					
@@ -1084,9 +1089,6 @@
 						.addClass('form-control')
 						.appendTo($div);
 					break;
-				case 'typeahead':
-					$div.append('<input name="' + name + '"  type="text" class="form-control" />');
-					break;		
 				case 'dropdown':
 					var source = field['source'];
 

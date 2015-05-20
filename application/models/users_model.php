@@ -262,6 +262,8 @@ class Users_Model extends CI_Model {
 		
 		$this->safety->destroyMenuCache();
 		$this->safety->destroyControllersCache();
+
+		$this->saveUsersSearch(false, false, $userId);
 		
 		return true;
 	}
@@ -282,6 +284,8 @@ class Users_Model extends CI_Model {
 		);		
 		
 		$this->db->where('userId', $userId)->update('users', $values);
+
+		$this->saveUsersSearch(false, false, $userId);
 
 		return true;
 	}
@@ -465,7 +469,7 @@ class Users_Model extends CI_Model {
 		if ($userId != null) {
 			$aWhere[] = ' users.userId = '.(int)$userId;
 		}
-
+// TODO: reemplazar entityTree por entityFullName y entityReverseTree por entityReverseFullName
 		$searchKey = 'searchUsers';
 		$query = "REPLACE INTO entities_search
 			(entityTypeId, entityId, entityNameSearch, entityName, entityTree, entityReverseTree)

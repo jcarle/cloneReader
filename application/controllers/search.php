@@ -64,33 +64,9 @@ class Search extends CI_Controller {
 			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, $fieldName, false, false)
 		));
 	}
-	
-	function brands() {
-		$searchKey = 'searchBrands';
-
-		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, false)
-		));
-	}
-	
-	function models() {
-		$searchKey = 'searchModels';
-		
-		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, 'entityTree', false, $this->input->get('onlyApproved'))
-		));
-	}
-	
-	function cars() { 
-		$searchKey = 'searchCars';
-		
-		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, 'entityTree', true, true)
-		));
-	}
 
 	function feeds() {
-		$searchKey = ' searchFeeds ';
+		$searchKey = 'searchFeeds';
 		
 		return $this->load->view('json', array(
 			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, null, false, false)
@@ -98,14 +74,15 @@ class Search extends CI_Controller {
 	}
 	
 	function tags() {
-		$searchKey = ' searchTags ';
+		$searchKey = 'searchTags';
 		
 		if ($this->input->get('onlyWithFeeds') == 'true') {
-			$searchKey .= ' tagHasFeed ';
+			$searchKey .= ' tagHasFeed';
 		}
 		
 		return $this->load->view('json', array(
-			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, false)
+											  //searchEntityName($search,                    $searchKey = '', $fieldName = null, $contactEntityTypeId = false, $onlyApproved = true) {
+			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, null, false, false)
 		));
 	}	
 }

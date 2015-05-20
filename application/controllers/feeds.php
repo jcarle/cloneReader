@@ -226,7 +226,8 @@ class Feeds extends CI_Controller {
 					'label'        => 'Tags',
 					'source'       => base_url('search/tags/'),
 					'multiple'     => true,
-					'placeholder'  => 'tags'
+					'placeholder'  => 'tags',
+					'disabled'     => true,
 				),
 				'feedSuggest' => array(
 					'type'   => 'checkbox',

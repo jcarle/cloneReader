@@ -337,6 +337,14 @@ function renderCrFormFields($form) {
 		if (in_array($name, $formErrors)) {
 			$hasError = 'has-error';
 		}
+
+		$properties = array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control');
+		if (element('disabled', $field) == true) {
+			$properties += array('disabled' => 'disabled');
+		} 
+		if (element('placeholder', $field) != '') {
+			$properties += array('placeholder' => $field['placeholder']);
+		}
 		
 		$sField = '
 			<fieldset class="form-group '.$hasError.'">
@@ -349,10 +357,10 @@ function renderCrFormFields($form) {
 				break;
 			case 'text':
 			case 'numeric':
-				$properties = array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control', 'placeholder' => element('placeholder', $field));
-				if (element('disabled', $field) == true) {
-					$properties += array('disabled' => 'disabled');
-				} 
+			case 'typeahead':
+				if ($field['type'] == 'typeahead') {
+					unset($properties['value']);
+				}
 				$aFields[] = sprintf($sField, form_input($properties));
 				break;
 			case 'date':
@@ -370,25 +378,13 @@ function renderCrFormFields($form) {
 			case 'textarea':
 				$aFields[] = sprintf($sField, form_textarea($name, element('value', $field), 'class="form-control"'));
 				break;			
-			case 'typeahead':
-				$aFields[] = sprintf($sField, 
-					'<input name="'.$name.'"  type="text" class="form-control" />'
-				);
-				break;			
 			case 'dropdown':
 				$source = element('source', $field, array());
 				$source = sourceToDropdown($source, element('appendNullOption', $field));
-
-				$properties = array('class="form-control"', 'placeholder="'.element('placeholder', $field).'"');
-
 				if (element('multiple', $field) == true) {
-					$properties[] = 'multiple="multiple"';
+					$properties += array('multiple' => 'multiple');
 				}
-				if (element('disabled', $field) == true) {
-					$properties[] = 'disabled="disabled"';
-				}
-
-				$aFields[] = sprintf($sField, form_dropdown($name, $source, element('value', $field, null), implode(' ', $properties)));
+				$aFields[] = sprintf($sField, form_dropdown($name, $source, element('value', $field, null), _attributes_to_string($properties)));
 				break;
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);

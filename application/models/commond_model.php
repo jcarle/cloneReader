@@ -167,7 +167,7 @@ class Commond_Model extends CI_Model {
 			$fieldName = 'entityName';
 		}
 		
-		$aSearchKey = array($searchKey);
+		$aSearchKey = explode(' ', $searchKey);
 		if ($onlyApproved == true) {
 			 $aSearchKey[] = 'statusApproved';
 		}

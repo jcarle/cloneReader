@@ -9,10 +9,10 @@ class Process extends CI_Controller {
 				throw new Exception(' Not Found');
 			}
 		}
-
+/*
 		$this->output->enable_profiler(false);
 		$this->db->save_queries = false;
-
+*/
 		set_time_limit(0);
 		ini_set('memory_limit', '512M');
 	}
@@ -74,14 +74,6 @@ class Process extends CI_Controller {
 			$entityTypeId == null;
 		}
 		
-		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeCity')) {
-			$this->load->model('Countries_Model');
-			$this->Countries_Model->saveZonesSearch(($onlyUpdates != true), $onlyUpdates);
-		}
-		if ($entityTypeId == null || $entityTypeId == config_item('entityTypePlace')) {
-			$this->load->model('Places_Model');
-			$this->Places_Model->savePlacesSearch(($onlyUpdates != true), $onlyUpdates);
-		}
 		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeUser')) {
 			$this->load->model('Users_Model');
 			$this->Users_Model->saveUsersSearch(($onlyUpdates != true), $onlyUpdates);
@@ -94,8 +86,8 @@ class Process extends CI_Controller {
 			$this->load->model('Feeds_Model');
 			$this->Feeds_Model->saveFeedsSearch(($onlyUpdates != true), $onlyUpdates);
 		}
-		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeEntries')) {
-			$this->load->model('Entriess_Model');
+		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeEntry')) {
+			$this->load->model('Entries_Model');
 			$this->Entries_Model->saveEntriesSearch(($onlyUpdates != true), $onlyUpdates);
 		}
 
@@ -106,5 +98,14 @@ class Process extends CI_Controller {
 		$this->db
 			->where_in('entityTypeId', $aEntityTypeId)
 			->delete('entities_search');
+	}
+	
+	
+	
+	
+	
+	// TODO: borrar una vez que este implementado el buscador
+	function saveEntriesSearch() {
+		
 	}
 }
