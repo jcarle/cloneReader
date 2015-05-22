@@ -49,7 +49,7 @@ function truncate($string, $limit, $break=" ", $pad="...") {
 
 /**
  * Elimina las palabras reservadas y las palabras muy cortas del string de búsqueda; 
- * 	También reemplaza los caracteres especiales por caracteres buscables, ver la funcion searchReplace de mysql que hace el mismo REPLACE
+ * 	También llama a la function searchReplace
  * 
  * @param  (string) $search       a buscar
  * @param  (array)  $aSearchKey   array con las $searchKey validas (ej: statusApproved, searchUsers)
@@ -64,7 +64,7 @@ function cleanSearchString($search, $aSearchKey, $addPlus = true, $addWildcard =
 	$aSearch   = explode(' ', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $CI->db->escape_like_str($search))));
 	for($i=0; $i<count($aSearch); $i++) {
 		if (strlen($aSearch[$i]) >= 3 )  { // TODO: harckodeta
-			$result[] = str_replace(array('+', '-', '&'), array('plus', 'minus', 'ampersand'), $aSearch[$i]);
+			$result[] = searchReplace($aSearch[$i]);
 		}
 	}
 	
@@ -86,6 +86,15 @@ function cleanSearchString($search, $aSearchKey, $addPlus = true, $addWildcard =
 	$result = array_merge($aSearchKey, $result);
 	
 	return $result;
+}
+
+/**
+ * 	Reemplaza los caracteres especiales por caracteres buscables
+ *  Ver la funcion searchReplace de mysql que hace el mismo REPLACE
+ * 
+ */
+function searchReplace($string) {
+	return str_replace(array('+', '-', '&'), array('plus', 'minus', 'ampersand'), $string);
 }
 
 /**
@@ -196,13 +205,12 @@ function getHtmlPagination($foundRows, $pageSize, $params) {
 function getHtmlFormSearch($isHeader = true) {
 	$CI        = & get_instance();
 	$frmName   = 'frmSearch';
+
+	$CI->my_js->add(  '  $.Search.init($(\'.'.$frmName.'\')); ');
 	
 	$html = '
-		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('search').'">
+		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('').'">
 			<a href="'.base_url('search').'" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
-			
-			<input name="t" type="hidden" value="" />
-			
 			<div class="form-group '.($isHeader == true ? ' hidden-md hidden-sm ' : '').'" >
 				<div class="input-group">
 					<input type="text" class="form-control" name="q" placeholder="'. $CI->lang->line('search').' ..."  value="'.$CI->input->get('q').'" />

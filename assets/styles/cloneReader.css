@@ -324,6 +324,10 @@
 					padding:0 0 0 40px;
 					list-style-type: disc;
 				}
+			#cloneReader .ulEntries > li p mark {
+				background: #ff0 none repeat scroll 0 0;
+				color: #000;
+			}
 			#cloneReader .ulEntries > li .footer {
 				min-height: 1px;
 				width:100%;
@@ -728,3 +732,4 @@
 	.newDetail p {
 		white-space: pre;
 	}
+

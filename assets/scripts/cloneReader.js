@@ -24,7 +24,8 @@ cloneReader = {
 			'id':           crSettings.tagHome, 
 			'type':         'tag',
 			'viewType':     'detail',
-			'isMaximized':  false
+			'isMaximized':  false,
+			'search':       '' // $.url().param('q').trim() TODO:
 		}, aFilters);
 		this.isMaximized  = (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
 		this.aSystemTags  = [crSettings.tagAll, crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse];
@@ -38,6 +39,12 @@ cloneReader = {
 //		this.resizeWindow();
 		this.$page.trigger('onVisible');
 		this.isLoaded = true;
+
+
+	},
+
+	searchEntries: function() {
+		this.loadEntries(true, true, { 'search': $.url().param('q').trim() });
 	},
 
 	updateMainMenu: function() {
@@ -90,6 +97,7 @@ cloneReader = {
 			function() {
 				this.$mainToolbar.hide();
 				this.$toolbar.hide();
+				$.Search.clearForm();
 				$('#header .logo').attr('href', base_url);
 				$('#header').css( {'box-shadow': 'none' });
 				$('#header .container').removeClass('fullSize');
@@ -165,25 +173,25 @@ cloneReader = {
 							this.$ulEntries.find('.entry.selected .header a')[0].click();
 						}
 						break;
-					case 77: // M read entry
+					case 77: // M: read entry
 						var $entry = this.$ulEntries.find('.entry.selected');
 						if ($entry.length != 0) {
 							this.readEntry($entry, $entry.find('.read').hasClass('selected'));
 						}
 						break;
-					case 65: // A Add feed
+					case 65: // A: Add feed
 						this.$mainToolbar.find('.add').click();
 						break;
-					case 69: // E
+					case 69: // E:
 						var $entry = this.$ulEntries.find('.entry.selected');
 						if ($entry.length != 0) {
 							this.showFormShareByEmail($entry.data('entryId'));
 						}
 						break;
-					case 49: // 1 Detail view
+					case 49: // 1: Detail view
 						this.$mainToolbar.find('.viewDetail').click();
 						break;
-					case 50: // 2 List view
+					case 50: // 2: List view
 						this.$mainToolbar.find('.viewList').click();
 						break;
 				}
@@ -397,6 +405,10 @@ cloneReader = {
 		if (this.isMobile != true) { // Actualizo el valor de isMaximized sino isMobile 
 			this.aFilters.isMaximized = this.isMaximized;
 		}
+
+		if (this.aFilters.search.trim() == '') {
+			$.Search.clearForm();
+		}
 		
 		this.renderNotResult(true);
 		this.renderEntriesHead();
@@ -563,7 +575,7 @@ cloneReader = {
 	
 		$div.find('a').click(
 			function() {
-				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
+				cloneReader.loadEntries(true, false, { 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'], 'search': '' });
 			}
 		);
 
@@ -634,6 +646,10 @@ TODO: pensar como mejorar esta parte
 			if ($entry.hasClass('selected') == true) { return; }
 			cloneReader.selectEntry($entry, false, false);
 		});
+
+		if (this.aFilters.search.trim() != '') {
+			$entry.highlight(decodeURIComponent(this.aFilters.search.trim()).split(' '), { element: 'mark' });
+		}
 	},
 	
 	renderListEntry: function($entry, entry) {
@@ -709,17 +725,24 @@ TODO: pensar como mejorar esta parte
 	},
 
 	renderEntriesHead: function() {
-		var filter = this.getFilter(this.aFilters);
-		if (filter == null) { return; }
+		var filter;
+		if (this.aFilters.search.trim() != '') {
+			title = $.sprintf(crLang.line('Search %s'), '<mark>' + this.aFilters.search.trim() + '</mark>');
+		}
+		else {
+			var filter = this.getFilter(this.aFilters);
+			if (filter == null) { return; }
+			var title = filter.name;
+		}
 		
 		if (this.$entriesHead == null) {
 			this.$entriesHead = $('<li/>').addClass('entriesHead');
 		}
 		
-		this.$entriesHead.text(filter.name);
+		this.$entriesHead.html(title);
 		this.$ulEntries.prepend(this.$entriesHead);
 		
-		$('title').text(filter.name + ' | ' + crSettings.siteName);
+		$('title').html(title + ' | ' + crSettings.siteName);
 	},
 	
 	selectFilters: function() {
@@ -751,7 +774,7 @@ TODO: pensar como mejorar esta parte
 						<ul class="list-group"> \
 							<li class="list-group-item"> <a href="javascript:void(0);" class="addFeed" > ' + crLang.line('Add feed') + ' </a> </li> \
 							<li class="list-group-item"> <a href="' + base_url + 'import/feeds"> ' + crLang.line('Import feeds') + ' </a> </li> \
-							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + crSettings.tagBrowse + ' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
+							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + crSettings.tagBrowse + ', \'search\': \'\' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
 						</ul> \
 					</div>');
 					
@@ -1127,7 +1150,7 @@ console.timeEnd("t1");
 			.attr('title', filter.name)
 			.click(function (event) {
 				var filter = $($(event.target).parents('li:first')).data('filter');
-				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id });
+				cloneReader.loadEntries(true, false, { 'type': filter.type, 'id': filter.id, 'search': '' });
 			});
 			
 		this.renderCounts(filter);
@@ -1362,13 +1385,13 @@ console.timeEnd("t1");
 
 		$.ajax({
 			'url': 		base_url + 'entries/addFeed',
-			'data': 	{  'feedUrl': feedUrl },
+			'data': 	{ 'feedUrl': feedUrl },
 			'type':	 	'post',
 			'success': 	
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					
-					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'] }); 
+					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'], 'search': '' }); 
 					cloneReader.loadFilters(true);
 				}
 		});
@@ -1429,7 +1452,7 @@ console.timeEnd("t1");
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-					cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'] }); 
+					cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'], 'search': '' }); 
 					cloneReader.loadFilters(true);
 				}
 		});
@@ -1504,7 +1527,7 @@ console.timeEnd("t1");
 						'success': 	
 							function(response) {
 								if ($.hasAjaxDefaultAction(response) == true) { return; }
-								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': crSettings.tagAll });
+								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': crSettings.tagAll, 'search': '' });
 								cloneReader.loadFilters(true);
 							}
 					});

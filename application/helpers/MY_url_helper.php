@@ -60,6 +60,7 @@ function appendFilesToCarabiner() {
 		'crMenu.js',
 		'feedback.js',
 		'profile.js',
+		'search.js',
 		'process.js',
 
 		'crForm.js',
@@ -79,6 +80,7 @@ function appendFilesToCarabiner() {
 
 		'crList.js',
 		'bootstrap-paginator.js',
+		'jquery.highlight.js',
 	);
 	
 	$aCss = array(
