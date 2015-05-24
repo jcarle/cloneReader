@@ -19,7 +19,7 @@ $.Search = {
 				}
 				$.hideMobileNavbar();
 				$.goToUrl($form.attr('action') + '?' + $form.serialize());
-				cloneReader.searchEntries();
+				//cloneReader.searchEntries();
 				return false;
 			}
 		);

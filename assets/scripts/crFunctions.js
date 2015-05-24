@@ -388,7 +388,7 @@ $.extend({
 	},
 	
 	/**
-	 * 	Ejecutar las acciones por defecto de una peticion ajax (alerts, redirects, notifications, etc)
+	 * 	Ejecuta las acciones por defecto de una peticion ajax (alerts, redirects, notifications, etc)
 	 * 	Params:
 	 * 		skipAppLink					fuerza la variable $.support.pushState=false; se utiliza para un hard redirect
 	 * 		goToUrl						carga una url

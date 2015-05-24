@@ -772,31 +772,38 @@ class Entries_Model extends CI_Model {
 	}
 
 	function saveEntriesSearch($deleteEntitySearch = false, $onlyUpdates = false, $entryId = null) {
+		$this->load->model('Feeds_Model');
+
 		if ($deleteEntitySearch == true) {
-//			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeEntry')));
+			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeEntry')));
 		}
+		
 		
 		$aWhere = array();
 		if ($onlyUpdates == true) {
 			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveEntriesSearch');
-// TODO: incluir feeds.lastUpdate en el filtro cuando je de actualizarse automaticamente
+// TODO: incluir feeds.lastUpdate en el filtro cuando deje de actualizarse automaticamente
 			$aWhere[] = ' (entries.lastUpdate > \''.$lastUpdate.'\' ) '; // OR feeds.lastUpdate > \''.$lastUpdate.'\') ';
 		}
 		if ($entryId != null) {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
 		}
-
+		
+/*
 		$query = " SELECT COUNT(1) AS total
 			FROM entries
 			INNER JOIN feeds ON feeds.feedId = entries.feedId
 			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')."  ";
 		//pr($this->db->last_query()); die;
-		$query     = $this->db->query($query)->row_array();
+		$query     = $this->db->query($query)->row_array();*/
 		$pageSize  = 1000;
-		$foundRows = $query['total'];
-		$pageCount = ceil($foundRows / $pageSize);
-		for ($pageCurrent = 1; $pageCurrent<=$pageCount; $pageCurrent++) {
-			$this->saveEntriesSearchPage($aWhere, $pageCurrent, $pageSize);
+		//$foundRows = $query['total'];
+		//$pageCount = ceil($foundRows / $pageSize);
+		$lastEntryId   = 0;
+		while ($lastEntryId !== null) {
+		//for ($pageCurrent = 1; $pageCurrent<=$pageCount; $pageCurrent++) {
+		///	$this->saveEntriesSearchPage($aWhere, $pageCurrent, $pageSize);
+			$lastEntryId = $this->saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize);
 		}
 
 		
@@ -808,32 +815,44 @@ class Entries_Model extends CI_Model {
 	}	
 
 
-	function saveEntriesSearchPage($aWhere, $pageCurrent, $pageSize) {
+	function saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize) {
 		$this->db->trans_start();
+		
+		$aWhere[] = ' entries.entryId > '.(int)$lastEntryId;
+		
+		$lastEntryId = null;
 
-		$query = " SELECT entryId, entryTitle, entryContent, entries.feedId, feedName
+		$query = " SELECT entryId, entryTitle, entryContent, entries.feedId
 			FROM entries
-			INNER JOIN feeds ON feeds.feedId = entries.feedId
-			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')." 
-			LIMIT ".(($pageCurrent * $pageSize) - $pageSize).", ".$pageSize."  ";	
-		pr($query);
+			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')."
+			ORDER BY entryId ASC 
+			LIMIT ".$pageSize."  ";	
+		pr($query); // die;
+// , feedName
+// INNER JOIN feeds ON feeds.feedId = entries.feedId
 //			ORDER BY entryId ASC
 		$query = $this->db->query($query);
 		foreach ($query->result_array() as $data) {
+			$lastEntryId = $data['entryId'];
+			
 			$searchKey = 'searchEntries searchInFeedId'.$data['feedId'];
+
+			$feed = $this->Feeds_Model->get($data['feedId']);
 
 			$values = array(
 				'entityTypeId'     => config_item('entityTypeEntry'), 
 				'entityId'         => $data['entryId'],
-				'entityFullSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.strip_tags($data['entryContent']).' '.$data['feedName']),
-				'entityNameSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.$data['feedName']),
+				'entityFullSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.strip_tags($data['entryContent']).' '.$feed['feedName']),
+				'entityNameSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.$feed['feedName']),
 				'entityName'       => $data['entryTitle']
 			);
 
-			$this->db->replace('entities_search', $values);
+			$this->db->insert('entities_search', $values);
 		}
 
 		$this->db->trans_complete();
 		$query->free_result();
+		
+		return $lastEntryId;
 	}
 }

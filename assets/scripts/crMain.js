@@ -122,6 +122,7 @@ crMain = {
 	 * 		notRefresh: no vuelve a pedir la page, solo muestra lo que ya hay en memoria
 	 * 		skipScrollTop: evita el scroll al cargar/mostrar la page
 	 * Eventos que dispara cada page; hay que setearlo en el js de cada page
+	 * 		loadUrl: se lanza siempre que pasa por este metodo. Es últi en una $page que tiene notRefresh=true y que cambiaron sus parametros
 	 * 		onHide: se lanza al ocultar la page
 	 * 		onVisible: se lanza al mostrar la page
 	 * Eventos que dispara body:
@@ -135,6 +136,7 @@ crMain = {
 		}
 		
 		var $page = this.aPages[pageName];
+		$page.trigger('loadUrl');
 		
 		if ($page.children().length > 0 && $page.is(':visible') == true && location.hash != '') {
 			return;

@@ -93,22 +93,4 @@ class Process extends CI_Controller {
 
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}
-	
-	/*
-	
-	// TODO: borrar una vez que este implementado el buscador
-	function saveEntriesSearch() {
-		$this->db->trans_start();
-
-		$query = $this->db
-			->get('entries')
-			->limit(1500)
-			->result_array();
-		//pr($this->db->last_query()); 
-		foreach ($query as $entry) {		
-			$this->db->where('entryId', $entry['entryId'])->update('entryCleanContent', strip_tags($entry['entryContent']));
-		}
-
-		$this->db->trans_complete();
-	}*/
 }
