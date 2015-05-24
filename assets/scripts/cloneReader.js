@@ -4,10 +4,7 @@ cloneReader = {
 		this.$toolbar   = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
 		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
-		
-		this.fixDatetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
-		moment.lang(crSettings.langId);
-		this.isMobile = $.isMobile();
+		this.isMobile   = $.isMobile();
 
 		this.minUnreadEntries   = 2;
 		this.isLastPage         = false;
@@ -1605,7 +1602,7 @@ console.timeEnd("t1");
 	
 	updateEntryDateTime: function($entry) {
 		var entryId = $entry.data('entryId');
-		var entry 	= this.aEntries[entryId];
+		var entry   = this.aEntries[entryId];
 		if (entry == null) { return; }
 		if (entry.entryDate == null) { return; }
 		
@@ -1933,15 +1930,18 @@ console.timeEnd("t1");
 	},
 	
 	humanizeDatetime: function(datetime, format) {
-		var datetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').add('ms', -this.fixDatetime);
-		if (datetime >= moment()) {
-			datetime = moment().add('ms', -1);
-		} 
+		if (crSettings.momentLoaded != true) {
+			crSettings.momentLoaded = true;
+			moment.lang(crSettings.langId);
+			crSettings.fixDatetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
+		}
+		
+		var $moment = moment(datetime, 'YYYY-MM-DDTHH:mm:ss');
 		
 		if (format == null) {
-			return datetime.fromNow();
+			return $moment.fromNow();
 		}
-		return datetime.format(format);
+		return $moment.format(format);
 	},
 	
 	showFormShareByEmail: function(entryId) {

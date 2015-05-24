@@ -186,5 +186,5 @@
 					.attr('src', base_url + 'assets/images/error.svg');
 			}
 		});
-	}
+	};
 })(jQuery);

@@ -40,13 +40,13 @@
 	};
 	
 	crList = function($crList, options) {
-		this.$crList		= $crList;
-		this.$form 			= this.$crList.find('form');
-		this.$table			= this.$crList.find('table');
-		this.$crFilterList	= this.$crList.find('.crFilterList');
-		this.$btnOrder		= this.$crList.find('.btnOrder');
-		this.$btnFilter		= this.$crFilterList.prev();
-		this.options	 	= $.extend({}, options );
+		this.$crList       = $crList;
+		this.$form         = this.$crList.find('form');
+		this.$table        = this.$crList.find('table');
+		this.$crFilterList = this.$crList.find('.crFilterList');
+		this.$btnOrder     = this.$crList.find('.btnOrder');
+		this.$btnFilter    = this.$crFilterList.prev();
+		this.options       = $.extend({}, options );
 
 		this.$table.find('tbody .date, tbody .datetime').each(
 			function() {
@@ -130,9 +130,9 @@
 					if (aDelete.length == 0) { return;  }
 
 					$(document).crAlert( {
-						'msg': 			crLang.line('Are you sure?'),
-						'isConfirm': 	true,
-						'callback': 	$.proxy(
+						'msg':        crLang.line('Are you sure?'),
+						'isConfirm':  true,
+						'callback':   $.proxy(
 								function(aDelete, b, c) {
 									$.ajax( {
 										'type':     'post', 
@@ -207,7 +207,7 @@
 			if (this.options.data.length == 0) {
 				return;
 			}
-						
+
 			var $row = $(row);
 			$row.removeClass('info');
 			
@@ -254,10 +254,10 @@
 			data['buttons'] = buttons;
 		}
 				
-		var params 		= $.url().param();
-		var $crList		= $('<div class="crList"></div>').appendTo($parentNode);
-		var $panel		= $('<div class="panel panel-default" />').appendTo($crList);
-		var $form 		= $('\
+		var params  = $.url().param();
+		var $crList = $('<div class="crList"></div>').appendTo($parentNode);
+		var $panel  = $('<div class="panel panel-default" />').appendTo($crList);
+		var $form   = $('\
 			<form method="get" class="panel-heading" id="frmCrList" role="search" action="' + base_url + data['urlList'] + '" >\
 				<div class="btn-group">\
 					<div class="input-group">\
@@ -287,12 +287,12 @@
 		}
 
 		if (data['sort'] != null) {
-			var defaultOrderBy 	= Object.keys(data['sort'])[0];
-			var orderBy 		= params['orderBy'];
+			var defaultOrderBy  = Object.keys(data['sort'])[0];
+			var orderBy         = params['orderBy'];
 			if ($.inArray(orderBy, Object.keys(data['sort'])) == -1) {
-				orderBy 	= defaultOrderBy;
+				orderBy = defaultOrderBy;
 			}
-			var orderDir 	= params['orderDir'] == 'desc' ? 'desc' : 'asc';
+			var orderDir = params['orderDir'] == 'desc' ? 'desc' : 'asc';
 			
 			delete params['orderBy']; 
 			delete params['orderDir'];
@@ -314,11 +314,11 @@
 			var $ul = $sort.find('ul');	
 	
 			for (key in data['sort']) {
-				params['orderBy'] 	= key;
-				params['orderDir'] 	= (orderDir == 'desc' ? 'asc' : 'desc');
+				params['orderBy']  = key;
+				params['orderDir'] = (orderDir == 'desc' ? 'asc' : 'desc');
 				
-				var $li 	= $('<li/>').appendTo($ul);
-				var $link 	= $('<a/>')
+				var $li   = $('<li/>').appendTo($ul);
+				var $link = $('<a/>')
 					.appendTo($li)
 					.attr('href', base_url + data['urlList'] + '?' + $.param(params))
 					.text(data['sort'][key]);
@@ -329,10 +329,10 @@
 			}
 		}
 
-		var $div           = $('<div class="table-responsive" />').appendTo($crList);
-		var $table         = $('<table class="table" />').appendTo($div);
-		var $thead         = $('<thead />').appendTo($table);
-		var $tr            = $('<tr class="label-primary" />').appendTo($thead);
+		var $div     = $('<div class="table-responsive" />').appendTo($crList);
+		var $table   = $('<table class="table" />').appendTo($div);
+		var $thead   = $('<thead />').appendTo($table);
+		var $tr      = $('<tr class="label-primary" />').appendTo($thead);
 
 		if (showCheckbox == true) {
 			$('<th class="rowCheckbox">	<input type="checkbox" > </th>').appendTo($tr);	
@@ -347,7 +347,7 @@
 		for (var columnName in data['columns']) {
 			var $th = $(' <th />')
 				.text(data['columns'][columnName])
-				.appendTo($tr);		
+				.appendTo($tr);	
 	
 			if ($.isPlainObject(data['columns'][columnName])) {
 				$th
@@ -368,15 +368,15 @@
 				$(row).appendTo($tbody);
 			}
 			else {
-				var id 	   = row[Object.keys(row)[0]];
-				var $tr    = $( '<tr />').appendTo($tbody);
+				var id  = row[Object.keys(row)[0]];
+				var $tr = $( '<tr />').appendTo($tbody);
 		
 				if (data['urlEdit'] != null) {
 					$tr.attr('data-url-edit', base_url + $.sprintf(data['urlEdit'], id));
 				}
 				
 				if (showCheckbox == true) {	
-					$('	<td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
+					$(' <td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
 				}
 				if (showId == true) {
 					$('<td class="numeric" />').appendTo($tr).text(id);
@@ -401,8 +401,8 @@
 		}
 
 		var $footer = $('<div class="panel panel-default footer" />').appendTo($crList);
-		var $row	= $('<div class="panel-footer row" />').appendTo($footer);
-		var $div 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
+		var $row    = $('<div class="panel-footer row" />').appendTo($footer);
+		var $div    = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 
 		if (data['buttons'].length != 0) {
 			for (var i=0; i<data['buttons'].length; i++) {
@@ -417,18 +417,18 @@
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 		var $ul  = $('<ul class="pagination">').appendTo($div);
 	
-		var params 		= $.url().param();
+		var params      = $.url().param();
 		var currentPage = params['page'];
-		var totalPages	= Math.ceil(data['foundRows'] / crSettings.pageSize);
+		var totalPages  = Math.ceil(data['foundRows'] / crSettings.pageSize);
 		delete params['page'];
 	
 		$ul.bootstrapPaginator({
-			'bootstrapMajorVersion': 	3,
-			'currentPage': 				currentPage,
-			'numberOfPages': 			5, 
-			'totalPages': 				totalPages,
-			'totalRows':				data['foundRows'],
-			'itemTexts': 				function (type, page, current) {
+			'bootstrapMajorVersion': 3,
+			'currentPage':           currentPage,
+			'numberOfPages':         5, 
+			'totalPages':            totalPages,
+			'totalRows':             data['foundRows'],
+			'itemTexts':             function (type, page, current) {
 				switch (type) {
 					case "first":
 						return "1";
@@ -442,10 +442,10 @@
 						return page;
 				}
 			},	
-			'tooltipTitles': 			function (type, page, current) {
+			'tooltipTitles': function (type, page, current) {
 				return null;
 			},
-			'shouldShowPage': 			function(type, page, current){
+			'shouldShowPage': function(type, page, current){
 				switch(type) {
 					case "first":
 						return (current > 5);
@@ -461,9 +461,9 @@
 						return true;
 				}
 			},
-			'pageUrl': 				function(type, page, current){
-				var params 		= $.url().param();
-				params['page'] 	= page;			
+			'pageUrl': function(type, page, current){
+				var params     = $.url().param();
+				params['page'] = page;
 				return base_url + data['urlList'] + '?' + $.param(params);
 			},
 		});
