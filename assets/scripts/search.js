@@ -18,8 +18,8 @@ $.Search = {
 					return false;
 				}
 				$.hideMobileNavbar();
-				$.goToUrl($form.attr('action') + '?' + $form.serialize());
-				//cloneReader.searchEntries();
+				//$.goToUrl($form.attr('action') + '?' + $form.serialize());
+				cloneReader.changeFilters({ 'search': $input.val().trim() } );
 				return false;
 			}
 		);

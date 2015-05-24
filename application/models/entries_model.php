@@ -109,8 +109,17 @@ class Entries_Model extends CI_Model {
 
 
 	function searchEntries($userFilters) {
-		$aEntityId = array();
-		$query     = $this->Commond_Model->searchEntityFulltext($userFilters['search'], 'searchEntries', $userFilters['page'], config_item('entriesPageSize'), false);
+		$this->load->model('Feeds_Model');
+		
+		$aEntityId   = array();
+		$aSearchKey = array('searchEntries');
+// TODO: hacer un metodo que solo para esto 		
+		$query = $this->Feeds_Model->selectToList(1, 99999, array('userId' => $this->session->userdata('userId')));
+		foreach ($query['data'] as $data) {
+			$aSearchKey[] = 'searchInFeedId'.$data['feedId'];
+		} 
+		
+		$query     = $this->Commond_Model->searchEntityFulltext($userFilters['search'], implode(' ', $aSearchKey), $userFilters['page'], config_item('entriesPageSize'), false);
 		
 		foreach ($query['data'] as $data) {
 			$aEntryId[] = $data['entityId'];
@@ -789,23 +798,12 @@ class Entries_Model extends CI_Model {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
 		}
 		
-/*
-		$query = " SELECT COUNT(1) AS total
-			FROM entries
-			INNER JOIN feeds ON feeds.feedId = entries.feedId
-			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')."  ";
-		//pr($this->db->last_query()); die;
-		$query     = $this->db->query($query)->row_array();*/
-		$pageSize  = 1000;
-		//$foundRows = $query['total'];
-		//$pageCount = ceil($foundRows / $pageSize);
-		$lastEntryId   = 0;
+
+		$pageSize     = 1000;
+		$lastEntryId  = 0;
 		while ($lastEntryId !== null) {
-		//for ($pageCurrent = 1; $pageCurrent<=$pageCount; $pageCurrent++) {
-		///	$this->saveEntriesSearchPage($aWhere, $pageCurrent, $pageSize);
 			$lastEntryId = $this->saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize);
 		}
-
 		
 		if ($entryId == null) {
 			$this->Commond_Model->updateProcessDate('saveEntriesSearch');
@@ -813,7 +811,6 @@ class Entries_Model extends CI_Model {
 
 		return true;
 	}	
-
 
 	function saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize) {
 		$this->db->trans_start();
@@ -827,10 +824,7 @@ class Entries_Model extends CI_Model {
 			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')."
 			ORDER BY entryId ASC 
 			LIMIT ".$pageSize."  ";	
-		pr($query); // die;
-// , feedName
-// INNER JOIN feeds ON feeds.feedId = entries.feedId
-//			ORDER BY entryId ASC
+		// pr($query); // die;
 		$query = $this->db->query($query);
 		foreach ($query->result_array() as $data) {
 			$lastEntryId = $data['entryId'];
