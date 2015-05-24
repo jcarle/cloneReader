@@ -45,7 +45,7 @@ crMenu = {
 			}
 
 			if (item['icon'] != null) {
-				$link.append(' <i class="' + item['icon'] + '" ></i> ')
+				$link.append(' <i class="' + item['icon'] + '" ></i> ');
 			}
 			$('<span>').text(label).appendTo($link);
 

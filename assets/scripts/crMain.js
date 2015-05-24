@@ -173,7 +173,7 @@ crMain = {
 					}
 				}
 			, this, pageName)
-		})
+		});
 	},
 	
 	loadUploadFile: function() {

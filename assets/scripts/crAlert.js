@@ -28,12 +28,12 @@
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
 		}  
-	}
+	};
 	
 	crAlert = function() {
 
-	}
-					
+	};
+
 	crAlert.prototype = {
 		/*
 		 * input indica a que elemento se le pasara el foco cuando el crAlert se cierre
@@ -120,5 +120,5 @@
 			this.$btn.focus();
 			$(document).focus();
 		}
-	}
+	};
 })($);

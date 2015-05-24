@@ -57,7 +57,7 @@
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
 		}
-	}
+	};
 	
 	crForm = function($form, options) {
 		this.$form         = $form;
@@ -119,7 +119,7 @@
 				this.resizeWindow();
 			}
 		, this));
-	}
+	};
 	
 	crForm.prototype = {
 		initFields: function() {
@@ -276,7 +276,7 @@
 									function (i, checkbox) {
 										this.checkGroupCheckBox($(checkbox));
 									}
-								, this))
+								, this));
 								
 							this.updateGroupCheckBox(field.$input);
 							break;
@@ -545,7 +545,7 @@
 			var $gallery      = this.$form.find('.gallery');
 			this.reloadGallery();
 			
-			$('#fileupload').data( { 'crForm': this } )
+			$('#fileupload').data( { 'crForm': this } );
 			
 			$gallery.find('.btnEditPhotos').click( $.proxy(
 				function () {
@@ -605,7 +605,7 @@
 						
 						var files = result.files;
 						var fu    = $('#fileupload').data('blueimpFileupload');
-						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in')
+						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in');
 						
 						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside', animateLoading: true });
 
@@ -797,7 +797,7 @@
 				$exchange.prev().autoNumeric('set', 1);
 			}
 
-			$price.prev().autoNumeric('update', { aSign: $currency.find('option:selected').text() +' ' } )
+			$price.prev().autoNumeric('update', { aSign: $currency.find('option:selected').text() +' ' } );
 			$total.autoNumeric('set', $price.val() * $exchange.val());
 		},
 		
@@ -1237,5 +1237,5 @@
 		}
 
 		return $ul;
-	}	
+	};
 })($);

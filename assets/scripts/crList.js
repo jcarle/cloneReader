@@ -37,7 +37,7 @@
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on crList' );
 		}  
-	}
+	};
 	
 	crList = function($crList, options) {
 		this.$crList		= $crList;
@@ -109,7 +109,7 @@
 		
 		this.initEvents();
 		this.resizeWindow();
-	}
+	};
 	
 	crList.prototype = {
 		initEvents: function() {
@@ -489,5 +489,5 @@
 			</div> ');
 			
 		$(document).crForm('renderCrFormFields', fields, $parentNode.find('.panel-body'));
-	}
+	};
 })($);
