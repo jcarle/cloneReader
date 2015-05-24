@@ -1605,12 +1605,13 @@ console.timeEnd("t1");
 		var entry   = this.aEntries[entryId];
 		if (entry == null) { return; }
 		if (entry.entryDate == null) { return; }
+
+		var $entryDate = $entry.find('.entryDate');
+		$entryDate.text(entry.entryDate).addClass('datetime fromNow');
+		$.formatDate($entryDate);
 		
 		if (this.aFilters.viewType == 'detail') {
-			$entry.find('.entryDate').text(this.humanizeDatetime(entry.entryDate, 'LLL') + ' (' + this.humanizeDatetime(entry.entryDate) + ')');
-		}
-		else {
-			$entry.find('.entryDate').text(this.humanizeDatetime(entry.entryDate));
+			$entryDate.text(  moment(entry.entryDate, 'YYYY-MM-DDTHH:mm:ss' ).format( 'LLL' ) + ' (' + $entryDate.text() + ')');
 		}
 	},	
 
@@ -1927,21 +1928,6 @@ console.timeEnd("t1");
 				this.browseFeedsByTagId($tag, true);
 			}
 		, this));
-	},
-	
-	humanizeDatetime: function(datetime, format) {
-		if (crSettings.momentLoaded != true) {
-			crSettings.momentLoaded = true;
-			moment.lang(crSettings.langId);
-			crSettings.fixDatetime = moment(crSettings.datetime, 'YYYY-MM-DDTHH:mm:ss').diff(moment(), 'ms'); // guardo en memoria la diferencia de tiempo entre la db y el cliente, para mostrar bien las fechas
-		}
-		
-		var $moment = moment(datetime, 'YYYY-MM-DDTHH:mm:ss');
-		
-		if (format == null) {
-			return $moment.fromNow();
-		}
-		return $moment.format(format);
 	},
 	
 	showFormShareByEmail: function(entryId) {
