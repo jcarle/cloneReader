@@ -60,6 +60,26 @@ class Feeds_Model extends CI_Model {
 
 		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
+
+	function selectFeedIdByUserId($userId, $feedId = null, $tagId = null) {
+		$this->db
+			->select(' users_feeds.feedId, ', false)
+			->from('users_feeds')
+			->where('users_feeds.userId', $userId);			
+			
+		if ($feedId != null) {
+			$this->db->where('users_feeds.feedId', $feedId);
+		}
+		if ($tagId != null) {
+			$this->db->join('users_feeds_tags', 'users_feeds_tags.feedId = users_feeds.feedId AND users_feeds_tags.userId = users_feeds.userId', 'inner');
+			$this->db->where('tagId', $tagId);
+		}
+		
+		$query = $this->db->get();
+		//pr($this->db->last_query()); die;
+
+		return $query->result_array();
+	}
 	
 	function select(){
 		return $this->db->get('feeds');

@@ -113,15 +113,53 @@ class Entries_Model extends CI_Model {
 		
 		$aEntityId   = array();
 		$aSearchKey = array('searchEntries');
-// TODO: hacer un metodo que solo para esto 		
-		$query = $this->Feeds_Model->selectToList(1, 99999, array('userId' => $this->session->userdata('userId')));
-		foreach ($query['data'] as $data) {
-			$aSearchKey[] = 'searchInFeedId'.$data['feedId'];
+		
+		$search = $userFilters['search'];
+		$aSearch   = cleanSearchString($search, $aSearchKey);
+		$aFeedId = array();
+		if (empty($aSearch)) {
+			return array();
+		}		
+ 		
+		$feedId = null; $tagId = null;
+		if ($userFilters['type'] == 'feed') {
+			$feedId = $userFilters['id'];
+		}
+		if ($userFilters['type'] == 'tag' && $userFilters['id'] != config_item('tagAll')) {
+			$tagId = $userFilters['id'];
+		}
+		$query   = $this->Feeds_Model->selectFeedIdByUserId($this->session->userdata('userId'), $feedId, $tagId);
+		$aFeedsSearch = array();
+		foreach ($query as $data) {
+			$aFeedsSearch[] = " MATCH (entityNameSearch) AGAINST ('+searchEntries  +searchInFeedId".$data['feedId']."' IN BOOLEAN MODE) ";
+			//$aFeedId[] = $data['feedId'];
 		} 
 		
-		$query     = $this->Commond_Model->searchEntityFulltext($userFilters['search'], implode(' ', $aSearchKey), $userFilters['page'], config_item('entriesPageSize'), false);
+		if (empty($aFeedsSearch)) {
+			return array();
+		}
 		
-		foreach ($query['data'] as $data) {
+		$match     = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
+// SQL_CALC_FOUND_ROWS		
+		$this->db
+			->select(' entityId, entityName, '.$match.' AS score, 
+				MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
+			->from('entities_search')
+			->join('entries', 'entries.entryId = entities_search.entityId', 'inner')
+			->where('('. implode(' OR ', $aFeedsSearch).')', NULL, FALSE)
+			//->where_in('feedId', $aFeedId)
+			//->where('MATCH (entityNameSearch) AGAINST (\''.implode(' ', $aFeedsSearch).'\' IN BOOLEAN MODE)', NULL, FALSE)
+			->where($match, NULL, FALSE)
+			//->order_by('scoreName DESC, score DESC')
+			;
+			
+		$this->Commond_Model->appendLimitInQuery($userFilters['page'], config_item('entriesPageSize'));
+		$query = $this->db->get()->result_array();
+		//pr($this->db->last_query()); die;		
+		
+//		$query     = $this->Commond_Model->searchEntityFulltext($userFilters['search'], implode(' ', $aSearchKey), $userFilters['page'], config_item('entriesPageSize'), false);
+		
+		foreach ($query as $data) {
 			$aEntryId[] = $data['entityId'];
 		}
 
