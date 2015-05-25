@@ -214,6 +214,7 @@ $lang['Places'] = 'Lugares';
 $lang['Place'] = 'Lugar';
 $lang['Found %1$s rows for %2$s'] = 'Encontramos %1$s registros para %2$s'; 
 $lang['Search %s'] = 'Buscar %s';
+$lang['Search %s in "%s"'] = 'Buscar %s en "%s"';
 $lang['Search for %s'] = 'Buscar por %s';
 $lang['Has email'] = 'Tiene email';
 $lang['Not has country'] = 'No tiene país';

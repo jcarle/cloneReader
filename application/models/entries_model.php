@@ -111,17 +111,17 @@ class Entries_Model extends CI_Model {
 	function searchEntries($userFilters) {
 		$this->load->model('Feeds_Model');
 		
-		$aEntityId   = array();
+		$aEntityId  = array();
 		$aSearchKey = array('searchEntries');
-		
-		$search = $userFilters['search'];
-		$aSearch   = cleanSearchString($search, $aSearchKey);
-		$aFeedId = array();
+		$search     = $userFilters['search'];
+		$aSearch    = cleanSearchString($search, $aSearchKey);
+		$feedId     = null; 
+		$tagId      = null;
 		if (empty($aSearch)) {
 			return array();
 		}		
  		
-		$feedId = null; $tagId = null;
+		
 		if ($userFilters['type'] == 'feed') {
 			$feedId = $userFilters['id'];
 		}
@@ -132,7 +132,6 @@ class Entries_Model extends CI_Model {
 		$aFeedsSearch = array();
 		foreach ($query as $data) {
 			$aFeedsSearch[] = " MATCH (entityNameSearch) AGAINST ('+searchEntries  +searchInFeedId".$data['feedId']."' IN BOOLEAN MODE) ";
-			//$aFeedId[] = $data['feedId'];
 		} 
 		
 		if (empty($aFeedsSearch)) {
@@ -145,20 +144,11 @@ class Entries_Model extends CI_Model {
 			->select(' entityId, entityName, '.$match.' AS score, 
 				MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
 			->from('entities_search')
-			->join('entries', 'entries.entryId = entities_search.entityId', 'inner')
 			->where('('. implode(' OR ', $aFeedsSearch).')', NULL, FALSE)
-			//->where_in('feedId', $aFeedId)
-			//->where('MATCH (entityNameSearch) AGAINST (\''.implode(' ', $aFeedsSearch).'\' IN BOOLEAN MODE)', NULL, FALSE)
-			->where($match, NULL, FALSE)
-			//->order_by('scoreName DESC, score DESC')
-			;
-			
+			->where($match, NULL, FALSE);
 		$this->Commond_Model->appendLimitInQuery($userFilters['page'], config_item('entriesPageSize'));
 		$query = $this->db->get()->result_array();
 		//pr($this->db->last_query()); die;		
-		
-//		$query     = $this->Commond_Model->searchEntityFulltext($userFilters['search'], implode(' ', $aSearchKey), $userFilters['page'], config_item('entriesPageSize'), false);
-		
 		foreach ($query as $data) {
 			$aEntryId[] = $data['entityId'];
 		}
@@ -168,24 +158,16 @@ class Entries_Model extends CI_Model {
 		}
 
 
-		$this->db
+		$query = $this->db
 			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor ', false)
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
-//			->where('feeds.feedId', config_item('feedCloneReader'))
-			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'));
-
-// TODO: filtrar por usuario
-
-		if (!empty($aEntryId)) {
-			$this->db->where_in('entries.entryId', $aEntryId);
-		}
-		$query = $this->db
-			->get('entries ', config_item('entriesPageSize'))
+			->where_in('entries.entryId', $aEntryId)
+			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
+			->get('entries ')
 			->result_array();
 		//pr($this->db->last_query()); die;
-		
 		return $query;
-	}		
+	}
 
 	function selectFilters($userId) {
 		$aFilters = array();

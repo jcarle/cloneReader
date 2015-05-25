@@ -42,19 +42,19 @@ cloneReader = {
 //if ($.support.pushState == false) {
 // TODO: implementar
 
-//		var currentFilters = this.aFilters.clone() ;
-//cn(currentFilters);		
 		aFilters   = $.extend({}, this.aFilters, aFilters);
-cn(aFilters);		
 		var params = {
 			'id':      aFilters.id,
 			'type':    aFilters.type,
 			'view':    aFilters.viewType,
-			'q':       aFilters.search,
 			'unread':  aFilters.onlyUnread,
 			'sort':    aFilters.sortDesc == true ? 'desc' : 'asc',
 		};
-			
+		
+		if (aFilters.search.trim() != '') {
+			params['q'] = aFilters.search.trim();
+		}
+		
 		$.goToUrl( base_url + '?' + $.param(params) );
 	},
 
@@ -120,6 +120,7 @@ cn(aFilters);
 					
 				}
 				
+				$.Search.populateForm();
 				cloneReader.loadEntries(true, false, aFilters);
 			}
 		);
@@ -319,7 +320,7 @@ cn(aFilters);
 				<li> \
 					<button title="' + crLang.line('Mark all as read') + '" class="btnMarkAllAsRead" > \
 						<i class="fa fa-archive" /> \
-						<span>' + crLang.line('Mark all as read') + '</span> \
+						<span class="btnLabel">' + crLang.line('Mark all as read') + '</span> \
 					</button> \
 				</li> \
 				<li> \
@@ -617,7 +618,7 @@ cn($.toJSON(aFilters));
 	
 		$div.find('a').click(
 			function() {
-				cloneReader.changeFilters({ 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'], 'search': '' });
+				cloneReader.changeFilters({ 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
 			}
 		);
 
@@ -767,14 +768,11 @@ TODO: pensar como mejorar esta parte
 	},
 
 	renderEntriesHead: function() {
-		var filter;
+		var filter = this.getFilter(this.aFilters);
+		if (filter == null) { return; }
+		var title = filter.name;
 		if (this.aFilters.search.trim() != '') {
-			title = $.sprintf(crLang.line('Search %s'), '<mark>' + this.aFilters.search.trim() + '</mark>');
-		}
-		else {
-			var filter = this.getFilter(this.aFilters);
-			if (filter == null) { return; }
-			var title = filter.name;
+			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + this.aFilters.search.trim() + '</mark>', filter.name) + ' <a class="btn btn-danger btn-sm" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/> ' + crLang.line('Delete') + ' </a>';
 		}
 		
 		if (this.$entriesHead == null) {
@@ -784,7 +782,7 @@ TODO: pensar como mejorar esta parte
 		this.$entriesHead.html(title);
 		this.$ulEntries.prepend(this.$entriesHead);
 		
-		$('title').html(title + ' | ' + crSettings.siteName);
+		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 	},
 	
 	selectFilters: function() {
@@ -1192,7 +1190,7 @@ console.timeEnd("t1");
 			.attr('title', filter.name)
 			.click(function (event) {
 				var filter = $($(event.target).parents('li:first')).data('filter');
-				cloneReader.changeFilters({ 'type': filter.type, 'id': filter.id, 'search': '' });
+				cloneReader.changeFilters({ 'type': filter.type, 'id': filter.id });
 			});
 			
 		this.renderCounts(filter);

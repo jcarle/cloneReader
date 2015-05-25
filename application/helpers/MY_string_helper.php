@@ -213,6 +213,9 @@ function getHtmlFormSearch($isHeader = true) {
 			<a href="'.base_url('search').'" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
 			<div class="form-group '.($isHeader == true ? ' hidden-md hidden-sm ' : '').'" >
 				<div class="input-group">
+					<span class="input-group-addon">
+						<i class="fa fa-times" ></i>
+					</span>
 					<input type="text" class="form-control" name="q" placeholder="'. $CI->lang->line('search').' ..."  value="'.$CI->input->get('q').'" />
 					<span class="input-group-btn">
 						<button  class="btn btn-default"> '. $CI->lang->line('Search').'</button>

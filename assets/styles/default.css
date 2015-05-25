@@ -65,11 +65,14 @@ body.isLoading, body.isLoading * {
 				#header ul.menuProfile  li a .badge {
 					margin:0 0px 0 5px;
 				}
-			
 @media (min-width: 768px) {
 	#header form {
 		max-width:450px;
+		padding: 0;
 	}	
+		#header form .form-group {
+			width:450px;
+		}
 	#header ul.menuProfile { }
 		#header ul.menuProfile > li { }
 		#header ul.menuProfile > li:last-child { }

@@ -1,9 +1,9 @@
 $.Search = {
 	init: function($form) {
-		this.$page      = $('.cr-page-home');
-		this.$form      = $form;
-		var search      = $.url().param('q');
-
+		this.$page   = $('.cr-page-home');
+		this.$form   = $form;
+		this.$input  = this.$form.find('[name=q]');
+		
 		this.$form.find('input').keyup(function(event) {
 			event.stopPropagation();
 		});
@@ -18,23 +18,29 @@ $.Search = {
 					return false;
 				}
 				$.hideMobileNavbar();
-				//$.goToUrl($form.attr('action') + '?' + $form.serialize());
 				cloneReader.changeFilters({ 'search': $input.val().trim() } );
 				return false;
 			}
 		);
 			
-		if ($.isMobile() == false) { 
-			var v = $('.cr-page-search input[name=q]').val();
-			$('.cr-page-search input[name=q]').focus().val('').val(v);
+		if ($.isMobile() == false) {
+			var v = this.$input.val(); 
+			this.$input.focus().val('').val(v);
 		}
 
+		this.populateForm();
+	},
+	
+	populateForm: function() {
+		var search = $.url().param('q');
+		
+		this.$input.val('');
 		if (search !== undefined) {
-			$form.find('[name=q]').val(decodeURIComponent(search));
+			this.$input.val(decodeURIComponent(search));
 		}
 	},
 	
 	clearForm: function() {
-		this.$form.find('[name=q]').val('');
+		this.$input.val('');
 	}
 };
