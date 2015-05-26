@@ -13,15 +13,20 @@ $.Search = {
 			.on('submit', 
 			function() {
 				var $form  = $(this);
-				var $input = $form.find('[name=q]');
-				if ($input.val().trim() == '') {
-					return false;
-				}
 				$.hideMobileNavbar();
-				cloneReader.changeFilters({ 'search': $input.val().trim() } );
+				cloneReader.changeFilters({ 'search': $form.find('[name=q]').val().trim() } );
 				return false;
 			}
 		);
+		
+		this.$form.find('.fa-times').parent()
+			.css( { 'cursor': 'pointer', 'color': '#555555' } )
+			.click($.proxy(
+				function (event){
+					this.$form.find('input[name=q]').val('');
+					this.$form.submit();
+				}
+			, this));
 			
 		if ($.isMobile() == false) {
 			var v = this.$input.val(); 

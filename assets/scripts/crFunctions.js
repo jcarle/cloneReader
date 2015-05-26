@@ -51,7 +51,11 @@ $.extend({
 			o = s + o;
 		}
 		return o;
-	},	
+	},
+
+	htmlspecialchars: function(string) {
+		return $('<div></div>').html(string).text();
+	},
 	
 	base64Decode: function( data ) {
 		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";

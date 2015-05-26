@@ -835,25 +835,21 @@ class Entries_Model extends CI_Model {
 	function saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize) {
 		$this->db->trans_start();
 		
-		$aWhere[] = ' entries.entryId > '.(int)$lastEntryId;
-		
+		$aWhere[]    = ' entries.entryId > '.(int)$lastEntryId;
 		$lastEntryId = null;
 
 		$query = " SELECT entryId, entryTitle, entryContent, entries.feedId
 			FROM entries
-			".(!empty($aWhere) ? ' WHERE '.implode(' AND ', $aWhere) : '')."
+			WHERE ".implode(' AND ', $aWhere)." 
 			ORDER BY entryId ASC 
 			LIMIT ".$pageSize."  ";	
 		// pr($query); // die;
 		$query = $this->db->query($query);
 		foreach ($query->result_array() as $data) {
 			$lastEntryId = $data['entryId'];
-			
-			$searchKey = 'searchEntries searchInFeedId'.$data['feedId'];
-
-			$feed = $this->Feeds_Model->get($data['feedId']);
-
-			$values = array(
+			$searchKey   = 'searchEntries searchInFeedId'.$data['feedId'];
+			$feed        = $this->Feeds_Model->get($data['feedId']);
+			$values      = array(
 				'entityTypeId'     => config_item('entityTypeEntry'), 
 				'entityId'         => $data['entryId'],
 				'entityFullSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.strip_tags($data['entryContent']).' '.$feed['feedName']),

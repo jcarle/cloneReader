@@ -69,26 +69,27 @@ class Process extends CI_Controller {
 	}
 
 	function saveEntitiesSearch($entityTypeId = null, $onlyUpdates = false) {
-		$onlyUpdates = ($onlyUpdates == 'true');
+		$onlyUpdates        = ($onlyUpdates == 'true');
+		$deleteEntitySearch = ($onlyUpdates != true);
 		if ($entityTypeId == 'null') {
 			$entityTypeId == null;
 		}
 		
 		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeUser')) {
 			$this->load->model('Users_Model');
-			$this->Users_Model->saveUsersSearch(($onlyUpdates != true), $onlyUpdates);
+			$this->Users_Model->saveUsersSearch($deleteEntitySearch, $onlyUpdates);
 		}
 		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeTag')) {
 			$this->load->model('Tags_Model');
-			$this->Tags_Model->saveTagsSearch(($onlyUpdates != true), $onlyUpdates);
+			$this->Tags_Model->saveTagsSearch($deleteEntitySearch, $onlyUpdates);
 		}
 		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeFeed')) {
 			$this->load->model('Feeds_Model');
-			$this->Feeds_Model->saveFeedsSearch(($onlyUpdates != true), $onlyUpdates);
+			$this->Feeds_Model->saveFeedsSearch($deleteEntitySearch, $onlyUpdates);
 		}
 		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeEntry')) {
 			$this->load->model('Entries_Model');
-			$this->Entries_Model->saveEntriesSearch(($onlyUpdates != true), $onlyUpdates);
+			$this->Entries_Model->saveEntriesSearch($deleteEntitySearch, $onlyUpdates);
 		}
 
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));

@@ -53,6 +53,9 @@ cloneReader = {
 		
 		if (aFilters.search.trim() != '') {
 			params['q'] = aFilters.search.trim();
+			if (params['type'] == 'tag' && $.inArray(params['id'], [crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse]) != -1) {
+				params['q'] = '';
+			}
 		}
 		
 		$.goToUrl( base_url + '?' + $.param(params) );
@@ -97,9 +100,7 @@ cloneReader = {
 				this.updateMainMenu();
 
 				if (this.indexFilters != null) {
-// TODO: setear bien el titulo cuando estoy haciendo una busqueda
-					var filter = this.getFilter(this.aFilters);
-					$('title').text(filter.name + ' | ' + crSettings.siteName);
+					$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 				}
 			}
 
@@ -115,9 +116,9 @@ cloneReader = {
 					'onlyUnread':   $.url().param('unread') == 'true',
 					'sortDesc':     $.url().param('sort') == 'desc',
 				};
-				
-				if ($.url().param('q') != null) {
-					
+
+				if ($.url().param('q') == null) {
+					aFilters['search'] = '';
 				}
 				
 				$.Search.populateForm();
@@ -770,13 +771,15 @@ TODO: pensar como mejorar esta parte
 	renderEntriesHead: function() {
 		var filter = this.getFilter(this.aFilters);
 		if (filter == null) { return; }
-		var title = filter.name;
-		if (this.aFilters.search.trim() != '') {
-			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + this.aFilters.search.trim() + '</mark>', filter.name) + ' <a class="btn btn-danger btn-sm" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/> ' + crLang.line('Delete') + ' </a>';
-		}
-		
+
 		if (this.$entriesHead == null) {
 			this.$entriesHead = $('<li/>').addClass('entriesHead');
+		}
+
+		var title  = $.htmlspecialchars(filter.name);
+		var search = $.htmlspecialchars(this.aFilters.search.trim());
+		if (search != '') {
+			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 		
 		this.$entriesHead.html(title);
@@ -1177,7 +1180,7 @@ console.timeEnd("t1");
 
 		var $filter = $('<li/>')
 					.data('filter', filter)
-					.html('<div><span class="icon fa" /><a>' + filter.name + '</a><span class="count" /></div>')
+					.html('<div><span class="icon fa" /><a>' + filter.name + ' </a><span class="count" /></div>')
 					.appendTo($parent);
 
 		if (index != null && index != $filter.index()) { // para ordenar los items que se crearon en tiempo de ejecución
@@ -1187,7 +1190,7 @@ console.timeEnd("t1");
 		filter.$filter = filter.$filter.add($filter);
 
 		$filter.find('a')
-			.attr('title', filter.name)
+			.attr('title', $.htmlspecialchars(filter.name) )
 			.click(function (event) {
 				var filter = $($(event.target).parents('li:first')).data('filter');
 				cloneReader.changeFilters({ 'type': filter.type, 'id': filter.id });
