@@ -44,7 +44,7 @@ cloneReader = {
 
 		aFilters   = $.extend({}, this.aFilters, aFilters);
 		var params = {
-			'id':      aFilters.id,
+			'id':      parseInt(aFilters.id),
 			'type':    aFilters.type,
 			'view':    aFilters.viewType,
 			'unread':  aFilters.onlyUnread,
@@ -53,12 +53,34 @@ cloneReader = {
 		
 		if (aFilters.search.trim() != '') {
 			params['q'] = aFilters.search.trim();
-			if (params['type'] == 'tag' && $.inArray(params['id'], [crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse]) != -1) {
-				params['q'] = '';
+			if (params['type'] == 'tag' && $.inArray(params['id'], [crSettings.tagHome, crSettings.tagBrowse]) != -1) {
+				params['id'] = crSettings.tagAll;
 			}
 		}
 		
 		$.goToUrl( base_url + '?' + $.param(params) );
+	},
+
+	loadUrl: function() {
+		var aFilters = {
+			'id':           $.url().param('id'),
+			'type':         $.url().param('type'),
+			'viewType':     $.url().param('view'),
+			'search':       $.url().param('q'),
+			'onlyUnread':   $.url().param('unread') == 'true',
+			'sortDesc':     $.url().param('sort') == 'desc',
+		};
+
+		if ($.url().param('q') == null) {
+			aFilters['search'] = '';
+		}
+		if (Object.keys($.url().param()).length == 0) {
+			this.changeFilters({});
+			return;
+		}
+
+		$.Search.populateForm();
+		this.loadEntries(true, false, aFilters);
 	},
 
 	updateMainMenu: function() {
@@ -108,21 +130,7 @@ cloneReader = {
 
 		this.$page.bind('loadUrl', 
 			function() {
-				var aFilters = {
-					'id':           $.url().param('id'),
-					'type':         $.url().param('type'),
-					'viewType':     $.url().param('view'),
-					'search':       $.url().param('q'),
-					'onlyUnread':   $.url().param('unread') == 'true',
-					'sortDesc':     $.url().param('sort') == 'desc',
-				};
-
-				if ($.url().param('q') == null) {
-					aFilters['search'] = '';
-				}
-				
-				$.Search.populateForm();
-				cloneReader.loadEntries(true, false, aFilters);
+				cloneReader.loadUrl();
 			}
 		);
 
@@ -692,7 +700,7 @@ TODO: pensar como mejorar esta parte
 		});
 
 		if (this.aFilters.search.trim() != '') {
-			$entry.highlight(decodeURIComponent(this.aFilters.search.trim()).split(' '), { element: 'mark' });
+			$entry.find('p, .header').highlight( this.aFilters.search.trim().split(' '), { element: 'mark', wordsOnly: true });
 		}
 	},
 	
@@ -720,6 +728,10 @@ TODO: pensar como mejorar esta parte
 			}
 			cloneReader.selectEntry($entry, true, false);
 		});	
+
+		if (this.aFilters.search.trim() != '') {
+			$entry.find('.entryContent').highlight( this.aFilters.search.trim().split(' '), { element: 'mark', wordsOnly: true });
+		}
 	},
 
 	renderEntryPictures: function($entry) {
@@ -779,7 +791,7 @@ TODO: pensar como mejorar esta parte
 		var title  = $.htmlspecialchars(filter.name);
 		var search = $.htmlspecialchars(this.aFilters.search.trim());
 		if (search != '') {
-			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
+			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search.split(' ').join('</mark> <mark>') + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 		
 		this.$entriesHead.html(title);
@@ -1111,9 +1123,8 @@ console.time("t1");
 							this.renderEntriesHead();
 						}
 						else {
-							this.loadEntries(true, false, {});
+							this.loadUrl();
 						}
-						
 console.timeEnd("t1");
 					}
 				, this, reload)
@@ -1192,8 +1203,12 @@ console.timeEnd("t1");
 		$filter.find('a')
 			.attr('title', $.htmlspecialchars(filter.name) )
 			.click(function (event) {
-				var filter = $($(event.target).parents('li:first')).data('filter');
-				cloneReader.changeFilters({ 'type': filter.type, 'id': filter.id });
+				var filter   = $($(event.target).parents('li:first')).data('filter');
+				var aFilters = { 'type': filter.type, 'id': filter.id };
+				if (filter.type == 'tag' && $.inArray(filter.id, [crSettings.tagHome, crSettings.tagBrowse]) != -1) {
+					aFilters.search = '';
+				}
+				cloneReader.changeFilters(aFilters);
 			});
 			
 		this.renderCounts(filter);

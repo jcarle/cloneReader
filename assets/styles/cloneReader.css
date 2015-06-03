@@ -323,7 +323,8 @@
 					padding:0 0 0 40px;
 					list-style-type: disc;
 				}
-			#cloneReader .ulEntries > li p mark {
+			#cloneReader .ulEntries > li p mark,
+			#cloneReader .ulEntries > li p .highlight {
 				background: #ff0 none repeat scroll 0 0;
 				color: #000;
 			}

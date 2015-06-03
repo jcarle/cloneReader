@@ -862,3 +862,8 @@ table .dotdotdot {
 .raty {
 	height:20px;
 }
+
+.highlight {
+	background: #ff0 none repeat scroll 0 0;
+	color: #000;
+}
