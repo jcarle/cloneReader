@@ -1,3 +1,5 @@
+/*
+TODO: borrar este archivo
 $.Search = {
 	init: function($form) {
 		this.$page   = $('.cr-page-home');
@@ -13,7 +15,12 @@ $.Search = {
 			.on('submit', 
 			function() {
 				var $form  = $(this);
+				var $input = $form.find('[name=q]');
+				if ($input.val().trim() == '') {
+					return false;
+				}
 				$.hideMobileNavbar();
+
 				cloneReader.changeFilters({ 'search': $form.find('[name=q]').val().trim() } );
 				return false;
 			}
@@ -27,11 +34,11 @@ $.Search = {
 					this.$form.submit();
 				}
 			, this));
-			
+/*			
 		if ($.isMobile() == false) {
 			var v = this.$input.val(); 
 			this.$input.focus().val('').val(v);
-		}
+		}*/
 
 		this.populateForm();
 	},
@@ -48,4 +55,4 @@ $.Search = {
 	clearForm: function() {
 		this.$input.val('');
 	}
-};
+};*/

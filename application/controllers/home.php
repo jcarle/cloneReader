@@ -5,12 +5,9 @@ class Home extends CI_Controller {
 			redirect('', 'location', 301);
 		}
 
-		$this->load->model('Users_Model');
-
 		$this->load->view('pageHtml',
 			array(
 				'view'            => 'home', 
-				'userFilters'     => $this->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') ),
 				'showTitle'       => false,
 				'notRefresh'      => true,
 				'skipBreadcrumb'  => true,

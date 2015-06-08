@@ -19,6 +19,7 @@ if (!isset($langs)) {
 $langs      = getLangToJs($langs);
 $this->my_js->add(langJs($langs));
 $this->my_js->add(  '  $(\'.'.getPageName().'\').data(\'meta\', '.json_encode($meta).'); ');
+$this->my_js->add( ' cloneReader.initHeader(); ');
 
 if (ENVIRONMENT == 'production' && config_item('google-analytics-Account') != '') {
 	$this->my_js->add( "

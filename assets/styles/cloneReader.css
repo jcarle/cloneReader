@@ -688,9 +688,6 @@
 			float:none;
 			display: block;
 		}
-/*		#cloneReader .ulEntries.list > li .title .feedName {
-			max-width: calc(100% - 125px);
-		}*/
 		#cloneReader .ulEntries > li .header .star {
 			float: none;
 			position: absolute;

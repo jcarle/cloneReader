@@ -1,5 +1,6 @@
 cloneReader = {
 	init: function(aFilters) {
+cn('init');
 		this.$page      = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
 		this.$toolbar   = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
@@ -14,20 +15,10 @@ cloneReader = {
 		this.tags               = null;
 		this.aUserEntries       = {};
 		this.aUserTags          = {};
-		this.aFilters           = $.extend({
-			'page':         1,
-			'onlyUnread':   true,
-			'sortDesc':     true,
-			'id':           crSettings.tagHome, 
-			'type':         'tag',
-			'viewType':     'detail',
-			'isMaximized':  false,
-			'search':       '' // $.url().param('q').trim() TODO:
-		}, aFilters);
-		this.isMaximized  = (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobili = false
-		this.aSystemTags  = [crSettings.tagAll, crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse];
-		this.isLoaded     = false;
-		
+		this.isMaximized        = (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobile = false
+		this.aSystemTags        = [crSettings.tagAll, crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse];
+		this.isLoaded           = false;
+
 		this.buildCache();
 		this.renderToolbar();
 		this.loadFilters(false);
@@ -39,9 +30,6 @@ cloneReader = {
 	},
 
 	changeFilters: function(aFilters) {
-//if ($.support.pushState == false) {
-// TODO: implementar
-
 		aFilters   = $.extend({}, this.aFilters, aFilters);
 		var params = {
 			'id':      parseInt(aFilters.id),
@@ -57,11 +45,14 @@ cloneReader = {
 				params['id'] = crSettings.tagAll;
 			}
 		}
-		
+
 		$.goToUrl( base_url + '?' + $.param(params) );
 	},
 
 	loadUrl: function() {
+		if (Object.keys($.url().param()).length == 0) {
+			return this.changeFilters({});
+		}
 		var aFilters = {
 			'id':           $.url().param('id'),
 			'type':         $.url().param('type'),
@@ -74,12 +65,11 @@ cloneReader = {
 		if ($.url().param('q') == null) {
 			aFilters['search'] = '';
 		}
-		if (Object.keys($.url().param()).length == 0) {
-			this.changeFilters({});
-			return;
+		if (aFilters['viewType'] != 'detail' && aFilters['viewType'] != 'list') {
+			aFilters['viewType'] = 'detail';
 		}
 
-		$.Search.populateForm();
+		this.populateSearchForm();
 		this.loadEntries(true, false, aFilters);
 	},
 
@@ -139,7 +129,7 @@ cloneReader = {
 			function() {
 				this.$mainToolbar.hide();
 				this.$toolbar.hide();
-				$.Search.clearForm();
+				this.clearSearchForm();
 				$('#header .logo').attr('href', base_url);
 				$('#header').css( {'box-shadow': 'none' });
 				$('#header .container').removeClass('fullSize');
@@ -449,7 +439,7 @@ cloneReader = {
 		}
 
 		if (this.aFilters.search.trim() == '') {
-			$.Search.clearForm();
+			this.clearSearchForm();
 		}
 		
 		this.renderNotResult(true);
@@ -463,7 +453,6 @@ cloneReader = {
 		}
 
 		// Si SOLO cambio el tipo de vista reendereo sin pasar por el servidor
-cn($.toJSON(aFilters));
 		if (this.aFilters.viewType != lastFilters.viewType) {
 			var onlyViewType = true;
 			for (filterName in aFilters) {
@@ -699,9 +688,7 @@ TODO: pensar como mejorar esta parte
 			cloneReader.selectEntry($entry, false, false);
 		});
 
-		if (this.aFilters.search.trim() != '') {
-			$entry.find('p, .header').highlight( this.aFilters.search.trim().split(' '), { element: 'mark', wordsOnly: true });
-		}
+		this.highlight($entry.find('p, .header'));
 	},
 	
 	renderListEntry: function($entry, entry) {
@@ -729,9 +716,7 @@ TODO: pensar como mejorar esta parte
 			cloneReader.selectEntry($entry, true, false);
 		});	
 
-		if (this.aFilters.search.trim() != '') {
-			$entry.find('.entryContent').highlight( this.aFilters.search.trim().split(' '), { element: 'mark', wordsOnly: true });
-		}
+		this.highlight($entry.find('.feedName, .entryContent'));
 	},
 
 	renderEntryPictures: function($entry) {
@@ -744,11 +729,6 @@ TODO: pensar como mejorar esta parte
 			if (width != null) {
 				$img.css('width', width + 'px');
 			}
-			if (height != null) {
-				// FIXME: revisar, las img se extiran en movile
-				// $img.css('height', height + 'px');
-			}
-
 			if (!($img.width() == 1 || $img.height() == 1)) {
 				if ($img.parent('a').length == 0) { 
 					$img.before('<a />').prev().append($img);
@@ -791,7 +771,11 @@ TODO: pensar como mejorar esta parte
 		var title  = $.htmlspecialchars(filter.name);
 		var search = $.htmlspecialchars(this.aFilters.search.trim());
 		if (search != '') {
-			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search.split(' ').join('</mark> <mark>') + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
+			search = decodeURIComponent(search);
+			if (search.substr(0, 1) != '"' && search.substr(search.length-1, 1) != '"') {
+				search = search.split(' ').join('</mark> <mark>');
+			}
+			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 		
 		this.$entriesHead.html(title);
@@ -971,6 +955,10 @@ TODO: pensar como mejorar esta parte
 		}
 		
 		this.toogleMainToolbarItem(['.filterSort'], true);
+
+		if (this.aFilters.search.trim() != '') {
+			this.toogleMainToolbarItem(['.btnMarkAllAsRead', '.filterSort', '.filterUnread', '.feedSettings'], false);
+		}
 	},
 	
 	toogleMainToolbarItem: function(aItems, show) {
@@ -1985,6 +1973,97 @@ console.timeEnd("t1");
 					}
 				, this),
 		});
+	},
+
+	highlight: function($elements) {
+		if (this.aFilters.search.trim() == '') {
+			return;
+		}
+		
+		var search = this.aFilters.search;
+		if (search.substr(0, 1) == '"' && search.substr(search.length-1, 1) == '"') {
+			search = this.aFilters.search.trim().replace(/"/g, "");
+		}
+		else {
+			search = this.aFilters.search.trim().replace(/"/g, "").split(' ');
+		}
+		$elements.highlight( search, { element: 'mark', wordsOnly: true });
+	},
+
+	initHeader: function() { // TODO: pensar un mejor nombre para este metodo
+		this.$frmSearch = $('.frmSearch');
+		this.aFilters = $.extend({
+			'page':         1,
+			'onlyUnread':   true,
+			'sortDesc':     true,
+			'id':           crSettings.tagHome, 
+			'type':         'tag',
+			'viewType':     'detail',
+			'isMaximized':  false,
+			'search':       '' // $.url().param('q').trim() TODO:
+		}, crSettings.userFilters);
+		
+		$('body') // sobreescribo el evento para que no apeendee en window.history base_url; si no luego no se puede hacer back
+			.off('click', 'a')
+			.on('click', 'a',
+			function(event) {
+				if (event.button != 0) { return; }
+		
+				var $link = $(event.currentTarget);
+				if ($link.attr('href') == base_url) {
+					event.preventDefault();
+					cloneReader.changeFilters({});
+					return;
+				}
+				crMain.clickOnLink(event);
+			}
+		);
+
+
+		this.$frmSearch.find('input').keyup(function(event) {
+			event.stopPropagation();
+		});
+
+		this.$frmSearch
+			.unbind('submit')
+			.on('submit', 
+			function() {
+				var $frmSearch  = $(this);
+				var $input      = $frmSearch.find('[name=q]');
+				if ($input.val().trim() == '') {
+					return false;
+				}
+				$.hideMobileNavbar();
+
+				cloneReader.changeFilters({ 'search': $input.val().trim() } );
+				return false;
+			}
+		);
+		
+		this.$frmSearch.find('.fa-times').parent()
+			.css( { 'cursor': 'pointer', 'color': '#555555' } )
+			.click($.proxy(
+				function (event){
+					this.$frmSearch.find('input[name=q]').val('');
+					cloneReader.changeFilters({ 'search': '' } );
+				}
+			, this));
+
+		this.populateSearchForm();
+	},
+	
+	populateSearchForm: function() {
+		var search = $.url().param('q');
+		var $input = this.$frmSearch.find('input[name=q]');
+
+		$input.val('');
+		if (search !== undefined) {
+			$input.val(decodeURIComponent(search));
+		}
+	},
+	
+	clearSearchForm: function() {
+		this.$frmSearch.find('input[name=q]').val('');
 	}
 };
 

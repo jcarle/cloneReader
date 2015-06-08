@@ -549,7 +549,7 @@ class CI_DB_mysql_driver extends CI_DB {
 	 */
 	function _insert($table, $keys, $values) 
 	{	
-        $sql = ( ! $this->ar_ignore) ? 'INSERT ' : 'INSERT IGNORE ';
+		$sql = ( ! $this->ar_ignore) ? 'INSERT ' : 'INSERT IGNORE ';
 		return "$sql INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
 	}
 	/*function _insert($table, $keys, $values)

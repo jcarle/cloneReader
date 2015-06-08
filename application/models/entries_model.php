@@ -146,6 +146,7 @@ class Entries_Model extends CI_Model {
 			->from('entities_search')
 			->where('('. implode(' OR ', $aFeedsSearch).')', NULL, FALSE)
 			->where($match, NULL, FALSE);
+// TODO: order_by
 		$this->Commond_Model->appendLimitInQuery($userFilters['page'], config_item('entriesPageSize'));
 		$query = $this->db->get()->result_array();
 		//pr($this->db->last_query()); die;		
@@ -817,7 +818,6 @@ class Entries_Model extends CI_Model {
 		if ($entryId != null) {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
 		}
-		
 
 		$pageSize     = 1000;
 		$lastEntryId  = 0;
@@ -833,10 +833,9 @@ class Entries_Model extends CI_Model {
 	}	
 
 	function saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize) {
-		$this->db->trans_start();
-		
 		$aWhere[]    = ' entries.entryId > '.(int)$lastEntryId;
 		$lastEntryId = null;
+		$values      = array();
 
 		$query = " SELECT entryId, entryTitle, entryContent, entries.feedId
 			FROM entries
@@ -846,22 +845,31 @@ class Entries_Model extends CI_Model {
 		// pr($query); // die;
 		$query = $this->db->query($query);
 		foreach ($query->result_array() as $data) {
-			$lastEntryId = $data['entryId'];
-			$searchKey   = 'searchEntries searchInFeedId'.$data['feedId'];
-			$feed        = $this->Feeds_Model->get($data['feedId']);
-			$values      = array(
+			$lastEntryId              = $data['entryId'];
+			$searchKey                = 'searchEntries searchInFeedId'.$data['feedId'];
+			$feed                     = $this->Feeds_Model->get($data['feedId']);
+			$values[$data['entryId']] = array(
 				'entityTypeId'     => config_item('entityTypeEntry'), 
 				'entityId'         => $data['entryId'],
-				'entityFullSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.strip_tags($data['entryContent']).' '.$feed['feedName']),
+				'entityFullSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.rip_tags($data['entryContent']).' '.$feed['feedName']),
 				'entityNameSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.$feed['feedName']),
 				'entityName'       => $data['entryTitle']
 			);
-
-			$this->db->insert('entities_search', $values);
 		}
 
-		$this->db->trans_complete();
+
+		if (!empty($values)) {
+			$this->db
+				->where('entityTypeId', config_item('entityTypeEntry'))
+				->where_in('entityId', array_keys($values))
+				->delete('entities_search');
+			//pr($this->db->last_query()); die;
+
+			$this->db->insert_batch('entities_search', $values);
+		}
+
 		$query->free_result();
+		unset($values);
 		
 		return $lastEntryId;
 	}

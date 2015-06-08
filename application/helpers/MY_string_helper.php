@@ -47,6 +47,22 @@ function truncate($string, $limit, $break=" ", $pad="...") {
 	return $string;
 }
 
+function rip_tags($string) { 
+    // ----- remove HTML TAGs ----- 
+	$string = preg_replace ('/<[^>]*>/', ' ', $string); 
+
+    // ----- remove control characters ----- 
+	$string = str_replace("\r", '', $string);    // --- replace with empty space
+	$string = str_replace("\n", ' ', $string);   // --- replace with space
+	$string = str_replace("\t", ' ', $string);   // --- replace with space
+
+	// ----- remove multiple spaces ----- 
+	$string = trim(preg_replace('/ {2,}/', ' ', $string));
+    
+	return $string; 
+}
+
+
 /**
  * Elimina las palabras reservadas y las palabras muy cortas del string de búsqueda; 
  * 	También llama a la function searchReplace
@@ -58,16 +74,22 @@ function truncate($string, $limit, $break=" ", $pad="...") {
  * @return (array)  devuelve      un array con las palabras a buscar
  * */
 function cleanSearchString($search, $aSearchKey, $addPlus = true, $addWildcard = false) {
-	$CI = & get_instance();
+	$CI     = & get_instance();
+	$result = array();
+	$search = str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $search));
 
-	$result    = array();
-	$aSearch   = explode(' ', str_replace('  ', ' ', str_replace( config_item('searchKeys'), '', $CI->db->escape_like_str($search))));
-	for($i=0; $i<count($aSearch); $i++) {
-		if (strlen($aSearch[$i]) >= 3 )  { // TODO: harckodeta
-			$result[] = searchReplace($aSearch[$i]);
+	if (substr($search, 0, 1) == '"'  && substr($search, strlen($search)-1, 1) == '"') {
+		$result   = array(searchReplace($CI->db->escape_like_str($search)));
+	}
+	else {
+		$aSearch   = explode(' ', $CI->db->escape_like_str($search));
+		for($i=0; $i<count($aSearch); $i++) {
+			if (strlen($aSearch[$i]) >= 3 )  { // TODO: harckodeta
+				$result[] = searchReplace($aSearch[$i]);
+			}
 		}
 	}
-	
+
 	if (empty($result)) {
 		return array();
 	}
@@ -94,6 +116,7 @@ function cleanSearchString($search, $aSearchKey, $addPlus = true, $addWildcard =
  * 
  */
 function searchReplace($string) {
+	$string = html_entity_decode($string);
 	return str_replace(array('+', '-', '&'), array('plus', 'minus', 'ampersand'), $string);
 }
 
@@ -206,7 +229,7 @@ function getHtmlFormSearch($isHeader = true) {
 	$CI        = & get_instance();
 	$frmName   = 'frmSearch';
 
-	$CI->my_js->add(  '  $.Search.init($(\'.'.$frmName.'\')); ');
+//	$CI->my_js->add(  '  $.Search.init($(\'.'.$frmName.'\')); ');
 	
 	$html = '
 		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('').'">
