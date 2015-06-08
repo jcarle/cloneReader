@@ -60,7 +60,6 @@ function appendFilesToCarabiner() {
 		'crMenu.js',
 		'feedback.js',
 		'profile.js',
-		'search.js',
 		'process.js',
 
 		'crForm.js',

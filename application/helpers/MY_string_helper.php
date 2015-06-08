@@ -229,8 +229,6 @@ function getHtmlFormSearch($isHeader = true) {
 	$CI        = & get_instance();
 	$frmName   = 'frmSearch';
 
-//	$CI->my_js->add(  '  $.Search.init($(\'.'.$frmName.'\')); ');
-	
 	$html = '
 		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('').'">
 			<a href="'.base_url('search').'" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
