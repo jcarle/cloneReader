@@ -111,15 +111,19 @@ class Entries_Model extends CI_Model {
 	function searchEntries($userFilters) {
 		$this->load->model('Feeds_Model');
 		
-		$aEntityId  = array();
-		$aSearchKey = array('searchEntries');
-		$search     = $userFilters['search'];
-		$aSearch    = cleanSearchString($search, $aSearchKey);
-		$feedId     = null; 
-		$tagId      = null;
+		$userId        = $this->session->userdata('userId');
+		$aEntityId     = array();
+		$aSearchKey    = array('searchEntries');
+		$search        = $userFilters['search'];
+		$aSearch       = cleanSearchString($search, $aSearchKey);
+		$feedId        = null; 
+		$tagId         = null;
+		$aFeedsSearch  = array();
+		$aEntrySearch  = array();
 		if (empty($aSearch)) {
 			return array();
-		}		
+		}
+
  		
 		
 		if ($userFilters['type'] == 'feed') {
@@ -128,24 +132,46 @@ class Entries_Model extends CI_Model {
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] != config_item('tagAll')) {
 			$tagId = $userFilters['id'];
 		}
-		$query   = $this->Feeds_Model->selectFeedIdByUserId($this->session->userdata('userId'), $feedId, $tagId);
-		$aFeedsSearch = array();
-		foreach ($query as $data) {
-			$aFeedsSearch[] = " MATCH (entityNameSearch) AGAINST ('+searchEntries  +searchInFeedId".$data['feedId']."' IN BOOLEAN MODE) ";
-		} 
-		
-		if (empty($aFeedsSearch)) {
+		if ($userFilters['type'] == 'tag' && $userFilters['id'] == config_item('tagStar')) {
+			$indexName = 'indexTag';
+			$query = $this->db
+				->select(' users_entries.entryId ', false)
+				->from('users_entries FORCE INDEX ('.$indexName.')' )
+				->where('users_entries.userId', $userId)
+				->where('users_entries.tagId', config_item('tagStar'))
+				->get()->result_array();
+			//pr($this->db->last_query()); die;
+			foreach ($query as $data) {
+				$aEntrySearch[] = $data['entryId'];
+			}
+		}
+		else {
+			$query = $this->Feeds_Model->selectFeedIdByUserId($userId, $feedId, $tagId);
+			foreach ($query as $data) {
+				$aFeedsSearch[] = " MATCH (entityNameSearch) AGAINST ('+searchEntries  +searchInFeedId".$data['feedId']."' IN BOOLEAN MODE) ";
+			} 
+		}
+
+		if (empty($aFeedsSearch) && empty($aEntrySearch)) {
 			return array();
 		}
+
 		
 		$match     = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
 // SQL_CALC_FOUND_ROWS		
 		$this->db
 			->select(' entityId, entityName, '.$match.' AS score, 
 				MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
-			->from('entities_search')
-			->where('('. implode(' OR ', $aFeedsSearch).')', NULL, FALSE)
-			->where($match, NULL, FALSE);
+			->from('entities_search');
+		if (!empty($aFeedsSearch) ) {
+			$this->db->where('('. implode(' OR ', $aFeedsSearch).')', NULL, FALSE);
+		}
+		if (!empty($aEntrySearch)) {
+			$this->db->where('entityTypeId', config_item('entityTypeEntry'));
+			$this->db->where_in('entityId', $aEntrySearch);
+		}
+
+		$this->db->where($match, NULL, FALSE);
 // TODO: order_by
 		$this->Commond_Model->appendLimitInQuery($userFilters['page'], config_item('entriesPageSize'));
 		$query = $this->db->get()->result_array();
@@ -160,12 +186,13 @@ class Entries_Model extends CI_Model {
 
 
 		$query = $this->db
-			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor ', false)
+			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.config_item('tagStar').', true, false) AS starred, entryRead ', false)
+			->from('entries')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
+			->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
 			->where_in('entries.entryId', $aEntryId)
-			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
-			->get('entries ')
-			->result_array();
+//			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
+			->get()->result_array();
 		//pr($this->db->last_query()); die;
 		return $query;
 	}

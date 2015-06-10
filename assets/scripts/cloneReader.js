@@ -1,11 +1,14 @@
 cloneReader = {
-	init: function(aFilters) {
-cn('init');
+	init: function() {
 		this.$page      = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
 		this.$toolbar   = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
 		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
 		this.isMobile   = $.isMobile();
+
+		if (this.aFilters == null) {
+			this.initSearch();
+		}
 
 		this.minUnreadEntries   = 2;
 		this.isLastPage         = false;
@@ -1094,7 +1097,7 @@ TODO: pensar como mejorar esta parte
 					function(reload, response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-console.time("t1");	
+//console.time("t1");	
 						if (reload == true) {
 							var scrollTop = this.$ulFilters.scrollTop();
 						}
@@ -1113,7 +1116,7 @@ console.time("t1");
 						else {
 							this.loadUrl();
 						}
-console.timeEnd("t1");
+//console.timeEnd("t1");
 					}
 				, this, reload)
 		});	
@@ -1990,7 +1993,7 @@ console.timeEnd("t1");
 		$elements.highlight( search, { element: 'mark', wordsOnly: true });
 	},
 
-	initHeader: function() { // TODO: pensar un mejor nombre para este metodo
+	initSearch: function() {
 		this.$frmSearch = $('.frmSearch');
 		this.aFilters = $.extend({
 			'page':         1,
@@ -2078,3 +2081,6 @@ $.fn.scrollStopped = function(callback) {
 	});
 };
 
+$(document).ready( function() {
+	cloneReader.initSearch();
+});
