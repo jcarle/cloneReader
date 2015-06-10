@@ -142,14 +142,12 @@ class Commond_Model extends CI_Model {
 			return array();
 		}
 		
-// 		
 		$match     = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS entityId, entityName, '.$match.' AS score, MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
 			->from('entities_search')
 			->where($match, NULL, FALSE)
 			->order_by('scoreName DESC, score DESC');
-			
 		$this->appendLimitInQuery($pageCurrent, $pageSize);
 
 		$query = $this->db->get()->result_array();
@@ -203,12 +201,17 @@ class Commond_Model extends CI_Model {
 	}
 
 	function deleteEntitySearch( array $aEntityTypeId, $entityId = null) {
-		$this->db->where_in('entityTypeId', $aEntityTypeId);
-		if ($entityId != null) {
-			$this->db->where_in('entityId', $entityId);
+		$affectedRows = 1;
+
+		while ($affectedRows > 0) {
+			$this->db->where_in('entityTypeId', $aEntityTypeId);
+			if ($entityId != null) {
+				$this->db->where_in('entityId', $entityId);
+			}
+			$this->db->limit(10000)->delete('entities_search');
+
+			$affectedRows = $this->db->affected_rows();
 		}
-		
-		$this->db->delete('entities_search');
 	}
 	
 	/**

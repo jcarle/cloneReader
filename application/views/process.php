@@ -44,6 +44,10 @@ $items = array(
 				),
 			),
 			array(
+				'text'    => 'Optimeze table',
+				'url'     => 'process/optimezeTableEntitiesSearch',
+			),
+			array(
 				'text'    => 'All entities',
 				'url'     => 'process/saveEntitiesSearch',
 				'childs' => array(

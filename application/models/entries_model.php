@@ -449,7 +449,7 @@ class Entries_Model extends CI_Model {
 	function pushTmpUserEntries($userId) { // guarda los cambios en la tabla users_entries
 		$this->db->trans_start();
 		
-		$entries 	= $this->db->where('userId', $userId)->get('tmp_users_entries')->result_array();
+		$entries = $this->db->where('userId', $userId)->get('tmp_users_entries')->result_array();
 		//pr($this->db->last_query()); 
 		
 		foreach ($entries as $entry) {		
