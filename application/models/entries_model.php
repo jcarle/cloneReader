@@ -32,7 +32,6 @@ class Entries_Model extends CI_Model {
 	}
 	
 	function select($userId, $aFilters){
-//$aFilters = array();		
 		// Default filters, por si viaja mal el js.
 		$userFilters = array_merge(
 			array(
@@ -66,7 +65,7 @@ class Entries_Model extends CI_Model {
 
 		$indexName = 'PRIMARY';
 		$query = $this->db
-			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.config_item('tagStar').', true, false) AS starred, entryRead', false)
+			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, entryRead', false)
 			->join('entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->where('users_entries.userId', $userId);
@@ -89,8 +88,13 @@ class Entries_Model extends CI_Model {
 			->get('users_entries FORCE INDEX ('.$indexName.')', config_item('entriesPageSize'), ((int)$userFilters['page'] * config_item('entriesPageSize')) - config_item('entriesPageSize'))
 			->result_array();
 		//pr($this->db->last_query()); die;
-		
-		return $query;
+		$result = array();
+		foreach ($query as $data) {
+			$data['starred'] = $this->isEntryStarred($userId, $data['entryId']);
+			$result[] = $data;
+		}
+
+		return $result;
 	}
 	
 	
@@ -123,8 +127,6 @@ class Entries_Model extends CI_Model {
 		if (empty($aSearch)) {
 			return array();
 		}
-
- 		
 		
 		if ($userFilters['type'] == 'feed') {
 			$feedId = $userFilters['id'];
@@ -132,9 +134,11 @@ class Entries_Model extends CI_Model {
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] != config_item('tagAll')) {
 			$tagId = $userFilters['id'];
 		}
+
 		if ($userFilters['type'] == 'tag' && $userFilters['id'] == config_item('tagStar')) {
+			$tagId     = config_item('tagStar');
 			$indexName = 'indexTag';
-			$query = $this->db
+			$query     = $this->db
 				->select(' users_entries.entryId ', false)
 				->from('users_entries FORCE INDEX ('.$indexName.')' )
 				->where('users_entries.userId', $userId)
@@ -150,6 +154,7 @@ class Entries_Model extends CI_Model {
 			foreach ($query as $data) {
 				$aFeedsSearch[] = " MATCH (entityNameSearch) AGAINST ('+searchEntries  +searchInFeedId".$data['feedId']."' IN BOOLEAN MODE) ";
 			} 
+			$tagId = config_item('tagAll');
 		}
 
 		if (empty($aFeedsSearch) && empty($aEntrySearch)) {
@@ -157,12 +162,12 @@ class Entries_Model extends CI_Model {
 		}
 
 		
-		$match     = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
-// SQL_CALC_FOUND_ROWS		
+		$match = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
 		$this->db
-			->select(' entityId, entityName, '.$match.' AS score, 
-				MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
-			->from('entities_search');
+			->select(' entityId, entityName, '.$match.' AS score, MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
+			->from('entities_search')
+			->where($match, NULL, FALSE)
+			->order_by('scoreName DESC, score DESC');
 		if (!empty($aFeedsSearch) ) {
 			$this->db->where('('. implode(' OR ', $aFeedsSearch).')', NULL, FALSE);
 		}
@@ -170,9 +175,6 @@ class Entries_Model extends CI_Model {
 			$this->db->where('entityTypeId', config_item('entityTypeEntry'));
 			$this->db->where_in('entityId', $aEntrySearch);
 		}
-
-		$this->db->where($match, NULL, FALSE);
-// TODO: order_by
 		$this->Commond_Model->appendLimitInQuery($userFilters['page'], config_item('entriesPageSize'));
 		$query = $this->db->get()->result_array();
 		//pr($this->db->last_query()); die;		
@@ -185,16 +187,39 @@ class Entries_Model extends CI_Model {
 		}
 
 
-		$query = $this->db
-			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, IF(users_entries.tagId = '.config_item('tagStar').', true, false) AS starred, entryRead ', false)
+		$this->db
+			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, entryRead ', false)
 			->from('entries')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
 			->where_in('entries.entryId', $aEntryId)
-//			->order_by('entries.entryDate', ($userFilters['sortDesc'] == true ? 'desc' : 'asc'))
-			->get()->result_array();
+			->where('users_entries.userId', $userId)
+			->where('users_entries.tagId', $tagId);
+
+		$this->db->_protect_identifiers = FALSE;
+		$this->db->order_by('FIELD(entries.entryId, '.implode(',', $aEntryId).' ) ');
+		$this->db->_protect_identifiers = TRUE;
+
+		$query = $this->db->get()->result_array();
 		//pr($this->db->last_query()); die;
-		return $query;
+		$result = array();
+		foreach ($query as $data) {
+			$data['starred'] = $this->isEntryStarred($userId, $data['entryId']);
+			$result[] = $data;
+		}
+
+		return $result;
+	}
+
+
+	function isEntryStarred($userId, $entryId) {
+		$query = $this->db
+			->from('users_entries')
+			->where('userId', $userId)
+			->where('entryId', $entryId)
+			->where('tagId', config_item('tagStar'))
+			->get()->row_array();
+		return (!empty($query));
 	}
 
 	function selectFilters($userId) {
@@ -421,17 +446,14 @@ class Entries_Model extends CI_Model {
 		//pr($this->db->last_query()); 
 	}
 
-	// guarda los cambios en la tabla users_entries
-	function pushTmpUserEntries($userId) {
+	function pushTmpUserEntries($userId) { // guarda los cambios en la tabla users_entries
 		$this->db->trans_start();
 		
-//		$aQueries 	= array();
 		$entries 	= $this->db->where('userId', $userId)->get('tmp_users_entries')->result_array();
 		//pr($this->db->last_query()); 
 		
 		foreach ($entries as $entry) {		
 			if ($entry['starred'] == true) {
-				//$aQueries[] = 
 				$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate)  
 					SELECT userId, entryId, feedId, '.config_item('tagStar').', entryRead, entryDate
 					FROM users_entries 
@@ -442,18 +464,12 @@ class Entries_Model extends CI_Model {
 				//pr($this->db->last_query());	 
 			}
 			else {
-				//$aQueries[] = 'DELETE FROM users_entries WHERE userId = '.$userId.' AND entryId = '.$entry['entryId'].' AND tagId = '.config_item('tagStar');
 				$this->db->delete('users_entries', array(
 					'userId'	=> $userId,
 					'entryId'	=> $entry['entryId'],
 					'tagId'		=> config_item('tagStar')
 				));
 			}
-			
-/*			$aQueries[] = 'UPDATE users_entries SET
-				entryRead 		= '.$entry['entryRead'].'
-				WHERE userId	= '.$userId.'
-				AND   entryId	= '.$entry['entryId'];*/				
 			
 			$this->db
 				->where(array(
@@ -463,14 +479,9 @@ class Entries_Model extends CI_Model {
 				->update('users_entries', array('entryRead' => $entry['entryRead']));
 			//pr($this->db->last_query());				
 		}
-	
-//pr(implode(';', $aQueries));		
-//$this->db->conn_id->multi_query(implode(';', $aQueries));
-		//$this->db->query(implode(';', $aQueries));
+
 		//pr($this->db->last_query());				
 		$this->db->delete('tmp_users_entries', array('userId' => $userId));
-		// TODO: enviar todos estos queries juntos al servidor
-		
 		$this->db->trans_complete();
 	}
 	
