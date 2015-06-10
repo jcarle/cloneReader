@@ -159,7 +159,7 @@ class Feeds_Model extends CI_Model {
 	
 	function delete($feedId) {
 		$this->db->delete('feeds', array('feedId' => $feedId));
-		$this->Commond_Model->deleteEntitySearch(array(config_item('entityTypeFeed')), $feedId);
+		$this->Commond_Model->deleteEntitySearch(config_item('entityTypeFeed'), $feedId);
 
 		return true;
 	}
@@ -612,7 +612,7 @@ class Feeds_Model extends CI_Model {
 	
 	function saveFeedsSearch($deleteEntitySearch = false, $onlyUpdates = false, $feedId = null) {
 		if ($deleteEntitySearch == true) {
-			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeFeed')));
+			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeFeed'));
 		}
 		
 		$aWhere = array();

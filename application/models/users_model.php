@@ -271,7 +271,7 @@ class Users_Model extends CI_Model {
 	function delete($userId) {
 		$this->db->delete('users', array('userId' => $userId));
 		
-		$this->Commond_Model->deleteEntitySearch(array(config_item('entityTypeUser')), $userId);
+		$this->Commond_Model->deleteEntitySearch(config_item('entityTypeUser'), $userId);
 		
 		return true;
 	}		
@@ -458,7 +458,7 @@ class Users_Model extends CI_Model {
 	
 	function saveUsersSearch($deleteEntitySearch = false, $onlyUpdates = false, $userId = null) {
 		if ($deleteEntitySearch == true) {
-			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeUser')));
+			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeUser'));
 		}
 		
 		$aWhere = array();

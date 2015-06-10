@@ -843,7 +843,7 @@ class Entries_Model extends CI_Model {
 		$this->load->model('Feeds_Model');
 
 		if ($deleteEntitySearch == true) {
-			$this->Commond_Model->deleteEntitySearch( array(config_item('entityTypeEntry')));
+			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeEntry'));
 		}
 		
 		
