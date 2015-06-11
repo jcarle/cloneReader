@@ -154,7 +154,7 @@ function loadViewAjax($code, $result = null) {
 	if ($result == null) {
 		$result = array();
 	}	
-	if ($code != true) {
+	if ($code != true && is_array($result)) {
 		$result['formErrors'] = validation_array_errors();
 	}
 	

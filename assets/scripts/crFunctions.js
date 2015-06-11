@@ -506,6 +506,69 @@ $.extend({
 		$.showModal($modal, false);
 	},
 	
+	showPopupSimpleForm: function($element, placeholder, callback, value){
+		if ($.$popupSimpleForm == null) {
+			$.$popupSimpleForm = $('\
+				<form class="btn-default dropdown-menu form-inline popupSimpleForm "> \
+					<div class="input-group"> \
+						<input type="text" class="form-control"  /> \
+						<span class="input-group-btn" > \
+							<button class="btn btn-primary"> <i class="fa fa-check" /> </button> \
+						</span> \
+					</div> \
+				</form>\
+			');
+			
+			$.$popupSimpleForm.find('input').keyup(function(event) {
+				event.stopPropagation();
+			});
+		}
+		
+		var $page = $('.cr-page:visible');
+		$.$popupSimpleForm.data('$element', $element);
+		
+		$.hidePopupSimpleForm();
+		$.hideMobileNavbar();
+		$element.addClass('active');
+
+		if (value == null) { value = ''; }
+		
+		$.$popupSimpleForm
+			.unbind()
+			.submit(function(event) {
+				event.preventDefault();
+				callback();
+				return false;
+			});
+		$.$popupSimpleForm.find('input').attr('placeholder', placeholder.toLowerCase()).val( value );
+
+		var top  = $element.offset().top + $element.height() +  15;
+		var left = $element.offset().left - $page.offset().left;
+		
+		$.$popupSimpleForm
+			.css({ 'top': top,  'left': left, 'right': 'auto', 'position': 'fixed' })
+			.appendTo($('body'))
+			.stop()
+			.fadeIn();
+
+		if ($page.width() < ($.$popupSimpleForm.width() + left)) {
+			$.$popupSimpleForm.css({ 'left': 'auto', 'right': 5 });
+		}
+
+		if ($.isMobile() == false) {
+			$.$popupSimpleForm.find('input').focus();
+		}
+	},
+	
+	hidePopupSimpleForm: function() {
+		//this.$mainToolbar.find('.open').removeClass('open');
+		
+		if ($.$popupSimpleForm != null) {
+			$.$popupSimpleForm.hide();
+			$.$popupSimpleForm.data('$element').removeClass('active');
+		}
+	},	
+	
 	formatNumber: function(value) { // TODO: ver si hay alguna manera de que autoNumeric devuelva el numero formateado sin tener que crear un $elemento
 		return $('<span />')
 			.text(value)
@@ -558,6 +621,24 @@ $.extend({
 $(window).resize(function() {
 	resizeWindow();
 });
+
+$(document).click(
+	function(event) {
+		if ($(event.target).parents('.modal').length != 0) {
+			return;
+		}
+		if ($('.crAlert:visible').length != 0) {
+			return;
+		}
+		if ($.$popupSimpleForm != null) {
+			if ($.contains($.$popupSimpleForm[0], event.target)) {
+				return;
+			}
+		}
+
+		$.hidePopupSimpleForm();
+	}
+);
 
 function resizeWindow() {
 }

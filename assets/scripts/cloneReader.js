@@ -232,25 +232,6 @@ cloneReader = {
 				}
 			}
 		, this));
-
-		$(document).click(
-			function(event) {
-				if ($(event.target).parents('.modal').length != 0) {
-					return;
-				}
-				if ($('.crAlert:visible').length != 0) {
-					return;
-				}
-				
-				var $popupForm = cloneReader.$page.find('.popupForm:visible');
-				if ($popupForm.length != 0) {
-					if ($.contains($popupForm[0], event.target)) {
-						return;
-					}
-				}
-				cloneReader.hidePopupWindow();
-			}
-		);
 		
 		$('#header .logo').click(function(event) { 
 			if (cloneReader.isMobile != true) {  return;  }
@@ -401,7 +382,7 @@ cloneReader = {
 		this.$mainToolbar.find('.filterOldestSort').click(function(event) { cloneReader.changeFilters( {'sortDesc': false}); });
 		this.$mainToolbar.find('.add').click(  function(event) {  
 				event.stopPropagation(); 
-				cloneReader.showPopupForm(crLang.line('Add new feed'), crLang.line('Add feed url'), function() { cloneReader.addFeed(); }, $(event.target)); 
+				$.showPopupSimpleForm($(event.target), crLang.line('Add feed url'), function() { cloneReader.addFeed(); }); 
 			}
 		);
 		this.$mainToolbar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
@@ -409,13 +390,13 @@ cloneReader = {
 		this.toogleMainToolbarItem(['.filterUnread', '.filterSort', '.feedSettings'], false);
 		this.$mainToolbar.find('.dropdown-toggle').click(
 			function(event) {
-				cloneReader.hidePopupWindow();
+				$.hidePopupSimpleForm();
 			}
 		);
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
-		this.hidePopupWindow();
+		$.hidePopupSimpleForm();
 		
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters   = $.extend(this.aFilters, aFilters);
@@ -1419,15 +1400,15 @@ TODO: pensar como mejorar esta parte
 	},
 
 	addFeed: function() {
-		var feedUrl = this.$popupForm.find('input').val();
+		var feedUrl = $.$popupSimpleForm.find('input').val();
 		if (feedUrl == '') {
-			return this.$popupForm.find('input').crAlert(crLang.line('Enter a url'));
+			return $.$popupSimpleForm.find('input').crAlert(crLang.line('Enter a url'));
 		}
 		if ($.validateUrl(feedUrl) == false) {
-			return this.$popupForm.find('input').crAlert(crLang.line('Enter a valid url'));
+			return $.$popupSimpleForm.find('input').crAlert(crLang.line('Enter a valid url'));
 		}
 
-		this.hidePopupWindow();
+		$.hidePopupSimpleForm();
 
 		$.ajax({
 			'url':   base_url + 'entries/addFeed',
@@ -1480,12 +1461,12 @@ TODO: pensar como mejorar esta parte
 	},
 
 	addTag: function() {
-		var tagName = this.$popupForm.find('input').val();
+		var tagName = $.$popupSimpleForm.find('input').val();
 		if (tagName.trim() == '') {
-			return this.$popupForm.find('input').crAlert('enter a tag name');
+			return $.$popupSimpleForm.find('input').crAlert('enter a tag name');
 		}
 
-		this.hidePopupWindow();
+		$.hidePopupSimpleForm();
 
 		$.ajax({
 			'url': 		base_url + 'entries/addTag',
@@ -1505,7 +1486,7 @@ TODO: pensar como mejorar esta parte
 	},
 
 	saveUserFeedTag: function(feedId, tagId, append) {
-		this.hidePopupWindow();
+		$.hidePopupSimpleForm();
 		$.hideMobileNavbar();
 
 		$.ajax({
@@ -1526,10 +1507,9 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	markAllAsRead: function(feedId) {
-		this.hidePopupWindow();
+		$.hidePopupSimpleForm();
 		
 		var filter = this.getFilter(this.aFilters);
-
 
 		$(document).crAlert( {
 			'msg': 			$.sprintf( crLang.line('Mark "%s" as read?'), filter.name),
@@ -1557,7 +1537,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	unsubscribeFeed: function(feedId) {
-		this.hidePopupWindow();
+		$.hidePopupSimpleForm();
 		
 		var filter = this.getFilter(this.aFilters);
 		
@@ -1628,8 +1608,8 @@ TODO: pensar como mejorar esta parte
 			{ 'html': crLang.line('Unsubscribe'),  'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
 			{ 'html': crLang.line('New tag'),      'class': 'newTag', 'callback': 
 				function(event) {
-					event.stopPropagation(); 
-					cloneReader.showPopupForm(crLang.line('Add new tag'), crLang.line('enter tag name'), function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings button'));
+					event.stopPropagation();
+					$.showPopupSimpleForm(cloneReader.$mainToolbar.find('.feedSettings button'), crLang.line('enter tag name'), function() { cloneReader.addTag(); });
 				}
 			},
 			{ 'html': crLang.line('Edit tags'), 'callback': 
@@ -1689,56 +1669,6 @@ TODO: pensar como mejorar esta parte
 		} 
 		return false;
 	},
-
-	showPopupForm: function(title, placeholder, callback, $element, value){
-		if (this.$popupForm == null) {
-			this.$popupForm = $('\
-				<form class="btn-default dropdown-menu form-inline popupForm "> \
-					<div class="input-group"> \
-						<input type="text" class="form-control"  /> \
-						<span class="input-group-btn" > \
-							<button class="btn btn-primary"> <i class="fa fa-check" /> </button> \
-						</span> \
-					</div> \
-				</form>\
-			');
-			
-			this.$popupForm.find('input').keyup(function(event) {
-				event.stopPropagation();
-			});
-		}
-		
-		this.hidePopupWindow();
-		$.hideMobileNavbar();
-
-		if (value == null) { value = ''; }
-		
-		this.$popupForm
-			.unbind()
-			.submit(function(event) {
-				event.preventDefault();
-				callback();
-				return false;
-			});
-		this.$popupForm.find('input').attr('placeholder', placeholder.toLowerCase()).val( value );
-
-		var top  = $element.offset().top + $element.height() +  15;
-		var left = $element.offset().left - this.$page.offset().left;
-		
-		this.$popupForm
-			.css({ 'top': top,  'left': left, 'right': 'auto', 'position': 'fixed' })
-			.appendTo(this.$page)
-			.stop()
-			.fadeIn();
-
-		if (this.$page.width() < (this.$popupForm.width() + left)) {
-			this.$popupForm.css({ 'left': 'auto', 'position': 'fixed', 'right': 5 });
-		}
-			
-		if (this.isMobile == false) {
-			this.$popupForm.find('input').focus();
-		}
-	},
 	
 	resizeWindow: function() {
 		if (this.$page.is(':visible') != true) {
@@ -1759,7 +1689,7 @@ TODO: pensar como mejorar esta parte
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
-			this.hidePopupWindow();
+			$.hidePopupSimpleForm();
 			$('#header').css( {'box-shadow': 'none' });
 		}
 
@@ -1783,11 +1713,6 @@ TODO: pensar como mejorar esta parte
 				)		
 //			.css('border', '1px red solid' )
 		;				
-	},
-	
-	hidePopupWindow: function() {
-		this.$page.find('.popupForm').hide();
-		this.$mainToolbar.find('.open').removeClass('open');
 	},
 	
 	isBrowseTags: function() {
@@ -2072,7 +1997,7 @@ TODO: pensar como mejorar esta parte
 	},
 
 	showPopupSearch: function(event) {
-		this.showPopupForm(crLang.line('Search'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': cloneReader.$popupForm.find('input').val() } ); }, this.$frmSearch.find('.btn-default:visible'), cloneReader.$frmSearch.find('input[name=q]').val()); 
+		$.showPopupSimpleForm(this.$frmSearch.find('.btn-default:visible'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': $.$popupSimpleForm.find('input').val() } ); }, cloneReader.$frmSearch.find('input[name=q]').val()); 
 	}
 };
 

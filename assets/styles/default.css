@@ -867,3 +867,17 @@ table .dotdotdot {
 	background: #ff0;
 	color: #000;
 }
+
+.popupSimpleForm {
+	padding: 5px 10px;
+	width:300px;
+}
+@media (max-width: 767px) {
+	.popupSimpleForm {
+		left: 5px !important;
+		padding: 50px 10px;
+		right: 5px !important;
+		top: 92px !important;
+		width: auto;
+	}
+}
