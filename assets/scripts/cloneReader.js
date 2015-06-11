@@ -57,7 +57,7 @@ cloneReader = {
 			return this.changeFilters({});
 		}
 		var aFilters = {
-			'id':           $.url().param('id'),
+			'id':           parseInt($.url().param('id')),
 			'type':         $.url().param('type'),
 			'viewType':     $.url().param('view'),
 			'search':       $.url().param('q'),
@@ -949,12 +949,10 @@ TODO: pensar como mejorar esta parte
 			this.toogleMainToolbarItem(['.feedSettings'], true);
 		}
 		
-		this.toogleMainToolbarItem(['.filterUnread'], false);
-		this.toogleMainToolbarItem(['.btnMarkAllAsRead'], false);
+		this.toogleMainToolbarItem(['.filterUnread', '.btnMarkAllAsRead'], false);
 		
 		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [crSettings.tagStar, crSettings.tagHome]) != -1)) {
-			this.toogleMainToolbarItem(['.btnMarkAllAsRead'], true);
-			this.toogleMainToolbarItem(['.filterUnread'], true);
+			this.toogleMainToolbarItem(['.btnMarkAllAsRead', '.filterUnread'], true);
 		}
 		
 		this.toogleMainToolbarItem(['.filterSort'], true);
@@ -974,7 +972,6 @@ TODO: pensar como mejorar esta parte
 				$li.hide();
 			}
 		}
-		
 	},
 
 	updateMenuCount: function() {
@@ -1632,7 +1629,7 @@ TODO: pensar como mejorar esta parte
 			{ 'html': crLang.line('New tag'),      'class': 'newTag', 'callback': 
 				function(event) {
 					event.stopPropagation(); 
-					cloneReader.showPopupForm(crLang.line('Add new tag'), crLang.line('enter tag name'), function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings'));
+					cloneReader.showPopupForm(crLang.line('Add new tag'), crLang.line('enter tag name'), function() { cloneReader.addTag(); }, cloneReader.$mainToolbar.find('.feedSettings button'));
 				}
 			},
 			{ 'html': crLang.line('Edit tags'), 'callback': 
@@ -1693,7 +1690,7 @@ TODO: pensar como mejorar esta parte
 		return false;
 	},
 
-	showPopupForm: function(title, placeholder, callback, $element){
+	showPopupForm: function(title, placeholder, callback, $element, value){
 		if (this.$popupForm == null) {
 			this.$popupForm = $('\
 				<form class="btn-default dropdown-menu form-inline popupForm "> \
@@ -1722,16 +1719,22 @@ TODO: pensar como mejorar esta parte
 				return false;
 			});
 		this.$popupForm.find('input').attr('placeholder', placeholder).val('');
+		if (value != null) {
+			this.$popupForm.find('input').val( value );
+		}
 
-		//var top		= $element.offset().top + $element.height() - this.$toolbar.offset().top;
-		var top  = 92; //FIXME: harckodeta! //this.$toolbar.height() + this.$toolbar.offset().top; 
+		var top  = $element.offset().top + $element.height() +  15;
 		var left = $element.offset().left - this.$page.offset().left;
 		
 		this.$popupForm
-			.css({ 'top': top,  'left': left, 'position': 'fixed' })
+			.css({ 'top': top,  'left': left, 'right': 'auto', 'position': 'fixed' })
 			.appendTo(this.$page)
 			.stop()
 			.fadeIn();
+
+		if (this.$page.width() < (this.$popupForm.width() + left)) {
+			this.$popupForm.css({ 'left': 'auto', 'position': 'fixed', 'right': 5 });
+		}
 			
 		if (this.isMobile == false) {
 			this.$popupForm.find('input').focus();
@@ -1995,7 +1998,7 @@ TODO: pensar como mejorar esta parte
 
 	initSearch: function() {
 		this.$frmSearch = $('.frmSearch');
-		this.aFilters = $.extend({
+		this.aFilters   = $.extend({
 			'page':         1,
 			'onlyUnread':   true,
 			'sortDesc':     true,
@@ -2067,6 +2070,10 @@ TODO: pensar como mejorar esta parte
 	
 	clearSearchForm: function() {
 		this.$frmSearch.find('input[name=q]').val('');
+	},
+
+	showPopupSearch: function(event) {
+		this.showPopupForm(crLang.line('Search'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': cloneReader.$popupForm.find('input').val() } ); }, this.$frmSearch.find('.btn-default:visible'), cloneReader.$frmSearch.find('input[name=q]').val()); 
 	}
 };
 

@@ -897,12 +897,7 @@ class Entries_Model extends CI_Model {
 
 
 		if (!empty($values)) {
-			$this->db
-				->where('entityTypeId', config_item('entityTypeEntry'))
-				->where_in('entityId', array_keys($values))
-				->delete('entities_search');
-			//pr($this->db->last_query()); die;
-
+//			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), array_keys($values));
 			$this->db->insert_batch('entities_search', $values);
 		}
 

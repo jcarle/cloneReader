@@ -91,7 +91,7 @@ class Process extends CI_Controller {
 			$this->load->model('Entries_Model');
 			$this->Entries_Model->saveEntriesSearch($deleteEntitySearch, $onlyUpdates);
 		}
-		if ($entityTypeId == null) {
+		if ($entityTypeId == null && $onlyUpdates == false) {
 			$this->optimezeTableEntitiesSearch();
 		}
 

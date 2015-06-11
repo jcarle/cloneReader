@@ -200,17 +200,17 @@ class Commond_Model extends CI_Model {
 		return $query;
 	}
 
-	function deleteEntitySearch($entityTypeId, $entityId = null) {
+	function deleteEntitySearch($entityTypeId, $aEntityId = null) {
 		$affectedRows = 1;
 
 		while ($affectedRows > 0) {
 			$query = ' DELETE QUICK FROM entities_search
 				WHERE entityTypeId = '.(int)$entityTypeId.'
-				'.($entityId != null ? ' AND entityId IN ('.implode(', ', $entityId) : '').'
+				'.($aEntityId != null ? ' AND entityId IN ('.implode(', ', $aEntityId).') ' : '').'
 				ORDER BY entityTypeId
-				LIMIT 1000 ';
+				LIMIT 10000 ';
 			$this->db->query($query);
-			// vd($this->db->last_query());
+			//vd($this->db->last_query()); die;
 			$affectedRows = $this->db->affected_rows();
 		}
 	}

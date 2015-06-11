@@ -231,7 +231,7 @@ function getHtmlFormSearch($isHeader = true) {
 
 	$html = '
 		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('').'">
-			<a href="'.base_url('search').'" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
+			<a href="javascript:cloneReader.showPopupSearch();" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
 			<div class="form-group '.($isHeader == true ? ' hidden-md hidden-sm ' : '').'" >
 				<div class="input-group">
 					<span class="input-group-addon">

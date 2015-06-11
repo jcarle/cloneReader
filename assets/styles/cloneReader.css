@@ -94,7 +94,7 @@
 		#cloneReader .nav li button, 
 		#cloneReader .nav li ul li a {
 			text-transform: lowercase;
-		}	
+		}
 }
 	#cloneReader .ulEntries {
 		display:block;
@@ -584,6 +584,16 @@
 	font-size: small;
 }
 
+@media (max-width: 800px) and (min-width: 768px) {
+	.mainToolbar button span:first-child {
+		float: left;
+		margin-right: 5px;
+		max-width: 100px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
 
 @media (max-width: 767px) {
 	.navbar-collapse.in {
@@ -698,6 +708,7 @@
 			left: 5px !important;
 			padding: 50px 10px;
 			right: 5px !important;
+			top: 92px !important;
 			width: auto;
 		}
 }
