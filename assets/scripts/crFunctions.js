@@ -561,7 +561,7 @@ $.extend({
 	},
 	
 	autoHidePopups: function() {
-		$('.dropdown-toggle').parent().removeClass('open');
+		$('.dropdown-toggle .open').removeClass('open');
 		
 		if ($.$popupSimpleForm != null) {
 			$.$popupSimpleForm.hide();
