@@ -846,7 +846,6 @@ class Entries_Model extends CI_Model {
 			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeEntry'));
 		}
 		
-		
 		$aWhere = array();
 		if ($onlyUpdates == true) {
 			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveEntriesSearch');
@@ -895,9 +894,8 @@ class Entries_Model extends CI_Model {
 			);
 		}
 
-
 		if (!empty($values)) {
-//			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), array_keys($values));
+			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), array_keys($values));
 			$this->db->insert_batch('entities_search', $values);
 		}
 

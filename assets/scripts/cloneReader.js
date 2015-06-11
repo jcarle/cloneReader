@@ -1710,6 +1710,8 @@ TODO: pensar como mejorar esta parte
 		
 		this.hidePopupWindow();
 		$.hideMobileNavbar();
+
+		if (value == null) { value = ''; }
 		
 		this.$popupForm
 			.unbind()
@@ -1718,10 +1720,7 @@ TODO: pensar como mejorar esta parte
 				callback();
 				return false;
 			});
-		this.$popupForm.find('input').attr('placeholder', placeholder).val('');
-		if (value != null) {
-			this.$popupForm.find('input').val( value );
-		}
+		this.$popupForm.find('input').attr('placeholder', placeholder.toLowerCase()).val( value );
 
 		var top  = $element.offset().top + $element.height() +  15;
 		var left = $element.offset().left - this.$page.offset().left;
