@@ -527,7 +527,7 @@ $.extend({
 		var $page = $('.cr-page:visible');
 		$.$popupSimpleForm.data('$element', $element);
 		
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 		$.hideMobileNavbar();
 		$element.addClass('active');
 
@@ -560,8 +560,8 @@ $.extend({
 		}
 	},
 	
-	hidePopupSimpleForm: function() {
-		//this.$mainToolbar.find('.open').removeClass('open');
+	autoHidePopups: function() {
+		$('.dropdown-toggle').parent().removeClass('open');
 		
 		if ($.$popupSimpleForm != null) {
 			$.$popupSimpleForm.hide();
@@ -636,7 +636,7 @@ $(document).click(
 			}
 		}
 
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 	}
 );
 

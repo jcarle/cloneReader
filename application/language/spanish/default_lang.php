@@ -229,3 +229,4 @@ $lang['Locate'] = 'Localizar';
 $lang['Only rows updated'] = 'Sólo los registros actualizados';
 $lang['Done'] = 'Hecho!';
 $lang['Clear search'] = 'Borrar búsqueda';
+$lang['Enter a tag name'] = 'Ingrese el nombre del tag';

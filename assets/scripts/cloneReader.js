@@ -390,13 +390,13 @@ cloneReader = {
 		this.toogleMainToolbarItem(['.filterUnread', '.filterSort', '.feedSettings'], false);
 		this.$mainToolbar.find('.dropdown-toggle').click(
 			function(event) {
-				$.hidePopupSimpleForm();
+				$.autoHidePopups();
 			}
 		);
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 		
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters   = $.extend(this.aFilters, aFilters);
@@ -1408,7 +1408,7 @@ TODO: pensar como mejorar esta parte
 			return $.$popupSimpleForm.find('input').crAlert(crLang.line('Enter a valid url'));
 		}
 
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 
 		$.ajax({
 			'url':   base_url + 'entries/addFeed',
@@ -1463,19 +1463,19 @@ TODO: pensar como mejorar esta parte
 	addTag: function() {
 		var tagName = $.$popupSimpleForm.find('input').val();
 		if (tagName.trim() == '') {
-			return $.$popupSimpleForm.find('input').crAlert('enter a tag name');
+			return $.$popupSimpleForm.find('input').crAlert( crLang.line('Enter a tag name'));
 		}
 
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 
 		$.ajax({
-			'url': 		base_url + 'entries/addTag',
-			'data': 	{ 
-				'tagName': 	tagName ,
-				'feedId':	this.aFilters.id
+			'url':   base_url + 'entries/addTag',
+			'data':  { 
+				'tagName': tagName ,
+				'feedId':  this.aFilters.id
 			},
-			'type':	 	'post',
-			'success': 	
+			'type':    'post',
+			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
@@ -1486,7 +1486,7 @@ TODO: pensar como mejorar esta parte
 	},
 
 	saveUserFeedTag: function(feedId, tagId, append) {
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 		$.hideMobileNavbar();
 
 		$.ajax({
@@ -1507,7 +1507,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	markAllAsRead: function(feedId) {
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 		
 		var filter = this.getFilter(this.aFilters);
 
@@ -1537,7 +1537,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	unsubscribeFeed: function(feedId) {
-		$.hidePopupSimpleForm();
+		$.autoHidePopups();
 		
 		var filter = this.getFilter(this.aFilters);
 		
@@ -1689,7 +1689,7 @@ TODO: pensar como mejorar esta parte
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
-			$.hidePopupSimpleForm();
+			$.autoHidePopups();
 			$('#header').css( {'box-shadow': 'none' });
 		}
 
