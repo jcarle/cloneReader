@@ -382,7 +382,7 @@ cloneReader = {
 		this.$mainToolbar.find('.filterOldestSort').click(function(event) { cloneReader.changeFilters( {'sortDesc': false}); });
 		this.$mainToolbar.find('.add').click(  function(event) {  
 				event.stopPropagation(); 
-				$.showPopupSimpleForm($(event.target), crLang.line('Add feed url'), function() { cloneReader.addFeed(); }); 
+				$.showPopupSimpleForm(cloneReader.$mainToolbar.find('.add'), crLang.line('Add feed url'), function() { cloneReader.addFeed(); }); 
 			}
 		);
 		this.$mainToolbar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
@@ -390,13 +390,13 @@ cloneReader = {
 		this.toogleMainToolbarItem(['.filterUnread', '.filterSort', '.feedSettings'], false);
 		this.$mainToolbar.find('.dropdown-toggle').click(
 			function(event) {
-				$.autoHidePopups();
+				$.hidePopupSimpleForm();
 			}
 		);
 	},
 	
 	loadEntries: function(clear, forceRefresh, aFilters) {
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 		
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters   = $.extend(this.aFilters, aFilters);
@@ -1408,7 +1408,7 @@ TODO: pensar como mejorar esta parte
 			return $.$popupSimpleForm.find('input').crAlert(crLang.line('Enter a valid url'));
 		}
 
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 
 		$.ajax({
 			'url':   base_url + 'entries/addFeed',
@@ -1466,7 +1466,7 @@ TODO: pensar como mejorar esta parte
 			return $.$popupSimpleForm.find('input').crAlert( crLang.line('Enter a tag name'));
 		}
 
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 
 		$.ajax({
 			'url':   base_url + 'entries/addTag',
@@ -1486,7 +1486,7 @@ TODO: pensar como mejorar esta parte
 	},
 
 	saveUserFeedTag: function(feedId, tagId, append) {
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 		$.hideMobileNavbar();
 
 		$.ajax({
@@ -1507,7 +1507,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	markAllAsRead: function(feedId) {
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 		
 		var filter = this.getFilter(this.aFilters);
 
@@ -1537,7 +1537,7 @@ TODO: pensar como mejorar esta parte
 	},
 	
 	unsubscribeFeed: function(feedId) {
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 		
 		var filter = this.getFilter(this.aFilters);
 		
@@ -1609,6 +1609,7 @@ TODO: pensar como mejorar esta parte
 			{ 'html': crLang.line('New tag'),      'class': 'newTag', 'callback': 
 				function(event) {
 					event.stopPropagation();
+					cloneReader.$mainToolbar.find('.open .dropdown-toggle').parent().removeClass('open');
 					$.showPopupSimpleForm(cloneReader.$mainToolbar.find('.feedSettings button'), crLang.line('enter tag name'), function() { cloneReader.addTag(); });
 				}
 			},
@@ -1689,7 +1690,7 @@ TODO: pensar como mejorar esta parte
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
 			this.$toolbar.show();
 			$('#header .logo').attr('href', base_url);
-			$.autoHidePopups();
+			$.hidePopupSimpleForm();
 			$('#header').css( {'box-shadow': 'none' });
 		}
 

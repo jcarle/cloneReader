@@ -522,18 +522,42 @@ $.extend({
 			$.$popupSimpleForm.find('input').keyup(function(event) {
 				event.stopPropagation();
 			});
+
+			$.$popupSimpleForm.data('$element', $('body'));
+
+			$(document).click(
+				function(event) {
+					if ($(event.target).parents('.modal').length != 0) {
+						return;
+					}
+					if ($('.crAlert:visible').length != 0) {
+						return;
+					}
+					if ($.$popupSimpleForm != null) {
+						if ($.contains($.$popupSimpleForm[0], event.target)) {
+							return;
+						}
+					}
+
+					$.hidePopupSimpleForm();
+				}
+			);
+		}
+
+		if ($.$popupSimpleForm.data('$element').is($element)) {
+			return $.hidePopupSimpleForm();
 		}
 		
 		var $page = $('.cr-page:visible');
-		$.$popupSimpleForm.data('$element', $element);
 		
-		$.autoHidePopups();
+		$.hidePopupSimpleForm();
 		$.hideMobileNavbar();
 		$element.addClass('active');
 
 		if (value == null) { value = ''; }
 		
 		$.$popupSimpleForm
+			.data('$element', $element)
 			.unbind()
 			.submit(function(event) {
 				event.preventDefault();
@@ -542,9 +566,9 @@ $.extend({
 			});
 		$.$popupSimpleForm.find('input').attr('placeholder', placeholder.toLowerCase()).val( value );
 
-		var top  = $element.offset().top + $element.height() +  15;
+		var top  = $element.offset().top + $element.outerHeight(false);
 		var left = $element.offset().left - $page.offset().left;
-		
+
 		$.$popupSimpleForm
 			.css({ 'top': top,  'left': left, 'right': 'auto', 'position': 'fixed' })
 			.appendTo($('body'))
@@ -560,12 +584,13 @@ $.extend({
 		}
 	},
 	
-	autoHidePopups: function() {
-		$('.dropdown-toggle .open').removeClass('open');
-		
+	hidePopupSimpleForm: function() {
 		if ($.$popupSimpleForm != null) {
 			$.$popupSimpleForm.hide();
-			$.$popupSimpleForm.data('$element').removeClass('active');
+			if ($.$popupSimpleForm.data('$element') != null) {
+				$.$popupSimpleForm.data('$element').removeClass('active');
+			}
+			$.$popupSimpleForm.data('$element', $('body'));
 		}
 	},	
 	
@@ -621,24 +646,6 @@ $.extend({
 $(window).resize(function() {
 	resizeWindow();
 });
-
-$(document).click(
-	function(event) {
-		if ($(event.target).parents('.modal').length != 0) {
-			return;
-		}
-		if ($('.crAlert:visible').length != 0) {
-			return;
-		}
-		if ($.$popupSimpleForm != null) {
-			if ($.contains($.$popupSimpleForm[0], event.target)) {
-				return;
-			}
-		}
-
-		$.autoHidePopups();
-	}
-);
 
 function resizeWindow() {
 }
