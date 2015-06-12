@@ -1998,7 +1998,8 @@ TODO: pensar como mejorar esta parte
 	},
 
 	showPopupSearch: function(event) {
-		$.showPopupSimpleForm(this.$frmSearch.find('.btn-default:visible'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': $.$popupSimpleForm.find('input').val() } ); }, cloneReader.$frmSearch.find('input[name=q]').val()); 
+		event.stopPropagation(); 
+		$.showPopupSimpleForm(cloneReader.$frmSearch.find('.btn-default:visible'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': $.$popupSimpleForm.find('input').val() } ); }, cloneReader.$frmSearch.find('input[name=q]').val()); 
 	}
 };
 
