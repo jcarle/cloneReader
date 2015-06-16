@@ -914,7 +914,7 @@ class Entries_Model extends CI_Model {
 				ON DUPLICATE KEY UPDATE
 				entityFullSearch = VALUES(entityFullSearch),
 				entityNameSearch = VALUES(entityNameSearch),
-				entityName = VALUES(entityName) ';
+				entityName       = VALUES(entityName) ';
 			//vd($query); die;
 			$this->db->query($query);
 		}

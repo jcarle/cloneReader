@@ -50,6 +50,9 @@ cloneReader = {
 		}
 
 		$.goToUrl( base_url + '?' + $.param(params) );
+		if (typeof ga != "undefined") {
+			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
+		}
 	},
 
 	loadUrl: function() {
