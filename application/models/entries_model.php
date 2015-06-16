@@ -857,7 +857,7 @@ class Entries_Model extends CI_Model {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
 		}
 
-		$pageSize     = 1000;
+		$pageSize     = 500;
 		$lastEntryId  = 0;
 		while ($lastEntryId !== null) {
 			$lastEntryId = $this->saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize);
