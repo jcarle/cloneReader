@@ -50,10 +50,10 @@ class News_Model extends CI_Model {
 		$newId = $data['newId'];
 
 		$values = array(
-			'newTitle'		=> element('newTitle', $data),
-			'newContent'	=> element('newContent', $data),
-			'userId'		=> element('userId', $data),
-			'newDate'		=> element('newDate', $data),
+			'newTitle'   => element('newTitle', $data),
+			'newContent' => element('newContent', $data),
+			'userId'     => element('userId', $data),
+			'newDate'    => element('newDate', $data),
 		);
 
 		if ((int)$newId != 0) {		

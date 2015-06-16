@@ -207,7 +207,6 @@ class Commond_Model extends CI_Model {
 			$query = ' DELETE QUICK FROM entities_search
 				WHERE entityTypeId = '.(int)$entityTypeId.'
 				'.($aEntityId != null ? ' AND entityId IN ('.implode(', ', $aEntityId).') ' : '').'
-				ORDER BY entityTypeId
 				LIMIT 10000 ';
 			$this->db->query($query);
 			//vd($this->db->last_query()); die;

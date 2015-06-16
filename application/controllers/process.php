@@ -56,6 +56,7 @@ class Process extends CI_Controller {
 	}
 	
 	function deleteOldEntries($feedId = null) {
+		$this->load->model('Feeds_Model');
 		$this->Feeds_Model->deleteOldEntries($feedId);
 		
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
@@ -72,7 +73,7 @@ class Process extends CI_Controller {
 		$onlyUpdates        = ($onlyUpdates == 'true');
 		$deleteEntitySearch = ($onlyUpdates != true);
 		if ($entityTypeId == 'null') {
-			$entityTypeId == null;
+			$entityTypeId = null;
 		}
 		
 		if ($entityTypeId == null || $entityTypeId == config_item('entityTypeUser')) {

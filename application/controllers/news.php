@@ -22,13 +22,13 @@ class News extends CI_Controller {
 			'view'   => 'includes/crList', 
 			'meta'   => array( 'title' => $this->lang->line('Edit news') ),
 			'list'   => array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('userFullName' => $this->lang->line('Author'), 'newTitle' => $this->lang->line('Title'), 'newSef' => $this->lang->line('Sef'), 'newDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'showId'		=> false
+				'urlList'   => strtolower(__CLASS__).'/listing',
+				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'    => strtolower(__CLASS__).'/add',
+				'columns'   => array('userFullName' => $this->lang->line('Author'), 'newTitle' => $this->lang->line('Title'), 'newSef' => $this->lang->line('Sef'), 'newDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
+				'data'      => $query['data'],
+				'foundRows' => $query['foundRows'],
+				'showId'    => false
 			)
 		));
 	}
@@ -71,39 +71,38 @@ class News extends CI_Controller {
 
 	function _getFormProperties($newId) {
 		$form = array(
-			'frmId'		=> 'frmNewEdit',
-			'rules'		=> array(),
-			'fields'	=> array(
+			'frmId' => 'frmNewEdit',
+			'rules' => array(),
+			'fields' => array(
 				'newId' => array(
-					'type'	=> 'hidden', 
-					'value'	=> $newId
+					'type' => 'hidden', 
+					'value'=> $newId
 				),
 				'newTitle' => array(
-					'type'		=> 'text',
-					'label'		=> $this->lang->line('Title'), 
-				),				
+					'type'  => 'text',
+					'label' => $this->lang->line('Title'), 
+				),
 				'newContent' => array(
-					'type' 		=> 'textarea',
-					'label'		=> $this->lang->line('Content'), 
+					'type'  => 'textarea',
+					'label' => $this->lang->line('Content'), 
 				),
 				'userId' => array(
-					'type' 		=> 'typeahead',
-					'label'		=> $this->lang->line('Author'),
-					'source' 	=> base_url('search/users/'),
+					'type'   => 'typeahead',
+					'label'  => $this->lang->line('Author'),
+					'source' => base_url('search/users/'),
 				),
 				'newDate' => array(
-					'type' 		=> 'datetime',
-					'label'		=> $this->lang->line('Date'), 
+					'type'  => 'datetime',
+					'label' => $this->lang->line('Date'), 
 				),
-			), 		
+			),
 		);
-
 		
 		if ((int)$newId > 0) {
 			$form['fields']['newSef'] = array(
-				'type' 		=> 'text',
-				'label'		=> 'Sef', 
-				'disabled'	=> true,
+				'type'      => 'text',
+				'label'     => 'Sef', 
+				'disabled'  => true,
 			); 
 			
 			$form['urlDelete'] = base_url('news/delete/');

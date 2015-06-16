@@ -850,7 +850,8 @@ class Entries_Model extends CI_Model {
 		if ($onlyUpdates == true) {
 			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveEntriesSearch');
 // TODO: incluir feeds.lastUpdate en el filtro cuando deje de actualizarse automaticamente
-			$aWhere[] = ' (entries.lastUpdate > \''.$lastUpdate.'\' ) '; // OR feeds.lastUpdate > \''.$lastUpdate.'\') ';
+//			$aWhere[] = ' (entries.lastUpdate > \''.$lastUpdate.'\'  OR entries.feedId IN ( SELECT feedId FROM feeds WHERE feeds.lastUpdate > \''.$lastUpdate.'\') ) ';
+			$aWhere[] = ' entries.lastUpdate > \''.$lastUpdate.'\' ';
 		}
 		if ($entryId != null) {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
@@ -879,28 +880,47 @@ class Entries_Model extends CI_Model {
 			WHERE ".implode(' AND ', $aWhere)." 
 			ORDER BY entryId ASC 
 			LIMIT ".$pageSize."  ";	
-		// pr($query); // die;
+		// pr($query); die;
 		$query = $this->db->query($query);
 		foreach ($query->result_array() as $data) {
 			$lastEntryId              = $data['entryId'];
 			$searchKey                = 'searchEntries searchInFeedId'.$data['feedId'];
 			$feed                     = $this->Feeds_Model->get($data['feedId']);
 			$values[$data['entryId']] = array(
-				'entityTypeId'     => config_item('entityTypeEntry'), 
-				'entityId'         => $data['entryId'],
-				'entityFullSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.rip_tags($data['entryContent']).' '.$feed['feedName']),
-				'entityNameSearch' => searchReplace($searchKey.' '.$data['entryTitle'].' '.$feed['feedName']),
-				'entityName'       => $data['entryTitle']
+				'entityTypeId'     => $this->db->escape(config_item('entityTypeEntry')), 
+				'entityId'         => $this->db->escape($data['entryId']),
+				'entityFullSearch' => $this->db->escape(searchReplace($searchKey.' '.$data['entryTitle'].' '.rip_tags($data['entryContent']).' '.$feed['feedName'])),
+				'entityNameSearch' => $this->db->escape(searchReplace($searchKey.' '.$data['entryTitle'].' '.$feed['feedName'])),
+				'entityName'       => $this->db->escape($data['entryTitle'])
 			);
 		}
+		$query->free_result();
 
 		if (!empty($values)) {
-			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), array_keys($values));
-			$this->db->insert_batch('entities_search', $values);
+//			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), array_keys($values));
+//			$this->db->insert_batch('entities_search', $values);
+
+
+
+			$inserts = array();			
+			foreach ($values as $data) {
+				$inserts[] = "( ".implode(", ", $data)." )";
+			}
+
+			$query = ' INSERT INTO entities_search 
+				(entityTypeId, entityId, entityFullSearch, entityNameSearch, entityName) 
+				VALUES 
+				'.implode(', ', $inserts).'
+				ON DUPLICATE KEY UPDATE
+				entityFullSearch = VALUES(entityFullSearch),
+				entityNameSearch = VALUES(entityNameSearch),
+				entityName = VALUES(entityName) ';
+			//vd($query); die;
+			$this->db->query($query);
 		}
 
-		$query->free_result();
 		unset($values);
+		unset($inserts);
 		
 		return $lastEntryId;
 	}
