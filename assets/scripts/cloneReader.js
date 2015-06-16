@@ -50,9 +50,6 @@ cloneReader = {
 		}
 
 		$.goToUrl( base_url + '?' + $.param(params) );
-		if (typeof ga != "undefined") {
-			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
-		}
 	},
 
 	loadUrl: function() {
@@ -77,6 +74,9 @@ cloneReader = {
 
 		this.populateSearchForm();
 		this.loadEntries(true, false, aFilters);
+		if (typeof ga != "undefined") {
+			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
+		}
 	},
 
 	updateMainMenu: function() {
