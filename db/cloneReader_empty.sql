@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 03, 2015 at 01:07 AM
+-- Generation Time: Jun 17, 2015 at 10:29 AM
 -- Server version: 5.5.38-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.4
 
@@ -26,7 +26,7 @@ DELIMITER $$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `countUnread`(_userId INT, _feedId INT, _tagId INT, _maxCount INT) RETURNS int(11)
+CREATE FUNCTION `countUnread`(_userId INT, _feedId INT, _tagId INT, _maxCount INT) RETURNS int(11)
 BEGIN
 
 #DECLARE total INT;
@@ -46,6 +46,9 @@ RETURN (
 
 #RETURN total;
 END$$
+
+CREATE FUNCTION `searchReplace`(`search` TEXT) RETURNS text CHARSET utf8
+RETURN REPLACE(REPLACE(REPLACE(search , '+', 'plus'), '-', 'minus'), '&', 'ampersand')$$
 
 DELIMITER ;
 
@@ -414,12 +417,16 @@ CREATE TABLE IF NOT EXISTS `entities_files` (
 CREATE TABLE IF NOT EXISTS `entities_search` (
   `entityTypeId` int(10) unsigned NOT NULL,
   `entityId` varchar(100) NOT NULL,
-  `entitySearch` text NOT NULL,
+  `entityNameSearch` text NOT NULL,
+  `entityFullSearch` text NOT NULL,
+  `entityName` varchar(255) NOT NULL,
   `entityTree` text NOT NULL,
   `entityReverseTree` text NOT NULL,
   PRIMARY KEY (`entityTypeId`,`entityId`),
   KEY `entityTypeId` (`entityTypeId`),
-  FULLTEXT KEY `entitySearch` (`entitySearch`)
+  FULLTEXT KEY `entityFullSearch` (`entityFullSearch`),
+  FULLTEXT KEY `entityNameSearch` (`entityNameSearch`),
+  FULLTEXT KEY `entityNameSearch_2` (`entityNameSearch`,`entityFullSearch`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -441,7 +448,9 @@ CREATE TABLE IF NOT EXISTS `entities_type` (
 INSERT INTO `entities_type` (`entityTypeId`, `entityTypeName`) VALUES
 (1, 'testing'),
 (5, 'feeds'),
-(6, 'tags');
+(6, 'tags'),
+(7, 'users'),
+(8, 'entries');
 
 -- --------------------------------------------------------
 
@@ -457,13 +466,14 @@ CREATE TABLE IF NOT EXISTS `entries` (
   `entryAuthor` varchar(255) DEFAULT NULL,
   `entryDate` datetime NOT NULL,
   `entryUrl` varchar(255) NOT NULL,
+  `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`entryId`),
   UNIQUE KEY `indexFeedIdEntryUrl` (`feedId`,`entryUrl`),
   KEY `feedId` (`feedId`),
-  KEY `feedEntryTitle` (`entryTitle`),
   KEY `entryDate` (`entryDate`),
   KEY `indexFeedIdEntryDate` (`feedId`,`entryDate`),
-  KEY `entryUrl` (`entryUrl`)
+  KEY `entryUrl` (`entryUrl`),
+  KEY `lastUpdate` (`lastUpdate`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -521,6 +531,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   `feedMaxRetries` int(10) unsigned NOT NULL DEFAULT '0',
   `feedCountUsers` int(10) NOT NULL,
   `feedCountEntries` int(10) NOT NULL,
+  `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`feedId`),
   UNIQUE KEY `feedUrl` (`feedUrl`),
   KEY `feedName` (`feedName`),
@@ -532,8 +543,21 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   KEY `fixLocale` (`fixLocale`),
   KEY `feedMaxRetries` (`feedMaxRetries`),
   KEY `feedCountUsers` (`feedCountUsers`),
-  KEY `feedCountEntries` (`feedCountEntries`)
+  KEY `feedCountEntries` (`feedCountEntries`),
+  KEY `lastUpdate` (`lastUpdate`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Triggers `feeds`
+--
+DROP TRIGGER IF EXISTS `changeFeedName`;
+DELIMITER //
+CREATE TRIGGER `changeFeedName` BEFORE UPDATE ON `feeds`
+ FOR EACH ROW IF (NEW.feedName <> OLD.feedName)  THEN
+	SET NEW.lastUpdate = NOW();
+END IF
+//
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -843,7 +867,7 @@ INSERT INTO `menu` (`menuId`, `menuName`, `menuPosition`, `menuParentId`, `contr
 (3, 'Edit controllers', 2, 14, 5, '', '', 1, 0, 0),
 (4, 'Edit groups', 3, 14, 7, '', '', 1, 0, 0),
 (5, 'Edit menu', 5, 14, 9, '', '', 1, 0, 0),
-(6, 'Settings', 10, 10, NULL, 'fa fa-gear', 'menuItemSettings', 1, 0, 0),
+(6, 'Settings', 10, 10, NULL, 'fa fa-gear fa-bars', 'menuItemSettings', 1, 0, 0),
 (7, 'Edit entries', 2, 17, 15, '', '', 1, 0, 0),
 (8, 'menuMain', 4, 0, NULL, '', '', 1, 0, 0),
 (9, 'Edit feeds', 1, 17, 13, '', '', 1, 0, 0),
@@ -895,6 +919,29 @@ CREATE TABLE IF NOT EXISTS `news` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `process`
+--
+
+CREATE TABLE IF NOT EXISTS `process` (
+  `processName` varchar(255) NOT NULL,
+  `lastUpdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`processName`),
+  KEY `lastUpdate` (`lastUpdate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `process`
+--
+
+INSERT INTO `process` (`processName`, `lastUpdate`) VALUES
+('saveEntriesSearch', '2015-06-16 16:15:56'),
+('saveFeedsSearch', '2015-06-16 16:15:56'),
+('saveTagsSearch', '2015-06-16 16:15:56'),
+('saveUsersSearch', '2015-06-16 16:15:56');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `shared_by_email`
 --
 
@@ -909,7 +956,7 @@ CREATE TABLE IF NOT EXISTS `shared_by_email` (
   KEY `userId` (`userId`),
   KEY `entryId` (`entryId`),
   KEY `userFriendId` (`userFriendId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2379,23 +2426,25 @@ CREATE TABLE IF NOT EXISTS `tags` (
   `countEntries` int(10) unsigned NOT NULL,
   `countUsers` int(10) unsigned NOT NULL,
   `countTotal` int(10) unsigned NOT NULL,
+  `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tagId`),
   UNIQUE KEY `tagName` (`tagName`),
   KEY `countFeeds` (`countFeeds`),
   KEY `countEntries` (`countEntries`),
   KEY `countUsers` (`countUsers`),
-  KEY `countTotal` (`countTotal`)
+  KEY `countTotal` (`countTotal`),
+  KEY `lastUpdate` (`lastUpdate`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `tags`
 --
 
-INSERT INTO `tags` (`tagId`, `tagName`, `countFeeds`, `countEntries`, `countUsers`, `countTotal`) VALUES
-(1, '@tag-all', 0, 0, 0, 0),
-(2, '@tag-star', 0, 0, 0, 0),
-(3, '@tag-home', 0, 0, 0, 0),
-(4, '@tag-browse', 0, 0, 0, 0);
+INSERT INTO `tags` (`tagId`, `tagName`, `countFeeds`, `countEntries`, `countUsers`, `countTotal`, `lastUpdate`) VALUES
+(1, '@tag-all', 0, 0, 0, 0, '2015-06-15 20:31:24'),
+(2, '@tag-star', 0, 0, 0, 0, '2015-06-15 20:31:24'),
+(3, '@tag-home', 0, 0, 0, 0, '2015-06-15 20:31:24'),
+(4, '@tag-browse', 0, 0, 0, 0, '2015-06-15 20:31:24');
 
 -- --------------------------------------------------------
 
@@ -2459,7 +2508,7 @@ CREATE TABLE IF NOT EXISTS `testing` (
   KEY `stateId` (`stateId`),
   KEY `fileIdTestPicture` (`testPictureFileId`),
   KEY `fileIdTestDoc` (`testDocFileId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2493,8 +2542,6 @@ CREATE TABLE IF NOT EXISTS `testing_childs_users` (
   KEY `testChildId` (`testChildId`),
   KEY `userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 
 -- --------------------------------------------------------
 
@@ -2537,6 +2584,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `confirmEmailDate` datetime DEFAULT NULL,
   `confirmEmailValue` varchar(255) DEFAULT NULL,
   `verifiedUserEmail` int(1) NOT NULL DEFAULT '0',
+  `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `userEmail` (`userEmail`),
   UNIQUE KEY `resetPasswordKey` (`resetPasswordKey`),
@@ -2548,16 +2596,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `langId` (`langId`),
   KEY `userDateAdd` (`userDateAdd`),
   KEY `resetPasswordDate` (`resetPasswordDate`),
-  KEY `changeEmailDate` (`confirmEmailDate`)
+  KEY `changeEmailDate` (`confirmEmailDate`),
+  KEY `lastUpdate` (`lastUpdate`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userId`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `userBirthDate`, `userDateAdd`, `userLastAccess`, `countryId`, `langId`, `userFilters`, `facebookUserId`, `googleUserId`, `resetPasswordKey`, `resetPasswordDate`, `confirmEmailKey`, `confirmEmailDate`, `confirmEmailValue`, `verifiedUserEmail`) VALUES
-(1, '1@', NULL, 'anonymous', 'anonymous', NULL, '2013-10-01 00:11:12', '2013-10-01 00:11:15', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(2, 'admin@creader.com', '63a9f0ea7bb98050796b649e85481845', 'admin', 'person', '0000-00-00', '0000-00-00 00:00:00', '2014-05-15 19:26:13', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `users` (`userId`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `userBirthDate`, `userDateAdd`, `userLastAccess`, `countryId`, `langId`, `userFilters`, `facebookUserId`, `googleUserId`, `resetPasswordKey`, `resetPasswordDate`, `confirmEmailKey`, `confirmEmailDate`, `confirmEmailValue`, `verifiedUserEmail`, `lastUpdate`) VALUES
+(1, NULL, NULL, 'anonymous', 'anonymous', NULL, '2013-10-01 00:11:12', '2013-10-01 00:11:15', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2015-06-16 15:03:44'),
+(2, 'admin@creader.com', '63a9f0ea7bb98050796b649e85481845', 'admin', 'person', '0000-00-00', '0000-00-00 00:00:00', '2014-05-15 19:26:13', 'ar', 'en', '{}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2015-06-16 15:03:44');
 
 -- --------------------------------------------------------
 
