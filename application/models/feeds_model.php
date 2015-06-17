@@ -256,8 +256,6 @@ class Feeds_Model extends CI_Model {
 		//vd($this->db->last_query()); die; 
 		$maxThreads = 40;
 		foreach ($query->result() as $row) {
-
-
 			$out = array();
 			$out = shell_exec("ps aux | grep process/scanFeed | wc -l");
 			while ($out > $maxThreads) {
