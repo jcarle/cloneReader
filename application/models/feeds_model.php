@@ -254,14 +254,19 @@ class Feeds_Model extends CI_Model {
 		 
 		$query = $this->db->get('feeds');
 		//vd($this->db->last_query()); die; 
-		$count = 0;
+		$maxThreads = 40;
 		foreach ($query->result() as $row) {
-			exec('nohup '.PHP_PATH.'  '.BASEPATH.'../index.php process/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &');
-			
-			$count++;
-			if ($count % 40 == 0) {
-				sleep(10);
+
+
+			$out = array();
+			$out = shell_exec("ps aux | grep process/scanFeed | wc -l");
+			while ($out > $maxThreads) {
+				sleep(0.01);
+				$out = shell_exec("ps aux | grep process/scanFeed | wc -l ");
+				$out = (int)$out;
 			}
+			$command = 'nohup '.PHP_PATH.'  '.BASEPATH.'../index.php process/scanFeed/'.(int)$row->feedId.' >> '.BASEPATH.'../application/logs/scanFeed.log &';
+			shell_exec($command); 
 		}
 	}
 
@@ -512,11 +517,11 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		if (!empty($aDeleteEntryId)) {
-				$query = ' DELETE FROM entries
-					WHERE feedId = '.$feedId.' 
-					AND entryId IN ('.implode(', ', $aDeleteEntryId).' ) ';
-				$this->db->query($query);
-				// pr($this->db->last_query());
+			$query = ' DELETE FROM entries
+				WHERE feedId = '.$feedId.' 
+				AND entryId IN ('.implode(', ', $aDeleteEntryId).' ) ';
+			$this->db->query($query);
+			// pr($this->db->last_query());
 		}
 		
 		$this->updateFeedCounts($feedId);

@@ -66,21 +66,21 @@ class Import extends CI_Controller {
 				foreach ($tag->children() as $feed) {
 					
 					$feed = array(
-						'feedName'		=> (string)$feed->attributes()->title,
-						'feedUrl' 		=> (string)$feed->attributes()->xmlUrl,
-						'feedLink'		=> (string)$feed->attributes()->htmlUrl,
-						'feedSuggest' 	=> true,
+						'feedName'    => (string)$feed->attributes()->title,
+						'feedUrl'     => (string)$feed->attributes()->xmlUrl,
+						'feedLink'    => (string)$feed->attributes()->htmlUrl,
+						'feedSuggest' => true,
 					);
-					$feedId	=  $this->Entries_Model->addFeed($userId, $feed);
+					$feedId =  $this->Entries_Model->addFeed($userId, $feed);
 					$this->Entries_Model->addTag($tagName, $userId, $feedId);
 				}
 			}
 			else {
 				$feed = array(
-					'feedName' 		=> (string)$tag->attributes()->title,
-					'feedUrl' 		=> (string)$tag->attributes()->xmlUrl,
-					'feedLink'		=> (string)$tag->attributes()->htmlUrl,
-					'feedSuggest' 	=> true,
+					'feedName'    => (string)$tag->attributes()->title,
+					'feedUrl'     => (string)$tag->attributes()->xmlUrl,
+					'feedLink'    => (string)$tag->attributes()->htmlUrl,
+					'feedSuggest' => true,
 				);
 				$this->Entries_Model->addFeed($userId, $feed);
 			}
@@ -153,23 +153,23 @@ class Import extends CI_Controller {
 			}
 
 			$entry = array(
-				'entryTitle' 	=> element('title', $data, '(title unknown)'),
-				'entryUrl'		=> (string)$data['alternate'][0]['href'],
-				'entryAuthor'	=> element('author', $data, null),
-				'entryDate'		=> date('Y-m-d H:i:s', $data['published']),
-				'entryContent' 	=> (string)$entryContent,
+				'entryTitle'   => element('title', $data, '(title unknown)'),
+				'entryUrl'     => (string)$data['alternate'][0]['href'],
+				'entryAuthor'  => element('author', $data, null),
+				'entryDate'    => date('Y-m-d H:i:s', $data['published']),
+				'entryContent' => (string)$entryContent,
 			);
 
 			$feed = array(
-				'feedName'		=> element('title', $data['origin']),
-				'feedUrl' 		=> substr($data['origin']['streamId'], 5),
-				'feedLink'		=> $data['origin']['htmlUrl'],
-				'feedName'		=> element('title', $data['origin']),
-				'feedSuggest' 	=> true,
+				'feedName'    => element('title', $data['origin']),
+				'feedUrl'     => substr($data['origin']['streamId'], 5),
+				'feedLink'    => $data['origin']['htmlUrl'],
+				'feedName'    => element('title', $data['origin']),
+				'feedSuggest' => true,
 			);
 			
-			$entry['feedId']	= $this->Entries_Model->addFeed($userId, $feed);
-			$entry['entryId'] 	= $this->Entries_Model->saveEntry($entry);
+			$entry['feedId']  = $this->Entries_Model->addFeed($userId, $feed);
+			$entry['entryId'] = $this->Entries_Model->saveEntry($entry);
 			if ($entry['entryId'] == null) {
 				$entry['entryId'] = $this->Entries_Model->getEntryIdByFeedIdAndEntryUrl($entry['feedId'], $entry['entryUrl']);
 			}
