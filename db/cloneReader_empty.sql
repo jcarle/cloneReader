@@ -528,6 +528,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   `countryId` char(2) DEFAULT NULL,
   `feedSuggest` int(1) unsigned NOT NULL DEFAULT '1',
   `fixLocale` int(1) unsigned NOT NULL DEFAULT '0',
+  `feedKeepOldEntries` int(1) unsigned NOT NULL DEFAULT '0',
   `feedMaxRetries` int(10) unsigned NOT NULL DEFAULT '0',
   `feedCountUsers` int(10) NOT NULL,
   `feedCountEntries` int(10) NOT NULL,
