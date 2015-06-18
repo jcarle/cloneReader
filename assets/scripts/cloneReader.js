@@ -568,7 +568,7 @@ cloneReader = {
 			cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
 		});
 		
-		this.starEntry($entry, entry.starred);
+		this.starEntry($entry, entry.entryStarred);
 		this.readEntry($entry, (entry.entryRead == true));
 		
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
@@ -827,10 +827,10 @@ TODO: pensar como mejorar esta parte
 		}
 		$entry.find('.star i').addClass('fa fa-lg');
 		
-		var entryId = $entry.data('entryId');
-		var starred = (this.aEntries[entryId].starred == 1);
-		this.aEntries[entryId].starred = value;
-		if (starred != value) {
+		var entryId      = $entry.data('entryId');
+		var entryStarred = (this.aEntries[entryId].entryStarred == 1);
+		this.aEntries[entryId].entryStarred = value;
+		if (entryStarred != value) {
 			this.addToSave(this.aEntries[entryId]);
 		}
 	},
@@ -999,7 +999,7 @@ TODO: pensar como mejorar esta parte
 				cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
 			});
 			
-			this.starEntry($entry, entry.starred);
+			this.starEntry($entry, entry.entryStarred);
 			
 			animate = false;
 		}
@@ -1433,9 +1433,9 @@ TODO: pensar como mejorar esta parte
 		}
 		
 		this.aUserEntries[entry.entryId] = {
-			'entryId': 		entry.entryId,	
-			'entryRead': 	entry.entryRead,
-			'starred': 		entry.starred
+			'entryId': 	    entry.entryId,	
+			'entryRead':    entry.entryRead,
+			'entryStarred': entry.entryStarred
 		};
 	},
 	

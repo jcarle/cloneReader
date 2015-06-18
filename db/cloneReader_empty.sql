@@ -2552,7 +2552,7 @@ CREATE TABLE IF NOT EXISTS `testing_childs_users` (
 CREATE TABLE IF NOT EXISTS `tmp_users_entries` (
   `userId` int(10) unsigned NOT NULL,
   `entryId` int(10) unsigned NOT NULL,
-  `starred` int(1) unsigned NOT NULL,
+  `entryStarred` int(1) unsigned NOT NULL,
   `entryRead` int(1) unsigned NOT NULL,
   PRIMARY KEY (`userId`,`entryId`),
   KEY `entryId` (`entryId`)

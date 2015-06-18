@@ -65,7 +65,7 @@ class Entries_Model extends CI_Model {
 
 		$indexName = 'PRIMARY';
 		$query = $this->db
-			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, entryRead', false)
+			->select('users_entries.feedId, feedName, feedUrl, feedLInk, feedIcon, users_entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, entryRead, entryStarred ', false)
 			->join('entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->where('users_entries.userId', $userId);
@@ -88,15 +88,8 @@ class Entries_Model extends CI_Model {
 			->get('users_entries FORCE INDEX ('.$indexName.')', config_item('entriesPageSize'), ((int)$userFilters['page'] * config_item('entriesPageSize')) - config_item('entriesPageSize'))
 			->result_array();
 		//pr($this->db->last_query()); die;
-		$result = array();
-		foreach ($query as $data) {
-			$data['starred'] = $this->isEntryStarred($userId, $data['entryId']);
-			$result[] = $data;
-		}
-
-		return $result;
-	}
-	
+		return $query;
+	}	
 	
 	function selectFeedCR($userId, $userFilters) {
 		$query = $this->db
@@ -188,7 +181,7 @@ class Entries_Model extends CI_Model {
 
 
 		$this->db
-			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, entryRead ', false)
+			->select('feeds.feedId, feedName, feedUrl, feedLInk, feedIcon, entries.entryId, entryTitle, entryUrl, entryContent, entries.entryDate, entryAuthor, entryRead, entryStarred ', false)
 			->from('entries')
 			->join('feeds', 'entries.feedId = feeds.feedId', 'inner')
 			->join('users_entries', 'users_entries.entryId = entries.entryId AND users_entries.feedId = entries.feedId', 'inner')
@@ -202,24 +195,7 @@ class Entries_Model extends CI_Model {
 
 		$query = $this->db->get()->result_array();
 		//pr($this->db->last_query()); die;
-		$result = array();
-		foreach ($query as $data) {
-			$data['starred'] = $this->isEntryStarred($userId, $data['entryId']);
-			$result[] = $data;
-		}
-
-		return $result;
-	}
-
-
-	function isEntryStarred($userId, $entryId) {
-		$query = $this->db
-			->from('users_entries')
-			->where('userId', $userId)
-			->where('entryId', $entryId)
-			->where('tagId', config_item('tagStar'))
-			->get()->row_array();
-		return (!empty($query));
+		return $query;
 	}
 
 	function selectFilters($userId) {
@@ -434,14 +410,14 @@ class Entries_Model extends CI_Model {
 	
 		$aQueries = array();
 		foreach ($entries as $entry) {
-			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.(element('entryRead', $entry) == true ? 'true' : 'false').', '.(element('starred', $entry) == true ? 'true' : 'false').') ';
+			$aQueries[] = ' ('.(INT)$userId.', '.(INT)$entry['entryId'].', '.(element('entryRead', $entry) == true ? 'true' : 'false').', '.(element('entryStarred', $entry) == true ? 'true' : 'false').') ';
 
 		}
 		if (count($aQueries) == 0) {
 			return;
 		}
 
-		$query = 'REPLACE INTO tmp_users_entries (userId, entryId, entryRead, starred) VALUES '.implode(', ', $aQueries).';';
+		$query = 'REPLACE INTO tmp_users_entries (userId, entryId, entryRead, entryStarred) VALUES '.implode(', ', $aQueries).';';
 		$this->db->query($query);
 		//pr($this->db->last_query()); 
 	}
@@ -452,8 +428,8 @@ class Entries_Model extends CI_Model {
 		$entries = $this->db->where('userId', $userId)->get('tmp_users_entries')->result_array();
 		//pr($this->db->last_query()); 
 		
-		foreach ($entries as $entry) {		
-			if ($entry['starred'] == true) {
+		foreach ($entries as $entry) {
+			if ($entry['entryStarred'] == true) {
 				$query = ' INSERT IGNORE INTO users_entries (userId, entryId, feedId, tagId, entryRead, entryDate)  
 					SELECT userId, entryId, feedId, '.config_item('tagStar').', entryRead, entryDate
 					FROM users_entries 
@@ -476,7 +452,7 @@ class Entries_Model extends CI_Model {
 					'userId'	=> $userId,
 					'entryId'	=> $entry['entryId'])
 				)
-				->update('users_entries', array('entryRead' => $entry['entryRead']));
+				->update('users_entries', array('entryRead' => $entry['entryRead'], 'entryStarred' => $entry['entryStarred'] ));
 			//pr($this->db->last_query());				
 		}
 

@@ -175,7 +175,7 @@ class Import extends CI_Controller {
 			}
 			
 			$this->Entries_Model->saveUserEntries($userId, $entry['feedId'], $entry['entryId']);
-			$this->Entries_Model->saveTmpUsersEntries($userId, array(array( 'userId' => $userId, 'entryId'	=> $entry['entryId'], 'starred'	=> true,  'entryRead' => true )));
+			$this->Entries_Model->saveTmpUsersEntries($userId, array(array( 'userId' => $userId, 'entryId' => $entry['entryId'], 'entryStarred' => true,  'entryRead' => true )));
 		}
 		
 		$this->db->trans_complete();
