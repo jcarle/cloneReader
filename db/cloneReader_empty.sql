@@ -2620,6 +2620,7 @@ CREATE TABLE IF NOT EXISTS `users_entries` (
   `tagId` int(10) unsigned NOT NULL DEFAULT '0',
   `feedId` int(10) unsigned NOT NULL,
   `entryRead` int(1) unsigned NOT NULL,
+  `entryStarred` int(1) unsigned NOT NULL,
   `entryDate` datetime NOT NULL,
   PRIMARY KEY (`userId`,`entryId`,`feedId`,`tagId`),
   KEY `entryId` (`entryId`),
