@@ -92,9 +92,6 @@ class Process extends CI_Controller {
 			$this->load->model('Entries_Model');
 			$this->Entries_Model->saveEntriesSearch($deleteEntitySearch, $onlyUpdates);
 		}
-		if ($entityTypeId == null && $onlyUpdates == false) {
-			$this->optimezeTableEntitiesSearch();
-		}
 
 		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
 	}

@@ -833,7 +833,7 @@ class Entries_Model extends CI_Model {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
 		}
 
-		$pageSize     = 500;
+		$pageSize     = 100;
 		$lastEntryId  = 0;
 		while ($lastEntryId !== null) {
 			$lastEntryId = $this->saveEntriesSearchPage($aWhere, $lastEntryId, $pageSize);
@@ -873,11 +873,6 @@ class Entries_Model extends CI_Model {
 		$query->free_result();
 
 		if (!empty($values)) {
-//			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), array_keys($values));
-//			$this->db->insert_batch('entities_search', $values);
-
-
-
 			$inserts = array();			
 			foreach ($values as $data) {
 				$inserts[] = "( ".implode(", ", $data)." )";

@@ -136,8 +136,9 @@ class Feeds extends CI_Controller {
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
-				$_POST['feedSuggest']  = $this->input->post('feedSuggest') == 'on';
-				$_POST['fixLocale']    = $this->input->post('fixLocale') == 'on';
+				$_POST['feedSuggest']        = $this->input->post('feedSuggest') == 'on';
+				$_POST['fixLocale']          = $this->input->post('fixLocale') == 'on';
+				$_POST['feedKeepOldEntries'] = $this->input->post('feedKeepOldEntries') == 'on';
 				$this->Feeds_Model->save($this->input->post());
 			}
 			
@@ -237,7 +238,10 @@ class Feeds extends CI_Controller {
 					'type'  => 'checkbox',
 					'label' => sprintf($this->lang->line('Fix language')),
 				),
-				
+				'feedKeepOldEntries' => array(
+					'type'  => 'checkbox',
+					'label' => sprintf($this->lang->line('Keep old entries')),
+				),
 			),
 		);
 

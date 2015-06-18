@@ -115,12 +115,13 @@ class Feeds_Model extends CI_Model {
 		}
 		
 		$values = array(
-			'feedUrl'      => $data['feedUrl'], 
-			'statusId'     => config_item('feedStatusPending'),
-			'countryId'    => element('countryId', $data),
-			'langId'       => element('langId', $data),
-			'feedSuggest'  => element('feedSuggest', $data),
-			'fixLocale'    => element('fixLocale', $data),
+			'feedUrl'            => $data['feedUrl'], 
+			'statusId'           => config_item('feedStatusPending'),
+			'countryId'          => element('countryId', $data),
+			'langId'             => element('langId', $data),
+			'feedSuggest'        => element('feedSuggest', $data),
+			'fixLocale'          => element('fixLocale', $data),
+			'feedKeepOldEntries' => element('feedKeepOldEntries', $data),
 		);
 		
 		if (isset($data['feedName'])) {
@@ -445,7 +446,8 @@ class Feeds_Model extends CI_Model {
 			->from('feeds')
 			->join('entries', 'entries.feedId = feeds.feedId', 'inner')
 			->where('feedCountEntries > ', config_item('entriesKeepMin'))
-			->where('entryDate < DATE_ADD(NOW(), INTERVAL -'.config_item('entrieskeepMonthMin').' MONTH)');
+			->where('entryDate < DATE_ADD(NOW(), INTERVAL -'.config_item('entrieskeepMonthMin').' MONTH)')
+			->where('feedKeepOldEntries', 0); 
 			
 		if ($feedId != null) {
 			$this->db->where('feeds.feedId', $feedId);
@@ -510,7 +512,7 @@ class Feeds_Model extends CI_Model {
 				//pr($this->db->last_query());
 				
 				$aDeleteEntryId = array();
-				sleep(1);
+				sleep(0.1);
 			}
 		}
 		
@@ -520,6 +522,8 @@ class Feeds_Model extends CI_Model {
 				AND entryId IN ('.implode(', ', $aDeleteEntryId).' ) ';
 			$this->db->query($query);
 			// pr($this->db->last_query());
+
+			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), $aDeleteEntryId);
 		}
 		
 		$this->updateFeedCounts($feedId);

@@ -73,3 +73,4 @@ $lang['Not subscribed to any feeds'] = 'No estás subscripto a ningún feed';
 $lang['Browser tags'] = 'Navegar tags';
 $lang['Admin feeds'] = 'Administrar feeds';
 $lang['The feed has been sent successfully'] = 'El feed fué agregado con éxito';
+$lang['Keep old entries'] = 'Mantener entradas antiguas';
