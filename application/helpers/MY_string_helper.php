@@ -116,7 +116,7 @@ function cleanSearchString($search, $aSearchKey, $addPlus = true, $addWildcard =
  * 
  */
 function searchReplace($string) {
-	$string = html_entity_decode($string);
+	$string = html_entity_decode($string, ENT_COMPAT, 'UTF-8');
 	return str_replace(array('+', '-', '&'), array('plus', 'minus', 'ampersand'), $string);
 }
 
