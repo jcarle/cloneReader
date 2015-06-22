@@ -510,6 +510,8 @@ class Feeds_Model extends CI_Model {
 					AND entryId IN ('.implode(', ', $aDeleteEntryId).' ) ';
 				$this->db->query($query);
 				//pr($this->db->last_query());
+
+				$this->Commond_Model->deleteEntitySearch(config_item('entityTypeEntry'), $aDeleteEntryId);
 				
 				$aDeleteEntryId = array();
 				sleep(0.1);

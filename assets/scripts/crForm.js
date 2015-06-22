@@ -582,7 +582,7 @@
 				},
 				add: function (e, data) {
 					var jqXHR = data.submit().complete(function (result, textStatus, jqXHR) {
-						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside', animateLoading: true });
+						$('#fileupload').find('.thumbnail > img').imgCenter( { centerType: 'inside', animateLoading: true });
 					});
 				}
 			});
