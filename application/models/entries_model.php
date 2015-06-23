@@ -821,13 +821,15 @@ class Entries_Model extends CI_Model {
 		if ($deleteEntitySearch == true) {
 			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeEntry'));
 		}
+		if ($entryId == null) {
+			$currentDatetime = $this->Commond_Model->getCurrentDateTime();
+		}
 		
 		$aWhere = array();
 		if ($onlyUpdates == true) {
-			$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveEntriesSearch');
-// TODO: incluir feeds.lastUpdate en el filtro cuando deje de actualizarse automaticamente
-//			$aWhere[] = ' (entries.lastUpdate > \''.$lastUpdate.'\'  OR entries.feedId IN ( SELECT feedId FROM feeds WHERE feeds.lastUpdate > \''.$lastUpdate.'\') ) ';
-			$aWhere[] = ' entries.lastUpdate > \''.$lastUpdate.'\' ';
+			$lastUpdate      = $this->Commond_Model->getProcessLastUpdate('saveEntriesSearch');
+			$aWhere[]        = ' (entries.lastUpdate > \''.$lastUpdate.'\'  OR entries.feedId IN ( SELECT feedId FROM feeds WHERE feeds.lastUpdate > \''.$lastUpdate.'\') ) ';
+			$currentDatetime = $this->Commond_Model->getCurrentDateTime();
 		}
 		if ($entryId != null) {
 			$aWhere[] = ' entries.entryId = '.(int)$entryId;
@@ -840,7 +842,7 @@ class Entries_Model extends CI_Model {
 		}
 		
 		if ($entryId == null) {
-			$this->Commond_Model->updateProcessDate('saveEntriesSearch');
+			$this->Commond_Model->updateProcessDate('saveEntriesSearch', $currentDatetime);
 		}
 
 		return true;

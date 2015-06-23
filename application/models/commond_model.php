@@ -322,9 +322,9 @@ class Commond_Model extends CI_Model {
 		return $query['lastUpdate'];
 	}
 	
-	function updateProcessDate($processName) {
+	function updateProcessDate($processName, $lastUpdate = null) {
 		$query = " UPDATE process set 
-			lastUpdate = NOW()
+			lastUpdate = ".($lastUpdate == null ? " NOW() " : "'".$lastUpdate."'")."
 			WHERE processName = '".$processName."' ";
 		$this->db->query($query);
 		//pr($this->db->last_query()); die;
