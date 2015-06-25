@@ -460,6 +460,16 @@ class Feeds_Model extends CI_Model {
 		foreach ($query as $row) {
 			$this->deleteOldEntriesByFeedId($row['feedId']);
 		}
+
+		// Borro de entities_search los items que no se hayan borrado automaticamente
+		$query = " DELETE FROM entities_search
+			WHERE entityTypeId = ".config_item('entityTypeEntry')."
+			AND entityId NOT IN (
+				SELECT entryId
+				FROM entries
+			) ";
+		$this->db->query($query);
+		//pr($this->db->last_query());
 	}
 	
 	function deleteOldEntriesByFeedId($feedId) {
