@@ -63,13 +63,21 @@ sudo chmod -R 775 /var/www/html/cloneReader/
 
 **Restore database:**
 
-sudo mysql -u root -proot < [path_to_source]/db/cloneReader_empty.sql
+sudo mysql -u root -proot < [PATH_TO_CLONEREADER]/db/cloneReader_empty.sql
 With firefox, go to http://localhost/cloneReader
 Login with 
 username: admin@creader.com
 password:root
 
-**NOTE:**
+**Add crontab**
+- php [PATH_TO_CLONEREADER]/index.php process/scanAllFeeds
+- php [PATH_TO_CLONEREADER]/index.php process saveEntitiesSearch/null/true
+- php [PATH_TO_CLONEREADER]/index.php process/rescanAll404Feeds
+- php [PATH_TO_CLONEREADER]/index.php process/deleteOldEntries
+- php [PATH_TO_CLONEREADER]/index.php tasks/sendEmails
+
+
+###NOTE:
 
 If rewrite not work, please see:
 http://www.dev-metal.com/enable-mod_rewrite-ubuntu-14-04-lts/
