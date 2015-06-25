@@ -2,11 +2,13 @@ Clone of the old google reader. Reader of feeds, rss news.
 
 Open source.
 
-Import subscriptions.xml and starred.json from google reader.
+Responsive.
+
+Search in all feeds
 
 Remote login.
 
-Responsive.
+Import subscriptions.xml and starred.json from google reader.
 
 Remote Storage.
 
@@ -16,7 +18,9 @@ Share entries in social networks.
 
 Keyboard navigation {'j': 'next', 'k': 'prev', 'u': 'expand', 's': 'toogle start', 'm': 'toogle unread' };
 
-On scroll mark entry as read.
+List view or expanded view for item viewing.
+
+Automatic marking of items as read as they scrolled past (expanded view only).
 
 Source: https://github.com/jcarle/cloneReader
 
@@ -29,11 +33,13 @@ Clon de google reader. Lector de feeds, rss, noticias.
 
 Open source.
 
-Importa subscriptions.xml y starred.json de google reader.
+Responsive.
+
+Buscar en todos los articulos.
 
 Login remoto.
 
-Responsive.
+Importa subscriptions.xml y starred.json de google reader.
 
 Remote Storage.
 
@@ -43,10 +49,11 @@ Links para compartir en redes sociales.
 
 Atajos de teclado  {'j': 'next', 'k': 'prev', 'u': 'expand', 's': 'toogle start', 'm': 'toogle unread' };
 
-On scroll mark entry as read.
+Vista de lista y vista expandida para visualizar artículos.
+
+Marcado automático de los artículos como leídos al desplazarse hacia abajo (solo en vista expandida).
 
 Source: https://github.com/jcarle/cloneReader
-
 
 Desarrrollado con codeigniter, simplepie, jquery, bootstrap
 
