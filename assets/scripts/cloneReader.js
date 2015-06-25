@@ -480,6 +480,10 @@ cloneReader = {
 		}
 		
 		this.isLoadEntries = true;
+
+		if (typeof ga != "undefined") {
+			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
+		}
 		
 		this.ajax = $.ajax({		
 			'url':      base_url + 'entries/select',
