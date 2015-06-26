@@ -217,6 +217,7 @@ $lang['Search %s'] = 'Buscar %s';
 $lang['Search %s in "%s"'] = 'Buscar %s en "%s"';
 $lang['Search for %s'] = 'Buscar por %s';
 $lang['Has email'] = 'Tiene email';
+$lang['Has logo'] = 'Tiene logo';
 $lang['Not has country'] = 'No tiene país';
 $lang['Add Comment to "%s"'] = 'Agregar comentario a "%s"';
 $lang['Be the first to comment'] = 'Sé el primero en comentar';

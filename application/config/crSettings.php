@@ -162,7 +162,7 @@ $config['meta'] = array(
  * Js y Css adicionales para que sea compilado con carabiner
  */
 $config['siteAssets'] = array(
-	'js'  => array( 'feeds.js', 'process.js', 'cloneReader.js',  'jquery.visible.min.js', ),
+	'js'  => array( 'feeds.js', 'cloneReader.js',  'jquery.visible.min.js', ),
 	'css' => array( 'cloneReader.css', )
 );
 

@@ -458,7 +458,7 @@ class Users_Model extends CI_Model {
 	
 	function saveUsersSearch($deleteEntitySearch = false, $onlyUpdates = false, $userId = null) {
 		if ($deleteEntitySearch == true) {
-			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeUser'));
+			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeUser'));
 		}
 		
 		$aWhere = array();

@@ -141,7 +141,7 @@ class Tags_Model extends CI_Model {
 	
 	function saveTagsSearch($deleteEntitySearch = false, $onlyUpdates = false, $tagId = null) {
 		if ($deleteEntitySearch == true) {
-			$this->Commond_Model->deleteEntitySearch( config_item('entityTypeTag'));
+			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeTag'));
 		}
 		
 		$aWhere = array(' tags.tagId NOT IN ( '.config_item('tagAll').', '.config_item('tagStar').', '.config_item('tagHome').', '.config_item('tagBrowse').' ) ');
