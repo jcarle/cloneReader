@@ -1086,8 +1086,10 @@ TODO: pensar como mejorar esta parte
 						if (reload == true) {
 							var scrollTop = this.$ulFilters.scrollTop();
 						}
-						this.filters 	= response.result.filters;
-						this.tags 		= response.result.tags;
+
+						this.oldIndexFilters = this.indexFilters;
+						this.filters         = response.result.filters;
+						this.tags            = response.result.tags;
 						this.runIndexFilters(this.filters, null, true);
 						this.renderFilters(this.filters, this.$ulFilters, true);
 						this.resizeWindow();
@@ -1148,6 +1150,12 @@ TODO: pensar como mejorar esta parte
 				index++;
 			}
 				
+			if (filter.type == 'tag' && this.oldIndexFilters != null) {
+				var tmp = this.oldIndexFilters[filter.type][filter.id];
+				if (tmp != null) {
+					filter.expanded = tmp.expanded;
+				}
+			}
 			if (filter.$filter != null && filter.childs != null && filter.expanded == true ) {
 				this.expandFilter(filter, filter.expanded);
 				this.renderFilters(filter.childs, filter.$filter.find('ul:first'), false);

@@ -1,41 +1,41 @@
-<?php 
+<?php
 class Error extends CI_Controller {
 	function __construct() {
-		parent::__construct();	
+		parent::__construct();
 	}
-	
+
 	function index() {
 		$this->error404();
 	}
-	
-	function forbidden() {
-		if ($this->input->is_ajax_request() && $this->input->get('pageJson') != true) {
+
+	function forbidden($forceJson = false) {
+		if ($forceJson == true || ($this->input->is_ajax_request() && $this->input->get('pageJson') != true)) {
 			return $this->load->view('json', array(
-				'code'         => false, 
+				'code'         => false,
 				'result'       => $this->lang->line('Not authorized for the action to take'),
 				'status_code'  => 403
 			));
-		}		
-		
+		}
+
 		$this->load->view('pageHtml', array(
-			'view'        => 'error', 
+			'view'        => 'error',
 			'meta'        => array( 'title' => $this->lang->line('Error 403') ),
 			'message'     => $this->lang->line('Not authorized for the action to take'),
 			'status_code' => 403
 		));
-	}	
-	
-	function error404() {
-		if ($this->input->is_ajax_request() && $this->input->get('pageJson') != true) {
+	}
+
+	function error404($forceJson = false) {
+		if ($forceJson == true || ($this->input->is_ajax_request() && $this->input->get('pageJson') != true)) {
 			return $this->load->view('json', array(
-				'code'          => false, 
+				'code'          => false,
 				'result'        => $this->lang->line('The page you requested does not exist'),
-				'status_code'   => 404 
+				'status_code'   => 404
 			));
-		}		
-		
+		}
+
 		$this->load->view('pageHtml', array(
-			'view'          => 'error', 
+			'view'          => 'error',
 			'meta'          => array( 'title' => $this->lang->line('Error 404') ),
 			'message'       => $this->lang->line('The page you requested does not exist'),
 			'status_code'   => 404
