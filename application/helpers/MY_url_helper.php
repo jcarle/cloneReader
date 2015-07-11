@@ -2,7 +2,7 @@
 
 /**
  * // TODO: documentar ! y mover de aca tambien!
- * 
+ *
  * */
 function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $entitySef) {
 
@@ -12,7 +12,7 @@ function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $en
 			$remove = true;
 		}
 	}
-	
+
 	$currentFilters[$entityTypeId] = array('entityTypeId' => $entityTypeId, 'entitySef' => $entitySef);
 	if ($remove == true) {
 		unset($currentFilters[$entityTypeId]);
@@ -32,7 +32,7 @@ function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $en
 			$sefs[] = $currentFilters[$entityTypeId]['entitySef'];
 		}
 	}
-	
+
 	return base_url(implode('/', $sefs));
 }
 
@@ -41,7 +41,7 @@ function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $en
  */
 function appendFilesToCarabiner() {
 	$CI = &get_instance();
-	
+
 	$aJs = array(
 		'jquery-1.7.2.js',
 		//'jquery-1.11.0.js',
@@ -50,7 +50,7 @@ function appendFilesToCarabiner() {
 		'jquery.url.js',
 //		'jquery.dotdotdot.js',
 		'jquery.actual.js',
-		
+
 		'moment-with-langs.js',
 		'bootstrap.js',
 		'crFunctions.js',
@@ -81,7 +81,7 @@ function appendFilesToCarabiner() {
 		'bootstrap-paginator.js',
 		'jquery.highlight.js',
 	);
-	
+
 	$aCss = array(
 		'bootstrap.css',
 //		'bootstrap-theme.css',
@@ -93,10 +93,10 @@ function appendFilesToCarabiner() {
 		'bootstrap-datetimepicker.css',
 		'blueimp-gallery.css',
 		'jquery.fileupload-ui.css',
-		
+
 		'default.css',
 	);
-	
+
 	if ($CI->session->userdata('langId') != 'en') {
 		$aTmp = explode('-', $CI->session->userdata('langId'));
 		if (count($aTmp) == 2) {
@@ -107,10 +107,10 @@ function appendFilesToCarabiner() {
 			$aJs[] = 'select2/select2_locale_'.$CI->session->userdata('langId').'.js';
 			$aJs[] = 'datetimepicker/bootstrap-datetimepicker.'.$CI->session->userdata('langId').'.js';
 		}
-	}	
+	}
 
 	$siteAssets = config_item('siteAssets');
-	
+
 	$aJs  = array_merge($aJs, $siteAssets['js']);
 	$aCss = array_merge($aCss, $siteAssets['css']);
 
@@ -122,18 +122,18 @@ function appendFilesToCarabiner() {
 	}
 }
 
-function errorForbidden() {
+function errorForbidden($forceJson = false) {
 	$CI = &get_instance();
 	$CI->load->library('../controllers/error');
 	initLang(); // FIXME: revisar; se esta vaciando la session al hacer el redirect
 	$CI->safety->initSession();
-	$CI->error->forbidden();
+	$CI->error->forbidden($forceJson);
 }
 
-function error404() {
+function error404($forceJson = false) {
 	$CI = &get_instance();
 	$CI->load->library('../controllers/error');
-	$CI->error->error404();	
+	$CI->error->error404($forceJson);
 }
 
 
@@ -153,15 +153,15 @@ function loadViewAjax($code, $result = null) {
 
 	if ($result == null) {
 		$result = array();
-	}	
+	}
 	if ($code != true && is_array($result)) {
 		$result['formErrors'] = validation_array_errors();
 	}
-	
+
 	return $CI->load->view('json', array(
-		'code'   => $code, 
+		'code'   => $code,
 		'result' => $result,
-	));	
+	));
 }
 
 function getPageName() {

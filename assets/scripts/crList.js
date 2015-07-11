@@ -1,21 +1,21 @@
 ;(function($) {
-	var 
+	var
 		methods,
 		crList;
-		
+
 	methods = {
 		init : function( options ) {
 			var $element = $(this);
 			if (options == null) {
 				options = {};
-			} 
+			}
 			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
 			// Se utiliza en appAjax
-			if ($element.length == 0) { 
+			if ($element.length == 0) {
 				if (options.autoRender == true && options.$parentNode != null) {
 					$element = renderCrList(options, options.$parentNode);
 				}
-				else { 
+				else {
 					return null;
 				}
 			}
@@ -23,7 +23,7 @@
 			if ($element.data('crList') == null) {
 				$element.data('crList', new crList($element, options));
 			}
-			
+
 			return $element;
 		}
 	};
@@ -38,7 +38,7 @@
 			$.error( 'Method ' +  method + ' does not exist on crList' );
 		}
 	};
-	
+
 	crList = function($crList, options) {
 		this.$crList       = $crList;
 		this.$form         = this.$crList.find('form');
@@ -53,7 +53,7 @@
 				$.formatDate($(this));
 			}
 		);
-		
+
 		this.$table.find('tbody td.dotdotdot').each(
 			function() {
 				var $td  = $(this);
@@ -62,10 +62,10 @@
 				var $div = $('<div />').attr('title', value).html(value).appendTo($td);
 			}
 		);
-		
+
 
 		this.$search = this.$form.find('input[name=search]');
-		
+
 		this.$form.find('.fa-times').parent()
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
@@ -77,28 +77,28 @@
 					this.$form.submit();
 				}
 			, this));
-		
+
 		this.$table.find('tbody tr').each($.proxy(
 			function (event, tr){
 				this.checkedRow(tr);
 			}
 		, this));
-		
+
 		if ($.trim($.url().param('search')) != '' && $.isMobile() == false) {
 			this.$search.focus();
 		}
-	
+
 		this.$crFilterList.click(function(event) {
 			event.stopPropagation();
-		});	
-		
+		});
+
 		if (this.$btnFilter.length != 0) {
-			this.$form.addClass('hasBtnFilter'); 
+			this.$form.addClass('hasBtnFilter');
 		}
 		if (this.$btnOrder.length != 0) {
 			this.$form.addClass('hasBtnOrder');
 		}
-		
+
 		if (options['filters'] != null) {
 			this.$form.crForm( { 'fields': options['filters'] });
 			var hasFilter = (this.$crFilterList.find('input[type=text][value!=""], input:checked, select[value!=""]').length != 0);
@@ -106,11 +106,11 @@
 				this.$btnFilter.addClass('btn-info');
 			}
 		}
-		
+
 		this.initEvents();
 		this.resizeWindow();
 	};
-	
+
 	crList.prototype = {
 		initEvents: function() {
 			$(window).resize($.proxy(
@@ -120,7 +120,7 @@
 			, this));
 
 			this.$crList.find('.btnDelete').click($.proxy(
-				function() { 
+				function() {
 					var aDelete = [];
 					var $input = this.$table.find('tr.info input');
 					for (var i=0; i<$input.length; i++) {
@@ -135,14 +135,14 @@
 						'callback':   $.proxy(
 								function(aDelete, b, c) {
 									$.ajax( {
-										'type':     'post', 
+										'type':     'post',
 										'url':      base_url + this.options['urlDelete'],
 										'data':     { 'aDelete': $.toJSON(aDelete) },
 										'success':
 										$.proxy(
 											function (response) {
 												if ($.hasAjaxDefaultAction(response) == true) { return; }
-												
+
 												var params = $.url().param();
 												delete params['page'];
 												$.goToUrl(base_url + this.options['urlList'] + '?' + $.param(params));
@@ -154,27 +154,27 @@
 					});
 				}
 			, this));
-			
+
 			this.$table.find('tbody tr td.rowCheckbox').click(
 				function(event) {
 					event.stopPropagation();
 				}
 			);
-			
+
 			this.$table.find('tbody input[type=checkbox]').change( $.proxy(
 				function(event) {
 					this.checkedRow($(event.target).parent().parent());
 				}
 			, this));
-			
+
 			this.$table.find('thead input[type=checkbox]').change( $.proxy(
 				function() {
 					this.checkAll();
 				}
-			, this));			
-			
+			, this));
+
 			if (this.options['urlEdit'] != null) {
-				this.$table.find('tbody tr').on('click', 
+				this.$table.find('tbody tr').on('click',
 					function (event) {
 						if ($(this).data('url-edit')) {
 							$.goToUrl($(this).data('url-edit') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
@@ -190,10 +190,10 @@
 						return false;
 					}
 				);
-			}			
+			}
 			this.$form.unbind();
 
-			this.$form.on('submit', 
+			this.$form.on('submit',
 				function(event) {
 					event.stopPropagation();
 					var $form = $(this);
@@ -202,7 +202,7 @@
 				}
 			);
 		},
-		
+
 		checkedRow: function(row) {
 			if (this.options.data.length == 0) {
 				return;
@@ -210,27 +210,27 @@
 
 			var $row = $(row);
 			$row.removeClass('info');
-			
+
 			if ($row.find('input[type=checkbox]').is(':checked')) {
 				$row.addClass('info');
 			}
-			
+
 			this.$table.find('thead input[type=checkbox]').removeAttr('checked', 'checked');
 			if (! this.$table.find('tbody input[type=checkbox]:not(:checked)').length) {
 				this.$table.find('thead input[type=checkbox]').attr('checked', 'checked');
 			}
 		},
-		
+
 		checkAll: function() {
 			this.$table.find('tbody input[type=checkbox]').removeAttr('checked', 'checked');
-			
+
 			if (this.$table.find('thead input[type=checkbox]').is(':checked')) {
 				this.$table.find('tbody input[type=checkbox]').attr('checked', 'checked');
 			}
-			
+
 			this.$table.find('tbody input[type=checkbox]').change();
 		},
-		
+
 		resizeWindow: function() {
 			this.$table.parent().removeClass('table-force-responsive');
 			if (this.$table.outerWidth(true) > this.$table.parent().outerWidth(true)) {
@@ -238,10 +238,10 @@
 			}
 		}
 	},
-		
+
 	renderCrList = function(data, $parentNode) {
 		var showCheckbox   = data['showCheckbox'] == true;
-		var showId         = data['showId'] == true;		
+		var showId         = data['showId'] == true;
 		var buttons        = [];
 		if (showCheckbox == true && data['urlDelete'] != null) {
 			buttons.push( '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + crLang.line('Delete') + ' </a>' );
@@ -253,7 +253,7 @@
 		if (data['buttons'] == null) {
 			data['buttons'] = buttons;
 		}
-				
+
 		var params  = $.url().param();
 		var $crList = $('<div class="crList"></div>').appendTo($parentNode);
 		var $panel  = $('<div class="panel panel-default" />').appendTo($crList);
@@ -277,7 +277,7 @@
 		if ($.trim(params['search']) != '') {
 			$form.find('input[name=search]').val(decodeURIComponent(params['search']));
 		}
-		
+
 		if ($.trim(params['search']) != '' && $.isMobile() == false) {
 			$form.find('input[name=search]').focus();
 		}
@@ -293,11 +293,11 @@
 				orderBy = defaultOrderBy;
 			}
 			var orderDir = params['orderDir'] == 'desc' ? 'desc' : 'asc';
-			
-			delete params['orderBy']; 
+
+			delete params['orderBy'];
 			delete params['orderDir'];
 			delete params['page'];
-	
+
 			var $sort = $('\
 				<div class="btn-group">\
 					<input type="hidden" name="orderBy"  value="' + orderBy + '" />\
@@ -310,19 +310,19 @@
 					</div>\
 				</div>\
 			').appendTo($form);
-			
-			var $ul = $sort.find('ul');	
-	
+
+			var $ul = $sort.find('ul');
+
 			for (key in data['sort']) {
 				params['orderBy']  = key;
 				params['orderDir'] = (orderDir == 'desc' ? 'asc' : 'desc');
-				
+
 				var $li   = $('<li/>').appendTo($ul);
 				var $link = $('<a/>')
 					.appendTo($li)
 					.attr('href', base_url + data['urlList'] + '?' + $.param(params))
 					.text(data['sort'][key]);
-		
+
 				if (orderBy == key) {
 					$link.prepend(' <i class="fa fa-fw ' + (orderDir == 'asc' ? 'fa-arrow-up' : 'fa-arrow-down') + ' " ></i> ');
 				}
@@ -335,20 +335,20 @@
 		var $tr      = $('<tr class="label-primary" />').appendTo($thead);
 
 		if (showCheckbox == true) {
-			$('<th class="rowCheckbox">	<input type="checkbox" > </th>').appendTo($tr);	
+			$('<th class="rowCheckbox">	<input type="checkbox" > </th>').appendTo($tr);
 		}
 		if (data['urlEdit'] != null) {
 			$table.addClass('table-hover');
 		}
 		if (showId == true) {
-			$('<th class="numeric"> # </th>').appendTo($tr);	
+			$('<th class="numeric"> # </th>').appendTo($tr);
 		}
-	
+
 		for (var columnName in data['columns']) {
 			var $th = $(' <th />')
 				.text(data['columns'][columnName])
-				.appendTo($tr);	
-	
+				.appendTo($tr);
+
 			if ($.isPlainObject(data['columns'][columnName])) {
 				$th
 					.text(data['columns'][columnName]['value'])
@@ -370,29 +370,29 @@
 			else {
 				var id  = row[Object.keys(row)[0]];
 				var $tr = $( '<tr />').appendTo($tbody);
-		
+
 				if (data['urlEdit'] != null) {
 					$tr.attr('data-url-edit', base_url + $.sprintf(data['urlEdit'], id));
 				}
-				
-				if (showCheckbox == true) {	
+
+				if (showCheckbox == true) {
 					$(' <td class="rowCheckbox"> <input type="checkbox" name="chkDelete" value="' + id + '" /> </td> ').appendTo($tr);
 				}
 				if (showId == true) {
 					$('<td class="numeric" />').appendTo($tr).text(id);
 				}
-		
+
 				for (columnName in data['columns']) {
 					var $td = $(' <td />').appendTo($tr);
-					
+
 					if (data['columns'][columnName]['isHtml'] == true ) {
 						$td.html(row[columnName] || '');
 					}
 					else {
 						$td.text(row[columnName] || '');
 					}
-					
-					
+
+
 					if ($.isPlainObject(data['columns'][columnName])) {
 						$td.addClass(data['columns'][columnName]['class']);
 					}
@@ -411,21 +411,21 @@
 					.append(' ');
 			}
 		}
-		
-		$(' <span> ' + $.sprintf(crLang.line('%s rows'), $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);		
-	
+
+		$(' <span> ' + $.sprintf(crLang.line('%s rows'), $.formatNumber(data['foundRows']))+ ' </span> ').appendTo($div);
+
 		var $div = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" />').appendTo($row);
 		var $ul  = $('<ul class="pagination">').appendTo($div);
-	
+
 		var params      = $.url().param();
 		var currentPage = params['page'];
 		var totalPages  = Math.ceil(data['foundRows'] / crSettings.pageSize);
 		delete params['page'];
-	
+
 		$ul.bootstrapPaginator({
 			'bootstrapMajorVersion': 3,
 			'currentPage':           currentPage,
-			'numberOfPages':         5, 
+			'numberOfPages':         5,
 			'totalPages':            totalPages,
 			'totalRows':             data['foundRows'],
 			'itemTexts':             function (type, page, current) {
@@ -441,7 +441,7 @@
 					case "page":
 						return page;
 				}
-			},	
+			},
 			'tooltipTitles': function (type, page, current) {
 				return null;
 			},
@@ -467,7 +467,7 @@
 				return base_url + data['urlList'] + '?' + $.param(params);
 			},
 		});
-		
+
 		return $crList;
 	},
 
@@ -481,13 +481,13 @@
 					<div class="crFilterList  panel panel-default fade in crForm form-horizontal dropdown-menu"> \
 						<div class="panel-heading"> ' + crLang.line('Filter') + ' </div> \
 						<div class="panel-body"> </div> \
-						<div class="modal-footer form-actions"> \
+						<div class="modal-footer formButtons"> \
 							<button type="submit" class="btn btn-default"> <i class="fa fa-search" ></i> ' + crLang.line('Search') + ' </button> \
 						</div> \
 					</div> \
 				</div> \
 			</div> ');
-			
+
 		$(document).crForm('renderCrFormFields', fields, $parentNode.find('.panel-body'));
 	};
 })($);

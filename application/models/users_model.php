@@ -262,7 +262,7 @@ class Users_Model extends CI_Model {
 		
 		$this->safety->destroyMenuCache();
 		$this->safety->destroyControllersCache();
-
+		
 		$this->saveUsersSearch(false, false, $userId);
 		
 		return true;

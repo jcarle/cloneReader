@@ -1,58 +1,58 @@
-<?php 
+<?php
 class Testing extends CI_Controller {
 
 	function __construct() {
-		parent::__construct();	
-		
+		parent::__construct();
+
 		$this->load->model(array('Testing_Model', 'Countries_Model', 'Users_Model'));
-	}  
-	
+	}
+
 	function index() {
 		$this->listing();
 	}
-	
+
 	function listing() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
-		
+
 		$filters = array(
-			'search'    => $this->input->get('search'), 
+			'search'    => $this->input->get('search'),
 			'countryId' => $this->input->get('countryId')
 		);
-		
+
 		$query = $this->Testing_Model->selectToList($page, config_item('pageSize'),  $filters);
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
-			'meta'			=> array( 'title' => $this->lang->line('Edit testing') ),
-			'list'			=> array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('testName' => 'Name', 'countryName' => $this->lang->line('Country'), 'stateName' => 'State'),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'filters'		=> array(
+			'view'  => 'includes/crList',
+			'meta'  => array( 'title' => $this->lang->line('Edit testing') ),
+			'list'  => array(
+				'urlList'    => strtolower(__CLASS__).'/listing',
+				'urlEdit'    => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'     => strtolower(__CLASS__).'/add',
+				'columns'    => array('testName' => 'Name', 'countryName' => $this->lang->line('Country'), 'stateName' => 'State'),
+				'data'       => $query['data'],
+				'foundRows'  => $query['foundRows'],
+				'filters'    => array(
 					'countryId' => array(
-						'type'				=> 'dropdown',
-						'label'				=> $this->lang->line('Country'), 
-						'value'				=> $this->input->get('countryId'),
-						'source'			=> $this->Countries_Model->selectToDropdown(),
-						'appendNullOption' 	=> true
+						'type'             => 'dropdown',
+						'label'            => $this->lang->line('Country'),
+						'value'            => $this->input->get('countryId'),
+						'source'           => $this->Countries_Model->selectToDropdown(),
+						'appendNullOption' => true
 					)
 				)
 			)
 		));
 	}
-	
+
 	function edit($testId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->Testing_Model->get($testId, true), $testId);
 		if ($data === null) { return error404(); }
-		
+
 		$form = array(
 			'frmId'  => 'frmTestingEdit',
 			'fields' => array(
@@ -62,21 +62,21 @@ class Testing extends CI_Controller {
 				),
 				'testName' => array(
 					'type'   => 'text',
-					'label'  => 'Name', 
+					'label'  => 'Name',
 				),
 				'countryId' => array(
 					'type'    => 'dropdown',
-					'label'   => $this->lang->line('Country'), 
+					'label'   => $this->lang->line('Country'),
 					'source'  => $this->Countries_Model->selectToDropdown(),
 				),
 				'stateId' => array(
 					'type'        => 'dropdown',
-					'label'       => 'State', 
+					'label'       => 'State',
 					'controller'  => base_url('search/selectStatesByCountryId/'),
 					'subscribe'   => array(
 						array(
 							'field'      => 'countryId',
-							'event'      => 'change',   
+							'event'      => 'change',
 							'callback'   => 'loadDropdown',
 							'arguments'  => array(
 								'this.getFieldByName(\'countryId\').val()'
@@ -87,22 +87,22 @@ class Testing extends CI_Controller {
 				),
 				'testRating' => array(
 					'type'   => 'raty',
-					'label'  => 'Rating', 
+					'label'  => 'Rating',
 				),
 				'testDesc' => array(
 					'type'  => 'textarea',
-					'label' => 'Description', 
+					'label' => 'Description',
 				),
 				'testDate' => array(
 					'type'  => 'datetime',
-					'label' => 'Fecha', 
+					'label' => 'Fecha',
 				),
 			)
 		);
-		
+
 		if ((int)$testId > 0) {
 			$form['urlDelete'] = base_url('testing/delete/');
-			
+
 			$form['fields']['testPicture'] = array(
 				'type'             => 'upload',
 				'label'            => $this->lang->line('Logo'),
@@ -116,7 +116,7 @@ class Testing extends CI_Controller {
 				'urlSave'    => base_url('testing/saveDoc/'.$testId),
 				'urlDelete'  => base_url('testing/deleteDoc/'.$testId),
 			);
-			
+
 			$form['fields']['testIco'] = array(
 				'type'       => 'upload',
 				'label'      => $this->lang->line('Icon'),
@@ -127,12 +127,12 @@ class Testing extends CI_Controller {
 			$form['fields']['gallery'] = getCrFormFieldGallery(config_item('entityTypeTesting'), $testId, 'Pictures');
 			$form['fields']['testChilds'] = array(
 				'type'        => 'subform',
-				'label'       => 'childs', 
+				'label'       => 'childs',
 				'controller'  => base_url('testing/selectChildsByTestId/'.$testId),
 			);
 		}
-		
-		$form['rules'] = array( 
+
+		$form['rules'] = array(
 			array(
 				'field' => 'testName',
 				'label' => $form['fields']['testName']['label'],
@@ -147,14 +147,14 @@ class Testing extends CI_Controller {
 			if ($code == true) {
 				$this->Testing_Model->save($this->input->post());
 			}
-			
+
 			if ($this->input->is_ajax_request()) {
 				return loadViewAjax($code);
 			}
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm', 
+			'view'		=> 'includes/crForm',
 			'meta'		=> array( 'title' => $this->lang->line('Edit testing') ),
 			'form'		=> populateCrForm($form, $data),
 		));
@@ -163,37 +163,37 @@ class Testing extends CI_Controller {
 	function add(){
 		$this->edit(0);
 	}
-	
+
 	function delete() {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
-		
+
 		return loadViewAjax($this->Testing_Model->delete($this->input->post('testId')));
-	}	
+	}
 
 	function selectChildsByTestId($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
-		
+
 		$data = $this->Testing_Model->selectChildsByTestId($testId);
 		$data[] = '<tr><td colspan="3">asdf asdf asdf</td></tr>';
-		
+
 		$list = array(
-			'controller'	=> strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
-			'columns'		=> array( 
-				'testChildName' 	=> 'Name', 
-				'countryName' 		=> $this->lang->line('Country'), 
-				'testChildDate' 	=> array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
-			'data'			=> $data,
+			'controller' => strtolower(__CLASS__).'/popupTestingChilds/'.$testId.'/',
+			'data'       => $data,
+			'columns'    => array(
+				'testChildName' => 'Name',
+				'countryName'   => $this->lang->line('Country'),
+				'testChildDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
 		);
 
 		return loadViewAjax(true, array('list' => $list));
 	}
-	
+
 	function popupTestingChilds($testId, $testChildId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->Testing_Model->getTestChild($testChildId), $testChildId);
 		if ($data === null) { return error404(); }
-		
+
 		$form = array(
 			'frmId'  => 'frmTestChildEdit',
 			'title'  => 'Edit test child',
@@ -217,7 +217,7 @@ class Testing extends CI_Controller {
 				),
 				'testChildDate' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Date'), 
+					'label' => $this->lang->line('Date'),
 				),
 			),
 			'rules' => array(
@@ -233,25 +233,25 @@ class Testing extends CI_Controller {
 				),
 			)
 		);
-		
+
 		$price      = array('name' => 'testChildPrice',    'label' => $this->lang->line('Price'), );
 		$exchange  = array('name' => 'testChildExchange',  'label' => $this->lang->line('Exchange rate'), );
-		
+
 		$form['fields'] += getCrFormFieldMoney(
 			$price,
 			array('name' => 'currencyId',           'label' => $this->lang->line('Currency'), ),
 			$exchange,
 			array('name' => 'testChildTotalPrice',  'label' => 'Total')
 		);
-		
-		$form['rules'] = array_merge($form['rules'], getCrFormValidationFieldMoney($price, $exchange));		
-		
+
+		$form['rules'] = array_merge($form['rules'], getCrFormValidationFieldMoney($price, $exchange));
+
 		if ((int)$testChildId > 0) {
 			$form['urlDelete'] = base_url('testing/deleteTestChild/');
-			
+
 			$form['fields']['testChildsUsers'] = array(
 				'type'        => 'subform',
-				'label'       => 'Users', 
+				'label'       => 'Users',
 				'controller'  => base_url('testing/selectUsersByTestChildId/'.$testChildId),
 			);
 		}
@@ -274,31 +274,30 @@ class Testing extends CI_Controller {
 	function selectUsersByTestChildId($testChildId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 
-
 		$list = array(
-			'controller'	=> strtolower(__CLASS__).'/popupTestChildUser/'.$testChildId.'/',
-			'columns'		=> array( 
-				'userFirstName' 	=> 'Nombre', 
-				'userLastName' 		=> 'Apellido', 
-				'userEmail'			=> 'Email',
+			'controller' => strtolower(__CLASS__).'/popupTestChildUser/'.$testChildId.'/',
+			'data'       => $this->Testing_Model->selectUsersByTestChildId($testChildId),
+			'columns'    => array(
+				'userFirstName' => 'Nombre',
+				'userLastName'  => 'Apellido',
+				'userEmail'     => 'Email',
 			),
-			'data'			=> $this->Testing_Model->selectUsersByTestChildId($testChildId),
 		);
 
 		return loadViewAjax(true, array('list' => $list));
 	}
-	
+
 	function popupTestChildUser($testChildId, $userId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->Testing_Model->getTestChild($testChildId), $testChildId);
 		if ($data === null) { return error404(); }
-		
+
 		$user = null;
 		if ((int)$userId != 0) {
 			$user = $this->Users_Model->get($userId);
 		}
-		
+
 		$form = array(
 			'frmId'  => 'frmTestChildUserEdit',
 			'title'  => 'Edit user',
@@ -315,7 +314,7 @@ class Testing extends CI_Controller {
 					'type'          => 'typeahead',
 					'label'         => $this->lang->line('User'),
 					'source'        => base_url('search/users/'),
-					'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ), 
+					'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
 					'multiple'      => false,
 					'placeholder'  => $this->lang->line('User')
 				)
@@ -328,7 +327,7 @@ class Testing extends CI_Controller {
 				),
 			)
 		);
-		
+
 		if ((int)$testChildId > 0) {
 			$form['urlDelete'] = base_url('testing/deleteTestChild/');
 		}
@@ -338,10 +337,10 @@ class Testing extends CI_Controller {
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
-			
+
 				$testChildId = $this->input->post('testChildId');
 				$userId      = $this->input->post('userId');
-			
+
 				if ($this->Testing_Model->exitsTestChildUser($testChildId, $userId) == true) {
 					return loadViewAjax(false, 'El usuario ya exite che');
 				}
@@ -352,65 +351,69 @@ class Testing extends CI_Controller {
 
 			return loadViewAjax($code);
 		}
-		
+
 		return $this->load->view('includes/crJsonForm', array( 'form' => populateCrForm($form, $data) ));
 	}
-	
+
 	function savePicture($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
-		
+
 		$this->deletePicture($testId);
-		
+
 		$result  = savePicture(config_item('testPicture'));
-		
+
 		if ($result['code'] != true) {
 			return loadViewAjax(false, $result['result']);
 		}
-		
+
 		$testPictureFileId = $result['fileId'];
 
 		$this->Testing_Model->savePicture($testId, $testPictureFileId);
 
-		return loadViewAjax(true, array('reloadUrl' => true));
+		$data = $this->Testing_Model->get($testId, true);
+
+		return loadViewAjax(true, $data['testPicture']);
 	}
-	
+
 	function deletePicture($testId) {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
-		
+
 		$this->load->model('Files_Model');
-		
+
 		$data = $this->Testing_Model->get($testId);
-		
+
 		$this->Files_Model->deleteFile(config_item('testPicture'), $data['testPictureFileId']);
 
-		return loadViewAjax(true, array('reloadUrl' => true));
+		return loadViewAjax(true);
 	}
 
 	function saveDoc($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
-		
+
 		$this->deleteDoc($testId);
-		
+
 		$result = saveFile(config_item('testDoc'));
-		
+
 		if ($result['code'] != true) {
 			return loadViewAjax(false, $result['result']);
 		}
-		
+
 		$this->Testing_Model->saveDoc($testId, $result['fileId']);
 
-		return loadViewAjax(true, array('reloadUrl' => true));
+		$data = $this->Testing_Model->get($testId, true);
+
+		return loadViewAjax(true, $data['testDoc']);
 	}
 
 	function deleteDoc($testId) {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
-		
+
 		$this->load->model('Files_Model');
 		$data = $this->Testing_Model->get($testId);
 		if (!empty($data)) {
 			$this->Files_Model->deleteFile(config_item('testDoc'), $data['testDocFileId']);
 		}
 
-		return loadViewAjax(true, array('reloadUrl' => true));
+		return loadViewAjax(true);
 	}
 }

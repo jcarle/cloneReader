@@ -1,8 +1,8 @@
 ;(function($) {
-	var 
+	var
 		methods,
 		crForm;
-		
+
 	methods = {
 		init : function( options ) {
 			var $element = $(this);
@@ -11,34 +11,34 @@
 			}
 			// Para que se autoreenderee: nececita que sea llamado desde NULL $(null) y con las properties autoRender y $parentNode
 			// Se utiliza en appAjax
-			if ($element.length == 0) { 
+			if ($element.length == 0) {
 				if (options.autoRender == true && options.$parentNode != null) {
 					$element = renderCrForm(options, options.$parentNode);
 				}
-				else { 
+				else {
 					return null;
 				}
 			}
-			
+
 			if ($element.data('crForm') == null) {
 				$element.data('crForm', new crForm($element, options));
 			}
-			
+
 			return $element;
 		},
-		
+
 		renderCrFormFields: function(fields, $parentNode) { // Para renderear los elementos, en caso de que tengan un container distinto, como crFilterList
 			renderCrFormFields(fields, $parentNode);
 		},
-		
+
 		renderPopupForm: function(data) {
 			return renderPopupForm(data);
 		},
-		
+
 		renderAjaxForm: function(data, $parentNode) {
 			return renderAjaxForm(data, $parentNode);
 		},
-		
+
 		showSubForm: function(controller) {
 			$(this).data('crForm').showSubForm(controller);
 			return $(this);
@@ -58,7 +58,7 @@
 			$.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
 		}
 	};
-	
+
 	crForm = function($form, options) {
 		this.$form         = $form;
 		this.$btnSubmit    = this.$form.find('button[type=submit]');
@@ -67,17 +67,17 @@
 			fields:        [],
 			rules:         []
 		}, options );
-		
+
 		this.initFields();
 		this.initCallbacks();
 		this.resizeWindow();
-		
+
 		this.options.urlSave = this.$form.attr('action');
-		
+
 		this.$form.find('.formButtons .btn-danger').click($.proxy(
 			function(event) {
 				event.stopPropagation();
-				
+
 				$(document).crAlert( {
 					'msg':        crLang.line('Are you sure?'),
 					'isConfirm':  true,
@@ -88,50 +88,57 @@
 						}
 					, this)
 				});
-				
+
 				return false;
 			}
 		, this));
-		
+
 		this.$form.on('submit', $.proxy(
 				function() {
 					if ( !this.validate() ) {
 						return false;
 					}
-					
+
 					this.$form.attr('action', this.options.urlSave);
 					if (this.options.sendWithAjax == true) {
 						this.sendForm(true);
 						return false;
 					}
-					
-					return true; 
+
+					return true;
 				}
 			, this))
 			.change($.proxy(
-				function() {
+				function(event) {
+					var field = $(event.target).data('field');
+					if (field == null) {
+						return;
+					}
+					if (field.type == 'subform') {
+						return;
+					}
 					this.changeField();
 				}
 			, this));
-			
+
 		$(window).resize($.proxy(
 			function() {
 				this.resizeWindow();
 			}
 		, this));
 	};
-	
+
 	crForm.prototype = {
 		initFields: function() {
 			for (var fieldName in this.options.fields){
 
-				var field 		= this.options.fields[fieldName];
-				field.name 		= fieldName;
-				field.$input	= this.$form.find('*[name="' + field['name'] + '"]');
-				
+				var field    = this.options.fields[fieldName];
+				field.name   = fieldName;
+				field.$input = this.$form.find('*[name="' + field['name'] + '"]');
+
 				if (field['type'] != null) {
 					field.$input.data( 'field', field);
-					
+
 					switch (field['type']) {
 						case 'dropdown':
 							field.$input.select2();
@@ -155,7 +162,7 @@
 								ajax: {
 									url:        field['source'],
 									dataType:   'json',
-									params:     { skipwWaiting: true }, 
+									params:     { skipwWaiting: true },
 									data:       function (term, page) {
 										return { 'query': term };
 									},
@@ -179,7 +186,7 @@
 								});
 
 								if (field.multiple == false) {
-									if (field.value.id != null && field.value.id != false) { 
+									if (field.value.id != null && field.value.id != false) {
 										field.$input.select2('data', field.value);
 									}
 								}
@@ -205,21 +212,21 @@
 							field.$input
 								.data('inputName', inputName)
 								.removeAttr('name')
-								.on('change', 
+								.on('change',
 									function(event){
 										var $input 	= $(event.target);
-										
+
 										if ($input.val() == '') {
 											$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val('');
 											return;
 										}
-										
+
 										var datetimepicker 	= $input.parent().data('datetimepicker');
 										datetimepicker.date.setSeconds(0);
 										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
 									}
 								);
-							
+
  							field.$input.parent()
 								.addClass('date form_datetime')
 								.datetimepicker({ 'format': format, 'autoclose': true, 'minView': minView, 'language': $.normalizeLang(crSettings.langId), 'pickerPosition': 'bottom-left' });
@@ -264,7 +271,7 @@
 							field.$input.removeAttr('name');
 							var $field = field.$input.find('input:first').attr('name', field['name']);
 							field.$input.data('$field', $field);
-						
+
 							field.$input.find('input[type=checkbox]')
 								.click($.proxy(
 									function(event) {
@@ -277,7 +284,7 @@
 										this.checkGroupCheckBox($(checkbox));
 									}
 								, this));
-								
+
 							this.updateGroupCheckBox(field.$input);
 							break;
 					}
@@ -288,37 +295,37 @@
 		initCallbacks: function(){
 			for (var fieldName in this.options.fields){
 				var field = this.options.fields[fieldName];
-				
+
 				if (field.subscribe != null) {
 					for (var i = 0; i<field.subscribe.length; i++) {
 						var subscribe = field.subscribe[i];
 						$(this.getFieldByName(subscribe.field)).bind(
 							subscribe.event,
-							{ $input: field.$input, callback: subscribe.callback, arguments: subscribe.arguments, applyCallback: subscribe.applyCallback }, 
-								$.proxy( 
+							{ $input: field.$input, callback: subscribe.callback, arguments: subscribe.arguments, applyCallback: subscribe.applyCallback },
+								$.proxy(
 									function(event) {
 										if (event.data.applyCallback) {
 											if (eval(event.data.applyCallback) == false) { return; }
 										}
-										
+
 										var arguments = [event.data.$input];
 										if (event.data.arguments) {
 											for (var i = 0; i<event.data.arguments.length; i++) {
 												arguments.push(eval(event.data.arguments[i]));
 											}
 										}
-												
+
 										var method = event.data.callback;
 										if ( this[method] ) {
 											return this[ method ].apply( this, Array.prototype.slice.call( arguments, 0 ));
-										} 
+										}
 										else {
 											$.error( 'Method ' +  method + ' does not exist ' );
-										}  
+										}
 									}
 								, this)
 						);
-						
+
 						if (subscribe.runOnInit == true) {
 							$(this.getFieldByName(subscribe.field)).trigger(subscribe.event);
 						}
@@ -326,7 +333,7 @@
 				}
 			}
 		},
-		
+
 		sendForm: function(saved) {
 			if (saved == true) {
 				if (this.$btnSubmit.is(':disabled') == true) {
@@ -335,7 +342,7 @@
 				this.$btnSubmit.attr('disabled', 'disabled');
 				this.$btnSubmit.append(' <i class="iconLoading fa fa-spinner fa-spin " /> ');
 			}
-			
+
 			if (this.options.modalHideOnSubmit == true) {
 				this.$form.parents('.modal').first().modal('hide');
 			}
@@ -361,7 +368,7 @@
 								this.options.callback(response);
 								return;
 							}
-							
+
 							response['result']['crForm'] = this;
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
 
@@ -377,17 +384,17 @@
 					, this),
 			});
 		},
-		
+
 		validate: function() {
 			this.$form.find('fieldset').removeClass('has-error');
-			
+
 			for (var i = 0; i<this.options.rules.length; i++){
 				var field   = this.options.rules[i];
 				var rules   = field['rules'].split('|');
 				var field   = this.options.fields[field.field];
 				var $input  = field.$input;
 
-				
+
 				for (var z=0; z<rules.length; z++) {
 					if (typeof this[rules[z]] === 'function') {
 						if (this[rules[z]]($input, field) == false) {
@@ -398,14 +405,14 @@
 					}
 				}
 			};
-			
+
 			return true;
 		},
-		
+
 		numeric: function($input) {
 			return !isNaN($input.val());
 		},
-		
+
 		required: function($input, field) {
 			switch (field['type']) {
 				case 'raty':
@@ -418,11 +425,11 @@
 					return ( $input.val().trim() != '');
 			}
 		},
-		
+
 		valid_email: function($input){
 			return $.validateEmail($input.val());
 		},
-		
+
 		initFieldDropdownMultiple: function(field) {
 			var $field = $('<input type="hidden" name="' + field.name + '" />').appendTo(field.$input.parent());
 
@@ -432,17 +439,17 @@
 				try {
 					value = $.parseJSON($field.val());
 				}
-				catch(err) { 
+				catch(err) {
 					$field.val('');
 				}
 				$(this).parent().find('select').select2('val', value);
 			});
-			
+
 			field.$input.on('change', function(event) {
 				var value  = null;
 				var $input = $(this);
 				if ($input.val() != null) {
-					value  = $.toJSON($input.val()); 
+					value  = $.toJSON($input.val());
 				}
 				$input.data('$field').val(value);
 			});
@@ -455,9 +462,12 @@
 
 		initFieldUpload: function(field) {
 			crMain.loadUploadFile();
-			
+
+			field.$input.data( { 'crForm': this, 'field': field } );
 			field.$input.parent().addClass('fieldUpload');
-			
+
+			field.$input.children().remove();
+
 			if (field.disabled != true) {
 				field.$input.append('\
 					<div class="col-md-6 fileupload-btn" >\
@@ -474,7 +484,7 @@
 						<div class="progress-extended">&nbsp;</div> \
 					</div> ');
 			}
-			
+
 			if (field.value == null) {
 				field.value = '';
 			}
@@ -497,34 +507,49 @@
 					field.$input.prepend('<div class="fileName"> <a download="' + field.value.name + '" target="_blank" href="' + field.value.url + '" data-skip-app-link="true"> <i class="fa fa-download"/> <span />  </a> </div>');
 					field.$input.find('.fileName span').text(field.value.name);
 				}
-				
+
 				if (field.urlDelete != null) {
-					field.$input.find('.fileupload-btn')
-						.append('<a class="btn btn-danger "> <i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + '</a>')
-						.find('.btn-danger').click( $.proxy(
-						function (field, event) {
-							this.$form.attr('action', field.urlDelete);
-							this.sendForm();
-						}
-					, this, field));
+					field.$input.find('.fileupload-btn').append('<a class="btn btn-danger "> <i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + '</a>');
+					field.$input.find('.btn-danger')
+						.data( { 'crForm': this, 'field': field })
+						.click(
+							function (event) {
+								var $btnDanger = $(event.target);
+								$.ajax({
+									'url':     field.urlDelete,
+									'params': { 'field': $btnDanger.data('field'), 'crForm': $btnDanger.data('crForm') } ,
+									'success': function (response) {
+										if ($.hasAjaxDefaultAction(response) == true) { return; }
+
+										var crForm    = this.params.crForm;
+										var field     = this.params.field;
+										field.value   = '';
+										setTimeout(function(){ crForm.initFieldUpload(field); }, 1);
+									}
+								});
+							}
+					);
 				}
 			}
-			
-			field.$input.parent().fileupload( { 
+
+			if (field.$input.data('hasFileupload') == true ){
+				field.$input.fileupload('destroy');
+			}
+
+			field.$input.fileupload( {
 				'autoUpload': true,
 				'url':        field.urlSave,
-				'done': 
+				'done':
 					function (event, data) {
 						var response = data.result;
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
-						$(document).crAlert({
-							'msg':      response['result']['msg'],
-							'callback': function() {
-								$.goToUrl(response['result']['goToUrl']);
-							}
-						});
+
+						var crForm    = $(event.target).data('crForm');
+						var field     = $(event.target).data('field');
+						field.value   = response.result;
+						setTimeout(function(){ crForm.initFieldUpload(field); }, 1);
 					},
-				'fail': 
+				'fail':
 					function (event, data) {
 						if ($.isUnloadPage == true) {
 							return;
@@ -536,17 +561,19 @@
 						$.hasAjaxDefaultAction(response);
 					}
 			} );
+
+			field.$input.data('hasFileupload', true );
 		},
 
 		initUploadGallery: function(field) {
 			crMain.loadUploadFile();
-			
+
 			this.fileupload   = field;
 			var $gallery      = this.$form.find('.gallery');
 			this.reloadGallery();
-			
+
 			$('#fileupload').data( { 'crForm': this } );
-			
+
 			$gallery.find('.btnEditPhotos').click( $.proxy(
 				function () {
 					if (this.$fileupload == null) {
@@ -554,7 +581,7 @@
 
 						this.$fileupload
 							.unbind('hidden.bs.modal')
-							.on('hidden.bs.modal', 
+							.on('hidden.bs.modal',
 							function() {
 								var crForm = $(this).data('crForm');
 								crForm.reloadGallery();
@@ -571,12 +598,12 @@
 			, this));
 
 			$('#fileupload').fileupload({
-				autoUpload: true, 
+				autoUpload: true,
 				getFilesFromResponse: function(data) {
-					if ($.isArray(data.result.result.files)) { 
+					if ($.isArray(data.result.result.files)) {
 						return data.result.result.files;
 					}
-					
+
 					$.hasAjaxDefaultAction(data.result);
 					return [];
 				},
@@ -587,7 +614,7 @@
 				}
 			});
 		},
-		
+
 		reloadGallery: function() {
 			var $gallery = this.$form.find('.gallery');
 			$.initGallery($gallery);
@@ -595,59 +622,63 @@
 			$('#fileupload tbody').children().remove();
 
 			$.ajax({
-				'url':      this.fileupload.urlGallery,
-				'data':     { },
-				'success': 
+				'url':    this.fileupload.urlGallery,
+				'data':   { },
+				'success':
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
-						
+
 						var result = response['result'];
-						
+
 						var files = result.files;
 						var fu    = $('#fileupload').data('blueimpFileupload');
 						fu._renderDownload(files).appendTo($('#fileupload tbody')).addClass('in');
-						
+
 						$('#fileupload').find('.thumbnail img').imgCenter( { centerType: 'inside', animateLoading: true });
 
 						for (var i=0; i<result.files.length; i++) {
 							var photo       = result.files[i];
 							var $thumbnails = $gallery.find('.thumbnails');
-							
+
 							$('<a class="thumbnail " data-skip-app-link="true" />')
 								.append($('<img />').prop('src', photo.urlThumbnail))
 								.prop('href', photo.urlLarge)
 								.prop('title', $.sprintf(crLang.line('Picture %s'), (i + 1)))
 								.appendTo($thumbnails);
 						}
-		
+
 						$gallery.find('img').imgCenter( { animateLoading: true } );
 					},
 			});
 		},
-		
+
 		loadSubForm: function(field) {
 			$.ajax( {
-				'type': 		'get', 
-				'url':			field.controller,
-				'success': 		
-					$.proxy( 
-						function (response) {
+				'type':  'get',
+				'url':   field.controller,
+				'success':
+					$.proxy(
+						function (field, response) {
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
-							
-							var result 	= response['result'];
-							var list	= result['list'];
+
+							var result  = response['result'];
+							var list    = result['list'];
+							var showId  = list['showId'] == true;
 							field.$input.children().remove();
-							
-							var $div 	= $('<div class="table-responsive"/>').appendTo(field.$input);
-							var $table 	= $('<table class="table table-hover" />').appendTo($div);
-							var $thead 	= $('<thead/>').appendTo($table);
-							var $tr 	= $('<tr class="label-primary"/>').appendTo($thead);
-							
+
+							var $div   = $('<div class="table-responsive"/>').appendTo(field.$input);
+							var $table = $('<table class="table table-hover" />').appendTo($div);
+							var $thead = $('<thead/>').appendTo($table);
+							var $tr    = $('<tr class="label-primary"/>').appendTo($thead);
+
+							if (showId == true) {
+								$('<th class="numeric"> # </th>').appendTo($tr);
+							}
 							for (var columnName in list['columns']) {
 								var $th = $(' <th />')
 									.text(list['columns'][columnName])
-									.appendTo($tr);		
-						
+									.appendTo($tr);
+
 								if ($.isPlainObject(list['columns'][columnName])) {
 									$th
 										.text(list['columns'][columnName]['value'])
@@ -661,19 +692,22 @@
 							}
 							for (var i=0; i<list['data'].length; i++) {
 								var row = list['data'][i];
-								
+
 								if ($.isPlainObject(row) == false) {
 									$(row).appendTo($tbody);
 								}
 								else {
 									var id 	= row[Object.keys(row)[0]];
 									var $tr	= $( '<tr data-controller="' + base_url + list['controller'] + id +'">').appendTo($tbody);
-							
+
+									if (showId == true) {
+										$('<td class="numeric" />').appendTo($tr).text(id);
+									}
 									for (columnName in list['columns']) {
 										var $td = $(' <td />')
 											.html(row[columnName] || '')
 											.appendTo($tr);
-										
+
 										if ($.isPlainObject(list['columns'][columnName])) {
 											$td.addClass(list['columns'][columnName]['class']);
 										}
@@ -681,14 +715,14 @@
 								}
 							}
 
-							$('<a class="btn btn-default btn-sm btnAdd" href="' + base_url + list['controller'] + '0" />') 
+							$('<a class="btn btn-default btn-sm btnAdd" href="' + base_url + list['controller'] + '0" />')
 								.appendTo(field.$input)
 								.append(' <i class="fa fa-plus"> </i> ')
 								.append(' ' + crLang.line('Add'))
 								.data( { 'crForm': this })
 								.click(
 									function() {
-										$(this).data('crForm').showSubForm($(this).attr('href'), field); 
+										$(this).data('crForm').showSubForm($(this).attr('href'), field);
 										return false;
 									}
 								);
@@ -698,44 +732,44 @@
 									$.formatDate($(this));
 								}
 							);
-							
+
 							$tbody.find('tr').data( { 'crForm': this });
 							$tbody.on('click', 'tr',
 								function (event) {
 									if ($(this).data('controller') == null) {
 										return;
 									}
-									$(this).data('crForm').showSubForm($(this).data('controller'), field); 
+									$(this).data('crForm').showSubForm($(this).data('controller'), field);
 								}
 							);
-		
+
 							field.$input.change();
 							this.resizeWindow();
 						}
-					, this)
+					, this, field)
 			});
 		},
-		
+
 		showSubForm: function(controller, field) {
 			$.ajax( {
-				'type': 		'get', 
-				'url':			controller,
-				'data': 		{ 'pageJson': true },
-				'success': 		
-					$.proxy( 
+				'type': 'get',
+				'url':  controller,
+				'data': { 'pageJson': true },
+				'success':
+					$.proxy(
 						function (response) {
 							if ($.hasAjaxDefaultAction(response) == true) { return; }
-							
-							var $subform 		= $(document).crForm('renderPopupForm', response['result']['form']);
-							var $modal			= $subform.parents('.modal');
+
+							var $subform = $(document).crForm('renderPopupForm', response['result']['form']);
+							var $modal   = $subform.parents('.modal');
 							$subform.data('frmParent', this);
-		
+
 							$.showModal($modal, false);
 							$modal.on('hidden.bs.modal', function() {
 								$(this).find('form').data('frmParent').loadSubForm(field);
 								$(this).remove();
 							});
-		
+
 							if ($.isMobile() == false) {
 								$subform.find('select, input[type=text]').first().focus();
 							}
@@ -743,20 +777,20 @@
 					, this)
 			});
 		},
-		
+
 		getFieldByName: function(fieldName){
 			return this.$form.find('*[name="' + fieldName + '"]');
 		},
-		
+
 		setErrorField: function(fieldName) {
 			var $input = this.getFieldByName(fieldName);
 			$input.parents('fieldset').addClass('has-error');
 		},
-		
+
 		toogleField: function($field, value) { // TODO: implementar los otros metodos! ( show, hide, etc)
 			$field.parent().toggle(value);
 		},
-		
+
 		calculatePrice: function($field, $price, $currency, $exchange, $total) {
 			if ($total.data('init-price') == null) {
 				$maskPrice = $price.clone();
@@ -768,7 +802,7 @@
 					.change( function(event) {
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
-					
+
 				$maskExchange = $exchange.clone();
 				$exchange.hide();
 				$maskExchange
@@ -778,7 +812,7 @@
 					.change( function(event) {
 						$(event.target).next().val($(event.target).autoNumeric('get') ).change();
 					});
-				
+
 				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: crSettings.defaultCurrencyName + ' ' } );
 
 				this.$form.bind('submit', $.proxy(
@@ -787,11 +821,11 @@
 						$maskExchange.change();
 					}
 				, this, $maskPrice, $maskExchange));
-				
-								
+
+
 				$total.data('init-price', true);
 			}
-			
+
 			if ($currency.val() == crSettings.defaultCurrencyId) {
 				$exchange.val(1);
 				$exchange.prev().autoNumeric('set', 1);
@@ -800,12 +834,12 @@
 			$price.prev().autoNumeric('update', { aSign: $currency.find('option:selected').text() +' ' } );
 			$total.autoNumeric('set', $price.val() * $exchange.val());
 		},
-		
+
 		sumValues: function($total, aFieldName) {
 			if ($total.data('init-price') == null) {
 				$total.autoNumeric('init', { vMax: 999999999999, aSep: crLang.line('NUMBER_THOUSANDS_SEP'), aDec: crLang.line('NUMBER_DEC_SEP'),  aSign: crSettings.defaultCurrencyName + ' ' } );
 			}
-			
+
 			var total = 0;
 			for (var i=0; i<aFieldName.length; i++) {
 				var field = $('*[name="' + aFieldName[i] + '"]').data('field');
@@ -819,21 +853,21 @@
 					total += Number(value);
 				}
 			}
-			
+
 			$total.autoNumeric('set', total);
 		},
-		
+
 		loadDropdown: function($field, value) {
 			var controller = this.options.fields[$field.attr('name')].controller;
 			if (value != null) {
 				controller += '/' + value;
 			}
-			
+
 			$.ajax( {
-				'type': 	'get', 
-				'url':		controller,
-				'success': 	
-					$.proxy( 
+				'type': 'get',
+				'url':  controller,
+				'success':
+					$.proxy(
 						function (result) {
 							$field.children().remove();
 							for (var i=0; i<result.length; i++) {
@@ -845,20 +879,20 @@
 					, this)
 			});
 		},
-		
-		checkGroupCheckBox: function($checkbox) { 
+
+		checkGroupCheckBox: function($checkbox) {
 			var $li = $checkbox.parents('li');
 			$li.removeClass('active');
 			if ($checkbox.is(':checked') == true) {
 				$li.addClass('active');
 			}
 		},
-		
+
 		updateGroupCheckBox: function($input) {
 			var value 		= [];
 			var aCheckbox 	= $input.find('input[type=checkbox]');
 			$input.data('$field').val('');
-			
+
 			for (var i=0; i<aCheckbox.length; i++) {
 				var $checkbox = $(aCheckbox[i]);
 				if ($checkbox.is(':checked') == true) {
@@ -869,11 +903,11 @@
 				$input.data('$field').val($.toJSON(value));
 			}
 		},
-		
+
 		changeField: function() {
 			this.$btnSubmit.removeAttr('disabled');
 		},
-		
+
 		resizeWindow: function() {
 			if (this.$form.is(':visible') != true) {
 				return;
@@ -882,25 +916,25 @@
 			this.$form.find('.table-responsive').css('max-width', width - 30 );
 		}
 	};
-	
-	
+
+
 	renderCrForm = function(data, $parentNode) {
 		var buttons = [
 			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + crLang.line('Back') + ' </button> ',
 			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
 		}
-		
+
 		var pageName = location.href;
 		if (pageName.indexOf('?') != -1) {
 			pageName = pageName.substr(0, pageName.indexOf('?'));
 		}
 
 		data = $.extend({
-			'action': 	pageName, 
+			'action': 	pageName,
 			'frmId': 	'frmId',
 			'buttons': 	buttons
 		}, data);
@@ -911,12 +945,12 @@
 			.attr('role', 'form')
 			.appendTo($parentNode);
 
-		var $div = $('<div class="panel-body" />').appendTo($form); 
+		var $div = $('<div class="panel-body" />').appendTo($form);
 		$div = renderCrFormInfo(data, $div);
 		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
-			$div = $('<div class="formButtons form-actions panel-footer" > ').appendTo($form);
+			$div = $('<div class="formButtons panel-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
 				$div
 					.append($(data['buttons'][i]))
@@ -926,24 +960,22 @@
 
 		return $form;
 	},
-	
-	
-	
+
 	renderPopupForm = function(data) {
 		var buttons 	= [
 			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + crLang.line('Close') + '</button>',
 			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
 		}
-		
+
 		data = $.extend({
 			'frmId': 	'frmId',
 			'buttons': 	buttons
 		}, data);
-				
+
 		var $modal = $('\
 			<div class="modal" role="dialog" >\
 				<div class="modal-dialog" >\
@@ -952,12 +984,12 @@
 				</div>\
 			</div>\
 		');
-		
+
 		var $form = $('<form action="' + data['action'] + '" />')
 			.attr('id', data['frmId'])
 			.addClass('crForm form-horizontal')
 			.attr('role', 'form')
-			.appendTo($modal.find('.modal-content'));		
+			.appendTo($modal.find('.modal-content'));
 
 		var $modalHeader = $('\
 			<div class="modal-header">\
@@ -971,16 +1003,16 @@
 		$modalHeader.find('h4')
 			.append('<i class="' + (data['icon'] != null ? data['icon'] : 'fa fa-edit') + '"></i>')
 			.append(' ' + data['title']);
-		
+
 		var $modalBody 	= $('<div class="modal-body" />').appendTo($form);
 		var $parentNode = $modalBody;
-		
+
 		$parentNode = this.renderCrFormInfo(data, $parentNode);
-		
+
 		this.renderCrFormFields(data.fields, $parentNode);
 
 		if (data['buttons'].length != 0) {
-			$modalFooter = $('<div class="modal-footer" > ').appendTo($form);
+			$modalFooter = $('<div class="formButtons modal-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
 				$modalFooter
 					.append($(data['buttons'][i]))
@@ -992,38 +1024,38 @@
 
 		return $form;
 	},
-	
+
 	renderAjaxForm = function(data, $parentNode) {
 		var buttons 	= [
 			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + crLang.line('Back') + ' </button>',
 			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
-			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '	
+			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '
 		];
 		if (data['urlDelete'] == null) {
 			delete buttons[1];
 		}
-		
+
 		data = $.extend({
 			'frmId':   'frmId',
 			'buttons': buttons
 		}, data);
-		
+
 		var $form = $('<form action="' + data['action'] + '" />')
 			.attr('id', data['frmId'])
 			.addClass('panel panel-default crForm form-horizontal')
 			.attr('role', 'form')
-			.appendTo($parentNode);		
+			.appendTo($parentNode);
 
 		if (data['title'] != null) {
 			$('<div class="panel-heading" />').text(data['title']).appendTo($form);
 		}
 
-		var $div = $('<div class="panel-body" />').appendTo($form); 
+		var $div = $('<div class="panel-body" />').appendTo($form);
 		$div = renderCrFormInfo(data, $div);
 		this.renderCrFormFields(data.fields, $div);
 
 		if (data['buttons'].length != 0) {
-			$modalFooter = $('<div class="formButtons form-actions panel-footer" > ').appendTo($form);
+			$modalFooter = $('<div class="formButtons panel-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
 				$modalFooter
 					.append($(data['buttons'][i]))
@@ -1035,7 +1067,7 @@
 
 		return $form;
 	},
-	
+
 	renderCrFormFields = function(fields, $parentNode) {
 		for (var name in fields) {
 			var field 		= fields[name];
@@ -1063,7 +1095,7 @@
 					}
 					if (field['disabled'] == true) {
 						$input.attr('disabled', 'disabled');
-					}					
+					}
 					break;
 				case 'date':
 				case 'datetime':
@@ -1103,7 +1135,7 @@
 							.text('-- ' + crLang.line('Choose') + ' --')
 							.appendTo($input);
 					}
-					
+
 					for (var item in source) {
 						var item 	= field['source'][item];
 						$('<option />')
@@ -1111,7 +1143,7 @@
 							.text(item['text'])
 							.appendTo($input);
 					}
-					
+
 					$input.val(field['value']);
 					if (field['disabled'] == true) {
 						$input.attr('disabled', 'disabled');
@@ -1120,7 +1152,7 @@
 				case 'groupCheckBox':
 					var showId 	= field['showId'] == true;
 					var $input 	= $('<ul class="groupCheckBox" name="' + name + '" />').appendTo($div);
-					
+
 					$('<li><input type="text" style="display:none" /> </li>').appendTo($input);
 
 					for (var item in field['source']) {
@@ -1197,19 +1229,19 @@
 					$fieldset = $(field['value']);
 					break;
 			}
-			
+
 			$($fieldset).appendTo($parentNode);
 		}
 	},
-	
+
 	renderCrFormInfo = function(data, $parentNode) {
 		if (data.info == null) {
 			return $parentNode;
 		}
-		
+
 		var $row 	= $('<div class="row">').appendTo($parentNode);
 		$parentNode = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').appendTo($row);
-		
+
 		var $info 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').html(data.info.html).appendTo($row);
 		if (data.info.position == 'left' ) {
 			$info.before($parentNode);
@@ -1217,7 +1249,7 @@
 
 		return $parentNode;
 	},
-	
+
 	renderCrFormTree = function(aTree, value, $parent){
 		var $ul = $('<ul />').appendTo($parent);
 		for (var i=0; i<aTree.length; i++) {
@@ -1226,11 +1258,11 @@
 				.attr('href', base_url + aTree[i]['url'])
 				.text(aTree[i]['label'])
 				.appendTo($li);
-				
+
 			if (value == aTree[i]['id']) {
 				$link.addClass('selected');
 			}
-				
+
 			if (aTree[i]['childs'].length > 0) {
 				this.renderCrFormTree(aTree[i]['childs'], value, $li);
 			}

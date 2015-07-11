@@ -1,25 +1,24 @@
 <?php
 class Files_Model extends CI_Model {
-	
+
 	function insert($fileName, $fileTitle) {
-		
 		$this->db->insert('files', array(
 			'fileName'   => $fileName,
 			'fileTitle'  => $fileTitle
 		));
-		
+
 		return $this->db->insert_id();
 	}
-	
+
 	function deleteFile($config, $fileId){
 		$data = $this->get($fileId);
 		if (empty($data)) {
 			return;
 		}
 		$fileName  = $data['fileName'];
-		
+
 		@unlink('.'.$config['folder'].$fileName);
-		
+
 		if (isset($config['sizes'])) {
 			if (is_array($config['sizes'])) {
 				foreach ($config['sizes'] as $size) {
@@ -30,12 +29,12 @@ class Files_Model extends CI_Model {
 
 		return $this->db->where('fileId', $fileId)->delete('files');
 	}
-	
+
 	function deleteEntityFile($entityTypeId, $fileId) {
 		$config = getEntityGalleryConfig($entityTypeId);
 		return $this->deleteFile($config, $fileId);
 	}
-	
+
 	function get($fileId, $folder = null, $fieldName = null) {
 		$query = $this->db->where('fileId', $fileId)->get('files')->row_array();
 		if (empty($query)) {
@@ -49,16 +48,16 @@ class Files_Model extends CI_Model {
 		}
 		return $query;
 	}
-	
+
 	function saveFileRelation($entityTypeId, $entityId, $fileId) {
-		$this->db->insert('entities_files', 
+		$this->db->insert('entities_files',
 			array(
 				'entityTypeId'   => $entityTypeId,
 				'entityId'       => $entityId,
 				'fileId'         => $fileId,
 		));
 	}
-	
+
 	function selectEntityFiles($entityTypeId, $entityId, $fileId = null) {
 		$config   = getEntityGalleryConfig($entityTypeId);
 		$result   = array();
@@ -74,7 +73,7 @@ class Files_Model extends CI_Model {
 		//pr($this->db->last_query());
 		return $query;
 	}
-	
+
 	function selectEntityGallery($entityTypeId, $entityId, $fileId = null, $allowDelete = false, $calculateSize = false) {
 		$config    = getEntityGalleryConfig($entityTypeId);
 		$result    = array();
@@ -91,14 +90,14 @@ class Files_Model extends CI_Model {
 				$picture['urlDelete'] = base_url(str_replace(array('$entityTypeId', '$fileId'), array($entityTypeId, $row['fileId']), $config['urlDelete']));
 			}
 			if ($calculateSize == true) {
-				$picture['size'] = filesize('.'.$config['folder'].$row['fileName']); 
+				$picture['size'] = filesize('.'.$config['folder'].$row['fileName']);
 			}
 			$result[] = $picture;
 		}
-		
+
 		return $result;
 	}
-	
+
 	function getEntityPicture($entityTypeId, $entityId, $size = 'thumb') {
 		$config       = getEntityGalleryConfig($entityTypeId);
 		$pictures     = $this->selectEntityFiles($entityTypeId, $entityId);
@@ -106,7 +105,7 @@ class Files_Model extends CI_Model {
 			return base_url($config['sizes'][$size]['folder'].$pictures[0]['fileName']);
 		}
 	}
-	
+
 	function hasFileIdInEntityTypeId($entityTypeId, $fileId) {
 		$query = $this->db->select('files.fileId ')
 			->join('entities_files', 'files.fileId =  entities_files.fileId', 'inner')

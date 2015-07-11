@@ -27,14 +27,13 @@ switch ($view) {
 		$result['js']   = 'crForm';
 		$result['form'] = $form;
 		break;
-	default: 
+	default:
 		$result['html'] = $this->load->view($view, '', true);
-		$result['html'].= $this->my_js->getHtml();  
+		$result['html'].= $this->my_js->getHtml();
 }
-
 
 return $this->load->view('json', array(
 	'view'   => null,
-	'code'   => true,
+	'code'   => isset($code) ? $code : true,
 	'result' => $result
-)); 
+));

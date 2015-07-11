@@ -13,7 +13,7 @@ body.isLoading, body.isLoading * {
 	padding: 10px;
 	width: 200px;
 	border-radius:5px;
-	border: 1px #8A6D3B solid;	
+	border: 1px #8A6D3B solid;
 	z-index: 1051;
 }
 	#divWaiting small  {
@@ -26,10 +26,10 @@ body.isLoading, body.isLoading * {
 }
 	.error404 i {
 		color: #9D261D;
-		text-shadow: 1px 1px 0 black;	
+		text-shadow: 1px 1px 0 black;
 		margin-right: 10px;
 	}
-	
+
 .page-header {
 	margin:0px;
 	border-bottom: 0px solid #eee;
@@ -53,12 +53,12 @@ body.isLoading, body.isLoading * {
 		max-height:none;
 	}
 	#header ul.menuProfile  li a {
-		cursor: pointer; 
+		cursor: pointer;
 	}
 		#header ul.menuProfile .open .dropdown-menu {
 			background-clip: inherit;
-		}	
-		#header ul.menuProfile  li a i { }		
+		}
+		#header ul.menuProfile  li a i { }
 		#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
 			margin: 0 0 0 15px;
 		}
@@ -69,7 +69,7 @@ body.isLoading, body.isLoading * {
 	#header form {
 		max-width:450px;
 		padding: 0;
-	}	
+	}
 		#header form .form-group {
 			width:450px;
 		}
@@ -82,7 +82,7 @@ body.isLoading, body.isLoading * {
 			}
 			#header ul.menuProfile .menuItemSettings { }
 				#header ul.menuProfile .menuItemSettings > a span {
-					display:none; 
+					display:none;
 				}
 			#header ul.menuProfile .dropdown-submenu-left {
 				position: relative;
@@ -129,13 +129,13 @@ body.isLoading, body.isLoading * {
 		border-top: 0 solid #FF0000;
 		margin-top: 4px;
 		box-shadow: none;
-	}		
+	}
 	#header ul.menuProfile {
 		float:none !important;
 	}
 	#header ul.menuProfile a {
 		padding-bottom: 10px;
-		padding-top: 10px;		
+		padding-top: 10px;
 		cursor: pointer;
 	}
 	#header ul.menuProfile ul a {
@@ -143,7 +143,7 @@ body.isLoading, body.isLoading * {
 	}
 	#header ul.menuProfile ul li ul li a {
 		padding-left:60px;
-	}	
+	}
 	#header ul.menuProfile .open .dropdown-menu {
 		padding:0;
 	}
@@ -207,7 +207,7 @@ body.isLoading, body.isLoading * {
 
 #footer {
 	background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3)); 
+	background: -webkit-gradient(linear, left top, left bottom,from(#F9F9F9),to(#E3E3E3));
 	border-top: 1px solid #CCC;
 	border-bottom: 1px solid #CCC;
 	height: 25px; line-height:25px;
@@ -220,8 +220,8 @@ body.isLoading, body.isLoading * {
 	background: none repeat scroll 0 0 beige;
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
-	margin: 10px;	
-}	
+	margin: 10px;
+}
 	.errors ul {
 		margin: 0 0 0 20px;
 	}
@@ -247,7 +247,7 @@ body.isLoading, body.isLoading * {
 		.crList form.hasBtnFilter.hasBtnOrder > .btn-group:first-child {
 			width: calc(100% - 85px);
 		}
-		
+
 		.crList form > .btn-group {
 			margin-bottom: 0;
 		}
@@ -259,13 +259,16 @@ body.isLoading, body.isLoading * {
 		}
 			.crList form  .crFilterList .form-group {
 				display: block;
-				margin-bottom: 15px;			
+				margin-bottom: 15px;
 			}
 			.crList form  .crFilterList .form-group > label,
 			.crList form  .crFilterList .form-group > div {
 				width:100%;
 				display: block;
 				text-align: left;
+			}
+			.crList form  .crFilterList .formButtons {
+				padding-bottom: 15px;
 			}
 	.crList .table-responsive {
 		border: 1px solid #ccc;
@@ -283,7 +286,7 @@ body.isLoading, body.isLoading * {
 			height:20px;
 		}
 			.crList table thead tr th { }
-				.crList table thead tr th, 
+				.crList table thead tr th,
 				.crList table thead tr th a  {
 					color:white;
 					text-shadow: 1px 1px 0 #555;
@@ -299,13 +302,13 @@ body.isLoading, body.isLoading * {
 				.crList table tbody tr td.rowCheckbox,
 				.crList table tbody tr.warning td{
 					cursor: default;
-				} 
+				}
 				.crList table tbody tr td {
 					word-break: break-all;
 				}
 		.crList table .rowCheckbox input[type=checkbox] {
 			margin-left: 0;
-		}				
+		}
 	.crList .footer {
 		color: #777777;
 		font-weight: normal;
@@ -315,7 +318,7 @@ body.isLoading, body.isLoading * {
 	}
 	.crList .row > div {
 		padding: 0;
-	}	
+	}
 		.crList .footer span {
 			font-size: small;
 		}
@@ -338,8 +341,8 @@ body.isLoading, body.isLoading * {
 				.crList table tbody tr:last-child td:last-child {
 					border-bottom-right-radius:5px;
 				}
-				
-@media (max-width: 767px) {	
+
+@media (max-width: 767px) {
 	.crList .footer .pagination {
 		margin: 5px 0 0 0;
 		float:none;
@@ -361,6 +364,10 @@ body.isLoading, body.isLoading * {
 			display: inline-block;
 			border: 0 none;
 		}
+		.crForm fieldset .crLink {
+			white-space: normal;
+			word-wrap: break-word;
+		}
 		.crForm fieldset select[multiple] {
 			height: 34px;
 		}
@@ -372,7 +379,7 @@ body.isLoading, body.isLoading * {
 		}
 		.crForm fieldset .form_datetime span {
 			cursor:pointer;
-		}	
+		}
 		.crForm fieldset .fa-times {
 			color: #555555;
 		}
@@ -386,13 +393,13 @@ body.isLoading, body.isLoading * {
 			padding: 0;
 			height:auto;
 			border: 1px solid #CCCCCC;
-			border-radius: 4px 4px 4px 4px;			
+			border-radius: 4px 4px 4px 4px;
 		}
 			.crForm fieldset .groupCheckBox li {
 				border: none;
 				border-bottom: 1px solid #CCCCCC;
 				margin: 0;
-				padding: 0 0 0 5px;	
+				padding: 0 0 0 5px;
 			}
 			.crForm fieldset .groupCheckBox li:last-child {
 				border:0;
@@ -400,6 +407,9 @@ body.isLoading, body.isLoading * {
 			.crForm fieldset .fieldUpload .fileupload-btn {
 				padding-left:0;
 			}
+				.crForm fieldset .fieldUpload .fileupload-btn .btn {
+					margin-bottom: 5px;
+				}
 				.crForm fieldset .fieldUpload .fileupload-progress .progress {
 					margin-bottom:0px;
 				}
@@ -429,19 +439,19 @@ body.isLoading, body.isLoading * {
 			overflow: auto;
 			border: 1px solid #CCCCCC;
 			border-radius: 6px;
-		}		
+		}
 		.crForm fieldset.tree ul {
 			list-style: inside;
 			margin: 4px 10px;
 			padding: 0 10px;
-		}				
+		}
 			.crForm fieldset.tree ul li {
 			}
 				.crForm fieldset.tree ul li a {
 					color: #3176CB;
 				}
 				.crForm fieldset.tree ul li a.selected {
-					font-weight: bold;	
+					font-weight: bold;
 				}
 			.crForm fieldset .gallery {
 				overflow: auto;
@@ -460,19 +470,19 @@ body.isLoading, body.isLoading * {
 				border-radius: 5px;
 				box-shadow: 0 0 5px #CCCCCC;
 				margin: 0 0 10px;
-				position: relative;	
+				position: relative;
 				overflow-x: auto;
 				overflow-y: hidden;
 			}
 			.crForm fieldset .subform table {
-				margin-bottom: 0; 
+				margin-bottom: 0;
 			}
 				.crForm fieldset .subform .btnAdd {
 					margin:10px 0 0 0;
 				}
 				.crForm fieldset .subform table thead { }
 					.crForm fieldset .subform table thead tr { }
-					.crForm fieldset .subform table thead tr th, 
+					.crForm fieldset .subform table thead tr th,
 					.crForm fieldset .subform table thead tr th a  {
 						color:white;
 						text-shadow: 1px 1px 0 #555555;
@@ -483,11 +493,10 @@ body.isLoading, body.isLoading * {
 						.crForm fieldset .subform table tbody tr td {
 							cursor: pointer;
 						}
-						.crForm fieldset .subform table tbody tr.success td,
 						.crForm fieldset .subform table tbody tr.warning td {
 							cursor: default;
 						}
-				.crForm fieldset .subform table tbody tr td table { 
+				.crForm fieldset .subform table tbody tr td table {
 					border: 1px solid #dddddd;
 					border-collapse: collapse;
 					border-spacing: 0;
@@ -511,12 +520,16 @@ body.isLoading, body.isLoading * {
 			display:inline-block;
 			margin: 0 15px 20px 0;
 		}
-	.crForm .form-actions {
+	.crForm .formButtons {
 		border-radius: 0 0 5px 5px;
 		text-align: right;
 		margin: 0;
+		padding-bottom: 5px;
 	}
-	
+		.crForm .formButtons button {
+			margin-bottom: 5px;
+		}
+
 footer {
 	background-color: #F5F5F5;
 	border-top: 1px solid #E5E5E5;
@@ -591,14 +604,14 @@ footer {
 		.imgCenter > .imageLoading.animate > img {
 			        animation: imgCenterAnimation 2s infinite;
 			-webkit-animation: imgCenterAnimation 2s infinite;
-			        animation-timing-function: linear; 	
+			        animation-timing-function: linear;
 			-webkit-animation-timing-function: linear;
 		}
 		.imgCenter.imgCenterComplete > .imageLoading > img {
 			animation: none;
 			-webkit-animation: none;
 			display: none;
-		}	
+		}
 	.imgCenter.imgCenterComplete > img {
 		opacity:1;
 	}
@@ -634,9 +647,9 @@ footer {
 		-ms-transform: translateY(-50%);
 		transform: translateY(-50%);
 	}
-	
-	
-@keyframes imgCenterAnimation { 
+
+
+@keyframes imgCenterAnimation {
 	0%   { transform: rotateY(0deg); }
 	100% { transform: rotateY(359deg);}
 }
@@ -660,7 +673,7 @@ footer {
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
 	height: auto;
-	padding: 2px 0;	
+	padding: 2px 0;
 }
 
 table .numeric, table .date, table .datetime, table .text-right {
@@ -682,10 +695,10 @@ table .dotdotdot {
 
 .modal {
 	overflow: auto;
-}  
+}
 .modal-dialog {
 	max-width: 900px;
-	width: auto; 
+	width: auto;
 }
 .modal.crAlert .modal-dialog {
 	max-width: 560px;
@@ -721,7 +734,7 @@ table .dotdotdot {
 	-webkit-overflow-scrolling: touch;
 }
 
-.form-control .select2-choice, 
+.form-control .select2-choice,
 .form-control .select2-choices {
 	border: 0 !important;
 	border-radius: 4px 3px 3px 4px !important;
@@ -737,7 +750,7 @@ table .dotdotdot {
 	background: none;
 }
 .form-control .select2-choice .select2-arrow {
-	border-radius: 0 0px 0px 0;   
+	border-radius: 0 0px 0px 0;
 	background:#EEEEEE !important;
 	border-left: 1px solid #CCCCCC;
 }
@@ -764,6 +777,12 @@ table .dotdotdot {
 	border-radius: 4px 4px 0 0;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.045) inset, 0 0 8px rgba(102, 175, 233, 0.6);
 }
+.form-control.select2-container .select2-choice > .select2-chosen {
+	left: 8px; right: 42px;
+	margin: 0;
+	position: absolute;
+}
+
 .select2-drop-active {
 	border-color: #66AFE9;
 	box-shadow: 0 4px 5px rgba(0, 0, 0, 0.045);
@@ -775,7 +794,7 @@ table .dotdotdot {
 .select2-search-field input {
 	height: 28px;
 	display: block;
-	padding:0 5px !important;	
+	padding:0 5px !important;
 }
 .select2-drop.select2-drop-above {
 	margin-top: 3px;
@@ -813,7 +832,7 @@ table .dotdotdot {
 	.line-clamp {
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;  
+		-webkit-box-orient: vertical;
 		max-height:3.6em;
 		height: auto;
 	}
@@ -826,7 +845,7 @@ table .dotdotdot {
 	display: none;
 }
 .contentMap .gmnoprint img {
-	max-width: none; 
+	max-width: none;
 }
 	.contentMap .map {
 		min-width: 240px;
@@ -850,7 +869,7 @@ table .dotdotdot {
 		font-size: 23px;
 		color: #197BB5;
 	}
-	
+
 
 .btn-social-icon{
 	text-align:left;

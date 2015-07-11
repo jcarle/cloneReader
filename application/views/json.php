@@ -4,12 +4,12 @@ if (isset($view)) {
 }
 
 $output = $result;
-			
-if (isset($code)) { 
+
+if (isset($code)) {
 	$output = array(
-				'code'		=> $code, 
-				'result' 	=> $result
-			);
+		'code'   => $code, 
+		'result' => $result
+	);
 }
 
 $this->output
