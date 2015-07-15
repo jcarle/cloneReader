@@ -365,6 +365,8 @@ body.isLoading, body.isLoading * {
 			border: 0 none;
 		}
 		.crForm fieldset .crLink {
+			display: block;
+			padding-top: 7px;
 			white-space: normal;
 			word-wrap: break-word;
 		}

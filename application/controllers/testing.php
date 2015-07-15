@@ -316,7 +316,7 @@ class Testing extends CI_Controller {
 					'source'        => base_url('search/users/'),
 					'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
 					'multiple'      => false,
-					'placeholder'  => $this->lang->line('User')
+					'placeholder'   => $this->lang->line('User')
 				)
 			),
 			'rules' => array(

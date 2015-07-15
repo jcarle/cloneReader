@@ -377,7 +377,7 @@ class Commond_Model extends CI_Model {
 	* Busca en el array $data las properties countryId, stateId y cityId el item de menos profundidad y devuelve la zona con el path completo
 	*
 	*/
-	function getZoneToTypeahead($data){
+	function getZoneToTypeahead($data, $fieldName = 'entityReverseTree'){
 		$entityTypeId = null;
 		$entityId     = null;
 		if ($data['cityId'] != null) {
@@ -393,7 +393,7 @@ class Commond_Model extends CI_Model {
 			$entityId     = $data['countryId'];
 		}
 
-		return $this->getEntitySearch($entityTypeId, $entityId, 'entityReverseTree', true);
+		return $this->getEntitySearch($entityTypeId, $entityId, $fieldName, true);
 	}
 
 	/**

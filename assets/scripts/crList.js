@@ -174,7 +174,7 @@
 			, this));
 
 			if (this.options['urlEdit'] != null) {
-				this.$table.find('tbody tr').on('click',
+				this.$table.on('click', 'tbody tr',
 					function (event) {
 						if ($(this).data('url-edit')) {
 							$.goToUrl($(this).data('url-edit') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
@@ -182,14 +182,9 @@
 					}
 				);
 			}
+
 			if (this.options['urlAdd'] != null) {
-				this.$crList.find('.btnAdd').on('click',
-					function (event) {
-						$.goToUrl($(this).attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
-						event.preventDefault;
-						return false;
-					}
-				);
+				this.$crList.find('.btnAdd').attr('href', this.$crList.find('.btnAdd').attr('href') + '?urlList=' + encodeURIComponent($.base64Encode(location.href)));
 			}
 			this.$form.unbind();
 

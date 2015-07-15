@@ -201,12 +201,12 @@
 								field.$input.val('');
 							}
 
-							var inputName 	= field.$input.attr('name');
-							var format 		= crLang.line('DATE_FORMAT');
-							var minView		= 'month';
+							var inputName  = field.$input.attr('name');
+							var format     = crLang.line('DATE_FORMAT');
+							var minView    = 'month';
 							if (field['type'] == 'datetime') {
-							 	format 	= crLang.line('DATE_FORMAT') + ' hh:ii:ss';
-								minView	= 'hour';
+							 	format  = crLang.line('DATE_FORMAT') + ' hh:ii:ss';
+								minView = 'hour';
 							}
 
 							field.$input
@@ -221,7 +221,7 @@
 											return;
 										}
 
-										var datetimepicker 	= $input.parent().data('datetimepicker');
+										var datetimepicker = $input.parent().data('datetimepicker');
 										datetimepicker.date.setSeconds(0);
 										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
 									}

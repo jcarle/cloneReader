@@ -1,6 +1,6 @@
 crMain = {
 	aPages: [],
-	
+
 	init: function() {
 		$.support.pushState = (history.pushState == false ? false : true);
 
@@ -8,28 +8,28 @@ crMain = {
 		this.initEvents();
 		this.iniAppAjax();
 		resizeWindow();
-		
+
 		if ($.support.pushState == false) {
 			$.showWaiting(false);
 		}
 	},
-	
+
 	initEvents: function() {
 		$.countProcess = 0;
 
 		$(window).bind('beforeunload', function(){
 			$.isUnloadPage = true; // Para evitar tirar el error de conección perdida si unlodean la page
 		});
-		
+
 		$('body').on('click', 'a',
 			function(event) {
 				crMain.clickOnLink(event);
 			}
 		);
-		
+
 		$.ajaxSetup({'dataType': 'json'});
-		
-		
+
+
 		/**
 		 * Propiedades por default para los ajax:
 		 * 		skipwWaiting: omite postrar el divWaiting en cada peticion
@@ -53,7 +53,7 @@ crMain = {
 				$.showWaiting();
 			}
 		);
-		
+
 		$(document).ajaxError(
 			function(event, jqXHR, ajaxOptions) {
 				if ($.isUnloadPage == true) {
@@ -73,15 +73,15 @@ crMain = {
 					});
 					return;
 				}
-				
+
 				var response = $.parseJSON(jqXHR.responseText);
 				if ($.hasAjaxDefaultAction(response) == true) { return; }
-				
+
 				crMain.renderPage(response, ajaxOptions.pageName);
 			}
 		);
 	},
-	
+
 	iniAppAjax: function() {
 		if ($.support.pushState == false) {
 			return;
@@ -91,21 +91,21 @@ crMain = {
 
 		$(window).bind('popstate', function () {
 			crMain.loadUrl(location.href);
-		});  
+		});
 
 		if ($('.pageContainer > .cr-page').length == 0) {
 			crMain.loadUrl(location.href);
 		}
 	},
-	
+
 	loadMenuAndTranslations: function(async) {
 		$.ajax({
 			'url':   base_url + 'app/selectMenuAndTranslations',
 			'async': (async == true),
-			'success': 
+			'success':
 				function(response) {
 					crLang.aLangs = response['result']['aLangs'];
-		
+
 					var aMenu = response['result']['aMenu'];
 					for (var menuName in aMenu) {
 						var $parent = $(aMenu[menuName]['parent']);
@@ -114,7 +114,7 @@ crMain = {
 					}
 					crMenu.initMenu();
 				}
-		});		
+		});
 	},
 
 	/**
@@ -126,7 +126,7 @@ crMain = {
 	 * 		onHide: se lanza al ocultar la page
 	 * 		onVisible: se lanza al mostrar la page
 	 * Eventos que dispara body:
-	 * 		showPage: se lanza al cambiar de page 
+	 * 		showPage: se lanza al cambiar de page
 	 * */
 	loadUrl: function(controller) {
 		var pageName = this.getPageName();
@@ -134,10 +134,10 @@ crMain = {
 		if (this.aPages[pageName].length == 0) {
 			this.aPages[pageName] = $('<div class="cr-page ' + pageName + '"/>').appendTo($('.pageContainer'));
 		}
-		
+
 		var $page = this.aPages[pageName];
 		$page.trigger('loadUrl');
-		
+
 		if ($page.children().length > 0 && $page.is(':visible') == true && location.hash != '') {
 			return;
 		}
@@ -146,7 +146,7 @@ crMain = {
 			this.ajax.abort();
 			this.ajax = null;
 		}
-		
+
 		var url = base_url + controller.replace(base_url, '');
 		if ($page.data('notRefresh') == true) {
 			if ($page.is(':visible') == true) {
@@ -158,7 +158,7 @@ crMain = {
 			}
 			return;
 		}
-		
+
 		this.ajax = $.ajax({
 			'url':      url,
 			'data':     { 'pageJson': true },
@@ -175,33 +175,33 @@ crMain = {
 			, this, pageName)
 		});
 	},
-	
+
 	loadUploadFile: function() {
 		if (this.loadedUploadFile == true) {
 			return;
 		}
-		
+
 		$.ajax({
 			'url':      base_url + 'app/uploadFile',
 			'async':    false,
 			'dataType': 'text',
-			'success': 
+			'success':
 				function(response) {
 					$('body').append(response);
 					crMain.loadedUploadFile = true;
 				}
 		});
 	},
-	
+
 	renderPage: function(response, pageName) {
 		var data   = response['result'];
 		var $page  = crMain.aPages[pageName];
 		$page.data(data);
-		
+
 		crMain.showPage(pageName);
 		$page.children().remove();
 		crMain.renderPageTitle(data, $page);
-		
+
 		switch (data['js']) {
 			case 'crList':
 				$(null).crList($.extend({
@@ -223,10 +223,10 @@ crMain = {
 			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
 		}
 	},
-	
+
 	renderPageTitle: function(data, $page) {
 		$('title').text(data['meta']['title'] + (crSettings.addTitleSiteName == true ? ' | ' + crSettings.siteName : ''));
-		
+
 		if (data['breadcrumb'].length != 0) {
 			var $ol = $('<ol class="breadcrumb">').appendTo($page);
 
@@ -238,7 +238,7 @@ crMain = {
 				else {
 					var $li = $('<li/>').appendTo($ol);
 					$('<a />').attr('href', link['href']).text(link['text']).appendTo($li);
-				} 
+				}
 			}
 		}
 
@@ -251,21 +251,21 @@ crMain = {
 					<h1> <small> </small></h1>\
 				</div>\
 			').appendTo($page);
-			
+
 			$pageHeader.find('h1').text(data['meta']['h1']);
 		}
 	},
-	
+
 	showPage: function(pageName) {
 		$.showWaiting(true);
-		
+
 		$('.datetimepicker, .select2-drop, .select2-drop-mask, .select2-hidden-accessible').hide(); // FIXME: Elimino estos divs, sino se van agregando todo el tiempo. Son de objectos de jquery calendar, drodown, etc
 		$('.modal').modal('hide'); // Elimino los .alers y los .modal que pueda haber al hacer history.back
 
 		var $page       = this.aPages[pageName];
 		var $otherPages = $('.pageContainer > .cr-page:visible:not(.' + pageName + ')');
 		var meta        = $page.data('meta');
-		
+
 		$otherPages.hide().trigger('onHide');
 
 		$('title').text(meta['title'] + (crSettings.addTitleSiteName == true ? ' | ' + crSettings.siteName : ''));
@@ -275,7 +275,7 @@ crMain = {
 
 		$.showWaiting(false);
 	},
-	
+
 	getPageName: function() {
 		var pageName = location.href.replace(base_url, '');
 		if (pageName.indexOf('?') != -1){
@@ -289,27 +289,27 @@ crMain = {
 		if (controller.trim() == '') {
 			controller = crSettings.pageHome;
 		}
-		
+
 		return 'cr-page-' + controller + (aTmp.length > 1 ? '-' + aTmp[1] : '');
 	},
 
 	/**
-	 * Modifica un link para que la page se carge por ajax (si $.support.pushState=true) o para mostrar el $.showWaiting antes de redireccionar  
+	 * Modifica un link para que la page se carge por ajax (si $.support.pushState=true) o para mostrar el $.showWaiting antes de redireccionar
 	 * Para omitir este comportamiento se puede setear
 	 * 		skip-app-link = true 		como property de un <a/>
- 	 */		
+ 	 */
 	clickOnLink: function(event) {
 		if (event.button != 0) {
 			return;
 		}
-		
+
 		var $link 	= $(event.currentTarget);
 		if ($link.attr('target') != null) {
 			return;
 		}
 		if ($link.data('skip-app-link') == true) {
 			return;
-		}	
+		}
 		var url = $link.attr('href');
 		if (url == null || url.substr(0, 1) == '#' || url.substr(0, 10) == 'javascript') {
 			return;
@@ -319,9 +319,9 @@ crMain = {
 				return;
 			}
 		}
-		
+
 		$.hideMobileNavbar();
-		
+
 		event.preventDefault();
 		return $.goToUrl(url);
 	}
