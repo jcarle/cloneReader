@@ -234,3 +234,5 @@ $lang['Enter a tag name'] = 'Ingrese el nombre del tag';
 $lang['Popularity'] = 'Popularidad';
 $lang['Branches'] = 'Sucursales';
 $lang['Edit branches'] = 'Editar sucursales';
+$lang['Branch %s'] = 'Sucursal %s';
+$lang['Visits'] = 'Visitas';

@@ -245,10 +245,10 @@
 							field.$input
 								.removeAttr('name')
 								.raty( {
-									score: 		field['value'],
-									scoreName: 	field['name'],
-									path: 		base_url + 'assets/images/',
-									click:		$.proxy(function() {
+									score:      field['value'],
+									scoreName:  field['name'],
+									path:       base_url + 'assets/images/',
+									click:      $.proxy(function() {
 										this.changeField();
 									}, this)
 								});
@@ -277,6 +277,7 @@
 									function(event) {
 										this.checkGroupCheckBox($(event.target));
 										this.updateGroupCheckBox($(event.target).parents('ul'));
+										this.changeField();
 									}
 								, this))
 								.each($.proxy(
@@ -730,6 +731,15 @@
 							$tbody.find('.date, .datetime').each(
 								function() {
 									$.formatDate($(this));
+								}
+							);
+
+							$tbody.find('td.dotdotdot').each(
+								function() {
+									var $td  = $(this);
+									var value = $td.html();
+									$td.html('');
+									var $div = $('<div />').attr('title', value).html(value).appendTo($td);
 								}
 							);
 

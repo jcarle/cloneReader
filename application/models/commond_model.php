@@ -99,13 +99,12 @@ class Commond_Model extends CI_Model {
 			return false;
 		}
 
-		$values = array(
-			'entityTypeId'  => $entityTypeId,
-			'entityId'      => $entityId,
-			'entitySef'     => $entitySef,
-		);
-
-		$this->db->replace('entities_sef', $values);
+		$query = " INSERT INTO entities_properties
+			(entityTypeId, entityId, entitySef)
+			VALUES
+			(".$entityTypeId.", ".$entityId.", ".$this->db->escape($entitySef).")
+			ON DUPLICATE KEY UPDATE entitySef = ".$this->db->escape($entitySef)." ";
+		$this->db->query($query);
 
 		// Si exite un $entityConfig, actualizo el sef en la tabla principal; ya que puede convenir duplicar la info algunas veces para evitar el join
 		$entityConfig = getEntityConfig($entityTypeId);
@@ -138,9 +137,6 @@ class Commond_Model extends CI_Model {
 		if (!isset($config['fieldSef'])) {
 			return false;
 		}
-
-		// TODO: agregar un param para borrar todo antes de volver a guardar
-		$this->db->delete('entities_sef', array( 'entityTypeId' => $entityTypeId ));
 
 		$query = $this->db
 			->select( 'COUNT(1) AS total ', false)
@@ -188,7 +184,7 @@ class Commond_Model extends CI_Model {
 		$query = $this->db
 			->select(' entityTypeId, entityId, entitySef ', false)
 			->where_in('entitySef', $aUriSegment)
-			->get('entities_sef')->result_array();
+			->get('entities_properties')->result_array();
 		//pr($this->db->last_query()); die;
 		foreach ($query as $data) {
 			$filters[$data['entityTypeId']] = $data;
@@ -291,6 +287,10 @@ class Commond_Model extends CI_Model {
 
 	function deleteEntitySearch($entityTypeId, $aEntityId = null) {
 		$affectedRows = 1;
+
+		if ($aEntityId != null && is_array($aEntityId) == false) {
+			$aEntityId = array($aEntityId);
+		}
 
 		while ($affectedRows > 0) {
 			$query = ' DELETE QUICK FROM entities_search

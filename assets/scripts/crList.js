@@ -63,7 +63,6 @@
 			}
 		);
 
-
 		this.$search = this.$form.find('input[name=search]');
 
 		this.$form.find('.fa-times').parent()

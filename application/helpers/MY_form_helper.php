@@ -2,22 +2,22 @@
 function appendMessagesToCrForm($form) {
 	$CI = &get_instance();
 	$CI->lang->load('form_validation');
-		
+
 	if (element('messages', $form) == null) {
 		$form['messages'] = array();
 	}
-	
+
 	if (element('rules', $form) == null) {
 		return $form;
 	}
-	
+
 	foreach ($form['rules'] as $rule) {
 		$aRules = explode('|', $rule['rules']);
 		foreach ($aRules as $key) {
 			$form['messages'][$key] = $CI->lang->line(str_replace('callback_', '', $key));
 		}
 	}
-	
+
 	return $form;
 }
 
@@ -38,7 +38,7 @@ function populateCrForm($form, $data) {
 			case 'numeric':
 			case 'upload':
 				// TODO: revisar este IF. Esta puesto para que no sobreescriba fields hiddens con el parentId que se usa para agregar un child
-				if ( element('value', $form['fields'][$fieldName]) === false ) { 
+				if ( element('value', $form['fields'][$fieldName]) === false ) {
 					$form['fields'][$fieldName]['value'] = element($fieldName, $data, '');
 				}
 				break;
@@ -50,15 +50,15 @@ function populateCrForm($form, $data) {
 				break;
 		}
 	}
-	
+
 	return $form;
 }
 
 /**
- * Para chequear los datos de un crForm 
+ * Para chequear los datos de un crForm
  * @param $data
- * @param $id 
- * @return si no esta vacio devuelve $data, si $id == 0 devuelve true (se usa en %s/add ), sino devuelve null 
+ * @param $id
+ * @return si no esta vacio devuelve $data, si $id == 0 devuelve true (se usa en %s/add ), sino devuelve null
  */
 function getCrFormData($data, $id) {
 	if (!is_numeric($id)) {
@@ -75,29 +75,29 @@ function getCrFormData($data, $id) {
 
 function getCrFormFieldGallery($entityTypeId, $entityId, $label) {
 	$config = getEntityGalleryConfig($entityTypeId);
-	
+
 	return array(
 		'type'          => 'gallery',
 		'label'         => $label,
 		'urlGallery'    => base_url(str_replace(array('$entityTypeId', '$entityId'), array($entityTypeId, $entityId),$config['urlGallery'])),
 		'urlSave'       => base_url($config['urlSave']),
-		'urlDelete'     => base_url($config['urlDelete']), 
+		'urlDelete'     => base_url($config['urlDelete']),
 		'entityTypeId'  => $entityTypeId,
-		'entityId'      => $entityId,	
+		'entityId'      => $entityId,
 	);
 }
 
 function getCrFormFieldMoney(array $price, array $currency, array $exchange, array $total) {
 	$CI = &get_instance();
 	$CI->load->model('Coins_Model');
-	
+
 	$subscribe 	= array();
 	$aFieldName = array( $price['name'], $currency['name'], $exchange['name'], );
-	
+
 	foreach ($aFieldName as $fieldName) {
 		$subscribe[] = array(
 			'field'         => $fieldName,
-			'event'         => 'change', 
+			'event'         => 'change',
 			'callback'      => 'calculatePrice',
 			'arguments'     => array(
 				'this.getFieldByName(\''.$price['name'].'\')',
@@ -107,35 +107,35 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			)
 		);
 	}
-	
+
 	$subscribe[0]['runOnInit'] = true;
-			
+
 	return array(
 		$price['name']	=> array(
 			'type'          => 'text',
 			'name'          => $price['name'],
-			'label'         => $price['label'], 
+			'label'         => $price['label'],
 			'value'         => element('value', $price, 0),
 			'placeholder'   => '0,00',
 		),
 		$currency['name']   => array(
 			'type'          => 'dropdown',
 			'name'          => $currency['name'],
-			'label'         => $currency['label'], 
+			'label'         => $currency['label'],
 			'value'         => element('value', $currency),
 			'source'        => $CI->Coins_Model->selectToDropdown(),
 		),
 		$exchange['name']   => array(
 			'type'          => 'text',
 			'name'          => $exchange['name'],
-			'label'         => $exchange['label'], 
+			'label'         => $exchange['label'],
 			'value'         => element('value', $exchange, 0),
 			'placeholder'   => '0,00',
 		),
 		$total['name']      => array(
 			'type'          => 'text',
 			'name'          => $total['name'],
-			'label'         => $total['label'], 
+			'label'         => $total['label'],
 			'value'         => null,
 			'disabled'      => true,
 			'subscribe'     => $subscribe
@@ -162,7 +162,7 @@ function subscribeForCrFormSumValues($fieldName, array $aFieldName) {
 	foreach ($aFieldName as $fieldName) {
 		$subscribe[] = array(
 			'field'      => $fieldName,
-			'event'      => 'change', 
+			'event'      => 'change',
 			'callback'   => 'sumValues',
 			'arguments'  => array( json_encode($aFieldName) )
 		);
@@ -183,16 +183,16 @@ function getCrFieldGallery($form) {
 function selectGallery($entityTypeId, $entityId) {
 	$CI = &get_instance();
 	$CI->load->model('Files_Model');
-	
+
 	$files = $CI->Files_Model->selectEntityGallery($entityTypeId, $entityId, null, true);
-	return loadViewAjax(true,  array('files' => $files));	
+	return loadViewAjax(true,  array('files' => $files));
 }
 
 
 /**
  * Guarda una imagen y la rezisea segun los parametros seteados en el config
  * SI  entityTypeId != NULL AND $entityId != NULL guarda la relacion en la table entities_files
- * 
+ *
  * @param $config array. Ejemplo de $config = array(
  *		'folder'        => '/assets/images/%s/original/',
  *		'allowed_types' => 'gif|jpg|png',
@@ -224,7 +224,7 @@ function savePicture($config, $entityTypeId = null, $entityId = null) {
 	$data = $CI->upload->data();
 
 	$CI->load->library('image_lib');
-		
+
 	// creo los sizes que esten seteados en el config
 	resizePicure($config['sizes'], $data['full_path']);
 
@@ -235,12 +235,12 @@ function savePicture($config, $entityTypeId = null, $entityId = null) {
 	}
 
 	@unlink($_FILES[$file_element_name]);
-	
+
 
 	if ($entityTypeId != null &&  $entityId != null) {
 		$CI->Files_Model->saveFileRelation($entityTypeId, $entityId ,$fileId);
 	}
-	
+
 	return array( 'code' => true, 'fileId' => $fileId);
 }
 
@@ -253,25 +253,25 @@ function resizePicure($sizes, $sourceImage) {
 	if (!is_array($sizes)) {
 		return;
 	}
-	
+
 	$CI = &get_instance();
 	$CI->load->library('image_lib');
-	
+
 	$data       = getimagesize($sourceImage);
 	$origWidth  = $data[0];
 	$origHeight = $data[1];
-				
+
 	foreach ($sizes as $size) {
 		$width  = $size['width'];
 		$height = $size['height'];
-				
+
 		if ($origWidth < $size['width']) {
 			$width = $origWidth;
 		}
 		if ($origHeight < $size['height']) {
 			$height = $origHeight;
 		}
-		
+
 		$dim    = (intval($origWidth) / intval($origHeight)) - ($width / $height);
 
 		$config = array(
@@ -289,7 +289,7 @@ function resizePicure($sizes, $sourceImage) {
 
 /**
  * Guarda un archivo segun los parametros seteados en el config
- * 
+ *
  * @param $config array. Ejemplo de $config = array(
  *		'folder'        => '/assets/images/%s/original/',
  *		'allowed_types' => 'gif|jpg|png',
@@ -299,7 +299,7 @@ function resizePicure($sizes, $sourceImage) {
  * */
 function saveFile($config) {
 	$CI = &get_instance();
-	
+
 	$CI->load->model('Files_Model');
 
 	$CI->load->library('upload', array(
@@ -322,7 +322,7 @@ function saveFile($config) {
 	}
 
 	@unlink($_FILES[$file_element_name]);
-	
+
 	return array( 'code' => true, 'fileId'	=> $fileId);
 }
 
@@ -330,9 +330,9 @@ function renderCrFormFields($form) {
 	$CI         = &get_instance();
 	$aFields    = array();
 	$formErrors = array_keys(validation_array_errors());
-	
+
 	foreach ($form['fields'] as $name => $field) {
-		
+
 		$hasError = null;
 		if (in_array($name, $formErrors)) {
 			$hasError = 'has-error';
@@ -341,11 +341,11 @@ function renderCrFormFields($form) {
 		$properties = array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control');
 		if (element('disabled', $field) == true) {
 			$properties += array('disabled' => 'disabled');
-		} 
+		}
 		if (element('placeholder', $field) != '') {
 			$properties += array('placeholder' => $field['placeholder']);
 		}
-		
+
 		$sField = '
 			<fieldset class="form-group '.$hasError.'">
 				'.form_label(element('label', $field), null, array('class' => 'col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label')).'
@@ -365,19 +365,27 @@ function renderCrFormFields($form) {
 				break;
 			case 'date':
 			case 'datetime':
-				$aFields[] = sprintf($sField, 
+				$aFields[] = sprintf($sField,
 					'<div class="input-group" style="width:1px">
-						'.form_input(array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control', 'size' => ($field['type'] == 'datetime' ? 18 : 9), 'placeholder' => $CI->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '') )).'
+						'.form_input(
+							array(
+								'name'        => $name,
+								'value'       => element('value', $field),
+								'class'       => 'form-control',
+								'size'        => ($field['type'] == 'datetime' ? 18 : 9),
+								'placeholder' => $CI->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '')
+							)
+						).'
 						<span class="input-group-addon"><i class="glyphicon glyphicon-remove fa fa-times"></i></span>
 						<span class="input-group-addon"><i class="glyphicon glyphicon-th icon-th fa fa-th"></i></span>
 					</div>');
 				break;
 			case 'password':
 				$aFields[] = sprintf($sField, form_password(array('name' => $name, 'value' => element('value', $field), 'class' => 'form-control')));
-				break;			
+				break;
 			case 'textarea':
 				$aFields[] = sprintf($sField, form_textarea($name, element('value', $field), 'class="form-control"'));
-				break;			
+				break;
 			case 'dropdown':
 				$source = element('source', $field, array());
 				$source = sourceToDropdown($source, element('appendNullOption', $field));
@@ -389,12 +397,12 @@ function renderCrFormFields($form) {
 			case 'groupCheckBox':
 				$showId = element('showId', $field, false);
 				$sTmp = '<ul class="groupCheckBox" name="'.$name.'"> <li><input type="text" style="display:none" /> </li>';
-				
+
 				foreach ($field['source'] as $item) {
-					$sTmp .= 
+					$sTmp .=
 						'<li>
 							<div class="checkbox">
-								 <label>' 
+								 <label>'
 									.form_checkbox(null, $item['id'], in_array($item['id'], $field['value']))
 									.$item['text'].($showId == true ? ' - '.$item['id'] : '').'
 								</label>
@@ -403,7 +411,7 @@ function renderCrFormFields($form) {
 				}
 				$sTmp .= '</ul>';
 				$aFields[] = sprintf($sField, $sTmp);
-				break;		
+				break;
 			case 'checkbox':
 				$className = '';
 				if (element('hideOffset', $field) == true) {
@@ -421,7 +429,7 @@ function renderCrFormFields($form) {
 							</div>
 						</div>
 					</fieldset>';
-				
+
 				break;
 			case 'gallery':
 				$aFields[] = sprintf($sField, '
@@ -436,7 +444,7 @@ function renderCrFormFields($form) {
 				break;
 			case 'subform':
 				$aFields[] = sprintf($sField, '
-					<div name="'.$name.'" class="subform "> 
+					<div name="'.$name.'" class="subform ">
 						<div class="alert alert-warning">
 							<i class="fa fa-spinner fa-spin fa-lg"></i>
 							<small>'.$CI->lang->line('loading ...').'</small>
@@ -446,8 +454,8 @@ function renderCrFormFields($form) {
 				break;
 			case 'tree':
 				$aFields[] = '<fieldset class="form-group tree">'
-						.renderCrFormTree($field['source'], $field['value'])	
-					.'</fieldset>';			
+						.renderCrFormTree($field['source'], $field['value'])
+					.'</fieldset>';
 				break;
 			case 'link':
 				$sField = '
@@ -469,7 +477,7 @@ function renderCrFormFields($form) {
 				break;
 		}
 	}
-	
+
 	return $aFields;
 }
 
@@ -478,14 +486,26 @@ function renderCrFormTree($aTree, $value){
 	$sTmp = '<ul>';
 	for ($i=0; $i<count($aTree); $i++) {
 		$sTmp .= '	<li>'.anchor($aTree[$i]['url'], $aTree[$i]['label'], array('class' => ($value == $aTree[$i]['id'] ? 'selected' : '')));
-		if (count($aTree[$i]['childs']) > 0) {			
+		if (count($aTree[$i]['childs']) > 0) {
 			$sTmp .= renderCrFormTree($aTree[$i]['childs'], $value);
 		}
-		
+
 		$sTmp .= '</li>';
 	}
 	$sTmp .= '</ul>';
 	return $sTmp;
+}
+
+function getHtmlCrLink($url, $fieldName) {
+	$CI = &get_instance();
+
+	return '
+		<fieldset class="form-group ">
+			<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label"> '.$CI->lang->line('Url').'</label>
+			<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 ">
+				<a name="'.$fieldName.'" class="crLink" href="'.$url.'"> '.$url.'</a>
+			</div>
+		</fieldset>';
 }
 
 function validation_array_errors() {
@@ -493,18 +513,18 @@ function validation_array_errors() {
 	{
 		return array();
 	}
-	
+
 	return $OBJ->get_error_array();
 }
 
 
 /**
  * Se utiliza en comments y contacts
- * Se utiliza un prefix para obtenes los nombres de los fields a guardar y devolver en la cookie  
+ * Se utiliza un prefix para obtenes los nombres de los fields a guardar y devolver en la cookie
  */
 function saveCrFormCookie($data, $prefix = 'comment') {
 	$CI = &get_instance();
-	
+
 	$phone = '';
 	if (isset($data[$prefix.'Phone'])) {
 		$phone = $data[$prefix.'Phone'];
@@ -515,7 +535,7 @@ function saveCrFormCookie($data, $prefix = 'comment') {
 			$phone = $cookie[$prefix.'Phone'];
 		}
 	}
-	
+
 	$cookie = array(
 		'firstName'  => element($prefix.'FirstName', $data),
 		'lastName'   => element($prefix.'LastName', $data),
@@ -525,10 +545,10 @@ function saveCrFormCookie($data, $prefix = 'comment') {
 
 	$CI->session->set_userdata('formCookie', $cookie);
 }
-	
+
 function getCrFormCookie($prefix = 'comment') {
 	$CI = &get_instance();
-	
+
 	$cookie = $CI->session->userdata('formCookie');
 
 	if (!empty($cookie)) {
@@ -545,11 +565,11 @@ function getCrFormCookie($prefix = 'comment') {
 	if ($CI->session->userdata('userId') == USER_ANONYMOUS) {
 		return array();
 	}
-		
+
 	$CI->load->model('Users_Model');
-		
+
 	$data = $CI->Users_Model->get($CI->session->userdata('userId'));
-		
+
 	return array(
 		$prefix.'FirstName'  => element('userFirstName', $data),
 		$prefix.'LastName'   => element('userLastName', $data),
