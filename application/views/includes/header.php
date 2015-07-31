@@ -44,13 +44,13 @@ header('Content-Type: text/html; charset=utf-8');
 <?php
 if (config_item('hasRss') == true) {
 	echo ' <link rel="alternate" type="application/rss+xml" title="Feed | '.config_item('siteName').'" href="'. base_url('rss').'" />';
-}	
+}
 ?>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	
+
 	<meta name="description" content="<?php echo element('description', $meta); ?>" />
 	<meta name="keywords" content="<?php echo element('keywords', $meta); ?>" />
 	<meta name="robots" content="<?php echo element('robots', $meta); ?>" />
@@ -80,7 +80,7 @@ $siteLogo = config_item('siteLogo');
 		<i class="fa fa-spinner fa-spin fa-lg"></i>
 		<small> <?php echo $this->lang->line('loading ...'); ?></small>
 	</div>
-	
+
 	<nav class="navbar navbar-default" role="navigation" id="header">
 		<div class="container">
 			<div class="navbar-header">
@@ -90,8 +90,8 @@ $siteLogo = config_item('siteLogo');
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand logo" href="<?php echo base_url(); ?>"> 
-					<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">  
+				<a class="navbar-brand logo" href="<?php echo base_url(); ?>">
+					<img alt="<?php echo config_item('siteName'); ?>" src="<?php echo base_url('assets/images/logo.png'); ?>" width="<?php echo $siteLogo['w']; ?>" height="<?php echo $siteLogo['h']; ?>">
 				</a>
 			</div>
 
@@ -108,7 +108,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'me
 		<div>
 <?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 'menuPublic'); ?>
 		</div>
-	</nav>	
+	</nav>
 	<div class="container pageContainer ">
 		<div class="cr-page <?php echo getPageName(); ?>">
 <?php
@@ -120,9 +120,9 @@ if (!empty($breadcrumb)) {
 		}
 		else {
 			echo '<li><a title="'.$link['text'].'" href="'.$link['href'].'">'.$link['text'].'</a></li>';
-		} 
+		}
 	}
-	echo '</ol>';  
+	echo '</ol>';
 }
 
 if (!isset($showTitle)) {
@@ -138,17 +138,19 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 	if (empty($aMenu)) {
 		return;
 	}
-	
+
 	$CI = &get_instance();
-	
+
 	if ($depth == 0) {
 		$className .= ' crMenu ';
 	}
-	
+
 	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
 	for ($i=0; $i<count($aMenu); $i++) {
 		$item       = $aMenu[$i];
 		$icon       = '';
+		$arrowLeft  = '';
+		$arrowRight = '';
 		$hasChilds  = count($item['childs']) > 0;
 		$attr       = '';
 		$label      = $item['menuTranslate'] == true ? $CI->lang->line($item['label']) : $item['label'];
@@ -158,29 +160,35 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 		}
 		if ($hasChilds == true) {
 			$attr = ' class="dropdown-toggle" data-toggle="dropdown" ';
+			$aClassName[] = 'dropdown-submenu';
 		}
-		
-		if ($depth >= 1 && $hasChilds == true) {
-			$aClassName[] = 'dropdown-submenu dropdown-submenu-left';
+
+		if ($hasChilds == true && $depth >= 1) {
+			$aClassName[] = 'dropdown-submenu-left';
 		}
 
 		if ($item['menuDividerBefore'] == true) {
 			$sTmp .= ' <li role="presentation" class="divider"></li> ';
 		}
 
+		if ($hasChilds > 0 && $depth > 0) {
+			$arrowLeft  = ' <i class="fa fa-caret-left" ></i> ';
+			$arrowRight = ' <i class="fa fa-caret-right pull-right" ></i> ';
+		}
+
 		if ($item['url'] != null) {
-			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" href="'.base_url($item['url']).'" '.$attr.'>'.$icon. '<span>'.$label.'</span></a>';
+			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" href="'.base_url($item['url']).'" '.$attr.'>'.$arrowLeft.$icon. '<span>'.$label.'</span>'.$arrowRight.'</a>';
 		}
 		else {
-			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" '.$attr.'>'.$icon.'<span>'.$label.'</span></a>';
-		}	
-		
+			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" '.$attr.'>'.$arrowLeft.$icon.'<span>'.$label.'</span>'.$arrowRight.'</a>';
+		}
+
 		if ($hasChilds == true) {
 			$sTmp .= renderMenu($item['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
 		}
 
 		$sTmp .= '</li>';
-		
+
 		if ($item['menuDividerAfter'] == true) {
 			$sTmp .= ' <li role="presentation" class="divider"></li> ';
 		}
@@ -188,4 +196,3 @@ function renderMenu($aMenu, $className = null, $depth = 0){
 	$sTmp .= '</ul>';
 	return $sTmp;
 }
-

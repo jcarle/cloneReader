@@ -65,8 +65,9 @@ crMenu = {
 
 			if (item['childs'].length > 0) {
 				$link.addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
+				$li.addClass('dropdown-submenu');
 				if (depth >= 1) {
-					$li.addClass(' dropdown-submenu dropdown-submenu-left ');
+					$li.addClass('dropdown-submenu-left');
 				}
 
 				this.renderMenu(item['childs'], 'dropdown-menu' , $li, (depth + 1));
