@@ -424,7 +424,7 @@ function renderCrFormFields($form) {
 						<div class="col-xs-12 col-sm-9 col-md-9  col-lg-9 ">
 							<div class="checkbox" >
 								<label>
-									'.form_checkbox($name, 'on', $field['checked']).' '. element('label', $field) .' 
+									'.form_checkbox($name, 'on', $field['checked']).' '. element('label', $field) .'
 								</label>
 							</div>
 						</div>

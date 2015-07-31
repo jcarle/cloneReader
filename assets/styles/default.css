@@ -87,7 +87,12 @@ body.isLoading, body.isLoading * {
 			#header ul.menuProfile .dropdown-submenu-left {
 				position: relative;
 			}
-				#header ul.menuProfile .dropdown-submenu-left a { }
+				#header ul.menuProfile .dropdown-submenu-left > a {
+					padding-left:15px;
+				}
+					#header ul.menuProfile .dropdown-submenu-left > a > .fa-caret-right {
+						display: none;
+					}
 				#header ul.menuProfile .dropdown-submenu-left a:hover { }
 				#header ul.menuProfile .dropdown-submenu-left > .dropdown-menu {
 					top: 0;
@@ -102,19 +107,6 @@ body.isLoading, body.isLoading * {
 				#header ul.menuProfile .dropdown-submenu-left:hover > .dropdown-menu {
 				  display: block;
 				}
-				#header ul.menuProfile .dropdown-submenu-left > a:before {
-					display: block;
-					content: "  ";
-					float: left;
-					width: 0;
-					height: 0;
-					border-color: transparent;
-					border-style: solid;
-					border-width: 5px 5px 5px 0px;
-					border-right-color: #CCCCCC;
-					margin-top: 5px;
-					margin-left: -10px;
-				}
 				#header ul.menuProfile .dropdown-submenu-left > a:after,
 				#header ul.menuProfile .dropdown-submenu-left:hover > a:after {
 					border-color: transparent;
@@ -126,24 +118,33 @@ body.isLoading, body.isLoading * {
 
 @media (max-width: 767px) {
 	#header form {
-		border-top: 0 solid #FF0000;
-		margin-top: 4px;
+		border: 0 solid #FF0000;
 		box-shadow: none;
 	}
 	#header ul.menuProfile {
 		float:none !important;
 	}
-	#header ul.menuProfile a {
-		padding-bottom: 10px;
-		padding-top: 10px;
-		cursor: pointer;
-	}
-	#header ul.menuProfile ul a {
-		padding-left:45px;
-	}
-	#header ul.menuProfile ul li ul li a {
-		padding-left:60px;
-	}
+		#header ul.menuProfile li {
+			border-top: 1px #E7E7E7 solid;
+		}
+		#header ul.menuProfile > li:first-child {
+			border-top: 1px #e7e7e7 solid;
+		}
+		#header ul.menuProfile a {
+			padding-bottom: 10px;
+			padding-top: 10px;
+			cursor: pointer;
+		}
+			#header ul.menuProfile .dropdown-submenu-left > a { }
+				#header ul.menuProfile .dropdown-submenu-left > a > .fa-caret-left {
+					display: none;
+				}
+		#header ul.menuProfile ul a {
+			padding-left:45px;
+		}
+		#header ul.menuProfile ul li ul li a {
+			padding-left:60px;
+		}
 	#header ul.menuProfile .open .dropdown-menu {
 		padding:0;
 	}
@@ -153,10 +154,6 @@ body.isLoading, body.isLoading * {
 	#header ul.menuProfile .dropdown-submenu-left .dropdown-menu {
 		margin:0;
 	}
-		#header ul.menuProfile .open .dropdown-menu li {
-			cursor:pointer;
-			border-top: 1px #E7E7E7 solid;
-		}
 		#header ul.menuProfile a {
 			font-size: larger;
 		}
