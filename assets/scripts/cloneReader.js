@@ -41,7 +41,7 @@ cloneReader = {
 			'unread':  aFilters.onlyUnread,
 			'sort':    aFilters.sortDesc == true ? 'desc' : 'asc',
 		};
-		
+
 		if (aFilters.search.trim() != '') {
 			params['q'] = aFilters.search.trim();
 			if (params['type'] == 'tag' && $.inArray(params['id'], [crSettings.tagHome, crSettings.tagBrowse]) != -1) {
@@ -81,17 +81,22 @@ cloneReader = {
 
 	updateMainMenu: function() {
 		if (this.$helpKeyboardShortcut == null) {
-			var $ul                    = $('ul.menuProfile').find('.menuItemSettings ul').first();
+			crMenu.$liSettings.appendTo(crMenu.$menuItemSettings.find('ul:first'));
+
+			var $ul                    = $('ul.menuProfile').find('.menuItemSettings ul:first');
 			this.$helpKeyboardShortcut = $('<li class="dropdown-submenu"><a href="javascript:cloneReader.helpKeyboardShortcut();" title="' + crLang.line('Keyboard shortcut') + '">' + crLang.line('Keyboard shortcut') + '</a></li>');
 			if ($ul.find('.fa-power-off').length != 0) {
 				var $li = $ul.find('.fa-power-off').parent().parent();
-				$li.before( $('<li role="presentation" class="divider"></li>'), this.$helpKeyboardShortcut );
-			} 
+				$li.before(this.$helpKeyboardShortcut, $('<li role="presentation" class="divider"></li>') );
+			}
 			else {
 				$ul.append( $('<li role="presentation" class="divider"></li>'), this.$helpKeyboardShortcut );
 			}
+
+			crMenu.$liSettings = crMenu.$menuItemSettings.find('> ul > li');
+			crMenu.updateMenu();
 		}
-		
+
 		if (this.$page.is(':visible') == true) {
 			this.$helpKeyboardShortcut.prev().show();
 			this.$helpKeyboardShortcut.show();
@@ -101,19 +106,19 @@ cloneReader = {
 		}
 		else {
 			this.$helpKeyboardShortcut.prev().hide();
-			this.$helpKeyboardShortcut.hide();		
+			this.$helpKeyboardShortcut.hide();
 		}
 	},
-	
+
 	initEvents: function() {
 		this.$page.data('notRefresh', true);
-		
+
 		this.$page.bind('onVisible', $.proxy(
 			function() {
 				$('.menu').hide();
 				$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
 				$('#header .container').addClass('fullSize');
-				
+
 				this.resizeWindow();
 				this.updateMainMenu();
 
@@ -124,13 +129,13 @@ cloneReader = {
 
 		, this));
 
-		this.$page.bind('loadUrl', 
+		this.$page.bind('loadUrl',
 			function() {
 				cloneReader.loadUrl();
 			}
 		);
 
-		
+
 		this.$page.bind('onHide', $.proxy(
 			function() {
 				this.$mainToolbar.hide();
@@ -141,31 +146,31 @@ cloneReader = {
 				$('#header .container').removeClass('fullSize');
 				$('.menu').show();
 				$('body').css({ 'background': 'white', 'overflow': '' });
-				
+
 				this.resizeWindow();
 				this.updateMainMenu();
 			}
 		, this));
-					
-		
-		setInterval(function() { cloneReader.saveData(true); }, (crSettings.feedTimeSave * 1000)); 
+
+
+		setInterval(function() { cloneReader.saveData(true); }, (crSettings.feedTimeSave * 1000));
 //		setInterval(function() { cloneReader.loadFilters(true); }, (crSettings.feedTimeReload * 60000));
 		setInterval(function() { cloneReader.updateEntriesDateTime(); }, (crSettings.feedTimeReload * 60000));
 
 		this.$ulEntries
-			.on({ 'tap' : 
+			.on({ 'tap' :
 				function(event){
 					var $entry = $(event.target);
 					cloneReader.selectEntry($entry, false, false);
-				} 
+				}
 			})
 			.scrollStopped(function(){
 				cloneReader.checkScroll();
 				cloneReader.getMoreEntries();
 			});
-		
+
 		this.maximiseUlEntries(this.isMaximized, false);
-		
+
 		$(window).resize(function() {
 			cloneReader.resizeWindow();
 			if (cloneReader.isMobile != true) {
@@ -173,7 +178,7 @@ cloneReader = {
 			}
 			cloneReader.maximiseUlEntries(cloneReader.isMaximized, true);
 		});
-		
+
 		$(document).keyup($.proxy(
 			function(event) {
 				if ($('body').hasClass('modal-open') == true) {
@@ -185,18 +190,18 @@ cloneReader = {
 				if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
 					return;
 				}
-				
+
 				event.stopPropagation();
-				
+
 				switch (event['keyCode']) {
 					case 74: // J: next
 					case 75: // N: prev
 						this.goToEntry(event['keyCode'] == 74);
-						break;	
+						break;
 					case 82: // R: reload
 						this.loadEntries(true, true, {});
 						break;
-					case 85: // U: expand!			
+					case 85: // U: expand!
 						this.maximiseUlEntries(!this.isMaximized, false);
 						break;
 					case 83: // S: star
@@ -235,18 +240,28 @@ cloneReader = {
 				}
 			}
 		, this));
-		
-		$('#header .logo').click(function(event) { 
+
+		$('#header .logo').click(function(event) {
 			if (cloneReader.isMobile != true) {  return;  }
 			cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false);
 		} );
+
+		$('#header .navbar-collapse')
+			.on('shown.bs.collapse', function() {
+				if (cloneReader.$page.is(':visible') != true) { return; }
+				$('body').css('overflow', '');
+			})
+			.on('hidden.bs.collapse', function() {
+				if (cloneReader.$page.is(':visible') != true) { return; }
+				$('body').css( 'overflow', 'hidden');
+			});
 	},
-	
+
 	checkScroll: function() {
 		if (this.aFilters.viewType == 'list') {
 			return;
 		}
-		if (this.$ulEntries.find('li.selected').length == 0 && this.$ulEntries.scrollTop() == 0) { 
+		if (this.$ulEntries.find('li.selected').length == 0 && this.$ulEntries.scrollTop() == 0) {
 			return;
 		}
 		if (this.$ulEntries.is(':animated') == true) {
@@ -256,11 +271,11 @@ cloneReader = {
 		var top      = this.$ulEntries.offset().top;
 		var height   = this.$ulEntries.outerHeight();
 		var aLi      = this.$ulEntries.find('.entry');
-		
+
 		for (var i=0; i<aLi.length; i++) {
 			var $entry  = $(aLi[i]);
 			var offset  = $entry.find('p:first').offset();
-			if (top <= offset.top) { 
+			if (top <= offset.top) {
 				this.selectEntry($entry, false, false);
 				return;
 			}
@@ -270,22 +285,22 @@ cloneReader = {
 			}
 		}
 	},
-	
+
 	buildCache: function() {
 		$.ajax({
 			'url':          base_url + 'entries/buildCache',
 			'async':        true, //false
 			'skipwWaiting': (this.$ulFilters.find('li:visible').length == 0 ? false : true),
-			'success': 
+			'success':
 				function(response) {
-					if ($.hasAjaxDefaultAction(response) == true) { return; }		
+					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					if (response.result.hasNewEntries == true) {
 						cloneReader.loadFilters(true);
 					}
 				}
 		});
 	},
-	
+
 	renderToolbar: function() {
 		this.$toolbar.html(' \
 			<ul class="nav navbar-nav"> \
@@ -365,13 +380,13 @@ cloneReader = {
 				</li> \
 			</ul> \
 		');
-		
+
 		this.$mainToolbar       = this.$toolbar.find('.mainToolbar');
 		this.$popupFeedSettings = this.$toolbar.find('.popupFeedSettings');
 
-		
+
 		this.$toolbar.find('ul button').addClass('btn').addClass('btn-default').addClass('navbar-btn');
-		
+
 		this.$toolbar.find('.expand').click(function() { cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false); } );
 		this.$toolbar.find('.btnMarkAllAsRead').click( function() { cloneReader.markAllAsRead(); } );
  		this.$mainToolbar.find('.next').click(function() { cloneReader.goToEntry(true); });
@@ -383,13 +398,13 @@ cloneReader = {
 		this.$mainToolbar.find('.filterOnlyUnread').click(function() { cloneReader.changeFilters( { 'onlyUnread': true }); });
 		this.$mainToolbar.find('.filterNewestSort').click(function(event) { cloneReader.changeFilters( {'sortDesc': true}); });
 		this.$mainToolbar.find('.filterOldestSort').click(function(event) { cloneReader.changeFilters( {'sortDesc': false}); });
-		this.$mainToolbar.find('.add').click(  function(event) {  
-				event.stopPropagation(); 
-				$.showPopupSimpleForm(cloneReader.$mainToolbar.find('.add'), crLang.line('Add feed url'), function() { cloneReader.addFeed(); }); 
+		this.$mainToolbar.find('.add').click(  function(event) {
+				event.stopPropagation();
+				$.showPopupSimpleForm(cloneReader.$mainToolbar.find('.add'), crLang.line('Add feed url'), function() { cloneReader.addFeed(); });
 			}
 		);
 		this.$mainToolbar.find('.feedSettings').click(function() { cloneReader.showPopupFeedSettings(); });
-		
+
 		this.toogleMainToolbarItem(['.filterUnread', '.filterSort', '.feedSettings'], false);
 		this.$mainToolbar.find('.dropdown-toggle').click(
 			function(event) {
@@ -397,17 +412,17 @@ cloneReader = {
 			}
 		);
 	},
-	
+
 	loadEntries: function(clear, forceRefresh, aFilters) {
 		$.hidePopupSimpleForm();
-		
+
 		var lastFilters = $.toJSON(this.aFilters);
 		this.aFilters   = $.extend(this.aFilters, aFilters);
-		
+
 		if (this.$ulEntries.children().length == 0) { // Para la primera carga
 			forceRefresh = true;
 		}
-		
+
 		if (clear == true && this.isMobile == true && this.$ulEntries.children().length != 0) { // Si no es la primera carga y es mobile, maximizo al cambiar el filtro
 			this.maximiseUlEntries(true, false);
 		}
@@ -420,20 +435,20 @@ cloneReader = {
 			this.$ulEntries.children().remove();
 			this.$ulEntries.scrollTop(0);
 		}
-		
-		if (this.isMobile != true) { // Actualizo el valor de isMaximized sino isMobile 
+
+		if (this.isMobile != true) { // Actualizo el valor de isMaximized sino isMobile
 			this.aFilters.isMaximized = this.isMaximized;
 		}
 
 		if (this.aFilters.search.trim() == '') {
 			this.clearSearchForm();
 		}
-		
+
 		this.renderNotResult(true);
 		this.renderEntriesHead();
 		this.selectFilters();
 		this.updateToolBar();
-		
+
 		lastFilters = $.parseJSON(lastFilters);
 		if (this.aFilters.onlyUnread != lastFilters.onlyUnread) {
 			this.renderFilters(this.filters, this.$ulFilters, true);
@@ -457,7 +472,7 @@ cloneReader = {
 				return;
 			}
 		}
-		
+
 		if (this.aFilters['page'] == 1) {
 			this.currentEntries = [];
 		}
@@ -466,30 +481,30 @@ cloneReader = {
 		}
 		if (clear == true) {
 			this.saveData(false);
-		}		
+		}
 
 		if (this.ajax) {
 			this.ajax.abort();
 			this.ajax = null;
 		}
-		
-		
+
+
 		if (this.isBrowseTags()) {
 			this.browseTags();
 			return;
 		}
-		
+
 		this.isLoadEntries = true;
 
 		if (typeof ga != "undefined") {
 			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
 		}
-		
-		this.ajax = $.ajax({		
+
+		this.ajax = $.ajax({
 			'url':      base_url + 'entries/select',
-			'data':    { 
-				'post':               $.toJSON(this.aFilters), 
-				'pushTmpUserEntries': clear 
+			'data':    {
+				'post':               $.toJSON(this.aFilters),
+				'pushTmpUserEntries': clear
 			},
 			'type':        'post',
 			'skipwWaiting': true,
@@ -505,29 +520,29 @@ cloneReader = {
 				function () {
 					cloneReader.isLoadEntries = false;
 				}
-		});	
+		});
 	},
-	
+
 	renderEntries: function(result) {
 		this.$ulEntries.removeClass('list');
 		if (this.aFilters.viewType == 'list') {
 			this.$ulEntries.addClass('list');
 		}
-		
+
 		if (result.length == 0) {
 			this.updateMenuCount();
 			this.renderNotResult(false);
 			return;
 		}
-		
+
 		this.$noResult.hide();
-		
+
 		for (var i=0; i<result.length; i++) {
 			var entry = result[i];
 			if (this.aEntries[entry.entryId] == null) {
 				this.aEntries[entry.entryId] = entry;
 			}
-			
+
 			var $entry = $('<li/>')
 					.addClass('entry')
 					.data({ 'entryId': entry.entryId } )
@@ -535,25 +550,25 @@ cloneReader = {
 
 			this.renderEntry($entry);
 		}
-	
+
 		this.updateMenuCount();
 		this.renderNotResult(false);
 	},
-	
+
 	renderEntry: function($entry) {
 		if ($entry.hasClass('noResult') == true) {
 			return false;
 		}
-		
-		$entry.children().remove();		
+
+		$entry.children().remove();
 
 		var entryId = $entry.data('entryId');
 		var entry 	= this.aEntries[entryId];
-		
+
 		if (entry.entryTitle == '') {
 			var datetime = moment(entry['entryDate'], 'YYYY-MM-DDTHH:mm:ss');
 			entry.entryTitle = datetime.format('LL');
-		}		
+		}
 
 		if (this.aFilters.viewType == 'detail') {
 			this.renderDetailEntry($entry, entry);
@@ -571,22 +586,22 @@ cloneReader = {
 			}
 			cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
 		});
-		
+
 		this.starEntry($entry, entry.entryStarred);
 		this.readEntry($entry, (entry.entryRead == true));
-		
+
 		setTimeout( function() { cloneReader.updateEntryDateTime($entry); } , 0);
-		
+
 		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagHome) {
 			$entry.find('.star, .footer, .entryOrigin').remove();
-		} 
-		
+		}
+
 		return true;
 	},
-	
+
 	renderDetailEntry: function($entry, entry) {
 		var $header = $('<div/>').addClass('header').appendTo($entry);
-		
+
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
@@ -596,7 +611,7 @@ cloneReader = {
 
 		$('<label title="' + crLang.line('Star') + '"><i /></label>').addClass('star fa').appendTo($header);
 		$('<span />').addClass('entryDate').appendTo($header);
-		
+
 		if (entry.entryAuthor == '') {
 			var entryOrigin = $.sprintf(crLang.line('From %s'), '<a >' + entry.feedName + '</a>');
 		}
@@ -604,7 +619,7 @@ cloneReader = {
 			var entryOrigin = $.sprintf(crLang.line('From %s by %s'), '<a >' + entry.feedName + '</a>', entry.entryAuthor);
 		}
 		var $div = $('<div class="entryOrigin" />').html( entryOrigin).appendTo($header);
-	
+
 		$div.find('a').click(
 			function() {
 				cloneReader.changeFilters({ 'type': 'feed', 'id': cloneReader.aEntries[$(this).parents('.entry').data('entryId')]['feedId'] });
@@ -617,7 +632,7 @@ cloneReader = {
 
 		$('<label class="star checkbox" title="' + crLang.line('Star') + '" > <i/> </label>').appendTo($footer);
 		$('<label class="read checkbox" > <i/> <span> ' + crLang.line('Keep unread') + ' </span> </label>').appendTo($footer);
-		
+
 
 		$('<a class="btnSocial fa fa-lg fa-envelope"  />')
 			.click(function(event) {
@@ -626,8 +641,8 @@ cloneReader = {
 				var entryId = $entry.data('entryId');
 				cloneReader.showFormShareByEmail(entryId);
 			})
-			.appendTo($footer);	
-		
+			.appendTo($footer);
+
 		var aSocial = [
 			{'icon': 'fa fa-facebook-square',    'app': 'fb:share/',  'url': 'http://www.facebook.com/sharer/sharer.php?u='},
 			{'icon': 'fa fa-twitter-square',     'app': '',           'url': 'http://www.twitter.com/home?status='},
@@ -641,16 +656,16 @@ cloneReader = {
 
 /*
 TODO: pensar como mejorar esta parte
-		
-		if (this.isMobile == true) {		
+
+		if (this.isMobile == true) {
 //			if ( $p.get(0).scrollHeight > $p.height()) {
 				$('<button class="btn btn-default  btnViewAll"> <i class="fa fa-lg fa-reorder" /> </button>')
 					.click(function(event) {
 						var $entry = $(event.target).parents('.entry');
 						$entry.find('> p').css( {'max-height': 'none' });
-						$entry.find('.btnViewAll').remove(); 
+						$entry.find('.btnViewAll').remove();
 					})
-					.appendTo($entry);	
+					.appendTo($entry);
 //			}
 		} */
 
@@ -662,17 +677,17 @@ TODO: pensar como mejorar esta parte
 			}
 			cloneReader.readEntry($checkbox.parents('.entry'), $checkbox.hasClass('selected'));
 		});
-		
+
 		$entry.find('p').children().removeAttr('class');
 		$entry.find('a').attr('target', '_blank');
-		
+
 		$p.find('table').each(function() {
 			var $table = $(this);
 			var $div   = $('<div class="table-responsive" />');
 			$table.before($div);
 			$table.appendTo($div).addClass('table table-bordered table-condensed');
 		});
-		
+
 		$entry.click(function(event) {
 			var $entry = $(event.target).parents('.entry');
 			if ($entry.hasClass('selected') == true) { return; }
@@ -681,21 +696,21 @@ TODO: pensar como mejorar esta parte
 
 		this.highlight($entry.find('p, .header'));
 	},
-	
+
 	renderListEntry: function($entry, entry) {
 		var $div = $('<div/>').addClass('title').appendTo($entry);
 
 		$('<label><i /></label>').addClass('fa star').appendTo($div);
 		$('<span />').addClass('feedName').html($.stripTags(entry.feedName, '')).appendTo($div);
 		$('<span />').addClass('entryDate').appendTo($div);
-		
+
 		$('<span />').addClass('entryContent').html($.stripTags(entry.entryContent, ''))
 			.appendTo($div)
 			.prepend($('<h2 />').html($.stripTags(entry.entryTitle, '')));
 
 		$entry.find('.title').click(function(event) {
 			var $entry = $(event.target).parents('.entry');
-			
+
 			if ($entry.hasClass('expanded') == true) {
 				$entry
 					.removeClass('expanded')
@@ -705,7 +720,7 @@ TODO: pensar como mejorar esta parte
 				return;
 			}
 			cloneReader.selectEntry($entry, true, false);
-		});	
+		});
 
 		this.highlight($entry.find('.feedName, .entryContent'));
 	},
@@ -721,7 +736,7 @@ TODO: pensar como mejorar esta parte
 				$img.css('width', width + 'px');
 			}
 			if (!($img.width() == 1 || $img.height() == 1)) {
-				if ($img.parent('a').length == 0) { 
+				if ($img.parent('a').length == 0) {
 					$img.before('<a />').prev().append($img);
 				}
 				$img.parent('a').addClass('imgCenter imgCenterInside');
@@ -731,13 +746,13 @@ TODO: pensar como mejorar esta parte
 		}
 
 		$entry.find('a.imgCenter > img')
-			.imgCenter( { centerType: 'inside', animateLoading: true, complete: 
+			.imgCenter( { centerType: 'inside', animateLoading: true, complete:
 			function($img) {
 				cloneReader.checkPictureSize($img);
 			}
 		} );
 	},
-	
+
 	checkPictureSize: function($img) {
 		if ($img.width() < 150 && $img.height() < 150) {
 			return;
@@ -768,35 +783,35 @@ TODO: pensar como mejorar esta parte
 			}
 			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
-		
+
 		this.$entriesHead.html(title);
 		this.$ulEntries.prepend(this.$entriesHead);
-		
+
 		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 	},
-	
+
 	selectFilters: function() {
 		this.$ulFilters.find('li.selected').removeClass('selected');
-		
+
 		var filter = this.getFilter(this.aFilters);
 		if (filter == null) { return; }
-				
+
 		filter.$filter.addClass('selected');
 	},
-	
+
 	renderNotResult: function(loading) {
 		if (this.$noResult == null) {
 			this.$noResult = $('<li/>').addClass('noResult');
 		}
-		
+
 		this.$noResult.appendTo(this.$ulEntries).show();
-		
+
 		if (loading == true) {
 			this.$noResult.html('<div class="alert alert-warning"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + crLang.line('loading ...') + '</div>').addClass('loading');
 		}
 		else {
 			this.$noResult.html('<div class="well well-lg"> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');
-			
+
 			if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagAll) {
 				if (Object.keys(this.indexFilters['feed']).length == 0) {
 					this.$noResult.html('<div class="well well-lg"> \
@@ -807,15 +822,15 @@ TODO: pensar como mejorar esta parte
 							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + crSettings.tagBrowse + ', \'search\': \'\' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
 						</ul> \
 					</div>');
-					
-					this.$noResult.find('.addFeed').on('click', function(event) { 
+
+					this.$noResult.find('.addFeed').on('click', function(event) {
 						event.stopPropagation();
-						cloneReader.$mainToolbar.find('.add').click(); 
+						cloneReader.$mainToolbar.find('.add').click();
 					});
 				}
 			}
 		}
-		
+
 		this.resizeNoResult();
 	},
 
@@ -830,7 +845,7 @@ TODO: pensar como mejorar esta parte
 			$entry.find('.star i').addClass('fa-star-o');
 		}
 		$entry.find('.star i').addClass('fa fa-lg');
-		
+
 		var entryId      = $entry.data('entryId');
 		var entryStarred = (this.aEntries[entryId].entryStarred == 1);
 		this.aEntries[entryId].entryStarred = value;
@@ -842,7 +857,7 @@ TODO: pensar como mejorar esta parte
 	readEntry: function($entry, value) {
 		$entry.find('.read').removeClass('selected');
 		$entry.find('.read i').removeAttr('class');
-		
+
 		if (value == false) {
 			$entry.find('.read').addClass('selected');
 			$entry.find('.read i').addClass('fa-check-square');
@@ -851,7 +866,7 @@ TODO: pensar como mejorar esta parte
 			$entry.find('.read i').addClass('fa-square-o');
 		}
 		$entry.find('.read i').addClass('fa fa-lg');
-		
+
 		var entryId		= $entry.data('entryId');
 		var entryRead	= (this.aEntries[entryId].entryRead == 1);
 		this.aEntries[entryId].entryRead = value;
@@ -861,11 +876,11 @@ TODO: pensar como mejorar esta parte
 			var feedId  = this.aEntries[entryId].feedId;
 			var filter  = this.indexFilters['feed'][feedId];
 			var sum     = (value == true ? -1 : +1);
-			
+
 			if (filter == null) {
 				return;
 			}
-			
+
 			filter.count = parseInt(filter.count) + sum;
 			if (filter.count < 0) {
 				filter.count = 0;
@@ -880,47 +895,47 @@ TODO: pensar como mejorar esta parte
 			$entry.addClass('readed');
 		}
 	},
-	
+
 	renderUlFilterBranch: function(filter) { // actualizo solo los contadores de la parte del arbol de filters seleccionado
-		this.renderCounts(filter); 
+		this.renderCounts(filter);
 		var parents = this.getAllParentsByFilter(filter);
 		for(var i=0; i<parents.length; i++) {
 			this.renderCounts(parents[i]);
-		}	
+		}
 	},
-	
+
 	renderCounts: function(filter, count) {
 		filter		= this.getFilter(filter);
 		var $filter = filter.$filter;
 		var count 	= this.getCountFilter(filter);
 		if ($filter.length == 0) { return; }
-		
+
 		if (count < 0) {
 			count = 0;
 		}
-					
+
 		var $count = $filter.find('.count:first');
 		$count.text('(' + (count > crSettings.feedMaxCount ? crSettings.feedMaxCount + '+' : count) + ')');
 		$count.hide();
 		if (count > 0) {
 			$count.show();
 		}
-		
-		
+
+
 		$filter.removeClass('empty');
 		if (count == 0) {
 			$filter.addClass('empty');
 		}
-		$filter.hide().toggle(this.filterIsVisible(filter, true));		
+		$filter.hide().toggle(this.filterIsVisible(filter, true));
 	},
-	
+
 	updateToolBar: function() {
 		if (this.isBrowseTags() == true) {
 			this.$mainToolbar.hide();
 			return;
 		}
 		this.$mainToolbar.show();
-		
+
 		this.$mainToolbar.find('.filterSort span:first').text(this.$mainToolbar.find(this.aFilters.sortDesc == true ? '.filterNewestSort' : '.filterOldestSort').text());
 		this.$mainToolbar.find('.filterUnread span:first').html(this.$mainToolbar.find(this.aFilters.onlyUnread == true ? '.filterOnlyUnread a' : '.filterAllItems a').html());
 
@@ -936,20 +951,20 @@ TODO: pensar como mejorar esta parte
 		if (this.aFilters.type == 'feed') {
 			this.toogleMainToolbarItem(['.feedSettings'], true);
 		}
-		
+
 		this.toogleMainToolbarItem(['.filterUnread', '.btnMarkAllAsRead'], false);
-		
+
 		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [crSettings.tagStar, crSettings.tagHome]) != -1)) {
 			this.toogleMainToolbarItem(['.btnMarkAllAsRead', '.filterUnread'], true);
 		}
-		
+
 		this.toogleMainToolbarItem(['.filterSort'], true);
 
 		if (this.aFilters.search.trim() != '') {
 			this.toogleMainToolbarItem(['.btnMarkAllAsRead', '.filterSort', '.filterUnread', '.feedSettings'], false);
 		}
 	},
-	
+
 	toogleMainToolbarItem: function(aItems, show) {
 		for (var i=0; i<aItems.length; i++) {
 			var $li = this.$mainToolbar.find(aItems[i]).parents('li');
@@ -970,21 +985,21 @@ TODO: pensar como mejorar esta parte
 		this.$mainToolbar.find('.filterUnread .count').text(count);
 		this.$page.find('.filterOnlyUnread .count').text(count);
 	},
-	
+
 	selectEntry: function($entry, scrollTo, animate) {
 		if ($entry.length == 0) { return; }
 		if ($entry.hasClass('noResult') == true) { return; }
 		if (this.$ulEntries.find('> li.entry.selected:first').is($entry)) { return; }
-	
+
 		this.$ulEntries.find(' > li.entry.selected').removeClass('selected');
 		$entry.addClass('selected');
 
 		if (this.aFilters.viewType == 'list') {
 			this.$ulEntries.find('.entry').removeClass('expanded');
 			this.$ulEntries.find('.entry .detail').remove();
-			
+
 			this.renderEntry($entry);
-			
+
 			$entry.addClass('expanded');
 			var entryId = $entry.data('entryId');
 			var entry   = this.aEntries[entryId];
@@ -993,7 +1008,7 @@ TODO: pensar como mejorar esta parte
 			$div.find('.header .entryDate, .header .star').remove();
 			$entry.append($div);
 			this.renderEntryPictures($entry);
-			
+
 			$entry.find('.footer .star').click(function(event) {
 				event.stopPropagation();
 				$star = $(event.target);
@@ -1002,42 +1017,42 @@ TODO: pensar como mejorar esta parte
 				}
 				cloneReader.starEntry($star.parents('.entry'), !$star.hasClass('selected'));
 			});
-			
+
 			this.starEntry($entry, entry.entryStarred);
-			
+
 			animate = false;
 		}
 
 		if (scrollTo == true) {
 			this.scrollToEntry($entry, animate);
-		}	
+		}
 
 		this.readEntry($entry, true);
 //		this.getMoreEntries();
 	},
-	
+
 	scrollToEntry: function($entry, animate) {
 		if ($entry.length == 0) { return; }
 		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
 
-		var top = $entry.get(0).offsetTop - 10;		
+		var top = $entry.get(0).offsetTop - 10;
 
-		if (animate == true) { 
+		if (animate == true) {
 			 this.$ulEntries.stop().animate( {  scrollTop: top  } );
 		}
 		else {
 			this.$ulEntries.stop().scrollTop(top);
 		}
 	},
-	
+
 	goToEntry: function(next) {
 		$.hideMobileNavbar();
-		
+
 		var $entry = this.$ulEntries.find('.entry.selected');
 		if ($entry.length == 0 && next != true) {
 			return;
-		}		
-		
+		}
+
 		if ($entry.length == 0) {
 			$entry = this.$ulEntries.find('.entry').first();
 		}
@@ -1047,25 +1062,25 @@ TODO: pensar como mejorar esta parte
 		this.selectEntry($entry, true, true);
 		this.$ulEntries.focus();
 	},
-	
+
 	getMoreEntries: function() {
 		if (this.isBrowseTags() == true) {
 			return;
 		}
-		
+
 		// busco más entries si esta visible el li 'noResult', o si el li.selected es casi el ultimo
-		if (this.isLastPage == true) { 
+		if (this.isLastPage == true) {
 			return;
 		}
-		
+
 		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
-		
+
 		if (
-			this.$noResult.visible(true) == true 
+			this.$noResult.visible(true) == true
 			||
 			((this.$ulEntries.find('.entry').length - this.minUnreadEntries) <= this.$ulEntries.find('.entry.selected').index())
 		) {
-			
+
 			if ($.active == 0) {
 				this.loadEntries(false, false, { 'page': this.aFilters['page'] + 1 });
 			}
@@ -1074,15 +1089,15 @@ TODO: pensar como mejorar esta parte
 
 	loadFilters: function(reload) {
 		this.saveData(false);
-		
-		$.ajax({ 
+
+		$.ajax({
 			'url':     base_url + 'entries/selectFilters',
-			'success': 
+			'success':
 				$.proxy(
 					function(reload, response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-//console.time("t1");	
+//console.time("t1");
 						if (reload == true) {
 							var scrollTop = this.$ulFilters.scrollTop();
 						}
@@ -1106,40 +1121,40 @@ TODO: pensar como mejorar esta parte
 //console.timeEnd("t1");
 					}
 				, this, reload)
-		});	
+		});
 	},
-	
+
 	runIndexFilters: function(filters, parent, clear) {
 		if (clear == true) {
 			this.indexFilters = { 'tag': {}, 'feed': {}};
 			this.$ulFilters.children().remove();
 		}
-		
+
 		for (var i=0; i<filters.length; i++) {
 			var filter = filters[i];
-			
+
 			if (this.indexFilters[filter.type][filter.id] == null) {
 				this.indexFilters[filter.type][filter.id] = filter;
 				$.extend(filter, { '$filter': $(), 'parents': [] });
 			}
-			
+
 			filter = this.getFilter(filter);
-			
+
 			if (parent != null) {
 				filter.parents.push(parent);
 			}
-			
+
 			if (filter.childs != null) {
 				this.runIndexFilters(filter.childs, filter, false);
 			}
-		}		
+		}
 	},
 
 	renderFilters: function(filters, $parent, selectFilters){
 		var index = 0;
 		for (var i=0; i<filters.length; i++) {
 			var filter = filters[i];
-			
+
 			filter = this.getFilter(filter);
 
 			filter.count = this.getCountFilter(filter);
@@ -1149,7 +1164,7 @@ TODO: pensar como mejorar esta parte
 				this.renderFilter(filter, $parent, index);
 				index++;
 			}
-				
+
 			if (filter.type == 'tag' && this.oldIndexFilters != null) {
 				var tmp = this.oldIndexFilters[filter.type][filter.id];
 				if (tmp != null) {
@@ -1168,7 +1183,7 @@ TODO: pensar como mejorar esta parte
 
 	renderFilter: function(filter, $parent, index) {
 		var filter = this.getFilter(filter);
-			
+
 		if (filter.$filter.length != 0 && filter.$filter.parents().is($parent)) {
 			return filter.$filter;
 		}
@@ -1181,7 +1196,7 @@ TODO: pensar como mejorar esta parte
 		if (index != null && index != $filter.index()) { // para ordenar los items que se crearon en tiempo de ejecución
 			$($parent.find('> li').get(index)).before($filter);
 		}
-					
+
 		filter.$filter = filter.$filter.add($filter);
 
 		$filter.find('a')
@@ -1194,7 +1209,7 @@ TODO: pensar como mejorar esta parte
 				}
 				cloneReader.changeFilters(aFilters);
 			});
-			
+
 		this.renderCounts(filter);
 
 		if (filter.icon != null) {
@@ -1202,9 +1217,9 @@ TODO: pensar como mejorar esta parte
 		}
 		if (filter.classIcon != null) {
 			$filter.find('.icon').addClass(filter.classIcon);
-		}				
+		}
 
-		
+
 		if (filter.childs != null) {
 			$filter.append('<ul />').find('.icon').addClass('arrow');
 			$filter.find('.icon')
@@ -1216,19 +1231,19 @@ TODO: pensar como mejorar esta parte
 						cloneReader.expandFilter(filter, !filter.expanded);
 					});
 
-			if (filter.expanded == false) { 
+			if (filter.expanded == false) {
 				this.animateFilter($filter.find('ul'), false);
 			}
 		}
 
 		return $filter;
 	},
-	
+
 	filterIsVisible: function(filter, parentIsVisible) {
 		filter = this.getFilter(filter);
 		if (filter.type == 'tag' && $.inArray(filter.id, this.aSystemTags) != -1) {
 			return true;
-		}		
+		}
 		if (parentIsVisible == true && parseInt(this.getCountFilter(filter)) > 0) {
 			return true;
 		}
@@ -1237,11 +1252,11 @@ TODO: pensar como mejorar esta parte
 		}
 		if (this.isSelectedFilter(filter) == true) {
 			return true;
-		}						
-		
+		}
+
 		return false;
 	},
-	
+
 	isSelectedFilter: function(filter) {
 		if (filter.id == this.aFilters.id && filter.type == this.aFilters.type) {
 			return true;
@@ -1251,19 +1266,19 @@ TODO: pensar como mejorar esta parte
 				if (this.isSelectedFilter(filter.childs[i]) == true) {
 					return true;
 				}
-			}			
+			}
 		}
 		return false;
 	},
-	
+
 	getFilter: function(filter) {
 		var tmp = this.indexFilters[filter.type][filter.id];
 		if (tmp != null) {
 			return tmp;
-		}	
-		return this.indexFilters['tag'][crSettings.tagAll];	
+		}
+		return this.indexFilters['tag'][crSettings.tagAll];
 	},
-	
+
 	getAllParentsByFilter: function(filter){
 		var parents = [];
 		for (var i=0; i<filter.parents.length; i++) {
@@ -1274,12 +1289,12 @@ TODO: pensar como mejorar esta parte
 		}
 		return parents;
 	},
-	
+
 	getFeedsByFilter: function(filter) {
 		if (filter.childs == null) {
 			return [filter];
 		}
-				
+
 		var feeds = {};
 		for (var i=0; i<filter.childs.length; i++) {
 			if (filter.childs[i].childs != null) {
@@ -1290,7 +1305,7 @@ TODO: pensar como mejorar esta parte
 					feeds[filter.childs[i].id] = this.getFilter(filter.childs[i]);
 				}
 			}
-		}		
+		}
 		return feeds;
 	},
 
@@ -1301,14 +1316,14 @@ TODO: pensar como mejorar esta parte
 		if (filter.childs == null) {
 			return filter.count;
 		}
-		
-		var feeds = this.getFeedsByFilter(filter);		
+
+		var feeds = this.getFeedsByFilter(filter);
 		var count = 0;
 		for (var feedId in feeds) {
 			count += parseInt(feeds[feedId].count);
 		}
 		return count;
-	},				
+	},
 
 	expandFilter: function(filter, value){
 		if (filter.expanded != value) {
@@ -1320,7 +1335,7 @@ TODO: pensar como mejorar esta parte
 		}
 
 		var $filter	= filter.$filter;
-		
+
 		if (value != true) {
 			this.animateFilter($filter, value);
 		}
@@ -1337,13 +1352,13 @@ TODO: pensar como mejorar esta parte
 		this.animateFilter($filter, value);
 		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
-	
+
 	animateFilter: function($filter, value) {
 		var $ul 	= $filter.find('ul:first');
 		var $arrow 	= $filter.find('.arrow:first');
-		
+
 		$arrow.removeClass('fa-caret-square-o-down').removeClass('fa-caret-square-o-right');
-		
+
 		if (value != true) {
 			$arrow.addClass('fa-caret-square-o-right');
 			$ul.removeClass('filterVisible');
@@ -1355,16 +1370,16 @@ TODO: pensar como mejorar esta parte
 		$ul.addClass('filterVisible');
 		$ul.slideDown('fast');
 	},
-	
+
 	maximiseUlEntries: function(value, isResize) {
 		if (isResize == false) {
 			$.hideMobileNavbar();
 		}
 
 		this.isMaximized = value;
-		
+
 		var speed = 100;
-		
+
 		if (this.isMobile == true) {
 			if (value == true) {
 				this.$ulFilters.addClass('outside');
@@ -1382,28 +1397,28 @@ TODO: pensar como mejorar esta parte
 		else {
 			this.$ulEntries.addClass('maximixed');
 		}
-		
-		this.$ulEntries.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', 
-			function() {		
+
+		this.$ulEntries.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
+			function() {
 					cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 			});
-			
+
 		if (this.isLoaded == true) {
 			this.updateUserFilters();
 		}
 	},
-	
+
 	subscribeFeed: function(feedId) {
 		$.ajax({
 			'url': 		base_url + 'entries/subscribeFeed',
 			'data': 	{  'feedId': feedId },
 			'type':	 	'post',
-			'success': 	
+			'success':
 				$.proxy(
 					function(feedId, response) {
 						$.hasAjaxDefaultAction(response);
 						if (response['code'] != true  == true) { return; }
-						
+
 						var $button = this.$ulEntries.find('.browseTags .feedItem-' + feedId + ' button');
 						$button.after('<a title="' + crLang.line('Done') + '" class="btn btn-link"  > <i class="fa fa-check"  /> ' +  crLang.line('Done') + ' </a>');
 						$button.remove();
@@ -1432,45 +1447,45 @@ TODO: pensar como mejorar esta parte
 			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
-					
-					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'], 'search': '' }); 
+
+					cloneReader.loadEntries(true, true, { 'type': 'feed', 'id': response['result']['feedId'], 'search': '' });
 					cloneReader.loadFilters(true);
 				}
 		});
 	},
-	
+
 	addToSave: function(entry) {
-		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagHome) { // si estoy en el tag home, no guardo nada 
+		if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagHome) { // si estoy en el tag home, no guardo nada
 			return;
 		}
-		
+
 		this.aUserEntries[entry.entryId] = {
-			'entryId': 	    entry.entryId,	
+			'entryId': 	    entry.entryId,
 			'entryRead':    entry.entryRead,
 			'entryStarred': entry.entryStarred
 		};
 	},
-	
+
 	saveData: function(async){
 		if (Object.keys(this.aUserEntries).length == 0 && Object.keys(this.aUserTags).length == 0) {
 			return;
 		}
-		
+
 		$.ajax({
 			'url': 		base_url + 'entries/saveData',
-			'data': 	{ 
+			'data': 	{
 					'entries': 	$.toJSON(this.aUserEntries),
-					'tags': 	$.toJSON(this.aUserTags) 
+					'tags': 	$.toJSON(this.aUserTags)
 			},
 			'type':	 		'post',
 			'skipwWaiting':	(async == true),
 			'async':		async,
-			'success': 		
+			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 				}
 		});
-		
+
 		this.aUserEntries 	= {};
 		this.aUserTags		= {};
 	},
@@ -1485,7 +1500,7 @@ TODO: pensar como mejorar esta parte
 
 		$.ajax({
 			'url':   base_url + 'entries/addTag',
-			'data':  { 
+			'data':  {
 				'tagName': tagName ,
 				'feedId':  this.aFilters.id
 			},
@@ -1494,7 +1509,7 @@ TODO: pensar como mejorar esta parte
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-					cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'], 'search': '' }); 
+					cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': response['result']['tagId'], 'search': '' });
 					cloneReader.loadFilters(true);
 				}
 		});
@@ -1506,13 +1521,13 @@ TODO: pensar como mejorar esta parte
 
 		$.ajax({
 			'url': 		base_url + 'entries/saveUserFeedTag',
-			'data': 	{ 
+			'data': 	{
 				'feedId': 	feedId,
 				'tagId': 	tagId,
 				'append':	append
 			},
 			'type':	 	'post',
-			'success': 	
+			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					cloneReader.saveData(false);
@@ -1520,10 +1535,10 @@ TODO: pensar como mejorar esta parte
 				}
 		});
 	},
-	
+
 	markAllAsRead: function(feedId) {
 		$.hidePopupSimpleForm();
-		
+
 		var filter = this.getFilter(this.aFilters);
 
 		$(document).crAlert( {
@@ -1538,7 +1553,7 @@ TODO: pensar como mejorar esta parte
 							'type': 	this.aFilters.type,
 							'id': 		this.aFilters.id
 						},
-						'success': 	
+						'success':
 							function(response) {
 								if ($.hasAjaxDefaultAction(response) == true) { return; }
 								cloneReader.aEntries = {};
@@ -1548,24 +1563,24 @@ TODO: pensar como mejorar esta parte
 					});
 				}
 			, this)
-		});	
+		});
 	},
-	
+
 	unsubscribeFeed: function(feedId) {
 		$.hidePopupSimpleForm();
-		
+
 		var filter = this.getFilter(this.aFilters);
-		
+
 		$(document).crAlert( {
 			'msg': 			$.sprintf( crLang.line('Unsubscribe "%s"?'), filter.name),
 			'isConfirm': 	true,
-			'callback': 	$.proxy(		
+			'callback': 	$.proxy(
 				function () {
 					$.ajax({
 						'type':	 	'post',
 						'url': 		base_url + 'entries/unsubscribeFeed',
 						'data': 	{ 'feedId':	feedId 	},
-						'success': 	
+						'success':
 							function(response) {
 								if ($.hasAjaxDefaultAction(response) == true) { return; }
 								cloneReader.loadEntries(true, true, { 'type': 'tag', 'id': crSettings.tagAll, 'search': '' });
@@ -1576,7 +1591,7 @@ TODO: pensar como mejorar esta parte
 			, this)
 		});
 	},
-	
+
 	updateUserFilters: function() {
 // TODO: hacer que no guarde tanto asi no mata al servidor
 		this.ajaxUpdateUserFilters = $.ajax({
@@ -1584,13 +1599,13 @@ TODO: pensar como mejorar esta parte
 			'data': 		{ 'post': $.toJSON(this.aFilters) },
 			'type':			'post',
 			'skipwWaiting': true,
-			'success': 		
+			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 				}
 		});
 	},
-	
+
 	updateEntriesDateTime: function() {
 		this.$ulEntries.find('.entryDate').each(
 			function() {
@@ -1598,7 +1613,7 @@ TODO: pensar como mejorar esta parte
 			}
 		);
 	},
-	
+
 	updateEntryDateTime: function($entry) {
 		var entryId = $entry.data('entryId');
 		var entry   = this.aEntries[entryId];
@@ -1608,11 +1623,11 @@ TODO: pensar como mejorar esta parte
 		var $entryDate = $entry.find('.entryDate');
 		$entryDate.text(entry.entryDate).addClass('datetime fromNow');
 		$.formatDate($entryDate);
-		
+
 		if (this.aFilters.viewType == 'detail') {
 			$entryDate.text(  moment(entry.entryDate, 'YYYY-MM-DDTHH:mm:ss' ).format( 'LLL' ) + ' (' + $entryDate.text() + ')');
 		}
-	},	
+	},
 
 	showPopupFeedSettings: function() {
 		this.$popupFeedSettings.find('li').remove();
@@ -1621,21 +1636,21 @@ TODO: pensar como mejorar esta parte
 
 		var aItems = [
 			{ 'html': crLang.line('Unsubscribe'),  'callback': function() { cloneReader.unsubscribeFeed(cloneReader.aFilters.id);  } },
-			{ 'html': crLang.line('New tag'),      'class': 'newTag', 'callback': 
+			{ 'html': crLang.line('New tag'),      'class': 'newTag', 'callback':
 				function(event) {
 					event.stopPropagation();
 					cloneReader.$mainToolbar.find('.open .dropdown-toggle').parent().removeClass('open');
 					$.showPopupSimpleForm(cloneReader.$mainToolbar.find('.feedSettings button'), crLang.line('enter tag name'), function() { cloneReader.addTag(); });
 				}
 			},
-			{ 'html': crLang.line('Edit tags'), 'callback': 
+			{ 'html': crLang.line('Edit tags'), 'callback':
 				function(event) {
-					event.stopPropagation(); 
+					event.stopPropagation();
 					$.goToUrl(base_url + 'tools/tags');
 				}
 			},
 		];
-		
+
 		if (this.tags.length > 0) {
 			aItems.push( { 'class': 'divider' } );
 		}
@@ -1649,14 +1664,14 @@ TODO: pensar como mejorar esta parte
 				if (hasTag == true) {
 					check = '&#10004';
 				}
-				aItems.push( { 'html': (hasTag == true ? '<i class="fa fa-check fa-fw" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {  
-					var $filter = $(this); 
-					cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), $filter.find('i.fa-check').length == 0 ); 
+				aItems.push( { 'html': (hasTag == true ? '<i class="fa fa-check fa-fw" />' : '') + tag.tagName, 'data': { 'feedId': feedId, 'tagId': tag.tagId} , 'callback': function() {
+					var $filter = $(this);
+					cloneReader.saveUserFeedTag($filter.data('feedId'), $filter.data('tagId'), $filter.find('i.fa-check').length == 0 );
 				} } );
 			}
 		}
-		
- 
+
+
 		for (var i=0; i<aItems.length; i++) {
 			var item 	= aItems[i];
 			if (item.class == 'divider') {
@@ -1668,12 +1683,12 @@ TODO: pensar como mejorar esta parte
 					$item.data(item.data);
 				}
 				$item.click(item.callback);
-			} 
+			}
 		}
-			
+
 		this.$popupFeedSettings.css({ 'max-height': this.$ulEntries.height(), 'overflow': 'auto' });
 	},
-	
+
 	feedHasTag: function(feed, tag) {
 		if (feed == null || tag == null) {
 			return false;
@@ -1682,17 +1697,17 @@ TODO: pensar como mejorar esta parte
 			if (tag.type == feed.parents[i].type && tag.id == feed.parents[i].id) {
 				return true;
 			}
-		} 
+		}
 		return false;
 	},
-	
+
 	resizeWindow: function() {
 		if (this.$page.is(':visible') != true) {
 			return;
 		}
-		
+
 		this.isMobile = $.isMobile();
-		
+
 		this.$mainToolbar.removeClass('navbar-nav pull-right').show();
 
 		if (this.isMobile == true) {
@@ -1713,82 +1728,82 @@ TODO: pensar como mejorar esta parte
 
 		this.resizeNoResult();
 	},
-	
+
 	resizeNoResult: function() {
 		if (this.$noResult == null) { return; }
-		
+
 		this.$noResult
-			.css('min-height', 
-				this.$ulEntries.height() 
+			.css('min-height',
+				this.$ulEntries.height()
 //				- $('#header').outerHeight()
 //				- this.$ulEntries.find('.entriesHead').outerHeight()
-//				- this.$ulEntries.offset().top 
+//				- this.$ulEntries.offset().top
 //				- this.$noResult.offset().top
 //				- this.$noResult.find('div').outerHeight()
-				- (this.isMobile == true ? 75 : 130) // FIXME: desharkodear! 
-				)		
+				- (this.isMobile == true ? 75 : 130) // FIXME: desharkodear!
+				)
 //			.css('border', '1px red solid' )
-		;				
+		;
 	},
-	
+
 	isBrowseTags: function() {
 		if (this.aFilters.type == 'tag' && this.aFilters.id == crSettings.tagBrowse) {
 			return true;
 		}
 		return false;
-	},		
-	
+	},
+
 	browseTags: function() {
-		this.ajax = $.ajax({		
+		this.ajax = $.ajax({
 			'url': 		base_url + 'entries/browseTags',
 			'type':		'post',
-			'success': 	
+			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 					cloneReader.renderBrowseTags(response.result);
 				}
 		});
 	},
-	
+
 	renderBrowseTags: function(result) {
 		this.$ulEntries.removeClass('list');
-		
+
 		this.updateToolBar();
-		
+
 		if (result.length == 0) {
 			this.renderNotResult(false);
 			return;
 		}
-		
+
 		this.$noResult.hide();
-		
+
 		this.aBrowseTags = {}; // Para guardar una referencia al $elemento
-		
+
 		var $li = $('<li class="browseTags"></li>').appendTo(this.$ulEntries);
 		var $ul = $('<div class="list-group"></div>').appendTo($li);
-		
+
 		for (var i=0; i<result.length; i++) {
 			var tag  = result[i];
 			this.appendBrowseTag(tag, $ul);
 		}
-		
+
 		$ul.on('click', 'a.list-group-item', function(event) {
 			var $tag = $(event.target);
 			cloneReader.browseFeedsByTagId($tag);
 		});
 	},
-	
+
 	appendBrowseTag: function(tag, $parent) {
 		var $tag = $('<a class="list-group-item" href="javascript:void(0);"><i class="icon fa fa-tag"></i> ' + tag.tagName + ' </a>').appendTo($parent);
 		tag.$tag = $tag;
 		$tag.data('tag', tag);
-			
-		this.aBrowseTags[tag.tagId] = $tag;	
+
+		this.aBrowseTags[tag.tagId] = $tag;
 	},
-	
+
 	browseFeedsByTagId: function($tag, reload) {
 		this.$ulEntries.find('.browseTags div.list-group-item').remove();
-				
+
 		var tag = $tag.data('tag');
 		if ($tag.hasClass('active') && reload != true) {
 			$tag.removeClass('active');
@@ -1801,12 +1816,12 @@ TODO: pensar como mejorar esta parte
 		this.ajax = $.ajax({
 			'url':       base_url + 'entries/browseFeedsByTagId',
 			'data':      { 'tagId': tag.tagId },
-			'success':   $.proxy( 
+			'success':   $.proxy(
 				function($tag, response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
-					
-					$parent = $tag; 
-					
+
+					$parent = $tag;
+
 					for (var i=0; i<response.result.feeds.length; i++) {
 						var feed            = response.result.feeds[i];
 						var feedId          = feed.feedId;
@@ -1826,7 +1841,7 @@ TODO: pensar como mejorar esta parte
 								<span class="btnLabel">' +  crLang.line('Subscribe') + '</span> \
 							</button> \
 						</div>');
-						
+
 						$feed.find('button')
 							.data('feedId', feedId)
 							.click(
@@ -1837,26 +1852,26 @@ TODO: pensar como mejorar esta parte
 								cloneReader.subscribeFeed($button.data('feedId'));
 							}
 						);
-						
+
 						this.renderBrowseFeedTags(feed.tags, $feed.find('.alert'));
-						
+
 						$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')');
 						$parent.after($feed);
 						$parent = $feed;
 					}
-					
+
 					//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
-					this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!! 
+					this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!!
 				}, this, $tag)
 			});
 	},
-	
+
 	renderBrowseFeedTags: function(tags, $parent) {
 		if (tags.length == 0) {
 			$parent.remove();
 			return;
 		}
-		
+
 		for (var i=0; i<tags.length; i++) {
 			var tag  = tags[i];
 			var $tag = $('<a href="javascript:void(0);" class="label label-info">' + tag.tagName + '</a>');
@@ -1869,7 +1884,7 @@ TODO: pensar como mejorar esta parte
 		$parent.find('a.label').on('click', $.proxy(
 			function(event) {
 				var tag = $(event.target).data('tag');
-				
+
 				if (this.aBrowseTags[tag.tagId] == null) {
 					var $ul = this.$ulEntries.find('.browseTags div.list-group');
 					this.appendBrowseTag(tag, $ul);
@@ -1879,18 +1894,18 @@ TODO: pensar como mejorar esta parte
 			}
 		, this));
 	},
-	
+
 	showFormShareByEmail: function(entryId) {
 		if (this.ajaxShareByEmail) {
 			this.ajaxShareByEmail.abort();
 			this.ajaxShareByEmail = null;
 		}
-				
+
 		this.ajaxShareByEmail = $.ajax({
 			'url': 		base_url + 'entries/shareByEmail/' + entryId,
 			'async':	true,
-			'success': 	
-				$.proxy( 
+			'success':
+				$.proxy(
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
 						$.showPopupForm(response['result']['form']);
@@ -1898,23 +1913,23 @@ TODO: pensar como mejorar esta parte
 				, this)
 		});
 	},
-	
+
 	helpKeyboardShortcut: function() {
 		$.hideMobileNavbar();
-		
+
 		if (this.$keyboardShortcut != null) {
 			$.showModal(this.$keyboardShortcut, false);
 			return;
 		}
-		
+
 		$.ajax({
 			'type': 	'get',
 			'url': 		base_url + 'help/keyboardShortcut/',
-			'success': 	
-				$.proxy( 
+			'success':
+				$.proxy(
 					function (response) {
 						if ($.hasAjaxDefaultAction(response) == true) { return; }
-						
+
 						this.$keyboardShortcut = $.showPopupForm(response['result']['form']);
 					}
 				, this),
@@ -1925,7 +1940,7 @@ TODO: pensar como mejorar esta parte
 		if (this.aFilters.search.trim() == '') {
 			return;
 		}
-		
+
 		var search = this.aFilters.search;
 		if (search.substr(0, 1) == '"' && search.substr(search.length-1, 1) == '"') {
 			search = this.aFilters.search.trim().replace(/"/g, "");
@@ -1942,19 +1957,19 @@ TODO: pensar como mejorar esta parte
 			'page':         1,
 			'onlyUnread':   true,
 			'sortDesc':     true,
-			'id':           crSettings.tagHome, 
+			'id':           crSettings.tagHome,
 			'type':         'tag',
 			'viewType':     'detail',
 			'isMaximized':  false,
 			'search':       '' // $.url().param('q').trim() TODO:
 		}, crSettings.userFilters);
-		
+
 		$('body') // sobreescribo el evento para que no apeendee en window.history base_url; si no luego no se puede hacer back
 			.off('click', 'a')
 			.on('click', 'a',
 			function(event) {
 				if (event.button != 0) { return; }
-		
+
 				var $link = $(event.currentTarget);
 				if ($link.attr('href') == base_url) {
 					event.preventDefault();
@@ -1972,7 +1987,7 @@ TODO: pensar como mejorar esta parte
 
 		this.$frmSearch
 			.unbind('submit')
-			.on('submit', 
+			.on('submit',
 			function() {
 				var $frmSearch  = $(this);
 				var $input      = $frmSearch.find('[name=q]');
@@ -1985,7 +2000,7 @@ TODO: pensar como mejorar esta parte
 				return false;
 			}
 		);
-		
+
 		this.$frmSearch.find('.fa-times').parent()
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
@@ -1997,7 +2012,7 @@ TODO: pensar como mejorar esta parte
 
 		this.populateSearchForm();
 	},
-	
+
 	populateSearchForm: function() {
 		var search = $.url().param('q');
 		var $input = this.$frmSearch.find('input[name=q]');
@@ -2007,14 +2022,14 @@ TODO: pensar como mejorar esta parte
 			$input.val(decodeURIComponent(search));
 		}
 	},
-	
+
 	clearSearchForm: function() {
 		this.$frmSearch.find('input[name=q]').val('');
 	},
 
 	showPopupSearch: function(event) {
-		event.stopPropagation(); 
-		$.showPopupSimpleForm(cloneReader.$frmSearch.find('.btn-default:visible'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': $.$popupSimpleForm.find('input').val() } ); }, cloneReader.$frmSearch.find('input[name=q]').val()); 
+		event.stopPropagation();
+		$.showPopupSimpleForm(cloneReader.$frmSearch.find('.btn-default:visible'), crLang.line('Search'), function() { cloneReader.changeFilters( { 'search': $.$popupSimpleForm.find('input').val() } ); }, cloneReader.$frmSearch.find('input[name=q]').val());
 	}
 };
 
