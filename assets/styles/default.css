@@ -121,6 +121,9 @@ body.isLoading, body.isLoading * {
 		border: 0 solid #FF0000;
 		box-shadow: none;
 	}
+	#header form.navbar-form .form-group {
+		margin-bottom:0;
+	}
 	#header ul.menuProfile {
 		float:none !important;
 	}
