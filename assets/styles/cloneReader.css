@@ -9,11 +9,11 @@
 	#header .logo  {
 		cursor: pointer;
 	}
-	
+
 .mainToolbar .caret {
 	border-bottom-color: #333333;
 	border-top-color: #333333;
-}	
+}
 	.mainToolbar .navbar-btn {
 		margin-bottom: 1px;
 	}
@@ -77,16 +77,16 @@
 		}
 		#cloneReader nav .expand,
 		#cloneReader nav .tooglePageHeader {
-		}	
+		}
 		#cloneReader .navbar-collapse {
 			max-height:none;
-		}		
-			
+		}
+
 @media (min-width: 768px) {
 	#cloneReader nav ul li button .btnLabel {
 		display:none;
 	}
-		#cloneReader .nav li button, 
+		#cloneReader .nav li button,
 		#cloneReader .nav li ul li a {
 			text-transform: lowercase;
 		}
@@ -122,7 +122,7 @@
 		}
 		#cloneReader .ulEntries > li.selected {
 			border-left:2px #1155CC solid !important;
-			border-radius:0 5px 5px 0; 
+			border-radius:0 5px 5px 0;
 			padding:0;
 		}
 		#cloneReader .ulEntries > li:last-child {
@@ -143,10 +143,10 @@
 		#cloneReader .ulEntries > li.readed {}
 				#cloneReader .ulEntries li .star i {
 					color: #999999;
-				}		
+				}
 				#cloneReader .ulEntries li .star.selected i {
 					color: gold;
-					text-shadow: 0 0 1px black;	
+					text-shadow: 0 0 1px black;
 				}
 			#cloneReader .ulEntries > li .header {
 				margin: 10px;
@@ -195,7 +195,7 @@
 				margin:0 10px 10px 10px;
 				max-width: 100%;
 				overflow: auto;
-				position: relative;	
+				position: relative;
 				font-size: 100%;
 			}
 				#cloneReader .ulEntries > li p,
@@ -212,7 +212,7 @@
 				}
 				#cloneReader .ulEntries > li p *:not(table, thead, tbody, th, tr, td) {
 					position: relative;
-					margin: 0; 
+					margin: 0;
 					padding: 0;
 					border: 0 none;
 				}
@@ -312,7 +312,7 @@
 					color: #1155CC;
 				}
 				#cloneReader .ulEntries > li p ul,
-				#cloneReader .ulEntries > li p ol 
+				#cloneReader .ulEntries > li p ol
 				{
 					margin:auto;
 					padding:0 0 0 40px;
@@ -387,7 +387,7 @@
 			border-bottom: 1px solid #CCCCCC;
 			box-shadow: none;
 			margin: 0;
-		}		
+		}
 		#cloneReader .ulEntries.list > li:last-child {
 			border: 0 none;
 			box-shadow: none;
@@ -409,7 +409,7 @@
 					margin:5px 0px 0 5px;
 					height:25px;
 					line-height:25px;
-				}			
+				}
 				#cloneReader .ulEntries.list > li .title .feedName {
 					width: auto;
 					color: gray;
@@ -489,7 +489,7 @@
 		background:white;
 		width: 240px;
 		position:absolute;
-		left:0; top:50px; 
+		left:0; top:50px;
 		overflow:auto;
 		list-style: none;
 		margin: 0px;
@@ -503,8 +503,8 @@
 			#cloneReader ul.ulFilters li div {}
 			#cloneReader ul.ulFilters li div:hover {
 				background-color:#EEE;
-			}			
-				#cloneReader ul.ulFilters li div a, 
+			}
+				#cloneReader ul.ulFilters li div a,
 				#cloneReader ul.ulFilters li div span {
 					line-height:30px;
 					height:30px;
@@ -516,13 +516,13 @@
 					position: absolute;
 					top: 0px;
 					width: 20px;
-					text-align: center;	
+					text-align: center;
 				}
 				#cloneReader ul.ulFilters li div .icon.arrow {
 					margin: 0 5px 0 0;
 					cursor: pointer;
 					color: #666666;
-				}			
+				}
 				#cloneReader ul.ulFilters li div a {
 					color: #333333;
 					cursor: pointer;
@@ -561,13 +561,13 @@
 				}
 					#cloneReader ul.ulFilters li ul  li .icon {
 						left:25px;
-					} 
+					}
 					#cloneReader ul.ulFilters li ul  li a {
 						margin-left:45px;
 					}
 						#cloneReader ul.ulFilters li ul li ul li .icon {
 						left:45px;
-					} 
+					}
 					#cloneReader ul.ulFilters li ul li ul li a {
 						margin-left:65px;
 					}
@@ -595,7 +595,10 @@
 		overflow-y: inherit;
 	}
 	#header .navbar-ex1-collapse {
-	}	
+	}
+	#header .mainToolbar {
+		border-top: 1px #e7e7e7 solid;
+	}
 		#header .mainToolbar .directionNav,
 		#header .menuProfile .divider {
 			display:none;
@@ -633,12 +636,12 @@
 			box-shadow: 0 0 5px #808080;
 			-webkit-transform: translateX(0%);
 			-ms-transform: translateX(0%);
-			transform: translateX(0%);			
+			transform: translateX(0%);
 		}
 		#cloneReader ul.ulFilters.outside {
 			-webkit-transform: translateX(-100%);
 			-ms-transform: translateX(-100%);
-			transform: translateX(-100%);			
+			transform: translateX(-100%);
 		}
 	#cloneReader ul.ulFilters li {
 	}
@@ -651,12 +654,12 @@
 			height:50px;
 			margin:0;
 		}
-		#cloneReader ul.ulFilters li div a, 
+		#cloneReader ul.ulFilters li div a,
 		#cloneReader ul.ulFilters li div span {
 			font-size: larger;
 			font-weight: normal;
 			height: 50px;
-			line-height: 50px;		
+			line-height: 50px;
 		}
 		#cloneReader ul.ulFilters li div .icon {
 			left: 0px;
@@ -666,7 +669,7 @@
 			}
 				#cloneReader ul.ulFilters li ul li ul li .icon {
 					left:30px;
-				}			
+				}
 		#cloneReader ul.ulFilters li div a {
 			margin-left:50px;
 		}
@@ -675,9 +678,9 @@
 			}
 				#cloneReader ul.ulFilters li ul li ul li div a {
 					margin-left:80px;
-				}				
+				}
 		#cloneReader ul.ulEntries {
-			border: 0px solid #808080;	
+			border: 0px solid #808080;
 			position: relative;
 			top: 0;
 			left: 0;
@@ -697,7 +700,7 @@
 			float: none;
 			position: absolute;
 			right: 0;
-			top: 0;	
+			top: 0;
 		}
 }
 
@@ -707,18 +710,18 @@
 		width: 8px;
 	}
 	::-webkit-scrollbar-track {
-		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 		-webkit-border-radius: 10px;
 		border-radius: 10px;
 	}
 	::-webkit-scrollbar-thumb {
 		-webkit-border-radius: 10px;
 		border-radius: 10px;
-		background: #c1c1c1; 
-		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		background: #c1c1c1;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 	}
 	::-webkit-scrollbar-thumb:window-inactive {
-		background: transparent; 
+		background: transparent;
 	}
 }
 
@@ -728,4 +731,3 @@
 	.newDetail p {
 		white-space: pre;
 	}
-

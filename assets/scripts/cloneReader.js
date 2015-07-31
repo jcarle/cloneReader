@@ -1712,7 +1712,8 @@ TODO: pensar como mejorar esta parte
 
 		if (this.isMobile == true) {
 			this.$toolbar.hide();
-			this.$mainToolbar.appendTo($('#header .navbar-collapse')).addClass('navbar-nav');
+			crMenu.$menuProfile.before(this.$mainToolbar);
+			this.$mainToolbar.addClass('navbar-nav');
 			$('#header .logo').removeAttr('href');
 			$('#header').css( { 'box-shadow': '0 0px 7px #666' });
 		}
