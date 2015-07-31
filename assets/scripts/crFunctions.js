@@ -568,7 +568,7 @@ $.extend({
 		$.$popupSimpleForm.find('input').attr('placeholder', placeholder.toLowerCase()).val( value );
 
 		var top  = $element.offset().top + $element.outerHeight(false);
-		var left = $element.offset().left - $page.offset().left;
+		var left = $element.offset().left;
 
 		$.$popupSimpleForm
 			.css({ 'top': top,  'left': left, 'right': 'auto', 'position': 'fixed' })
