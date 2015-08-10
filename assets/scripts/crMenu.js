@@ -44,14 +44,21 @@ crMenu = {
 				}
 			}
 
-			if (item['childs'].length > 0 && depth > 0) {
+			if (item['childs'].length > 0) {
 				$link.append(' <i class="fa fa-caret-left" ></i> ');
 			}
 			if (item['icon'] != '') {
+				if (item['icon'] == 'lang-' + crSettings.langId) {
+					item['icon'] += ' fa fa-check fa-fw ';
+				}
 				$link.append(' <i class="' + item['icon'] + '" ></i> ');
 			}
 			$('<span>').text(label).appendTo($link);
-			if (item['childs'].length > 0 && depth > 0) {
+
+			if (item['menuClassName'] == 'menuItemLanguage') {
+				$link.append( ' <span class="badge"> ' + crSettings.langId + ' </span> ' )
+			}
+			if (item['childs'].length > 0) {
 				$link.append(' <i class="fa fa-caret-right pull-right" ></i> ');
 			}
 
@@ -77,9 +84,6 @@ crMenu = {
 
 	initMenu: function() {
 		this.$menuProfile = $('ul.menuProfile');
-
-		this.$menuProfile.find('.lang-' + crSettings.langId ).before('<i class="fa fa-check fa-fw"></i>');
-		this.$menuProfile.find('.fa-flag-o').parent().append('<span class="badge pull-right">' + crSettings.langId + '</span>');
 
 		this.$menuProfile.find('.dropdown-submenu').on('shown.bs.dropdown', function (event) {
 			if ($.isMobile() == false) {

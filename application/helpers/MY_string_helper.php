@@ -253,3 +253,64 @@ function getHtmlAdsense($slotName) {
 
 	return $html;
 }
+
+function getHtmlMenu($aMenu, $className = null, $depth = 0){
+	if (empty($aMenu)) {
+		return;
+	}
+
+	$CI  = &get_instance();
+	$aLi = array();
+	for ($i=0; $i<count($aMenu); $i++) {
+		$item       = $aMenu[$i];
+		$hasChilds  = count($item['childs']) > 0;
+		$label      = $item['menuTranslate'] == true ? $CI->lang->line($item['label']) : $item['label'];
+		$aAttr      = array('title="'.$label.'"');
+		$aClassName = array();
+		$aElements  = array();
+		$htmlChilds = '';
+
+		if ($item['menuClassName'] != '') {
+			$aClassName[] = $item['menuClassName'];
+		}
+
+		if ($item['url'] != null) {
+			$aAttr[] = ' href="'.base_url($item['url']).'" ';
+		}
+
+		if ($hasChilds == true) {
+			$aElements[]  = ' <i class="fa fa-caret-left" ></i> ';
+		}
+		if ($item['icon'] != null) {
+			if ($item['icon'] == 'lang-'.$CI->session->userdata('langId')) {
+				$item['icon'] .= ' fa fa-check fa-fw ';
+			}
+			$aElements[] = ' <i class="'.$item['icon'].'" ></i> ';
+		}
+		$aElements[] = '<span>'.$label.'</span>';
+		if ($item['menuClassName'] == 'menuItemLanguage') {
+			$aElements[] ='<span class="badge"> '.$CI->session->userdata('langId').' </span>';
+		}
+		if ($hasChilds == true) {
+			$aElements[]  = ' <i class="fa fa-caret-right pull-right" ></i> ';
+			$htmlChilds   = getHtmlMenu($item['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
+			$aAttr[]      = ' class="dropdown-toggle" data-toggle="dropdown" ';
+			$aClassName[] = 'dropdown-submenu';
+		}
+		if ($hasChilds == true && $depth >= 1) {
+			$aClassName[] = 'dropdown-submenu-left';
+		}
+
+		if ($item['menuDividerBefore'] == true) {
+			$aLi[] = ' <li role="presentation" class="divider"></li> ';
+		}
+		$aLi[] = ' <li '.(!empty($aClassName) ? ' class="'.implode(' ', $aClassName).'" ' : '').'> <a '.implode(' ', $aAttr).'> '.implode(' ', $aElements).' </a> '.$htmlChilds.' </li> ';
+		if ($item['menuDividerAfter'] == true) {
+			$aLi[] = ' <li role="presentation" class="divider"></li> ';
+		}
+	}
+
+	if ($depth == 0) { $className .= ' crMenu '; }
+
+	return '<ul '.($className != null ? ' class="'.$className.'" ' : '').'> '.implode('', $aLi).' </ul>';
+}

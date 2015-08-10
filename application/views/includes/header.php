@@ -98,7 +98,7 @@ $siteLogo = config_item('siteLogo');
 			<div class="navbar-collapse collapse navbar-ex1-collapse ">
 <?php
 echo getHtmlFormSearch();
-echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'menuProfile nav navbar-nav navbar-right');
+echo getHtmlMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'menuProfile nav navbar-nav navbar-right');
 ?>
 			</div>
 		</div>
@@ -106,7 +106,7 @@ echo renderMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'me
 
 	<nav class="menu label-primary">
 		<div>
-<?php echo renderMenu($CI->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 'menuPublic'); ?>
+<?php echo getHtmlMenu($CI->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 'menuPublic'); ?>
 		</div>
 	</nav>
 	<div class="container pageContainer ">
@@ -132,67 +132,4 @@ if ($showTitle == true) {
 	echo '	<div class="page-header">
 				<h1>'. element('h1', $meta).' <small> </small></h1>
 			</div>';
-}
-
-function renderMenu($aMenu, $className = null, $depth = 0){
-	if (empty($aMenu)) {
-		return;
-	}
-
-	$CI = &get_instance();
-
-	if ($depth == 0) {
-		$className .= ' crMenu ';
-	}
-
-	$sTmp = '<ul '.($className != null ? ' class="'.$className.'" ' : '').'>';
-	for ($i=0; $i<count($aMenu); $i++) {
-		$item       = $aMenu[$i];
-		$icon       = '';
-		$arrowLeft  = '';
-		$arrowRight = '';
-		$hasChilds  = count($item['childs']) > 0;
-		$attr       = '';
-		$label      = $item['menuTranslate'] == true ? $CI->lang->line($item['label']) : $item['label'];
-		$aClassName = array($item['menuClassName']);
-		if ($item['icon'] != null) {
-			$icon = ' <i class="'.$item['icon'].'" ></i> ';
-		}
-		if ($hasChilds == true) {
-			$attr = ' class="dropdown-toggle" data-toggle="dropdown" ';
-			$aClassName[] = 'dropdown-submenu';
-		}
-
-		if ($hasChilds == true && $depth >= 1) {
-			$aClassName[] = 'dropdown-submenu-left';
-		}
-
-		if ($item['menuDividerBefore'] == true) {
-			$sTmp .= ' <li role="presentation" class="divider"></li> ';
-		}
-
-		if ($hasChilds > 0 && $depth > 0) {
-			$arrowLeft  = ' <i class="fa fa-caret-left" ></i> ';
-			$arrowRight = ' <i class="fa fa-caret-right pull-right" ></i> ';
-		}
-
-		if ($item['url'] != null) {
-			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" href="'.base_url($item['url']).'" '.$attr.'>'.$arrowLeft.$icon. '<span>'.$label.'</span>'.$arrowRight.'</a>';
-		}
-		else {
-			$sTmp .= ' <li class="'.implode(' ', $aClassName).'"> <a title="'.$label.'" '.$attr.'>'.$arrowLeft.$icon.'<span>'.$label.'</span>'.$arrowRight.'</a>';
-		}
-
-		if ($hasChilds == true) {
-			$sTmp .= renderMenu($item['childs'], ($hasChilds == true ? 'dropdown-menu' : null), $depth + 1 );
-		}
-
-		$sTmp .= '</li>';
-
-		if ($item['menuDividerAfter'] == true) {
-			$sTmp .= ' <li role="presentation" class="divider"></li> ';
-		}
-	}
-	$sTmp .= '</ul>';
-	return $sTmp;
 }

@@ -90,7 +90,8 @@ body.isLoading, body.isLoading * {
 				#header ul.menuProfile .dropdown-submenu-left > a {
 					padding-left:15px;
 				}
-					#header ul.menuProfile .dropdown-submenu-left > a > .fa-caret-right {
+					#header ul.menuProfile .dropdown-submenu > a > .fa-caret-right,
+					#header ul.menuProfile > .dropdown-submenu > a > .fa-caret-left {
 						display: none;
 					}
 				#header ul.menuProfile .dropdown-submenu-left a:hover { }
@@ -138,8 +139,8 @@ body.isLoading, body.isLoading * {
 			padding-top: 10px;
 			cursor: pointer;
 		}
-			#header ul.menuProfile .dropdown-submenu-left > a { }
-				#header ul.menuProfile .dropdown-submenu-left > a > .fa-caret-left {
+			#header ul.menuProfile .dropdown-submenu > a { }
+				#header ul.menuProfile .dropdown-submenu > a > .fa-caret-left {
 					display: none;
 				}
 		#header ul.menuProfile ul a {
