@@ -28,12 +28,12 @@
 			end:            function(){}
 		};
 	 	var opts = $.extend(defaults, options);
-	 	
+
 		opts.start.call(this);
-		
+
 		// Get total number of items.
 		var len = this.length - 1;
-		
+
 		return this.each(function(i){
 			var current = i;
 			var $img    = $(this);
@@ -55,7 +55,7 @@
 						$img.imgCenter(opts);
 					}
 				, this, opts));
-				
+
 				$img.parents('.cr-page').bind('onVisible', $.proxy(
 					function($img, opts, event) {
 						if ($img.data('imgCenterComplete') != true) {
@@ -66,39 +66,39 @@
 
 				$img.data('registerEvent', true);
 			}
-			
+
 
 			if ($img.data('imgCenterComplete') == true) {
 				return;
 			}
-			
+
 			$parent.addClass('imgCenter');
 			$parent.removeClass('imgCenterComplete');
-			
+
 			if (opts.centerType == 'outside') {
 				$parent.addClass('imgCenterOutside');
 			}
 			else {
 				$parent.addClass('imgCenterInside');
 			}
-			
+
 			if ($parent.find('.imageLoading').length == 0) {
-				$img.before('<div class="imageLoading"> <img src="' + base_url + 'assets/images/file-image-o.svg" /> </div>');
+				$img.before('<div class="imageLoading"> <img src="' + $.base_url('assets/images/file-image-o.svg') + '" /> </div>');
 			}
-			
+
 			if (opts.animateLoading == true) {
 				$img.parent().find('.imageLoading').addClass('animate');
 			}
-			
+
 			// reset properties
 			if (opts.centerType == 'outside') {
 				$img.removeAttr('style');
 			}
-			
+
 			var parWidth   = parseInt($parent.actual('innerWidth'));
 			var parHeight  = parseInt($parent.actual('innerHeight'));
 			var parAspect  = parWidth / parHeight;
-			
+
 			$img.load($.proxy(
 				function(event) {
 					imgMath($(event.target));
@@ -114,7 +114,7 @@
 				if (typeof $img.get(0).naturalWidth !== "undefined" && $img.get(0).naturalWidth === 0) {
 					return imgError($img);
 				}
-					
+
 				if (opts.centerType == 'outside') {
 					// Get image properties.
 					var imgWidth   = parseInt($img.get(0).naturalWidth);
@@ -125,7 +125,7 @@
 						parWidth  = imgWidth;
 						parHeight = imgHeight;
 					}
-	
+
 					// Center the image.
 					if(parWidth != imgWidth || parHeight != imgHeight){
 						if(opts.scaleToFit){
@@ -133,12 +133,12 @@
 								$img.css({'width': parWidth +'px'});
 								imgWidth = parWidth;
 								imgHeight = Math.round(imgWidth / imgAspect);
-								
+
 								if((parWidth / imgAspect) < parHeight){
 									$img.css({'height': parHeight +'px', 'width': 'auto'});
 									imgHeight = parHeight;
 									imgWidth = Math.round(imgHeight * imgAspect);
-								}				
+								}
 							} else {
 								$img.css({'height': parHeight +'px'});
 								imgHeight = parHeight;
@@ -154,7 +154,7 @@
 							}
 							if(imgHeight > parHeight && opts.centerVertical){
 								$img.css({'margin-top': '-' + Math.round((imgHeight - parHeight) / 2) + 'px'});
-							}		
+							}
 						} else {
 							if(imgWidth > parWidth){
 								$img.css({'margin-left': '-' + Math.round((imgWidth - parWidth) / 2) + 'px'});
@@ -172,18 +172,18 @@
 
 				$img.data('imgCenterComplete', true);
 				$img.parent().addClass('imgCenterComplete');
-				
+
 				opts.complete.call(this, $img);
 				if(current == len){
 					opts.end.call(this);
 				}
 			}
-			
+
 			function imgError($img) {
 				$img
 					.addClass('imgError')
 					.attr('title', 'No network connection or image is not available')
-					.attr('src', base_url + 'assets/images/error.svg');
+					.attr('src', $.base_url('assets/images/error.svg'));
 			}
 		});
 	};

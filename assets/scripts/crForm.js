@@ -247,7 +247,7 @@
 								.raty( {
 									score:      field['value'],
 									scoreName:  field['name'],
-									path:       base_url + 'assets/images/',
+									path:       $.base_url('assets/images/'),
 									click:      $.proxy(function() {
 										this.changeField();
 									}, this)
@@ -699,7 +699,7 @@
 								}
 								else {
 									var id 	= row[Object.keys(row)[0]];
-									var $tr	= $( '<tr data-controller="' + base_url + list['controller'] + id +'">').appendTo($tbody);
+									var $tr	= $( '<tr data-controller="' + $.base_url(list['controller'] + id) + '">').appendTo($tbody);
 
 									if (showId == true) {
 										$('<td class="numeric" />').appendTo($tr).text(id);
@@ -716,7 +716,7 @@
 								}
 							}
 
-							$('<a class="btn btn-default btn-sm btnAdd" href="' + base_url + list['controller'] + '0" />')
+							$('<a class="btn btn-default btn-sm btnAdd" href="' + $.base_url(list['controller'] + '0') + '" />')
 								.appendTo(field.$input)
 								.append(' <i class="fa fa-plus"> </i> ')
 								.append(' ' + crLang.line('Add'))
@@ -1265,7 +1265,7 @@
 		for (var i=0; i<aTree.length; i++) {
 			var $li 	= $('<li/>').appendTo($ul);
 			var $link 	= $('<a />')
-				.attr('href', base_url + aTree[i]['url'])
+				.attr('href', $.base_url(aTree[i]['url']))
 				.text(aTree[i]['label'])
 				.appendTo($li);
 

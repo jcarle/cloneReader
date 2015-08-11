@@ -100,7 +100,7 @@ crMain = {
 
 	loadMenuAndTranslations: function(async) {
 		$.ajax({
-			'url':   base_url + 'app/selectMenuAndTranslations',
+			'url':   $.base_url('app/selectMenuAndTranslations'),
 			'async': (async == true),
 			'success':
 				function(response) {
@@ -147,7 +147,7 @@ crMain = {
 			this.ajax = null;
 		}
 
-		var url = base_url + controller.replace(base_url, '');
+		var url = $.base_url(controller);
 		if ($page.data('notRefresh') == true) {
 			if ($page.is(':visible') == true) {
 				return;
@@ -182,7 +182,7 @@ crMain = {
 		}
 
 		$.ajax({
-			'url':      base_url + 'app/uploadFile',
+			'url':      $.base_url('app/uploadFile'),
 			'async':    false,
 			'dataType': 'text',
 			'success':

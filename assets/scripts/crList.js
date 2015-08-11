@@ -135,7 +135,7 @@
 								function(aDelete, b, c) {
 									$.ajax( {
 										'type':     'post',
-										'url':      base_url + this.options['urlDelete'],
+										'url':      $.base_url(this.options['urlDelete']),
 										'data':     { 'aDelete': $.toJSON(aDelete) },
 										'success':
 										$.proxy(
@@ -144,7 +144,7 @@
 
 												var params = $.url().param();
 												delete params['page'];
-												$.goToUrl(base_url + this.options['urlList'] + '?' + $.param(params));
+												$.goToUrl($.base_url(this.options['urlList'] + '?' + $.param(params)));
 											}
 										, this),
 									});
@@ -241,7 +241,7 @@
 			buttons.push( '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> ' + crLang.line('Delete') + ' </a>' );
 		}
 		if (data['urlAdd'] != null ) {
-			buttons.push( '<a href="' + (base_url + data['urlAdd']) + '" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> ' + crLang.line('Add') + ' </a> ');
+			buttons.push( '<a href="' + $.base_url(data['urlAdd']) + '" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> ' + crLang.line('Add') + ' </a> ');
 		}
 
 		if (data['buttons'] == null) {
@@ -252,7 +252,7 @@
 		var $crList = $('<div class="crList"></div>').appendTo($parentNode);
 		var $panel  = $('<div class="panel panel-default" />').appendTo($crList);
 		var $form   = $('\
-			<form method="get" class="panel-heading" id="frmCrList" role="search" action="' + base_url + data['urlList'] + '" >\
+			<form method="get" class="panel-heading" id="frmCrList" role="search" action="' + $.base_url(data['urlList']) + '" >\
 				<div class="btn-group">\
 					<div class="input-group">\
 						<span class="input-group-addon">\
@@ -314,7 +314,7 @@
 				var $li   = $('<li/>').appendTo($ul);
 				var $link = $('<a/>')
 					.appendTo($li)
-					.attr('href', base_url + data['urlList'] + '?' + $.param(params))
+					.attr('href', $.base_url(data['urlList'] + '?' + $.param(params)))
 					.text(data['sort'][key]);
 
 				if (orderBy == key) {
@@ -366,7 +366,7 @@
 				var $tr = $( '<tr />').appendTo($tbody);
 
 				if (data['urlEdit'] != null) {
-					$tr.attr('data-url-edit', base_url + $.sprintf(data['urlEdit'], id));
+					$tr.attr('data-url-edit', $.base_url($.sprintf(data['urlEdit'], id)));
 				}
 
 				if (showCheckbox == true) {
@@ -458,7 +458,7 @@
 			'pageUrl': function(type, page, current){
 				var params     = $.url().param();
 				params['page'] = page;
-				return base_url + data['urlList'] + '?' + $.param(params);
+				return $.base_url(data['urlList'] + '?' + $.param(params));
 			},
 		});
 

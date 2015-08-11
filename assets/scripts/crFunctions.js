@@ -17,13 +17,16 @@ $.extend({
 		return o;
 	},
 
-	base_url: function() {
-		// TODO: implementar !
+	base_url: function(uri) {
+		if (uri != null) {
+			uri = uri.replace(base_url, '');
+			return base_url + uri;
+		}
+		return base_url;
 	},
 
 	isMobile: function() {
 		return $('#header .navbar-toggle').is(':visible');
-		// return $(window).width() < 768;
 	},
 
 	validateEmail: function(value) {

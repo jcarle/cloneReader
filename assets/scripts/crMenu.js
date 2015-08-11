@@ -32,7 +32,7 @@ crMenu = {
 			}
 
 			if (item['url'] != null) {
-				$link.attr('href', base_url + item['url']);
+				$link.attr('href', $.base_url(item['url']));
 
 				var aTmp = item['url'].split('/'); // Para quitar los parametros adicionales de un controller
 				var controller = aTmp[0];
