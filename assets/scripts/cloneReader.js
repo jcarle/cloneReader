@@ -49,7 +49,7 @@ cloneReader = {
 			}
 		}
 
-		$.goToUrl( base_url + '?' + $.param(params) );
+		$.goToUrl( $.base_url('?' + $.param(params)));
 		if (typeof ga != "undefined") {
 			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
 		}
@@ -141,7 +141,7 @@ cloneReader = {
 				this.$mainToolbar.hide();
 				this.$toolbar.hide();
 				this.clearSearchForm();
-				$('#header .logo').attr('href', base_url);
+				$('#header .logo').attr('href', $.base_url());
 				$('#header').css( {'box-shadow': 'none' });
 				$('#header .container').removeClass('fullSize');
 				$('.menu').show();
@@ -288,7 +288,7 @@ cloneReader = {
 
 	buildCache: function() {
 		$.ajax({
-			'url':          base_url + 'entries/buildCache',
+			'url':          $.base_url('entries/buildCache'),
 			'async':        true, //false
 			'skipwWaiting': (this.$ulFilters.find('li:visible').length == 0 ? false : true),
 			'success':
@@ -501,7 +501,7 @@ cloneReader = {
 		}
 
 		this.ajax = $.ajax({
-			'url':      base_url + 'entries/select',
+			'url':      $.base_url('entries/select'),
 			'data':    {
 				'post':               $.toJSON(this.aFilters),
 				'pushTmpUserEntries': clear
@@ -605,7 +605,7 @@ cloneReader = {
 		$('<a />')
 			.addClass('entryTitle')
 			.attr('href', entry.entryUrl)
-			.css('background-image', 'url(' + base_url + (entry.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + entry.feedIcon) + ')')
+			.css('background-image', 'url(' + $.base_url(entry.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + entry.feedIcon) + ')')
 			.html(entry.entryTitle || '&nbsp;')
 			.appendTo($header);
 
@@ -818,7 +818,7 @@ TODO: pensar como mejorar esta parte
 						' + crLang.line('Not subscribed to any feeds') + ' \
 						<ul class="list-group"> \
 							<li class="list-group-item"> <a href="javascript:void(0);" class="addFeed" > ' + crLang.line('Add feed') + ' </a> </li> \
-							<li class="list-group-item"> <a href="' + base_url + 'import/feeds"> ' + crLang.line('Import feeds') + ' </a> </li> \
+							<li class="list-group-item"> <a href="' + $.base_url('import/feeds') + '"> ' + crLang.line('Import feeds') + ' </a> </li> \
 							<li class="list-group-item"> <a href="javascript:void(0);" onclick="cloneReader.loadEntries(true, true, { \'type\': \'tag\', \'id\': ' + crSettings.tagBrowse + ', \'search\': \'\' } );"> ' + crLang.line('Browser tags') + ' </a> </li> \
 						</ul> \
 					</div>');
@@ -905,9 +905,9 @@ TODO: pensar como mejorar esta parte
 	},
 
 	renderCounts: function(filter, count) {
-		filter		= this.getFilter(filter);
+		filter      = this.getFilter(filter);
 		var $filter = filter.$filter;
-		var count 	= this.getCountFilter(filter);
+		var count   = this.getCountFilter(filter);
 		if ($filter.length == 0) { return; }
 
 		if (count < 0) {
@@ -1091,7 +1091,7 @@ TODO: pensar como mejorar esta parte
 		this.saveData(false);
 
 		$.ajax({
-			'url':     base_url + 'entries/selectFilters',
+			'url':     $.base_url('entries/selectFilters'),
 			'success':
 				$.proxy(
 					function(reload, response) {
@@ -1189,9 +1189,9 @@ TODO: pensar como mejorar esta parte
 		}
 
 		var $filter = $('<li/>')
-					.data('filter', filter)
-					.html('<div><span class="icon fa" /><a>' + filter.name + ' </a><span class="count" /></div>')
-					.appendTo($parent);
+			.data('filter', filter)
+			.html('<div><span class="icon fa" /><a>' + filter.name + ' </a><span class="count" /></div>')
+			.appendTo($parent);
 
 		if (index != null && index != $filter.index()) { // para ordenar los items que se crearon en tiempo de ejecución
 			$($parent.find('> li').get(index)).before($filter);
@@ -1340,8 +1340,8 @@ TODO: pensar como mejorar esta parte
 			this.animateFilter($filter, value);
 		}
 
-		var $ul 	= $filter.find('ul:first');
-		var index 	= 0;
+		var $ul   = $filter.find('ul:first');
+		var index = 0;
 		for (var i=0; i<filter.childs.length; i++) {
 			if (this.filterIsVisible(filter.childs[i], true) == true) {
 				this.renderFilter(filter.childs[i], $ul, index);
@@ -1354,8 +1354,8 @@ TODO: pensar como mejorar esta parte
 	},
 
 	animateFilter: function($filter, value) {
-		var $ul 	= $filter.find('ul:first');
-		var $arrow 	= $filter.find('.arrow:first');
+		var $ul    = $filter.find('ul:first');
+		var $arrow = $filter.find('.arrow:first');
 
 		$arrow.removeClass('fa-caret-square-o-down').removeClass('fa-caret-square-o-right');
 
@@ -1410,9 +1410,9 @@ TODO: pensar como mejorar esta parte
 
 	subscribeFeed: function(feedId) {
 		$.ajax({
-			'url': 		base_url + 'entries/subscribeFeed',
-			'data': 	{  'feedId': feedId },
-			'type':	 	'post',
+			'url':   $.base_url('entries/subscribeFeed'),
+			'data':  {  'feedId': feedId },
+			'type':  'post',
 			'success':
 				$.proxy(
 					function(feedId, response) {
@@ -1441,7 +1441,7 @@ TODO: pensar como mejorar esta parte
 		$.hidePopupSimpleForm();
 
 		$.ajax({
-			'url':   base_url + 'entries/addFeed',
+			'url':   $.base_url('entries/addFeed'),
 			'data':  { 'feedUrl': feedUrl },
 			'type':  'post',
 			'success':
@@ -1460,7 +1460,7 @@ TODO: pensar como mejorar esta parte
 		}
 
 		this.aUserEntries[entry.entryId] = {
-			'entryId': 	    entry.entryId,
+			'entryId':      entry.entryId,
 			'entryRead':    entry.entryRead,
 			'entryStarred': entry.entryStarred
 		};
@@ -1472,22 +1472,22 @@ TODO: pensar como mejorar esta parte
 		}
 
 		$.ajax({
-			'url': 		base_url + 'entries/saveData',
-			'data': 	{
-					'entries': 	$.toJSON(this.aUserEntries),
-					'tags': 	$.toJSON(this.aUserTags)
+			'url':   $.base_url('entries/saveData'),
+			'data':  {
+				'entries': $.toJSON(this.aUserEntries),
+				'tags':    $.toJSON(this.aUserTags)
 			},
-			'type':	 		'post',
-			'skipwWaiting':	(async == true),
-			'async':		async,
+			'type':         'post',
+			'skipwWaiting': (async == true),
+			'async':        async,
 			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 				}
 		});
 
-		this.aUserEntries 	= {};
-		this.aUserTags		= {};
+		this.aUserEntries = {};
+		this.aUserTags    = {};
 	},
 
 	addTag: function() {
@@ -1499,7 +1499,7 @@ TODO: pensar como mejorar esta parte
 		$.hidePopupSimpleForm();
 
 		$.ajax({
-			'url':   base_url + 'entries/addTag',
+			'url':   $.base_url('entries/addTag'),
 			'data':  {
 				'tagName': tagName ,
 				'feedId':  this.aFilters.id
@@ -1520,13 +1520,13 @@ TODO: pensar como mejorar esta parte
 		$.hideMobileNavbar();
 
 		$.ajax({
-			'url': 		base_url + 'entries/saveUserFeedTag',
-			'data': 	{
-				'feedId': 	feedId,
-				'tagId': 	tagId,
-				'append':	append
+			'url':  $.base_url('entries/saveUserFeedTag'),
+			'data': {
+				'feedId': feedId,
+				'tagId':  tagId,
+				'append': append
 			},
-			'type':	 	'post',
+			'type':  'post',
 			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
@@ -1542,16 +1542,16 @@ TODO: pensar como mejorar esta parte
 		var filter = this.getFilter(this.aFilters);
 
 		$(document).crAlert( {
-			'msg': 			$.sprintf( crLang.line('Mark "%s" as read?'), filter.name),
-			'isConfirm': 	true,
-			'callback': 	$.proxy(
+			'msg':       $.sprintf( crLang.line('Mark "%s" as read?'), filter.name),
+			'isConfirm': true,
+			'callback':  $.proxy(
 				function() {
 					$.ajax({
-						'type':	 	'post',
-						'url': 		base_url + 'entries/markAllAsRead',
-						'data': 	{
-							'type': 	this.aFilters.type,
-							'id': 		this.aFilters.id
+						'type':  'post',
+						'url':    $.base_url('entries/markAllAsRead'),
+						'data':   {
+							'type': this.aFilters.type,
+							'id':   this.aFilters.id
 						},
 						'success':
 							function(response) {
@@ -1572,14 +1572,14 @@ TODO: pensar como mejorar esta parte
 		var filter = this.getFilter(this.aFilters);
 
 		$(document).crAlert( {
-			'msg': 			$.sprintf( crLang.line('Unsubscribe "%s"?'), filter.name),
-			'isConfirm': 	true,
-			'callback': 	$.proxy(
+			'msg':       $.sprintf( crLang.line('Unsubscribe "%s"?'), filter.name),
+			'isConfirm': true,
+			'callback':  $.proxy(
 				function () {
 					$.ajax({
-						'type':	 	'post',
-						'url': 		base_url + 'entries/unsubscribeFeed',
-						'data': 	{ 'feedId':	feedId 	},
+						'type':   'post',
+						'url':     $.base_url('entries/unsubscribeFeed'),
+						'data':    { 'feedId':	feedId 	},
 						'success':
 							function(response) {
 								if ($.hasAjaxDefaultAction(response) == true) { return; }
@@ -1595,9 +1595,9 @@ TODO: pensar como mejorar esta parte
 	updateUserFilters: function() {
 // TODO: hacer que no guarde tanto asi no mata al servidor
 		this.ajaxUpdateUserFilters = $.ajax({
-			'url': 			base_url + 'entries/updateUserFilters',
-			'data': 		{ 'post': $.toJSON(this.aFilters) },
-			'type':			'post',
+			'url':          $.base_url('entries/updateUserFilters'),
+			'data':         { 'post': $.toJSON(this.aFilters) },
+			'type':        'post',
 			'skipwWaiting': true,
 			'success':
 				function(response) {
@@ -1646,7 +1646,7 @@ TODO: pensar como mejorar esta parte
 			{ 'html': crLang.line('Edit tags'), 'callback':
 				function(event) {
 					event.stopPropagation();
-					$.goToUrl(base_url + 'tools/tags');
+					$.goToUrl($.base_url('tools/tags'));
 				}
 			},
 		];
@@ -1673,12 +1673,12 @@ TODO: pensar como mejorar esta parte
 
 
 		for (var i=0; i<aItems.length; i++) {
-			var item 	= aItems[i];
+			var item = aItems[i];
 			if (item.class == 'divider') {
-				var $item 	= $('<li class="divider" />').appendTo(this.$popupFeedSettings);
+				var $item = $('<li class="divider" />').appendTo(this.$popupFeedSettings);
 			}
 			else {
-				var $item 	= $('<li><a>' + item.html + '</a></li>').appendTo(this.$popupFeedSettings);
+				var $item = $('<li><a>' + item.html + '</a></li>').appendTo(this.$popupFeedSettings);
 				if (item.data != null) {
 					$item.data(item.data);
 				}
@@ -1720,7 +1720,7 @@ TODO: pensar como mejorar esta parte
 		else {
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
 			this.$toolbar.show();
-			$('#header .logo').attr('href', base_url);
+			$('#header .logo').attr('href', $.base_url());
 			$.hidePopupSimpleForm();
 			$('#header').css( {'box-shadow': 'none' });
 		}
@@ -1756,8 +1756,8 @@ TODO: pensar como mejorar esta parte
 
 	browseTags: function() {
 		this.ajax = $.ajax({
-			'url': 		base_url + 'entries/browseTags',
-			'type':		'post',
+			'url':   $.base_url('entries/browseTags'),
+			'type': 'post',
 			'success':
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
@@ -1815,7 +1815,7 @@ TODO: pensar como mejorar esta parte
 		$tag.addClass('active');
 
 		this.ajax = $.ajax({
-			'url':       base_url + 'entries/browseFeedsByTagId',
+			'url':       $.base_url('entries/browseFeedsByTagId'),
 			'data':      { 'tagId': tag.tagId },
 			'success':   $.proxy(
 				function($tag, response) {
@@ -1856,7 +1856,7 @@ TODO: pensar como mejorar esta parte
 
 						this.renderBrowseFeedTags(feed.tags, $feed.find('.alert'));
 
-						$feed.find('h4').css('background-image', 'url(' + base_url + (feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')');
+						$feed.find('h4').css('background-image', 'url(' + $.base_url(feed.feedIcon == null ? 'assets/images/default_feed.png' : 'assets/favicons/' + feed.feedIcon) + ')');
 						$parent.after($feed);
 						$parent = $feed;
 					}
@@ -1903,8 +1903,8 @@ TODO: pensar como mejorar esta parte
 		}
 
 		this.ajaxShareByEmail = $.ajax({
-			'url': 		base_url + 'entries/shareByEmail/' + entryId,
-			'async':	true,
+			'url':   $.base_url('entries/shareByEmail/' + entryId),
+			'async': true,
 			'success':
 				$.proxy(
 					function (response) {
@@ -1924,8 +1924,8 @@ TODO: pensar como mejorar esta parte
 		}
 
 		$.ajax({
-			'type': 	'get',
-			'url': 		base_url + 'help/keyboardShortcut/',
+			'type':   'get',
+			'url':    $.base_url('help/keyboardShortcut/'),
 			'success':
 				$.proxy(
 					function (response) {
