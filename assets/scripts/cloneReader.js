@@ -50,9 +50,6 @@ cloneReader = {
 		}
 
 		$.goToUrl( $.base_url('?' + $.param(params)));
-		if (typeof ga != "undefined") {
-			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
-		}
 	},
 
 	loadUrl: function() {
@@ -496,8 +493,9 @@ cloneReader = {
 
 		this.isLoadEntries = true;
 
-		if (typeof ga != "undefined") {
-			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
+
+		if (this.aFilters['page'] > 1 && typeof dataLayer != "undefined") {
+			dataLayer.push( { 'event': 'crGetMoreEntries' });
 		}
 
 		this.ajax = $.ajax({
@@ -512,8 +510,8 @@ cloneReader = {
 				function(response) {
 					if ($.hasAjaxDefaultAction(response) == true) { return; }
 
-					cloneReader.isLastPage 		= (response.result.length < crSettings.entriesPageSize);
-					cloneReader.currentEntries 	= $.merge(cloneReader.currentEntries, response.result);
+					cloneReader.isLastPage     = (response.result.length < crSettings.entriesPageSize);
+					cloneReader.currentEntries = $.merge(cloneReader.currentEntries, response.result);
 					cloneReader.renderEntries(response.result);
 				},
 			'complete':
@@ -2048,3 +2046,4 @@ $.fn.scrollStopped = function(callback) {
 $(document).ready( function() {
 	cloneReader.initSearch();
 });
+;

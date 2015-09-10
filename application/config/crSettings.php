@@ -14,6 +14,7 @@ $config['addTitleSiteName'] = true;
 $config['emailFrom'] = 'clonereader@gmail.com';
 $config['emailDebug'] = 'jcarle@gmail.com';
 $config['google-analytics-account'] = 'UA-41589815-1';
+$config['google-gtm-account'] = 'GTM-K9SS2S';
 
 $config['urlDev']  = 'http://jcarle.redirectme.net/dev/jcarle/cloneReader/';
 $config['urlQa']   = 'http://www.jcarle.com.ar/cloneReader';
@@ -45,14 +46,14 @@ $config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
  * Si alguna entidad tiene gallery, se puede utilizar la gallery por default, o customizarla
  * Tambien se guardan properties de las tablas mysql para los sef y otras tareas
  */
-$config['entityConfig'] = array( 
+$config['entityConfig'] = array(
 	'default' => array(
 		'entityTypeName' => null,
-		'gallery' => array(  // Default config gallery 
+		'gallery' => array(  // Default config gallery
 			'controller'    => '%s/edit',
 			'urlGallery'    => 'gallery/select/$entityTypeId/$entityId',         // url que devuelve un json con todas las imagenes de la gallery
 			'urlSave'       => 'gallery/savePicture',                            // url del controlador para guardar una imagen
-			'urlDelete'     => 'gallery/deletePicture/$entityTypeId/$fileId',    // url del controlador para borrar una imagen  
+			'urlDelete'     => 'gallery/deletePicture/$entityTypeId/$fileId',    // url del controlador para borrar una imagen
 			'folder'        => '/assets/images/%s/original/',
 			'allowed_types' => 'gif|jpg|png',
 			'max_size'      => 1024 * 8,
@@ -62,17 +63,17 @@ $config['entityConfig'] = array(
 			)
 		),
 		'comments' => array(
-			'commentTitle'      => 'Comments', 
+			'commentTitle'      => 'Comments',
 			'allowAddMember'    => false,
 			'allowAddNotMember' => false,
-			'showTypeahead'     => false, 
-			'showCommentDate'   => false, 
+			'showTypeahead'     => false,
+			'showCommentDate'   => false,
 			'showCommentIp'     => false,
 			'hasCommentRating'  => true,
 		),
 		'contacts' => array(
-			'showTypeahead'     => false, 
-			'showContactDate'   => false, 
+			'showTypeahead'     => false,
+			'showContactDate'   => false,
 			'showContactIp'     => false,
 		),
 	),
@@ -85,9 +86,9 @@ $config['entityConfig'] = array(
 		'fieldId'         => 'countryId',
 		'fieldName'       => 'countryName',
 		'fieldSef'        => 'countryId',
-	),	
+	),
 	$config['entityTypeState'] => array(
-		'entityTypeName'  => 'states',	
+		'entityTypeName'  => 'states',
 		'tableName'       => 'states',
 		'fieldId'         => 'stateId',
 		'fieldName'       => 'stateName',
@@ -135,7 +136,7 @@ $config['testDoc'] = array(
 
 /*
 *   Meta por default, sino existe el meta en el controller
-*   busca en este array por controller/method y carga ese texto 
+*   busca en este array por controller/method y carga ese texto
 *   Los textos que se carguen en este config se traducen en el header.
 */
 $config['meta'] = array(
@@ -144,7 +145,7 @@ $config['meta'] = array(
 		'h1'           => 'cloneReader',
 		'description'  => 'Clone Reader. Clone of google reader. Reader of feeds, rss news. Open source',
 		'keyword'      => 'cReader cloneReader news feeds rss reader open source',
-		'robots'       => 'index,follow',	
+		'robots'       => 'index,follow',
 	),
 	'login' => array(
 		'title'       => 'Login',
@@ -177,12 +178,12 @@ $config['tagBrowse'] = 4;
 $config['feedMaxCount'] = 1000;
 
 $config['feedCloneReader']          = 1633; 	// id del feed propio, se muestra en el filtro 'home'
-$config['feedStatusPending']        = 0; 	
+$config['feedStatusPending']        = 0;
 $config['feedStatusApproved']       = 1;
 $config['feedStatusInvalidFormat"'] = 3;
 $config['feedStatusNotFound']       = 404;
 
-$config['feedMaxRetries'] = 10; // maxima cantidad de reintentos si un feed tiene algun error 
+$config['feedMaxRetries'] = 10; // maxima cantidad de reintentos si un feed tiene algun error
 
 $config['feedTimeScan']    = 180; 	// 	Cada cuanto MINUTOS busca nuevos feeds
 $config['feedTimeSave']    = 10; 	// 	Cada cuanto SEGUNDOS guardan los datos
@@ -190,5 +191,4 @@ $config['feedTimeReload']  = 9999;  //  Cada cuanto MINUTOS recarga el menu con 
 $config['entriesPageSize'] = 30;
 
 $config['entriesKeepMin']         = 50; // Cantidad minima de entries que se van a guardar al borrar entries antiguas
-$config['entrieskeepMonthMin']    = 3;  // Cantidad de meses que se van a guardar al borrar entries antiguas 
-
+$config['entrieskeepMonthMin']    = 3;  // Cantidad de meses que se van a guardar al borrar entries antiguas

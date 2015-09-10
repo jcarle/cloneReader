@@ -359,7 +359,7 @@
 					$.proxy(
 						function(response) {
 							if (typeof dataLayer != "undefined") {
-								dataLayer.push( { 'event': 'crFormSubmit.' + this.options.frmName })
+								dataLayer.push( { 'event': 'crFormSubmit.' + this.options.frmName });
 							}
 
 							if (this.options.callback != null) {
