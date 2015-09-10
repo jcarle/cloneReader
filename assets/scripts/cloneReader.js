@@ -1972,7 +1972,7 @@ TODO: pensar como mejorar esta parte
 				if (event.button != 0) { return; }
 
 				var $link = $(event.currentTarget);
-				if ($link.attr('href') == base_url) {
+				if ($link.attr('href') == crSettings.base_url) {
 					event.preventDefault();
 					cloneReader.changeFilters({});
 					return;

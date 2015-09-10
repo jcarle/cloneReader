@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	RewriteCond %{REQUEST_URI} !\.(jpe?g|png|css|js)$
+	RewriteCond %{ENV:REDIRECT_STATUS} !=503
+	RewriteRule .* maintenance.php [L]
+</IfModule>

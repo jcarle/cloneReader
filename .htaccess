@@ -7,6 +7,11 @@ AddType application/x-web-app-manifest+json .webapp
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
+
+	RewriteCond $0 =deploy.sh [OR]
+	RewriteCond $0 =maintenance.php 
+	RewriteRule ^(.*)$ index.php?/error [L]
+
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ index.php?/$1 [L]
@@ -18,7 +23,7 @@ AddType application/x-web-app-manifest+json .webapp
 	# Submitted by: ElliotHaughin
 
 	ErrorDocument 404 /index.php
-</IfModule>  
+</IfModule>
 
 
 # Turn on Expires and set default expires to 3 days
