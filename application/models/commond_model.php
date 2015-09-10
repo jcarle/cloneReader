@@ -51,12 +51,28 @@ class Commond_Model extends CI_Model {
 		$this->db->limit($pageSize, ($pageCurrent * $pageSize) - $pageSize);
 	}
 
-	/**
-	 * Chequea en la tabla de cada entity si cambio el sef para hacer una redirección 301
-	 * @return $entitySef o NULL si no existe
-	 */
-	function hasNewEntitySef($entitySef, $entityTypeId) {
-		$aTmp = explode('-',  $entitySef);
+	function appendJoinEntitiesProperty($entityTypeId, $orders) {
+		// TODO: mejorar esta parte; estoy joineando con entities_properties SOLO si ordenos por visitas,
+
+		$entityConfig = getEntityConfig($entityTypeId);
+
+		if (!empty($orders)) {
+			if ($orders[0]['orderBy'] ==  'entityVisits') {
+				$this->db
+					->select(' entityVisits', false)
+					->join('entities_properties', 'entities_properties.entityId = '.$entityConfig['tableName'].'.'.$entityConfig['fieldId'], 'left')
+					->where('entities_properties.entityTypeId', $entityTypeId);
+				return true;
+			}
+		}
+
+		$this->db->select(' 0 AS entityVisits', false);
+		return false;
+	}
+
+	function getEnityIdInEntitySef($entitySef, $entityTypeId) {
+		$entitySef = parse_url($entitySef, PHP_URL_PATH);
+		$aTmp      = explode('-',  $entitySef);
 		if (count($aTmp) < 2) {
 			return null;
 		}
@@ -64,6 +80,20 @@ class Commond_Model extends CI_Model {
 			return null;
 		}
 		$entityId = $aTmp[count($aTmp)-1];
+
+		if (!is_numeric($entityId)) {
+			return null;
+		}
+
+		return $entityId;
+	}
+
+	/**
+	 * Chequea en la tabla de cada entity si cambio el sef para hacer una redirección 301
+	 * @return $entitySef o NULL si no existe
+	 */
+	function hasNewEntitySef($entityTypeId, $entitySef) {
+		$entityId = $this->getEnityIdInEntitySef($entitySef, $entityTypeId);
 
 		if (!is_numeric($entityTypeId) || !is_numeric($entityId)) {
 			return null;
@@ -88,14 +118,29 @@ class Commond_Model extends CI_Model {
 
 	/**
 	 * Guarda el sef de una entidad
-	 * Los parametros $entitySef y $entityName son opcionales; pero deben incluirse alguno de los dos
 	 * @return $entitySef
 	 * */
-	function saveEntitySef($entityTypeId, $entityId, $entityName = null, $entitySef = null) {
-		if ($entitySef == null) {
-			$entitySef = url_title($entityName.'-'.$entityTypeId.'-'.$entityId, 'dash', true);
+	function saveEntitySef($entityTypeId, $entityId, $entityName = null) {
+		$entityConfig = getEntityConfig($entityTypeId);
+		if ($entityConfig == null) {
+			return false;
 		}
-		if (trim($entitySef) == '' || $entitySef == null ){
+
+		if ($entityName == null) {
+			$query = $this->db
+				->select($entityConfig['fieldName'], false)
+				->where($entityConfig['fieldId'], $entityId)
+				->get($entityConfig['tableName'])->row_array();
+			$query = getCrFormData($query, $entityId);
+			if (!is_array($query)) {
+				return false;
+			}
+			$entityName = $query[$entityConfig['fieldName']];
+		}
+
+		$entitySef = url_title($entityName.'-'.$entityTypeId.'-'.$entityId, 'dash', true);
+
+		if (trim($entitySef) == ''){
 			return false;
 		}
 
@@ -103,16 +148,13 @@ class Commond_Model extends CI_Model {
 			(entityTypeId, entityId, entitySef)
 			VALUES
 			(".$entityTypeId.", ".$entityId.", ".$this->db->escape($entitySef).")
-			ON DUPLICATE KEY UPDATE entitySef = ".$this->db->escape($entitySef)." ";
+			ON DUPLICATE KEY UPDATE entitySef = VALUES(entitySef) ";
 		$this->db->query($query);
 
-		// Si exite un $entityConfig, actualizo el sef en la tabla principal; ya que puede convenir duplicar la info algunas veces para evitar el join
-		$entityConfig = getEntityConfig($entityTypeId);
-		if ($entityConfig != null) {
-			$this->db
-				->where($entityConfig['fieldId'], $entityId)
-				->update($entityConfig['tableName'], array($entityConfig['fieldSef'] => $entitySef));
-		}
+		// Actualizo el sef en la tabla principal
+		$this->db
+			->where($entityConfig['fieldId'], $entityId)
+			->update($entityConfig['tableName'], array($entityConfig['fieldSef'] => $entitySef));
 
 		return $entitySef;
 	}
@@ -223,7 +265,7 @@ class Commond_Model extends CI_Model {
 			return array();
 		}
 
-		$match     = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
+		$match = 'MATCH (entityFullSearch) AGAINST (\''.implode(' ', $aSearch).'\' IN BOOLEAN MODE)';
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS entityId, entityName, '.$match.' AS score, MATCH (entityNameSearch) AGAINST (\''.implode(' ', cleanSearchString($search, $aSearchKey, false, false)).'\' IN BOOLEAN MODE) AS scoreName ', false)
 			->from('entities_search')
@@ -426,6 +468,26 @@ class Commond_Model extends CI_Model {
 		return '';
 	}
 
+	/**
+	 * @param     (int)    $entityTypeId
+	 * @param     (int)    $entityId
+	 * @return    (string) devuelve el sef de la entity
+	 * */
+	function getEntitySef($entityTypeId, $entityId) {
+		$query = $this->db
+			->select(' entitySef', false)
+		 	->from(' entities_properties')
+			->where('entityTypeId', $entityTypeId)
+			->where('entityId', $entityId)
+			->get()->row_array();
+		//pr($this->db->last_query()); die;
+		if (!empty($query)) {
+			return $query['entitySef'];
+		}
+
+		return '';
+	}
+
 	function getProcessLastUpdate($processName) {
 		$query = $this->db
 			->where('processName', $processName)
@@ -476,6 +538,121 @@ class Commond_Model extends CI_Model {
 		$data = $this->db->get('countries')->row_array();
 		//pr($this->db->last_query()); die;
 		return $data;
+	}
+
+	function saveEntitiesVisits($entityTypeId, $entitySef) {
+		$this->Commond_Model->clearEntitiesVisits($entityTypeId);
+
+		$this->db->trans_start();
+
+		$query = $this->db
+			->select('request_uri ', true)
+			->like('request_uri', $entitySef)
+			->get('usertracking')->result_array();
+		//pr($this->db->last_query());  die;
+		foreach ($query as $data) {
+			$entityId = $this->getEnityIdInEntitySef($data['request_uri'], $entityTypeId);
+			if ($entityId != null) {
+				$this->saveEntityVisits($entityTypeId, $entityId);
+			}
+		}
+
+		$this->db->trans_complete();
+	}
+
+	function saveEntityVisits($entityTypeId, $entityId) {
+		$query = " INSERT INTO entities_properties
+			(entityTypeId, entityId, entityVisits)
+			VALUES
+			(".$entityTypeId.", ".$entityId.", 1)
+			ON DUPLICATE KEY UPDATE entityVisits = entityVisits + 1 ";
+		$this->db->query($query);
+	}
+
+	function getEntityVisits($entityTypeId, $entityId) {
+		$query = $this->db
+			->select(' entityVisits', false)
+		 	->from(' entities_properties')
+			->where('entityTypeId', $entityTypeId)
+			->where('entityId', $entityId)
+			->get()->row_array();
+		//pr($this->db->last_query()); die;
+		if (!empty($query)) {
+			return $query['entityVisits'];
+		}
+
+		return null;
+	}
+
+	function clearEntitiesVisits($entityTypeId) {
+		$this->db
+			->where('entityTypeId', $entityTypeId)
+			->update('entities_properties', array('entityVisits' => 0));
+		//pr($this->db->last_query());  die;
+	}
+
+	function appendPlaceDetail($query) {
+		$this->load->model('Places_Model');
+
+		$place  = $this->Places_Model->get($query['placeId']);
+		if (!empty($place)) {
+			$query['placeName'] = $place['placeName'];
+			$query['placeSef']  = $place['placeSef'];
+		}
+
+		return $query;
+	}
+
+	/**
+	 * Apendea los indices brandId y modelId al array $values
+	 * Se utiliza para guardar los datos devueltor por el autocomplete de cars
+	 * */
+	function appendCarsToSave($values, $entityTypeId, $entityId) {
+		$values['brandId'] = null;
+		$values['modelId'] = null;
+
+		if ($entityTypeId == config_item('entityTypeModel')) {
+			$query = $this->db
+				->select('* ', false)
+				->where('modelId', $entityId)
+				->get('models')->row_array();
+			//pr($this->db->last_query());  die;
+			$values['brandId'] = $query['brandId'];
+			$values['modelId'] = $query['modelId'];
+			return $values;
+		}
+
+		if ($entityTypeId == config_item('entityTypeBrand')) {
+			$values['brandId'] = $entityId;
+		}
+
+		return $values;
+	}
+
+	/**
+	 *
+	 * Apendea al array filters el id del tipo de zona que corresponda (countryId, stateId, cityId)
+	 * Se utiliza en los listados
+	 *
+	 * @param array $filters
+	 * @param       $carId  un string con el formato: [entityTypeId]-[entityId]
+	 * */
+	function appendCarToFilters(array $filters, $carId) {
+		if (empty($carId)) {
+			return $filters;
+		}
+		$aTmp = explode('-', $carId);
+
+		switch ($aTmp[0]) {
+			case config_item('entityTypeBrand'):
+				$filters['brandId'] = $aTmp[1];
+				break;
+			case config_item('entityTypeModel'):
+				$filters['modelId'] = $aTmp[1];
+				break;
+		}
+
+		return $filters;
 	}
 
 	/*

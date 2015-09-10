@@ -1,24 +1,24 @@
-<?php 
+<?php
 class Feedbacks extends CI_Controller {
 
 	function __construct() {
-		parent::__construct();	
-		
+		parent::__construct();
+
 		$this->load->model('Feedbacks_Model');
 	}
-	
+
 	function index() {
 	}
-	
+
 	function addFeedback() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$this->load->helper('email');
 		$this->load->model('Users_Model');
-		
+
 		$userId = (int)$this->session->userdata('userId');
 		$data	= array();
-		if ($userId != USER_ANONYMOUS) {		
+		if ($userId != USER_ANONYMOUS) {
 			$data = $this->Users_Model->get($userId);
 		}
 
@@ -28,32 +28,32 @@ class Feedbacks extends CI_Controller {
 		}
 
 		$form = array(
-			'frmId'     => 'frmFeedbackEdit',
+			'frmName'   => 'frmFeedbackEdit',
 			'callback'  => 'function(response) { $.Feedback.onSaveFeedback(response); };',
-			'fields' => array( 
+			'fields' => array(
 				'feedbackId' => array(
-					'type'  => 'hidden', 
+					'type'  => 'hidden',
 					'value' => element('feedbackId', $data, 0)
 				),
 				'feedbackUserName' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Name'), 
+					'label'  => $this->lang->line('Name'),
 					'value'  => trim(element('userFirstName', $data).' '.element('userLastName', $data)),
 				),
 				'feedbackUserEmail' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Email'), 
+					'label'  => $this->lang->line('Email'),
 					'value'  => $feedbackUserEmail
 				),
 				'feedbackDesc' => array(
 					'type'  => 'textarea',
-					'label' => $this->lang->line('Comment'), 
+					'label' => $this->lang->line('Comment'),
 					'value' => ''
 				),
 			),
 			'buttons' => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-comment"></i> '.$this->lang->line('Send').'</button> '),
 		);
-		
+
 		$form['rules'] = array(
 			array(
 				'field' => 'feedbackUserName',
@@ -64,45 +64,45 @@ class Feedbacks extends CI_Controller {
 				'field' => 'feedbackUserEmail',
 				'label' => $form['fields']['feedbackUserEmail']['label'],
 				'rules' => 'trim|required|valid_email'
-			),			
+			),
 			array(
 				'field' => 'feedbackDesc',
 				'label' => $form['fields']['feedbackDesc']['label'],
 				'rules' => 'trim|required'
 			),
-		);	
+		);
 
 		$this->form_validation->set_rules($form['rules']);
-		
+
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Feedbacks_Model->saveFeedback($this->input->post());
 			}
-			
+
 			if ($this->input->is_ajax_request()) {
 				return loadViewAjax($code);
 			}
 		}
-		
+
 		$this->load->view('pageHtml', array(
-			'view'  => 'includes/crForm', 
+			'view'  => 'includes/crForm',
 			'meta'  => array( 'title' => $this->lang->line('Feedback') ),
 			'form'  => $form,
 			'langs' => array( 'Thanks for contacting us' ),
 		));
 	}
-	
+
 	function listing() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
-		
+
 		$query = $this->Feedbacks_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
-		
+
 		$this->load->view('pageHtml', array(
-			'view'    => 'includes/crList', 
+			'view'    => 'includes/crList',
 			'meta'    => array( 'title' => $this->lang->line('Edit feedbacks')),
 			'list'    => array(
 				'urlList'   => strtolower(__CLASS__).'/listing',
@@ -110,7 +110,7 @@ class Feedbacks extends CI_Controller {
 				'columns'   => array(
 					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  $this->lang->line('Description')),
 					'feedbackDate'       => array('class' => 'datetime', 'value' => $this->lang->line('Date')),
-					'feedbackUserName'   => $this->lang->line('Name'), 
+					'feedbackUserName'   => $this->lang->line('Name'),
 					'feedbackUserEmail'  => $this->lang->line('Email'),
 				),
 				'data'       => $query['data'],
@@ -119,58 +119,58 @@ class Feedbacks extends CI_Controller {
 			)
 		));
 	}
-	
+
 	function edit($feedbackId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->Feedbacks_Model->get($feedbackId), $feedbackId);
 		if ($data === null) { return error404(); }
-		
+
 		$form = $this->_getFormProperties($feedbackId, false);
-		
+
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Feedbacks_Model->save($this->input->post());
 			}
-			
+
 			if ($this->input->is_ajax_request()) {
 				return loadViewAjax($code);
 			}
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'    => 'includes/crForm', 
+			'view'    => 'includes/crForm',
 			'meta'    => array('title' => $this->lang->line('Edit feedbacks')),
 			'form'    => populateCrForm($form, $data),
-		));	
+		));
 	}
 
 	function _getFormProperties($feedbackId) {
 		$form = array(
-			'frmId'    => 'frmFeedbackEdit',
+			'frmName'  => 'frmFeedbackEdit',
 			'buttons'  => array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
-			'fields' => array( 
+			'fields' => array(
 				'feedbackId' => array(
-					'type'  => 'hidden', 
+					'type'  => 'hidden',
 					'value' => $feedbackId,
 				),
 				'feedbackUserName' => array(
 					'type'      => 'text',
 					'label'     => $this->lang->line('Name'),
-					'disabled'  => true, 
+					'disabled'  => true,
 				),
 				'feedbackUserEmail' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Email'), 
+					'label'  => $this->lang->line('Email'),
 				),
 				'feedbackDesc' => array(
 					'type'   => 'textarea',
-					'label'  => $this->lang->line('Description'), 
+					'label'  => $this->lang->line('Description'),
 				),
 				'feedbackDate' => array(
 					'type'   => 'datetime',
-					'label'  => $this->lang->line('Date'), 
+					'label'  => $this->lang->line('Date'),
 				),
 			)
 		);
@@ -186,11 +186,11 @@ class Feedbacks extends CI_Controller {
 				'label' => $form['fields']['feedbackDate']['label'],
 				'rules' => 'trim|required'
 			),
-		);	
+		);
 
 		if ((int)$feedbackId > 0) {
 			$form['urlDelete'] = base_url('feedbacks/delete/');
-			
+
 			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>';
 		}
 
@@ -201,7 +201,7 @@ class Feedbacks extends CI_Controller {
 
 	function delete() {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
-		
+
 		return loadViewAjax($this->Feedbacks_Model->delete($this->input->post('feedbackId')));
-	}	
+	}
 }

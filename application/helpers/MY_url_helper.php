@@ -174,3 +174,16 @@ function getPageName() {
 
 	return 'cr-page-' . $controller . (count($aTmp) > 1 ? '-'.$aTmp[1] : '');
 }
+
+function getEntityUrl($entityTypeId, $entitySef) {
+	$entityConfig = getEntityConfig($entityTypeId);
+	if ($entityConfig == null) {
+		return $entitySef;
+	}
+
+	if (is_array($entitySef)) {
+		return base_url(vsprintf($entityConfig['entityUrl'], $entitySef));
+	}
+
+	return base_url(sprintf($entityConfig['entityUrl'], $entitySef));
+}

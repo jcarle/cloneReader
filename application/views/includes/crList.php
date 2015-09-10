@@ -162,7 +162,7 @@ foreach ($list['data'] as $row) {
 			</div>
 <?php
 if ($filters != null) {
-	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmId' => 'crFrmFilterList') ));
+	$this->load->view('includes/crFilterList', array('form' => array('fields' => $filters, 'frmName' => 'crFrmFilterList') ));
 }
 echo $htmlSort;
 ?>

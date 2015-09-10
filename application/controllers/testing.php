@@ -54,8 +54,8 @@ class Testing extends CI_Controller {
 		if ($data === null) { return error404(); }
 
 		$form = array(
-			'frmId'  => 'frmTestingEdit',
-			'fields' => array(
+			'frmName' => 'frmTestingEdit',
+			'fields'  => array(
 				'testId' => array(
 					'type'  => 'hidden',
 					'value' => (int)$testId,
@@ -195,9 +195,9 @@ class Testing extends CI_Controller {
 		if ($data === null) { return error404(); }
 
 		$form = array(
-			'frmId'  => 'frmTestChildEdit',
-			'title'  => 'Edit test child',
-			'fields' => array(
+			'frmName' => 'frmTestChildEdit',
+			'title'   => 'Edit test child',
+			'fields'  => array(
 				'testChildId' => array(
 					'type'  => 'hidden',
 					'value' => (int)$testChildId
@@ -299,8 +299,8 @@ class Testing extends CI_Controller {
 		}
 
 		$form = array(
-			'frmId'  => 'frmTestChildUserEdit',
-			'title'  => 'Edit user',
+			'frmName' => 'frmTestChildUserEdit',
+			'title'   => 'Edit user',
 			'fields'  => array(
 				'testChildId' => array(
 					'type'  => 'hidden',

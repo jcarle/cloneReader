@@ -1,25 +1,25 @@
-<?php 
+<?php
 class Groups extends CI_Controller {
 
 	function __construct() {
-		parent::__construct();	
-		
+		parent::__construct();
+
 		$this->load->model(array('Groups_Model', 'Controllers_Model'));
-	}  
-	
+	}
+
 	function index() {
 		$this->listing();
 	}
-	
+
 	function listing() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 		$query = $this->Groups_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
-		
+
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList', 
+			'view'			=> 'includes/crList',
 			'meta'			=> array( 'title' => $this->lang->line('Edit groups') ),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
@@ -32,23 +32,23 @@ class Groups extends CI_Controller {
 			)
 		));
 	}
-	
+
 	function edit($groupId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->Groups_Model->get($groupId), $groupId);
 		if ($data === null) { return error404(); }
-		
+
 		$form = array(
-			'frmId'  => 'frmGroupsEdit',
-			'fields' => array(
+			'frmName' => 'frmGroupsEdit',
+			'fields'  => array(
 				'groupId' => array(
-					'type'  => 'hidden', 
+					'type'  => 'hidden',
 					'value' => $groupId,
 				),
 				'groupName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Name'), 
+					'label' => $this->lang->line('Name'),
 				),
 				'groupHomePage' => array(
 					'type'  => 'text',
@@ -61,12 +61,12 @@ class Groups extends CI_Controller {
 				)
 			)
 		);
-		
+
 		if ((int)$groupId > 0) {
 			$form['urlDelete'] = base_url('groups/delete/');
 		}
-		
-		$form['rules'] = array( 
+
+		$form['rules'] = array(
 			array(
 				'field' => 'groupName',
 				'label' => $form['fields']['groupName']['label'],
@@ -81,16 +81,16 @@ class Groups extends CI_Controller {
 			if ($code == true) {
 				$this->Groups_Model->save($this->input->post());
 			}
-			
+
 			if ($this->input->is_ajax_request()) {
 				return loadViewAjax($code, array('loadMenuAndTranslations' => true));
 			}
 		}
-		
+
 		$form['fields']['controllers']['source'] = $this->Controllers_Model->selectToDropdown(true);
 
 		$this->load->view('pageHtml', array(
-			'view' => 'includes/crForm', 
+			'view' => 'includes/crForm',
 			'meta' => array( 'title' => $this->lang->line('Edit groups') ),
 			'form' => populateCrForm($form, $data),
 		));
@@ -99,7 +99,7 @@ class Groups extends CI_Controller {
 	function add(){
 		$this->edit(0);
 	}
-	
+
 	function delete() {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
 

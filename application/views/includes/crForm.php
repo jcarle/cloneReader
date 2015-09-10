@@ -3,17 +3,17 @@
  * El form tiene que tener este formato:
  *
  * $form = array(
- *	'frmId'		=> 'frmId',
- *	'action'	=> base_url('entity/save'), //
- * 	'className' => 'panel panel-default crForm form-horizontal' // class del form
- *	'fields'	=> array(), // fields que va a incluir el formulario
- *	'rules'		=> array(), // reglas de validacion para cada campo
- * 	'buttons'	=> array(), // los bottones que se van a mostrar
- *	'info'		=> array('position' => 'left|right', 'html' => ''), // si incluye info a los costados
- *	'title'		=> 'title',
- *	'icon'		=> 'fa fa-edit', // se utiliza en los popup form,
+ *	'frmName'   => 'frmName',
+ *	'action'    => base_url('entity/save'), //
+ *	'className' => 'panel panel-default crForm form-horizontal' // class del form
+ *	'fields'    => array(), // fields que va a incluir el formulario
+ *	'rules'     => array(), // reglas de validacion para cada campo
+ * 	'buttons'   => array(), // los bottones que se van a mostrar
+ *	'info'      => array('position' => 'left|right', 'html' => ''), // si incluye info a los costados
+ *	'title'     => 'title',
+ *	'icon'      => 'fa fa-edit', // se utiliza en los popup form,
  *	'urlDelete' => base_url('entity/delete'), // url para borrar
- *	'callback'	=> function javascript que se llama al enviar el form
+ *	'callback'  => function javascript que se llama al enviar el form
  *);
  *
  *	fields:
@@ -25,7 +25,7 @@
  *			'urlDelete'  => base_url('%s/deletePicture/'.$id),  // url del controlador para borrar el archivo
  *			'isPicture'  => true,           // indica si se va a subir una imagen u otro archivo
  * 			'disabled'   => false, // TODO: implementar!
- * 							// TODO: implementar acceptFileTypes, maxFileSize, maxNumberOfFiles
+ * 		                           // TODO: implementar acceptFileTypes, maxFileSize, maxNumberOfFiles
  *		);
  * 		En los controladores se pueden llamar a los metodos savePicture o saveFile.
  * 		Estos metodos utilizan un archivo de configuración con el formato:
@@ -63,25 +63,25 @@
  */
 
 
-$CI	= &get_instance();
+$CI          = &get_instance();
+$form        = appendMessagesToCrForm($form);
+$htmlTitle   = '';
+$htmlFields  = '';
+$htmlButtons = '';
+$htmlErrors  = '';
+$aFields     = renderCrFormFields($form);
 
-$form  = appendMessagesToCrForm($form);
+$this->form_validation->set_error_delimiters('<li>', '</li>');
 
 if (!isset($form['action'])) {
 	$form['action'] = base_url($this->uri->uri_string());
 }
-
-echo form_open($form['action'], array('id'=> element('frmId', $form, 'frmId'), 'class' => element('className', $form, 'panel panel-default crForm form-horizontal'), 'role' => 'form' ));
-
 if (isset($form['title'])) {
-	echo '<div class="panel-heading">'.  $form['title'].'</div>';
+	$htmlTitle = '<div class="panel-heading">'.  $form['title'].'</div>';
 }
-echo '	<div class="panel-body"> ';
-
-
-$this->load->view('includes/formError');
-
-$aFields = renderCrFormFields($form);
+if(strlen(validation_errors())) {
+	$htmlErrors = ' <div class="alert alert-danger"> <ul> '.validation_errors().' </ul> </div>';
+}
 
 if (isset($form['info'])) {
 	$row = ' <div class="row">
@@ -89,14 +89,14 @@ if (isset($form['info'])) {
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> %s </div>
 			</div>';
 	if ($form['info']['position'] == 'left' ) {
-		echo sprintf($row, $form['info']['html'], implode(' ', $aFields));
+		$htmlFields = sprintf($row, $form['info']['html'], implode(' ', $aFields));
 	}
 	else {
-		echo sprintf($row, implode(' ', $aFields), $form['info']['html']);
+		$htmlFields = sprintf($row, implode(' ', $aFields), $form['info']['html']);
 	}
 }
 else {
-	echo implode(' ', $aFields);
+	$htmlFields = implode(' ', $aFields);
 }
 
 if (!isset($form['buttons'])) {
@@ -108,15 +108,18 @@ if (!isset($form['buttons'])) {
 	$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> '.$CI->lang->line('Save').' </button> ';
 }
 
-
-echo ' </div>';
-
 if (!empty($form['buttons'])) {
-	echo 	'<div class="formButtons panel-footer" > ';
-	echo implode(' ', $form['buttons']);
-	echo '</div>';
+	$htmlButtons = '<div class="formButtons panel-footer" > '.implode(' ', $form['buttons']).'</div>';
 }
 
-echo form_close();
 
-$this->my_js->add(' $(\'#'. element('frmId', $form, 'frmId').'\').crForm('. json_encode($form).'); ');
+echo form_open($form['action'], array('class' => $form['frmName'].' '.element('className', $form, 'panel panel-default crForm form-horizontal'), 'role' => 'form' ))
+	.$htmlTitle.'
+	<div class="panel-body">
+		'.$htmlErrors.'
+		'.$htmlFields.'
+	</div>
+	'.$htmlButtons.'
+	'.form_close();
+
+$this->my_js->add(' $(\'.'.getPageName().' .'. $form['frmName'].'\').crForm('. json_encode($form).'); ');

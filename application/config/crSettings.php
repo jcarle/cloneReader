@@ -13,7 +13,7 @@ $config['siteId'] = 'cloneReader';
 $config['addTitleSiteName'] = true;
 $config['emailFrom'] = 'clonereader@gmail.com';
 $config['emailDebug'] = 'jcarle@gmail.com';
-$config['google-analytics-Account'] = 'UA-41589815-1';
+$config['google-analytics-account'] = 'UA-41589815-1';
 
 $config['urlDev']  = 'http://jcarle.redirectme.net/dev/jcarle/cloneReader/';
 $config['urlQa']   = 'http://www.jcarle.com.ar/cloneReader';

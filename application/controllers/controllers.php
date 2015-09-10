@@ -1,26 +1,26 @@
-<?php 
+<?php
 class Controllers extends CI_Controller {
 
 	function __construct() {
-		parent::__construct();	
-		
+		parent::__construct();
+
 		$this->load->model('Controllers_Model');
-	}  
-	
+	}
+
 	function index() {
 		$this->listing();
 	}
-	
+
 	function listing() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 
 		$query = $this->Controllers_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
-		
+
 		$this->load->view('pageHtml', array(
-			'view'  => 'includes/crList', 
+			'view'  => 'includes/crList',
 			'meta'  => array( 'title' => $this->lang->line('Edit controllers') ),
 			'list'  => array(
 				'urlList'    => strtolower(__CLASS__).'/listing',
@@ -33,18 +33,18 @@ class Controllers extends CI_Controller {
 			)
 		));
 	}
-	
+
 	function edit($controllerId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->Controllers_Model->get($controllerId), $controllerId);
 		if ($data === null) { return error404(); }
-		
+
 		$form = array(
-			'frmId'  => 'frmControllersEdit',
-			'fields' => array(
+			'frmName' => 'frmControllersEdit',
+			'fields'  => array(
 				'controllerId' => array(
-					'type'   => 'hidden', 
+					'type'   => 'hidden',
 					'value'  => $controllerId,
 				),
 				'controllerName' => array(
@@ -53,7 +53,7 @@ class Controllers extends CI_Controller {
 				),
 				'controllerUrl' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Url'), 
+					'label' => $this->lang->line('Url'),
 				),
 				'controllerActive' => array(
 					'type'   => 'checkbox',
@@ -61,12 +61,12 @@ class Controllers extends CI_Controller {
 				)
 			)
 		);
-		
+
 		if ((int)$controllerId > 0) {
 			$form['urlDelete'] = base_url('controllers/delete/');
 		}
 
-		$form['rules'] = array( 
+		$form['rules'] = array(
 			array(
 				'field' => 'controllerName',
 				'label' => $form['fields']['controllerName']['label'],
@@ -77,7 +77,7 @@ class Controllers extends CI_Controller {
 				'label' => $form['fields']['controllerUrl']['label'],
 				'rules' => 'trim|required'
 			),
-		);		
+		);
 
 		$this->form_validation->set_rules($form['rules']);
 
@@ -86,14 +86,14 @@ class Controllers extends CI_Controller {
 			if ($code == true) {
 				$this->Controllers_Model->save($this->input->post());
 			}
-			
+
 			if ($this->input->is_ajax_request()) {
 				return loadViewAjax($code, array('loadMenuAndTranslations' => true));
 			}
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'  => 'includes/crForm', 
+			'view'  => 'includes/crForm',
 			'meta'  => array( 'title' => $this->lang->line('Edit controllers') ),
 			'form'  => populateCrForm($form, $data),
 		));
@@ -102,13 +102,13 @@ class Controllers extends CI_Controller {
 	function add(){
 		$this->edit(0);
 	}
-	
+
 	function delete() {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
 
-		return loadViewAjax($this->Controllers_Model->delete($this->input->post('controllerId'))); 
+		return loadViewAjax($this->Controllers_Model->delete($this->input->post('controllerId')));
 	}
-	
+
 	function _validate_exitsName() {
 		return ($this->Controllers_Model->exitsController($this->input->post('controllerName'), (int)$this->input->post('controllerId')) != true);
 	}

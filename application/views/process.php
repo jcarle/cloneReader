@@ -61,7 +61,7 @@ $items = array(
 	),
 	array(
 		'title' => 'Feeds',
-		'buttons' => array(	
+		'buttons' => array(
 			array(
 				'text' => 'Scan',
 				'url'  => 'process/scanAllFeeds',
@@ -74,12 +74,12 @@ $items = array(
 				'text' => 'Process feeds tags',
 				'url'  => 'process/processFeedsTags',
 			),
-			
+
 		)
 	),
 	array(
 		'title' => 'Entries',
-		'buttons' => array(	
+		'buttons' => array(
 			array(
 				'text' => 'Delete old entries',
 				'url'  => 'process/deleteOldEntries',

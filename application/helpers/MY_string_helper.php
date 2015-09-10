@@ -48,10 +48,10 @@ function truncate($string, $limit, $break=" ", $pad="...") {
 }
 
 function rip_tags($string) {
-    // ----- remove HTML TAGs -----
+	// ----- remove HTML TAGs -----
 	$string = preg_replace ('/<[^>]*>/', ' ', $string);
 
-    // ----- remove control characters -----
+	// ----- remove control characters -----
 	$string = str_replace("\r", '', $string);    // --- replace with empty space
 	$string = str_replace("\n", ' ', $string);   // --- replace with space
 	$string = str_replace("\t", ' ', $string);   // --- replace with space
@@ -248,10 +248,8 @@ function getHtmlFormSearch($isHeader = true) {
 	return $html;
 }
 
-function getHtmlAdsense($slotName) {
-	$html = '<div class="adsbygoogle" data-slot-id="'.config_item('google-dfp-slotId').'" data-slot-name="'.$slotName.'"> </div>';
-
-	return $html;
+function getHtmlAdsense($slotName, $adVertical = false) {
+	return '<div class="adsbygoogle '.($adVertical == true ? ' adVertical ' : '' ).'" data-slot-id="'.config_item('google-dfp-slotId').'" data-slot-name="'.$slotName.'"> </div>';
 }
 
 function getHtmlMenu($aMenu, $className = null, $depth = 0){

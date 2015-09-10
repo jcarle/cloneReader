@@ -25,6 +25,10 @@ function appendMessagesToCrForm($form) {
  * Para no pedir datos al pedo, completo las propiedades del form solo cuando se muestra la vista, no al validar
  */
 function populateCrForm($form, $data) {
+	if (isset($form['fields']['entityUrl'])) { // TODO: chequear esta parte, quizas esto convenga setearlo desde afuera
+		$form['fields']['entityUrl']['value'] = getHtmlCrLink(element('entityUrl', $data), 'entityUrl');
+	}
+
 	foreach ($form['fields'] as $fieldName => $fieldValue) {
 		switch ($form['fields'][$fieldName]['type']) {
 			case 'hidden':
@@ -37,6 +41,7 @@ function populateCrForm($form, $data) {
 			case 'raty':
 			case 'numeric':
 			case 'upload':
+			case 'html':
 				// TODO: revisar este IF. Esta puesto para que no sobreescriba fields hiddens con el parentId que se usa para agregar un child
 				if ( element('value', $form['fields'][$fieldName]) === false ) {
 					$form['fields'][$fieldName]['value'] = element($fieldName, $data, '');
@@ -503,7 +508,7 @@ function getHtmlCrLink($url, $fieldName) {
 		<fieldset class="form-group ">
 			<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label"> '.$CI->lang->line('Url').'</label>
 			<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 ">
-				<a name="'.$fieldName.'" class="crLink" href="'.$url.'"> '.$url.'</a>
+				<a name="'.$fieldName.'" class="crLink" href="'.$url.'" target="_blank"> '.$url.'</a>
 			</div>
 		</fieldset>';
 }
