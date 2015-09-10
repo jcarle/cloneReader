@@ -849,6 +849,9 @@ table .dotdotdot {
 	}
 }
 
+.cr-page-process ul li .btn {
+	margin-bottom:5px;
+}
 .servicesMap{
 	display: none;
 }
