@@ -4,8 +4,9 @@ $items = array(
 		'title' => 'Search',
 		'buttons' => array(
 			array(
-				'text'    => 'Users',
-				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeUser'),
+				'text'   => 'Users',
+				'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeUser'),
+				'icon'   => 'fa fa-user text-muted',
 				'childs' => array(
 					array(
 						'text'   => 'Only rows updated',
@@ -14,8 +15,9 @@ $items = array(
 				),
 			),
 			array(
-				'text'    => 'Feeds',
-				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeFeed'),
+				'text'   => 'Feeds',
+				'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeFeed'),
+				'icon'   => 'fa fa-rss text-success',
 				'childs' => array(
 					array(
 						'text'   => 'Only rows updated',
@@ -24,8 +26,9 @@ $items = array(
 				),
 			),
 			array(
-				'text'    => 'Entries',
-				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeEntry'),
+				'text'   => 'Entries',
+				'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeEntry'),
+				'icon'   => 'fa fa-bookmark text-danger',
 				'childs' => array(
 					array(
 						'text'   => 'Only rows updated',
@@ -34,8 +37,9 @@ $items = array(
 				),
 			),
 			array(
-				'text'    => 'Tags',
-				'url'     => 'process/saveEntitiesSearch/'.config_item('entityTypeTag'),
+				'text'   => 'Tags',
+				'url'    => 'process/saveEntitiesSearch/'.config_item('entityTypeTag'),
+				'icon'   => 'fa fa-tags text-info',
 				'childs' => array(
 					array(
 						'text'   => 'Only rows updated',
@@ -44,8 +48,9 @@ $items = array(
 				),
 			),
 			array(
-				'text'    => 'Optimeze table',
-				'url'     => 'process/optimezeTableEntitiesSearch',
+				'text'   => 'Optimeze table',
+				'url'    => 'process/optimezeTableEntitiesSearch',
+				'icon'   => 'fa fa-table text-warning',
 			),
 			array(
 				'text'    => 'All entities',
@@ -65,14 +70,17 @@ $items = array(
 			array(
 				'text' => 'Scan',
 				'url'  => 'process/scanAllFeeds',
+				'icon' => 'fa fa-rss text-success',
 			),
 			array(
 				'text' => 'Rescan 404',
 				'url'  => 'process/rescanAll404Feeds',
+				'icon' => 'fa fa-rss text-success',
 			),
 			array(
 				'text' => 'Process feeds tags',
 				'url'  => 'process/processFeedsTags',
+				'icon' => 'fa fa-rss text-success',
 			),
 
 		)
@@ -83,6 +91,7 @@ $items = array(
 			array(
 				'text' => 'Delete old entries',
 				'url'  => 'process/deleteOldEntries',
+				'icon' => 'fa fa-bookmark text-danger',
 			),
 		),
 	),
