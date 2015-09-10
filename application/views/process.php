@@ -87,47 +87,56 @@ $items = array(
 		),
 	),
 );
-?>
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<ul class="list-group">
-<?php
+
+
+$aLi = array();
 foreach ($items as $item) {
-?>
-			<li class="list-group-item clearfix">
-				<h4 class="list-group-item-heading"><?php echo $this->lang->line($item['title']); ?> </h4>
-<?php
+	$aButtons = array();
 	foreach ($item['buttons'] as $process) {
+		$className = 'btn-default';
+		$icon      = 'fa-cog';
+		if (isset($process['icon'])) {
+			$icon = $process['icon'];
+		}
 		if (!isset($process['childs'])) {
-			echo '
-				<a title="'. $this->lang->line($process['text']).'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn btn-primary" >
-					<i class="fa fa-cog"></i> '. $this->lang->line($process['text']).'
+			$aButtons[] = '
+				<a title="'. $this->lang->line($process['text']).'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn '.$className.'" >
+					<i class="fa '.$icon.'"></i> '. $this->lang->line($process['text']).'
 				</a>';
 		}
 		else {
-			echo '
+			$aChilds = array();
+			foreach ($process['childs'] as $child) {
+				$aChilds[] = ' <li> <a title="'. $this->lang->line($child['text']).'" href="javascript:$.process.submit(\''. base_url($child['url']).'\');"  > '. $this->lang->line($child['text']).' </a> </li>';
+			}
+
+			$aButtons[] = '
 				<div class="btn-group">
-					<a title="'. $process['text'].'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn btn-primary" >
-						<i class="fa fa-cog"></i> '. $this->lang->line($process['text']).'
+					<a title="'. $process['text'].'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn '.$className.'" >
+						<i class="fa '.$icon.'"></i> '. $this->lang->line($process['text']).'
 					</a>
-					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<button type="button" class="btn '.$className.' dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						<span class="caret"></span>
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
-					<ul class="dropdown-menu" role="menu"> ';
-			foreach ($process['childs'] as $child) {
-				echo ' <li> <a title="'. $this->lang->line($child['text']).'" href="javascript:$.process.submit(\''. base_url($child['url']).'\');"  > '. $this->lang->line($child['text']).' </a> </li>';
-			}
-			echo '
+					<ul class="dropdown-menu" role="menu">
+						'.implode('', $aChilds).'
 					</ul>
 				</div> ';
 		}
 	}
-?>
-			</li>
-<?php
+	$aLi[] = '<li class="list-group-item clearfix">
+				<h4 class="list-group-item-heading">'. $this->lang->line($item['title']).' </h4>
+				'.implode('', $aButtons).'
+			</li>';
 }
 ?>
+
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<ul class="list-group">
+<?php echo implode(' ', $aLi); ?>
 		</ul>
 	</div>
 </div>

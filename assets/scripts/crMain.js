@@ -218,10 +218,6 @@ crMain = {
 			default:
 				$page.append(data['html']);
 		}
-
-		if (typeof ga != "undefined") {
-			ga('send', 'pageview', {'page': location.pathname + location.search, 'title': document.title});
-		}
 	},
 
 	renderPageTitle: function(data, $page) {
@@ -277,7 +273,7 @@ crMain = {
 	},
 
 	getPageName: function() {
-		var pageName = location.href.replace(base_url, '');
+		var pageName = location.href.replace(crSettings.base_url, '');
 		if (pageName.indexOf('?') != -1){
 			pageName = pageName.substr(0, pageName.indexOf('?'));
 		}
@@ -315,7 +311,7 @@ crMain = {
 			return;
 		}
 		if (url.substr(0, 7) == 'http://' || url.substr(0, 8) == 'https://') {
-			if (url.indexOf(base_url) == -1) {
+			if (url.indexOf(crSettings.base_url) == -1) {
 				return;
 			}
 		}

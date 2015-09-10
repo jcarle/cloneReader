@@ -166,7 +166,7 @@
 									data:       function (term, page) {
 										return { 'query': term };
 									},
-									results: 	function (data, page) {
+									results:    function (data, page) {
 										return {results: data};
 									}
 								}
@@ -302,29 +302,25 @@
 						var subscribe = field.subscribe[i];
 						$(this.getFieldByName(subscribe.field)).bind(
 							subscribe.event,
-							{ $input: field.$input, callback: subscribe.callback, arguments: subscribe.arguments, applyCallback: subscribe.applyCallback },
-								$.proxy(
-									function(event) {
-										if (event.data.applyCallback) {
-											if (eval(event.data.applyCallback) == false) { return; }
-										}
-
-										var arguments = [event.data.$input];
-										if (event.data.arguments) {
-											for (var i = 0; i<event.data.arguments.length; i++) {
-												arguments.push(eval(event.data.arguments[i]));
-											}
-										}
-
-										var method = event.data.callback;
-										if ( this[method] ) {
-											return this[ method ].apply( this, Array.prototype.slice.call( arguments, 0 ));
-										}
-										else {
-											$.error( 'Method ' +  method + ' does not exist ' );
+							{ $input: field.$input, callback: subscribe.callback, arguments: subscribe.arguments },
+							$.proxy(
+								function(event) {
+									var arguments = [event.data.$input];
+									if (event.data.arguments) {
+										for (var i = 0; i<event.data.arguments.length; i++) {
+											arguments.push(eval(event.data.arguments[i]));
 										}
 									}
-								, this)
+
+									var method = event.data.callback;
+									if ( this[method] ) {
+										return this[ method ].apply( this, Array.prototype.slice.call( arguments, 0 ));
+									}
+									else {
+										$.error( 'Method ' +  method + ' does not exist ' );
+									}
+								}
+							, this)
 						);
 
 						if (subscribe.runOnInit == true) {
@@ -362,6 +358,10 @@
 				'success':
 					$.proxy(
 						function(response) {
+							if (typeof dataLayer != "undefined") {
+								dataLayer.push( { 'event': 'crFormSubmit.' + this.options.frmName })
+							}
+
 							if (this.options.callback != null) {
 								if (typeof this.options.callback == 'string') {
 									eval('this.options.callback = ' + this.options.callback);
@@ -944,14 +944,12 @@
 		}
 
 		data = $.extend({
-			'action': 	pageName,
-			'frmId': 	'frmId',
-			'buttons': 	buttons
+			'action':  pageName,
+			'buttons': buttons
 		}, data);
 
 		var $form = $('<form action="' + data['action'] + '" />')
-			.attr('id', data['frmId'])
-			.addClass('panel panel-default crForm form-horizontal')
+			.addClass(data['frmName'] + ' panel panel-default crForm form-horizontal')
 			.attr('role', 'form')
 			.appendTo($parentNode);
 
@@ -962,9 +960,7 @@
 		if (data['buttons'].length != 0) {
 			$div = $('<div class="formButtons panel-footer" > ').appendTo($form);
 			for (var i=0; i<data['buttons'].length; i++) {
-				$div
-					.append($(data['buttons'][i]))
-					.append(' ');
+				$div.append($(data['buttons'][i])).append(' ');
 			}
 		}
 
@@ -972,7 +968,7 @@
 	},
 
 	renderPopupForm = function(data) {
-		var buttons 	= [
+		var buttons = [
 			'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">' + crLang.line('Close') + '</button>',
 			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '
@@ -981,10 +977,7 @@
 			delete buttons[1];
 		}
 
-		data = $.extend({
-			'frmId': 	'frmId',
-			'buttons': 	buttons
-		}, data);
+		data = $.extend({ 'buttons': buttons }, data);
 
 		var $modal = $('\
 			<div class="modal" role="dialog" >\
@@ -996,8 +989,7 @@
 		');
 
 		var $form = $('<form action="' + data['action'] + '" />')
-			.attr('id', data['frmId'])
-			.addClass('crForm form-horizontal')
+			.addClass(data['frmName'] + ' crForm form-horizontal')
 			.attr('role', 'form')
 			.appendTo($modal.find('.modal-content'));
 
@@ -1014,7 +1006,7 @@
 			.append('<i class="' + (data['icon'] != null ? data['icon'] : 'fa fa-edit') + '"></i>')
 			.append(' ' + data['title']);
 
-		var $modalBody 	= $('<div class="modal-body" />').appendTo($form);
+		var $modalBody  = $('<div class="modal-body" />').appendTo($form);
 		var $parentNode = $modalBody;
 
 		$parentNode = this.renderCrFormInfo(data, $parentNode);
@@ -1036,7 +1028,7 @@
 	},
 
 	renderAjaxForm = function(data, $parentNode) {
-		var buttons 	= [
+		var buttons = [
 			'<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> ' + crLang.line('Back') + ' </button>',
 			'<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> ' + crLang.line('Delete') + ' </button>',
 			'<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> ' + crLang.line('Save') + ' </button> '
@@ -1045,14 +1037,10 @@
 			delete buttons[1];
 		}
 
-		data = $.extend({
-			'frmId':   'frmId',
-			'buttons': buttons
-		}, data);
+		data = $.extend({ 'buttons': buttons }, data);
 
 		var $form = $('<form action="' + data['action'] + '" />')
-			.attr('id', data['frmId'])
-			.addClass('panel panel-default crForm form-horizontal')
+			.addClass(data['frmName'] + ' panel panel-default crForm form-horizontal')
 			.attr('role', 'form')
 			.appendTo($parentNode);
 
@@ -1080,8 +1068,8 @@
 
 	renderCrFormFields = function(fields, $parentNode) {
 		for (var name in fields) {
-			var field 		= fields[name];
-			var $fieldset 	= $('\
+			var field     = fields[name];
+			var $fieldset = $('\
 				<fieldset class="form-group">\
 					<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">' + field['label'] + '</label>\
 					<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9"> </div>\
@@ -1147,7 +1135,7 @@
 					}
 
 					for (var item in source) {
-						var item 	= field['source'][item];
+						var item = field['source'][item];
 						$('<option />')
 							.val(item['id'])
 							.text(item['text'])
@@ -1160,17 +1148,17 @@
 					}
 					break;
 				case 'groupCheckBox':
-					var showId 	= field['showId'] == true;
-					var $input 	= $('<ul class="groupCheckBox" name="' + name + '" />').appendTo($div);
+					var showId = field['showId'] == true;
+					var $input = $('<ul class="groupCheckBox" name="' + name + '" />').appendTo($div);
 
 					$('<li><input type="text" style="display:none" /> </li>').appendTo($input);
 
 					for (var item in field['source']) {
-						var item 	= field['source'][item];
+						var item = field['source'][item];
 						$input.append('\
 							<li>\
 								<div class="checkbox">\
-									 <label>\
+									<label>\
 										<input type="checkbox" value="' + item['id'] + '" ' + ($.inArray(item['id'], field['value']) != -1 ? ' checked="checked" ' : '' ) + ' />\
 										' + item['text'] + (showId == true ? ' - ' + item['id'] : '')  +'\
 									</label>\
@@ -1249,10 +1237,10 @@
 			return $parentNode;
 		}
 
-		var $row 	= $('<div class="row">').appendTo($parentNode);
+		var $row    = $('<div class="row">').appendTo($parentNode);
 		$parentNode = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').appendTo($row);
 
-		var $info 	= $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').html(data.info.html).appendTo($row);
+		var $info = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').html(data.info.html).appendTo($row);
 		if (data.info.position == 'left' ) {
 			$info.before($parentNode);
 		}
@@ -1263,8 +1251,8 @@
 	renderCrFormTree = function(aTree, value, $parent){
 		var $ul = $('<ul />').appendTo($parent);
 		for (var i=0; i<aTree.length; i++) {
-			var $li 	= $('<li/>').appendTo($ul);
-			var $link 	= $('<a />')
+			var $li   = $('<li/>').appendTo($ul);
+			var $link = $('<a />')
 				.attr('href', $.base_url(aTree[i]['url']))
 				.text(aTree[i]['label'])
 				.appendTo($li);

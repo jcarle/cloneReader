@@ -4,7 +4,7 @@ $CI = &get_instance();
 		</div>
 	</div>
 	<footer ></footer>
-<?php	
+<?php
 $CI->load->model('Users_Model');
 $userFilters = $CI->Users_Model->getUserFiltersByUserId( $this->session->userdata('userId') );
 
@@ -18,6 +18,7 @@ $crSettings = array(
 	'defaultCurrencyName' => config_item('defaultCurrencyName'),
 	'environment'         => ENVIRONMENT,
 	'datetime'            => $this->Commond_Model->getCurrentDateTime(),
+	'base_url'            => base_url(),
 	'tagAll'              => config_item('tagAll'),
 	'tagStar'             => config_item('tagStar'),
 	'tagHome'             => config_item('tagHome'),
@@ -29,15 +30,14 @@ $crSettings = array(
 	'userFilters'         => json_decode($userFilters),
 );
 
-echo '	
+echo '
 	<script type="text/javascript" >
 		var crSettings  = '.json_encode($crSettings).';
-		var base_url    = \''. base_url().'\';
 	</script>';
 
-$this->carabiner->display('js');		
+$this->carabiner->display('js');
 
 echo $this->my_js->getHtml();
-?>		
+?>
 </body>
 </html>

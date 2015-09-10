@@ -5,10 +5,10 @@ if (!isset($isPopUp)) {
 }
 
 if ($isPopUp == true) {
-	echo ' <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12"> 
-		<div class="alert alert-warning" role="alert"> 
-			<i class="fa fa-sign-in"></i> '.$this->lang->line('Please log in to continue').' 
-		</div> 
+	echo ' <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
+		<div class="alert alert-warning" role="alert">
+			<i class="fa fa-sign-in"></i> '.$this->lang->line('Please log in to continue').'
+		</div>
 	</div>';
 }
 ?>
@@ -20,18 +20,18 @@ $this->load->view('includes/crForm');
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<ul class="list-group">
-			<li class="list-group-item"> 
+			<li class="list-group-item">
 				<a href="<?php echo base_url(''); ?>" class="btn btn-success" >
 					<i class="fa fa-rss"></i>
 					<?php echo $this->lang->line('Demo'); ?>
-				</a>		
-			</li>	
+				</a>
+			</li>
 			<li class="list-group-item">
 				<a title="<?php echo $this->lang->line('Create account'); ?>" href="<?php echo base_url('register'); ?>" class="btn btn-info" >
 					<i class="fa fa-user"></i>
 					<?php echo $this->lang->line('Create account'); ?>
 				</a>
-			</li>	
+			</li>
 			<li class="list-group-item">
 				<a title="<?php echo $this->lang->line('Facebook Login'); ?>" href="<?php  echo base_url('login/facebook');?>" class="btn btn-facebook" data-skip-app-link="true" >
 					<i class="fa fa-facebook"></i>

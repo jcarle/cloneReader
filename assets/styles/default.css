@@ -707,6 +707,11 @@ table .dotdotdot {
 	max-width: 560px;
 	width: auto;
 }
+	.modal.crAlert i.fa-check-circle {
+		vertical-align: middle;
+		float: none;
+		display: inline-block;
+	}
 @media (max-width: 900px) {
 	.modal-dialog {
 		width: auto;

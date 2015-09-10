@@ -20,17 +20,6 @@ $langs      = getLangToJs($langs);
 $this->my_js->add(langJs($langs));
 $this->my_js->add( ' $(\'.'.getPageName().'\').data(\'meta\', '.json_encode($meta).'); ');
 
-if (ENVIRONMENT == 'production' && config_item('google-analytics-Account') != '') {
-	$this->my_js->add( "
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	ga('create', '".config_item('google-analytics-Account')."', 'auto');
-	ga('send', 'pageview');
-	" );
-}
-
 if (!isset($breadcrumb)) {
 	$breadcrumb = array();
 }
@@ -76,6 +65,13 @@ $siteLogo = config_item('siteLogo');
 	<title><?php echo element('title', $meta). (config_item('addTitleSiteName') == true ? ' | '.config_item('siteName') : ''); ?> </title>
 </head>
 <body>
+<?php
+if (config_item('google-gtm-account') != '' && ENVIRONMENT == 'production') {
+	echo ' <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M38QNF" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\': new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src= \'//www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f); })(window,document,\'script\',\'dataLayer\',\''. config_item('google-gtm-account').'\');</script>';
+}
+?>
+
 	<div id="divWaiting" class="alert alert-warning navbar-fixed-top">
 		<i class="fa fa-spinner fa-spin fa-lg"></i>
 		<small> <?php echo $this->lang->line('loading ...'); ?></small>

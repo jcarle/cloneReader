@@ -83,7 +83,7 @@
 			}
 
 			if ($parent.find('.imageLoading').length == 0) {
-				$img.before('<div class="imageLoading"> <img src="' + $.base_url('assets/images/file-image-o.svg') + '" /> </div>');
+				$img.before('<div class="imageLoading"> <img src="' + $.base_url('assets/images/file-image-o.svg') + '" alt="' + crLang.line('loading ...') + '" /> </div>');
 			}
 
 			if (opts.animateLoading == true) {

@@ -19,10 +19,10 @@ $.extend({
 
 	base_url: function(uri) {
 		if (uri != null) {
-			uri = uri.replace(base_url, '');
-			return base_url + uri;
+			uri = uri.replace(crSettings.base_url, '');
+			return crSettings.base_url + uri;
 		}
-		return base_url;
+		return crSettings.base_url;
 	},
 
 	isMobile: function() {
@@ -644,6 +644,27 @@ $.extend({
 		, this, $gallery));
 
 		$gallery.data('initGallery', true);
+	},
+
+	saveEntitySef: function(event, entityTypeId, entityId, controller) {
+		if (controller == null) {
+			controller = $.base_url('app/saveEntitySef/' + entityTypeId + '/' + entityId);
+		}
+		var crForm = $(event.target).parents('form').data('crForm');
+		$.ajax({
+			'url':   controller,
+			'data':  { },
+			'crForm': crForm,
+			'success':
+				function (response) {
+					var crForm    = this.crForm;
+					var field     = crForm.getFieldByName('entityUrl');
+					var entityUrl = response['result']['entityUrl'];
+					field.attr('href', entityUrl).text(entityUrl);
+
+					$(document).crAlert({ 'msg': crLang.line('Data updated successfully'), 'icon': 'success' });
+				}
+		});
 	}
 });
 
