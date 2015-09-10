@@ -1,25 +1,25 @@
-<?php 
+<?php
 class News extends CI_Controller {
 	function __construct() {
-		parent::__construct();	
-		
+		parent::__construct();
+
 		$this->load->model(array('News_Model', 'Users_Model'));
-	}	
-	
+	}
+
 	function index() {
 		$this->listing();
 	}
-	
+
 	function listing() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
-		
+
 		$query = $this->News_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
-		
+
 		$this->load->view('pageHtml', array(
-			'view'   => 'includes/crList', 
+			'view'   => 'includes/crList',
 			'meta'   => array( 'title' => $this->lang->line('Edit news') ),
 			'list'   => array(
 				'urlList'   => strtolower(__CLASS__).'/listing',
@@ -32,13 +32,13 @@ class News extends CI_Controller {
 			)
 		));
 	}
-	
+
 	function edit($newId) {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$data = getCrFormData($this->News_Model->get($newId, true), $newId);
 		if ($data === null) { return error404(); }
-		
+
 		$form = $this->_getFormProperties($newId);
 
 		if ($this->input->post() != false) {
@@ -46,45 +46,45 @@ class News extends CI_Controller {
 			if ($code == true) {
 				$this->News_Model->save($this->input->post());
 			}
-			
+
 			if ($this->input->is_ajax_request()) {
 				return loadViewAjax($code);
 			}
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'   => 'includes/crForm', 
+			'view'   => 'includes/crForm',
 			'meta'   => array('title' => $this->lang->line('Edit news')),
 			'form'   => populateCrForm($form, $data),
-		));		
+		));
 	}
 
 	function add(){
 		$this->edit(0);
 	}
-	
+
 	function delete() {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
-			
+
 		return loadViewAjax($this->News_Model->delete($this->input->post('newId')));
 	}
 
 	function _getFormProperties($newId) {
 		$form = array(
-			'frmId' => 'frmNewEdit',
-			'rules' => array(),
-			'fields' => array(
+			'frmName' => 'frmNewEdit',
+			'rules'   => array(),
+			'fields'  => array(
 				'newId' => array(
-					'type' => 'hidden', 
+					'type' => 'hidden',
 					'value'=> $newId
 				),
 				'newTitle' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Title'), 
+					'label' => $this->lang->line('Title'),
 				),
 				'newContent' => array(
 					'type'  => 'textarea',
-					'label' => $this->lang->line('Content'), 
+					'label' => $this->lang->line('Content'),
 				),
 				'userId' => array(
 					'type'   => 'typeahead',
@@ -93,22 +93,22 @@ class News extends CI_Controller {
 				),
 				'newDate' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Date'), 
+					'label' => $this->lang->line('Date'),
 				),
 			),
 		);
-		
+
 		if ((int)$newId > 0) {
 			$form['fields']['newSef'] = array(
 				'type'      => 'text',
-				'label'     => 'Sef', 
+				'label'     => 'Sef',
 				'disabled'  => true,
-			); 
-			
+			);
+
 			$form['urlDelete'] = base_url('news/delete/');
-		}		
-		
-		$form['rules'] += array( 
+		}
+
+		$form['rules'] += array(
 			array(
 				'field' => 'newTitle',
 				'label' => 'Title',
@@ -128,12 +128,12 @@ class News extends CI_Controller {
 
 	function view($newSef) {
 //		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-				
+
 		$new 	= $this->News_Model->getByNewSef($newSef);
-		
-		$this->load->view('pageHtml', 
+
+		$this->load->view('pageHtml',
 			array(
-				'view'   => 'newView', 
+				'view'   => 'newView',
 				'meta'   => array( 'title' => $new['newTitle']),
 				'new'    => $new,
 				'breadcrumb' => array(

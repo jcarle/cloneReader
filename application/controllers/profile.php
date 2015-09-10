@@ -540,13 +540,13 @@ class Profile extends CI_Controller {
 		if (! $this->safety->allowByControllerName('profile/edit') ) { return errorForbidden(); }
 
 		$form = array(
-			'frmId'			=> 'frmDownloadOPML',
-			'buttons'		=> array(),
-			'title'			=> $this->lang->line('Download OPML'),
-			'fields'		=> array(
+			'frmName'  => 'frmDownloadOPML',
+			'buttons'  => array(),
+			'title'    => $this->lang->line('Download OPML'),
+			'fields'   => array(
 				'downloadHtml' => array(
-					'type'	=> 'html',
-					'value'	=> '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'" data-skip-app-link="true"> '.$this->lang->line('Download OPML').' <i class="fa fa-download" /> </a>'
+					'type'  => 'html',
+					'value' => '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'" data-skip-app-link="true"> '.$this->lang->line('Download OPML').' <i class="fa fa-download" /> </a>'
 				),
 			)
 		);

@@ -1,25 +1,25 @@
-<?php 
+<?php
 class Help extends CI_Controller {
 
 	function __construct() {
-		parent::__construct();	
-		
+		parent::__construct();
+
 		$this->load->model('Users_Model');
 	}
-	
+
 	function index() {
 
 	}
-	
+
 
 	function keyboardShortcut() {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
-		
+
 		$aKeys = array(
-			'j'	=> 'Next item', 
-			'k'	=> 'Previous item', 
+			'j'	=> 'Next item',
+			'k'	=> 'Previous item',
 			'u'	=> 'Maximize entries',
-			's'	=> 'Mark item as star', 
+			's'	=> 'Mark item as star',
 			'm'	=> 'Mark item as unread',
 			'v' => 'View original',
 			'r' => 'Reload',
@@ -34,16 +34,16 @@ class Help extends CI_Controller {
 			$html .= '<li class="list-group-item"> <span class="label label-success">'.$key.'</span> '.$this->lang->line($value) .' </li> ';
 		}
 		$html .= '	</ul>';
-		
+
 		$form = array(
-			'frmId'			=> 'frmKeyboardShortcut',
-			'title'			=> $this->lang->line('Keyboard shortcut'),
-			'icon' 			=> 'fa fa-keyboard-o',
-			'buttons'		=> array(),
-			'fields'		=> array(
+			'frmName'  => 'frmKeyboardShortcut',
+			'title'    => $this->lang->line('Keyboard shortcut'),
+			'icon'     => 'fa fa-keyboard-o',
+			'buttons'  => array(),
+			'fields'   => array(
 				'keyboardShortcut' => array(
-					'type'	=> 'html',
-					'value'	=> $html
+					'type'  => 'html',
+					'value' => $html
 				),
 			)
 		);
@@ -52,7 +52,7 @@ class Help extends CI_Controller {
 		if ($this->input->is_ajax_request()) {
 			return $this->load->view('includes/crJsonForm', array( 'form' => $form));
 		}
-				
+
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crForm',
