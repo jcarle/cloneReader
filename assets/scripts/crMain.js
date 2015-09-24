@@ -18,6 +18,7 @@ crMain = {
 		$.countProcess = 0;
 
 		$(window).bind('beforeunload', function(){
+			$.showWaiting(true);
 			$.isUnloadPage = true; // Para evitar tirar el error de conección perdida si unlodean la page
 		});
 
@@ -299,7 +300,7 @@ crMain = {
 			return;
 		}
 
-		var $link 	= $(event.currentTarget);
+		var $link = $(event.currentTarget);
 		if ($link.attr('target') != null) {
 			return;
 		}

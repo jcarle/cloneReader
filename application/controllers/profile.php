@@ -546,7 +546,7 @@ class Profile extends CI_Controller {
 			'fields'   => array(
 				'downloadHtml' => array(
 					'type'  => 'html',
-					'value' => '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'" data-skip-app-link="true"> '.$this->lang->line('Download OPML').' <i class="fa fa-download" /> </a>'
+					'value' => '<p>'.$this->lang->line('OPML is a format which allows migrate the feeds to another reader').'</p><a href="'.site_url('profile/doDownloadOPML').'" data-skip-app-link="true" download="cReader.opml"> '.$this->lang->line('Download OPML').' <i class="fa fa-download" /> </a>'
 				),
 			)
 		);
@@ -593,11 +593,7 @@ class Profile extends CI_Controller {
 			$nFeed->addAttribute('title', $row['feedName']);
 			$nFeed->addAttribute('xmlUrl', $row['feedUrl']);
 			$nFeed->addAttribute('htmlUrl', $row['feedLink']);
-
-
 		}
-
-
 
 		force_download('cReader.opml', $xml->saveXML());
 	}
