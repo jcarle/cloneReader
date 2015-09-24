@@ -7,7 +7,6 @@ cp .htaccess.503 .htaccess;
 echo "Running process ..."
 git pull;
 php index.php > /dev/null;
-chown www-data:www-data -R assets/cache/;
 echo "Process complete."
 
 rm .htaccess;

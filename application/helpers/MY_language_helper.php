@@ -41,19 +41,19 @@ function getLangToJs($langs) {
 	$langs[] = 'Are you sure?';
 	$langs[] = 'Not connected. Please verify your network connection';
 	$langs[] = 'No results';
-	return $langs;	
+	return $langs;
 }
 
 function initLang() {
 	$CI = &get_instance();
-	
+
 	$languages = array(
 		'es'      => 'spanish',
 		'pt-br'   => 'portuguese-br',
 		'en'      => 'english',
 		'zh-cn'   => 'zh-CN',
 	);
-	
+
 	$langId = $CI->session->userdata('langId');
 	if ($langId === false) {
 		$CI->load->library('user_agent');
@@ -63,12 +63,12 @@ function initLang() {
 				break;
 			}
 		}
-		
+
 		if ($langId === false) {
 			$langId = config_item('langId');
-		} 
+		}
 	}
-	
+
 	if (!in_array($langId, array_keys($languages))) {
 		$langId = config_item('langId');
 	}
@@ -79,6 +79,6 @@ function initLang() {
 	$CI->config->set_item('langId', $langId);
 
 	$CI->session->set_userdata('langId', $langId);
-	$CI->lang->load('default', $langName);	
-	$CI->lang->load(config_item('siteId'), $langName);	
-}	
+	$CI->lang->load('default', $langName);
+	$CI->lang->load(config_item('siteId'), $langName);
+}
