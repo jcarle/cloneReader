@@ -6,7 +6,13 @@ cp .htaccess.503 .htaccess;
 
 echo "Running process ..."
 git pull;
-php index.php > /dev/null;
+
+php index.php langs/change/es;
+php index.php langs/change/pt-br;
+php index.php langs/change/en;
+php index.php langs/change/zh-cn;
+
+
 echo "Process complete."
 
 rm .htaccess;

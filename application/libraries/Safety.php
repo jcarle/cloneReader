@@ -7,9 +7,9 @@ class Safety {
 			$CI->db->save_queries = false;
 		}
 
-		//$CI->output->enable_profiler(FALSE);		
+		//$CI->output->enable_profiler(FALSE);
 	}
-	
+
 	function initSession() {
 		$CI = &get_instance();
 //pr($CI->session->userdata); die;
@@ -28,11 +28,11 @@ class Safety {
 			}
 		}
 	}
-	
+
 	function login($email, $password) {
 		$CI = &get_instance();
 		$CI->load->model('Users_Model');
-		
+
 		$query = $CI->Users_Model->login($email, $password);
 
 		if ($query->num_rows() == null) {
@@ -40,15 +40,15 @@ class Safety {
 		}
 
 		$row = $query->row();
-		
+
 		$CI->session->set_userdata(array(
 			'userId'  => $row->userId,
 			'langId'  => $row->langId,
 			'groups'  => sourceToArray($CI->Users_Model->getGroups($row->userId), 'groupId'),
 		));
-		
+
 		$CI->Users_Model->updateUserLastAccess();
-		
+
 		return true;
 	}
 
@@ -67,14 +67,14 @@ class Safety {
 
 	function allowByControllerName($controllerName) {
 		$CI = &get_instance();
-		
+
 		$aController = $this->getControllerCache($CI->session->userdata('groups'));
 		return in_array(str_replace('::', '/', strtolower($controllerName)), $aController);
 	}
 
 	function getGroupsByIdUsuario($userId){
 		$CI = &get_instance();
-		
+
 		return $CI->db
 			->where('userId', $userId)
 			->get('users_groups')->result_array();
@@ -94,19 +94,19 @@ class Safety {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	function destroyMenuCache() {
 		$CI = &get_instance();
 		$CI->load->model('Menu_Model');
 		$CI->Menu_Model->destroyMenuCache();
 	}
-	
+
 	function destroyControllersCache() {
 		$CI = &get_instance();
 		$CI->load->model('Controllers_Model');
 		$CI->Controllers_Model->destroyControllersCache();
-	}	
+	}
 }
