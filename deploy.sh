@@ -7,6 +7,9 @@ cp .htaccess.503 .htaccess;
 echo "Running process ..."
 git pull;
 
+rm -f assets/cache/*.js;
+rm -f assets/cache/*.css;
+
 php index.php langs/change/es;
 php index.php langs/change/pt-br;
 php index.php langs/change/en;
