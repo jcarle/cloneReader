@@ -764,7 +764,7 @@ cloneReader = {
 		}
 
 		this.$toolbar.find('.entriesTitle').html('<span>' + title + '</span> ' + (search != '' ? '' : ' <label class="count badge pull-right" />'));
-		this.$ulEntries.prepend(this.$entriesHead);
+		this.$ulEntries.prepend(this.$entriesHead.html(title));
 
 		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 	},
