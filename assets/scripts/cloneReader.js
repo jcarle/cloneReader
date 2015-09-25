@@ -138,7 +138,6 @@ cloneReader = {
 		this.$page.bind('onHide', $.proxy(
 			function() {
 				this.$mainToolbar.hide();
-				this.$toolbar.hide();
 				this.clearSearchForm();
 				$('#header .logo').attr('href', $.base_url());
 				$('#header').css( {'box-shadow': 'none' });
@@ -1685,7 +1684,6 @@ cloneReader = {
 		this.$mainToolbar.removeClass('navbar-nav pull-right').show();
 
 		if (this.isMobile == true) {
-//			this.$toolbar.hide();
 			crMenu.$menuProfile.before(this.$mainToolbar);
 			this.$mainToolbar.addClass('navbar-nav');
 			$('#header .logo').removeAttr('href');
@@ -1693,7 +1691,6 @@ cloneReader = {
 		}
 		else {
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
-//			this.$toolbar.show();
 			$('#header .logo').attr('href', $.base_url());
 			$.hidePopupSimpleForm();
 			$('#header').css( {'box-shadow': 'none' });
