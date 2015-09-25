@@ -65,7 +65,7 @@ class Entries extends CI_Controller {
 	}
 
 	function select($page = 1) { // busco nuevas entries
-//sleep(50);
+//sleep(5);
 		$userId = (int)$this->session->userdata('userId');
 		if ($this->input->post('pushTmpUserEntries') == 'true') {
 			$this->Entries_Model->pushTmpUserEntries($userId);

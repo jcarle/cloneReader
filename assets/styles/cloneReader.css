@@ -86,9 +86,9 @@ footer {
 		#cloneReader .nav > li:last-child {
 			margin-right:5px;
 		}
-		#cloneReader nav i {
-			color: #555;
-		}
+			#cloneReader nav ul i {
+				color: #555;
+			}
 		#cloneReader nav .dropdown-menu {
 			text-align: left;
 		}
