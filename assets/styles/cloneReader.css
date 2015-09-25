@@ -405,6 +405,7 @@ footer {
 			border:0;
 			box-shadow: none;
 			background: transparent;
+			min-height: calc(100% - 30px);
 		}
 			#cloneReader .ulEntries > li.noResult .well {
 				background: white;
