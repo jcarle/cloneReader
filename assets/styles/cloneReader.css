@@ -1,3 +1,6 @@
+footer {
+	display: none;
+}
 #header div .navbar-brand {
 	margin: 5px;
 	padding: 0;
@@ -96,16 +99,19 @@
 		list-style: none;
 		width: auto;
 		min-width:200px;
-		height:calc(100% - 50px);
+		height:calc(100% - 44px);
 		right:0; left: 240px;
 		top:50px;
-		padding:0;
+		padding:10px 0 0 0;
 		position: absolute;
 		overflow-x:auto;
 		background:#E5E5E5;
 		-webkit-transition: all 0.25s ease 0s;
 		-ms-transition: all 0.25s ease 0s;
 		transition: all 0.25s ease 0s;
+	}
+	#cloneReader .ulEntries.list {
+		padding: 0;
 	}
 	#cloneReader .ulEntries.maximixed {
 		left:0;
@@ -129,17 +135,9 @@
 			border: 0 none;
 			box-shadow: none;
 		}
-		#cloneReader .ulEntries > li.entriesHead,
-		#cloneReader .ulEntries.list > li.entriesHead {
-			border:none;
-			border-bottom:1px #CCC solid;
-			border-radius: 0 0 0 0;
-			font-size: 15px;
-			font-weight: bold;
-			margin:0 0 10px 0px;
-			padding: 10px;
-			min-height: 10px !important;
-		}
+	#cloneReader .entriesHead {
+		display: none;
+	}
 		#cloneReader .ulEntries > li.readed {}
 				#cloneReader .ulEntries li .star i {
 					color: #999999;
@@ -643,8 +641,7 @@
 			-ms-transform: translateX(-100%);
 			transform: translateX(-100%);
 		}
-	#cloneReader ul.ulFilters li {
-	}
+	#cloneReader ul.ulFilters li { }
 		#cloneReader ul.ulFilters li > div {
 			border-bottom:1px #ccc solid;
 		}
@@ -679,13 +676,13 @@
 				#cloneReader ul.ulFilters li ul li ul li div a {
 					margin-left:80px;
 				}
-		#cloneReader ul.ulEntries {
+		#cloneReader .ulEntries {
 			border: 0px solid #808080;
 			position: relative;
 			top: 0;
 			left: 0;
 			width: auto;
-			height: calc(100%);
+			height: calc(100% - 42px);
 			margin:0 !important;
 			overflow:auto;
 		}
@@ -702,6 +699,33 @@
 			right: 0;
 			top: 0;
 		}
+		#cloneReader .entriesHead {
+			display: block;
+			background: white;
+			box-shadow: 0 2px 4px gray;
+			border:none;
+			border-bottom:1px #CCC solid;
+			border-radius: 0 0 0 0;
+			font-size: 15px;
+			font-weight: bold;
+			margin:0;
+			padding: 10px;
+			position: relative;
+			z-index: 2;
+		}
+			#cloneReader .entriesHead span {
+				display: block;
+				margin: 0;
+				overflow: hidden;
+				padding: 0;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				width: calc(100% - 50px);
+			}
+			#cloneReader .entriesHead .count {
+				position: absolute;
+				right:5px; top: 12px;
+			}
 }
 
 

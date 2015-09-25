@@ -3,7 +3,15 @@ cloneReader = {
 		this.$page      = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
 		this.$toolbar   = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
+
+		this.$noResult  = $('<li/>').addClass('noResult');
+
+this.$entriesHead = $('<div class="entriesHead"  />').appendTo(this.$page);
+
 		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
+
+//		this.$entriesHead = $('<li/>').addClass('entriesHead');
+
 		this.isMobile   = $.isMobile();
 
 		if (this.aFilters == null) {
@@ -18,7 +26,7 @@ cloneReader = {
 		this.tags               = null;
 		this.aUserEntries       = {};
 		this.aUserTags          = {};
-		this.isMaximized        = (this.isMobile == true ? false : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobile = false
+		this.isMaximized        = (this.isMobile == true ? true : this.aFilters.isMaximized); // Uso una variable local para maximinar, y SOLO la guardo en la db si isMobile = false
 		this.aSystemTags        = [crSettings.tagAll, crSettings.tagStar, crSettings.tagHome, crSettings.tagBrowse];
 		this.isLoaded           = false;
 
@@ -768,10 +776,6 @@ TODO: pensar como mejorar esta parte
 		var filter = this.getFilter(this.aFilters);
 		if (filter == null) { return; }
 
-		if (this.$entriesHead == null) {
-			this.$entriesHead = $('<li/>').addClass('entriesHead');
-		}
-
 		var title  = $.htmlspecialchars(filter.name);
 		var search = $.htmlspecialchars(this.aFilters.search.trim());
 		if (search != '') {
@@ -782,8 +786,8 @@ TODO: pensar como mejorar esta parte
 			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 
-		this.$entriesHead.html(title);
-		this.$ulEntries.prepend(this.$entriesHead);
+		this.$entriesHead.html('<span>' + title + '</span> <label class="count badge pull-right" />');
+//		this.$ulEntries.prepend(this.$entriesHead);
 
 		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 	},
@@ -798,17 +802,13 @@ TODO: pensar como mejorar esta parte
 	},
 
 	renderNotResult: function(loading) {
-		if (this.$noResult == null) {
-			this.$noResult = $('<li/>').addClass('noResult');
-		}
-
 		this.$noResult.appendTo(this.$ulEntries).show();
 
 		if (loading == true) {
 			this.$noResult.html('<div class="alert alert-warning"> <i class="fa fa-spinner fa-spin fa-lg"></i> ' + crLang.line('loading ...') + '</div>').addClass('loading');
 		}
 		else {
-			this.$noResult.html('<div class="well well-lg"> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');
+			this.$noResult.html('<div class="well well-lg">  <i class="fa fa-info-circle text-success fa-lg"></i> ' + crLang.line('no more entries') + ' </div>').removeClass('loading');
 
 			if (this.aFilters['type'] ==  'tag' && this.aFilters['id'] == crSettings.tagAll) {
 				if (Object.keys(this.indexFilters['feed']).length == 0) {
@@ -828,8 +828,6 @@ TODO: pensar como mejorar esta parte
 				}
 			}
 		}
-
-		this.resizeNoResult();
 	},
 
 	starEntry: function($entry, value) {
@@ -982,6 +980,7 @@ TODO: pensar como mejorar esta parte
 		}
 		this.$mainToolbar.find('.filterUnread .count').text(count);
 		this.$page.find('.filterOnlyUnread .count').text(count);
+		this.$entriesHead.find('.count').text(count);
 	},
 
 	selectEntry: function($entry, scrollTo, animate) {
@@ -1033,7 +1032,7 @@ TODO: pensar como mejorar esta parte
 		if ($entry.length == 0) { return; }
 		if (this.isMobile == true && this.$ulEntries.is(':visible') == false) { return; }
 
-		var top = $entry.get(0).offsetTop - 10;
+		var top = $entry.get(0).offsetTop + (this.aFilters.viewType == 'list' ? 0 : -5);
 
 		if (animate == true) {
 			 this.$ulEntries.stop().animate( {  scrollTop: top  } );
@@ -1724,25 +1723,6 @@ TODO: pensar como mejorar esta parte
 		}
 
 		this.$page.find('.pageTitle').remove();
-
-		this.resizeNoResult();
-	},
-
-	resizeNoResult: function() {
-		if (this.$noResult == null) { return; }
-
-		this.$noResult
-			.css('min-height',
-				this.$ulEntries.height()
-//				- $('#header').outerHeight()
-//				- this.$ulEntries.find('.entriesHead').outerHeight()
-//				- this.$ulEntries.offset().top
-//				- this.$noResult.offset().top
-//				- this.$noResult.find('div').outerHeight()
-				- (this.isMobile == true ? 75 : 130) // FIXME: desharkodear!
-				)
-//			.css('border', '1px red solid' )
-		;
 	},
 
 	isBrowseTags: function() {
@@ -2046,4 +2026,3 @@ $.fn.scrollStopped = function(callback) {
 $(document).ready( function() {
 	cloneReader.initSearch();
 });
-;
