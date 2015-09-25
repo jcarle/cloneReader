@@ -1,18 +1,12 @@
 cloneReader = {
 	init: function() {
-		this.$page      = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
-		this.$toolbar   = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
-		this.$ulFilters = $('<ul class="ulFilters"/>').appendTo(this.$page);
-
-		this.$noResult  = $('<li/>').addClass('noResult');
-
-this.$entriesHead = $('<div class="entriesHead"  />').appendTo(this.$page);
-
-		this.$ulEntries = $('<ul class="ulEntries"  />').appendTo(this.$page);
-
-//		this.$entriesHead = $('<li/>').addClass('entriesHead');
-
-		this.isMobile   = $.isMobile();
+		this.$page        = $('.cr-page-home').attr('id', 'cloneReader'); // TODO: revisar el name
+		this.$toolbar     = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
+		this.$ulFilters   = $('<ul class="ulFilters"/>').appendTo(this.$page);
+		this.$noResult    = $('<li/>').addClass('noResult');
+		this.$entriesHead = $('<div class="entriesHead"  />').appendTo(this.$page);
+		this.$ulEntries   = $('<ul class="ulEntries"  />').appendTo(this.$page);
+		this.isMobile     = $.isMobile();
 
 		if (this.aFilters == null) {
 			this.initSearch();
@@ -786,8 +780,10 @@ TODO: pensar como mejorar esta parte
 			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 
-		this.$entriesHead.html('<span>' + title + '</span> <label class="count badge pull-right" />');
-//		this.$ulEntries.prepend(this.$entriesHead);
+		this.$entriesHead.html('<span>' + title + '</span> ' + (search != '' ? '' : ' <label class="count badge pull-right" />'));
+
+		this.$ulEntries.find('.entriesHead').remove();
+		this.$ulEntries.prepend($('<li class="entriesHead" />').html(title));
 
 		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 	},
@@ -1839,8 +1835,7 @@ TODO: pensar como mejorar esta parte
 						$parent = $feed;
 					}
 
-					//this.$ulEntries.stop().scrollTop( $tag.get(0).offsetTop + this.$entriesHead.height()  );
-					this.$ulEntries.stop().scrollTop( $tag.position().top + 45 ); // FIXME: harckodeta!!
+					this.$ulEntries.stop().scrollTop( $tag.position().top + this.$ulEntries.find('.entriesHead:visible').outerHeight() + 10 );
 				}, this, $tag)
 			});
 	},

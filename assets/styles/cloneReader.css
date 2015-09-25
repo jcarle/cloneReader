@@ -94,6 +94,9 @@ footer {
 			text-transform: lowercase;
 		}
 }
+	#cloneReader > .entriesHead {
+		display: none;
+	}
 	#cloneReader .ulEntries {
 		display:block;
 		list-style: none;
@@ -102,7 +105,7 @@ footer {
 		height:calc(100% - 44px);
 		right:0; left: 240px;
 		top:50px;
-		padding:10px 0 0 0;
+		padding:0px 0 0 0;
 		position: absolute;
 		overflow-x:auto;
 		background:#E5E5E5;
@@ -135,9 +138,17 @@ footer {
 			border: 0 none;
 			box-shadow: none;
 		}
-	#cloneReader .entriesHead {
-		display: none;
-	}
+		#cloneReader .ulEntries > li.entriesHead,
+		#cloneReader .ulEntries.list > li.entriesHead {
+			border:none;
+			border-bottom:1px #CCC solid;
+			border-radius: 0 0 0 0;
+			font-size: 15px;
+			font-weight: bold;
+			margin:0 0 10px 0px;
+			padding: 10px;
+			min-height: 10px !important;
+		}
 		#cloneReader .ulEntries > li.readed {}
 				#cloneReader .ulEntries li .star i {
 					color: #999999;
@@ -684,8 +695,12 @@ footer {
 			width: auto;
 			height: calc(100% - 42px);
 			margin:0 !important;
+			padding: 10px 0 0 0;
 			overflow:auto;
 		}
+			#cloneReader .ulEntries > li.entriesHead {
+				display: none;
+			}
 		#cloneReader .ulEntries > li .header > a  {
 			margin:0 20px 0 0;
 		}
@@ -699,7 +714,7 @@ footer {
 			right: 0;
 			top: 0;
 		}
-		#cloneReader .entriesHead {
+		#cloneReader > .entriesHead {
 			display: block;
 			background: white;
 			box-shadow: 0 2px 4px gray;
@@ -714,12 +729,8 @@ footer {
 			z-index: 2;
 		}
 			#cloneReader .entriesHead span {
-				display: block;
 				margin: 0;
-				overflow: hidden;
 				padding: 0;
-				text-overflow: ellipsis;
-				white-space: nowrap;
 				width: calc(100% - 50px);
 			}
 			#cloneReader .entriesHead .count {
