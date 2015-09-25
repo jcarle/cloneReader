@@ -4,7 +4,7 @@ cloneReader = {
 		this.$toolbar     = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters   = $('<ul class="ulFilters"/>').appendTo(this.$page);
 		this.$noResult    = $('<li/>').addClass('noResult');
-		this.$entriesHead = $('<div class="entriesHead"  />').appendTo(this.$page);
+		this.$entriesHead = $('<li class="entriesHead"  />');
 		this.$ulEntries   = $('<ul class="ulEntries"  />').appendTo(this.$page);
 		this.isMobile     = $.isMobile();
 
@@ -302,6 +302,7 @@ cloneReader = {
 
 	renderToolbar: function() {
 		this.$toolbar.html(' \
+			<div class="entriesTitle"> </div>\
 			<ul class="nav navbar-nav"> \
 				<li> \
 					<button title="' + crLang.line('Expand') + '" class="expand"> \
@@ -633,7 +634,6 @@ cloneReader = {
 		$('<label class="star checkbox" title="' + crLang.line('Star') + '" > <i/> </label>').appendTo($footer);
 		$('<label class="read checkbox" > <i/> <span> ' + crLang.line('Keep unread') + ' </span> </label>').appendTo($footer);
 
-
 		$('<a class="btnSocial fa fa-lg fa-envelope"  />')
 			.click(function(event) {
 				event.stopPropagation();
@@ -649,25 +649,8 @@ cloneReader = {
 			{'icon': 'fa fa-google-plus-square', 'app': 'tw:',        'url': 'http://plus.google.com/share?url='},
 		];
 		for (var i=0; i<aSocial.length; i++) {
-			var url = aSocial[i].url + entry.entryUrl;
-			//var linkToApp = aSocial[i].app + aSocial[i].url + entry.entryUrl;
-			$('<a data-rel="external" class="btnSocial fa-lg ' + aSocial[i].icon + '" href="' + url + '"  />').appendTo($footer);
+			$('<a data-rel="external" class="btnSocial fa-lg ' + aSocial[i].icon + '" href="' + (aSocial[i].url + entry.entryUrl) + '"  />').appendTo($footer);
 		}
-
-/*
-TODO: pensar como mejorar esta parte
-
-		if (this.isMobile == true) {
-//			if ( $p.get(0).scrollHeight > $p.height()) {
-				$('<button class="btn btn-default  btnViewAll"> <i class="fa fa-lg fa-reorder" /> </button>')
-					.click(function(event) {
-						var $entry = $(event.target).parents('.entry');
-						$entry.find('> p').css( {'max-height': 'none' });
-						$entry.find('.btnViewAll').remove();
-					})
-					.appendTo($entry);
-//			}
-		} */
 
 		$entry.find('.read, .read i').click(function(event) {
 			event.stopPropagation();
@@ -780,10 +763,8 @@ TODO: pensar como mejorar esta parte
 			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 
-		this.$entriesHead.html('<span>' + title + '</span> ' + (search != '' ? '' : ' <label class="count badge pull-right" />'));
-
-		this.$ulEntries.find('.entriesHead').remove();
-		this.$ulEntries.prepend($('<li class="entriesHead" />').html(title));
+		this.$toolbar.find('.entriesTitle').html('<span>' + title + '</span> ' + (search != '' ? '' : ' <label class="count badge pull-right" />'));
+		this.$ulEntries.prepend(this.$entriesHead);
 
 		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
 	},
@@ -976,7 +957,7 @@ TODO: pensar como mejorar esta parte
 		}
 		this.$mainToolbar.find('.filterUnread .count').text(count);
 		this.$page.find('.filterOnlyUnread .count').text(count);
-		this.$entriesHead.find('.count').text(count);
+		this.$toolbar.find('.entriesTitle .count').text(count);
 	},
 
 	selectEntry: function($entry, scrollTo, animate) {
@@ -1704,7 +1685,7 @@ TODO: pensar como mejorar esta parte
 		this.$mainToolbar.removeClass('navbar-nav pull-right').show();
 
 		if (this.isMobile == true) {
-			this.$toolbar.hide();
+//			this.$toolbar.hide();
 			crMenu.$menuProfile.before(this.$mainToolbar);
 			this.$mainToolbar.addClass('navbar-nav');
 			$('#header .logo').removeAttr('href');
@@ -1712,7 +1693,7 @@ TODO: pensar como mejorar esta parte
 		}
 		else {
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
-			this.$toolbar.show();
+//			this.$toolbar.show();
 			$('#header .logo').attr('href', $.base_url());
 			$.hidePopupSimpleForm();
 			$('#header').css( {'box-shadow': 'none' });

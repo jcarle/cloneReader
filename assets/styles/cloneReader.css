@@ -94,7 +94,7 @@ footer {
 			text-transform: lowercase;
 		}
 }
-	#cloneReader > .entriesHead {
+	#cloneReader nav .entriesTitle {
 		display: none;
 	}
 	#cloneReader .ulEntries {
@@ -138,8 +138,8 @@ footer {
 			border: 0 none;
 			box-shadow: none;
 		}
-		#cloneReader .ulEntries > li.entriesHead,
-		#cloneReader .ulEntries.list > li.entriesHead {
+		#cloneReader .ulEntries li.entriesHead,
+		#cloneReader .ulEntries.list li.entriesHead {
 			border:none;
 			border-bottom:1px #CCC solid;
 			border-radius: 0 0 0 0;
@@ -392,7 +392,7 @@ footer {
 			min-height:50px !important;
 			font-size:small;
 		}
-		#cloneReader .ulEntries.list > li.entriesHead {
+		#cloneReader .ulEntries.list li.entriesHead {
 			border-bottom: 1px solid #CCCCCC;
 			box-shadow: none;
 			margin: 0;
@@ -494,7 +494,7 @@ footer {
 						}
 
 
-	#cloneReader ul.ulFilters {
+	#cloneReader .ulFilters {
 		background:white;
 		width: 240px;
 		position:absolute;
@@ -505,20 +505,20 @@ footer {
 		padding:0px;
 		height:calc(100% - 50px);
 	}
-		#cloneReader ul.ulFilters li {
+		#cloneReader .ulFilters li {
 			position: relative;
 			margin: 0;
 		}
-			#cloneReader ul.ulFilters li div {}
-			#cloneReader ul.ulFilters li div:hover {
+			#cloneReader .ulFilters li div {}
+			#cloneReader .ulFilters li div:hover {
 				background-color:#EEE;
 			}
-				#cloneReader ul.ulFilters li div a,
-				#cloneReader ul.ulFilters li div span {
+				#cloneReader .ulFilters li div a,
+				#cloneReader .ulFilters li div span {
 					line-height:30px;
 					height:30px;
 				}
-				#cloneReader ul.ulFilters li div .icon {
+				#cloneReader .ulFilters li div .icon {
 					background-position: center left;
 					background-repeat: no-repeat;
 					left: 5px;
@@ -527,12 +527,12 @@ footer {
 					width: 20px;
 					text-align: center;
 				}
-				#cloneReader ul.ulFilters li div .icon.arrow {
+				#cloneReader .ulFilters li div .icon.arrow {
 					margin: 0 5px 0 0;
 					cursor: pointer;
 					color: #666666;
 				}
-				#cloneReader ul.ulFilters li div a {
+				#cloneReader .ulFilters li div a {
 					color: #333333;
 					cursor: pointer;
 					display: block;
@@ -540,47 +540,45 @@ footer {
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
-/*					font-weight: bold;
-					font-size:small;*/
 				}
-				#cloneReader ul.ulFilters li.empty > div > a {
+				#cloneReader .ulFilters li.empty > div > a {
 					color:gray;
 					font-weight: normal;
 				}
-				#cloneReader ul.ulFilters li.selected > div > a {
+				#cloneReader .ulFilters li.selected > div > a {
 					color:#d14836;
 				}
-		#cloneReader ul.ulFilters li.expand {
+		#cloneReader .ulFilters li.expand {
 		}
-			#cloneReader ul.ulFilters li .count {
+			#cloneReader .ulFilters li .count {
 				font-size: smaller;
 				cursor:default;
 				color:gray;
 				position:absolute;
 				top:0; right:10px;
 			}
-			#cloneReader ul.ulFilters li ul {
+			#cloneReader .ulFilters li ul {
 				padding:0;
 				list-style:none;
 				margin-left: 0;
 				display: none;
 			}
-			#cloneReader ul.ulFilters li ul.filterVisible { }
-				#cloneReader ul.ulFilters li ul  li {
+			#cloneReader .ulFilters li .filterVisible { }
+				#cloneReader .ulFilters li ul  li {
 				}
-					#cloneReader ul.ulFilters li ul  li .icon {
+					#cloneReader .ulFilters li ul  li .icon {
 						left:25px;
 					}
-					#cloneReader ul.ulFilters li ul  li a {
+					#cloneReader .ulFilters li ul  li a {
 						margin-left:45px;
 					}
-						#cloneReader ul.ulFilters li ul li ul li .icon {
+						#cloneReader .ulFilters li ul li ul li .icon {
 						left:45px;
 					}
-					#cloneReader ul.ulFilters li ul li ul li a {
+					#cloneReader .ulFilters li ul li ul li a {
 						margin-left:65px;
 					}
-			#cloneReader ul.ulFilters li a:hover {
+			#cloneReader .ulFilters li a:hover {
 				text-decoration: none;
 			}
 
@@ -624,12 +622,48 @@ footer {
 			padding-left: 15px;
 		}
 	#cloneReader { }
-	#cloneReader nav .expand {
-	}
+		#cloneReader nav {
+			border: 0 none;
+			box-shadow: none;
+			display: block;
+			margin: 0;
+			min-height: 0;
+			padding: 0;
+		}
+		#cloneReader nav .expand {}
+		#cloneReader nav ul {
+			display: none;
+		}
+		#cloneReader nav .entriesTitle {
+			display: block;
+			background: white;
+			box-shadow: 0 2px 4px gray;
+			border:none;
+			border-bottom:1px #CCC solid;
+			border-radius: 0 0 0 0;
+			font-size: 15px;
+			font-weight: bold;
+			margin:0;
+			padding: 10px;
+			position: relative;
+			z-index: 2;
+		}
+			#cloneReader nav .entriesTitle span {
+				display: block;
+				margin: 0;
+				padding: 0;
+				width: calc(100% - 50px);
+			}
+			#cloneReader nav .entriesTitle .count {
+				position: absolute;
+				right:5px; top: 12px;
+			}
+
+
 		#cloneReader nav .expand i {
 			color:#CCCCCC;
 		}
-		#cloneReader ul.ulFilters {
+		#cloneReader .ulFilters {
 			width: 100%;
 			-webkit-transition: all 0.25s ease 0s;
 			-ms-transition: all 0.25s ease 0s;
@@ -647,44 +681,44 @@ footer {
 			-ms-transform: translateX(0%);
 			transform: translateX(0%);
 		}
-		#cloneReader ul.ulFilters.outside {
+		#cloneReader .ulFilters.outside {
 			-webkit-transform: translateX(-100%);
 			-ms-transform: translateX(-100%);
 			transform: translateX(-100%);
 		}
-	#cloneReader ul.ulFilters li { }
-		#cloneReader ul.ulFilters li > div {
+	#cloneReader .ulFilters li { }
+		#cloneReader .ulFilters li > div {
 			border-bottom:1px #ccc solid;
 		}
-		#cloneReader ul.ulFilters li div .icon {
+		#cloneReader .ulFilters li div .icon {
 			background-position: center center;
 			width: 50px;
 			height:50px;
 			margin:0;
 		}
-		#cloneReader ul.ulFilters li div a,
-		#cloneReader ul.ulFilters li div span {
+		#cloneReader .ulFilters li div a,
+		#cloneReader .ulFilters li div span {
 			font-size: larger;
 			font-weight: normal;
 			height: 50px;
 			line-height: 50px;
 		}
-		#cloneReader ul.ulFilters li div .icon {
+		#cloneReader .ulFilters li div .icon {
 			left: 0px;
 		}
-			#cloneReader ul.ulFilters li ul li .icon {
+			#cloneReader .ulFilters li ul li .icon {
 				left:15px;
 			}
-				#cloneReader ul.ulFilters li ul li ul li .icon {
+				#cloneReader .ulFilters li ul li ul li .icon {
 					left:30px;
 				}
-		#cloneReader ul.ulFilters li div a {
+		#cloneReader .ulFilters li div a {
 			margin-left:50px;
 		}
-			#cloneReader ul.ulFilters li ul li div a {
+			#cloneReader .ulFilters li ul li div a {
 				margin-left:65px;
 			}
-				#cloneReader ul.ulFilters li ul li ul li div a {
+				#cloneReader .ulFilters li ul li ul li div a {
 					margin-left:80px;
 				}
 		#cloneReader .ulEntries {
@@ -698,7 +732,7 @@ footer {
 			padding: 10px 0 0 0;
 			overflow:auto;
 		}
-			#cloneReader .ulEntries > li.entriesHead {
+			#cloneReader .ulEntries li.entriesHead {
 				display: none;
 			}
 		#cloneReader .ulEntries > li .header > a  {
@@ -714,29 +748,6 @@ footer {
 			right: 0;
 			top: 0;
 		}
-		#cloneReader > .entriesHead {
-			display: block;
-			background: white;
-			box-shadow: 0 2px 4px gray;
-			border:none;
-			border-bottom:1px #CCC solid;
-			border-radius: 0 0 0 0;
-			font-size: 15px;
-			font-weight: bold;
-			margin:0;
-			padding: 10px;
-			position: relative;
-			z-index: 2;
-		}
-			#cloneReader .entriesHead span {
-				margin: 0;
-				padding: 0;
-				width: calc(100% - 50px);
-			}
-			#cloneReader .entriesHead .count {
-				position: absolute;
-				right:5px; top: 12px;
-			}
 }
 
 
