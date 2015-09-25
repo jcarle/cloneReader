@@ -70,6 +70,9 @@ footer {
 			position: relative;
 			z-index: 2;
 		}
+		#cloneReader nav .entriesTitle:empty  {
+			display: none;
+		}
 			#cloneReader nav .entriesTitle span {
 				display: block;
 				margin: 0;

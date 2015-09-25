@@ -301,7 +301,7 @@ cloneReader = {
 
 	renderToolbar: function() {
 		this.$toolbar.html(' \
-			<div class="entriesTitle"> </div>\
+			<div class="entriesTitle" />  \
 			<ul class="nav navbar-nav"> \
 				<li> \
 					<button title="' + crLang.line('Expand') + '" class="expand"> \
@@ -530,7 +530,7 @@ cloneReader = {
 		}
 
 		if (result.length == 0) {
-			this.updateMenuCount();
+			this.updateFilterCount();
 			this.renderNotResult(false);
 			return;
 		}
@@ -551,7 +551,7 @@ cloneReader = {
 			this.renderEntry($entry);
 		}
 
-		this.updateMenuCount();
+		this.updateFilterCount();
 		this.renderNotResult(false);
 	},
 
@@ -762,10 +762,16 @@ cloneReader = {
 			title = $.sprintf(crLang.line('Search %s in "%s"'), '<mark>' + search + '</mark>', filter.name) + ' <a class="btn btn-danger btn-xs" title="' + crLang.line('Clear search') + '" href="javascript:cloneReader.changeFilters( { \'search\': \'\' })" > <i class="fa fa-remove"/>  </a>';
 		}
 
-		this.$toolbar.find('.entriesTitle').html('<span>' + title + '</span> ' + (search != '' ? '' : ' <label class="count badge pull-right" />'));
 		this.$ulEntries.prepend(this.$entriesHead.html(title));
 
 		$('title').text(this.$entriesHead.text() + ' | ' + crSettings.siteName);
+
+		if (this.$toolbar.find('.entriesTitle').html() == '') {
+			this.$toolbar.find('.entriesTitle').html(' <span /> <label class="count badge pull-right" /> ');
+		}
+		this.$toolbar.find('.entriesTitle span').html(title);
+
+		this.updateFilterCount();
 	},
 
 	selectFilters: function() {
@@ -859,7 +865,7 @@ cloneReader = {
 			}
 
 			this.renderUlFilterBranch(filter);
-			this.updateMenuCount();
+			this.updateFilterCount();
 		}
 
 		$entry.removeClass('readed');
@@ -879,7 +885,7 @@ cloneReader = {
 	renderCounts: function(filter, count) {
 		filter      = this.getFilter(filter);
 		var $filter = filter.$filter;
-		var count   = this.getCountFilter(filter);
+		var count   = this.getCountFilter(filter, false);
 		if ($filter.length == 0) { return; }
 
 		if (count < 0) {
@@ -949,14 +955,15 @@ cloneReader = {
 		}
 	},
 
-	updateMenuCount: function() {
-		var count = this.getCountFilter(this.getFilter(this.aFilters));
-		if (count > crSettings.feedMaxCount) {
-			count = crSettings.feedMaxCount + '+';
-		}
+	updateFilterCount: function() {
+		var count = this.getCountFilter(this.getFilter(this.aFilters), true);
 		this.$mainToolbar.find('.filterUnread .count').text(count);
 		this.$page.find('.filterOnlyUnread .count').text(count);
-		this.$toolbar.find('.entriesTitle .count').text(count);
+
+		this.$toolbar.find('.entriesTitle .count').text('');
+		if (!(this.aFilters.type == 'tag' && $.inArray(this.aFilters.id, [crSettings.tagStar, crSettings.tagHome]) != -1) && this.aFilters.search.trim() == '') {
+			this.$toolbar.find('.entriesTitle .count').text(count);
+		}
 	},
 
 	selectEntry: function($entry, scrollTo, animate) {
@@ -1085,7 +1092,6 @@ cloneReader = {
 						if (reload == true) {
 							this.$ulFilters.scrollTop(scrollTop);
 							this.$ulFilters.find('.selected').hide().fadeIn('slow');
-							this.updateMenuCount();
 							this.renderEntriesHead();
 						}
 						else {
@@ -1130,7 +1136,7 @@ cloneReader = {
 
 			filter = this.getFilter(filter);
 
-			filter.count = this.getCountFilter(filter);
+			filter.count = this.getCountFilter(filter, false);
 			this.renderCounts(filter);
 
 			if (this.filterIsVisible(filter, $parent.hasClass('filterVisible')) == true) {
@@ -1217,7 +1223,7 @@ cloneReader = {
 		if (filter.type == 'tag' && $.inArray(filter.id, this.aSystemTags) != -1) {
 			return true;
 		}
-		if (parentIsVisible == true && parseInt(this.getCountFilter(filter)) > 0) {
+		if (parentIsVisible == true && parseInt(this.getCountFilter(filter, false)) > 0) {
 			return true;
 		}
 		if (parentIsVisible == true && this.aFilters.onlyUnread == false) {
@@ -1282,7 +1288,7 @@ cloneReader = {
 		return feeds;
 	},
 
-	getCountFilter: function(filter) {
+	getCountFilter: function(filter, appendPlus) {
 		if (filter == null) {
 			return 0;
 		}
@@ -1294,6 +1300,11 @@ cloneReader = {
 		var count = 0;
 		for (var feedId in feeds) {
 			count += parseInt(feeds[feedId].count);
+		}
+		if (appendPlus == true) {
+			if (count > crSettings.feedMaxCount) {
+				count = crSettings.feedMaxCount + '+';
+			}
 		}
 		return count;
 	},

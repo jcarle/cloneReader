@@ -75,6 +75,7 @@ class Entries extends CI_Controller {
 	}
 
 	function selectFilters() {
+//sleep(5);
 		return loadViewAjax(true, $this->Entries_Model->selectFilters($this->session->userdata('userId')));
 	}
 
