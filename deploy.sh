@@ -10,11 +10,12 @@ git pull;
 rm -f assets/cache/*.js;
 rm -f assets/cache/*.css;
 
-php index.php langs/change/es;
-php index.php langs/change/pt-br;
-php index.php langs/change/en;
-php index.php langs/change/zh-cn;
+php index.php langs/change/es > /dev/null;
+php index.php langs/change/pt-br > /dev/null;
+php index.php langs/change/en > /dev/null;
+php index.php langs/change/zh-cn > /dev/null;
 
+#chown jcarle:www-data -R assets/cache/;
 
 echo "Process complete."
 

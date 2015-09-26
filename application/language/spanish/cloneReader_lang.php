@@ -50,7 +50,7 @@ $lang['Star'] = 'Favorito';
 $lang['Download icon'] = 'Download icono';
 $lang['Entries'] = 'Entries';
 $lang['Count users'] = 'Cantidad de usuarios';
-$lang['Count entries'] = 'Cantidad de entries'; 
+$lang['Count entries'] = 'Cantidad de entries';
 $lang['Count starred'] = 'Cantidad de favoritos';
 $lang['View entries'] = 'Ver entries';
 $lang['View users'] = 'Ver usuarios';
@@ -62,10 +62,10 @@ $lang['Thank you for using %s'] = 'Gracias por usar %s';
 $lang['Sent to you by %s via cReader'] = 'Enviado por %s a través de cReader';
 
 
-$lang['Next item'] = 'Siguiente entrada'; 
-$lang['Previous item'] = 'Entrada anterior'; 
+$lang['Next item'] = 'Siguiente entrada';
+$lang['Previous item'] = 'Entrada anterior';
 $lang['Maximize entries'] = 'Maximizar entradas';
-$lang['Mark item as star'] = 'Marcar item como favorito'; 
+$lang['Mark item as star'] = 'Marcar item como favorito';
 $lang['Mark item as unread'] = 'Marcar como no leído';
 $lang['View original'] = 'Ver original';
 $lang['Send entry by email'] = 'Enviar entrada por email';

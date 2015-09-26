@@ -9,7 +9,7 @@ if (!defined('BASEPATH'))
  * @return string
  */
 function langJs($lines) {
-	$CI = & get_instance();
+	$CI   = & get_instance();
 	$json = array();
 
 	foreach ((array)$lines as $line) {
@@ -22,30 +22,41 @@ function langJs($lines) {
 
 }
 
-/**
- * langs que se utilizan en js
- */
- // TODO: renombrar!
-function getLangToJs($langs) {
-	$langs[] = 'DATE_FORMAT';
-	$langs[] = 'MOMENT_DATE_FORMAT';
-	$langs[] = 'NUMBER_DEC_SEP';
-	$langs[] = 'NUMBER_THOUSANDS_SEP';
-	$langs[] = 'Ok';
-	$langs[] = 'Cancel';
-	$langs[] = 'Close';
-	$langs[] = 'Add';
-	$langs[] = 'Delete';
-	$langs[] = 'Save';
-	$langs[] = 'Retry';
-	$langs[] = 'Are you sure?';
-	$langs[] = 'Not connected. Please verify your network connection';
-	$langs[] = 'No results';
-	return $langs;
+
+function createLangJs() {
+	$CI       = & get_instance();
+	$fileName = "./assets/cache/".sprintf("language_%s.js", $CI->session->userdata('langId'));
+
+	if (realpath($fileName) !== false) {
+		$filemtime = filemtime($fileName);
+		foreach ($CI->lang->is_loaded as $fileLang) {
+			if ($filemtime < filemtime('./application/language/'.config_item('language').'/'.$fileLang)) {
+				@unlink($fileName);
+				break;
+			}
+		}
+	}
+
+	if (realpath($fileName) !== false) {
+		return;
+	}
+
+	$lines  = array_keys($CI->lang->language);
+	$aLangs = array();
+	foreach ((array)$lines as $line) {
+		$aLangs[$line] = $CI->lang->line($line);
+	}
+
+	file_put_contents( $fileName, ' crLang.aLangs = '.json_encode($aLangs).';
+cn(crLang.aLangs); '
+);
 }
 
 function initLang() {
 	$CI = &get_instance();
+
+	$CI->lang->is_loaded = array();
+	$CI->lang->language = array();
 
 	$languages = array(
 		'es'      => 'spanish',
