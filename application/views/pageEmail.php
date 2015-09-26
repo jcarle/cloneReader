@@ -14,14 +14,14 @@ $this->load->view($view);
 if (isset($url)) {
 ?>
 			<div style=" background: #F5F5F5; border:1px solid #E5E5E5; border-radius: 5px; padding: 10px;">
-				<?php echo sprintf($this->lang->line('Trouble clicking? Copy and paste this URL into your browser: <br/> %s'), $url); ?>
+				<?php echo sprintf(lang('Trouble clicking? Copy and paste this URL into your browser: <br/> %s'), $url); ?>
 			</div>
 <?php
 }
 ?>
 		</div>
 		<div style="background: #F5F5F5; text-align: center; border-top: 1px solid #E5E5E5; padding: 10px;">
-			<?php echo sprintf($this->lang->line('Thank you for using %s'), config_item('siteName')); ?>
+			<?php echo sprintf(lang('Thank you for using %s'), config_item('siteName')); ?>
 		</div>
 	</div>
 </div>

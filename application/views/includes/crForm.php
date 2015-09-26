@@ -62,8 +62,6 @@
  *
  */
 
-
-$CI          = &get_instance();
 $form        = appendMessagesToCrForm($form);
 $htmlTitle   = '';
 $htmlFields  = '';
@@ -101,11 +99,11 @@ else {
 
 if (!isset($form['buttons'])) {
 	$form['buttons'] = array();
-	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$CI->lang->line('Back').' </button> ';
+	$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.lang('Back').' </button> ';
 	if (isset($form['urlDelete'])) {
-		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> '.$CI->lang->line('Delete').' </button>';
+		$form['buttons'][] = '<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> '.lang('Delete').' </button>';
 	}
-	$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> '.$CI->lang->line('Save').' </button> ';
+	$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> '.lang('Save').' </button> ';
 }
 
 if (!empty($form['buttons'])) {

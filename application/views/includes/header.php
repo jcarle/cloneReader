@@ -68,7 +68,7 @@ if (config_item('google-gtm-account') != '' && ENVIRONMENT == 'production') {
 
 	<div id="divWaiting" class="alert alert-warning navbar-fixed-top">
 		<i class="fa fa-spinner fa-spin fa-lg"></i>
-		<small> <?php echo $this->lang->line('loading ...'); ?></small>
+		<small> <?php echo lang('loading ...'); ?></small>
 	</div>
 
 	<nav class="navbar navbar-default" role="navigation" id="header">

@@ -9,8 +9,8 @@
  *      'urlDelete'     => '',                      // Url para eliminar elementos desde el listado, se envia un json con el array de los ids seleccionados
  *      'showCheckbox'  => false,                   // muestra un checkbox en cada row
  *      'columns'       => array(                   // array con las columnas, con el formato: $key => $value. También puede ser un array con las properties: {'value': nombre de la columna, 'className': incluye un class para los datetime y los numeric,  'isHtml': permite codigo html en la columna }
- *          'entityName' => $this->lang->line('Name'),
- *          'entityDate' => array('class' => 'date', 'value' => $this->lang->line('Date'), 'isHtml' => true ),
+ *          'entityName' => lang('Name'),
+ *          'entityDate' => array('class' => 'date', 'value' => lang('Date'), 'isHtml' => true ),
  *      ),
  *      'data'          => (array) $data,          // los datos a mostrar en el listado;
  *            Cada row puede ser un array macheando el mismo key que en la property columns; o un string html del <tr/>
@@ -112,7 +112,7 @@ foreach ($list['columns'] as $columnName) {
 
 $aTr = array();
 if (count($list['data']) == 0) {
-	$aTr[] = '<tr class="warning"><td colspan="'.(count($list['columns']) + ($showCheckbox == true ? 2 : 1)).'"> '.$CI->lang->line('No results').' </td></tr>';
+	$aTr[] = '<tr class="warning"><td colspan="'.(count($list['columns']) + ($showCheckbox == true ? 2 : 1)).'"> '.lang('No results').' </td></tr>';
 }
 foreach ($list['data'] as $row) {
 	if (!is_array($row)) {
@@ -154,9 +154,9 @@ foreach ($list['data'] as $row) {
 					<span class="input-group-addon">
 						<i class="fa fa-times" ></i>
 					</span>
-					<?php echo form_input(array('name' => 'search',  'value' => $this->input->get('search'), 'class' => 'form-control', 'placeholder' => $CI->lang->line('search'))); ?>
+					<?php echo form_input(array('name' => 'search',  'value' => $this->input->get('search'), 'class' => 'form-control', 'placeholder' => lang('search'))); ?>
 					<span class="input-group-btn">
-						<button type="submit" class="btn btn-default"><?php echo $CI->lang->line('Search'); ?></button>
+						<button type="submit" class="btn btn-default"><?php echo lang('Search'); ?></button>
 					</span>
 				</div>
 			</div>
@@ -189,17 +189,17 @@ echo $htmlSort;
 if (!isset($list['buttons'])) {
 	$list['buttons'] = array();
 	if ($showCheckbox == true && isset($list['urlDelete'])) {
-		$list['buttons'][] = '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.$CI->lang->line('Delete').' </a>';
+		$list['buttons'][] = '<a class="btnDelete btn btn-sm btn-danger" > <i class="fa fa-trash-o fa-lg"></i> '.lang('Delete').' </a>';
 	}
 	if (isset($list['urlAdd']) ) {
-		$list['buttons'][] = '<a href="'.base_url($list['urlAdd']).'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.$CI->lang->line('Add').' </a> ';
+		$list['buttons'][] = '<a href="'.base_url($list['urlAdd']).'" class="btnAdd btn btn-sm btn-success"> <i class="fa fa-file-o fa-fw"></i> '.lang('Add').' </a> ';
 	}
 }
 if (!empty($list['buttons'])) {
 	echo implode(' ', $list['buttons']);
 }
 ?>
-				<span><?php echo sprintf($CI->lang->line('%s rows'), number_format( $list['foundRows'], 0, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'))); ?> </span>
+				<span><?php echo sprintf(lang('%s rows'), number_format( $list['foundRows'], 0, lang('NUMBER_DEC_SEP'), lang('NUMBER_THOUSANDS_SEP'))); ?> </span>
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 <?php

@@ -109,20 +109,20 @@ foreach ($items as $item) {
 		}
 		if (!isset($process['childs'])) {
 			$aButtons[] = '
-				<a title="'. $this->lang->line($process['text']).'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn '.$className.'" >
-					<i class="fa '.$icon.'"></i> '. $this->lang->line($process['text']).'
+				<a title="'. lang($process['text']).'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn '.$className.'" >
+					<i class="fa '.$icon.'"></i> '. lang($process['text']).'
 				</a>';
 		}
 		else {
 			$aChilds = array();
 			foreach ($process['childs'] as $child) {
-				$aChilds[] = ' <li> <a title="'. $this->lang->line($child['text']).'" href="javascript:$.process.submit(\''. base_url($child['url']).'\');"  > '. $this->lang->line($child['text']).' </a> </li>';
+				$aChilds[] = ' <li> <a title="'. lang($child['text']).'" href="javascript:$.process.submit(\''. base_url($child['url']).'\');"  > '. lang($child['text']).' </a> </li>';
 			}
 
 			$aButtons[] = '
 				<div class="btn-group">
 					<a title="'. $process['text'].'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn '.$className.'" >
-						<i class="fa '.$icon.'"></i> '. $this->lang->line($process['text']).'
+						<i class="fa '.$icon.'"></i> '. lang($process['text']).'
 					</a>
 					<button type="button" class="btn '.$className.' dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						<span class="caret"></span>
@@ -135,7 +135,7 @@ foreach ($items as $item) {
 		}
 	}
 	$aLi[] = '<li class="list-group-item clearfix">
-				<h4 class="list-group-item-heading">'. $this->lang->line($item['title']).' </h4>
+				<h4 class="list-group-item-heading">'. lang($item['title']).' </h4>
 				'.implode('', $aButtons).'
 			</li>';
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (!isset($fileupload)) {
 	$fileupload = array();
 }
@@ -12,16 +12,16 @@ if (!isset($fileupload)) {
 				<?php echo form_hidden('entityId', element('entityId', $fileupload)); ?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
-					<h4> <i class="fa fa-edit"></i> <?php echo $this->lang->line('Edit pictures'); ?> </h4>
+					<h4> <i class="fa fa-edit"></i> <?php echo lang('Edit pictures'); ?> </h4>
 				</div>
-				
+
 				<div class="modal-body" >
 					<div class="row fileupload-buttonbar">
 						<div class="span6">
 							<!-- The fileinput-button span is used to style the file input field as button -->
 							<span class="btn btn-success fileinput-button">
 								<i class="fa fa-plus"></i>
-								<span> <?php echo $this->lang->line('Add photos'); ?> </span>
+								<span> <?php echo lang('Add photos'); ?> </span>
 								<input type="file" name="userfile" multiple>
 							</span>
 							<button type="submit" class="btn btn-primary start hide ">
@@ -34,7 +34,7 @@ if (!isset($fileupload)) {
 							</button>
 							<button type="button" class="btn btn-danger delete">
 								<i class="fa fa-trash-o"></i>
-								<span> <?php echo $this->lang->line('Delete'); ?> </span>
+								<span> <?php echo lang('Delete'); ?> </span>
 							</button>
 							<input type="checkbox" class="toggle">
 							<!-- The loading indicator is shown during file processing -->
@@ -50,7 +50,7 @@ if (!isset($fileupload)) {
 							<div class="progress-extended">&nbsp;</div>
 						</div>
 					</div>
-					
+
 					<div style="overflow: auto; max-height: 500px;">
 						<table role="presentation" class="table table-hover"><tbody class="files"></tbody></table>
 					</div>
@@ -90,7 +90,7 @@ if (!isset($fileupload)) {
 			{% if (!i) { %}
 				<button class="btn btn-warning cancel">
 					<i class="fa fa-ban"></i>
-					<span> <?php echo $this->lang->line('Cancel'); ?></span>
+					<span> <?php echo lang('Cancel'); ?></span>
 				</button>
 			{% } %}
 		</td>
@@ -117,7 +117,7 @@ if (!isset($fileupload)) {
 		<td class="text-right">
 			<button class="btn btn-danger delete" data-type="DELETE" data-url="{%=file.urlDelete%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 				<i class="fa fa-trash-o"></i>
-				<span> <?php echo $this->lang->line('Delete'); ?> </span>
+				<span> <?php echo lang('Delete'); ?> </span>
 			</button>
 			<input type="checkbox" name="delete" value="1" class="toggle">
 		</td>

@@ -202,36 +202,36 @@ class Entries_Model extends CI_Model {
 		$aFilters = array();
 
 		$result = array(
-			'tags'		=> $this->selectTagsByUserId($userId),
-			'filters'	=> array(
+			'tags'    => $this->selectTagsByUserId($userId),
+			'filters' => array(
 				array(
-					'type'		=> 'tag',
-					'id'		=> config_item('tagHome'),
-					'name'		=> $this->lang->line('@tag-home'),
-					'icon'		=> site_url().'assets/images/default_feed.png',
+					'type'  => 'tag',
+					'id'    => config_item('tagHome'),
+					'name'  => lang('@tag-home'),
+					'icon'  => site_url().'assets/images/default_feed.png',
 				),
 				array(
-					'type'		=> 'tag',
-					'id'		=> config_item('tagStar'),
-					'name'		=> $this->lang->line('@tag-star'),
-					'icon'		=> site_url().'assets/images/star-on.png',
+					'type'  => 'tag',
+					'id'    => config_item('tagStar'),
+					'name'  => lang('@tag-star'),
+					'icon'  => site_url().'assets/images/star-on.png',
 				),
 				array(
-					'type'			=> 'tag',
-					'id'			=> config_item('tagBrowse'),
-					'name'			=> $this->lang->line('@tag-browse'),
-					'classIcon'		=> 'fa fa-tags',
+					'type'      => 'tag',
+					'id'        => config_item('tagBrowse'),
+					'name'      => lang('@tag-browse'),
+					'classIcon' => 'fa fa-tags',
 				)
 			)
 		);
 
 		$aFilters['tags'] = array(
-			'type'		=> 'tag',
-			'id'		=> config_item('tagAll'),
-			'name'		=> $this->lang->line('@tag-all'),
-			'count'		=> 380,
-			'expanded'	=> true,
-			'childs'	=> array()
+			'type'      => 'tag',
+			'id'        => config_item('tagAll'),
+			'name'      => lang('@tag-all'),
+			'count'     => 380,
+			'expanded'  => true,
+			'childs'    => array()
 		);
 
 		$result['filters'][] = & $aFilters['tags'];

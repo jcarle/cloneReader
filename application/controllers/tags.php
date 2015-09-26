@@ -21,12 +21,12 @@ class Tags extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList',
-			'meta'   => array('title' => $this->lang->line('Edit tags')),
+			'meta'   => array('title' => lang('Edit tags')),
 			'list'   => array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('tagName' => $this->lang->line('Name')),
+				'columns'		=> array('tagName' => lang('Name')),
 				'data'			=> $query['data'],
 				'foundRows'		=> $query['foundRows'],
 				'showId'		=> true,
@@ -55,7 +55,7 @@ class Tags extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm',
-			'meta'   => array('title' => $this->lang->line('Edit tags')),
+			'meta'   => array('title' => lang('Edit tags')),
 			'form'   => populateCrForm($form, $data),
 		));
 	}
@@ -81,7 +81,7 @@ class Tags extends CI_Controller {
 				),
 				'tagName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Name'), 
+					'label' => lang('Name'), 
 				),
 			),
 		);

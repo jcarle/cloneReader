@@ -2,19 +2,19 @@
 	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 		<ul class="nav nav-pills nav-stacked userProfile" >
 			<li>
-				<a title="<?php echo $this->lang->line('Edit profile'); ?>" href="#editProfile" data-toggle="tab" ><?php echo $this->lang->line('Edit profile'); ?></a>
+				<a title="<?php echo lang('Edit profile'); ?>" href="#editProfile" data-toggle="tab" ><?php echo lang('Edit profile'); ?></a>
 			</li>
 			<li>
-				<a title="<?php echo $this->lang->line('Change email'); ?>" href="#changeEmail" data-toggle="tab"><?php echo $this->lang->line('Change email'); ?></a>
+				<a title="<?php echo lang('Change email'); ?>" href="#changeEmail" data-toggle="tab"><?php echo lang('Change email'); ?></a>
 			</li>
 			<li>
-				<a title="<?php echo $this->lang->line('Change password'); ?>" href="#changePassword" data-toggle="tab"><?php echo $this->lang->line('Change password'); ?></a>
+				<a title="<?php echo lang('Change password'); ?>" href="#changePassword" data-toggle="tab"><?php echo lang('Change password'); ?></a>
 			</li>
 			<li>
-				<a title="<?php echo $this->lang->line('Remove account'); ?>" href="#removeAccount" data-toggle="tab"><?php echo $this->lang->line('Remove account'); ?></a>
+				<a title="<?php echo lang('Remove account'); ?>" href="#removeAccount" data-toggle="tab"><?php echo lang('Remove account'); ?></a>
 			</li>
 			<li>
-				<a title="<?php echo $this->lang->line('Download OPML'); ?>" href="#downloadOPML" data-toggle="tab"><?php echo $this->lang->line('Download OPML'); ?></a>
+				<a title="<?php echo lang('Download OPML'); ?>" href="#downloadOPML" data-toggle="tab"><?php echo lang('Download OPML'); ?></a>
 			</li>
 		</ul>
 	</div>
