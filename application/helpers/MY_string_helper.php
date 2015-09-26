@@ -257,8 +257,9 @@ function getHtmlMenu($aMenu, $className = null, $depth = 0){
 		return;
 	}
 
-	$CI  = &get_instance();
-	$aLi = array();
+	$CI            = &get_instance();
+	$aLi           = array();
+	$aSkipAppLink  = array('logout', 'langs/change'); // Para forzar una carga completa de la page. Se usa en appAjax
 	for ($i=0; $i<count($aMenu); $i++) {
 		$item       = $aMenu[$i];
 		$hasChilds  = count($item['childs']) > 0;
@@ -274,6 +275,15 @@ function getHtmlMenu($aMenu, $className = null, $depth = 0){
 
 		if ($item['url'] != null) {
 			$aAttr[] = ' href="'.base_url($item['url']).'" ';
+		}
+
+		$aTmp       = explode('/', $item['url']); // Para quitar los parametros adicionales de un controller
+		$controller = $aTmp[0];
+		if (count($aTmp) > 1) {
+			$controller .= '/'.$aTmp[1];
+		}
+		if (in_array($controller, $aSkipAppLink) == true) {
+			$aAttr[] = 'data-skip-app-link="true"';
 		}
 
 		if ($hasChilds == true) {
