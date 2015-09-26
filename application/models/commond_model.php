@@ -120,7 +120,7 @@ class Commond_Model extends CI_Model {
 	 * Guarda el sef de una entidad
 	 * @return $entitySef
 	 * */
-	function saveEntitySef($entityTypeId, $entityId, $entityName = null) {
+	function saveEntitySef($entityTypeId, $entityId, $entityName = null, $oldEntitySef = null) {
 		$entityConfig = getEntityConfig($entityTypeId);
 		if ($entityConfig == null) {
 			return false;
@@ -128,14 +128,15 @@ class Commond_Model extends CI_Model {
 
 		if ($entityName == null) {
 			$query = $this->db
-				->select($entityConfig['fieldName'], false)
+				->select($entityConfig['fieldName'].', '.$entityConfig['fieldSef'], false)
 				->where($entityConfig['fieldId'], $entityId)
 				->get($entityConfig['tableName'])->row_array();
 			$query = getCrFormData($query, $entityId);
 			if (!is_array($query)) {
 				return false;
 			}
-			$entityName = $query[$entityConfig['fieldName']];
+			$entityName   = $query[$entityConfig['fieldName']];
+			$oldEntitySef = $query[$entityConfig['fieldSef']];
 		}
 
 		$entitySef = url_title($entityName.'-'.$entityTypeId.'-'.$entityId, 'dash', true);
@@ -155,6 +156,10 @@ class Commond_Model extends CI_Model {
 		$this->db
 			->where($entityConfig['fieldId'], $entityId)
 			->update($entityConfig['tableName'], array($entityConfig['fieldSef'] => $entitySef));
+
+		if ($oldEntitySef != $entitySef) {
+			$this->Commond_Model->saveEntityLog($entityTypeId, $entityId, null, array($entityConfig['fieldSef'] => $entitySef));
+		}
 
 		return $entitySef;
 	}
@@ -201,7 +206,7 @@ class Commond_Model extends CI_Model {
 
 		$this->db->trans_start();
 		foreach ($query->result_array() as $data) {
-			$this->saveEntitySef($entityTypeId, $data[$config['fieldId']], $data[$config['fieldName']]);
+			$this->saveEntitySef($entityTypeId, $data[$config['fieldId']], $data[$config['fieldName']], $data[$config['fieldSef']]);
 		}
 
 		$this->db->trans_complete();
@@ -540,15 +545,42 @@ class Commond_Model extends CI_Model {
 		return $data;
 	}
 
+	/**
+	* Inicializa la querly para parsear las visitas de una entidad
+	*/
+	function initQueryEntityVisits($excludeUsersRoot = true, $excludeSpiders = true) {
+		$aUserId = array();
+
+		if ($excludeUsersRoot == true) {
+			$query = $this->db
+				->select('DISTINCT userId', false)
+				->from('users_groups')
+				->where_in('groupId', array(GROUP_ROOT, GROUP_EDITOR))
+				->get()->result_array();
+			foreach ($query as $data) {
+				$aUserId[] = $data['userId'];
+			}
+		}
+
+		$query = $this->db->select('request_uri ', true)->from('usertracking');
+
+		if (!empty($aUserId)) {
+			$this->db->where_not_in('user_identifier', $aUserId);
+		}
+		if ($excludeSpiders == true) {
+			$this->db->where_not_in('client_user_agent', array('XmlSitemapGenerator - http://xmlsitemapgenerator.org', 'Googlebot/2.1 (+http://www.google.com/bot.html)', 'Googlebot/2.1 (+http://www.googlebot.com/bot.html)', 'User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'));
+		}
+	}
+
 	function saveEntitiesVisits($entityTypeId, $entitySef) {
 		$this->Commond_Model->clearEntitiesVisits($entityTypeId);
 
 		$this->db->trans_start();
 
+		$this->initQueryEntityVisits();
 		$query = $this->db
-			->select('request_uri ', true)
 			->like('request_uri', $entitySef)
-			->get('usertracking')->result_array();
+			->get()->result_array();
 		//pr($this->db->last_query());  die;
 		foreach ($query as $data) {
 			$entityId = $this->getEnityIdInEntitySef($data['request_uri'], $entityTypeId);
