@@ -398,16 +398,16 @@ $.extend({
 	/**
 	 * 	Ejecuta las acciones por defecto de una peticion ajax (alerts, redirects, notifications, etc)
 	 * 	Params:
-	 * 		skipAppLink					fuerza la variable $.support.pushState=false; se utiliza para un hard redirect
-	 * 		goToUrl						carga una url
-	 * 		notification				muestra una notificación
-	 * 		msg							muestra un alert, y al cerrarlo carga una url
-	 * 		loadMenuAndTranslations		vuelve a pedir el menu y las traducciones
-	 * 		reloadUrl					vuelve a cargar la url actual
-	 * 		formErrors					un array con el formato: {'fieldName': 'errorMessage' }.
-	 * 										muestra un alert con los errores del form;
-	 * 										en las  llamadas a esta funcion desde crForm se agrega la referencia "response['result']['crForm']" para agregar el has-error a los fields con errores
-	 * 		showPopupLogin				muestra el popup de login
+	 * 		skipAppLink      fuerza la variable $.support.pushState=false; se utiliza para un hard redirect
+	 * 		goToUrl          carga una url
+	 * 		notification     muestra una notificación
+	 * 		msg              muestra un alert, y al cerrarlo carga una url
+	 * 		reloadMenu       vuelve a pedir el menu y las traducciones
+	 * 		reloadUrl        vuelve a cargar la url actual
+	 * 		formErrors       un array con el formato: {'fieldName': 'errorMessage' }.
+	 * 							muestra un alert con los errores del form;
+	 * 							en las  llamadas a esta funcion desde crForm se agrega la referencia "response['result']['crForm']" para agregar el has-error a los fields con errores
+	 * 		showPopupLogin   muestra el popup de login
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
@@ -416,8 +416,8 @@ $.extend({
 		}
 		var result = response['result'];
 
-		if (result['loadMenuAndTranslations'] == true) {
-			crMain.loadMenuAndTranslations(true);
+		if (result['reloadMenu'] == true) {
+			crMain.reloadMenu();
 		}
 
 		if (result['skipAppLink'] == true) {

@@ -44,11 +44,9 @@ function appendFilesToCarabiner() {
 
 	$aJs = array(
 		'jquery-1.7.2.js',
-		//'jquery-1.11.0.js',
 		'jquery.json-2.3.js',
 		'jquery.printf.js',
 		'jquery.url.js',
-//		'jquery.dotdotdot.js',
 		'jquery.actual.js',
 
 		'moment-with-langs.js',
@@ -84,7 +82,6 @@ function appendFilesToCarabiner() {
 
 	$aCss = array(
 		'bootstrap.css',
-//		'bootstrap-theme.css',
 		'bootstrap-social.css',
 		'font-awesome.css',
 
@@ -113,6 +110,9 @@ function appendFilesToCarabiner() {
 
 	$aJs  = array_merge($aJs, $siteAssets['js']);
 	$aCss = array_merge($aCss, $siteAssets['css']);
+
+	createLangJs();
+	$aJs[] = '../../assets/cache/'.sprintf("language_%s.js", $CI->session->userdata('langId'));
 
 	foreach ($aJs as $js) {
 		$CI->carabiner->js($js);

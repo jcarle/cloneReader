@@ -88,7 +88,7 @@ class Controllers extends CI_Controller {
 			}
 
 			if ($this->input->is_ajax_request()) {
-				return loadViewAjax($code, array('loadMenuAndTranslations' => true));
+				return loadViewAjax($code, array('reloadMenu' => true));
 			}
 		}
 

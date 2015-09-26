@@ -8,10 +8,7 @@ crMain = {
 		this.initEvents();
 		this.iniAppAjax();
 		resizeWindow();
-
-		if ($.support.pushState == false) {
-			$.showWaiting(false);
-		}
+		$.showWaiting();
 	},
 
 	initEvents: function() {
@@ -88,8 +85,6 @@ crMain = {
 			return;
 		}
 
-		this.loadMenuAndTranslations(false);
-
 		$(window).bind('popstate', function () {
 			crMain.loadUrl(location.href);
 		});
@@ -99,14 +94,12 @@ crMain = {
 		}
 	},
 
-	loadMenuAndTranslations: function(async) {
+	reloadMenu: function(async) {
 		$.ajax({
-			'url':   $.base_url('app/selectMenuAndTranslations'),
-			'async': (async == true),
+			'url':   $.base_url('app/selectMenu'),
+			'async': true,
 			'success':
 				function(response) {
-					crLang.aLangs = response['result']['aLangs'];
-
 					var aMenu = response['result']['aMenu'];
 					for (var menuName in aMenu) {
 						var $parent = $(aMenu[menuName]['parent']);

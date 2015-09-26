@@ -13,11 +13,6 @@ if (!isset($meta)) {
 	$meta = array();
 }
 $meta = getMetaByController($meta);
-if (!isset($langs)) {
-	$langs = array();
-}
-$langs      = getLangToJs($langs);
-$this->my_js->add(langJs($langs));
 $this->my_js->add( ' $(\'.'.getPageName().'\').data(\'meta\', '.json_encode($meta).'); ');
 
 if (!isset($breadcrumb)) {
@@ -58,7 +53,6 @@ if (ENVIRONMENT == 'development') {
 appendFilesToCarabiner();
 
 $CI->carabiner->display('css');
-//$CI->carabiner->display('js');
 
 $siteLogo = config_item('siteLogo');
 ?>

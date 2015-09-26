@@ -13,10 +13,7 @@ class App extends CI_Controller {
 		header("Location: ".$this->input->get('url'));
 	}
 
-	// TODO: cachear este metodo; que devuelva un archivo en los assetss
-	function selectMenuAndTranslations() {
-//		$this->output->cache(50);
-
+	function selectMenu() {
 		$this->load->driver('cache', array('adapter' => 'file'));
 		$groups = $this->session->userdata('groups');
 
@@ -38,17 +35,7 @@ class App extends CI_Controller {
 			)
 		);
 
-		$lines = array_keys($this->lang->language);
-
-		$aLangs = array();
-		foreach ((array)$lines as $line) {
-			$aLangs[$line] = $this->lang->line($line);
-		}
-
-		return loadViewAjax(true, array(
-			'aMenu'   => $aMenu,
-			'aLangs'  => $aLangs,
-		));
+		return loadViewAjax(true, array( 'aMenu' => $aMenu ));
 	}
 
 	function uploadFile() {

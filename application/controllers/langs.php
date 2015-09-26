@@ -11,14 +11,16 @@ class Langs extends CI_Controller {
 
 		$this->session->set_userdata('langId', $langId);
 
+		// Si estoy ejecutando el controller desde la consola llamo a cualquier vista para que genere los js y css
+		if ($this->input->is_cli_request()) {
+			initLang();
+			$this->load->view('pageHtml', array( 'view' => 'home', ));
+			return;
+		}
+
 		// No guardo el idioma del usuario anonimo
 		if ($this->session->userdata('userId') !== USER_ANONYMOUS) {
 			$this->Users_Model->updateLangIdByUserId($langId, $this->session->userdata('userId'));
-		}
-
-		// Si estoy ejecutando el controller desde la consola llamo a cualquier vista para que genere los js y css
-		if ($this->input->is_cli_request()) {
-			$this->load->view('pageHtml', array( 'view' => 'home', ));
 		}
 
 		$this->load->library('user_agent');
