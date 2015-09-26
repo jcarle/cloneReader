@@ -37,21 +37,21 @@ class Feedbacks extends CI_Controller {
 				),
 				'feedbackUserName' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Name'),
+					'label'  => lang('Name'),
 					'value'  => trim(element('userFirstName', $data).' '.element('userLastName', $data)),
 				),
 				'feedbackUserEmail' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Email'),
+					'label'  => lang('Email'),
 					'value'  => $feedbackUserEmail
 				),
 				'feedbackDesc' => array(
 					'type'  => 'textarea',
-					'label' => $this->lang->line('Comment'),
+					'label' => lang('Comment'),
 					'value' => ''
 				),
 			),
-			'buttons' => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-comment"></i> '.$this->lang->line('Send').'</button> '),
+			'buttons' => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-comment"></i> '.lang('Send').'</button> '),
 		);
 
 		$form['rules'] = array(
@@ -87,7 +87,7 @@ class Feedbacks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm',
-			'meta'  => array( 'title' => $this->lang->line('Feedback') ),
+			'meta'  => array( 'title' => lang('Feedback') ),
 			'form'  => $form,
 			'langs' => array( 'Thanks for contacting us' ),
 		));
@@ -103,15 +103,15 @@ class Feedbacks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'    => 'includes/crList',
-			'meta'    => array( 'title' => $this->lang->line('Edit feedbacks')),
+			'meta'    => array( 'title' => lang('Edit feedbacks')),
 			'list'    => array(
 				'urlList'   => strtolower(__CLASS__).'/listing',
 				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
 				'columns'   => array(
-					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  $this->lang->line('Description')),
-					'feedbackDate'       => array('class' => 'datetime', 'value' => $this->lang->line('Date')),
-					'feedbackUserName'   => $this->lang->line('Name'),
-					'feedbackUserEmail'  => $this->lang->line('Email'),
+					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  lang('Description')),
+					'feedbackDate'       => array('class' => 'datetime', 'value' => lang('Date')),
+					'feedbackUserName'   => lang('Name'),
+					'feedbackUserEmail'  => lang('Email'),
 				),
 				'data'       => $query['data'],
 				'foundRows'  => $query['foundRows'],
@@ -141,7 +141,7 @@ class Feedbacks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'    => 'includes/crForm',
-			'meta'    => array('title' => $this->lang->line('Edit feedbacks')),
+			'meta'    => array('title' => lang('Edit feedbacks')),
 			'form'    => populateCrForm($form, $data),
 		));
 	}
@@ -149,7 +149,7 @@ class Feedbacks extends CI_Controller {
 	function _getFormProperties($feedbackId) {
 		$form = array(
 			'frmName'  => 'frmFeedbackEdit',
-			'buttons'  => array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$this->lang->line('Back').' </button> '),
+			'buttons'  => array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.lang('Back').' </button> '),
 			'fields' => array(
 				'feedbackId' => array(
 					'type'  => 'hidden',
@@ -157,20 +157,20 @@ class Feedbacks extends CI_Controller {
 				),
 				'feedbackUserName' => array(
 					'type'      => 'text',
-					'label'     => $this->lang->line('Name'),
+					'label'     => lang('Name'),
 					'disabled'  => true,
 				),
 				'feedbackUserEmail' => array(
 					'type'   => 'text',
-					'label'  => $this->lang->line('Email'),
+					'label'  => lang('Email'),
 				),
 				'feedbackDesc' => array(
 					'type'   => 'textarea',
-					'label'  => $this->lang->line('Description'),
+					'label'  => lang('Description'),
 				),
 				'feedbackDate' => array(
 					'type'   => 'datetime',
-					'label'  => $this->lang->line('Date'),
+					'label'  => lang('Date'),
 				),
 			)
 		);
@@ -191,7 +191,7 @@ class Feedbacks extends CI_Controller {
 		if ((int)$feedbackId > 0) {
 			$form['urlDelete'] = base_url('feedbacks/delete/');
 
-			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.lang('Delete').' </button>';
 		}
 
 		$this->form_validation->set_rules($form['rules']);

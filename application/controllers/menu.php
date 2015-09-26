@@ -19,7 +19,7 @@ class Menu extends CI_Controller {
 
 		$form = array(
 			'frmName'  => 'frmMenuEdit',
-			'buttons'  => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.$this->lang->line('Save').'</button> '),
+			'buttons'  => array( '<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> '.lang('Save').'</button> '),
 			'fields'   => array(
 				'menuId' => array(
 					'type'  => 'hidden',
@@ -36,11 +36,11 @@ class Menu extends CI_Controller {
 				),
 				'menuName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Name'),
+					'label' => lang('Name'),
 				),
 				'controllerId' => array(
 					'type'             => 'dropdown',
-					'label'            => $this->lang->line('Controller'),
+					'label'            => lang('Controller'),
 					'appendNullOption' => true,
 				),
 				'menuParentId' => array(
@@ -49,7 +49,7 @@ class Menu extends CI_Controller {
 				),
 				'menuPosition' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Position'),
+					'label' => lang('Position'),
 				),
 				'menuClassName' => array(
 					'type'  => 'text',
@@ -61,23 +61,23 @@ class Menu extends CI_Controller {
 				),
 				'menuTranslate' => array(
 					'type'  => 'checkbox',
-					'label' => $this->lang->line('Translate'),
+					'label' => lang('Translate'),
 				),
 				'menuDividerBefore' => array(
 					'type'  => 'checkbox',
-					'label' => $this->lang->line('Divider before'),
+					'label' => lang('Divider before'),
 				),
 				'menuDividerAfter' => array(
 					'type'  => 'checkbox',
-					'label' => $this->lang->line('Divider after'),
+					'label' => lang('Divider after'),
 				),
 			)
 		);
 
 		if ((int)$menuId > 0) {
 			$form['urlDelete'] = base_url('menu/delete');
-			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>');
-			array_unshift($form['buttons'], '<button type="button" class="btn btn-default" onclick="$.goToUrl(\''.base_url('menu').'\');" ><i class="fa fa-arrow-left"></i> '.$this->lang->line('Cancel').' </button>');
+			array_unshift($form['buttons'], '<button type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i> '.lang('Delete').' </button>');
+			array_unshift($form['buttons'], '<button type="button" class="btn btn-default" onclick="$.goToUrl(\''.base_url('menu').'\');" ><i class="fa fa-arrow-left"></i> '.lang('Cancel').' </button>');
 		}
 
 		$form['rules'] = array(
@@ -105,7 +105,7 @@ class Menu extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm',
-			'meta'  => array( 'title' => $this->lang->line('Edit menu') ),
+			'meta'  => array( 'title' => lang('Edit menu') ),
 			'form'  => populateCrForm($form, $data),
 		));
 	}

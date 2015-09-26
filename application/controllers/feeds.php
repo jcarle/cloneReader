@@ -48,45 +48,45 @@ class Feeds extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'      => 'includes/crList',
-			'meta'      => array('title' => $this->lang->line('Edit feeds')),
+			'meta'      => array('title' => lang('Edit feeds')),
 			'list'      => array(
 				'showId' => true,
 				'urlList'  => strtolower(__CLASS__).'/listing',
 				'urlEdit'  => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'   => strtolower(__CLASS__).'/add',
 				'columns'  => array(
-					'feedName'          => $this->lang->line('Name'),
-					'feedDescription'   => $this->lang->line('Description'),
-					'statusName'        => $this->lang->line('Status'),
-					'countryName'       => $this->lang->line('Country'),
-					'langName'          => $this->lang->line('Language'),
-					'feedUrl'           => $this->lang->line('Url'),
-					'feedLink'          => $this->lang->line('Link'),
-					'feedLastEntryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Last entry')),
-					'feedLastScan'      => array('class' => 'datetime', 'value' => $this->lang->line('Last update')),
-					'feedCountUsers'    => array('class' => 'numeric', 'value' => $this->lang->line('Users')),
-					'feedCountEntries'  => array('class' => 'numeric', 'value' => $this->lang->line('Entries')),
+					'feedName'          => lang('Name'),
+					'feedDescription'   => lang('Description'),
+					'statusName'        => lang('Status'),
+					'countryName'       => lang('Country'),
+					'langName'          => lang('Language'),
+					'feedUrl'           => lang('Url'),
+					'feedLink'          => lang('Link'),
+					'feedLastEntryDate' => array('class' => 'datetime', 'value' => lang('Last entry')),
+					'feedLastScan'      => array('class' => 'datetime', 'value' => lang('Last update')),
+					'feedCountUsers'    => array('class' => 'numeric', 'value' => lang('Users')),
+					'feedCountEntries'  => array('class' => 'numeric', 'value' => lang('Entries')),
 				),
 				'foundRows'  => $query['foundRows'],
 				'data'       => $query['data'],
 				'filters'    => array(
 					'statusId' => array(
 						'type'              => 'dropdown',
-						'label'             => $this->lang->line('Status'),
+						'label'             => lang('Status'),
 						'value'             => $statusId,
 						'source'            => $this->Status_Model->selectToDropdown(),
 						'appendNullOption'  => true
 					),
 					'countryId' => array(
 						'type'              => 'dropdown',
-						'label'             => $this->lang->line('Country'),
+						'label'             => lang('Country'),
 						'value'             => $this->input->get('countryId'),
 						'source'            => $this->Countries_Model->selectToDropdown(),
 						'appendNullOption'  => true
 					),
 					'langId' => array(
 						'type'               => 'dropdown',
-						'label'              => $this->lang->line('Language'),
+						'label'              => lang('Language'),
 						'value'              => $this->input->get('langId'),
 						'source'             => $this->Languages_Model->selectToDropdown(),
 						'appendNullOption'   => true
@@ -101,25 +101,25 @@ class Feeds extends CI_Controller {
 					),
 					'userId' => array(
 						'type'          => 'typeahead',
-						'label'         => $this->lang->line('User'),
+						'label'         => lang('User'),
 						'source'        => base_url('search/users/'),
 						'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
 						'multiple'      => false,
-						'placeholder'   => $this->lang->line('User')
+						'placeholder'   => lang('User')
 					),
 					'feedSuggest' => array(
 						'type'    => 'checkbox',
-						'label'   => $this->lang->line('Only feed suggest'),
+						'label'   => lang('Only feed suggest'),
 						'checked' => $feedSuggest,
 					),
 				),
 				'sort' => array(
 					'feedId'            => '#',
-					'feedName'          => $this->lang->line('Name'),
-					'feedLastEntryDate' => $this->lang->line('Last entry'),
-					'feedLastScan'      => $this->lang->line('Last update'),
-					'feedCountUsers'    => $this->lang->line('Count users'),
-					'feedCountEntries'  => $this->lang->line('Count entries'),
+					'feedName'          => lang('Name'),
+					'feedLastEntryDate' => lang('Last entry'),
+					'feedLastScan'      => lang('Last update'),
+					'feedCountUsers'    => lang('Count users'),
+					'feedCountEntries'  => lang('Count entries'),
 				)
 			)
 		));
@@ -153,7 +153,7 @@ class Feeds extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm',
-			'meta'   => array('title' => $this->lang->line('Edit feeds') ),
+			'meta'   => array('title' => lang('Edit feeds') ),
 			'form'   => populateCrForm($form, $data)
 		));
 	}
@@ -179,47 +179,47 @@ class Feeds extends CI_Controller {
 				),
 				'feedName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Name'),
+					'label' => lang('Name'),
 				),
 				'feedIcon' => array(
 					'type'      => 'upload',
-					'label'     => $this->lang->line('Icon'),
+					'label'     => lang('Icon'),
 					'isPicture' => true,
 					'disabled'  => true,
 				),
 				'feedDescription' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Description'),
+					'label' => lang('Description'),
 				),
 				'feedUrl' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Url'),
+					'label' => lang('Url'),
 				),
 				'feedLink' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Link'),
+					'label' => lang('Link'),
 				),
 				'countryId' => array(
 					'type'              => 'dropdown',
-					'label'             => $this->lang->line('Country'),
+					'label'             => lang('Country'),
 					'appendNullOption'  => true
 				),
 				'langId' => array(
 					'type'              => 'dropdown',
-					'label'             => $this->lang->line('Language'),
+					'label'             => lang('Language'),
 					'appendNullOption'  => true
 				),
 				'feedLastEntryDate' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Last entry'),
+					'label' => lang('Last entry'),
 				),
 				'feedLastScan' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Last update'),
+					'label' => lang('Last update'),
 				),
 				'statusId' => array(
 					'type'     => 'dropdown',
-					'label'    => $this->lang->line('Status'),
+					'label'    => lang('Status'),
 					'disabled' => true
 				),
 				'aTagId' => array(
@@ -232,63 +232,63 @@ class Feeds extends CI_Controller {
 				),
 				'feedSuggest' => array(
 					'type'   => 'checkbox',
-					'label'  => sprintf($this->lang->line('Show in "%s" tag?'), $this->lang->line('@tag-browse')),
+					'label'  => sprintf(lang('Show in "%s" tag?'), lang('@tag-browse')),
 				),
 				'fixLocale' => array(
 					'type'  => 'checkbox',
-					'label' => sprintf($this->lang->line('Fix language')),
+					'label' => sprintf(lang('Fix language')),
 				),
 				'feedKeepOldEntries' => array(
 					'type'  => 'checkbox',
-					'label' => sprintf($this->lang->line('Keep old entries')),
+					'label' => sprintf(lang('Keep old entries')),
 				),
 			),
 		);
 
 		$form['buttons'] = array();
-		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.$this->lang->line('Back').' </button> ';
+		$form['buttons'][] = '<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.lang('Back').' </button> ';
 		if ((int)$feedId > 0) {
 
 			$form['fields']['feedCountUsers'] = array(
 				'type'     => 'numeric',
-				'label'    => $this->lang->line('Count users'),
+				'label'    => lang('Count users'),
 				'disabled' => true,
 				'mDec'     => 0,
 			);
 			$form['fields']['feedCountEntries'] = array(
 				'type'      => 'numeric',
-				'label'     => $this->lang->line('Count entries'),
+				'label'     => lang('Count entries'),
 				'disabled'  => true,
 				'mDec'      => 0,
 			);
 			$form['fields']['feedCountStarred'] = array(
 				'type'      => 'numeric',
-				'label'     => $this->lang->line('Count starred'),
+				'label'     => lang('Count starred'),
 				'value'     => $this->Feeds_Model->countEntriesStarredByFeedId($feedId),
 				'disabled'  => true,
 				'mDec'      => 0,
 			);
 			$form['fields']['linkViewEntries'] = array(
 				'type'      => 'link',
-				'label'     => $this->lang->line('View entries'),
+				'label'     => lang('View entries'),
 				'value'     => site_url('entries/listing?feedId='.$feedId),
 			);
 
 			$form['fields']['linkViewUsers'] = array(
 				'type'   => 'link',
-				'label'  => $this->lang->line('View users'),
+				'label'  => lang('View users'),
 				'value'  => site_url('users/listing?feedId='.$feedId),
 			);
 
-			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.$this->lang->line('Delete').' </button>';
-			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="fa fa-refresh"></i> '.$this->lang->line('Scan').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.lang('Delete').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnScan" onclick="$.Feeds.resetAndScanFeed('.$feedId.');"><i class="fa fa-refresh"></i> '.lang('Scan').' </button>';
 
-			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="fa fa-picture-o"></i> '.$this->lang->line('Download icon').' </button>';
-			$form['buttons'][] = '<button type="button" class="btn btn-warning btnDownloadIcon" onclick="$.Feeds.deleteOldEntriesByFeedId('.$feedId.');"><i class="fa fa-times"></i> '.$this->lang->line('Remove old entries').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-info btnDownloadIcon" onclick="$.Feeds.saveFeedIcon('.$feedId.');"><i class="fa fa-picture-o"></i> '.lang('Download icon').' </button>';
+			$form['buttons'][] = '<button type="button" class="btn btn-warning btnDownloadIcon" onclick="$.Feeds.deleteOldEntriesByFeedId('.$feedId.');"><i class="fa fa-times"></i> '.lang('Remove old entries').' </button>';
 
 			$form['urlDelete'] = base_url('feeds/delete/');
 		}
-		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> '.$this->lang->line('Save').' </button> ';
+		$form['buttons'][] = '<button type="submit" class="btn btn-primary" disabled="disabled"><i class="fa fa-save"></i> '.lang('Save').' </button> ';
 
 		$form['rules'] += array(
 			array(

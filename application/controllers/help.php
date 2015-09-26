@@ -31,13 +31,13 @@ class Help extends CI_Controller {
 
 		$html = '<ul class="list-group">';
 		foreach ($aKeys as $key => $value) {
-			$html .= '<li class="list-group-item"> <span class="label label-success">'.$key.'</span> '.$this->lang->line($value) .' </li> ';
+			$html .= '<li class="list-group-item"> <span class="label label-success">'.$key.'</span> '.lang($value) .' </li> ';
 		}
 		$html .= '	</ul>';
 
 		$form = array(
 			'frmName'  => 'frmKeyboardShortcut',
-			'title'    => $this->lang->line('Keyboard shortcut'),
+			'title'    => lang('Keyboard shortcut'),
 			'icon'     => 'fa fa-keyboard-o',
 			'buttons'  => array(),
 			'fields'   => array(
@@ -55,10 +55,10 @@ class Help extends CI_Controller {
 
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crForm',
-			'form'			=> $form,
-			'title'			=> $this->lang->line('Keyboard shortcut'),
-			'code'			=> true
+			'view'  => 'includes/crForm',
+			'form'  => $form,
+			'title' => lang('Keyboard shortcut'),
+			'code'  => true
 		));
 	}
 }

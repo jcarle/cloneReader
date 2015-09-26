@@ -39,26 +39,26 @@ class Entries extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'      => 'includes/crList',
-			'meta'      => array( 'title' => $this->lang->line('Edit entries')),
+			'meta'      => array( 'title' => lang('Edit entries')),
 			'list'       => array(
 				'urlList'       => strtolower(__CLASS__).'/listing',
 				'urlEdit'       => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'        => strtolower(__CLASS__).'/add',
-				'columns'       => array('feedName' => $this->lang->line('Feed'), 'entryTitle' => $this->lang->line('Title'), 'entryUrl' => $this->lang->line('Url'), 'entryDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
+				'columns'       => array('feedName' => lang('Feed'), 'entryTitle' => lang('Title'), 'entryUrl' => lang('Url'), 'entryDate' => array('class' => 'datetime', 'value' => lang('Date'))),
 				'data'          => $query['data'],
 				'foundRows'     => $query['foundRows'],
 				'showId'        => false,
 				'filters'       => array(
 					'feedId' => array(
 						'type'      => 'typeahead',
-						'label'     => $this->lang->line('Feed'),
+						'label'     => lang('Feed'),
 						'source'    => base_url('search/feeds'),
 						'value'     => array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)),
 					),
 				),
 				'sort' => array(
 					'entryId'     => '#',
-					'entryDate'   => $this->lang->line('Date'),
+					'entryDate'   => lang('Date'),
 				)
 			)
 		));
@@ -100,7 +100,7 @@ class Entries extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm',
-			'meta'  => array( 'title' => $this->lang->line('Edit entries')),
+			'meta'  => array( 'title' => lang('Edit entries')),
 			'form'  => populateCrForm($form, $data),
 		));
 	}
@@ -126,24 +126,24 @@ class Entries extends CI_Controller {
 				),
 				'feedId' => array(
 					'type'   => 'typeahead',
-					'label'  => $this->lang->line('Feed'),
+					'label'  => lang('Feed'),
 					'source' => base_url('search/feeds/'),
 				),
 				'entryTitle' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Title'),
+					'label' => lang('Title'),
 				),
 				'entryUrl' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Url'),
+					'label' => lang('Url'),
 				),
 				'entryContent' => array(
 					'type'   => 'textarea',
-					'label'  => $this->lang->line('Content'),
+					'label'  => lang('Content'),
 				),
 				'entryDate' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Date'),
+					'label' => lang('Date'),
 				),
 			),
 		);
@@ -249,7 +249,7 @@ class Entries extends CI_Controller {
 		// guardo las entries en el user
 		$this->Entries_Model->saveUserEntries($userId, $feedId);
 
-		return loadViewAjax(true, array('notification' => $this->lang->line('The feed has been sent successfully')) );
+		return loadViewAjax(true, array('notification' => lang('The feed has been sent successfully')) );
 	}
 
 	function unsubscribeFeed() {
@@ -310,10 +310,10 @@ class Entries extends CI_Controller {
 
 		$form = array(
 			'frmName'             => 'frmShareByEmail',
-			'buttons'             => array('<button type="submit" class="btn btn-primary"><i class="fa fa-envelope "></i> '.$this->lang->line('Send').' </button>'),
+			'buttons'             => array('<button type="submit" class="btn btn-primary"><i class="fa fa-envelope "></i> '.lang('Send').' </button>'),
 			'icon'                => 'fa fa-envelope fa-lg text-primary',
 			'modalHideOnSubmit'   => true,
-			'title'               => sprintf($this->lang->line('Send by email %s'), ' "'.$data['entryTitle'].'" '),
+			'title'               => sprintf(lang('Send by email %s'), ' "'.$data['entryTitle'].'" '),
 			'fields'              => array(
 				'entryId' => array(
 					'type'  => 'hidden',
@@ -321,17 +321,17 @@ class Entries extends CI_Controller {
 				),
 				'userFriendEmail' => array(
 					'type'   => 'typeahead',
-					'label'  => $this->lang->line('For'),
+					'label'  => lang('For'),
 					'source' => base_url('search/friends/'),
 					'value'  => array( 'id' => null, 'text' => null ),
 				),
 				'shareByEmailComment' => array(
 					'type'  => 'textarea',
-					'label' => $this->lang->line('Comment'),
+					'label' => lang('Comment'),
 				),
 				'sendMeCopy' => array(
 					'type'    => 'checkbox',
-					'label'   => $this->lang->line('Send me a copy'),
+					'label'   => lang('Send me a copy'),
 					'checked' => true,
 				),
 			)
@@ -384,6 +384,6 @@ class Entries extends CI_Controller {
 
 		$this->Tasks_Model->addTask('shareByEmail', $params);
 
-		return loadViewAjax(true, array('notification' => $this->lang->line('The email has been sent')));
+		return loadViewAjax(true, array('notification' => lang('The email has been sent')));
 	}
 }

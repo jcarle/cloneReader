@@ -21,12 +21,12 @@ class Controllers extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crList',
-			'meta'  => array( 'title' => $this->lang->line('Edit controllers') ),
+			'meta'  => array( 'title' => lang('Edit controllers') ),
 			'list'  => array(
 				'urlList'    => strtolower(__CLASS__).'/listing',
 				'urlEdit'    => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'     => strtolower(__CLASS__).'/add',
-				'columns'    => array('controllerName' => $this->lang->line('Controller'), 'controllerUrl' => $this->lang->line('Url'), 'controllerActive' => $this->lang->line('Active')),
+				'columns'    => array('controllerName' => lang('Controller'), 'controllerUrl' => lang('Url'), 'controllerActive' => lang('Active')),
 				'data'       => $query['data'],
 				'foundRows'  => $query['foundRows'],
 				'showId'     => true
@@ -49,15 +49,15 @@ class Controllers extends CI_Controller {
 				),
 				'controllerName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Controller'),
+					'label' => lang('Controller'),
 				),
 				'controllerUrl' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Url'),
+					'label' => lang('Url'),
 				),
 				'controllerActive' => array(
 					'type'   => 'checkbox',
-					'label'  => $this->lang->line('Active'),
+					'label'  => lang('Active'),
 				)
 			)
 		);
@@ -94,7 +94,7 @@ class Controllers extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm',
-			'meta'  => array( 'title' => $this->lang->line('Edit controllers') ),
+			'meta'  => array( 'title' => lang('Edit controllers') ),
 			'form'  => populateCrForm($form, $data),
 		));
 	}
