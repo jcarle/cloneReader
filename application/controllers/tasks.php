@@ -29,17 +29,17 @@ class Tasks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList',
-			'meta'   => array( 'title' => $this->lang->line('Edit tasks') ),
+			'meta'   => array( 'title' => lang('Edit tasks') ),
 			'list'   => array(
 				'urlList'       => strtolower(__CLASS__).'/listing',
 				'readOnly'      => true,
 				'columns'       => array(
-					'taskMethod'        => $this->lang->line('Method'),
-					'taskParams'        => array('value' => $this->lang->line('Params'), 'class' => 'dotdotdot'),
-					'statusTaskName'    => $this->lang->line('Running'),
-					'langName'          => $this->lang->line('Language'),
-					'taskRetries'       => $this->lang->line('Retries'),
-					'taskSchedule'      => array('value' => $this->lang->line('Schedule date'), 'class' => 'datetime'),
+					'taskMethod'        => lang('Method'),
+					'taskParams'        => array('value' => lang('Params'), 'class' => 'dotdotdot'),
+					'statusTaskName'    => lang('Running'),
+					'langName'          => lang('Language'),
+					'taskRetries'       => lang('Retries'),
+					'taskSchedule'      => array('value' => lang('Schedule date'), 'class' => 'datetime'),
 				),
 				'data'        => $query['data'],
 				'foundRows'   => $query['foundRows'],
@@ -47,16 +47,16 @@ class Tasks extends CI_Controller {
 				'filters'     => array(
 					'taskRunning' => array(
 						'type'              => 'dropdown',
-						'label'             => $this->lang->line('Status'),
+						'label'             => lang('Status'),
 						'value'             => $this->input->get('taskRunning'),
 						'source'            => $this->Tasks_Status_Model->selectToDropdown(),
 						'appendNullOption' => true,
 					),
 				),
 				'sort' => array(
-					'taskId'        => $this->lang->line('#'),
-					'taskMethod'    => $this->lang->line('Method'),
-					'taskSchedule'  => $this->lang->line('Schedule date'),
+					'taskId'        => lang('#'),
+					'taskMethod'    => lang('Method'),
+					'taskSchedule'  => lang('Schedule date'),
 				)
 			)
 		));

@@ -26,11 +26,11 @@ class Login extends CI_Controller {
 
 		return $this->load->view('pageHtml', array(
 			'view'   => 'login',
-			'title'  => $this->lang->line('Login'),
+			'title'  => lang('Login'),
 			'form'   => $form,
 			'meta'   => array(
-				'title' => $this->lang->line('Login'),
-				'description' => $this->lang->line('Ingresar - Motormaniaco del Auto, Services, Modelos, Marcas')
+				'title' => lang('Login'),
+				'description' => lang('Ingresar - Motormaniaco del Auto, Services, Modelos, Marcas')
 			)
 		));
 	}
@@ -43,7 +43,7 @@ class Login extends CI_Controller {
 
 		$result = array(
 			'html'           => $this->load->view('login', array( 'form' => $form, 'isPopUp' => true), true).$this->my_js->getHtml(),
-			'title'          => $this->lang->line('Login'),
+			'title'          => lang('Login'),
 			'showPopupLogin' => true,
 		);
 
@@ -54,21 +54,21 @@ class Login extends CI_Controller {
 		$form = array(
 			'frmName'  => 'frmLogin',
 			'action'   => base_url('login'),
-			'buttons'  => array('<button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> '.$this->lang->line('Login').' </button>'),
+			'buttons'  => array('<button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> '.lang('Login').' </button>'),
 			'fields'   => array(
 				'email' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Email'),
+					'label' => lang('Email'),
 					'value' => set_value('email')
 				),
 				'password' => array(
 					'type'  => 'password',
-					'label' => $this->lang->line('Password'),
+					'label' => lang('Password'),
 					'value' => set_value('password')
 				),
 				'link'	=> array(
 					'type'  => 'link',
-					'label' => $this->lang->line('Forgot password'),
+					'label' => lang('Forgot password'),
 					'value' => base_url('forgotPassword'),
 				)
 			)

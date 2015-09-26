@@ -26,18 +26,18 @@ class Testing extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crList',
-			'meta'  => array( 'title' => $this->lang->line('Edit testing') ),
+			'meta'  => array( 'title' => lang('Edit testing') ),
 			'list'  => array(
 				'urlList'    => strtolower(__CLASS__).'/listing',
 				'urlEdit'    => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'     => strtolower(__CLASS__).'/add',
-				'columns'    => array('testName' => 'Name', 'countryName' => $this->lang->line('Country'), 'stateName' => 'State'),
+				'columns'    => array('testName' => 'Name', 'countryName' => lang('Country'), 'stateName' => 'State'),
 				'data'       => $query['data'],
 				'foundRows'  => $query['foundRows'],
 				'filters'    => array(
 					'countryId' => array(
 						'type'             => 'dropdown',
-						'label'            => $this->lang->line('Country'),
+						'label'            => lang('Country'),
 						'value'            => $this->input->get('countryId'),
 						'source'           => $this->Countries_Model->selectToDropdown(),
 						'appendNullOption' => true
@@ -66,7 +66,7 @@ class Testing extends CI_Controller {
 				),
 				'countryId' => array(
 					'type'    => 'dropdown',
-					'label'   => $this->lang->line('Country'),
+					'label'   => lang('Country'),
 					'source'  => $this->Countries_Model->selectToDropdown(),
 				),
 				'stateId' => array(
@@ -105,21 +105,21 @@ class Testing extends CI_Controller {
 
 			$form['fields']['testPicture'] = array(
 				'type'             => 'upload',
-				'label'            => $this->lang->line('Logo'),
+				'label'            => lang('Logo'),
 				'urlSave'          => base_url('testing/savePicture/'.$testId),
 				'urlDelete'        => base_url('testing/deletePicture/'.$testId),
 				'isPicture'        => true,
 			);
 			$form['fields']['testDoc'] = array(
 				'type'       => 'upload',
-				'label'      => $this->lang->line('pdf'),
+				'label'      => lang('pdf'),
 				'urlSave'    => base_url('testing/saveDoc/'.$testId),
 				'urlDelete'  => base_url('testing/deleteDoc/'.$testId),
 			);
 
 			$form['fields']['testIco'] = array(
 				'type'       => 'upload',
-				'label'      => $this->lang->line('Icon'),
+				'label'      => lang('Icon'),
 				'isPicture'  => true,
 				'disabled'   => true,
 			);
@@ -154,9 +154,9 @@ class Testing extends CI_Controller {
 		}
 
 		$this->load->view('pageHtml', array(
-			'view'		=> 'includes/crForm',
-			'meta'		=> array( 'title' => $this->lang->line('Edit testing') ),
-			'form'		=> populateCrForm($form, $data),
+			'view' => 'includes/crForm',
+			'meta' => array( 'title' => lang('Edit testing') ),
+			'form' => populateCrForm($form, $data),
 		));
 	}
 
@@ -181,8 +181,8 @@ class Testing extends CI_Controller {
 			'data'       => $data,
 			'columns'    => array(
 				'testChildName' => 'Name',
-				'countryName'   => $this->lang->line('Country'),
-				'testChildDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date')) ),
+				'countryName'   => lang('Country'),
+				'testChildDate' => array('class' => 'datetime', 'value' => lang('Date')) ),
 		);
 
 		return loadViewAjax(true, array('list' => $list));
@@ -208,38 +208,38 @@ class Testing extends CI_Controller {
 				),
 				'testChildName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Name'),
+					'label' => lang('Name'),
 				),
 				'countryId' => array(
 					'type'   => 'dropdown',
-					'label'  => $this->lang->line('Country'),
+					'label'  => lang('Country'),
 					'source' => $this->Countries_Model->selectToDropdown()
 				),
 				'testChildDate' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Date'),
+					'label' => lang('Date'),
 				),
 			),
 			'rules' => array(
 				array(
 					'field' => 'testChildName',
-					'label' => $this->lang->line('Name'),
+					'label' => lang('Name'),
 					'rules' => 'required'
 				),
 				array(
 					'field' => 'testChildDate',
-					'label' => $this->lang->line('Date'),
+					'label' => lang('Date'),
 					'rules' => 'required'
 				),
 			)
 		);
 
-		$price      = array('name' => 'testChildPrice',    'label' => $this->lang->line('Price'), );
-		$exchange  = array('name' => 'testChildExchange',  'label' => $this->lang->line('Exchange rate'), );
+		$price      = array('name' => 'testChildPrice',    'label' => lang('Price'), );
+		$exchange  = array('name' => 'testChildExchange',  'label' => lang('Exchange rate'), );
 
 		$form['fields'] += getCrFormFieldMoney(
 			$price,
-			array('name' => 'currencyId',           'label' => $this->lang->line('Currency'), ),
+			array('name' => 'currencyId',           'label' => lang('Currency'), ),
 			$exchange,
 			array('name' => 'testChildTotalPrice',  'label' => 'Total')
 		);
@@ -312,17 +312,17 @@ class Testing extends CI_Controller {
 				),
 				'userId' => array(
 					'type'          => 'typeahead',
-					'label'         => $this->lang->line('User'),
+					'label'         => lang('User'),
 					'source'        => base_url('search/users/'),
 					'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
 					'multiple'      => false,
-					'placeholder'   => $this->lang->line('User')
+					'placeholder'   => lang('User')
 				)
 			),
 			'rules' => array(
 				array(
 					'field' => 'userId',
-					'label' => $this->lang->line('User'),
+					'label' => lang('User'),
 					'rules' => 'required'
 				),
 			)

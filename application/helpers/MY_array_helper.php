@@ -1,13 +1,13 @@
 <?php
 /**
- * Convierte un sourde del tipo array('id' => '', 'text' => '') en un array valido para los dropdown de CI 
+ * Convierte un sourde del tipo array('id' => '', 'text' => '') en un array valido para los dropdown de CI
  */
 function sourceToDropdown($source, $appendNullOption) {
 	$CI    = &get_instance();
 	$data  = array();
-	
+
 	if ($appendNullOption == true) {
-		$data[''] = '-- '.$CI->lang->line('Choose').' --';
+		$data[''] = '-- '.lang('Choose').' --';
 	}
 
 	foreach ($source as $item) {
@@ -44,8 +44,8 @@ function getEntityConfig($entityTypeId, $key = null) {
 }
 
 /**
- * @return $entityTypeId 
- * 
+ * @return $entityTypeId
+ *
  * */
 function getEntityTypeIdByEnityTypeName($entityTypeName) {
 	$entities = config_item('entityConfig');
@@ -72,7 +72,7 @@ function getEntityGalleryConfig($entityTypeId) {
 	$entityConfig   = config_item('entityConfig');
 	$galleryDefault = $entityConfig['default']['gallery'];
 	$entityTypeName = $entityConfig[$entityTypeId]['entityTypeName'];
-	
+
 	$galleryDefault['controller']                = sprintf($galleryDefault['controller'], $entityTypeName);
 	$galleryDefault['folder']                    = sprintf($galleryDefault['folder'], $entityTypeName);
 	$galleryDefault['sizes']['thumb']['folder']  = sprintf($galleryDefault['sizes']['thumb']['folder'], $entityTypeName);
@@ -84,7 +84,7 @@ function getEntityGalleryConfig($entityTypeId) {
 
 /*
  * Armado de los title, h1, metaDescription y metaKeywords
- * Los meta se setean en los controller 
+ * Los meta se setean en los controller
  * Ej: $meta = array(
  *			'title'         => 'Home',
  *			'h1'            => 'Home',
@@ -93,14 +93,14 @@ function getEntityGalleryConfig($entityTypeId) {
  *		);
  * En el config existe un array por defecto que sea ROUTER/METHOD
  * Si el array de la vista esta incompleto se completa con el array por default
- * 
+ *
  * Tiene mas peso siempre los textos seteados en los controllers, luego los de crSettings, y luego el meta default
  * Los textos que vienen desde el controller no se traducen, los que demas si.
  * Si falta h1 y existe title, asigno ese valor
  */
 function getMetaByController($meta = null, $controller = null) {
 	$CI = &get_instance();
-	
+
 //	$metaDefault = array();
 	if (!is_array($meta)) {
 		$meta = array();
@@ -114,19 +114,19 @@ function getMetaByController($meta = null, $controller = null) {
 	if (!isset($metaConfig[$controller])) {
 		$metaConfig[$controller] = array();
 	}
-	
+
 	//Busco los textos que le faltan al array de la vista
 	foreach($metaConfig['default'] as $key => $value) {
 		if(empty($meta[$key])){
 			if (isset($metaConfig[$controller][$key])) {
-				$meta[$key] = $CI->lang->line($metaConfig[$controller][$key]);
+				$meta[$key] = lang($metaConfig[$controller][$key]);
 			}
 			else {
 				if ($key == 'h1' && isset($meta['title'])) { // Si falta h1 y existe title, asigno ese valor
 					$meta['h1'] = $meta['title'];
 				}
 				else {
-					$meta[$key] = $CI->lang->line($value);
+					$meta[$key] = lang($value);
 				}
 			}
 		}
@@ -136,32 +136,31 @@ function getMetaByController($meta = null, $controller = null) {
 }
 
 /**
- * Revisa las variables de la vista, y si no existe devuelve un breadcrumb por defecto  
+ * Revisa las variables de la vista, y si no existe devuelve un breadcrumb por defecto
  * 		array(
  *			array('text' => 'Home',  'href' => base_url()),
- *			array('text' => 'About', 'active' => true ) 
+ *			array('text' => 'About', 'active' => true )
  *		);
- * 
- * @param $breadcrumb        
+ *
+ * @param $breadcrumb
  * @param $meta              array meta, se utiliza el title para el breadcrumb por defecto
  * @param $skipBreadcrumb    para forzar que no muestre el breadcrumb
- * @return array 
+ * @return array
  */
 function getBreadcrumb(array $breadcrumb, array $meta, $skipBreadcrumb = false) {
 	$CI = &get_instance();
-	
+
 	if ($skipBreadcrumb == true) {
 		return array();
 	}
 	if (!empty($breadcrumb)) {
 		return $breadcrumb;
 	}
-	
-	$breadcrumb = array(
-		array('text' => $CI->lang->line('Home'),    'href' => base_url()),
-		array('text' => $meta['title'],             'active' => true ) 
-	);
-	
-	return $breadcrumb;	
-}
 
+	$breadcrumb = array(
+		array('text' => lang('Home'),    'href' => base_url()),
+		array('text' => $meta['title'],  'active' => true )
+	);
+
+	return $breadcrumb;
+}

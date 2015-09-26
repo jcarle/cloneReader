@@ -68,7 +68,7 @@ class SendMails {
 			), true);
 
 
-		return $this->_sendEmail($user['userEmail'], sprintf($this->CI->lang->line('Welcome to %s'), ucfirst(config_item('siteName'))), $message);
+		return $this->_sendEmail($user['userEmail'], sprintf(lang('Welcome to %s'), ucfirst(config_item('siteName'))), $message);
 	}
 
 	function sendEmailToResetPassword($params = array()) {
@@ -90,7 +90,7 @@ class SendMails {
 			),
 			true);
 
-		return $this->_sendEmail($userEmail, sprintf($this->CI->lang->line('Reset password in %s'), config_item('siteName')), $message);
+		return $this->_sendEmail($userEmail, sprintf(lang('Reset password in %s'), config_item('siteName')), $message);
 	}
 
 	function sendEmailToChangeEmail($params = array()) {
@@ -111,7 +111,7 @@ class SendMails {
 				'url'    => $url
 			), true);
 
-		return $this->_sendEmail($userEmail, sprintf($this->CI->lang->line('Change email in %s'), config_item('siteName')), $message);
+		return $this->_sendEmail($userEmail, sprintf(lang('Change email in %s'), config_item('siteName')), $message);
 	}
 
 	function sendFeedback($params = array()) {
@@ -150,10 +150,10 @@ class SendMails {
 		$userFullName          = $user['userFirstName'].' '.$user['userLastName'];
 
 		if ($entry['entryAuthor'] == '') {
-			$entryOrigin = sprintf($this->CI->lang->line('From %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>');
+			$entryOrigin = sprintf(lang('From %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>');
 		}
 		else {
-			$entryOrigin = sprintf($this->CI->lang->line('From %s by %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>', $entry['entryAuthor']);
+			$entryOrigin = sprintf(lang('From %s by %s'), '<a href="'.$entry['entryUrl'].'" >' . $entry['feedName'] . '</a>', $entry['entryAuthor']);
 		}
 
 		$message = $this->CI->load->view('pageEmail',

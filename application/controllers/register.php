@@ -18,28 +18,28 @@ class Register extends CI_Controller {
 
 		$form = array(
 			'frmName'   => 'frmRegister',
-			'buttons'   => array('<button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> '.$this->lang->line('Register').'</button>'),
-			'fields'		=> array(
+			'buttons'   => array('<button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> '.lang('Register').'</button>'),
+			'fields'    => array(
 				'userEmail' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Email'),
+					'type'  => 'text',
+					'label' => lang('Email'),
 				),
 				'userPassword' => array(
-					'type'	=> 'password',
-					'label'	=> $this->lang->line('Password'),
+					'type'  => 'password',
+					'label' => lang('Password'),
 				),
 				'userFirstName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('First name'),
+					'type'  => 'text',
+					'label' => lang('First name'),
 				),
 				'userLastName' => array(
-					'type'	=> 'text',
-					'label'	=> $this->lang->line('Last name'),
+					'type'  => 'text',
+					'label' => lang('Last name'),
 				),
 				'countryId' => array(
-					'type'				=> 'dropdown',
-					'label'				=> $this->lang->line('Country'),
-					'appendNullOption' 	=> true,
+					'type'             => 'dropdown',
+					'label'            => lang('Country'),
+					'appendNullOption' => true,
 				),
 			)
 		);
@@ -92,7 +92,7 @@ class Register extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crForm',
-			'meta'  => array( 'title' => $this->lang->line('Signup') ),
+			'meta'  => array( 'title' => lang('Signup') ),
 			'form'  => populateCrForm($form, array()),
 		));
 	}

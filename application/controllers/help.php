@@ -33,7 +33,7 @@ class Help extends CI_Controller {
 		foreach ($aKeys as $key => $value) {
 			$html .= '<li class="list-group-item"> <span class="label label-success">'.$key.'</span> '.lang($value) .' </li> ';
 		}
-		$html .= '	</ul>';
+		$html .= '</ul>';
 
 		$form = array(
 			'frmName'  => 'frmKeyboardShortcut',

@@ -20,12 +20,12 @@ class News extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList',
-			'meta'   => array( 'title' => $this->lang->line('Edit news') ),
+			'meta'   => array( 'title' => lang('Edit news') ),
 			'list'   => array(
 				'urlList'   => strtolower(__CLASS__).'/listing',
 				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'    => strtolower(__CLASS__).'/add',
-				'columns'   => array('userFullName' => $this->lang->line('Author'), 'newTitle' => $this->lang->line('Title'), 'newSef' => $this->lang->line('Sef'), 'newDate' => array('class' => 'datetime', 'value' => $this->lang->line('Date'))),
+				'columns'   => array('userFullName' => lang('Author'), 'newTitle' => lang('Title'), 'newSef' => lang('Sef'), 'newDate' => array('class' => 'datetime', 'value' => lang('Date'))),
 				'data'      => $query['data'],
 				'foundRows' => $query['foundRows'],
 				'showId'    => false
@@ -54,7 +54,7 @@ class News extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crForm',
-			'meta'   => array('title' => $this->lang->line('Edit news')),
+			'meta'   => array('title' => lang('Edit news')),
 			'form'   => populateCrForm($form, $data),
 		));
 	}
@@ -80,20 +80,20 @@ class News extends CI_Controller {
 				),
 				'newTitle' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Title'),
+					'label' => lang('Title'),
 				),
 				'newContent' => array(
 					'type'  => 'textarea',
-					'label' => $this->lang->line('Content'),
+					'label' => lang('Content'),
 				),
 				'userId' => array(
 					'type'   => 'typeahead',
-					'label'  => $this->lang->line('Author'),
+					'label'  => lang('Author'),
 					'source' => base_url('search/users/'),
 				),
 				'newDate' => array(
 					'type'  => 'datetime',
-					'label' => $this->lang->line('Date'),
+					'label' => lang('Date'),
 				),
 			),
 		);
@@ -137,7 +137,7 @@ class News extends CI_Controller {
 				'meta'   => array( 'title' => $new['newTitle']),
 				'new'    => $new,
 				'breadcrumb' => array(
-					array('text' => $this->lang->line('Home'), 'href' => base_url()),
+					array('text' => lang('Home'), 'href' => base_url()),
 					array('text' => $new['newTitle'], 'active' => true),
 				)
 			)

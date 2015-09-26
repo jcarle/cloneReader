@@ -44,19 +44,19 @@ class Users extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crList',
-			'meta'  => array( 'title' => $this->lang->line('Edit users') ),
+			'meta'  => array( 'title' => lang('Edit users') ),
 			'list'  => array(
 				'urlList'  => strtolower(__CLASS__).'/listing',
 				'urlEdit'  => strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'   => strtolower(__CLASS__).'/add',
 				'columns'  => array(
-					'userEmail'      => $this->lang->line('Email'),
-					'userFullName'   => $this->lang->line('Name'),
-					'countryName'    => $this->lang->line('Country'),
-					'langName'       => $this->lang->line('Language'),
-					'groupsName'     => $this->lang->line('Groups'),
-					'userDateAdd'    => array('class' => 'datetime', 'value' => $this->lang->line('Record date')),
-					'userLastAccess' => array('class' => 'datetime', 'value' => $this->lang->line('Last access')),
+					'userEmail'      => lang('Email'),
+					'userFullName'   => lang('Name'),
+					'countryName'    => lang('Country'),
+					'langName'       => lang('Language'),
+					'groupsName'     => lang('Groups'),
+					'userDateAdd'    => array('class' => 'datetime', 'value' => lang('Record date')),
+					'userLastAccess' => array('class' => 'datetime', 'value' => lang('Last access')),
 					'facebookUserId' => 'Facebook',
 					'googleUserId'   => 'Google',
 				),
@@ -66,34 +66,34 @@ class Users extends CI_Controller {
 				'filters'    => array(
 					'countryId' => array(
 						'type'             => 'dropdown',
-						'label'            => $this->lang->line('Country'),
+						'label'            => lang('Country'),
 						'value'            => $this->input->get('countryId'),
 						'source'           => $this->Countries_Model->selectToDropdown(),
 						'appendNullOption' => true,
 					),
 					'langId' => array(
 						'type'             => 'dropdown',
-						'label'            => $this->lang->line('Language'),
+						'label'            => lang('Language'),
 						'value'            => $this->input->get('langId'),
 						'source'           => $this->Languages_Model->selectToDropdown(),
 						'appendNullOption' => true,
 					),
 					'groupId' => array(
 						'type'             => 'dropdown',
-						'label'            => $this->lang->line('Group'),
+						'label'            => lang('Group'),
 						'source'           => $this->Groups_Model->selectToDropdown(),
 						'value'            => $this->input->get('groupId'),
 						'appendNullOption' => true,
 					),
 					'feedId' => array(
 						'type'    => 'typeahead',
-						'label'   => $this->lang->line('Feed'),
+						'label'   => lang('Feed'),
 						'source'  => base_url('search/feeds/'),
 						'value'   => array( 'id' => element('feedId', $feed), 'text' => element('feedName', $feed)),
 					),
 					'remoteLogin' => array(
 						'type'    => 'groupCheckBox',
-						'label'   => $this->lang->line('Remote login'),
+						'label'   => lang('Remote login'),
 						'source'  => array(
 							array('id' => 'facebook',  'text' => 'Facebook'),
 							array('id' => 'google' ,   'text'	=> 'Google'),
@@ -103,9 +103,9 @@ class Users extends CI_Controller {
 				),
 				'sort' => array(
 					'userId'          => '#',
-					'userEmail'       => $this->lang->line('Email'),
-					'userDateAdd'     => $this->lang->line('Record date'),
-					'userLastAccess'  => $this->lang->line('Last access'),
+					'userEmail'       => lang('Email'),
+					'userDateAdd'     => lang('Record date'),
+					'userLastAccess'  => lang('Last access'),
 				)
 			)
 		));
@@ -126,24 +126,24 @@ class Users extends CI_Controller {
 				),
 				'userEmail' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Email'),
+					'label' => lang('Email'),
 				),
 				'userFirstName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('First name'),
+					'label' => lang('First name'),
 				),
 				'userLastName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Last name'),
+					'label' => lang('Last name'),
 				),
 				'countryId' => array(
 					'type'              => 'dropdown',
-					'label'             => $this->lang->line('Country'),
+					'label'             => lang('Country'),
 					'appendNullOption'  => true,
 				),
 				'groups' => array(
 					'type'   => 'groupCheckBox',
-					'label'  => $this->lang->line('Groups'),
+					'label'  => lang('Groups'),
 					'showId' => true,
 				),
 			)
@@ -151,14 +151,14 @@ class Users extends CI_Controller {
 
 		if ((int)$userId > 0) {
 			$form['urlDelete']           = base_url('users/delete/');
-			$form['fields']['userFeeds']	= array(
-				'type'	=> 'link',
-				'label'	=> $this->lang->line('View feeds'),
-				'value'	=> base_url('feeds/listing/?userId='.$userId),
+			$form['fields']['userFeeds'] = array(
+				'type'   => 'link',
+				'label'  => lang('View feeds'),
+				'value'  => base_url('feeds/listing/?userId='.$userId),
 			);
 			$form['fields']['userLogs']  = array(
 				'type'  => 'link',
-				'label' => $this->lang->line('View logs'),
+				'label' => lang('View logs'),
 				'value' => base_url('users/logs/?userId='.$userId.'&orderBy=userLogDate&orderDir=desc'),
 			);
 		}
@@ -199,7 +199,7 @@ class Users extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view' => 'includes/crForm',
-			'meta' => array( 'title' => $this->lang->line('Edit users') ),
+			'meta' => array( 'title' => lang('Edit users') ),
 			'form' => populateCrForm($form, $data),
 		));
 	}
@@ -235,14 +235,14 @@ class Users extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'  => 'includes/crList',
-			'meta'  => array( 'title' => $this->lang->line('User logs') ),
+			'meta'  => array( 'title' => lang('User logs') ),
 			'list'  => array(
 				'urlList'   => 'users/logs',
 				'readOnly'  => true,
 				'columns'   => array(
-					'userEmail'     => $this->lang->line('Email'),
-					'userFullName'  => $this->lang->line('Name'),
-					'userLogDate'   => array('class' => 'date', 'value' => $this->lang->line('Date')),
+					'userEmail'     => lang('Email'),
+					'userFullName'  => lang('Name'),
+					'userLogDate'   => array('class' => 'date', 'value' => lang('Date')),
 				),
 				'data'      => $query['data'],
 				'foundRows' => $query['foundRows'],
@@ -250,16 +250,16 @@ class Users extends CI_Controller {
 				'filters'   => array(
 					'userId' => array(
 						'type'        => 'typeahead',
-						'label'       => $this->lang->line('User'),
+						'label'       => lang('User'),
 						'source'      => base_url('search/users/'),
 						'value'       => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
 						'multiple'    => false,
-						'placeholder' => $this->lang->line('User')
+						'placeholder' => lang('User')
 					),
 				),
 				'sort' => array(
 					'userId'      => '#',
-					'userLogDate' => $this->lang->line('Date'),
+					'userLogDate' => lang('Date'),
 				)
 			)
 		));

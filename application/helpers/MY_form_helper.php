@@ -14,7 +14,7 @@ function appendMessagesToCrForm($form) {
 	foreach ($form['rules'] as $rule) {
 		$aRules = explode('|', $rule['rules']);
 		foreach ($aRules as $key) {
-			$form['messages'][$key] = $CI->lang->line(str_replace('callback_', '', $key));
+			$form['messages'][$key] = lang(str_replace('callback_', '', $key));
 		}
 	}
 
@@ -378,7 +378,7 @@ function renderCrFormFields($form) {
 								'value'       => element('value', $field),
 								'class'       => 'form-control',
 								'size'        => ($field['type'] == 'datetime' ? 18 : 9),
-								'placeholder' => $CI->lang->line('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '')
+								'placeholder' => lang('DATE_FORMAT').($field['type'] == 'datetime' ? ' hh:mm:ss' : '')
 							)
 						).'
 						<span class="input-group-addon"><i class="glyphicon glyphicon-remove fa fa-times"></i></span>
@@ -441,7 +441,7 @@ function renderCrFormFields($form) {
 						<div id="'.$name.'" data-toggle="modal-gallery" data-target="#modal-gallery" class="gallery well" >
 							<button type="button" class="btn btn-success btn-sm btnEditPhotos fileinput-button">
 								<i class="fa fa-picture-o" ></i>
-								'.$CI->lang->line('Edit pictures').'
+								'.lang('Edit pictures').'
 							</button>
 							<div class="thumbnails" ></div>
 						</div>
@@ -452,7 +452,7 @@ function renderCrFormFields($form) {
 					<div name="'.$name.'" class="subform ">
 						<div class="alert alert-warning">
 							<i class="fa fa-spinner fa-spin fa-lg"></i>
-							<small>'.$CI->lang->line('loading ...').'</small>
+							<small>'.lang('loading ...').'</small>
 						</div>
 					</div>
 				');
@@ -506,7 +506,7 @@ function getHtmlCrLink($url, $fieldName) {
 
 	return '
 		<fieldset class="form-group ">
-			<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label"> '.$CI->lang->line('Url').'</label>
+			<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label"> '.lang('Url').'</label>
 			<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 ">
 				<a name="'.$fieldName.'" class="crLink" href="'.$url.'" target="_blank"> '.$url.'</a>
 			</div>

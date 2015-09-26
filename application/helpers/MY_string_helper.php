@@ -8,13 +8,11 @@ function vd($value) {
 }
 
 function formatCurrency($value, $currencyName = null) {
-	$CI = &get_instance();
-
 	if ($currencyName == null) {
 		$currencyName = config_item('defaultCurrencyName');
 	}
 
-	return $currencyName.' '.number_format($value, 2, $CI->lang->line('NUMBER_DEC_SEP'), $CI->lang->line('NUMBER_THOUSANDS_SEP'));
+	return $currencyName.' '.number_format($value, 2, lang('NUMBER_DEC_SEP'), lang('NUMBER_THOUSANDS_SEP'));
 }
 
 function hide_mail($email) {
@@ -140,7 +138,7 @@ function getHtmlDropdownSort($sort, $current, $seoTag = null, $className = 'btn 
 	$html = '
 		<div class="dropdown">
 			<a href="javascript:void(0);" class="'.$className.' dropdown-toggle" type="button" data-toggle="dropdown">
-				'. sprintf($CI->lang->line('Sort by %s'), strtolower($sort[$current]['label'])).'
+				'. sprintf(lang('Sort by %s'), strtolower($sort[$current]['label'])).'
 				<span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu" > ';
@@ -172,7 +170,7 @@ function getHtmlGallery($pictures, $alt = null) {
 		return '';
 	}
 	if ($alt == null) {
-		$alt = $CI->lang->line('Picture %s');
+		$alt = lang('Picture %s');
 	}
 
 	$html = '';
@@ -231,15 +229,15 @@ function getHtmlFormSearch($isHeader = true) {
 
 	$html = '
 		<form class="'.($isHeader == true ? ' navbar-form navbar-left' : '').' '.$frmName.'" role="search" action="'.base_url('').'">
-			<a href="javascript:void(0);" onclick="cloneReader.showPopupSearch(event);" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.$CI->lang->line('search').'"><i class="fa fa-search"></i> </a>
+			<a href="javascript:void(0);" onclick="cloneReader.showPopupSearch(event);" class="btn btn-default '.($isHeader == true ? ' visible-sm visible-md ' : ' hide ').'" title="'.lang('search').'"><i class="fa fa-search"></i> </a>
 			<div class="form-group '.($isHeader == true ? ' hidden-md hidden-sm ' : '').'" >
 				<div class="input-group">
 					<span class="input-group-addon">
 						<i class="fa fa-times" ></i>
 					</span>
-					<input type="text" class="form-control" name="q" placeholder="'. $CI->lang->line('search').' ..."  value="'.$CI->input->get('q').'" />
+					<input type="text" class="form-control" name="q" placeholder="'. lang('search').' ..."  value="'.$CI->input->get('q').'" />
 					<span class="input-group-btn">
-						<button  class="btn btn-default"> '. $CI->lang->line('Search').'</button>
+						<button  class="btn btn-default"> '. lang('Search').'</button>
 					</span>
 				</div>
 			</div>
@@ -263,7 +261,7 @@ function getHtmlMenu($aMenu, $className = null, $depth = 0){
 	for ($i=0; $i<count($aMenu); $i++) {
 		$item       = $aMenu[$i];
 		$hasChilds  = count($item['childs']) > 0;
-		$label      = $item['menuTranslate'] == true ? $CI->lang->line($item['label']) : $item['label'];
+		$label      = $item['menuTranslate'] == true ? lang($item['label']) : $item['label'];
 		$aAttr      = array('title="'.$label.'"');
 		$aClassName = array();
 		$aElements  = array();

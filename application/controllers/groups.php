@@ -20,12 +20,12 @@ class Groups extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'			=> 'includes/crList',
-			'meta'			=> array( 'title' => $this->lang->line('Edit groups') ),
+			'meta'			=> array( 'title' => lang('Edit groups') ),
 			'list'			=> array(
 				'urlList'		=> strtolower(__CLASS__).'/listing',
 				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
 				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('groupName' => $this->lang->line('Name'), 'groupHomePage' => $this->lang->line('Home page')),
+				'columns'		=> array('groupName' => lang('Name'), 'groupHomePage' => lang('Home page')),
 				'data'			=> $query['data'],
 				'foundRows'		=> $query['foundRows'],
 				'showId'		=> true
@@ -48,15 +48,15 @@ class Groups extends CI_Controller {
 				),
 				'groupName' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Name'),
+					'label' => lang('Name'),
 				),
 				'groupHomePage' => array(
 					'type'  => 'text',
-					'label' => $this->lang->line('Home page'),
+					'label' => lang('Home page'),
 				),
 				'controllers' => array(
 					'type'   => 'groupCheckBox',
-					'label'  => $this->lang->line('Controllers'),
+					'label'  => lang('Controllers'),
 					'showId' => true
 				)
 			)
@@ -91,7 +91,7 @@ class Groups extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view' => 'includes/crForm',
-			'meta' => array( 'title' => $this->lang->line('Edit groups') ),
+			'meta' => array( 'title' => lang('Edit groups') ),
 			'form' => populateCrForm($form, $data),
 		));
 	}

@@ -16,7 +16,7 @@ class Myforms {
 		$entityConfig = getEntityConfig($entityTypeId);
 
 		$form = array(
-			'frmName'   => 'frm'.$CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])).'Contact',
+			'frmName'   => 'frm'.lang(ucwords($entityConfig['entityTypeSingularName'])).'Contact',
 			'fields'    => array(
 				'contactId' => array(
 					'type'     => 'hidden',
@@ -32,27 +32,27 @@ class Myforms {
 				),
 				'contactFirstName' => array(
 					'type'   => 'text',
-					'label'  => $CI->lang->line('First name'),
+					'label'  => lang('First name'),
 				),
 				'contactLastName' => array(
 					'type'  => 'text',
-					'label' => $CI->lang->line('Last name'),
+					'label' => lang('Last name'),
 				),
 				'contactEmail' => array(
 					'type'  => 'text',
-					'label' => $CI->lang->line('Email'),
+					'label' => lang('Email'),
 				),
 				'contactPhone' => array(
 					'type'    => 'text',
-					'label'   => $CI->lang->line('Phone'),
+					'label'   => lang('Phone'),
 				),
 				'contactDate' => array(
 					'type'   => 'datetime',
-					'label'  => $CI->lang->line('Date'),
+					'label'  => lang('Date'),
 				),
 				'contactDesc' => array(
 					'type'   => 'textarea',
-					'label'  => $CI->lang->line('Comment'),
+					'label'  => lang('Comment'),
 				),
 				'contactIp' => array(
 					'type'     => 'text',
@@ -69,7 +69,7 @@ class Myforms {
 		if ($showTypeahead == true) {
 			$form['fields']['entityId'] = array(
 				'type'   => 'typeahead',
-				'label'  => $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
+				'label'  => lang(ucwords($entityConfig['entityTypeSingularName'])),
 				'source' => base_url('search/'.$entityConfig['entityTypeName']),
 			);
 		}
@@ -119,7 +119,7 @@ class Myforms {
 		$entityConfig = getEntityConfig($entityTypeId);
 
 		$form = array(
-			'frmName'   => 'frm'.$CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])).'Comment',
+			'frmName'   => 'frm'.lang(ucwords($entityConfig['entityTypeSingularName'])).'Comment',
 			'fields'    => array(
 				'commentId' => array(
 					'type'     => 'hidden',
@@ -134,32 +134,32 @@ class Myforms {
 				),
 				'entityId' => array(
 					'type'    => 'typeahead',
-					'label'   => $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
+					'label'   => lang(ucwords($entityConfig['entityTypeSingularName'])),
 					'source'  => base_url('search/'.$entityConfig['entityTypeName']),
 				),
 				'commentFirstName' => array(
 					'type'   => 'text',
-					'label'  => $CI->lang->line('First name'),
+					'label'  => lang('First name'),
 				),
 				'commentLastName' => array(
 					'type'  => 'text',
-					'label' => $CI->lang->line('Last name'),
+					'label' => lang('Last name'),
 				),
 				'commentEmail' => array(
 					'type'  => 'text',
-					'label' => $CI->lang->line('Email'),
+					'label' => lang('Email'),
 				),
 				'commentRating' => array(
 					'type'    => 'raty',
-					'label'   => $CI->lang->line('Rating'),
+					'label'   => lang('Rating'),
 				),
 				'commentDate' => array(
 					'type'   => 'datetime',
-					'label'  => $CI->lang->line('Date'),
+					'label'  => lang('Date'),
 				),
 				'commentDesc' => array(
 					'type'   => 'textarea',
-					'label'  => $CI->lang->line('Comment'),
+					'label'  => lang('Comment'),
 				),
 				'commentIp' => array(
 					'type'     => 'text',
@@ -176,7 +176,7 @@ class Myforms {
 		if ($showTypeahead == true) {
 			$form['fields']['entityId'] = array(
 				'type'    => 'typeahead',
-				'label'   => $CI->lang->line(ucwords($entityConfig['entityTypeSingularName'])),
+				'label'   => lang(ucwords($entityConfig['entityTypeSingularName'])),
 				'source'  => base_url('search/'.$entityConfig['entityTypeName']),
 			);
 		}
@@ -271,9 +271,8 @@ class Myforms {
 		if (empty($comments)) {
 			return '';
 		}
-		$CI   = &get_instance();
 		$html = '<div class="entityComments">
-					<h2>'.$CI->lang->line($title).'</h2>';
+					<h2>'.lang($title).'</h2>';
 
 		foreach ($comments as $comment) {
 			$html .= '

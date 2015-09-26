@@ -22,7 +22,7 @@ class Process extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'       => 'process',
-			'meta'       => array( 'title' => $this->lang->line('Process') ),
+			'meta'       => array( 'title' => lang('Process') ),
 		));
 	}
 
@@ -31,14 +31,14 @@ class Process extends CI_Controller {
 		$this->load->model(array('Feeds_Model'));
 		$this->Feeds_Model->scanAllFeeds($userId);
 
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+		return loadViewAjax(true, array('msg' => lang('Data updated successfully')));
 	}
 
 	function rescanAll404Feeds() {
 		$this->load->model(array('Feeds_Model'));
 		$this->Feeds_Model->scanAllFeeds(null, null, true);
 
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+		return loadViewAjax(true, array('msg' => lang('Data updated successfully')));
 	}
 
 	function scanFeed($feedId) {
@@ -59,14 +59,14 @@ class Process extends CI_Controller {
 		$this->load->model('Feeds_Model');
 		$this->Feeds_Model->deleteOldEntries($feedId);
 
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+		return loadViewAjax(true, array('msg' => lang('Data updated successfully')));
 	}
 
 	function processFeedsTags() {
 		$this->load->model(array('Feeds_Model'));
 		$this->Feeds_Model->processFeedsTags();
 
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+		return loadViewAjax(true, array('msg' => lang('Data updated successfully')));
 	}
 
 	function saveEntitiesSearch($entityTypeId = null, $onlyUpdates = false) {
@@ -93,7 +93,7 @@ class Process extends CI_Controller {
 			$this->Entries_Model->saveEntriesSearch($deleteEntitySearch, $onlyUpdates);
 		}
 
-		return loadViewAjax(true, array('msg' => $this->lang->line('Data updated successfully')));
+		return loadViewAjax(true, array('msg' => lang('Data updated successfully')));
 	}
 
 	function optimizeTableEntitiesSearch() {

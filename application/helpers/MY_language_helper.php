@@ -3,25 +3,6 @@
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-/**
- *
- * @param array $lines array('line1, 'line2', ..., 'lineN')
- * @return string
- */
-function langJs($lines) {
-	$CI   = & get_instance();
-	$json = array();
-
-	foreach ((array)$lines as $line) {
-		$json[$line] = $CI->lang->line($line);
-	}
-
-	$script = ' if (Object.keys(crLang.aLangs).length == 0) { crLang.aLangs = ' . json_encode($json) . '; } ';
-
-	return $script;
-
-}
-
 
 function createLangJs() {
 	$CI       = & get_instance();
@@ -44,12 +25,10 @@ function createLangJs() {
 	$lines  = array_keys($CI->lang->language);
 	$aLangs = array();
 	foreach ((array)$lines as $line) {
-		$aLangs[$line] = $CI->lang->line($line);
+		$aLangs[$line] = lang($line);
 	}
 
-	file_put_contents( $fileName, ' crLang.aLangs = '.json_encode($aLangs).';
-cn(crLang.aLangs); '
-);
+	file_put_contents( $fileName, ' crLang.aLangs = '.json_encode($aLangs).'; ' );
 }
 
 function initLang() {
