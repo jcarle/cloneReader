@@ -30,7 +30,6 @@ class Login extends CI_Controller {
 			'form'   => $form,
 			'meta'   => array(
 				'title' => lang('Login'),
-				'description' => lang('Ingresar - Motormaniaco del Auto, Services, Modelos, Marcas')
 			)
 		));
 	}
