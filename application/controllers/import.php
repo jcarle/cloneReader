@@ -11,9 +11,10 @@ class Import extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 
 		$form = array(
-			'rules'  => array(),
-			'action' => base_url('import/doImportFeeds'),
-			'fields' => array(
+			'rules'   => array(),
+			'frmName' => 'frmImportFeeds',
+			'action'  => base_url('import/doImportFeeds'),
+			'fields'  => array(
 				'tagName' => array(
 					'type'  => 'upload',
 					'label' => lang('Choose the subscriptions.xml file from gReader or a standard OPML file'),
@@ -95,6 +96,7 @@ class Import extends CI_Controller {
 		if (! $this->safety->allowByControllerName(__METHOD__) ) { return errorForbidden(); }
 
 		$form = array(
+			'frmName' => 'frmImportStarred',
 			'rules'   => array(),
 			'action'  => base_url('import/doImportStarred'),
 			'fields'  => array(
