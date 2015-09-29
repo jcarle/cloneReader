@@ -1151,7 +1151,7 @@ cloneReader = {
 				}
 			}
 			if (filter.$filter != null && filter.childs != null && filter.expanded == true ) {
-				this.expandFilter(filter, filter.expanded);
+				this.expandFilter(filter, filter.expanded, false);
 				this.renderFilters(filter.childs, filter.$filter.find('ul:first'), false);
 			}
 		}
@@ -1205,14 +1205,10 @@ cloneReader = {
 				.addClass('fa-caret-square-o-right')
 				.click(
 					function(event) {
-						var $filter	= $($(event.target).parents('li:first'));
-						var filter	= $filter.data('filter');
-						cloneReader.expandFilter(filter, !filter.expanded);
+						var $filter = $($(event.target).parents('li:first'));
+						var filter  = $filter.data('filter');
+						cloneReader.expandFilter(filter, !filter.expanded, true);
 					});
-
-			if (filter.expanded == false) {
-				this.animateFilter($filter.find('ul'), false);
-			}
 		}
 
 		return $filter;
@@ -1309,20 +1305,18 @@ cloneReader = {
 		return count;
 	},
 
-	expandFilter: function(filter, value){
+	expandFilter: function(filter, value, animate){
 		if (filter.expanded != value) {
 			filter.expanded = value;
 			this.aUserTags[filter.id] = {
-				'tagId': 		filter.id,
-				'expanded': 	value
+				'tagId':    filter.id,
+				'expanded': value
 			};
 		}
 
-		var $filter	= filter.$filter;
+		var $filter = filter.$filter;
 
-		if (value != true) {
-			this.animateFilter($filter, value);
-		}
+		$filter.removeClass('expand').removeClass('animate');
 
 		var $ul   = $filter.find('ul:first');
 		var index = 0;
@@ -1333,26 +1327,14 @@ cloneReader = {
 			}
 		}
 
-		this.animateFilter($filter, value);
-		this.getFilter(this.aFilters).$filter.addClass('selected');
-	},
-
-	animateFilter: function($filter, value) {
-		var $ul    = $filter.find('ul:first');
-		var $arrow = $filter.find('.arrow:first');
-
-		$arrow.removeClass('fa-caret-square-o-down').removeClass('fa-caret-square-o-right');
-
-		if (value != true) {
-			$arrow.addClass('fa-caret-square-o-right');
-			$ul.removeClass('filterVisible');
-			$ul.slideUp('fast');
-			return;
+		if (animate == true) {
+			$filter.addClass('animate');
+		}
+		if (value == true) {
+			$filter.addClass('expand');
 		}
 
-		$arrow.addClass('fa-caret-square-o-down');
-		$ul.addClass('filterVisible');
-		$ul.slideDown('fast');
+		this.getFilter(this.aFilters).$filter.addClass('selected');
 	},
 
 	maximiseUlEntries: function(value, isResize) {
@@ -1361,8 +1343,6 @@ cloneReader = {
 		}
 
 		this.isMaximized = value;
-
-		var speed = 100;
 
 		if (this.isMobile == true) {
 			if (value == true) {
@@ -1384,7 +1364,7 @@ cloneReader = {
 
 		this.$ulEntries.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
 			function() {
-					cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
+				cloneReader.scrollToEntry(cloneReader.$ulEntries.find('li.selected'), false);
 			});
 
 		if (this.isLoaded == true) {
@@ -1654,7 +1634,6 @@ cloneReader = {
 				} } );
 			}
 		}
-
 
 		for (var i=0; i<aItems.length; i++) {
 			var item = aItems[i];

@@ -51,7 +51,7 @@ footer {
 		vertical-align:inherit;
 	}
 	#cloneReader nav {
-		z-index: 1;
+		z-index: 3;
 		margin:-2px 0 0 0;
 		box-shadow: 0 0px 7px #666;
 		border-radius:0;
@@ -136,9 +136,9 @@ footer {
 		position: absolute;
 		overflow-x:auto;
 		background:#E5E5E5;
-		-webkit-transition: all 0.25s ease 0s;
-		-ms-transition: all 0.25s ease 0s;
 		transition: all 0.25s ease 0s;
+		transition-property: transform, left;
+		z-index: 2;
 	}
 	#cloneReader .ulEntries.list {
 		padding: 0;
@@ -317,10 +317,6 @@ footer {
 
 					#cloneReader .ulEntries > li p .imgCenter.imgCenterInside > img {
 						top: 0;
-						-webkit-transform: translateY(0);
-						-moz-transform: translateY(0);
-						-o-transform: translateY(0);
-						-ms-transform: translateY(0);
 						transform: translateY(0);
 					}
 					#cloneReader .ulEntries > li p .clearfix {
@@ -536,8 +532,14 @@ footer {
 		#cloneReader .ulFilters li {
 			position: relative;
 			margin: 0;
+			background: white;
+			overflow: hidden;
 		}
-			#cloneReader .ulFilters li div {}
+			#cloneReader .ulFilters li div {
+				background: white;
+				position: relative;
+				z-index: 2;
+			}
 			#cloneReader .ulFilters li div:hover {
 				background-color:#EEE;
 			}
@@ -555,10 +557,17 @@ footer {
 					width: 20px;
 					text-align: center;
 				}
+				#cloneReader .ulFilters li.animate > div .icon.arrow {
+					transition: transform  0.25s ease-in-out;
+				}
 				#cloneReader .ulFilters li div .icon.arrow {
 					margin: 0 5px 0 0;
 					cursor: pointer;
 					color: #666666;
+					transform: rotate(0deg);
+				}
+				#cloneReader .ulFilters li.expand > div > .arrow {
+					transform: rotate(90deg);
 				}
 				#cloneReader .ulFilters li div a {
 					color: #333333;
@@ -576,8 +585,7 @@ footer {
 				#cloneReader .ulFilters li.selected > div > a {
 					color:#d14836;
 				}
-		#cloneReader .ulFilters li.expand {
-		}
+		#cloneReader .ulFilters li.expand { }
 			#cloneReader .ulFilters li .count {
 				font-size: smaller;
 				cursor:default;
@@ -589,7 +597,21 @@ footer {
 				padding:0;
 				list-style:none;
 				margin-left: 0;
-				display: none;
+				position: relative;
+				display: block;
+				max-height: 0;
+				opacity: 0;
+				z-index: 1;
+				transform-origin: bottom;
+				transform: translate(0px, -100%);
+			}
+			#cloneReader .ulFilters li.animate > ul {
+				transition: all  0.25s ease-in-out;
+			}
+			#cloneReader .ulFilters li.expand > ul {
+				transform: translate(0, 0);
+				max-height: 99999999px;
+				opacity: 1;
 			}
 			#cloneReader .ulFilters li .filterVisible { }
 				#cloneReader .ulFilters li ul  li {
@@ -670,8 +692,6 @@ footer {
 		}
 		#cloneReader .ulFilters {
 			width: 100%;
-			-webkit-transition: all 0.25s ease 0s;
-			-ms-transition: all 0.25s ease 0s;
 			transition: all 0.25s ease 0s;
 			position: absolute;
 			top:0px;
@@ -681,14 +701,11 @@ footer {
 			background: white;
 			overflow:auto;
 			border: 1px solid #CCCCCC;
+			border-top: 0;
 			box-shadow: 0 0 5px #808080;
-			-webkit-transform: translateX(0%);
-			-ms-transform: translateX(0%);
 			transform: translateX(0%);
 		}
 		#cloneReader .ulFilters.outside {
-			-webkit-transform: translateX(-100%);
-			-ms-transform: translateX(-100%);
 			transform: translateX(-100%);
 		}
 	#cloneReader .ulFilters li { }
@@ -782,3 +799,34 @@ footer {
 	.newDetail p {
 		white-space: pre;
 	}
+
+
+
+
+
+/*
+
+#header {
+	position: relative;
+}
+#header .navbar-header {
+	position: relative;
+	z-index: 2;
+	background: #f8f8f8;
+}
+#header .navbar-collapse {
+	-webkit-transition: all 0.4s ease 0s;
+	-ms-transition: all 0.4s ease 0s;
+	transition: all 0.4s ease 0s;
+	height: auto !important;
+	transform: translateY(-100%);
+	z-index: 1;
+}
+#header .navbar-collapse.collapse.in {
+	transform: translateY(0);
+}
+#header .navbar-collapse.collapse,
+#header .navbar-collapse.collapsing {
+	transform: translateY(-100%);
+}
+*/
