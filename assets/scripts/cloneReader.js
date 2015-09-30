@@ -114,9 +114,7 @@ cloneReader = {
 
 		this.$page.bind('onVisible', $.proxy(
 			function() {
-				$('.menu').hide();
-				$('body').css({ 'background': '#E5E5E5', 'overflow': 'hidden' });
-				$('#header .container').addClass('fullSize');
+				$('body').addClass('crView');
 
 				this.resizeWindow();
 				this.updateMainMenu();
@@ -134,16 +132,12 @@ cloneReader = {
 			}
 		);
 
-
 		this.$page.bind('onHide', $.proxy(
 			function() {
 				this.$mainToolbar.hide();
 				this.clearSearchForm();
 				$('#header .logo').attr('href', $.base_url());
-				$('#header').css( {'box-shadow': 'none' });
-				$('#header .container').removeClass('fullSize');
-				$('.menu').show();
-				$('body').css({ 'background': 'white', 'overflow': '' });
+				$('body').removeClass('crView');
 
 				this.resizeWindow();
 				this.updateMainMenu();
@@ -243,16 +237,6 @@ cloneReader = {
 			if (cloneReader.isMobile != true) {  return;  }
 			cloneReader.maximiseUlEntries(!cloneReader.isMaximized, false);
 		} );
-
-		$('#header .navbar-collapse')
-			.on('shown.bs.collapse', function() {
-				if (cloneReader.$page.is(':visible') != true) { return; }
-				$('body').css('overflow', '');
-			})
-			.on('hidden.bs.collapse', function() {
-				if (cloneReader.$page.is(':visible') != true) { return; }
-				$('body').css( 'overflow', 'hidden');
-			});
 	},
 
 	checkScroll: function() {
@@ -1677,13 +1661,11 @@ cloneReader = {
 			crMenu.$menuProfile.before(this.$mainToolbar);
 			this.$mainToolbar.addClass('navbar-nav');
 			$('#header .logo').removeAttr('href');
-			$('#header').css( { 'box-shadow': '0 0px 7px #666' });
 		}
 		else {
 			this.$mainToolbar.appendTo( this.$toolbar ).addClass('navbar-nav pull-right');
 			$('#header .logo').attr('href', $.base_url());
 			$.hidePopupSimpleForm();
-			$('#header').css( {'box-shadow': 'none' });
 		}
 
 		this.$page.find('.pageTitle').remove();
@@ -1943,14 +1925,12 @@ cloneReader = {
 			}
 		);
 
-		this.$frmSearch.find('.fa-times').parent()
-			.css( { 'cursor': 'pointer', 'color': '#555555' } )
-			.click($.proxy(
-				function (event){
-					this.$frmSearch.find('input[name=q]').val('');
-					cloneReader.changeFilters({ 'search': '' } );
-				}
-			, this));
+		this.$frmSearch.find('.fa-times').parent().click($.proxy(
+			function (event){
+				this.$frmSearch.find('input[name=q]').val('');
+				cloneReader.changeFilters({ 'search': '' } );
+			}
+		, this));
 
 		this.populateSearchForm();
 	},

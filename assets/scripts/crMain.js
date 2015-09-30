@@ -78,6 +78,14 @@ crMain = {
 				crMain.renderPage(response, ajaxOptions.pageName);
 			}
 		);
+
+		$('#header .navbar-collapse')
+			.on('shown.bs.collapse', function() {
+				$('body').addClass('navbarVisible');
+			})
+			.on('hidden.bs.collapse', function() {
+				$('body').removeClass('navbarVisible');
+			});
 	},
 
 	iniAppAjax: function() {

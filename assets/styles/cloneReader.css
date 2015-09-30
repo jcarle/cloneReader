@@ -1,3 +1,14 @@
+body.crView {;
+	background: #E5E5E5;
+	overflow: hidden;
+}
+	body.crView .menu {
+		display: none;
+	}
+	body.navbarVisible {
+		overflow: auto;
+	}
+
 footer {
 	display: none;
 }
@@ -22,7 +33,7 @@ footer {
 	}
 
 @media (min-width: 768px) {
-	#header .container.fullSize {
+	body.crView #header .container {
 		width:100%;
 		padding:0;
 	}
@@ -651,8 +662,7 @@ footer {
 	.navbar-collapse.in {
 		overflow-y: inherit;
 	}
-	#header .navbar-ex1-collapse {
-	}
+	#header .navbar-ex1-collapse { }
 	#header .mainToolbar {
 		border-top: 1px #e7e7e7 solid;
 	}
@@ -799,8 +809,10 @@ footer {
 	.newDetail p {
 		white-space: pre;
 	}
-
-
+.frmSearch .input-group-addon {
+	cursor: pointer;
+	color: #555555;
+}
 
 
 
