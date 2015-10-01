@@ -81,8 +81,8 @@ footer {
 			position: relative;
 			z-index: 2;
 		}
-		#cloneReader nav .entriesTitle:empty  {
-			display: none;
+		#cloneReader nav div.entriesTitle.visible-xs:empty  {
+			display: none !important;
 		}
 			#cloneReader nav .entriesTitle span {
 				display: block;
