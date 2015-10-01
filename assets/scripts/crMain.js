@@ -79,13 +79,14 @@ crMain = {
 			}
 		);
 
-		$('#header .navbar-collapse')
-			.on('shown.bs.collapse', function() {
-				$('body').addClass('navbarVisible');
-			})
-			.on('hidden.bs.collapse', function() {
+		$('#header .navbar-collapse').on('shown.bs.collapse hidden.bs.collapse',
+			function(event) {
 				$('body').removeClass('navbarVisible');
-			});
+				if (event.type == 'shown') {
+					$('body').addClass('navbarVisible');
+				}
+			}
+		);
 	},
 
 	iniAppAjax: function() {

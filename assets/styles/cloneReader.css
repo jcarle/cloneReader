@@ -132,9 +132,6 @@ footer {
 			text-transform: lowercase;
 		}
 }
-	#cloneReader nav .entriesTitle {
-		display: none;
-	}
 	#cloneReader .ulEntries {
 		display:block;
 		list-style: none;
@@ -186,6 +183,10 @@ footer {
 			margin:0 0 10px 0px;
 			padding: 10px;
 			min-height: 10px !important;
+		}
+		#cloneReader .ulEntries.list li.entriesHead {
+			box-shadow: none;
+			margin: 0;
 		}
 		#cloneReader .ulEntries > li.readed {}
 				#cloneReader .ulEntries li .star i {
@@ -426,11 +427,6 @@ footer {
 			border-bottom: 1px solid #CCCCCC;
 			min-height:50px !important;
 			font-size:small;
-		}
-		#cloneReader .ulEntries.list li.entriesHead {
-			border-bottom: 1px solid #CCCCCC;
-			box-shadow: none;
-			margin: 0;
 		}
 		#cloneReader .ulEntries.list > li:last-child {
 			border: 0 none;
@@ -694,9 +690,6 @@ footer {
 		#cloneReader nav ul {
 			display: none;
 		}
-		#cloneReader nav .entriesTitle {
-			display: block;
-		}
 		#cloneReader nav .expand i {
 			color:#CCCCCC;
 		}
@@ -764,9 +757,6 @@ footer {
 			padding: 10px 0 0 0;
 			overflow:auto;
 		}
-			#cloneReader .ulEntries li.entriesHead {
-				display: none;
-			}
 		#cloneReader .ulEntries > li .header > a  {
 			margin:0 20px 0 0;
 		}

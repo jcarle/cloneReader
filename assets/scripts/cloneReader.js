@@ -4,7 +4,7 @@ cloneReader = {
 		this.$toolbar     = $('<nav class="navbar navbar-default" role="navigation" />').appendTo(this.$page);
 		this.$ulFilters   = $('<ul class="ulFilters"/>').appendTo(this.$page);
 		this.$noResult    = $('<li/>').addClass('noResult');
-		this.$entriesHead = $('<li class="entriesHead"  />');
+		this.$entriesHead = $('<li class="entriesHead hidden-xs"  />');
 		this.$ulEntries   = $('<ul class="ulEntries"  />').appendTo(this.$page);
 		this.isMobile     = $.isMobile();
 
@@ -285,7 +285,7 @@ cloneReader = {
 
 	renderToolbar: function() {
 		this.$toolbar.html(' \
-			<div class="entriesTitle" />  \
+			<div class="entriesTitle visible-xs" />  \
 			<ul class="nav navbar-nav"> \
 				<li> \
 					<button title="' + crLang.line('Expand') + '" class="expand"> \
