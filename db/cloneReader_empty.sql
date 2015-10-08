@@ -33,16 +33,16 @@ BEGIN
 
 #SET total = (
 RETURN (
-        SELECT 
-				COUNT(1) AS total FROM ( 
-			    	SELECT 1 
+        SELECT
+				COUNT(1) AS total FROM (
+			    	SELECT 1
 			    	FROM users_entries FORCE INDEX (indexUnread)
 			    	WHERE feedId 	    = _feedId
 					AND   userId	 	    = _userId
 					AND   tagId			 = _tagId
-			    	AND   entryRead 	 = false 
+			    	AND   entryRead 	 = false
 					LIMIT _maxCount
-			) AS tmp); 
+			) AS tmp);
 
 #RETURN total;
 END$$
@@ -420,8 +420,8 @@ CREATE TABLE IF NOT EXISTS `entities_search` (
   `entityNameSearch` text NOT NULL,
   `entityFullSearch` text NOT NULL,
   `entityName` varchar(255) NOT NULL,
-  `entityTree` text NOT NULL,
-  `entityReverseTree` text NOT NULL,
+  `entityFullName` text NOT NULL,
+  `entityReverseFullName` text NOT NULL,
   PRIMARY KEY (`entityTypeId`,`entityId`),
   KEY `entityTypeId` (`entityTypeId`),
   FULLTEXT KEY `entityFullSearch` (`entityFullSearch`),
@@ -596,8 +596,6 @@ CREATE TABLE IF NOT EXISTS `files` (
 CREATE TABLE IF NOT EXISTS `groups` (
   `groupId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `groupName` char(255) DEFAULT NULL,
-  `groupHomePage` char(255) NOT NULL,
-  `systemGroup` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`groupId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -605,10 +603,10 @@ CREATE TABLE IF NOT EXISTS `groups` (
 -- Dumping data for table `groups`
 --
 
-INSERT INTO `groups` (`groupId`, `groupName`, `groupHomePage`, `systemGroup`) VALUES
-(1, 'anonymous', '', 1),
-(2, 'root', '', 1),
-(3, 'default', '', 1);
+INSERT INTO `groups` (`groupId`, `groupName`) VALUES
+(1, 'anonymous'),
+(2, 'root'),
+(3, 'default');
 
 -- --------------------------------------------------------
 

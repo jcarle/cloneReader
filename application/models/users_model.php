@@ -469,10 +469,9 @@ class Users_Model extends CI_Model {
 		if ($userId != null) {
 			$aWhere[] = ' users.userId = '.(int)$userId;
 		}
-// TODO: reemplazar entityTree por entityFullName y entityReverseTree por entityReverseFullName
 		$searchKey = 'searchUsers';
 		$query = "REPLACE INTO entities_search
-			(entityTypeId, entityId, entityNameSearch, entityName, entityTree, entityReverseTree)
+			(entityTypeId, entityId, entityNameSearch, entityName, entityFullName, entityReverseFullName)
 			SELECT ".config_item('entityTypeUser').", userId,
 			CONCAT_WS(' ', '$searchKey', userFirstName, userLastName),
 			CONCAT_WS(' ', userFirstName, userLastName),

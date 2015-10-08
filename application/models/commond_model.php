@@ -309,7 +309,7 @@ class Commond_Model extends CI_Model {
 			->from('entities_search')
 			->where($match, NULL, FALSE)
 //			->order_by('entityTypeId')
-			->order_by('entityTree')
+			->order_by('entityFullName')
 			->limit(config_item('autocompleteSize'));
 
 		if ($excludeIds != null) {
@@ -424,7 +424,7 @@ class Commond_Model extends CI_Model {
 	* Busca en el array $data las properties countryId, stateId y cityId el item de menos profundidad y devuelve la zona con el path completo
 	*
 	*/
-	function getZoneToTypeahead($data, $fieldName = 'entityReverseTree'){
+	function getZoneToTypeahead($data, $fieldName = 'entityReverseFullName'){
 		$entityTypeId = null;
 		$entityId     = null;
 		if ($data['cityId'] != null) {

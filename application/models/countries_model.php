@@ -41,7 +41,7 @@ class Countries_Model extends CI_Model {
 			$aWhere[] = ' countries.lastUpdate > \''.$lastUpdate.'\' ';
 		}
 		$query = " REPLACE INTO entities_search
-			(entityTypeId, entityId, entityNameSearch, entityName, entityTree, entityReverseTree)
+			(entityTypeId, entityId, entityNameSearch, entityName, entityFullName, entityReverseFullName)
 			SELECT ".config_item('entityTypeCountry').", countryId,
 			CONCAT_WS(' ', '$searchKey', countryName),
 			countryName, countryName, countryName
@@ -56,7 +56,7 @@ class Countries_Model extends CI_Model {
 			$aWhere[] = ' (countries.lastUpdate > \''.$lastUpdate.'\' OR states.lastUpdate > \''.$lastUpdate.'\' ) ';
 		}
 		$query = "REPLACE INTO entities_search
-			(entityTypeId, entityId, entityNameSearch, entityName, entityTree, entityReverseTree)
+			(entityTypeId, entityId, entityNameSearch, entityName, entityFullName, entityReverseFullName)
 			SELECT ".config_item('entityTypeState').", stateId,
 			CONCAT_WS(' ', '$searchKey', countryName, stateName),
 			stateName,
@@ -74,7 +74,7 @@ class Countries_Model extends CI_Model {
 			$aWhere[] = ' (countries.lastUpdate > \''.$lastUpdate.'\' OR states.lastUpdate > \''.$lastUpdate.'\' OR cities.lastUpdate > \''.$lastUpdate.'\' ) ';
 		}
 		$query = "REPLACE INTO entities_search
-			(entityTypeId, entityId, entityNameSearch, entityName, entityTree, entityReverseTree)
+			(entityTypeId, entityId, entityNameSearch, entityName, entityFullName, entityReverseFullName)
 			SELECT ".config_item('entityTypeCity').", cityId,
 			CONCAT_WS(' ', '$searchKey', countryName, stateName, cityName),
 			cityName,

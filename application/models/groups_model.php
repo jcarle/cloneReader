@@ -2,7 +2,7 @@
 class Groups_Model extends CI_Model {
 	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array()){
 		$query = $this->db
-			->select('SQL_CALC_FOUND_ROWS groupId, groupName, groupHomePage', false)
+			->select('SQL_CALC_FOUND_ROWS groupId, groupName ', false)
 			->from('groups');
 
 		if (element('search', $filters) != null) {
@@ -49,8 +49,7 @@ class Groups_Model extends CI_Model {
 		$groupId = $data['groupId'];
 
 		$values = array(
-			'groupName'		=> $data['groupName'],
-			'groupHomePage'	=> $data['groupHomePage']
+			'groupName' => $data['groupName'],
 		);
 
 		if ((int)$groupId != 0) {
