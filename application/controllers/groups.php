@@ -19,16 +19,16 @@ class Groups extends CI_Controller {
 		$query = $this->Groups_Model->selectToList($page, config_item('pageSize'), array('search' => $this->input->get('search')));
 
 		$this->load->view('pageHtml', array(
-			'view'			=> 'includes/crList',
-			'meta'			=> array( 'title' => lang('Edit groups') ),
-			'list'			=> array(
-				'urlList'		=> strtolower(__CLASS__).'/listing',
-				'urlEdit'		=> strtolower(__CLASS__).'/edit/%s',
-				'urlAdd'		=> strtolower(__CLASS__).'/add',
-				'columns'		=> array('groupName' => lang('Name'), 'groupHomePage' => lang('Home page')),
-				'data'			=> $query['data'],
-				'foundRows'		=> $query['foundRows'],
-				'showId'		=> true
+			'view'  => 'includes/crList',
+			'meta'  => array( 'title' => lang('Edit groups') ),
+			'list'  => array(
+				'urlList'  => strtolower(__CLASS__).'/listing',
+				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
+				'urlAdd'    => strtolower(__CLASS__).'/add',
+				'columns'   => array('groupName' => lang('Name')),
+				'data'      => $query['data'],
+				'foundRows' => $query['foundRows'],
+				'showId'    => true
 			)
 		));
 	}
@@ -49,10 +49,6 @@ class Groups extends CI_Controller {
 				'groupName' => array(
 					'type'  => 'text',
 					'label' => lang('Name'),
-				),
-				'groupHomePage' => array(
-					'type'  => 'text',
-					'label' => lang('Home page'),
 				),
 				'controllers' => array(
 					'type'   => 'groupCheckBox',

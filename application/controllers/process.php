@@ -4,7 +4,10 @@ class Process extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 
-		if (!$this->input->is_cli_request()) {
+		if ($this->input->is_cli_request()) {
+			$this->session->set_userdata('userId', USER_CRBOOT);
+		}
+		else {
 			if (!$this->safety->allowByControllerName(__CLASS__)) {
 				throw new Exception(' Not Found');
 			}
@@ -99,5 +102,11 @@ class Process extends CI_Controller {
 	function optimizeTableEntitiesSearch() {
 		$this->load->dbutil();
 		$this->dbutil->optimize_table('entities_search');
+	}
+
+	function processDiffEntityLog() {
+		$this->Commond_Model->processDiffEntityLog();
+
+		return loadViewAjax(true, array('msg' => lang('Data updated successfully'), 'icon' => 'success'));
 	}
 }

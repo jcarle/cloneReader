@@ -79,16 +79,18 @@ function getCrFormData($data, $id) {
 }
 
 function getCrFormFieldGallery($entityTypeId, $entityId, $label) {
-	$config = getEntityGalleryConfig($entityTypeId);
+	$gallery = getEntityGalleryConfig($entityTypeId);
+	$config   = getEntityConfig($entityTypeId);
 
 	return array(
 		'type'          => 'gallery',
 		'label'         => $label,
-		'urlGallery'    => base_url(str_replace(array('$entityTypeId', '$entityId'), array($entityTypeId, $entityId),$config['urlGallery'])),
-		'urlSave'       => base_url($config['urlSave']),
-		'urlDelete'     => base_url($config['urlDelete']),
+		'urlGallery'    => base_url(str_replace(array('$entityTypeId', '$entityId'), array($entityTypeId, $entityId),$gallery['urlGallery'])),
+		'urlSave'       => base_url($gallery['urlSave']),
+		'urlDelete'     => base_url($gallery['urlDelete']),
 		'entityTypeId'  => $entityTypeId,
 		'entityId'      => $entityId,
+		'hasEntityLog'  => element('hasEntityLog', $config),
 	);
 }
 
@@ -490,7 +492,7 @@ function renderCrFormFields($form) {
 function renderCrFormTree($aTree, $value){
 	$sTmp = '<ul>';
 	for ($i=0; $i<count($aTree); $i++) {
-		$sTmp .= '	<li>'.anchor($aTree[$i]['url'], $aTree[$i]['label'], array('class' => ($value == $aTree[$i]['id'] ? 'selected' : '')));
+		$sTmp .= ' <li>'.anchor($aTree[$i]['url'], $aTree[$i]['label'], array('class' => ($value == $aTree[$i]['id'] ? 'selected' : '')));
 		if (count($aTree[$i]['childs']) > 0) {
 			$sTmp .= renderCrFormTree($aTree[$i]['childs'], $value);
 		}
@@ -501,9 +503,20 @@ function renderCrFormTree($aTree, $value){
 	return $sTmp;
 }
 
-function getHtmlCrLink($url, $fieldName) {
-	$CI = &get_instance();
+function getCrFormFieldEntityLog($entityTypeId, $entityId) {
+	return array(
+		'type'   => 'html',
+		'value'  => '
+			<fieldset class="form-group ">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label"> </label>
+				<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 ">
+					<a class="btn btn-default " href="javascript:$.showPopupEntityLog('.$entityTypeId.', '.$entityId.');"> <i class="fa fa-files-o text-info"> </i> '.lang('View logs').'</a>
+				</div>
+			</fieldset>'
+	);
+}
 
+function getHtmlCrLink($url, $fieldName) {
 	return '
 		<fieldset class="form-group ">
 			<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label"> '.lang('Url').'</label>
@@ -514,8 +527,7 @@ function getHtmlCrLink($url, $fieldName) {
 }
 
 function validation_array_errors() {
-	if (FALSE === ($OBJ =& _get_validation_object()))
-	{
+	if (FALSE === ($OBJ =& _get_validation_object())) {
 		return array();
 	}
 
@@ -581,4 +593,313 @@ function getCrFormCookie($prefix = 'comment') {
 		$prefix.'Email'      => element('userEmail', $data),
 		$prefix.'Phone'      => element('userPhone', $data),
 	);
+}
+
+/*
+ * Devuelve las porperties de una entidad, se utiliza para definir el upload de archivos, folder, tamaños, etc
+ */
+function getEntityConfig($entityTypeId, $key = null) {
+	$entityConfig  = config_item('entityConfig');
+	$entityConfig  = element($entityTypeId, $entityConfig);
+	if ($entityConfig != null) {
+		if ($key != null) {
+			return $entityConfig[$key];
+		}
+		return $entityConfig;
+	}
+
+	return null;
+}
+
+/**
+ * @return $entityTypeId
+ *
+ * */
+function getEntityTypeIdByEnityTypeName($entityTypeName) {
+	$entities = config_item('entityConfig');
+	// TODO: pensar si conviene indexar el entityTypeName, para que no tenga que recorrerlo
+	foreach ($entities as $entityTypeId => $entityConfig) {
+		if ($entityConfig['entityTypeName'] == $entityTypeName) {
+			return $entityTypeId;
+		}
+	}
+	return null;
+}
+
+/**
+ * Devuelve el config de una gallery, si no esta definida usa la gallery por default
+ */
+function getEntityGalleryConfig($entityTypeId) {
+	$config   = getEntityConfig($entityTypeId);
+	$gallery  = element('gallery', $config);
+	if ($gallery != null) {
+		return $gallery;
+	}
+
+	if ($config == null) {
+		return null;
+	}
+
+	// Si no existe, devuelve las properties por defecto, haciendo un sprintf de los folder y del controller con el name de la entidad
+	$entityConfig   = config_item('entityConfig');
+	$galleryDefault = $entityConfig['default']['gallery'];
+	$entityTypeName = $entityConfig[$entityTypeId]['entityTypeName'];
+
+	$galleryDefault['controller']                = sprintf($galleryDefault['controller'], $entityTypeName);
+	$galleryDefault['folder']                    = sprintf($galleryDefault['folder'], $entityTypeName);
+	$galleryDefault['sizes']['thumb']['folder']  = sprintf($galleryDefault['sizes']['thumb']['folder'], $entityTypeName);
+	$galleryDefault['sizes']['large']['folder']  = sprintf($galleryDefault['sizes']['large']['folder'], $entityTypeName);
+
+	return $galleryDefault;
+}
+
+/**
+ *
+ * @param     (string) $id  un string con el formato: [entityTypeId]-[entityId]
+ * @param     (string) $fieldName
+ * @return    (array)  devuelve un array con el formato:
+ * 		array( 'id' => 3-1822, 'text' => 'country' )
+ * */
+function getEntityToTypeahead($id, $fieldName = 'entityName', $contactEntityTypeId = true) {
+	if (empty($id)) {
+		return array();
+	}
+
+	$CI = &get_instance();
+
+	$aTmp = explode('-', $id);
+	return $CI->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1], $fieldName, $contactEntityTypeId);
+}
+
+/**
+ * @param     (int)    $entityTypeId
+ * @param     (int)    $entityId
+ * @param     (string) $fieldName
+ * @return    (string) devuelve el nombre de la entity
+ * */
+function getEntityName($entityTypeId, $entityId, $fieldName = 'entityName') {
+	$CI = &get_instance();
+
+	$entityConfig = getEntityConfig($entityTypeId);
+	if (element('customGetEntityName', $entityConfig) == true) {
+		$modelName = ucfirst($entityConfig['entityTypeName']).'_Model';
+		$CI->load->model($modelName);
+		return $CI->$modelName->getEntityName($entityId);
+	}
+
+	$entity = $CI->Commond_Model->getEntitySearch($entityTypeId, $entityId, $fieldName);
+	if (!empty($entity)) {
+		return $entity['text'];
+	}
+	return '';
+}
+
+
+/**
+ * Devuelve la url de una entidad;
+ * Puede recibir un $entityId o un arrayy $data que incluya el $fieldSet; ambos campos son opcionales pero deben incluirse uno de los dos
+ * Algunas entidades pueden necesitar un metodo custom para obtener la url, en este caso hay que setear customGetEntityUrl=true  en el config de la entidad
+ *
+ * */
+function getEntityUrl($entityTypeId, $entityId = null, $data = null) {
+	$CI = &get_instance();
+
+	if (empty($data) && empty($entityId)) {
+		return '';
+	}
+
+	$entityConfig = getEntityConfig($entityTypeId);
+	if ($entityConfig == null) {
+		return '';
+	}
+
+	if (element('customGetEntityUrl', $entityConfig) == true && !empty($entityId)) {
+		$modelName = ucfirst($entityConfig['entityTypeName']).'_Model';
+		$CI->load->model($modelName);
+		return $CI->$modelName->getEntityUrl($entityId);
+	}
+	if (!empty($data)) {
+		return base_url(sprintf($entityConfig['entityUrl'], $data[$entityConfig['fieldSef']]));
+	}
+	if (!empty($entityId)) {
+		return base_url(sprintf($entityConfig['entityUrl'], $CI->Commond_Model->getEntitySef($entityTypeId, $entityId)));
+	}
+
+	return '';
+}
+
+/**
+* Busca en el array $data las properties countryId, stateId y cityId el item de menos profundidad y devuelve la zona con el path completo
+*
+*/
+function getZoneToTypeahead($data, $fieldName = 'entityReverseFullName'){
+	$CI = &get_instance();
+	$entityTypeId = null;
+	$entityId     = null;
+	if ($data['cityId'] != null) {
+		$entityTypeId = config_item('entityTypeCity');
+		$entityId     = $data['cityId'];
+	}
+	else if ($data['stateId'] != null) {
+		$entityTypeId = config_item('entityTypeState');
+		$entityId     = $data['stateId'];
+	}
+	else if ($data['countryId'] != null) {
+		$entityTypeId = config_item('entityTypeCountry');
+		$entityId     = $data['countryId'];
+	}
+
+	return $CI->Commond_Model->getEntitySearch($entityTypeId, $entityId, $fieldName, true);
+}
+
+/**
+ *
+ * Apendea al array filters el id del tipo de zona que corresponda (countryId, stateId, cityId)
+ * Se utiliza en los listados
+ *
+ * @param array $filters
+ * @param       $zoneId  un string con el formato: [entityTypeId]-[entityId]
+ * */
+function appendZoneToFilters(array $filters, $zoneId) {
+	if (empty($zoneId)) {
+		return $filters;
+	}
+	$aTmp = explode('-', $zoneId);
+
+	switch ($aTmp[0]) {
+		case config_item('entityTypeCountry'):
+			$filters['countryId'] = $aTmp[1];
+			break;
+		case config_item('entityTypeState'):
+			$filters['stateId'] = $aTmp[1];
+			break;
+		case config_item('entityTypeCity'):
+			$filters['cityId'] = $aTmp[1];
+			break;
+	}
+
+	return $filters;
+}
+
+/**
+ *
+ * Apendea al array filters el id del tipo que corresponda (brandId, modelId)
+ * Se utiliza en los listados
+ *
+ * @param array $filters
+ * @param       $carId  un string con el formato: [entityTypeId]-[entityId]
+ * */
+function appendCarToFilters(array $filters, $carId) {
+	if (empty($carId)) {
+		return $filters;
+	}
+	$aTmp = explode('-', $carId);
+
+	switch ($aTmp[0]) {
+		case config_item('entityTypeBrand'):
+			$filters['brandId'] = $aTmp[1];
+			break;
+		case config_item('entityTypeModel'):
+			$filters['modelId'] = $aTmp[1];
+			break;
+	}
+
+	return $filters;
+}
+
+
+function langEntityTypeName($entityTypeId, $singular = false) {
+	$entityConfig = getEntityConfig($entityTypeId);
+	if ($entityConfig == null) {
+		return '';
+	}
+	return lang(ucfirst($entityConfig[($singular == true ? 'entityTypeSingularName' : 'entityTypeName')]));
+}
+
+/**
+ * Se utiliza para relodear un crForm luego de guardar los datos
+ * */
+function loadAjaxSaveCrForm($code, $entityTypeId, $entityId){
+	if ($code == false || empty($entityTypeId) || empty($entityId)) {
+		return loadViewAjax($code);
+	}
+	$CI           = &get_instance();
+	$entityConfig = getEntityConfig($entityTypeId);
+	if ($entityConfig == null) {
+		return loadViewAjax($code);
+	}
+
+	$goToUrl = base_url($entityConfig['entityTypeName'].'/edit/'.$entityId);
+
+	$CI->load->library('user_agent');
+	$url = parse_url($CI->agent->referrer());
+	parse_str(element('query', $url), $params);
+	if (isset($params['urlList'])) {
+		$goToUrl .= '?urlList='.$params['urlList'];
+	}
+	return loadViewAjax($code, array( 'msg' => lang('Data updated successfully'), 'icon' => 'success', 'goToUrl' => $goToUrl ));
+}
+
+/**
+ * Se ejecuta despues de guardar datos en un crForm
+ * 		Soporta las urls ('$entityTypeName/edit/$entityId', '$entityTypeName/add', '$entityTypeName/savePicture/$entityId', '$entityTypeName/deletePicture/$entityId' );
+ *		En caso de necesitar guardar en entities_logs desde otro controller, llamar a mano al method $this->Commond_Model->saveEntityLog
+ * 		En modo Edit: las variables $entityTypeId y $entityId esta en la url;
+ * 		En modo Add:  hay que setear la variable "lastInsertId"; ya que el entityId no está en la url (aun no existe)
+ *					Ej: $this->config->set_item('lastInsertId', $testId);
+ * 			 		Si en el config de la entidad existe 'fieldSef' ejecuta saveEntitySef
+ * 		En ambos casos: si en el config de la entidad esta seteado hasEntityLog==true guarda en la tabla entities_logs
+ * */
+function onSaveCrForm() {
+	$CI = &get_instance();
+
+	if ($CI->input->post() === false) {
+		return;
+	}
+	if (http_response_code() != 200) {
+		return;
+	}
+	$aErrors = validation_array_errors();
+	if (!empty($aErrors)) {
+		return;
+	}
+	if (isset($CI->upload)) {
+		$aErrors = $CI->upload->display_errors('', '');
+		if (!empty($aErrors)) {
+			return;
+		}
+	}
+
+	$aTmp = explode('/', uri_string());
+	if (count($aTmp) < 2) {
+		return;
+	}
+	$method = $aTmp[1];
+
+	if (!in_array($method, array('add', 'edit', 'savePicture', 'deletePicture'))) {
+		return;
+	}
+	$entityTypeId = getEntityTypeIdByEnityTypeName($aTmp[0]);
+	if ($entityTypeId === null) {
+		return;
+	}
+
+	$entityConfig = getEntityConfig($entityTypeId);
+	if ($entityConfig == null) {
+		return;
+	}
+
+	if ($method == 'add') {
+		$entityId = config_item('lastInsertId');
+	}
+	else {
+		$entityId = $aTmp[2];
+	}
+
+	if ($method == 'add' && element('fieldSef', $entityConfig) !== false) {
+		$CI->Commond_Model->saveEntitySef($entityTypeId, $entityId);
+	}
+	if (element('hasEntityLog', $entityConfig) == true) {
+		$CI->Commond_Model->saveEntityLog($entityTypeId, $entityId);
+	}
 }

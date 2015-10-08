@@ -103,15 +103,15 @@ class Feedbacks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'    => 'includes/crList',
-			'meta'    => array( 'title' => lang('Edit feedbacks')),
+			'meta'    => array( 'title' => lang('Feedbacks')),
 			'list'    => array(
 				'urlList'   => strtolower(__CLASS__).'/listing',
 				'urlEdit'   => strtolower(__CLASS__).'/edit/%s',
 				'columns'   => array(
-					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  lang('Description')),
-					'feedbackDate'       => array('class' => 'datetime', 'value' => lang('Date')),
 					'feedbackUserName'   => lang('Name'),
 					'feedbackUserEmail'  => lang('Email'),
+					'feedbackDesc'       => array('class' => 'dotdotdot', 'value' =>  lang('Description')),
+					'feedbackDate'       => array('class' => 'datetime', 'value' => lang('Date')),
 				),
 				'data'       => $query['data'],
 				'foundRows'  => $query['foundRows'],
@@ -141,7 +141,7 @@ class Feedbacks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'    => 'includes/crForm',
-			'meta'    => array('title' => lang('Edit feedbacks')),
+			'meta'    => array('title' => lang('Feedbacks')),
 			'form'    => populateCrForm($form, $data),
 		));
 	}
@@ -150,7 +150,7 @@ class Feedbacks extends CI_Controller {
 		$form = array(
 			'frmName'  => 'frmFeedbackEdit',
 			'buttons'  => array('<button type="button" class="btn btn-default" onclick="$.goToUrlList();"><i class="fa fa-arrow-left"></i> '.lang('Back').' </button> '),
-			'fields' => array(
+			'fields'   => array(
 				'feedbackId' => array(
 					'type'  => 'hidden',
 					'value' => $feedbackId,
@@ -188,20 +188,8 @@ class Feedbacks extends CI_Controller {
 			),
 		);
 
-		if ((int)$feedbackId > 0) {
-			$form['urlDelete'] = base_url('feedbacks/delete/');
-
-			$form['buttons'][] = '<button type="button" class="btn btn-danger" ><i class="fa fa-trash-o"></i> '.lang('Delete').' </button>';
-		}
-
 		$this->form_validation->set_rules($form['rules']);
 
 		return $form;
-	}
-
-	function delete() {
-		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
-
-		return loadViewAjax($this->Feedbacks_Model->delete($this->input->post('feedbackId')));
 	}
 }

@@ -54,7 +54,8 @@ class App extends CI_Controller {
 			return error404();
 		}
 
-		$entityUrl = getEntityUrl($entityTypeId, $entitySef);
+		$this->Commond_Model->saveEntityLog($entityTypeId, $entityId);
+		$entityUrl = getEntityUrl($entityTypeId, $entityId);
 
 		return loadViewAjax(true, array('entityUrl' => $entityUrl));
 	}

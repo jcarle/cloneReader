@@ -11,9 +11,11 @@ function createLangJs() {
 	if (realpath($fileName) !== false) {
 		$filemtime = filemtime($fileName);
 		foreach ($CI->lang->is_loaded as $fileLang) {
-			if ($filemtime < filemtime('./application/language/'.config_item('language').'/'.$fileLang)) {
-				@unlink($fileName);
-				break;
+			if (file_exists('./application/language/'.config_item('language').'/'.$fileLang)) {
+				if ($filemtime < filemtime('./application/language/'.config_item('language').'/'.$fileLang)) {
+					@unlink($fileName);
+					break;
+				}
 			}
 		}
 	}
@@ -29,6 +31,13 @@ function createLangJs() {
 	}
 
 	file_put_contents( $fileName, ' crLang.aLangs = '.json_encode($aLangs).'; ' );
+}
+
+// TODO: implementar!
+function resetLang($langId) {
+/*	$this->lang->is_loaded = array();
+	$this->session->set_userdata('langId', $task['langId']);
+	initLang();*/
 }
 
 function initLang() {

@@ -23,6 +23,11 @@ $hook['post_controller_constructor'][] = array(
 	'filepath' => 'libraries'
 );
 
+$hook['post_controller'][] = array(
+	'function' => 'onSaveCrForm',
+	'filename' => 'MY_form_helper.php',
+	'filepath' => 'helpers'
+);
 
 $hook['post_system'][] = array(
 	'class'    => 'Usertracking',

@@ -6,7 +6,7 @@ class Search extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 	}
-	
+
 	function index() {
 	}
 
@@ -51,7 +51,7 @@ class Search extends CI_Controller {
 
 	function zones($reverse = true) {
 		$searchKey = 'searchZones';
-		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+		$fieldName = ($reverse == true ? 'entityReverseFullName' : 'entityFullName');
 		return $this->load->view('json', array(
 			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, $fieldName, true, false)
 		));
@@ -59,7 +59,7 @@ class Search extends CI_Controller {
 
 	function places($reverse = true) {
 		$searchKey = 'searchPlaces';
-		$fieldName = ($reverse == true ? 'entityReverseTree' : 'entityTree');
+		$fieldName = ($reverse == true ? 'entityReverseFullName' : 'entityFullName');
 		return $this->load->view('json', array(
 			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, $fieldName, false, false)
 		));
@@ -67,23 +67,22 @@ class Search extends CI_Controller {
 
 	function feeds() {
 		$searchKey = 'searchFeeds';
-		
+
 		return $this->load->view('json', array(
 			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, null, false, false)
 		));
 	}
-	
+
 	function tags() {
 		$searchKey = 'searchTags';
-		
+
 		if ($this->input->get('onlyWithFeeds') == 'true') {
 			$searchKey .= ' tagHasFeed';
 		}
-		
+
 		return $this->load->view('json', array(
 											  //searchEntityName($search,                    $searchKey = '', $fieldName = null, $contactEntityTypeId = false, $onlyApproved = true) {
 			'result' => $this->Commond_Model->searchEntityName($this->input->get('query'), $searchKey, null, false, false)
 		));
-	}	
+	}
 }
-

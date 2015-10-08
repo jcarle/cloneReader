@@ -27,60 +27,6 @@ function sourceToArray($source, $fieldName) {
 	return $data;
 }
 
-/*
- * Devuelve las porperties de una entidad, se utiliza para definir el upload de archivos, folder, tamaños, etc
- */
-function getEntityConfig($entityTypeId, $key = null) {
-	$entityConfig = config_item('entityConfig');
-	$entityConfig  = element($entityTypeId, $entityConfig);
-	if ($entityConfig != null) {
-		if ($key != null) {
-			return $entityConfig[$key];
-		}
-		return $entityConfig;
-	}
-
-	return null;
-}
-
-/**
- * @return $entityTypeId
- *
- * */
-function getEntityTypeIdByEnityTypeName($entityTypeName) {
-	$entities = config_item('entityConfig');
-	// TODO: pensar si conviene indexar el entityTypeName, para que no tenga que recorrerlo
-	foreach ($entities as $entityTypeId => $entityConfig) {
-		if ($entityConfig['entityTypeName'] == $entityTypeName) {
-			return $entityTypeId;
-		}
-	}
-	return null;
-}
-
-/**
- * Devuelve el config de una gallery, si no esta definida usa la gallery por default
- */
-function getEntityGalleryConfig($entityTypeId) {
-	$config   = getEntityConfig($entityTypeId);
-	$gallery  = element('gallery', $config);
-	if ($gallery != null) {
-		return $gallery;
-	}
-
-	// Si no existe, devuelve las properties por defecto, haciendo un sprintf de los folder y del controller con el name de la entidad
-	$entityConfig   = config_item('entityConfig');
-	$galleryDefault = $entityConfig['default']['gallery'];
-	$entityTypeName = $entityConfig[$entityTypeId]['entityTypeName'];
-
-	$galleryDefault['controller']                = sprintf($galleryDefault['controller'], $entityTypeName);
-	$galleryDefault['folder']                    = sprintf($galleryDefault['folder'], $entityTypeName);
-	$galleryDefault['sizes']['thumb']['folder']  = sprintf($galleryDefault['sizes']['thumb']['folder'], $entityTypeName);
-	$galleryDefault['sizes']['large']['folder']  = sprintf($galleryDefault['sizes']['large']['folder'], $entityTypeName);
-
-	return $galleryDefault;
-}
-
 
 /*
  * Armado de los title, h1, metaDescription y metaKeywords
@@ -163,4 +109,29 @@ function getBreadcrumb(array $breadcrumb, array $meta, $skipBreadcrumb = false) 
 	);
 
 	return $breadcrumb;
+}
+
+function array_diff_recursive($array1, $array2) {
+	$difference=array();
+	foreach($array1 as $key => $value) {
+		if (is_numeric($key)){
+			if (!in_array($value, $array2)) {
+				$difference[] = $value;
+			}
+		}
+		else {
+			if( is_array($value) ) {
+				if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
+					$difference[$key] = $value;
+				} else {
+					$new_diff = array_diff_recursive($value, $array2[$key]);
+					if( !empty($new_diff) )
+					$difference[$key] = $new_diff;
+				}
+			} else if( !array_key_exists($key,$array2) || $array2[$key] !== $value ) {
+				$difference[$key] = $value;
+			}
+		}
+	}
+	return $difference;
 }

@@ -17,14 +17,14 @@ class Users extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 
-		$aRemoteLogin 	= array();
-		$remoteLogin	= json_decode($this->input->get('remoteLogin'));
+		$aRemoteLogin  = array();
+		$remoteLogin   = json_decode($this->input->get('remoteLogin'));
 		if (is_array($remoteLogin)) {
 			foreach ($remoteLogin as $provider) {
 				$aRemoteLogin[] = $provider;
 			}
 		}
-
+//TODO: usar el helper para busca el value del autocomplete
 		$feed 	= null;
 		$feedId = $this->input->get('feedId');
 		if ($feedId != null) {
@@ -220,15 +220,9 @@ class Users extends CI_Controller {
 		$page = (int)$this->input->get('page');
 		if ($page == 0) { $page = 1; }
 
-		$user 	= null;
-		$userId = $this->input->get('userId');
-		if ($userId != null) {
-			$user = $this->Users_Model->get($userId);
-		}
-
 		$filters = array(
-			'search'      => $this->input->get('search'),
-			'userId'      => $userId
+			'search' => $this->input->get('search'),
+			'userId' => $this->input->get('userId'),
 		);
 
 		$query = $this->Users_Model->selectUsersLogsToList($page, config_item('pageSize'), $filters, array(array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir'))) );
@@ -252,7 +246,7 @@ class Users extends CI_Controller {
 						'type'        => 'typeahead',
 						'label'       => lang('User'),
 						'source'      => base_url('search/users/'),
-						'value'       => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
+						'value'       => getEntityToTypeahead(config_item('entityTypeUser').'-'.$this->input->get('userId'), 'entityName', false),
 						'multiple'    => false,
 						'placeholder' => lang('User')
 					),
@@ -260,6 +254,10 @@ class Users extends CI_Controller {
 				'sort' => array(
 					'userId'      => '#',
 					'userLogDate' => lang('Date'),
+				),
+				'defaultSort' => array(
+					'orderBy'  => 'userLogDate',
+					'orderDir' => 'desc',
 				)
 			)
 		));

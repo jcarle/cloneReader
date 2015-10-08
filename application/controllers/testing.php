@@ -54,7 +54,8 @@ class Testing extends CI_Controller {
 		if ($data === null) { return error404(); }
 
 		$form = array(
-			'frmName' => 'frmTestingEdit',
+			'frmName'   => 'frmTestingEdit',
+			'urlDelete' => base_url('testing/delete/'),
 			'fields'  => array(
 				'testId' => array(
 					'type'  => 'hidden',
@@ -97,39 +98,43 @@ class Testing extends CI_Controller {
 					'type'  => 'datetime',
 					'label' => 'Fecha',
 				),
-			)
+				'testPicture' => array(
+					'type'       => 'upload',
+					'label'       => lang('Logo'),
+					'urlSave'     => base_url('testing/savePicture/'.$testId),
+					'urlDelete'   => base_url('testing/deletePicture/'.$testId),
+					'isPicture'   => true,
+				),
+				'testDoc' => array(
+					'type'       => 'upload',
+					'label'      => lang('pdf'),
+					'urlSave'    => base_url('testing/saveDoc/'.$testId),
+					'urlDelete'  => base_url('testing/deleteDoc/'.$testId),
+				),
+				'testIco' => array(
+					'type'       => 'upload',
+					'label'      => lang('Icon'),
+					'isPicture'  => true,
+					'disabled'   => true,
+				),
+				'gallery'    => getCrFormFieldGallery(config_item('entityTypeTesting'), $testId, 'Pictures'),
+				'testChilds' => array(
+					'type'        => 'subform',
+					'label'       => 'childs',
+					'controller'  => base_url('testing/selectChildsByTestId/'.$testId),
+				),
+				'entityLog' => getCrFormFieldEntityLog(config_item('entityTypeTesting'), $testId),
+			),
 		);
 
-		if ((int)$testId > 0) {
-			$form['urlDelete'] = base_url('testing/delete/');
-
-			$form['fields']['testPicture'] = array(
-				'type'             => 'upload',
-				'label'            => lang('Logo'),
-				'urlSave'          => base_url('testing/savePicture/'.$testId),
-				'urlDelete'        => base_url('testing/deletePicture/'.$testId),
-				'isPicture'        => true,
-			);
-			$form['fields']['testDoc'] = array(
-				'type'       => 'upload',
-				'label'      => lang('pdf'),
-				'urlSave'    => base_url('testing/saveDoc/'.$testId),
-				'urlDelete'  => base_url('testing/deleteDoc/'.$testId),
-			);
-
-			$form['fields']['testIco'] = array(
-				'type'       => 'upload',
-				'label'      => lang('Icon'),
-				'isPicture'  => true,
-				'disabled'   => true,
-			);
-
-			$form['fields']['gallery'] = getCrFormFieldGallery(config_item('entityTypeTesting'), $testId, 'Pictures');
-			$form['fields']['testChilds'] = array(
-				'type'        => 'subform',
-				'label'       => 'childs',
-				'controller'  => base_url('testing/selectChildsByTestId/'.$testId),
-			);
+		if ((int)$testId == 0) {
+			unset($form['urlDelete']);
+			unset($form['fields']['testPicture']);
+			unset($form['fields']['testDoc']);
+			unset($form['fields']['testIco']);
+			unset($form['fields']['gallery']);
+			unset($form['fields']['testChilds']);
+			unset($form['fields']['entityLog']);
 		}
 
 		$form['rules'] = array(
@@ -262,6 +267,7 @@ class Testing extends CI_Controller {
 			$code = $this->form_validation->run();
 			if ($code == true) {
 				$this->Testing_Model->saveTestingChilds($this->input->post());
+				$this->Commond_Model->saveEntityLog(config_item('entityTypeTesting'), $testId);
 			}
 
 			return loadViewAjax($code);
@@ -293,11 +299,6 @@ class Testing extends CI_Controller {
 		$data = getCrFormData($this->Testing_Model->getTestChild($testChildId), $testChildId);
 		if ($data === null) { return error404(); }
 
-		$user = null;
-		if ((int)$userId != 0) {
-			$user = $this->Users_Model->get($userId);
-		}
-
 		$form = array(
 			'frmName' => 'frmTestChildUserEdit',
 			'title'   => 'Edit user',
@@ -314,7 +315,7 @@ class Testing extends CI_Controller {
 					'type'          => 'typeahead',
 					'label'         => lang('User'),
 					'source'        => base_url('search/users/'),
-					'value'         => array( 'id' => element('userId', $user), 'text' => element('userFirstName', $user).' '.element('userLastName', $user) ),
+					'value'         => getEntityToTypeahead(config_item('entityTypeUser').'-'.$userId, 'entityName', false),
 					'multiple'      => false,
 					'placeholder'   => lang('User')
 				)
@@ -347,6 +348,7 @@ class Testing extends CI_Controller {
 
 				$this->Testing_Model->deleteTestChildUser($testChildId, $this->input->post('currentUserId'));
 				$this->Testing_Model->saveTestChildUser($testChildId, $userId);
+				$this->Commond_Model->saveEntityLog(config_item('entityTypeTesting'), $data['testId']);
 			}
 
 			return loadViewAjax($code);
@@ -360,7 +362,7 @@ class Testing extends CI_Controller {
 
 		$this->deletePicture($testId);
 
-		$result  = savePicture(config_item('testPicture'));
+		$result  = savePicture(getEntityConfig(config_item('entityTypeTesting'), 'testPicture'));
 
 		if ($result['code'] != true) {
 			return loadViewAjax(false, $result['result']);
@@ -382,7 +384,7 @@ class Testing extends CI_Controller {
 
 		$data = $this->Testing_Model->get($testId);
 
-		$this->Files_Model->deleteFile(config_item('testPicture'), $data['testPictureFileId']);
+		$this->Files_Model->deleteFile(getEntityConfig(config_item('entityTypeTesting'), 'testPicture'), $data['testPictureFileId']);
 
 		return loadViewAjax(true);
 	}
@@ -390,9 +392,9 @@ class Testing extends CI_Controller {
 	function saveDoc($testId) {
 		if (! $this->safety->allowByControllerName('testing/edit') ) { return errorForbidden(); }
 
-		$this->deleteDoc($testId);
+		$this->deleteDoc($testId, true);
 
-		$result = saveFile(config_item('testDoc'));
+		$result = saveFile(getEntityConfig(config_item('entityTypeTesting'), 'testDoc'));
 
 		if ($result['code'] != true) {
 			return loadViewAjax(false, $result['result']);
@@ -401,17 +403,21 @@ class Testing extends CI_Controller {
 		$this->Testing_Model->saveDoc($testId, $result['fileId']);
 
 		$data = $this->Testing_Model->get($testId, true);
+		$this->Commond_Model->saveEntityLog(config_item('entityTypeTesting'), $testId);
 
 		return loadViewAjax(true, $data['testDoc']);
 	}
 
-	function deleteDoc($testId) {
+	function deleteDoc($testId, $skipSaveEntityLog = false) {
 		if (! $this->safety->allowByControllerName(__CLASS__.'/edit') ) { return errorForbidden(); }
 
 		$this->load->model('Files_Model');
 		$data = $this->Testing_Model->get($testId);
 		if (!empty($data)) {
-			$this->Files_Model->deleteFile(config_item('testDoc'), $data['testDocFileId']);
+			$this->Files_Model->deleteFile(getEntityConfig(config_item('entityTypeTesting'), 'testDoc'), $data['testDocFileId']);
+		}
+		if ($skipSaveEntityLog == false) {
+			$this->Commond_Model->saveEntityLog(config_item('entityTypeTesting'), $testId);
 		}
 
 		return loadViewAjax(true);

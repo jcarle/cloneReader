@@ -175,15 +175,23 @@ function getPageName() {
 	return 'cr-page-' . $controller . (count($aTmp) > 1 ? '-'.$aTmp[1] : '');
 }
 
-function getEntityUrl($entityTypeId, $entitySef) {
-	$entityConfig = getEntityConfig($entityTypeId);
-	if ($entityConfig == null) {
-		return $entitySef;
+/**
+ * Analiza una url y trata de obtener el entittyId
+ * */
+function getEnityIdInEntitySef($entitySef, $entityTypeId) {
+	$entitySef = parse_url($entitySef, PHP_URL_PATH);
+	$aTmp      = explode('-',  $entitySef);
+	if (count($aTmp) < 2) {
+		return null;
+	}
+	if ($entityTypeId != $aTmp[count($aTmp)-2]) {
+		return null;
+	}
+	$entityId = $aTmp[count($aTmp)-1];
+
+	if (!is_numeric($entityId)) {
+		return null;
 	}
 
-	if (is_array($entitySef)) {
-		return base_url(vsprintf($entityConfig['entityUrl'], $entitySef));
-	}
-
-	return base_url(sprintf($entityConfig['entityUrl'], $entitySef));
+	return $entityId;
 }

@@ -48,8 +48,10 @@ $config['searchKeys'] = array( //Se utiliza filtrar datos en entities_search
  */
 $config['entityConfig'] = array(
 	'default' => array(
-		'entityTypeName' => null,
-		'gallery' => array(  // Default config gallery
+		'entityTypeName'      => null,
+		'customGetEntityUrl'  => false,
+		'customGetEntityName' => false,
+		'gallery'             => array(  // Default config gallery
 			'controller'    => '%s/edit',
 			'urlGallery'    => 'gallery/select/$entityTypeId/$entityId',         // url que devuelve un json con todas las imagenes de la gallery
 			'urlSave'       => 'gallery/savePicture',                            // url del controlador para guardar una imagen
@@ -78,7 +80,23 @@ $config['entityConfig'] = array(
 		),
 	),
 	$config['entityTypeTesting'] => array(
-		'entityTypeName' => 'testing',
+		'entityTypeName'         => 'testing',
+		'entityTypeSingularName' => 'testing',
+		'hasEntityLog'           => true,
+		'entityUrl'              => 'testing/detail/%s',
+		'testPicture'    => array(
+			'folder'        => '/assets/images/testing/logos/original/',
+			'allowed_types' => 'gif|jpg|png',
+			'max_size'      => 1024 * 8,
+			'sizes'         => array(
+				'thumb' => array( 'width' => 150,  'height' => 150, 'folder' => '/assets/images/testing/logos/thumb/' ),
+			)
+		),
+		'testDoc' => array(
+			'folder'        => '/assets/files/testing/',
+			'allowed_types' => 'txt|pdf',
+			'max_size'      => 1024 * 8,
+		)
 	),
 	$config['entityTypeCountry'] => array(
 		'entityTypeName'  => 'countries',
@@ -114,24 +132,6 @@ $config['entityConfig'] = array(
 		'fieldName'       => 'tagName',
 	),
 );
-
-// upload test picture
-$config['testPicture'] = array(
-	'folder'        => '/assets/images/testing/logos/original/',
-	'allowed_types' => 'gif|jpg|png',
-	'max_size'      => 1024 * 8,
-	'sizes'         => array(
-		'thumb' => array( 'width' => 150,  'height' => 150, 'folder' => '/assets/images/testing/logos/thumb/' ),
-	)
-);
-
-// upload test doc
-$config['testDoc'] = array(
-	'folder'        => '/assets/files/testing/',
-	'allowed_types' => 'txt|pdf',
-	'max_size'      => 1024 * 8,
-);
-
 
 
 /*

@@ -37,6 +37,7 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 define('USER_ANONYMOUS', 1);
+define('USER_CRBOOT', 28);
 define('GROUP_ANONYMOUS', 1);
 define('GROUP_ROOT', 2);
 define('GROUP_DEFAULT', 3);
