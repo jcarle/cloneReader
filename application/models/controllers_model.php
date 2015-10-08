@@ -4,35 +4,35 @@ class Controllers_Model extends CI_Model {
 		$this->db
 			->select('SQL_CALC_FOUND_ROWS controllerId, controllerName, controllerUrl, IF(controllerActive, \'X\', \'\') AS controllerActive ', false)
 			->from('controllers');
-			
+
 		if (element('search', $filters) != null) {
 			$this->db->like('controllerName', $filters['search']);
 		}
-			
+
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
-		
+
 		$query = $this->db->get();
 		//pr($this->db->last_query()); die;
-		
+
 		return array('data' => $query->result_array(), 'foundRows' => $this->Commond_Model->getFoundRows());
 	}
-	
+
 	function select($onlyActive = false){
 		$query = $this->db->order_by('controllerName');
-		
+
 		if ($onlyActive == true) {
 			$query->where('controllerActive', true);
 		}
 
 		return $query->get('controllers')->result_array();
-	}	
-	
-	
+	}
+
+
 	function selectToDropdown($onlyActive = false){
 		$query = $this->db
 			->select('controllerId AS id, controllerName AS text', true)
 			->order_by('controllerName');
-		
+
 		if ($onlyActive == true) {
 			$query->where('controllerActive', true);
 		}
@@ -44,36 +44,36 @@ class Controllers_Model extends CI_Model {
 		$this->db->where('controllerId', $controllerId);
 		return $this->db->get('controllers')->row_array();
 	}
-	
+
 	function save($data){
 		$controllerId = $data['controllerId'];
 		unset($data['controllerId']);
-		
-		$data['controllerActive'] = (element('controllerActive', $data) == 'on'); 
 
-		if ((int)$controllerId != 0) {		
+		$data['controllerActive'] = (element('controllerActive', $data) == 'on');
+
+		if ((int)$controllerId != 0) {
 			$this->db->where('controllerId', $controllerId);
 			$this->db->update('controllers', $data);
 		}
 		else {
 			$this->db->insert('controllers', $data);
 		}
-		
+
 		$this->safety->destroyMenuCache();
 		$this->safety->destroyControllersCache();
-		
+
 		return true;
 	}
-	
+
 	function delete($controllerId) {
 		$this->db->delete('controllers', array('controllerId' => $controllerId));
-		
+
 		$this->safety->destroyMenuCache();
 		$this->safety->destroyControllersCache();
-		
+
 		return true;
 	}
-	
+
 	function exitsController($controllerName, $controllerId) {
 		$this->db->where('controllerName', $controllerName);
 		$this->db->where('controllerId !=', $controllerId);
@@ -88,11 +88,11 @@ class Controllers_Model extends CI_Model {
 			->join('users_groups', 'users_groups.groupId = groups_controllers.groupId', 'inner')
 			->where('controllerActive', true)
 			->where('users_groups.userId', $userId)
-			->get()->result_array(); 
-		//echo $this->db->last_query(); 				
+			->get()->result_array();
+		//echo $this->db->last_query();
 		return $query;
 	}
-	
+
 	function selectControllersByGroupId($groups) {
 		if (empty($groups)) {
 			return null;
@@ -103,10 +103,10 @@ class Controllers_Model extends CI_Model {
 			->join('groups_controllers', 'controllers.controllerId = groups_controllers.controllerId', 'inner')
 			->where('controllerActive', true)
 			->where_in('groupId', $groups)
-			->get()->result_array(); 
-		//echo $this->db->last_query(); die; 				
+			->get()->result_array();
+		//echo $this->db->last_query(); die;
 		return $query;
-	}	
+	}
 
 	function destroyControllersCache() {
 		$this->load->driver('cache', array('adapter' => 'file'));
@@ -120,7 +120,7 @@ class Controllers_Model extends CI_Model {
 	}
 
 	/**
-	* Guarda un array en un archivo con los controllers permitidos por grupos, con el formato: 
+	* Guarda un array en un archivo con los controllers permitidos por grupos, con el formato:
 	*		array('controllerId' => 'controllerName')
 	*/
 	function createControllersCache($groups) {

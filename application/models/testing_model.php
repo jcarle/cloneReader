@@ -48,10 +48,10 @@ class testing_Model extends CI_Model {
 
 		if (!empty($query) && $getPicture == true) {
 			$this->load->model('Files_Model');
-			$config = config_item('testPicture');
+			$config = getEntityConfig(config_item('entityTypeTesting'), 'testPicture');
 			$query['testPicture'] = $this->Files_Model->get($query['testPictureFileId'], $config['sizes']['thumb']['folder'], 'fileUrl');
 
-			$config           = config_item('testDoc');
+			$config           = getEntityConfig(config_item('entityTypeTesting'), 'testDoc');
 			$testDoc          = $this->Files_Model->get($query['testDocFileId'], $config['folder']);
 			$query['testDoc'] = array('url' => $testDoc['fileUrl'], 'name' => $testDoc['fileTitle']);
 
@@ -65,14 +65,16 @@ class testing_Model extends CI_Model {
 		$testId = $values['testId'];
 		unset($values['testId']);
 
-		if ((int)$testId != 0) {
-			$this->db->where('testId', $testId);
-			$this->db->update('testing', $values);
-			return $testId;
+		if ((int)$testId == 0) {
+			$this->db->insert('testing', $values);
+			$testId = $this->db->insert_id();
+			$this->config->set_item('lastInsertId', $testId);
+		}
+		else {
+			$this->db->where('testId', $testId)->update('testing', $values);
 		}
 
-		$this->db->insert('testing', $values);
-		return $this->db->insert_id();
+		return $testId;
 	}
 
 	function delete($testId) {
@@ -83,12 +85,12 @@ class testing_Model extends CI_Model {
 			$this->Files_Model->deleteEntityFile(config_item('entityTypeTesting'), $row['fileId']);
 		}
 
-
 		$this->db->delete('testing', array('testId' => $testId));
 		return true;
 	}
 
 	function selectChildsByTestId($testId) {
+		$result = array();
 		$query = $this->db
 			->select('DISTINCT testing_childs.testChildId, currencyName, testChildPrice, testChildExchange, testChildDate, testChildName, countryName ', false)
 			->join('countries', 'testing_childs.countryId = countries.countryId', 'inner')
@@ -96,9 +98,16 @@ class testing_Model extends CI_Model {
 			->where('testing_childs.testId', $testId)
 			->order_by('testChildDate')
 			->get('testing_childs')->result_array();
-
 		//pr($this->db->last_query()); die;
-		return $query;
+		for ($i=0; $i<count($query); $i++) {
+			$row = $query[$i];
+			if ($i % 2 == 0) {
+				$row['crRowClassName'] = 'success';
+			}
+			$result[] = $row;
+		}
+
+		return $result;
 	}
 
 	function getTestChild($testChildId) {
@@ -114,13 +123,13 @@ class testing_Model extends CI_Model {
 		$testChildId = $data['testChildId'];
 
 		$values = array(
-			'testId'				=> $data['testId'],
-			'testChildDate'			=> $data['testChildDate'],
-			'testChildName'			=> $data['testChildName'],
-			'countryId'				=> $data['countryId'],
-			'currencyId'			=> $data['currencyId'],
-			'testChildPrice'		=> $data['testChildPrice'],
-			'testChildExchange'		=> $data['testChildExchange'],
+			'testId'            => $data['testId'],
+			'testChildDate'     => $data['testChildDate'],
+			'testChildName'     => $data['testChildName'],
+			'countryId'         => $data['countryId'],
+			'currencyId'        => $data['currencyId'],
+			'testChildPrice'    => $data['testChildPrice'],
+			'testChildExchange' => $data['testChildExchange'],
 		);
 
 
@@ -138,7 +147,7 @@ class testing_Model extends CI_Model {
 
 	function selectUsersByTestChildId($testChildId) {
 		$query = $this->db
-			->select('users.* ', false)
+			->select('users.userId, userFirstName, userLastName, userEmail ', false)
 			->join('users', 'testing_childs_users.userId = users.userId', 'inner')
 			->where('testChildId', $testChildId)
 			->order_by('userFirstName')
@@ -150,8 +159,8 @@ class testing_Model extends CI_Model {
 
 	function saveTestChildUser($testChildId, $userId) {
 		$this->db->ignore()->insert('testing_childs_users', array(
-			'userId' 			=> $userId,
-			'testChildId' 		=> $testChildId
+			'userId'      => $userId,
+			'testChildId' => $testChildId
 		));
 
 		return true;
@@ -160,8 +169,8 @@ class testing_Model extends CI_Model {
 	function exitsTestChildUser($testChildId, $userId) {
 		$query = $this->db
 			->where(array(
-				'testChildId' 	=> $testChildId,
-				'userId' 		=> $userId
+				'testChildId'  => $testChildId,
+				'userId'       => $userId
 			))
 			->get('testing_childs_users');
 		return ($query->num_rows() > 0);
@@ -169,8 +178,8 @@ class testing_Model extends CI_Model {
 
 	function deleteTestChildUser($testChildId, $userId) {
 		$this->db->delete('testing_childs_users', array(
-			'testChildId' 	=> $testChildId,
-			'userId' 		=> $userId
+			'testChildId'  => $testChildId,
+			'userId'       => $userId
 		));
 
 		return true;
@@ -182,5 +191,25 @@ class testing_Model extends CI_Model {
 
 	function saveDoc($testId, $testDocFileId) {
 		$this->db->where('testId', $testId)->update('testing', array('testDocFileId' => $testDocFileId));
+	}
+
+	function getEntityLogRaw($testId) {
+		$this->load->model('Files_Model');
+
+		$query = $this->get($testId, false);
+		if (empty($query)) {
+			return $query;
+		}
+
+		$query['testPicture'] = $this->Files_Model->get($query['testPictureFileId']);
+		$query['testDoc']     = $this->Files_Model->get($query['testDocFileId']);
+		$query['pictures']    = $this->Files_Model->selectEntityFiles(config_item('entityTypeTesting'), $testId);
+		$query['testChilds']  = $this->selectChildsByTestId($testId);
+
+		for ($i=0; $i<count($query['testChilds']); $i++) {
+			$query['testChilds'][$i]['users'] = $this->selectUsersByTestChildId($query['testChilds'][$i]['testChildId']);
+		}
+
+		return $query;
 	}
 }

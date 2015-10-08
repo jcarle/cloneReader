@@ -98,14 +98,6 @@ class Files_Model extends CI_Model {
 		return $result;
 	}
 
-	function getEntityPicture($entityTypeId, $entityId, $size = 'thumb') {
-		$config       = getEntityGalleryConfig($entityTypeId);
-		$pictures     = $this->selectEntityFiles($entityTypeId, $entityId);
-		if (!empty($pictures)) {
-			return base_url($config['sizes'][$size]['folder'].$pictures[0]['fileName']);
-		}
-	}
-
 	function hasFileIdInEntityTypeId($entityTypeId, $fileId) {
 		$query = $this->db->select('files.fileId ')
 			->join('entities_files', 'files.fileId =  entities_files.fileId', 'inner')

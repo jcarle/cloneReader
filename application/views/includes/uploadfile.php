@@ -10,6 +10,7 @@ if (!isset($fileupload)) {
 			<form action="#"  method="POST" enctype="multipart/form-data">
 				<?php echo form_hidden('entityTypeId', element('entityTypeId', $fileupload)); ?>
 				<?php echo form_hidden('entityId', element('entityId', $fileupload)); ?>
+				<?php echo form_hidden('hasEntityLog', element('hasEntityLog', $fileupload)); ?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
 					<h4> <i class="fa fa-edit"></i> <?php echo lang('Edit pictures'); ?> </h4>

@@ -7,7 +7,7 @@ $output = $result;
 
 if (isset($code)) {
 	$output = array(
-		'code'   => $code, 
+		'code'   => $code,
 		'result' => $result
 	);
 }

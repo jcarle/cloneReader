@@ -36,7 +36,11 @@ class Commond_Model extends CI_Model {
 			if (!in_array($orders[$i]['orderBy'], $allowFields)) {
 				$orders[$i]['orderBy'] = $allowFields[0];
 			}
-			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir'] == 'desc' ? 'desc' : 'asc');
+			if (!in_array($orders[$i]['orderDir'], array('desc', 'asc'))) {
+				$orders[$i]['orderDir'] = $defaultOrderDir;
+			}
+
+			$this->db->order_by($orders[$i]['orderBy'], $orders[$i]['orderDir']);
 		}
 	}
 
@@ -70,30 +74,28 @@ class Commond_Model extends CI_Model {
 		return false;
 	}
 
-	function getEnityIdInEntitySef($entitySef, $entityTypeId) {
-		$entitySef = parse_url($entitySef, PHP_URL_PATH);
-		$aTmp      = explode('-',  $entitySef);
-		if (count($aTmp) < 2) {
-			return null;
+	/**
+	* Devuelve un array con los userId que pertenecen a los grupos de $aGroupId; ej :array(GROUP_ROOT, GROUP_EDITOR)
+	*/
+	function selectUsersByGroupsId($aGroupId) {
+		$result = array();
+		$query = $this->db
+			->select('DISTINCT userId', false)
+			->from('users_groups')
+			->where_in('groupId', $aGroupId)
+			->get()->result_array();
+		foreach ($query as $data) {
+			$result[] = $data['userId'];
 		}
-		if ($entityTypeId != $aTmp[count($aTmp)-2]) {
-			return null;
-		}
-		$entityId = $aTmp[count($aTmp)-1];
-
-		if (!is_numeric($entityId)) {
-			return null;
-		}
-
-		return $entityId;
+		return $result;
 	}
 
 	/**
 	 * Chequea en la tabla de cada entity si cambio el sef para hacer una redirección 301
-	 * @return $entitySef o NULL si no existe
+	 * @return $entityId o NULL si no existe
 	 */
 	function hasNewEntitySef($entityTypeId, $entitySef) {
-		$entityId = $this->getEnityIdInEntitySef($entitySef, $entityTypeId);
+		$entityId = getEnityIdInEntitySef($entitySef, $entityTypeId);
 
 		if (!is_numeric($entityTypeId) || !is_numeric($entityId)) {
 			return null;
@@ -105,13 +107,13 @@ class Commond_Model extends CI_Model {
 		}
 
 		$query = $this->db
-			->select($entityConfig['fieldSef'], false)
+			->select($entityConfig['fieldId'], false)
 			->where('statusId', config_item('statusApproved'))
 			->where($entityConfig['fieldId'], $entityId)
 			->get($entityConfig['tableName'])->row_array();
 		//pr($this->db->last_query()); die;
 		if (!empty($query)) {
-			return $query[$entityConfig['fieldSef']];
+			return $query[$entityConfig['fieldId']];
 		}
 		return null;
 	}
@@ -120,7 +122,7 @@ class Commond_Model extends CI_Model {
 	 * Guarda el sef de una entidad
 	 * @return $entitySef
 	 * */
-	function saveEntitySef($entityTypeId, $entityId, $entityName = null, $oldEntitySef = null) {
+	function saveEntitySef($entityTypeId, $entityId, $entityName = null) {
 		$entityConfig = getEntityConfig($entityTypeId);
 		if ($entityConfig == null) {
 			return false;
@@ -128,15 +130,14 @@ class Commond_Model extends CI_Model {
 
 		if ($entityName == null) {
 			$query = $this->db
-				->select($entityConfig['fieldName'].', '.$entityConfig['fieldSef'], false)
+				->select($entityConfig['fieldName'], false)
 				->where($entityConfig['fieldId'], $entityId)
 				->get($entityConfig['tableName'])->row_array();
 			$query = getCrFormData($query, $entityId);
 			if (!is_array($query)) {
 				return false;
 			}
-			$entityName   = $query[$entityConfig['fieldName']];
-			$oldEntitySef = $query[$entityConfig['fieldSef']];
+			$entityName = $query[$entityConfig['fieldName']];
 		}
 
 		$entitySef = url_title($entityName.'-'.$entityTypeId.'-'.$entityId, 'dash', true);
@@ -156,10 +157,6 @@ class Commond_Model extends CI_Model {
 		$this->db
 			->where($entityConfig['fieldId'], $entityId)
 			->update($entityConfig['tableName'], array($entityConfig['fieldSef'] => $entitySef));
-
-		if ($oldEntitySef != $entitySef) {
-			$this->Commond_Model->saveEntityLog($entityTypeId, $entityId, null, array($entityConfig['fieldSef'] => $entitySef));
-		}
 
 		return $entitySef;
 	}
@@ -206,7 +203,8 @@ class Commond_Model extends CI_Model {
 
 		$this->db->trans_start();
 		foreach ($query->result_array() as $data) {
-			$this->saveEntitySef($entityTypeId, $data[$config['fieldId']], $data[$config['fieldName']], $data[$config['fieldSef']]);
+			$this->saveEntitySef($entityTypeId, $data[$config['fieldId']], $data[$config['fieldName']]);
+			$this->saveEntityLog($entityTypeId, $data[$config['fieldId']]);
 		}
 
 		$this->db->trans_complete();
@@ -253,7 +251,6 @@ class Commond_Model extends CI_Model {
 		}
 		return $result;
 	}
-
 
 	function searchEntityFulltext($search, $searchKey = '', $pageCurrent, $pageSize, $onlyApproved = true) {
 		$result = array('data' => array(), 'foundRows' => 0);
@@ -321,6 +318,10 @@ class Commond_Model extends CI_Model {
 	}
 
 	function getEntitySearch($entityTypeId, $entityId, $fieldName = 'entityName', $contactEntityTypeId = false) {
+		if (empty($entityTypeId) || empty($entityId)) {
+			return array();
+		}
+
 		$fieldId   = ($contactEntityTypeId == true ? ' CONCAT(entityTypeId, \'-\', entityId) ' : ' entityId ');
 
 		$query = $this->db
@@ -389,88 +390,6 @@ class Commond_Model extends CI_Model {
 		}
 
 		return $values;
-	}
-
-	/**
-	 *
-	 * Apendea al array filters el id del tipo de zona que corresponda (countryId, stateId, cityId)
-	 * Se utiliza en los listados
-	 *
-	 * @param array $filters
-	 * @param       $zoneId  un string con el formato: [entityTypeId]-[entityId]
-	 * */
-	function appendZoneToFilters(array $filters, $zoneId) {
-		if (empty($zoneId)) {
-			return $filters;
-		}
-		$aTmp = explode('-', $zoneId);
-
-		switch ($aTmp[0]) {
-			case config_item('entityTypeCountry'):
-				$filters['countryId'] = $aTmp[1];
-				break;
-			case config_item('entityTypeState'):
-				$filters['stateId'] = $aTmp[1];
-				break;
-			case config_item('entityTypeCity'):
-				$filters['cityId'] = $aTmp[1];
-				break;
-		}
-
-		return $filters;
-	}
-
-	/**
-	* Busca en el array $data las properties countryId, stateId y cityId el item de menos profundidad y devuelve la zona con el path completo
-	*
-	*/
-	function getZoneToTypeahead($data, $fieldName = 'entityReverseFullName'){
-		$entityTypeId = null;
-		$entityId     = null;
-		if ($data['cityId'] != null) {
-			$entityTypeId = config_item('entityTypeCity');
-			$entityId     = $data['cityId'];
-		}
-		else if ($data['stateId'] != null) {
-			$entityTypeId = config_item('entityTypeState');
-			$entityId     = $data['stateId'];
-		}
-		else if ($data['countryId'] != null) {
-			$entityTypeId = config_item('entityTypeCountry');
-			$entityId     = $data['countryId'];
-		}
-
-		return $this->getEntitySearch($entityTypeId, $entityId, $fieldName, true);
-	}
-
-	/**
-	 *
-	 * @param     (string) $id  un string con el formato: [entityTypeId]-[entityId]
-	 * @param     (string) $fieldName
-	 * @return    (array)  devuelve un array con el formato:
-	 * 		array( 'id' => 3-1822, 'text' => 'country' )
-	 * */
-	function getEntityToTypeahead($id, $fieldName = 'entityName') {
-		if (empty($id)) {
-			return array();
-		}
-
-		$aTmp = explode('-', $id);
-		return $this->Commond_Model->getEntitySearch($aTmp[0], $aTmp[1], $fieldName, true);
-	}
-
-	/**
-	 * @param     (int)    $entityTypeId
-	 * @param     (int)    $entityId
-	 * @param     (string) $fieldName
-	 * @return    (string) devuelve el nombre de la entity
-	 * */
-	function getEntityName($entityTypeId, $entityId, $fieldName = 'entityName') {
-		$entity = $this->getEntitySearch($entityTypeId, $entityId, $fieldName);
-		if (!empty($entity)) {
-			return $entity['text'];
-		}
-		return '';
 	}
 
 	/**
@@ -546,20 +465,12 @@ class Commond_Model extends CI_Model {
 	}
 
 	/**
-	* Inicializa la querly para parsear las visitas de una entidad
+	* Inicializa la query para parsear las visitas de una entidad
 	*/
 	function initQueryEntityVisits($excludeUsersRoot = true, $excludeSpiders = true) {
 		$aUserId = array();
-
 		if ($excludeUsersRoot == true) {
-			$query = $this->db
-				->select('DISTINCT userId', false)
-				->from('users_groups')
-				->where_in('groupId', array(GROUP_ROOT, GROUP_EDITOR))
-				->get()->result_array();
-			foreach ($query as $data) {
-				$aUserId[] = $data['userId'];
-			}
+			$aUserId = $this->selectUsersByGroupsId(array(GROUP_ROOT, GROUP_EDITOR));
 		}
 
 		$query = $this->db->select('request_uri ', true)->from('usertracking');
@@ -573,7 +484,7 @@ class Commond_Model extends CI_Model {
 	}
 
 	function saveEntitiesVisits($entityTypeId, $entitySef) {
-		$this->Commond_Model->clearEntitiesVisits($entityTypeId);
+		$this->clearEntitiesVisits($entityTypeId);
 
 		$this->db->trans_start();
 
@@ -583,7 +494,7 @@ class Commond_Model extends CI_Model {
 			->get()->result_array();
 		//pr($this->db->last_query());  die;
 		foreach ($query as $data) {
-			$entityId = $this->getEnityIdInEntitySef($data['request_uri'], $entityTypeId);
+			$entityId = getEnityIdInEntitySef($data['request_uri'], $entityTypeId);
 			if ($entityId != null) {
 				$this->saveEntityVisits($entityTypeId, $entityId);
 			}
@@ -661,30 +572,212 @@ class Commond_Model extends CI_Model {
 		return $values;
 	}
 
+	function getEntityLogRaw($entityTypeId, $entityId) {
+		$entityConfig = getEntityConfig($entityTypeId);
+		if ($entityConfig == null) {
+			return;
+		}
+		if (element('hasEntityLog', $entityConfig) != true) {
+			return;
+		}
+
+		$modelName = ucfirst($entityConfig['entityTypeName']).'_Model';
+		$this->load->model($modelName);
+
+		if (method_exists($this->$modelName, 'getEntityLogRaw') == false) {
+			return;
+		}
+
+		return $this->$modelName->getEntityLogRaw($entityId);
+	}
+
 	/**
-	 *
-	 * Apendea al array filters el id del tipo de zona que corresponda (countryId, stateId, cityId)
-	 * Se utiliza en los listados
-	 *
-	 * @param array $filters
-	 * @param       $carId  un string con el formato: [entityTypeId]-[entityId]
+	* Guarga un item en la tabla entities_logs
+	*
+	*/
+	function saveEntityLog($entityTypeId, $entityId, $isMigrate = false) {
+		$entityLogRaw = $this->getEntityLogRaw($entityTypeId, $entityId);
+		if (empty($entityLogRaw)) {
+			return;
+		}
+// TODO: borrar el parametro $isMigrate  de deployar
+if ($isMigrate == true) {
+	$entityLogDate = $entityLogRaw['lastUpdate'];
+}
+		unset($entityLogRaw['lastUpdate']);
+		unset($entityLogRaw['entityUrl']);
+
+		$values = array(
+			'entityTypeId'  => $entityTypeId,
+			'entityId'      => $entityId,
+			'userId'        => $this->session->userdata('userId'),
+			'entityLogRaw'  => json_encode($entityLogRaw),
+
+		);
+if ($isMigrate == true) {
+	$values['entityLogDate'] = $entityLogDate;
+}
+		$this->db->insert('entities_logs', $values);
+	}
+
+	function processDiffEntityLog() {
+		$this->db->trans_start();
+
+		$query = $this->db
+			->where('entityLogDiff', '')
+			->limit(1000) // TODO: harckodeta
+			->get('entities_logs');
+		//pr($this->db->last_query()); die;
+		foreach ($query->result_array() as $data) {
+			$entityLogDiff  = array();
+			$new            = (array)json_decode($data['entityLogRaw'], true);
+			$statusId       = null;
+
+			$oldData = $this->db
+				->where('entityTypeId', $data['entityTypeId'])
+				->where('entityId', $data['entityId'])
+				->where('entityLogDate < ', $data['entityLogDate'])
+				->order_by('entityLogDate', 'desc')
+				->limit(1)
+				->get('entities_logs')->row_array();
+			//pr($this->db->last_query()); die;
+
+			if (!empty($oldData)) {
+				$old = (array)json_decode($oldData['entityLogRaw'], true);
+				$entityLogDiff = array(
+					'+' => array_diff_recursive($new, $old),
+					'-' => array_diff_recursive($old, $new)
+				);
+
+				if (element('statusId', $entityLogDiff['+']) !== false) {
+					$statusId = $entityLogDiff['+']['statusId'];
+				}
+			}
+			else {
+				$statusId = element('statusId', $new, null);
+			}
+
+			$values = array(
+				'userFullName'    => getEntityName( config_item('entityTypeUser'), $data['userId']),
+				'entityName'      => getEntityName( $data['entityTypeId'], $data['entityId']),
+				'entityLogDiff'   => json_encode($entityLogDiff),
+				'statusId'        => $statusId,
+			);
+
+			$this->db
+				->where('entityLogId', $data['entityLogId'])
+				->update('entities_logs', $values);
+			//pr($this->db->last_query()); die;
+		}
+
+		$this->db->trans_complete();
+	}
+
+	/*
+	 * @param  (array)  $filters es un array con el formato:
+	 *      array(
+	 *           'search'            => null,
+	 *           'statusId'          => null,
+	 *           'entityTypeId'      => null,
+	 *           'userId'            => null,
+	 *           'entityLogDateFrom' => null,
+	 *           'entityLogDateTo'   => null,
+	 *           'groupEntities'     => null,
+	 *     );
 	 * */
-	function appendCarToFilters(array $filters, $carId) {
-		if (empty($carId)) {
-			return $filters;
-		}
-		$aTmp = explode('-', $carId);
+	function selectEntitiesLogsToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
+		$this->db
+			//->select(' SQL_CALC_FOUND_ROWS  CONCAT(entityTypeId, \'-\', entityId) AS id, entityTypeId, entityId, entityLogId, statusId, userFullName, entityName, entityLogDiff, entityLogDate ', false)
+			->select(' SQL_CALC_FOUND_ROWS  CONCAT(entityTypeId, \'-\', entityId) AS id, entityTypeId, entityId, entityLogId, statusId, entityName ', false)
+			->from('entities_logs');
 
-		switch ($aTmp[0]) {
-			case config_item('entityTypeBrand'):
-				$filters['brandId'] = $aTmp[1];
-				break;
-			case config_item('entityTypeModel'):
-				$filters['modelId'] = $aTmp[1];
-				break;
+		if (element('search', $filters) != null) {
+			if (is_numeric($filters['search'])) {
+				$this->db->where('entityId', $filters['search']);
+			}
+			else {
+				$this->db->or_like(array('entityName' => $filters['search'], 'entityLogDiff' => $filters['search']));
+			}
+		}
+		if (element('statusId', $filters) != null) {
+			$this->db->where('statusId', $filters['statusId']);
+		}
+		if (element('entityTypeId', $filters) != null) {
+			$this->db->where('entityTypeId', $filters['entityTypeId']);
+		}
+		if (element('userId', $filters) != null) {
+			$this->db->where('userId', $filters['userId']);
+		}
+		if (element('entityLogDateFrom', $filters) != null) {
+			$this->db->where('entityLogDate >=', date('Y-m-d', strtotime($filters['entityLogDateFrom'])).' 00:00:00');
+		}
+		if (element('entityLogDateTo', $filters) != null) {
+			$this->db->where('entityLogDate <=', date('Y-m-d', strtotime($filters['entityLogDateTo'])).' 24:59:59');
 		}
 
-		return $filters;
+		if (element('groupEntities', $filters) == true) {
+			$this->db->select(' \'\' AS entityLogDiff, GROUP_CONCAT(DISTINCT userFullName) AS userFullName, MAX(entityLogDate) AS entityLogDate ', false);
+			$this->db->group_by('entityTypeId, entityId');
+		}
+		else {
+			$this->db->select(' entityLogDiff, userFullName, entityLogDate ', false);
+		}
+
+		$this->appendOrderByInQuery($orders, array('entityLogDate', 'entityLogId', 'userId'), 'desc');
+		$this->appendLimitInQuery($pageCurrent, $pageSize);
+
+
+		$query = $this->db->get()->result_array();
+		//pr($this->db->last_query()); die;
+		$result = array('data' => array(), 'foundRows' => $this->getFoundRows());
+		foreach ($query as $data) {
+			$data['entityTypeName'] = langEntityTypeName($data['entityTypeId'], true);
+
+			if ($data['statusId'] == config_item('statusApproved')) {
+				$data['crRowClassName'] = 'success';
+			}
+			if ($data['statusId'] == config_item('statusRejected')) {
+				$data['crRowClassName'] = 'danger';
+			}
+
+			$result['data'][] = $data;
+		}
+
+		return $result;
+	}
+
+	/*
+	 * @param $entityTypeId
+	 * @param $entityId
+	 */
+	function getEntityLog($entityTypeId, $entityId){
+		$this->db
+			->from('entities_logs')
+			->where('entityTypeId', $entityTypeId)
+			->where('entityId', $entityId)
+			->order_by('entityLogDate', 'desc');
+		return $this->db->get()->result_array();
+	}
+
+	function selectEntitiesTypeToDropdown() {
+		// TODO: mejorar esta parte!
+		$result = array();
+		$query = $this->db->get('entities_type')->result_array();
+		foreach ($query as $data) {
+			$entityConfig = getEntityConfig($data['entityTypeId']);
+			if (element('hasEntityLog', $entityConfig) == true) {
+				$result[] = array(
+					'id'   => $data['entityTypeId'],
+					'text' => lang(ucfirst(element('entityTypeName', $entityConfig))),
+				);
+			}
+		}
+
+		usort($result, function($a, $b) {
+			return $a['text'] < $b['text'] ? -1 : 1;
+		});
+
+		return $result;
 	}
 
 	/*

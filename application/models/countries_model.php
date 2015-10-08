@@ -20,7 +20,7 @@ class Countries_Model extends CI_Model {
 
 	function selectToDropdown(){
 		return $this->db
-			-> select('countryId AS id, countryName AS text', true)
+			->select('countryId AS id, countryName AS text', true)
 			->order_by('countryName')
 			->get('countries')->result_array();
 	}

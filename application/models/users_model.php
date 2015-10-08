@@ -183,7 +183,7 @@ class Users_Model extends CI_Model {
 			$this->db->where('users.userId', $filters['userId']);
 		}
 
-		$this->Commond_Model->appendOrderByInQuery($orders, array('userId', 'userEmail', 'userLogDate' ));
+		$this->Commond_Model->appendOrderByInQuery($orders, array('userLogDate', 'userId', 'userEmail'), 'desc');
 		$this->Commond_Model->appendLimitInQuery($pageCurrent, $pageSize);
 
 		$query = $this->db->get();

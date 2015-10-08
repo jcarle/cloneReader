@@ -14,6 +14,7 @@
  *      ),
  *      'data'          => (array) $data,          // los datos a mostrar en el listado;
  *            Cada row puede ser un array macheando el mismo key que en la property columns; o un string html del <tr/>
+ *             Si existe la key 'crRowClassName' agrega el class="%s" al <tr/>
  *            Ej:
  *              $data = array();
  *              foreach ($query['data'] as $row) {
@@ -23,17 +24,20 @@
  *                  );
  *              }
  *              $data[] = '<tr class="success"><td colspan="4"> bla bla</td></tr>';
- *      'foundRows'     => $foundRows, // cantidad de registros, se usa en la paginación
- *      'showId'        => true,       // Indica si muestra el id en el listado
- *      'filters'       => array()     // Filtros para el listado, es un array con los fields similar a un crForm
- *      'sort'          => array(),    // Un array con los items por los que se puede ordenar el listado
- * );
+ *      'foundRows'   => $foundRows, // cantidad de registros, se usa en la paginación
+ *      'showId'      => true,       // Indica si muestra el id en el listado
+ *      'filters'     => array()     // Filtros para el listado, es un array con los fields similar a un crForm
+ *      'sort'        => array(),    // Un array con los items por los que se puede ordenar el listado
+ *      'defaultSort' => array()     // Ordern por defecto, con el formato: array(
+ *              'orderBy'  => 'userId',         // si se omite toma el primer item del array 'sort'
+ *              'orderDir' => ['asc', 'desc'],  // si se omite su valor es 'asc'
+ *          );
  *
  * classNames:
- * 		date: 		formatea una fecha
- * 		datetime:	formatea una fecha y hora
- * 		numeric:	aliea el texto a la izquierza // TODO: hacer que formatee pasando un par de parametros mas
- * 		dotdotdot:	trunca el texto a y muestra '...' si corresponde
+ *      date:       formatea una fecha
+ *      datetime:   formatea una fecha y hora
+ *      numeric:    aliea el texto a la izquierza // TODO: hacer que formatee pasando un par de parametros mas
+ *      dotdotdot:  trunca el texto a y muestra '...' si corresponde
  *
  */
 
@@ -52,17 +56,24 @@ if ($sort != null) {
 	unset($params['orderDir']);
 	unset($params['page']);
 
-	$aTmp           = array_keys($sort);
-	$defaultOrderBy = $aTmp[0];
-	$orderBy        = $this->input->get('orderBy');
-	if (array_key_exists((string)$orderBy, $sort) === false) {
-		$orderBy = $defaultOrderBy;
+	$defaultSort = element('defaultSort', $list);
+	if (empty($defaultSort)) {
+		$aTmp        = array_keys($sort);
+		$defaultSort = array( 'orderBy' => $aTmp[0], 'orderDir' => 'asc');
 	}
-	$orderDir = $this->input->get('orderDir') == 'desc' ? 'desc' : 'asc';
+
+	$orderBy  = $this->input->get('orderBy');
+	$orderDir = $this->input->get('orderDir');
+	if (array_key_exists((string)$orderBy, $sort) === false) {
+		$orderBy = $defaultSort['orderBy'];
+	}
+	if (!in_array($orderDir, array('asc', 'desc'))) {
+		$orderDir = $defaultSort['orderDir'];
+	}
 
 	$aLi = array();
 	foreach ($sort as $key => $value) {
-		$params['orderBy'] 	= $key;
+		$params['orderBy']  = $key;
 		$params['orderDir'] = ($orderDir == 'desc' ? 'asc' : 'desc');
 		$icon               = '';
 
@@ -75,10 +86,10 @@ if ($sort != null) {
 
 	$htmlSort = '
 	<div class="btn-group">
-		<input type="hidden" name="orderBy"  value="<?php echo $orderBy; ?>" />
-		<input type="hidden" name="orderDir" value="<?php echo $orderDir; ?>" />
+		<input type="hidden" name="orderBy"  value="'.$orderBy.'" />
+		<input type="hidden" name="orderDir" value="'.$orderDir.'" />
 		<div class="dropdown">
-			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder '.(($orderBy != $defaultOrderBy || $orderDir != 'asc') ? ' btn-info ' : '').'" data-toggle="dropdown">
+			<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder '.(($orderBy != $defaultSort['orderBy'] || $orderDir != $defaultSort['orderDir']) ? ' btn-info ' : '').'" data-toggle="dropdown">
 				<i class="fa fa-sort-amount-asc" ></i>
 			</button>
 			<ul class="dropdown-menu pull-right" role="menu">
@@ -87,8 +98,6 @@ if ($sort != null) {
 		</div>
 	</div>';
 }
-
-
 
 $showCheckbox   = element('showCheckbox', $list);
 $showId         = element('showId', $list);
@@ -99,6 +108,8 @@ if ($showCheckbox == true) {
 if ($showId == true) {
 	$aTh[] = '<th class="numeric"> # </th>';
 }
+
+unset($list['columns']['crRowClassName']);
 
 foreach ($list['columns'] as $columnName) {
 	$class      = '';
@@ -135,14 +146,14 @@ foreach ($list['data'] as $row) {
 		}
 
 		foreach ($list['columns'] as $fieldName => $columnName) {
-			$class 	= '';
+			$class = '';
 			if (is_array($columnName)) {
 				$class = ' class="'.element('class', $columnName).'" ';
 			}
 
 			$aTd[] = ' <td '.$class.'>'. (element('isHtml', $list['columns'][$fieldName]) == true ? $row[$fieldName] : htmlentities($row[$fieldName])).'</td>';
 		}
-		$aTr[] = '<tr '.$urlEdit.'> '.implode(' ', $aTd).' </tr>';
+		$aTr[] = '<tr '.$urlEdit.' '.(element('crRowClassName', $row) ? ' class="'.$row['crRowClassName'].'" ' : '').'> '.implode(' ', $aTd).' </tr>';
 	}
 }
 ?>
