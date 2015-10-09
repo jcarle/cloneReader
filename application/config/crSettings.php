@@ -26,6 +26,7 @@ $config['userCRBoot']     = 28;
 $config['groupAnonymous'] = 1;
 $config['groupRoot']      = 2;
 $config['groupDefault']   = 3;
+$config['groupEditor']    = 4;
 
 $config['menuAdmin']   = 1;
 $config['menuProfile'] = 10;

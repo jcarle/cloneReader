@@ -23,12 +23,12 @@ class App extends CI_Controller {
 		}
 
 		$aMenu = array(
-			'menuProfile'  => array(
+			'menuProfile'   => array(
 				'items'     => $this->cache->file->get('menuProfile_'.json_encode($groups)),
 				'className' => 'menuProfile nav navbar-nav navbar-right',
 				'parent'    => '.navbar-ex1-collapse',
 			),
-			'menuPublic'   => array(
+			'menuPublic'    => array(
 				'items'     => $this->cache->file->get('menuPublic_'.json_encode($groups)),
 				'className' =>'menuPublic',
 				'parent'    => '.menu.label-primary div',
