@@ -65,7 +65,7 @@
 
 		this.$search = this.$form.find('input[name=search]');
 
-		this.$form.find('.fa-times').parent()
+		this.$form.find('.fa-times:first').parent()
 			.css( { 'cursor': 'pointer', 'color': '#555555' } )
 			.click($.proxy(
 				function (event){
@@ -73,6 +73,7 @@
 					this.$btnOrder.removeClass('btn-info');
 					this.$form.find('input[type=text], input[name=orderBy], input[name=orderDir], select').val('');
 					this.$form.find('input:checked').attr('checked', false);
+					this.$form.find('.form_datetime').parent().find('input').val('');
 					this.$form.submit();
 				}
 			, this));
@@ -281,12 +282,20 @@
 		}
 
 		if (data['sort'] != null) {
-			var defaultOrderBy  = Object.keys(data['sort'])[0];
-			var orderBy         = params['orderBy'];
-			if ($.inArray(orderBy, Object.keys(data['sort'])) == -1) {
-				orderBy = defaultOrderBy;
+			var defaultSort = data['defaultSort'];
+			if (data['defaultSort'] == null) {
+				defaultSort = {'orderBy': Object.keys(data['sort'])[0], 'orderDir': 'asc' };
 			}
-			var orderDir = params['orderDir'] == 'desc' ? 'desc' : 'asc';
+
+			var orderBy  = params['orderBy'];
+			var orderDir = params['orderDir'];
+
+			if ($.inArray(orderBy, Object.keys(data['sort'])) == -1) {
+				orderBy = defaultSort['orderBy'];
+			}
+			if ($.inArray(orderDir, ['asc', 'desc']) == -1) {
+				orderDir = defaultSort['orderDir'];
+			}
 
 			delete params['orderBy'];
 			delete params['orderDir'];
@@ -297,7 +306,7 @@
 					<input type="hidden" name="orderBy"  value="' + orderBy + '" />\
 					<input type="hidden" name="orderDir" value="' + orderDir + '" />\
 					<div class="dropdown">\
-						<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder ' + (orderBy != defaultOrderBy || orderDir != 'asc' ? ' btn-info ' : '') + '" type="button" data-toggle="dropdown">\
+						<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle btnOrder ' + (orderBy != defaultSort['orderBy'] || orderDir != defaultSort['orderDir'] ? ' btn-info ' : '') + '" type="button" data-toggle="dropdown">\
 							<i class="fa fa-sort-amount-asc" ></i>\
 						</button>\
 						<ul class="dropdown-menu pull-right" role="menu" />\
@@ -365,6 +374,10 @@
 				var id  = row[Object.keys(row)[0]];
 				var $tr = $( '<tr />').appendTo($tbody);
 
+				if (row['crRowClassName'] != null) {
+					$tr.addClass(row['crRowClassName']);
+				}
+
 				if (data['urlEdit'] != null) {
 					$tr.attr('data-url-edit', $.base_url($.sprintf(data['urlEdit'], id)));
 				}
@@ -385,7 +398,6 @@
 					else {
 						$td.text(row[columnName] || '');
 					}
-
 
 					if ($.isPlainObject(data['columns'][columnName])) {
 						$td.addClass(data['columns'][columnName]['class']);

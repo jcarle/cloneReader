@@ -12,7 +12,8 @@ crMain = {
 	},
 
 	initEvents: function() {
-		$.countProcess = 0;
+		$.countProcess        = 0;
+		$.countGalleryProcess = 0;
 
 		$(window).bind('beforeunload', function(){
 			$.showWaiting(true);

@@ -95,6 +95,16 @@ $items = array(
 			),
 		),
 	),
+	array(
+		'title'   => 'Diff logs',
+		'buttons' => array(
+			array(
+				'text' => 'Diff logs',
+				'url'  => 'process/processDiffEntityLog',
+				'icon' => 'fa-file-text-o text-info',
+			),
+		),
+	),
 );
 
 

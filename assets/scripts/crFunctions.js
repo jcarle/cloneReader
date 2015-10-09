@@ -306,14 +306,13 @@ $.extend({
 		crMain.loadUrl(location.href);
 	},
 
-	ISODateString: function(d){
+	ISODateString: function(d, skipTime){
 		function pad(n) { return n<10 ? '0'+n : n; }
-		return d.getUTCFullYear()+'-'
-		+ pad(d.getUTCMonth()+1)+'-'
-		+ pad(d.getUTCDate()) +' '
-		+ pad(d.getUTCHours())+':'
-		+ pad(d.getUTCMinutes())+':'
-		+ pad(d.getUTCSeconds());
+		var string = d.getUTCFullYear() + '-' + pad(d.getUTCMonth()+1) + '-' + pad(d.getUTCDate());
+		if (skipTime != true) {
+			string += ' ' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds());
+		}
+		return string;
 	},
 
 	formatDate: function($element) {
@@ -446,12 +445,18 @@ $.extend({
 			return true;
 		}
 
-		if (result['msg'] != null && result['goToUrl'] != null) {
+		if (result['msg'] != null) {
+			var callback = null;
+			if (result['goToUrl'] != null) {
+				callback = function() { $.goToUrl(result['goToUrl']); }
+			}
+			if (result['reloadUrl'] == true) {
+				callback = function() { $.reloadUrl(); }
+			}
 			$(document).crAlert({
 				'msg':      result['msg'],
-				'callback': function() {
-					$.goToUrl(result['goToUrl']);
-				}
+				'icon':     result['icon'],
+				'callback': callback
 			});
 			return true;
 		}
@@ -463,15 +468,8 @@ $.extend({
 			$.goToUrl(result['goToUrl']);
 			return true;
 		}
-
 		if (result['reloadUrl'] == true) {
 			$.reloadUrl();
-			return true;
-		}
-		if (result['msg'] != null) {
-			$(document).crAlert({
-				'msg':      result['msg']
-			});
 			return true;
 		}
 
@@ -646,13 +644,30 @@ $.extend({
 		$gallery.data('initGallery', true);
 	},
 
-	saveEntitySef: function(event, entityTypeId, entityId, controller) {
-		if (controller == null) {
-			controller = $.base_url('app/saveEntitySef/' + entityTypeId + '/' + entityId);
+	saveGalleryLog: function() {
+		if ($('#fileupload').find('input[name=hasEntityLog]').val() != 'true') {
+			return;
 		}
+
+		if ($.countGalleryProcess < 0) { $.countGalleryProcess = 0; }
+		if ($.countGalleryProcess > 0) {
+			return;
+		}
+
+		$.ajax({
+			'type':   'post',
+			'url':    $.base_url('gallery/saveGalleryLog'),
+			'data':   {
+				'entityTypeId': $('#fileupload').find('input[name=entityTypeId]').val(),
+				'entityId':     $('#fileupload').find('input[name=entityId]').val()
+			},
+		});
+	},
+
+	saveEntitySef: function(event, entityTypeId, entityId) {
 		var crForm = $(event.target).parents('form').data('crForm');
 		$.ajax({
-			'url':   controller,
+			'url':   $.base_url('app/saveEntitySef/' + entityTypeId + '/' + entityId),
 			'data':  { },
 			'crForm': crForm,
 			'success':
@@ -663,6 +678,44 @@ $.extend({
 					field.attr('href', entityUrl).text(entityUrl);
 
 					$(document).crAlert({ 'msg': crLang.line('Data updated successfully'), 'icon': 'success' });
+				}
+		});
+	},
+
+	showPopupEntityLog: function(entityTypeId, entityId) {
+		$.ajax({
+			'url':   $.base_url('logs/detail/' + entityTypeId + '-' + entityId + '?isPopUp=true'),
+			'data':  { },
+			'success':
+				function (response) {
+					$html = $(response['result']);
+					var $modal = $('\
+						<div class="modal" role="dialog" >\
+							<div class="modal-dialog" >\
+								<div class="modal-content" >\
+									<div class="modal-header">\
+										<button aria-hidden="true" data-dismiss="modal" class="close" type="button">\
+											<i class="fa fa-times"></i>\
+										</button>\
+										<h4 />\
+									</div> \
+									<div class="modal-body"> </div>\
+									<div class="modal-footer"> \
+										<button type="button" class="btn btn-default" data-dismiss="modal"> ' + crLang.line('Close') + ' </button> \
+									</div>\
+								</div>\
+							</div>\
+						</div>\
+					');
+					$modal.appendTo($('body'));
+					$modal.find('.modal-header h4').html(' <i class="fa fa-files-o text-info"></i> Log - ' + $html.find('.panel-heading span').text());
+					$modal.find('.modal-body').addClass('cr-page-logs-detail').append($html.find('ul.list-group'));
+
+					$modal.find('.modal-body ul.list-group li:first').remove();
+
+					$modal.find('.cr-page-logs-detail .datetime').each( function() { $.formatDate($(this)); } );
+
+					$.showModal($modal, true, true);
 				}
 		});
 	}

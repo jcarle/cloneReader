@@ -197,7 +197,7 @@
 							break;
 						case 'date':
 						case 'datetime':
-							if ($.inArray(field.$input.val(), ['0000-00-00', '0000-00-00 00:00:00']) != -1) {
+							if ($.inArray(field.$input.val(), ['0000-00-00', '0000-00-00 00:00:00', 'false']) != -1) {
 								field.$input.val('');
 							}
 
@@ -214,7 +214,7 @@
 								.removeAttr('name')
 								.on('change',
 									function(event){
-										var $input 	= $(event.target);
+										var $input = $(event.target);
 
 										if ($input.val() == '') {
 											$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val('');
@@ -222,8 +222,9 @@
 										}
 
 										var datetimepicker = $input.parent().data('datetimepicker');
+										var field          = $input.data('field');
 										datetimepicker.date.setSeconds(0);
-										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date));
+										$input.parent().parent().find('input[name=' +  $input.data('inputName') + ']').val($.ISODateString(datetimepicker.date, field.type == 'date'));
 									}
 								);
 
@@ -517,7 +518,9 @@
 							function (event) {
 								var $btnDanger = $(event.target);
 								$.ajax({
+									'type':   'post',
 									'url':     field.urlDelete,
+									'data':    { 'deletePicture': true },
 									'params': { 'field': $btnDanger.data('field'), 'crForm': $btnDanger.data('crForm') } ,
 									'success': function (response) {
 										if ($.hasAjaxDefaultAction(response) == true) { return; }
@@ -592,6 +595,7 @@
 
 					this.$fileupload.find('input[name=entityTypeId]').val(this.fileupload.entityTypeId);
 					this.$fileupload.find('input[name=entityId]').val(this.fileupload.entityId);
+					this.$fileupload.find('input[name=hasEntityLog]').val(this.fileupload.hasEntityLog);
 					this.$fileupload.find('form').attr('action', this.fileupload.urlSave);
 
 					$.showModal(this.$fileupload, false, false);
@@ -614,6 +618,16 @@
 					});
 				}
 			});
+
+			$('#fileupload')
+				.unbind('fileuploadstop fileuploaddestroyed fileuploaddestroy')
+				.bind('fileuploadstop fileuploaddestroyed fileuploaddestroy',
+				function (event) {
+					if (event.type == 'fileuploaddestroyed') { $.countGalleryProcess--; }
+					if (event.type == 'fileuploaddestroy') { $.countGalleryProcess++; }
+					$.saveGalleryLog();
+				}
+			);
 		},
 
 		reloadGallery: function() {
@@ -698,8 +712,12 @@
 									$(row).appendTo($tbody);
 								}
 								else {
-									var id 	= row[Object.keys(row)[0]];
-									var $tr	= $( '<tr data-controller="' + $.base_url(list['controller'] + id) + '">').appendTo($tbody);
+									var id  = row[Object.keys(row)[0]];
+									var $tr = $( '<tr data-controller="' + $.base_url(list['controller'] + id) + '">').appendTo($tbody);
+
+									if (row['crRowClassName'] != null) {
+										$tr.addClass(row['crRowClassName']);
+									}
 
 									if (showId == true) {
 										$('<td class="numeric" />').appendTo($tr).text(id);
@@ -982,8 +1000,7 @@
 		var $modal = $('\
 			<div class="modal" role="dialog" >\
 				<div class="modal-dialog" >\
-					<div class="modal-content" >\
-					</div>\
+					<div class="modal-content" > </div>\
 				</div>\
 			</div>\
 		');

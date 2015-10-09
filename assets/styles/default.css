@@ -365,12 +365,6 @@ body.isLoading, body.isLoading * {
 			display: inline-block;
 			border: 0 none;
 		}
-		.crForm fieldset .crLink {
-			display: block;
-			padding-top: 7px;
-			white-space: normal;
-			word-wrap: break-word;
-		}
 		.crForm fieldset select[multiple] {
 			height: 34px;
 		}
@@ -852,6 +846,24 @@ table .dotdotdot {
 .cr-page-process ul li .btn {
 	margin-bottom:5px;
 }
+.cr-page-logs-detail .datetime {
+	display: block;
+}
+.cr-page-logs-detail .list-group-item .btn,
+.cr-page-logs-detail .list-group-item .datetime,
+.cr-page-logs-detail .list-group-item h4,
+.cr-page-logs-detail .list-group-item h5 {
+	margin: 0 0 10px 0;
+}
+.cr-page-logs-detail code {
+	display: block;
+	overflow: auto;
+	white-space: pre;
+}
+.cr-page-logs-detail .panel-footer {
+	text-align: right;
+}
+
 .servicesMap{
 	display: none;
 }
@@ -897,7 +909,12 @@ table .dotdotdot {
 	background: #ff0;
 	color: #000;
 }
-
+.crLink {
+	display: block;
+	padding-top: 7px;
+	white-space: normal;
+	word-wrap: break-word;
+}
 .popupSimpleForm {
 	padding: 5px 10px;
 	width:300px;
@@ -909,5 +926,13 @@ table .dotdotdot {
 		right: 5px !important;
 		top: 92px !important;
 		width: auto;
+	}
+}
+
+@media (max-width: 992px) {
+	.cr-page-logs-detail small.datetime {
+		position: absolute;
+		top: 0;
+		right: 10px;
 	}
 }
