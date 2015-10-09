@@ -113,7 +113,7 @@ class Controllers_Model extends CI_Model {
 
 		$cache = $this->cache->cache_info();
 		foreach ($cache as $key => $value) {
-			if (strrpos($key, 'CONTROLLERS_') !== FALSE) {
+			if (strrpos($key, 'controllers_') !== FALSE) {
 				$this->cache->delete($key);
 			}
 		}
@@ -129,13 +129,13 @@ class Controllers_Model extends CI_Model {
 		}
 		$this->load->driver('cache', array('adapter' => 'file'));
 
-		if (!is_array($this->cache->file->get('CONTROLLERS_'.json_encode($groups)))) {
+		if (!is_array($this->cache->file->get('controllers_'.json_encode($groups)))) {
 			$aController = array();
 			$query = $this->selectControllersByGroupId($groups);
 			foreach ($query as $row) {
 				$aController[$row['controllerId']] = strtolower($row['controllerName']);
 			}
-			$this->cache->file->save('CONTROLLERS_'.json_encode($groups), $aController);
+			$this->cache->file->save('controllers_'.json_encode($groups), $aController);
 		}
 	}
 }

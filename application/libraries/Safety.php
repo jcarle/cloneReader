@@ -58,11 +58,11 @@ class Safety {
 		}
 		$CI = &get_instance();
 		$CI->load->driver('cache', array('adapter' => 'file'));
-		if (!is_array($CI->cache->file->get('CONTROLLERS_'.json_encode($groups)))) {
+		if (!is_array($CI->cache->file->get('controllers_'.json_encode($groups)))) {
 			$CI->load->model('Controllers_Model');
 			$CI->Controllers_Model->createControllersCache($groups);
 		}
-		return $CI->cache->file->get('CONTROLLERS_'.json_encode($groups));
+		return $CI->cache->file->get('controllers_'.json_encode($groups));
 	}
 
 	function allowByControllerName($controllerName) {
