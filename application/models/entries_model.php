@@ -404,7 +404,7 @@ class Entries_Model extends CI_Model {
 	}
 
 	function saveTmpUsersEntries($userId, $entries) { // utilizo una tabla temporal para guardar los leidos y no romper la paginación infinita
-		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
+		if ($this->session->userdata('userId') == config_item('userAnonymous')) {
 			$this->session->set_userdata('addDefaultFeeds', true); // Si crea un usuario en la app le guardo los feeds del user anonimo
 		}
 
@@ -562,7 +562,7 @@ class Entries_Model extends CI_Model {
 			(userId, feedId )
 			SELECT '.$userId.', feedId
 			FROM users_feeds
-			WHERE userId = '.USER_ANONYMOUS;
+			WHERE userId = '.config_item('userAnonymous');
 		$this->db->query($query);
 		//pr($this->db->last_query());
 
@@ -570,7 +570,7 @@ class Entries_Model extends CI_Model {
 			(userId, tagId, expanded )
 			SELECT '.$userId.', tagId, expanded
 			FROM users_tags
-			WHERE userId = '.USER_ANONYMOUS;
+			WHERE userId = '.config_item('userAnonymous');
 		$this->db->query($query);
 		//pr($this->db->last_query());
 
@@ -578,7 +578,7 @@ class Entries_Model extends CI_Model {
 			(userId, feedId, tagId )
 			SELECT '.$userId.', feedId, tagId
 			FROM users_feeds_tags
-			WHERE userId = '.USER_ANONYMOUS;
+			WHERE userId = '.config_item('userAnonymous');
 		$this->db->query($query);
 		//pr($this->db->last_query());
 	}

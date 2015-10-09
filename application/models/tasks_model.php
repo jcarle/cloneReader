@@ -17,7 +17,7 @@ class Tasks_Model extends CI_Model {
 			'langId'        => $langId,
 			'taskMethod'    => $taskMethod,
 			'taskParams'    => json_encode($taskParams),
-			'taskRunning'   => TASK_PENDING,
+			'taskRunning'   => config_item('taskPending'),
 			'taskRetries'   => 0,
 			'taskSchedule'  => $taskSchedule,
 		));

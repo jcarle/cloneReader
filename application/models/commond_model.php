@@ -75,7 +75,7 @@ class Commond_Model extends CI_Model {
 	}
 
 	/**
-	* Devuelve un array con los userId que pertenecen a los grupos de $aGroupId; ej :array(GROUP_ROOT, GROUP_EDITOR)
+	* Devuelve un array con los userId que pertenecen a los grupos de $aGroupId; ej :array(config_item('groupRoot'), config_item('groupEditor'))
 	*/
 	function selectUsersByGroupsId($aGroupId) {
 		$result = array();
@@ -470,7 +470,7 @@ class Commond_Model extends CI_Model {
 	function initQueryEntityVisits($excludeUsersRoot = true, $excludeSpiders = true) {
 		$aUserId = array();
 		if ($excludeUsersRoot == true) {
-			$aUserId = $this->selectUsersByGroupsId(array(GROUP_ROOT, GROUP_EDITOR));
+			$aUserId = $this->selectUsersByGroupsId(array(config_item('groupRoot'), config_item('groupEditor')));
 		}
 
 		$query = $this->db->select('request_uri ', true)->from('usertracking');

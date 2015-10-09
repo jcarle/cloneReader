@@ -4,7 +4,7 @@ $CI = &get_instance();
 $groups = $this->session->userdata('groups');
 
 $CI->load->driver('cache', array('adapter' => 'file'));
-if (!is_array($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)))) {
+if (!is_array($CI->cache->file->get('menuProfile_'.json_encode($groups)))) {
 	$CI->load->model('Menu_Model');
 	$CI->Menu_Model->createMenuCache($groups);
 }
@@ -88,7 +88,7 @@ if (config_item('google-gtm-account') != '' && ENVIRONMENT == 'production') {
 			<div class="navbar-collapse collapse navbar-ex1-collapse ">
 <?php
 echo getHtmlFormSearch();
-echo getHtmlMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'menuProfile nav navbar-nav navbar-right');
+echo getHtmlMenu($CI->cache->file->get('menuProfile_'.json_encode($groups)), 'menuProfile nav navbar-nav navbar-right');
 ?>
 			</div>
 		</div>
@@ -96,7 +96,7 @@ echo getHtmlMenu($CI->cache->file->get('MENU_PROFILE_'.json_encode($groups)), 'm
 
 	<nav class="menu label-primary">
 		<div>
-<?php echo getHtmlMenu($CI->cache->file->get('MENU_PUBLIC_'.json_encode($groups)), 'menuPublic'); ?>
+<?php echo getHtmlMenu($CI->cache->file->get('menuPublic_'.json_encode($groups)), 'menuPublic'); ?>
 		</div>
 	</nav>
 	<div class="container pageContainer ">

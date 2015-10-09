@@ -76,7 +76,7 @@ class Users_Model extends CI_Model {
 		$this->db->insert('users', $values);
 		$userId = $this->db->insert_id();
 
-		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));
+		$this->db->ignore()->insert('users_groups', array('userId' => $userId, 'groupId' => config_item('groupDefault')));
 
 		$user = $this->db
 			->where($fieldName, $remoteUserId)
@@ -305,7 +305,7 @@ class Users_Model extends CI_Model {
 
 		$userId = $this->db->insert_id();
 
-		$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => GROUP_DEFAULT));
+		$this->db->insert('users_groups', array('userId' => $userId, 'groupId' => config_item('groupDefault')));
 
 		return $userId;
 	}
@@ -379,7 +379,7 @@ class Users_Model extends CI_Model {
 	}
 
 	function getUserFiltersByUserId($userId) {
-		if ($userId == USER_ANONYMOUS) {
+		if ($userId == config_item('userAnonymous')) {
 			return '{}';
 		}
 
@@ -447,7 +447,7 @@ class Users_Model extends CI_Model {
 
 		foreach ($aTables as $table) {
 			$this->db
-				->set('userId',USER_ANONYMOUS)
+				->set('userId', config_item('userAnonymous'))
 				->where('userId', $userId)
 				->update($table);
 			//pr($this->db->last_query()); die;
