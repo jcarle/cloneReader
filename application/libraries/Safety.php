@@ -15,12 +15,12 @@ class Safety {
 //pr($CI->session->userdata); die;
 		if ($CI->session->userdata('userId') == null) {
 			$CI->session->set_userdata(array(
-				'userId' => USER_ANONYMOUS,
-				'groups' => array(GROUP_ANONYMOUS),
+				'userId' => config_item('userAnonymous'),
+				'groups' => array(config_item('groupAnonymous')),
 			));
 		}
 
-		if ($CI->session->userdata('userId') != USER_ANONYMOUS) {
+		if ($CI->session->userdata('userId') != config_item('userAnonymous')) {
 			if ($CI->session->userdata('last_activity') == $CI->session->now) {
 				$CI->load->model('Users_Model');
 				$CI->Users_Model->updateUserLastAccess();

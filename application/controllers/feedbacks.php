@@ -18,7 +18,7 @@ class Feedbacks extends CI_Controller {
 
 		$userId = (int)$this->session->userdata('userId');
 		$data	= array();
-		if ($userId != USER_ANONYMOUS) {
+		if ($userId != config_item('userAnonymous')) {
 			$data = $this->Users_Model->get($userId);
 		}
 

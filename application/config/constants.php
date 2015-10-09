@@ -36,19 +36,6 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
-define('USER_ANONYMOUS', 1);
-define('USER_CRBOOT', 28);
-define('GROUP_ANONYMOUS', 1);
-define('GROUP_ROOT', 2);
-define('GROUP_DEFAULT', 3);
-define('MENU_ADMIN', 1);
-define('MENU_PROFILE', 10);
-define('MENU_PUBLIC', 8);
-define('TASK_PENDING', 0);
-define('TASK_RUNNING', 1);
-define('TASK_CANCEL', 2);
-define('TASK_RETRY', 5);
-
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

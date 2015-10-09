@@ -19,7 +19,7 @@ class Langs extends CI_Controller {
 		}
 
 		// No guardo el idioma del usuario anonimo
-		if ($this->session->userdata('userId') !== USER_ANONYMOUS) {
+		if ($this->session->userdata('userId') !== config_item('userAnonymous')) {
 			$this->Users_Model->updateLangIdByUserId($langId, $this->session->userdata('userId'));
 		}
 

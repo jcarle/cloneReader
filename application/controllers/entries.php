@@ -299,7 +299,7 @@ class Entries extends CI_Controller {
 	}*/
 
 	function shareByEmail($entryId) {
-		if ($this->session->userdata('userId') == USER_ANONYMOUS) {
+		if ($this->session->userdata('userId') == config_item('userAnonymous')) {
 			return errorForbidden();
 		}
 

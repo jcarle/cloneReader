@@ -17,19 +17,19 @@ class App extends CI_Controller {
 		$this->load->driver('cache', array('adapter' => 'file'));
 		$groups = $this->session->userdata('groups');
 
-		if (!is_array($this->cache->file->get('MENU_PROFILE_'.json_encode($groups)))) {
+		if (!is_array($this->cache->file->get('menuProfile_'.json_encode($groups)))) {
 			$this->load->model('Menu_Model');
 			$this->Menu_Model->createMenuCache($groups);
 		}
 
 		$aMenu = array(
-			'MENU_PROFILE'  => array(
-				'items'     => $this->cache->file->get('MENU_PROFILE_'.json_encode($groups)),
+			'menuProfile'  => array(
+				'items'     => $this->cache->file->get('menuProfile_'.json_encode($groups)),
 				'className' => 'menuProfile nav navbar-nav navbar-right',
 				'parent'    => '.navbar-ex1-collapse',
 			),
-			'MENU_PUBLIC'   => array(
-				'items'     => $this->cache->file->get('MENU_PUBLIC_'.json_encode($groups)),
+			'menuPublic'   => array(
+				'items'     => $this->cache->file->get('menuPublic_'.json_encode($groups)),
 				'className' =>'menuPublic',
 				'parent'    => '.menu.label-primary div',
 			)

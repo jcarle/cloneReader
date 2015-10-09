@@ -579,7 +579,7 @@ function getCrFormCookie($prefix = 'comment') {
 		}
 	}
 
-	if ($CI->session->userdata('userId') == USER_ANONYMOUS) {
+	if ($CI->session->userdata('userId') == config_item('userAnonymous')) {
 		return array();
 	}
 

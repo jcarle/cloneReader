@@ -83,7 +83,7 @@ class Tasks extends CI_Controller {
 
 		$filters = array(
 			'taskRunning'  => false,
-			'statusTaskId' => TASK_PENDING,
+			'statusTaskId' => config_item('taskPending'),
 			'validDate'    => true
 		);
 
@@ -93,7 +93,7 @@ class Tasks extends CI_Controller {
 			$this->load->library('SendMails');
 
 			foreach ($rsTasks as $task) {
-				$task['taskRunning'] = TASK_RUNNING;
+				$task['taskRunning'] = config_item('taskRunning');
 				$this->Tasks_Model->save($task);
 
 				$success = $this->_sendEmail($task);
@@ -102,15 +102,15 @@ class Tasks extends CI_Controller {
 					$this->Tasks_Model->delete($task['taskId']);
 				}
 				else { //Sino se envio el email, aumento el contador de reintentos
-					if($task['taskRetries'] < TASK_RETRY){
+					if($task['taskRetries'] < config_item('taskRetry')){
 						//Cantidad de Reintentos
-						$task['taskRunning'] = TASK_PENDING;
+						$task['taskRunning'] = config_item('taskPending');
 						$task['taskRetries'] = $task['taskRetries'] + 1;
 						$this->Tasks_Model->save($task);
 					}
 					else {
 						//Cambio el estado a Cancelado
-						$task['taskRunning'] = TASK_CANCEL;
+						$task['taskRunning'] = config_item('taskCancel');
 						$this->Tasks_Model->save($task);
 					}
 				}

@@ -5,7 +5,7 @@ class Process extends CI_Controller {
 		parent::__construct();
 
 		if ($this->input->is_cli_request()) {
-			$this->session->set_userdata('userId', USER_CRBOOT);
+			$this->session->set_userdata('userId', config_item('userCRBoot'));
 		}
 		else {
 			if (!$this->safety->allowByControllerName(__CLASS__)) {

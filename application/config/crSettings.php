@@ -21,6 +21,22 @@ $config['urlQa']   = 'http://www.jcarle.com.ar/cloneReader';
 $config['urlProd'] = 'http://www.clonereader.com.ar';
 
 
+$config['userAnonymous']  = 1;
+$config['userCRBoot']     = 28;
+$config['groupAnonymous'] = 1;
+$config['groupRoot']      = 2;
+$config['groupDefault']   = 3;
+
+$config['menuAdmin']   = 1;
+$config['menuProfile'] = 10;
+$config['menuPublic']  = 8;
+
+$config['taskPending'] = 0;
+$config['taskRunning'] = 1;
+$config['taskCancel']  = 2;
+$config['taskRetry']   = 5;
+
+
 $config['entityTypeTesting']  = 1;
 $config['entityTypeCountry']  = 2;
 $config['entityTypeState']    = 3;
@@ -170,9 +186,9 @@ $config['siteAssets'] = array(
 
 $config['aUserTables'] = array( 'feedbacks', ); // Tablas en las que se va a setear el usuario anonimo al eliminar un usuario
 
-$config['tagAll'] = 1;
-$config['tagStar'] = 2;
-$config['tagHome'] = 3;
+$config['tagAll']    = 1;
+$config['tagStar']   = 2;
+$config['tagHome']   = 3;
 $config['tagBrowse'] = 4;
 
 $config['feedMaxCount'] = 1000;
