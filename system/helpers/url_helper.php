@@ -50,7 +50,7 @@ if ( ! function_exists('site_url'))
 
 /**
  * Base URL
- * 
+ *
  * Create a local URL based on your basepath.
  * Segments can be passed in as a string or an array, same as site_url
  * or a URL to a file can be passed in, e.g. to an image file.
@@ -490,7 +490,7 @@ if ( ! function_exists('url_title'))
 		}
 
 		$str = utf8_encode(strtolower(strtr(utf8_decode($str), utf8_decode('ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ'), 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr')));
-		
+
 		$trans = array(
 						'&\#\d+?;'				=> '',
 						'&\S+?;'				=> '',
@@ -541,6 +541,8 @@ if ( ! function_exists('redirect'))
 		{
 			$uri = site_url($uri);
 		}
+
+		$uri = html_entity_decode($uri);
 
 		switch($method)
 		{
