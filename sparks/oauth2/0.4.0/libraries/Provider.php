@@ -165,7 +165,8 @@ abstract class OAuth2_Provider
 				$url .= '?'.http_build_query($params);
 				$response = file_get_contents($url);
 
-				parse_str($response, $return);
+				$return = get_object_vars(json_decode($response));
+//				parse_str($response, $return);
 
 			break;
 
