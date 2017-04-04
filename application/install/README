@@ -4,5 +4,5 @@ Agregar al crontab:
 0 */6 * * *   php [PATH_TO_CLONEREADER]/index.php process saveEntitiesSearch/null/true
 0 1 * * 1     php [PATH_TO_CLONEREADER]/index.php process/rescanAll404Feeds
 0 3 * *  4    php [PATH_TO_CLONEREADER]/index.php process/deleteOldEntries
-*/10 * * * *  php [PATH_TO_CLONEREADER]/index.php tasks/sendEmails
+*/10 * * * *  php [PATH_TO_CLONEREADER]/index.php process/sendEmails
 

@@ -26,16 +26,18 @@ class Countries_Model extends CI_Model {
 	}
 
 	function saveZonesSearch($deleteEntitySearch = false, $onlyUpdates = false) {
+		$currentDatetime = $this->Commond_Model->getCurrentDateTime();
+		
 		if ($deleteEntitySearch == true) {
 			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeCity'));
 			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeState'));
 			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeCountry'));
 		}
 
-		$searchKey  = 'searchZones';
 		$lastUpdate = $this->Commond_Model->getProcessLastUpdate('saveZonesSearch');
 
 		// Countries
+		$searchKey  = 'searchCountries searchZones';
 		$aWhere = array();
 		if ($onlyUpdates == true) {
 			$aWhere[] = ' countries.lastUpdate > \''.$lastUpdate.'\' ';
@@ -51,6 +53,7 @@ class Countries_Model extends CI_Model {
 		//pr($this->db->last_query()); die;
 
 		// States
+		$searchKey  = 'searchStates searchZones';
 		$aWhere = array();
 		if ($onlyUpdates == true) {
 			$aWhere[] = ' (countries.lastUpdate > \''.$lastUpdate.'\' OR states.lastUpdate > \''.$lastUpdate.'\' ) ';
@@ -69,6 +72,7 @@ class Countries_Model extends CI_Model {
 		//pr($this->db->last_query()); die;
 
 		// Cities
+		$searchKey  = 'searchCities searchZones';
 		$aWhere = array();
 		if ($onlyUpdates == true) {
 			$aWhere[] = ' (countries.lastUpdate > \''.$lastUpdate.'\' OR states.lastUpdate > \''.$lastUpdate.'\' OR cities.lastUpdate > \''.$lastUpdate.'\' ) ';
@@ -87,7 +91,7 @@ class Countries_Model extends CI_Model {
 		$this->db->query($query);
 		//pr($this->db->last_query()); die;
 
-		$this->Commond_Model->updateProcessDate('saveZonesSearch');
+		$this->Commond_Model->updateProcessDate('saveZonesSearch', $currentDatetime);
 
 		return true;
 	}

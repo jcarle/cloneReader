@@ -29,7 +29,7 @@ class Tasks extends CI_Controller {
 
 		$this->load->view('pageHtml', array(
 			'view'   => 'includes/crList',
-			'meta'   => array( 'title' => lang('Edit tasks') ),
+			'meta'   => array( 'title' => lang('Tasks') ),
 			'list'   => array(
 				'urlList'       => strtolower(__CLASS__).'/listing',
 				'readOnly'      => true,
@@ -60,98 +60,5 @@ class Tasks extends CI_Controller {
 				)
 			)
 		));
-	}
-
-	/*
-	 * Metodo que se llama desde un cronjobs para iniciar  el envio de las tasks_email
-	 */
-	function sendEmails(){
-		set_time_limit(0);
-		if(!$this->input->is_cli_request()){return error404();}
-
-		switch (ENVIRONMENT) {
-			case 'development':
-				$this->config->set_item('base_url', config_item('urlDev'));
-				break;
-			case 'testing':
-				$this->config->set_item('base_url', config_item('urlQa'));
-				break;
-			case 'production':
-				$this->config->set_item('base_url', config_item('urlProd'));
-				break;
-		}
-
-		$filters = array(
-			'taskRunning'  => false,
-			'statusTaskId' => config_item('taskPending'),
-			'validDate'    => true
-		);
-
-		$query   = $this->Tasks_Model->selectToList(1, 100, $filters, array() );
-		$rsTasks = $query['data'];
-		if(!empty($rsTasks)){
-			$this->load->library('SendMails');
-
-			foreach ($rsTasks as $task) {
-				$task['taskRunning'] = config_item('taskRunning');
-				$this->Tasks_Model->save($task);
-
-				$success = $this->_sendEmail($task);
-
-				if ($success == true) { //Cuando se completo el envio borro la tarea
-					$this->Tasks_Model->delete($task['taskId']);
-				}
-				else { //Sino se envio el email, aumento el contador de reintentos
-					if($task['taskRetries'] < config_item('taskRetry')){
-						//Cantidad de Reintentos
-						$task['taskRunning'] = config_item('taskPending');
-						$task['taskRetries'] = $task['taskRetries'] + 1;
-						$this->Tasks_Model->save($task);
-					}
-					else {
-						//Cambio el estado a Cancelado
-						$task['taskRunning'] = config_item('taskCancel');
-						$this->Tasks_Model->save($task);
-					}
-				}
-			}
-		}
-	}
-
-	/*
-	 *
-	 * Metodo que ejecuta cada una de las tareas de envio de email, lo llama self::sendEmails
-	 * El array que recibe debe tener el indice taskMethod obligatorio
-	 * @param array task
-	 * @return boolean
-	 *
-	 */
-	function _sendEmail($task) {
-		if(!$this->input->is_cli_request()){ return error404(); }
-
-		$return = false;
-		if(empty($task) || !is_array($task) || empty($task['taskMethod']) ){
-			return $return;
-		}
-
-		// Seteo el idioma en que se va a enviar el email
-		$this->lang->is_loaded = array();
-		$this->session->set_userdata('langId', $task['langId']);
-		initLang();
-
-		$taskMethod = $task['taskMethod'];
-		$taskParams = $task['taskParams'];
-
-		if (method_exists($this->sendmails, $taskMethod)) {
-			if(!empty($taskParams)){
-				$return = $this->sendmails->$taskMethod((array)json_decode($taskParams));
-			}else{
-				$return = $this->sendmails->$taskMethod();
-			}
-		}
-
-		unset($taskMethod);
-		unset($taskParams);
-		return $return;
 	}
 }

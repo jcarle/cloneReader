@@ -1,5 +1,7 @@
 <?php
 class Status_Model extends CI_Model {
+	protected $aStatusName = array();
+
 	function select(){
 		return $this->db->order_by('statusName')->get('status')->result_array();
 	}
@@ -19,5 +21,16 @@ class Status_Model extends CI_Model {
 		});
 
 		return $result;
+	}
+
+	function getStatusName($statusId) {
+		if (empty($this->aStatusName)) {
+			$query = $this->select();
+			foreach ($query as $data) {
+				$this->aStatusName[$data['statusId']] = $data['statusName'];
+			}
+		}
+
+		return element($statusId, $this->aStatusName);
 	}
 }

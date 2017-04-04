@@ -103,10 +103,112 @@ class Process extends CI_Controller {
 		$this->load->dbutil();
 		$this->dbutil->optimize_table('entities_search');
 	}
-
-	function processDiffEntityLog() {
-		$this->Commond_Model->processDiffEntityLog();
+	function doProcessDiffEntityLog() {
+		exec(PHP_PATH.'  '.BASEPATH.'../index.php process/processDiffEntityLog > /dev/null &');
 
 		return loadViewAjax(true, array('msg' => lang('Data updated successfully'), 'icon' => 'success'));
+	}
+
+	function processDiffEntityLog() {
+		$fileName = BASEPATH.'../application/cache/.processDiffEntityLog';
+		if (is_file($fileName)) {
+			// Puede suceder que en caso de un error desconocido, nunca se llege a completar el proceso y borrar el archivo
+			// Si el archivo .processDiffEntityLog es muy antiguo, lo elimino para poder continuar con el proceso
+			$maxLock = 1800; // Treinta minutos
+			if (time() - filemtime($fileName) >= $maxLock) {
+			    @unlink($fileName);
+			}
+			return;
+		}
+		file_put_contents($fileName, 'processing');
+
+//sleep(5);
+		$this->Commond_Model->processDiffEntityLog();
+		@unlink($fileName);
+	}
+
+	/*
+	 * Metodo que se llama desde un cronjobs para iniciar  el envio de las tasks_email
+	 */
+	function sendEmails(){
+		set_time_limit(0);
+
+		$this->load->model('Tasks_Model');
+
+		$filters = array(
+			'taskRunning'  => false,
+			'statusTaskId' => config_item('taskPending'),
+			'validDate'    => true
+		);
+
+		$query   = $this->Tasks_Model->selectToList(1, 100, $filters, array() );
+		$rsTasks = $query['data'];
+		if(!empty($rsTasks)){
+			$this->load->library('SendMails');
+
+			foreach ($rsTasks as $task) {
+				$task['taskRunning'] = config_item('taskRunning');
+				$this->Tasks_Model->save($task);
+
+				$success = $this->_sendEmail($task);
+
+				if ($success == true) { //Cuando se completo el envio borro la tarea
+					$this->Tasks_Model->delete($task['taskId']);
+				}
+				else { //Sino se envio el email, aumento el contador de reintentos
+					if($task['taskRetries'] < config_item('taskRetry')){
+						//Cantidad de Reintentos
+						$task['taskRunning'] = config_item('taskPending');
+						$task['taskRetries'] = $task['taskRetries'] + 1;
+						$this->Tasks_Model->save($task);
+					}
+					else {
+						//Cambio el estado a Cancelado
+						$task['taskRunning'] = config_item('taskCancel');
+						$this->Tasks_Model->save($task);
+					}
+				}
+			}
+		}
+
+		// TODO: mejorar esta parte; es para vaciar la variable $view que llega a las vistas
+		$this->load->view('json', array('view' => null), true);
+
+		return loadViewAjax(true, array('msg' => lang('Task completed successfully'), 'icon' => 'success'));
+	}
+
+	/*
+	 *
+	 * Metodo que ejecuta cada una de las tareas de envio de email, lo llama self::sendEmails
+	 * El array que recibe debe tener el indice taskMethod obligatorio
+	 * @param array task
+	 * @return boolean
+	 *
+	 */
+	function _sendEmail($task) {
+		$return = false;
+		if(empty($task) || !is_array($task) || empty($task['taskMethod']) ){
+			return $return;
+		}
+
+		// Seteo el idioma en que se va a enviar el email
+		$this->lang->is_loaded = array();
+		$this->session->set_userdata('langId', $task['langId']);
+		initLang();
+
+		$taskMethod = $task['taskMethod'];
+		$taskParams = $task['taskParams'];
+
+		if (method_exists($this->sendmails, $taskMethod)) {
+			if(!empty($taskParams)){
+				$return = $this->sendmails->$taskMethod((array)json_decode($taskParams));
+			}else{
+				$return = $this->sendmails->$taskMethod();
+			}
+		}
+
+		unset($taskMethod);
+		unset($taskParams);
+		return $return;
 	}
 }

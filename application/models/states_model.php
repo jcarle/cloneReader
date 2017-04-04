@@ -7,7 +7,7 @@ class States_Model extends CI_Model {
 			->where('countryId', $countryId)
 			->order_by('stateName')
 			->get()->result_array();
-			
+
 		//pr($this->db->last_query());
 		return $query;
 	}
@@ -17,5 +17,13 @@ class States_Model extends CI_Model {
 			->select('stateId as id, stateName as text')
 			->where('stateId', $id)
 			->get('states')->row_array();
+	}
+
+	function getEntityName($stateId) {
+		$data = $this->Commond_Model->getEntitySearch(config_item('entityTypeState'), $stateId, 'entityReverseFullName');
+		if (!empty($data)) {
+			return $data['text'];
+		}
+		return '';
 	}
 }

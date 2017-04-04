@@ -9,8 +9,9 @@ class App extends CI_Controller {
 		return error404();
 	}
 
-	function out() {
-		header("Location: ".$this->input->get('url'));
+
+	function url() {
+		header("Location: ".$this->input->get('q'));
 	}
 
 	function selectMenu() {

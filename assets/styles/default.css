@@ -701,7 +701,7 @@ table .dotdotdot {
 	max-width: 560px;
 	width: auto;
 }
-	.modal.crAlert i.fa-check-circle {
+	.modal.crAlert .modal-body .icon {
 		vertical-align: middle;
 		float: none;
 		display: inline-block;
@@ -846,6 +846,29 @@ table .dotdotdot {
 .cr-page-process ul li .btn {
 	margin-bottom:5px;
 }
+	.cr-page-process .popover {
+		font-size: small;
+		margin-top: 7px;
+	}
+	.cr-page-process h4 .btn {
+		padding: 0px 5px;
+		border: 0px #ccc solid;
+		cursor: help;
+	}
+	.cr-page-process h4 .btn:active,
+	.cr-page-process h4 .btn:focus {
+		outline: 0;
+	}
+	.cr-page-process .popover p {
+		padding: 0 0 0 20px;
+		position: relative;
+	}
+		.cr-page-process .popover p i {
+			position: absolute;
+			left: 0;
+			top: 3px;
+	}
+
 .cr-page-logs-detail .datetime {
 	display: block;
 }
@@ -936,3 +959,11 @@ table .dotdotdot {
 		right: 10px;
 	}
 }
+
+
+.crFacets { }
+	.crFacets h4 {
+		font-size: inherit;
+		margin: 0;
+		padding: 0;
+	}

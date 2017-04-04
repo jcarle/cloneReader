@@ -56,7 +56,7 @@ crMenu = {
 			$('<span>').text(label).appendTo($link);
 
 			if (item['menuClassName'] == 'menuItemLanguage') {
-				$link.append( ' <span class="badge"> ' + crSettings.langId + ' </span> ' )
+				$link.append( ' <span class="badge"> ' + crSettings.langId + ' </span> ' );
 			}
 			if (item['childs'].length > 0) {
 				$link.append(' <i class="fa fa-caret-right pull-right" ></i> ');

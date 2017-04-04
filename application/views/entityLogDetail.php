@@ -49,7 +49,7 @@ foreach ($logs as $data) {
 			</div>
 			<ul class="list-group">
 				<li class="list-group-item">
-					<a class="crLink"  href="<?php echo $entityUrl; ?>" > <?php echo $entityUrl; ?> </a>
+					<a class="crLink" target="_blank"  href="<?php echo $entityUrl; ?>" > <?php echo $entityUrl; ?> </a>
 				</li>
 				<?php echo implode(' ', $aLog); ?>
 			</ul>

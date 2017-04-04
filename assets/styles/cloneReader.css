@@ -709,7 +709,7 @@ footer {
 			transform: translateX(0%);
 		}
 		#cloneReader .ulFilters.outside {
-			transform: translateX(-100%);
+			transform: translateX(-105%);
 		}
 	#cloneReader .ulFilters li { }
 		#cloneReader .ulFilters li > div {

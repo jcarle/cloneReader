@@ -66,7 +66,7 @@ class Menu_Model extends CI_Model {
 
 		$this->safety->destroyMenuCache();
 
-		return true;
+		return $menuId;
 	}
 
 	function delete($menuId) {
@@ -82,7 +82,7 @@ class Menu_Model extends CI_Model {
 
 		$cache = $this->cache->cache_info();
 		foreach ($cache as $key => $value) {
-			if (strrpos($key, 'MENU_') !== FALSE) {
+			if (strrpos($key, 'menu') !== FALSE) {
 				$this->cache->delete($key);
 			}
 		}

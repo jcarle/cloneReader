@@ -47,7 +47,7 @@
 					msg:          '',
 					callback:     null,
 					isConfirm:    false,
-					icon:         '', // [success,] // TODO: implementar más iconos por defecto
+					icon:         '', // [success, danger]
 					confirmText:  crLang.line('Ok')
 				},
 				(typeof options === 'string' ? { msg: options } :
@@ -55,7 +55,10 @@
 			);
 
 			if (this.options.icon == 'success') {
-				this.options.msg = ' <i class="fa fa-check-circle fa-3x text-success  "></i> ' + this.options.msg;
+				this.options.msg = ' <i class="fa fa-check-circle fa-3x text-success icon  "></i> ' + this.options.msg;
+			}
+			if (this.options.icon == 'danger') {
+				this.options.msg = ' <i class="fa fa-warning fa-3x text-danger icon "></i> ' + this.options.msg;
 			}
 
 			this.$modal         = $('<div role="dialog" class="modal in crAlert" />');

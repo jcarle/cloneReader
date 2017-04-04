@@ -172,6 +172,9 @@ class Commond_Model extends CI_Model {
 			$this->load->model('Countries_Model');
 			return $this->Countries_Model->saveCountrySef();
 		}
+		if ($entityTypeId == config_item('entityTypeYear')) {
+			return $this->saveYearSef();
+		}
 
 		$config = getEntityConfig($entityTypeId);
 		if ($config == null) {
@@ -210,6 +213,48 @@ class Commond_Model extends CI_Model {
 		$this->db->trans_complete();
 		$query->free_result();
 	}
+
+	function saveYearSef() {
+		// TODO: mover esto de aca y desharckodear !
+		$query = ' INSERT IGNORE INTO years
+ 					(yearId)
+					SELECT DISTINCT yearId
+					FROM adverts ';
+		$this->db->query($query);
+
+		$query = ' REPLACE INTO entities_properties
+ 					(entityTypeId, entityId, entitySef )
+					SELECT '.config_item('entityTypeYear').', yearId, yearId
+					FROM years ';
+		$this->db->query($query);
+	}
+
+
+	/**
+	 * Valida que todos los filtros de una url sean validos y que esten en el orden definido en $entityConfig['sefsOrder']
+	 * @param $entityTypeId
+	 * @return true o un string con los sefs validos para redirigir
+	 */
+	function validateEntityFiltersSef($entityTypeId) {
+		$entityConfig = getEntityConfig($entityTypeId);
+		$filters      = $this->getEntityFiltersSef();
+		$aUriSegment  = $this->uri->segment_array();
+		$aSefsValid   = array();
+
+		foreach ($entityConfig['sefsOrder'] as $id) {
+			if (isset($filters[$id])) {
+				$aSefsValid[] = $filters[$id]['entitySef'];
+			}
+		}
+		array_unshift( $aSefsValid, $entityConfig['entityTypeName']);
+
+		if (implode('/', $aUriSegment) !== implode('/', $aSefsValid)) {
+			return implode('/', $aSefsValid);
+		}
+
+		return true;
+	}
+
 
 	/**
 	 *
@@ -572,6 +617,91 @@ class Commond_Model extends CI_Model {
 		return $values;
 	}
 
+
+	function selectFacetItems($entityTypeId) {
+		$entityConfig   = getEntityConfig($entityTypeId);
+		$sefsOrder      = $entityConfig['sefsOrder'];
+		$filtersSef     = $this->Commond_Model->getEntityFiltersSef();
+		$filtersId      = $this->Commond_Model->getEntityFiltersId();
+		$aEntities      = array();
+		$tableResume    = sprintf("%s_resume", $entityConfig['entityTypeName']);
+
+		foreach ($sefsOrder as $entityTypeId) {
+			$aEntities[$entityTypeId] = array();
+		}
+		if (!isset($filtersSef[config_item('entityTypeCountry')])) {
+			unset($aEntities[config_item('entityTypeState')]);
+			unset($aEntities[config_item('entityTypeCity')]);
+			unset($aEntities[config_item('entityTypePlace')]);
+		}
+		if (!isset($filtersSef[config_item('entityTypeState')])) {
+			unset($aEntities[config_item('entityTypeCity')]);
+		}
+
+		if (!isset($filtersSef[config_item('entityTypeBrand')])) {
+			unset($aEntities[config_item('entityTypeModel')]);
+		}
+
+		foreach ($aEntities as $entityTypeId => $value) {
+			$config = getEntityConfig($entityTypeId);
+			$items  = array();
+			$aEntities[$entityTypeId]['title'] = $config['entityTypeName'];
+
+			$query = $this->db
+				->select(' DISTINCT '.$config['fieldId'].' AS id, MAX(total) AS total  ', false)
+				->where($config['fieldId'].' <>', '0')
+				->where('total >', '0')
+				->group_by($config['fieldId'])
+				->order_by('total', 'desc');
+			if (!empty($filtersId)) {
+				$this->db->where($filtersId);
+			}
+			$query = $this->db->get($tableResume, 10)->result_array(); // TODO: harckodeta!
+			//pr($this->db->last_query());
+			foreach ($query as $data) {
+				if (!empty($data['id'])) {
+					$items[$data['id']] = $data;
+				}
+			}
+
+			if (!empty($items)) {
+				$params = array();
+				if ($this->input->get('sort') != null) {
+					$params = array('sort' => $this->input->get('sort'));
+				}
+
+				$query = $this->db
+					->select(' '.$config['fieldId'].' AS id, '.$config['fieldName'].' AS name, '.$config['fieldSef'].' AS sef ', false)
+					->where_in($config['fieldId'], array_keys($items))
+					->get($config['tableName'])->result_array();
+				foreach ($query as $data) {
+					$items[$data['id']]['name']  = $data['name'];
+					$items[$data['id']]['sef']   = $data['sef'];
+					$items[$data['id']]['url']   = createSefUrl($entityConfig['entityTypeName'], $sefsOrder, $filtersSef, $entityTypeId, $data['sef'], $params);
+
+					if (isset($filtersSef[$entityTypeId])) {
+						if ($filtersSef[$entityTypeId]['entityId'] == $data['id']) {
+							$items[$data['id']]['active'] = true;
+						}
+					}
+				}
+			}
+
+			$aEntities[$entityTypeId]['items'] = $items;
+		}
+
+		// Elimino los facetados sin resultados
+		foreach ($aEntities as $entityTypeId => $value) {
+			if (empty($aEntities[$entityTypeId]['items'])) {
+				unset($aEntities[$entityTypeId]);
+			}
+		}
+
+		return $aEntities;
+	}
+
+
+
 	function getEntityLogRaw($entityTypeId, $entityId) {
 		$entityConfig = getEntityConfig($entityTypeId);
 		if ($entityConfig == null) {
@@ -581,29 +711,25 @@ class Commond_Model extends CI_Model {
 			return;
 		}
 
-		$modelName = ucfirst($entityConfig['entityTypeName']).'_Model';
-		$this->load->model($modelName);
+		$crModel = loadEntityModel(null, $entityConfig);
 
-		if (method_exists($this->$modelName, 'getEntityLogRaw') == false) {
+		if (method_exists($this->$crModel, 'getEntityLogRaw') == false) {
 			return;
 		}
 
-		return $this->$modelName->getEntityLogRaw($entityId);
+		return $this->$crModel->getEntityLogRaw($entityId);
 	}
 
 	/**
 	* Guarga un item en la tabla entities_logs
 	*
 	*/
-	function saveEntityLog($entityTypeId, $entityId, $isMigrate = false) {
+	function saveEntityLog($entityTypeId, $entityId) {
 		$entityLogRaw = $this->getEntityLogRaw($entityTypeId, $entityId);
 		if (empty($entityLogRaw)) {
 			return;
 		}
-// TODO: borrar el parametro $isMigrate  de deployar
-if ($isMigrate == true) {
-	$entityLogDate = $entityLogRaw['lastUpdate'];
-}
+
 		unset($entityLogRaw['lastUpdate']);
 		unset($entityLogRaw['entityUrl']);
 
@@ -621,56 +747,70 @@ if ($isMigrate == true) {
 	}
 
 	function processDiffEntityLog() {
-		$this->db->trans_start();
+		$this->db->save_queries = false;
 
 		$query = $this->db
-			->where('entityLogDiff', '')
-			->limit(1000) // TODO: harckodeta
-			->get('entities_logs');
-		//pr($this->db->last_query()); die;
-		foreach ($query->result_array() as $data) {
-			$entityLogDiff  = array();
-			$new            = (array)json_decode($data['entityLogRaw'], true);
-			$statusId       = null;
+			->select(' COUNT(1) AS total ', false)
+			->where('entityLogStatusDiff', 0)
+			->get('entities_logs')->row_array();
+		$pageSize  = 500;
+		$foundRows = $query['total'];
+		$pageCount = ceil($foundRows / $pageSize);
+		for ($pageCurrent = 1; $pageCurrent<=$pageCount; $pageCurrent++) {
+			$this->db->trans_start();
 
-			$oldData = $this->db
-				->where('entityTypeId', $data['entityTypeId'])
-				->where('entityId', $data['entityId'])
-				->where('entityLogDate < ', $data['entityLogDate'])
-				->order_by('entityLogDate', 'desc')
-				->limit(1)
-				->get('entities_logs')->row_array();
+			$query = $this->db
+				->where('entityLogStatusDiff', 0)
+				->limit($pageSize)
+				->get('entities_logs');
 			//pr($this->db->last_query()); die;
+			foreach ($query->result_array() as $data) {
+				$entityLogDiff = array();
+				$new           = (array)json_decode($data['entityLogRaw'], true);
+				$statusId      = null;
 
-			if (!empty($oldData)) {
-				$old = (array)json_decode($oldData['entityLogRaw'], true);
-				$entityLogDiff = array(
-					'+' => array_diff_recursive($new, $old),
-					'-' => array_diff_recursive($old, $new)
+				$oldData = $this->db
+					->where('entityTypeId', $data['entityTypeId'])
+					->where('entityId', $data['entityId'])
+					->where('entityLogDate < ', $data['entityLogDate'])
+					->order_by('entityLogDate', 'desc')
+					->limit(1)
+					->get('entities_logs')->row_array();
+				//pr($this->db->last_query()); die;
+				if (!empty($oldData)) {
+					$old = (array)json_decode($oldData['entityLogRaw'], true);
+					$entityLogDiff = array(
+						'+' => array_diff_recursive($new, $old),
+						'-' => array_diff_recursive($old, $new)
+					);
+
+					if (element('statusId', $entityLogDiff['+']) !== false) {
+						$statusId = $entityLogDiff['+']['statusId'];
+					}
+					if (empty($entityLogDiff['+']) && empty($entityLogDiff['-'])) {
+						$entityLogDiff = array();
+					}
+				}
+				else {
+					$statusId = element('statusId', $new, null);
+				}
+
+				$values = array(
+					'userFullName'        => getEntityName( config_item('entityTypeUser'), $data['userId']),
+					'entityName'          => getEntityName( $data['entityTypeId'], $data['entityId']),
+					'entityLogDiff'       => json_encode($entityLogDiff),
+					'entityLogStatusDiff' => (empty($entityLogDiff) ? 2 : 1), // TODO: desharckodear [0:pending;1:notEmpty;2:empty]
+					'statusId'            => $statusId,
 				);
 
-				if (element('statusId', $entityLogDiff['+']) !== false) {
-					$statusId = $entityLogDiff['+']['statusId'];
-				}
-			}
-			else {
-				$statusId = element('statusId', $new, null);
+				$this->db
+					->where('entityLogId', $data['entityLogId'])
+					->update('entities_logs', $values);
+				//pr($this->db->last_query()); die;
 			}
 
-			$values = array(
-				'userFullName'    => getEntityName( config_item('entityTypeUser'), $data['userId']),
-				'entityName'      => getEntityName( $data['entityTypeId'], $data['entityId']),
-				'entityLogDiff'   => json_encode($entityLogDiff),
-				'statusId'        => $statusId,
-			);
-
-			$this->db
-				->where('entityLogId', $data['entityLogId'])
-				->update('entities_logs', $values);
-			//pr($this->db->last_query()); die;
+			$this->db->trans_complete();
 		}
-
-		$this->db->trans_complete();
 	}
 
 	/*
@@ -687,7 +827,6 @@ if ($isMigrate == true) {
 	 * */
 	function selectEntitiesLogsToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array()){
 		$this->db
-			//->select(' SQL_CALC_FOUND_ROWS  CONCAT(entityTypeId, \'-\', entityId) AS id, entityTypeId, entityId, entityLogId, statusId, userFullName, entityName, entityLogDiff, entityLogDate ', false)
 			->select(' SQL_CALC_FOUND_ROWS  CONCAT(entityTypeId, \'-\', entityId) AS id, entityTypeId, entityId, entityLogId, statusId, entityName ', false)
 			->from('entities_logs');
 
@@ -696,7 +835,8 @@ if ($isMigrate == true) {
 				$this->db->where('entityId', $filters['search']);
 			}
 			else {
-				$this->db->or_like(array('entityName' => $filters['search'], 'entityLogDiff' => $filters['search']));
+				$search = $this->db->escape_like_str($filters['search']);
+				$this->db->where(" ( entityName LIKE '%$search%' OR entityLogDiff LIKE '%$search%' ) ", '', false);
 			}
 		}
 		if (element('statusId', $filters) != null) {
@@ -759,16 +899,27 @@ if ($isMigrate == true) {
 		return $this->db->get()->result_array();
 	}
 
-	function selectEntitiesTypeToDropdown() {
-		// TODO: mejorar esta parte!
+	function selectEntitiesTypeToDropdown(array $aEntityTypeId = array(), $onlyWithLog = false) {
 		$result = array();
+		if (!empty($aEntityTypeId)) {
+			$this->db->where_in('entityTypeId', $aEntityTypeId);
+		}
 		$query = $this->db->get('entities_type')->result_array();
+		//pr($this->db->last_query()); die;
 		foreach ($query as $data) {
-			$entityConfig = getEntityConfig($data['entityTypeId']);
-			if (element('hasEntityLog', $entityConfig) == true) {
+			if ($onlyWithLog == true) {
+				$entityConfig = getEntityConfig($data['entityTypeId']);
+				if (element('hasEntityLog', $entityConfig) == true) {
+					$result[] = array(
+						'id'   => $data['entityTypeId'],
+						'text' => langEntityTypeName($data['entityTypeId'], true),
+					);
+				}
+			}
+			else {
 				$result[] = array(
 					'id'   => $data['entityTypeId'],
-					'text' => lang(ucfirst(element('entityTypeName', $entityConfig))),
+					'text' => langEntityTypeName($data['entityTypeId'], true),
 				);
 			}
 		}

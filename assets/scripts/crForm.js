@@ -147,53 +147,7 @@
 							}
 							break;
 						case 'typeahead':
-							if (field.multiple == null) {
-								field.multiple = false;
-							}
-
-							if (field.placeholder != null) {
-								field.$input.attr('placeholder', field.placeholder);
-							}
-
-							var config = {
-								multiple: field.multiple,
-//									openOnEnter: false,
-								minimumInputLength: 3,
-								ajax: {
-									url:        field['source'],
-									dataType:   'json',
-									params:     { skipwWaiting: true },
-									data:       function (term, page) {
-										return { 'query': term };
-									},
-									results:    function (data, page) {
-										return {results: data};
-									}
-								}
-							};
-							if (field.multiple == false) {
-								config.placeholder = (field.placeholder != null ? field.placeholder : '-- ' + crLang.line('Choose') + ' --');
-								config.allowClear  = true;
-							}
-
-							field.$input
-								.select2(config)
-								.on('select2-open', function(event) {
-									$('a > .select2-input').addClass('form-control');
-								})
-								.on('select2-close', function(event) {
-									//$(event.target).parent().find('.form-control').css('border-radius', '4px');
-								});
-
-								if (field.multiple == false) {
-									if (field.value.id != null && field.value.id != false) {
-										field.$input.select2('data', field.value);
-									}
-								}
-								else {
-									field.$input.select2('data', field.value);
-								}
-
+							this.initFieldTypeahead(field);
 							break;
 						case 'date':
 						case 'datetime':
@@ -297,35 +251,14 @@
 		initCallbacks: function(){
 			for (var fieldName in this.options.fields){
 				var field = this.options.fields[fieldName];
-
 				if (field.subscribe != null) {
-					for (var i = 0; i<field.subscribe.length; i++) {
-						var subscribe = field.subscribe[i];
-						$(this.getFieldByName(subscribe.field)).bind(
-							subscribe.event,
-							{ $input: field.$input, callback: subscribe.callback, arguments: subscribe.arguments },
-							$.proxy(
-								function(event) {
-									var arguments = [event.data.$input];
-									if (event.data.arguments) {
-										for (var i = 0; i<event.data.arguments.length; i++) {
-											arguments.push(eval(event.data.arguments[i]));
-										}
-									}
-
-									var method = event.data.callback;
-									if ( this[method] ) {
-										return this[ method ].apply( this, Array.prototype.slice.call( arguments, 0 ));
-									}
-									else {
-										$.error( 'Method ' +  method + ' does not exist ' );
-									}
-								}
-							, this)
-						);
+					for (var eventName in field.subscribe) {
+						var subscribe = field.subscribe[eventName];
+						eval('subscribe.callback = ' + subscribe.callback);
+						field.$input.bind( eventName, $.proxy(subscribe.callback, this) );
 
 						if (subscribe.runOnInit == true) {
-							$(this.getFieldByName(subscribe.field)).trigger(subscribe.event);
+							field.$input.trigger(eventName);
 						}
 					}
 				}
@@ -806,6 +739,57 @@
 			});
 		},
 
+		initFieldTypeahead: function(field) {
+			if (field.multiple == null) {
+				field.multiple = false;
+			}
+			if (field.placeholder != null) {
+				field.$input.attr('placeholder', field.placeholder);
+			}
+
+			var config = {
+				multiple: field.multiple,
+				minimumInputLength: 3,
+				ajax: {
+					url:        field['source'],
+					dataType:   'json',
+					params:     { skipwWaiting: true },
+					data:       function (term, page) {
+						return { 'query': term };
+					},
+					results:    function (data, page) {
+						return {results: data};
+					}
+				}
+			};
+			if (field.multiple == false) {
+				config.placeholder = (field.placeholder != null ? field.placeholder : '-- ' + crLang.line('Choose') + ' --');
+				config.allowClear  = true;
+			}
+
+			field.$input.select2(config).on('select2-open', function(event) { $('a > .select2-input').addClass('form-control'); });
+
+			if (field.multiple == false) {
+				if (field.value.id != null && field.value.id != false) {
+					field.$input.select2('data', field.value);
+				}
+			}
+			else {
+				field.$input.select2('data', field.value);
+			}
+		},
+
+		changeFieldTypeaheadUrl: function(field, url) {
+			if (field.source != null) { // Para que vacie el field solo si cambio la url
+				field.$input.select2('data', null);
+				field.value = [];
+			}
+
+			field.source = url;
+			field.$input.select2('destroy');
+			this.initFieldTypeahead(field);
+		},
+
 		getFieldByName: function(fieldName){
 			return this.$form.find('*[name="' + fieldName + '"]');
 		},
@@ -815,11 +799,7 @@
 			$input.parents('fieldset').addClass('has-error');
 		},
 
-		toogleField: function($field, value) { // TODO: implementar los otros metodos! ( show, hide, etc)
-			$field.parent().toggle(value);
-		},
-
-		calculatePrice: function($field, $price, $currency, $exchange, $total) {
+		calculatePrice: function($price, $currency, $exchange, $total) {
 			if ($total.data('init-price') == null) {
 				$maskPrice = $price.clone();
 				$price.hide();
@@ -885,12 +865,7 @@
 			$total.autoNumeric('set', total);
 		},
 
-		loadDropdown: function($field, value) {
-			var controller = this.options.fields[$field.attr('name')].controller;
-			if (value != null) {
-				controller += '/' + value;
-			}
-
+		loadDropdown: function($field, controller) {
 			$.ajax( {
 				'type': 'get',
 				'url':  controller,
@@ -1259,7 +1234,7 @@
 
 		var $info = $('<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">').html(data.info.html).appendTo($row);
 		if (data.info.position == 'left' ) {
-			$info.before($parentNode);
+			$parentNode.before($info);
 		}
 
 		return $parentNode;

@@ -63,7 +63,7 @@ crMain = {
 				}
 				if (jqXHR.status === 0 && jqXHR.statusText === 'error') {
 					$(document).crAlert( {
-						'msg':         crLang.line('Not connected. Please verify your network connection'),
+						'msg':          '<i class="fa fa-wifi fa-3x text-info icon "> </i> ' + crLang.line('Not connected. Please verify your network connection'),
 						'isConfirm':   true,
 						'confirmText': crLang.line('Retry'),
 						'callback':    $.proxy(

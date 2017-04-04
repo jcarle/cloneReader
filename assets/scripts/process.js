@@ -1,14 +1,17 @@
 $.process = {
-	init: function() { },
-	
+	init: function() {
+		$('.cr-page-process [data-toggle="popover"]').popover();
+	},
+
 	submit: function(url) {
 		this.ajax = $.ajax({
 			'url':    url,
 			'async':  true,
-			'success': 
+			'success':
 				function(response) {
 					$.hasAjaxDefaultAction(response);
 				}
 		});
 	}
 };
+

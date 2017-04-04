@@ -66,25 +66,19 @@ class Testing extends CI_Controller {
 					'label'  => 'Name',
 				),
 				'countryId' => array(
-					'type'    => 'dropdown',
-					'label'   => lang('Country'),
-					'source'  => $this->Countries_Model->selectToDropdown(),
+					'type'      => 'dropdown',
+					'label'     => lang('Country'),
+					'source'    => $this->Countries_Model->selectToDropdown(),
+					'subscribe' => array(
+						'change' => array(
+							'callback'   => " function (event) { this.loadDropdown(this.getFieldByName('stateId'), '".base_url('search/selectStatesByCountryId/')."/' + this.getFieldByName('countryId').val() ); }; ",
+							'runOnInit'  => true
+						)
+					)
 				),
 				'stateId' => array(
 					'type'        => 'dropdown',
 					'label'       => 'State',
-					'controller'  => base_url('search/selectStatesByCountryId/'),
-					'subscribe'   => array(
-						array(
-							'field'      => 'countryId',
-							'event'      => 'change',
-							'callback'   => 'loadDropdown',
-							'arguments'  => array(
-								'this.getFieldByName(\'countryId\').val()'
-							),
-							'runOnInit'  => true
-						)
-					)
 				),
 				'testRating' => array(
 					'type'   => 'raty',

@@ -222,6 +222,23 @@ function getHtmlPagination($foundRows, $pageSize, $params) {
 	return '';
 }
 
+function getHtmlFacets($facets) {
+	$html = '';
+	foreach ($facets as $entityTypeId => $data) {
+		$html .= '<h3>'.lang(ucfirst($data['title'])).'</h3>';
+		$html .= '<div class="list-group">';
+		foreach($data['items'] as $item) {
+			if (element('active', $item) == true) {
+				$html .= '<a title="'.$item['name'].'" class="list-group-item active " href="'.$item['url'].'"> <span class="pull-right " > <i class="fa fa-lg fa-times-circle" > </i> </span> '.$item['name'].'</a>';
+			}
+			else {
+				$html .= '<a title="'.$item['name'].'" class="list-group-item" href="'.$item['url'].'">  <span class="badge">'.$item['total'].'</span> <h4>'.$item['name'].'</h4></a>';
+			}
+		}
+		$html .= '</div>';
+	}
+	return $html;
+}
 
 function getHtmlFormSearch($isHeader = true) {
 	$CI        = & get_instance();
@@ -319,4 +336,29 @@ function getHtmlMenu($aMenu, $className = null, $depth = 0){
 	if ($depth == 0) { $className .= ' crMenu '; }
 
 	return '<ul '.($className != null ? ' class="'.$className.'" ' : '').'> '.implode('', $aLi).' </ul>';
+}
+
+
+function getFacetBreadcrumb($entityTypeId, $facets){
+	$entityConfig = getEntityConfig($entityTypeId);
+	$aSef         = array($entityConfig['entityTypeName']);
+	$breadcrumb   = array(
+		array('text' => lang('Home'),                       'href' => base_url()),
+		array('text' => langEntityTypeName($entityTypeId),  'href' => base_url(implode('/', $aSef))),
+	);
+
+	if(!empty($facets)){
+		foreach ($facets as $entities) {
+			foreach ($entities['items'] as $item) {
+				if(isset($item['active']) && $item['active'] == true){
+					$aSef[] = $item['sef'];
+					$breadcrumb[] = array('text' => $item['name'], 'href' => base_url(implode('/', $aSef)) );
+				}
+			}
+		}
+	}
+
+	$breadcrumb[count($breadcrumb)-1]['active'] = true;
+
+	return $breadcrumb;
 }

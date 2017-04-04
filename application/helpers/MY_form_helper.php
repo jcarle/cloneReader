@@ -98,32 +98,30 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 	$CI = &get_instance();
 	$CI->load->model('Coins_Model');
 
-	$subscribe 	= array();
+
 	$aFieldName = array( $price['name'], $currency['name'], $exchange['name'], );
+	$subscribe  = array(
+		'change' => array(
+			'callback'      => "
+				function (event) {
+					this.calculatePrice(
+						this.getFieldByName('".$price['name']."'),
+						this.getFieldByName('".$currency['name']."'),
+						this.getFieldByName('".$exchange['name']."'),
+						this.getFieldByName('".$total['name']."')
+					);
+				} ",
+		)
+	);
 
-	foreach ($aFieldName as $fieldName) {
-		$subscribe[] = array(
-			'field'         => $fieldName,
-			'event'         => 'change',
-			'callback'      => 'calculatePrice',
-			'arguments'     => array(
-				'this.getFieldByName(\''.$price['name'].'\')',
-				'this.getFieldByName(\''.$currency['name'].'\')',
-				'this.getFieldByName(\''.$exchange['name'].'\')',
-				'this.getFieldByName(\''.$total['name'].'\')'
-			)
-		);
-	}
-
-	$subscribe[0]['runOnInit'] = true;
-
-	return array(
-		$price['name']	=> array(
+	$result = array(
+		$price['name']      => array(
 			'type'          => 'text',
 			'name'          => $price['name'],
 			'label'         => $price['label'],
 			'value'         => element('value', $price, 0),
 			'placeholder'   => '0,00',
+			'subscribe'     => $subscribe,
 		),
 		$currency['name']   => array(
 			'type'          => 'dropdown',
@@ -131,6 +129,7 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			'label'         => $currency['label'],
 			'value'         => element('value', $currency),
 			'source'        => $CI->Coins_Model->selectToDropdown(),
+			'subscribe'     => $subscribe,
 		),
 		$exchange['name']   => array(
 			'type'          => 'text',
@@ -138,6 +137,7 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			'label'         => $exchange['label'],
 			'value'         => element('value', $exchange, 0),
 			'placeholder'   => '0,00',
+			'subscribe'     => $subscribe,
 		),
 		$total['name']      => array(
 			'type'          => 'text',
@@ -145,9 +145,11 @@ function getCrFormFieldMoney(array $price, array $currency, array $exchange, arr
 			'label'         => $total['label'],
 			'value'         => null,
 			'disabled'      => true,
-			'subscribe'     => $subscribe
 		),
 	);
+
+	$result[$price['name']]['subscribe']['change']['runOnInit'] = true;
+	return $result;
 }
 
 function getCrFormValidationFieldMoney(array $price, array $exchange) {
@@ -164,19 +166,6 @@ function getCrFormValidationFieldMoney(array $price, array $exchange) {
 		)
 	);
 }
-
-function subscribeForCrFormSumValues($fieldName, array $aFieldName) {
-	foreach ($aFieldName as $fieldName) {
-		$subscribe[] = array(
-			'field'      => $fieldName,
-			'event'      => 'change',
-			'callback'   => 'sumValues',
-			'arguments'  => array( json_encode($aFieldName) )
-		);
-	}
-	return $subscribe;
-}
-
 
 function getCrFieldGallery($form) {
 	foreach ($form['fields'] as $name => $field) {
@@ -619,7 +608,7 @@ function getEntityTypeIdByEnityTypeName($entityTypeName) {
 	$entities = config_item('entityConfig');
 	// TODO: pensar si conviene indexar el entityTypeName, para que no tenga que recorrerlo
 	foreach ($entities as $entityTypeId => $entityConfig) {
-		if ($entityConfig['entityTypeName'] == $entityTypeName) {
+		if (element('entityTypeName', $entityConfig) == $entityTypeName) {
 			return $entityTypeId;
 		}
 	}
@@ -682,9 +671,8 @@ function getEntityName($entityTypeId, $entityId, $fieldName = 'entityName') {
 
 	$entityConfig = getEntityConfig($entityTypeId);
 	if (element('customGetEntityName', $entityConfig) == true) {
-		$modelName = ucfirst($entityConfig['entityTypeName']).'_Model';
-		$CI->load->model($modelName);
-		return $CI->$modelName->getEntityName($entityId);
+		$crModel = loadEntityModel(null, $entityConfig);
+		return $CI->$crModel->getEntityName($entityId);
 	}
 
 	$entity = $CI->Commond_Model->getEntitySearch($entityTypeId, $entityId, $fieldName);
@@ -714,9 +702,8 @@ function getEntityUrl($entityTypeId, $entityId = null, $data = null) {
 	}
 
 	if (element('customGetEntityUrl', $entityConfig) == true && !empty($entityId)) {
-		$modelName = ucfirst($entityConfig['entityTypeName']).'_Model';
-		$CI->load->model($modelName);
-		return $CI->$modelName->getEntityUrl($entityId);
+		$crModel = loadEntityModel(null, $entityConfig);
+		return $CI->$crModel->getEntityUrl($entityId);
 	}
 	if (!empty($data)) {
 		return base_url(sprintf($entityConfig['entityUrl'], $data[$entityConfig['fieldSef']]));
@@ -726,6 +713,24 @@ function getEntityUrl($entityTypeId, $entityId = null, $data = null) {
 	}
 
 	return '';
+}
+
+/**
+ * Carga el modelo de una enitdad
+ *
+ * */
+function loadEntityModel($entityTypeId = null, $entityConfig = null) {
+	$CI = &get_instance();
+	if ($entityTypeId == null && $entityConfig == null) {
+		return;
+	}
+	if ($entityConfig == null) {
+		$entityConfig = getEntityConfig($entityTypeId);
+	}
+
+	$crModel = ucfirst($entityConfig['entityTypeName']).'_Model';
+	$CI->load->model($crModel);
+	return $crModel;
 }
 
 /**
@@ -808,12 +813,20 @@ function appendCarToFilters(array $filters, $carId) {
 }
 
 
-function langEntityTypeName($entityTypeId, $singular = false) {
+function langEntityTypeName($entityTypeId, $single = false) {
 	$entityConfig = getEntityConfig($entityTypeId);
 	if ($entityConfig == null) {
 		return '';
 	}
-	return lang(ucfirst($entityConfig[($singular == true ? 'entityTypeSingularName' : 'entityTypeName')]));
+	return lang(ucfirst(element($single == true ? 'entityTypeSingleName' : 'entityTypeName', $entityConfig)));
+}
+
+function langStatusName($statusId) {
+	$CI  = &get_instance();
+	$CI->load->model('Status_Model');
+
+
+	return lang(ucfirst( $CI->Status_Model->getStatusName($statusId) ));
 }
 
 /**
@@ -893,7 +906,7 @@ function onSaveCrForm() {
 		$entityId = config_item('lastInsertId');
 	}
 	else {
-		$entityId = $aTmp[2];
+		$entityId = element(2, $aTmp);
 	}
 
 	if ($method == 'add' && element('fieldSef', $entityConfig) !== false) {

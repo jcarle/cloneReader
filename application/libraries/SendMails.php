@@ -14,6 +14,18 @@ class SendMails {
 		$this->CI = &get_instance();
 		$this->CI->load->library('email');
 		$this->CI->load->helper('email');
+
+		switch (ENVIRONMENT) {
+			case 'development':
+				$this->CI->config->set_item('base_url', config_item('urlDev'));
+				break;
+			case 'testing':
+				$this->CI->config->set_item('base_url', config_item('urlQa'));
+				break;
+			case 'production':
+				$this->CI->config->set_item('base_url', config_item('urlProd'));
+				break;
+		}
 	}
 
 	/**
@@ -58,9 +70,9 @@ class SendMails {
 			return false;
 		}
 		$this->CI->load->model('Users_Model');
-		$user  = $this->CI->Users_Model->get($params['userId']);
-		$url   = ($user['confirmEmailKey'] != null ? base_url('confirmEmail?key='.$user['confirmEmailKey']) : null);
-		$message         = $this->CI->load->view('pageEmail',
+		$user    = $this->CI->Users_Model->get($params['userId']);
+		$url     = ($user['confirmEmailKey'] != null ? base_url('confirmEmail?key='.$user['confirmEmailKey']) : null);
+		$message = $this->CI->load->view('pageEmail',
 			array(
 				'view'   => 'email/welcome.php',
 				'user'   => $user,
@@ -88,7 +100,7 @@ class SendMails {
 				'user'  => $user,
 				'url'   => $url,
 			),
-			true);
+		true);
 
 		return $this->_sendEmail($userEmail, sprintf(lang('Reset password in %s'), config_item('siteName')), $message);
 	}
@@ -109,7 +121,8 @@ class SendMails {
 				'view'   => 'email/changeEmail.php',
 				'user'   => $user,
 				'url'    => $url
-			), true);
+			),
+		true);
 
 		return $this->_sendEmail($userEmail, sprintf(lang('Change email in %s'), config_item('siteName')), $message);
 	}
@@ -128,7 +141,7 @@ class SendMails {
 				'feedbackDate'          => element('feedbackDate', $params),
 				'url'                   => null,
 			),
-			true);
+		true);
 
 		return $this->_sendEmail(config_item('emailDebug'), 'Comentario de '.element('feedbackUserName', $params), $message, null, null, array('email' => element('feedbackUserEmail', $params), 'name' => element('feedbackUserName', $params)));
 	}

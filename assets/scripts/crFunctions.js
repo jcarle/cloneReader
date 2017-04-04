@@ -363,10 +363,8 @@ $.extend({
 	showModal: function($modal, keyboard, onCloseRemove) {
 		$('body').addClass('modal-open');
 
-		$modal.data('onCloseRemove', onCloseRemove == null ? true : onCloseRemove);
-
+		$modal.data('onCloseRemove', onCloseRemove == null ? true : onCloseRemove).attr('tabindex', '-1');
 		$modal.modal( { 'backdrop': 'static', 'keyboard': keyboard });
-
 		$('.modal').css('z-index', 1039);
 
 		$(document).unbind('hidden.bs.modal');
@@ -410,7 +408,7 @@ $.extend({
 	 */
 	hasAjaxDefaultAction: function(response) {
 		if (response == null) {
-			$(document).crAlert('error');
+			$(document).crAlert( { 'msg': 'error', 'icon': 'danger' });
 			return true;
 		}
 		var result = response['result'];
@@ -448,10 +446,10 @@ $.extend({
 		if (result['msg'] != null) {
 			var callback = null;
 			if (result['goToUrl'] != null) {
-				callback = function() { $.goToUrl(result['goToUrl']); }
+				callback = function() { $.goToUrl(result['goToUrl']); };
 			}
 			if (result['reloadUrl'] == true) {
-				callback = function() { $.reloadUrl(); }
+				callback = function() { $.reloadUrl(); };
 			}
 			$(document).crAlert({
 				'msg':      result['msg'],

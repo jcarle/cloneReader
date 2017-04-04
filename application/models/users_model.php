@@ -457,6 +457,8 @@ class Users_Model extends CI_Model {
 	}
 
 	function saveUsersSearch($deleteEntitySearch = false, $onlyUpdates = false, $userId = null) {
+		$currentDatetime = $this->Commond_Model->getCurrentDateTime();
+		
 		if ($deleteEntitySearch == true) {
 			$this->Commond_Model->deleteEntitySearch(config_item('entityTypeUser'));
 		}
@@ -483,7 +485,7 @@ class Users_Model extends CI_Model {
 		//pr($this->db->last_query()); die;
 
 		if ($userId == null) {
-			$this->Commond_Model->updateProcessDate('saveUsersSearch');
+			$this->Commond_Model->updateProcessDate('saveUsersSearch', $currentDatetime);
 		}
 
 		return true;

@@ -131,21 +131,28 @@ foreach ($items as $item) {
 
 			$aButtons[] = '
 				<div class="btn-group">
-					<a title="'. $process['text'].'" href="javascript:$.process.submit(\''. base_url($process['url']).'\');" class="btn '.$className.'" >
+					<a title="'. $process['text'].'" class="btn '.$className.' dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
 						<i class="fa '.$icon.'"></i> '. lang($process['text']).'
+						<span class="caret"> </span>
 					</a>
-					<button type="button" class="btn '.$className.' dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						<span class="caret"></span>
-						<span class="sr-only">Toggle Dropdown</span>
-					</button>
 					<ul class="dropdown-menu" role="menu">
 						'.implode('', $aChilds).'
 					</ul>
-				</div> ';
+				</div>
+				';
 		}
 	}
+
+	$help = '';
+	if (element('help', $item) != null) {
+		$help = '
+			<button type="button" class="btn btn-link btn-sm" data-html="true" data-trigger="focus"  data-toggle="popover" data-placement="bottom"  data-content="'.htmlentities($item['help']).'" >
+				<i class="fa fa-question-circle text-primary fa-2x " > </i>
+			</button>';
+	}
+
 	$aLi[] = '<li class="list-group-item clearfix">
-				<h4 class="list-group-item-heading">'. lang($item['title']).' </h4>
+				<h4 class="list-group-item-heading">'. lang($item['title']).' '.$help.' </h4>
 				'.implode('', $aButtons).'
 			</li>';
 }

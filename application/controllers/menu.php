@@ -93,11 +93,11 @@ class Menu extends CI_Controller {
 		if ($this->input->post() != false) {
 			$code = $this->form_validation->run();
 			if ($code == true) {
-				$this->Menu_Model->save($this->input->post());
+				$menuId = $this->Menu_Model->save($this->input->post());
 			}
 
 			if ($this->input->is_ajax_request()) { // save data
-				return loadViewAjax($code,  $code == false ? null : array('goToUrl' => base_url('menu/edit/'.$menuId), 'reloadMenu' => true));
+				return loadViewAjax($code,  $code == false ? null : array('msg' => lang('Data updated successfully'), 'icon' => 'success', 'goToUrl' => base_url('menu/edit/'.$menuId), 'reloadMenu' => true));
 			}
 		}
 

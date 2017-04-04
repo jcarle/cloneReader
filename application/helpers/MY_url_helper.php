@@ -4,7 +4,7 @@
  * // TODO: documentar ! y mover de aca tambien!
  *
  * */
-function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $entitySef) {
+function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $entitySef, $params = array()) {
 
 	$remove = false;
 	if (isset($currentFilters[$entityTypeId])) {
@@ -24,6 +24,9 @@ function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $en
 		if ($entityTypeId == config_item('entityTypeState')) {
 			unset($currentFilters[config_item('entityTypeCity')]);
 		}
+		if ($entityTypeId == config_item('entityTypeBrand')) {
+			unset($currentFilters[config_item('entityTypeModel')]);
+		}
 	}
 
 	$sefs = array($base_url);
@@ -33,7 +36,7 @@ function createSefUrl($base_url, $sefsOrder, $currentFilters, $entityTypeId, $en
 		}
 	}
 
-	return base_url(implode('/', $sefs));
+	return base_url(implode('/', $sefs)).(!empty($params) ? '?'.http_build_query($params, '', '&amp;') : '');
 }
 
 /**
