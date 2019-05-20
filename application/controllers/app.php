@@ -61,7 +61,7 @@ class App extends CI_Controller {
 	}
 
   function forbidden($forceJson = false) {
-    $this->language->init();
+    // $this->language->init();
     $this->safety->initSession();
 
     if ($forceJson === true || ($this->input->is_ajax_request() && $this->input->get('pageJson') != true)) {
@@ -81,7 +81,7 @@ class App extends CI_Controller {
   }
 
   function error404($forceJson = false) {
-    $this->language->init();
+    // $this->language->init();
     $this->safety->initSession();
 
     if ($forceJson === true || ($this->input->is_ajax_request() && $this->input->get('pageJson') != true)) {
