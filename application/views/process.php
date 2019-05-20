@@ -48,11 +48,6 @@ $items = array(
 				),
 			),
 			array(
-				'text'   => 'Optimize table',
-				'url'    => 'process/optimizeTableEntitiesSearch',
-				'icon'   => 'fa fa-table text-warning',
-			),
-			array(
 				'text'    => 'All entities',
 				'url'     => 'process/saveEntitiesSearch',
 				'childs' => array(

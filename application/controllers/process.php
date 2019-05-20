@@ -99,11 +99,6 @@ class Process extends CI_Controller {
 		return loadViewAjax(true, array('msg' => lang('Data updated successfully')));
 	}
 
-	function optimizeTableEntitiesSearch() {
-		$this->load->dbutil();
-		$this->dbutil->optimize_table('entities_search');
-	}
-
 	function processDiffEntityLog() {
 		$this->Commond_Model->processDiffEntityLog();
 
