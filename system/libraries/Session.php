@@ -97,7 +97,7 @@ class CI_Session {
 		{
 			$this->sess_expiration = (60*60*24*365*2);
 		}
-		
+
 		// Set the cookie name
 		$this->sess_cookie_name = $this->cookie_prefix.$this->sess_cookie_name;
 
@@ -662,13 +662,16 @@ class CI_Session {
 		$expire = ($this->sess_expire_on_close === TRUE) ? 0 : $this->sess_expiration + time();
 
 		// Set the cookie
+    header_remove('Set-Cookie');
+
 		setcookie(
 					$this->sess_cookie_name,
 					$cookie_data,
 					$expire,
 					$this->cookie_path,
 					$this->cookie_domain,
-					$this->cookie_secure
+					$this->cookie_secure,
+          true
 				);
 	}
 

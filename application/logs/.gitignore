@@ -1,1 +1,2 @@
-scanFeed.log*
+*.log
+log-*

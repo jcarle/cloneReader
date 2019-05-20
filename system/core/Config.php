@@ -68,7 +68,7 @@ class CI_Config {
 		{
 			if (isset($_SERVER['HTTP_HOST']))
 			{
-				$base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
+				$base_url = $this->is_https() == true ? 'https' : 'http';
 				$base_url .= '://'. $_SERVER['HTTP_HOST'];
 				$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 			}
@@ -79,6 +79,21 @@ class CI_Config {
 			}
 
 			$this->set_item('base_url', $base_url);
+		}
+	}
+
+	function is_https()  {
+		if(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on'){
+			return true;
+		}
+		elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
+			return true;
+		}
+		elseif (isset($_SERVER['HTTP_FRONT_END_HTTPS']) && $_SERVER['HTTP_FRONT_END_HTTPS'] == 'on'){
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 

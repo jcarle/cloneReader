@@ -123,17 +123,15 @@ function appendFilesToCarabiner() {
 }
 
 function errorForbidden($forceJson = false) {
-	$CI = &get_instance();
-	$CI->load->library('../controllers/error');
-	initLang(); // FIXME: revisar; se esta vaciando la session al hacer el redirect
-	$CI->safety->initSession();
-	$CI->error->forbidden($forceJson);
+  $CI = &get_instance();
+  $CI->load->library('../controllers/app');
+  $CI->app->forbidden($forceJson);
 }
 
 function error404($forceJson = false) {
-	$CI = &get_instance();
-	$CI->load->library('../controllers/error');
-	$CI->error->error404($forceJson);
+  $CI = &get_instance();
+  $CI->load->library('../controllers/app');
+  $CI->app->error404($forceJson);
 }
 
 

@@ -6,11 +6,11 @@
 |--------------------------------------------------------------------------
 |
 | Indicate an existing model, library, or helper function that returns the
-| current user's identification.  If you leave this blank or null, then the 
+| current user's identification.  If you leave this blank or null, then the
 | tracking system will not add records for userIdentifers.
 |
 | Use the following format:
-|   For Helper Function:    $config['userTracking']['userIdentifier'] = array("helper", "helperName", "helperFunction", "argument array"); 
+|   For Helper Function:    $config['userTracking']['userIdentifier'] = array("helper", "helperName", "helperFunction", "argument array");
 |   For Library Function:   $config['userTracking']['userIdentifier'] = array("library", "libraryName", "libraryFunction", "argument array");
 |   For Helper Function:    $config['userTracking']['userIdentifier'] = array("model", "modelName", "modelFunction", "argument array");
 |
@@ -33,7 +33,7 @@ $config['usertracking']['user_identifier'] = array('model', 'Users_Model', 'getU
 |
 | You must have the following code added to your config/hooks.php file:
 |
-|   $hook['post_controller_constructor'][] = array('class' => 'Usertracking', 
+|   $hook['post_controller_constructor'][] = array('class' => 'Usertracking',
 |                                                  'function' => 'autoTrack',
 |                                                  'filename' => 'Usertracking.php',
 |                                                  'filepath' => 'libraries');
@@ -54,7 +54,7 @@ $config['usertracking']['auto_track'] = TRUE;
 |     e.g. only track users if(isLoggedIn() == true), or something like that.
 |
 | Use the following format:
-|   For Helper Function:    $config['userTracking']['trackingFilter'][] = array("helper", "helperName", "helperFunction", "expectedResult", [optional] "argument array"); 
+|   For Helper Function:    $config['userTracking']['trackingFilter'][] = array("helper", "helperName", "helperFunction", "expectedResult", [optional] "argument array");
 |   For Library Function:   $config['userTracking']['trackingFilter'][] = array("library", "libraryName", "libraryFunction", "expectedResult", [optional] "argument array");
 |   For Helper Function:    $config['userTracking']['trackingFilter'][] = array("model", "modelName", "modelFunction", "expectedResult", [optional] "argument array");
 |

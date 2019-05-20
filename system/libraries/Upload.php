@@ -405,9 +405,9 @@ class CI_Upload {
 		$new_filename = '';
 		for ($i = 1; $i < 100; $i++)
 		{
-			if ( ! file_exists($path.$filename.$i.$this->file_ext))
+			if ( ! file_exists($path.$filename.'-'.$i.$this->file_ext))
 			{
-				$new_filename = $filename.$i.$this->file_ext;
+				$new_filename = $filename.'-'.$i.$this->file_ext;
 				break;
 			}
 		}

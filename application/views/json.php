@@ -13,7 +13,7 @@ if (isset($code)) {
 }
 
 $this->output
-	->set_content_type('application/json')
+	->set_content_type('application/json; charset=utf-8')
 	->set_output(json_encode($output));
 
 if (isset($status_code)) {

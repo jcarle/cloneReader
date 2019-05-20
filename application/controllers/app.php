@@ -59,4 +59,44 @@ class App extends CI_Controller {
 
 		return loadViewAjax(true, array('entityUrl' => $entityUrl));
 	}
+
+  function forbidden($forceJson = false) {
+    $this->language->init();
+    $this->safety->initSession();
+
+    if ($forceJson === true || ($this->input->is_ajax_request() && $this->input->get('pageJson') != true)) {
+      return $this->load->view('json', array(
+        'code'         => false,
+        'result'       => lang('Not authorized for the action to take'),
+        'status_code'  => 403
+      ));
+    }
+
+    $this->load->view('pageHtml', array(
+      'view'        => 'error',
+      'meta'        => array( 'title' => 'Error 403' ),
+      'message'     => lang('Not authorized for the action to take'),
+      'status_code' => 403
+    ));
+  }
+
+  function error404($forceJson = false) {
+    $this->language->init();
+    $this->safety->initSession();
+
+    if ($forceJson === true || ($this->input->is_ajax_request() && $this->input->get('pageJson') != true)) {
+      return $this->load->view('json', array(
+        'code'          => false,
+        'result'        => lang('The page you requested does not exist'),
+        'status_code'   => 404
+      ));
+    }
+
+    $this->load->view('pageHtml', array(
+      'view'          => 'error',
+      'meta'          => array( 'title' => 'Error 404' ),
+      'message'       => lang('The page you requested does not exist'),
+      'status_code'   => 404
+    ));
+  }
 }

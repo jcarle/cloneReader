@@ -147,7 +147,10 @@ class CI_Lang {
 		// Because killer robots like unicorns!
 		if ($value === FALSE)
 		{
-			log_message('error', 'Could not find the language line "'.$line.'"');
+			$CI =& get_instance();
+			if ($CI->session->userdata('langId') != 'en') { // not save log if language is english
+				log_message('error', 'Could not find the language line "'.$line.'"');
+			}
 			return $line;
 		}
 
