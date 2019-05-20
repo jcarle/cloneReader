@@ -47,8 +47,7 @@ class Usertracking
    * @access public
    * @return void|boolean Will return FALSE if the intialization did not succeed.
    */
-  public function Usertracking()
-  {
+  public function __construct(){
     $result = $this->initialize();
 
     if ($result === FALSE)
@@ -153,7 +152,7 @@ class Usertracking
     $input_data['session_id'] = $this->CI->session->userdata('session_id');
     $input_data['request_uri'] = $this->CI->input->server('REQUEST_URI');
     $input_data['timestamp'] = time();
-    $input_data['client_ip'] = $this->CI->input->server('REMOTE_ADDR');
+    $input_data['client_ip'] = $this->CI->input->ip_address();
     $input_data['client_user_agent'] = $this->CI->agent->agent_string();
     $input_data['referer_page'] = $this->CI->agent->referrer();
 

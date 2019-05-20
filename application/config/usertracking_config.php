@@ -110,4 +110,3 @@ $config['usertracking']['auto_build_db'] = FALSE;
 | default: true
 */
 $config['usertracking']['auto_fix_db'] = FALSE;
-
