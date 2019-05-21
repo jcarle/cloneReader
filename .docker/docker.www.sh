@@ -7,12 +7,11 @@ docker rm clonereader-www
 
 docker run -d -ti \
   --name clonereader-www \
-  -p 80:80 \
+  -p 8080:80 \
   -e TZ=America/Buenos_Aires \
   -v "$DIR/..:/var/www/cloneReader" \
   -v "$DIR/apc/:/var/www/apc.cloneReader"   \
   -v "$DIR/etc/hosts:/etc/hosts"  \
-  -v "$DIR/etc/nginx/ssl:/etc/nginx/ssl"  \
   -v "$DIR/etc/nginx/nginx.conf:/etc/nginx/nginx.conf"  \
   -v "$DIR/etc/nginx/.htpasswd:/etc/nginx/.htpasswd"  \
   -v "$DIR/etc/nginx/fastcgi_params:/etc/nginx/fastcgi_params"  \
