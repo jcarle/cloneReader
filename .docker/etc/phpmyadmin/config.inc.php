@@ -12,7 +12,7 @@ $i = 0;
 $i++;
 $cfg['Servers'][$i]['verbose'] = 'mysql-cloneReader';
 $cfg['Servers'][$i]['host'] = '172.17.0.1';
-$cfg['Servers'][$i]['port'] = 3306;
+$cfg['Servers'][$i]['port'] = 3307;
 $cfg['Servers'][$i]['socket'] = '';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['extension'] = 'mysqli';
