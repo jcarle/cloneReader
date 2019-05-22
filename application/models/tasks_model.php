@@ -17,7 +17,7 @@ class Tasks_Model extends CI_Model {
 			'langId'        => $langId,
 			'taskMethod'    => $taskMethod,
 			'taskParams'    => json_encode($taskParams),
-			'taskRunning'   => config_item('taskPending'),
+			'statusTaskId'  => config_item('taskPending'),
 			'taskRetries'   => 0,
 			'taskSchedule'  => $taskSchedule,
 		));
@@ -33,7 +33,6 @@ class Tasks_Model extends CI_Model {
 	 * 						array(
 	 * 							'search'         => null,
 	 * 							'statusTaskId'   => null,
-	 * 							'taskRunning'    => null,
 	 * 							'validDate'      => null, // Filtra las emails que ya pueden enviarse
 	 *						)
 	 * @param   $orders    un array con el formato:
@@ -46,17 +45,14 @@ class Tasks_Model extends CI_Model {
 	 * */
 	function selectToList($pageCurrent = null, $pageSize = null, array $filters = array(), array $orders = array() ){
 		$this->db
-			->select('SQL_CALC_FOUND_ROWS tasks_email.taskId, tasks_email.taskMethod, tasks_email.taskParams, tasks_email.taskRunning, tasks_email.taskRetries, tasks_email.taskSchedule, tasks_status.statusTaskName, languages.langId, langName ', false)
+			->select('SQL_CALC_FOUND_ROWS tasks_email.taskId, tasks_email.taskMethod, tasks_email.taskParams, tasks_email.statusTaskId, tasks_email.taskRetries, tasks_email.taskSchedule, tasks_status.statusTaskName, languages.langId, langName ', false)
 			->from('tasks_email')
 			->join('languages', 'tasks_email.langId = languages.langId', 'inner')
-			->join('tasks_status', 'tasks_status.statusTaskId = tasks_email.taskRunning', 'inner');
+			->join('tasks_status', 'tasks_status.statusTaskId = tasks_email.statusTaskId', 'inner');
 
 
-		if (element('statusTaskId', $filters) != null) {
+		if (element('statusTaskId', $filters) !== null) {
 			$this->db->where('tasks_email.statusTaskId', $filters['statusTaskId']);
-		}
-		if (element('taskRunning', $filters) != null) {
-			$this->db->where('taskRunning', $filters['taskRunning']);
 		}
 		if (element('validDate', $filters) == true) {
 			$this->db->where('taskSchedule < NOW() ');
@@ -83,7 +79,6 @@ class Tasks_Model extends CI_Model {
 		$values = array(
 			'taskMethod'            => $data['taskMethod'],
 			'taskParams'            => $data['taskParams'],
-			'taskRunning'           => $data['taskRunning'],
 			'taskRetries'           => $data['taskRetries'],
 		);
 

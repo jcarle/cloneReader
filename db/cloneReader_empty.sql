@@ -2455,7 +2455,7 @@ CREATE TABLE IF NOT EXISTS `tasks_email` (
   `taskId` int(10) NOT NULL AUTO_INCREMENT,
   `taskMethod` varchar(255) DEFAULT NULL,
   `taskParams` text,
-  `taskRunning` int(1) NOT NULL,
+  `statusTaskId` int(1) NOT NULL,
   `taskRetries` tinyint(4) NOT NULL,
   `langId` varchar(10) NOT NULL,
   `taskSchedule` datetime NOT NULL,

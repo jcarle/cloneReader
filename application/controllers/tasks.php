@@ -19,7 +19,7 @@ class Tasks extends CI_Controller {
 
 		$filters = array(
 			'search'       => $this->input->get('search'),
-			'taskRunning'  => ($this->input->get('taskRunning') === false ? null : $this->input->get('taskRunning')),
+			'statusTaskId' => ($this->input->get('statusTaskId') === false ? null : $this->input->get('statusTaskId')),
 		);
 		$orders  = array(
 			array('orderBy' => $this->input->get('orderBy'), 'orderDir' => $this->input->get('orderDir') ),
@@ -45,10 +45,10 @@ class Tasks extends CI_Controller {
 				'foundRows'   => $query['foundRows'],
 				'showId'      => true,
 				'filters'     => array(
-					'taskRunning' => array(
+					'statusTaskId' => array(
 						'type'              => 'dropdown',
 						'label'             => lang('Status'),
-						'value'             => $this->input->get('taskRunning'),
+						'value'             => $this->input->get('statusTaskId'),
 						'source'            => $this->Tasks_Status_Model->selectToDropdown(),
 						'appendNullOption' => true,
 					),
@@ -82,7 +82,6 @@ class Tasks extends CI_Controller {
 		}
 
 		$filters = array(
-			'taskRunning'  => false,
 			'statusTaskId' => config_item('taskPending'),
 			'validDate'    => true
 		);
@@ -93,7 +92,7 @@ class Tasks extends CI_Controller {
 			$this->load->library('SendMails');
 
 			foreach ($rsTasks as $task) {
-				$task['taskRunning'] = config_item('taskRunning');
+				$task['statusTaskId'] = config_item('taskRunning');
 				$this->Tasks_Model->save($task);
 
 				$success = $this->_sendEmail($task);
@@ -104,13 +103,13 @@ class Tasks extends CI_Controller {
 				else { //Sino se envio el email, aumento el contador de reintentos
 					if($task['taskRetries'] < config_item('taskRetry')){
 						//Cantidad de Reintentos
-						$task['taskRunning'] = config_item('taskPending');
+						$task['statusTaskId'] = config_item('taskPending');
 						$task['taskRetries'] = $task['taskRetries'] + 1;
 						$this->Tasks_Model->save($task);
 					}
 					else {
 						//Cambio el estado a Cancelado
-						$task['taskRunning'] = config_item('taskCancel');
+						$task['statusTaskId'] = config_item('taskCancel');
 						$this->Tasks_Model->save($task);
 					}
 				}

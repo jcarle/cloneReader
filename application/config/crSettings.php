@@ -18,7 +18,7 @@ $config['google-gtm-account'] = 'GTM-K9SS2S';
 
 $config['urlDev']  = 'http://jcarle.redirectme.net/dev/jcarle/cloneReader/';
 $config['urlQa']   = 'http://www.jcarle.com.ar/cloneReader';
-$config['urlProd'] = 'http://www.clonereader.com.ar';
+$config['urlProd'] = 'https://www.clonereader.com.ar';
 
 
 $config['userAnonymous']  = 1;
